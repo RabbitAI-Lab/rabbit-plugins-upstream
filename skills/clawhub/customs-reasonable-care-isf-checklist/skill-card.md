@@ -1,39 +1,60 @@
-## Description: <br>
-Provides an agent checklist for customs entry and ISF workflows, covering reasonable-care records, POA/KYC, PGA requirements, filing timing, and five-year recordkeeping. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a customs entry and ISF checklist for importer onboarding, reasonable-care documentation, PGA requirements, and recordkeeping.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Customs brokers, import teams, and compliance staff use this skill when preparing entry or ISF filings, onboarding importers, and checking whether required records and timing gates are complete. It is a checklist aid and not legal advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/customs-reasonable-care-isf-checklist) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/customs-reasonable-care-isf-checklist) <br>
-- [deciqAI machine-readable metadata](https://www.deciqai.com/s/customs-reasonable-care-isf-checklist.json) <br>
+Customs brokers and importer teams use this checklist to prepare entry and ISF filings, document reasonable care, identify PGA requirements, and track importer records. It helps surface missing items before filing; verify current requirements with official guidance.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Text, Markdown] <br>
-**Output Format:** [Markdown checklist guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No code execution; users should verify customs deadlines and legal citations against current CBP and 19 CFR guidance.] <br>
+United States
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Customs and agency requirements may change or vary by shipment.
+
+Mitigation: Use the checklist as an aid and verify current requirements with official CBP and relevant agency guidance before filing.
+
+Risk: Importer identity documents and POA records can contain sensitive information.
+
+Mitigation: Protect these documents and limit access to people who need them for the compliance process.
+
+Risk: The referenced parent checklist is not included with this release.
+
+Mitigation: Consult the complete parent checklist if the full underlying process is needed.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/customs-reasonable-care-isf-checklist)
+- [deciqAI skill overview](https://www.deciqai.com/c/customs-reasonable-care-isf-checklist)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/customs-reasonable-care-isf-checklist.json)
+- [Project repository](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Checklist, Markdown]
+
+**Output Format:** [Markdown checklist and prose guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory checklist; it does not perform customs filings.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

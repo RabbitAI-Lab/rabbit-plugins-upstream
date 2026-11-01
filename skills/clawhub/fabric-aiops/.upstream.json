@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/fabric-aiops",
   "slug": "fabric-aiops",
   "ownerHandle": null,
-  "version": "0.7.0",
-  "updatedAt": 1784635107092,
-  "contentHash": "676b7de4391005cbef08ec5dfe24489005b91396acb9d801b02dba3da19731f9",
-  "fetchedAt": "2026-07-26T18:09:06.966Z"
+  "version": "0.15.0",
+  "updatedAt": 1793325107767,
+  "contentHash": "cf9db202df0c0209f370e83377b01521f0ae42d103e1963687b29673a269e8ac",
+  "fetchedAt": "2026-11-01T14:41:29.582Z"
 }

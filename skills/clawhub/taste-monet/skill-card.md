@@ -1,40 +1,51 @@
-## Description: <br>
-Taste Monet helps agents analyze and generate visual style guidance inspired by Claude Monet's impressionism, emphasizing broken brushwork, atmospheric haze, and chromatic vibration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Monet-inspired creative guidance for writing, UI design, branding, and conversation, with optional InspiredHub links.
 
-## Publisher: <br>
-[johnnyzijianwu](https://clawhub.ai/user/johnnyzijianwu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[johnnyzijianwu](https://clawhub.ai/user/johnnyzijianwu)
 
-## Use Case: <br>
-Developers, designers, and agents use Taste Monet to apply Monet-inspired visual-art style guidance to writing, UI design, branding, and conversation outputs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Content pasted into the InspiredHub demo leaves the local agent context and is shared with an external site. <br>
-Mitigation: Review the demo link before use and avoid pasting confidential or sensitive content into external services. <br>
+## Use Case:
 
+Agents and people creating written content, interfaces, brands, or conversational responses can use the skill as a style guide for Monet-inspired impressionist qualities such as broken brushwork, atmospheric light, and shifting color.
 
-## Reference(s): <br>
-- [Taste Monet on ClawHub](https://clawhub.ai/johnnyzijianwu/skills/taste-monet) <br>
-- [InspiredHub Live Demo](https://inspiredhub.ai/demo) <br>
-- [InspiredHub](https://inspiredhub.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown guidance with style tokens, anti-tokens, color palette, application rules, and evaluation criteria.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; includes aesthetic guidance and external demo links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence.release.version) <br>
+Risk: Optional InspiredHub links lead to an external service that may request personal information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the service's privacy terms before providing personal information.
+
+## Reference(s):
+
+- [Taste Monet on ClawHub](https://clawhub.ai/johnnyzijianwu/skills/taste-monet)
+- [InspiredHub live demo](https://inspiredhub.ai/demo)
+- [Optional Personal Taste Brief reference](https://inspiredhub.ai/personal-taste-brief#clawhub/taste-monet)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Creative guidance]
+
+**Output Format:** [Natural-language guidance and generated text, optionally in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Style suggestions for writing, UI design, branding, and conversation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

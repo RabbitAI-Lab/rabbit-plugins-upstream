@@ -1,46 +1,55 @@
-## Description: <br>
-ElevenLabs music_v1 generates 10-300 second original music from a natural-language prompt for background music, ads, and short-video soundtracks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates original 10–300 second music from natural-language prompts through the dLazy hosted service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to invoke the dLazy ElevenLabs music generator from an agent workflow and receive generated media URLs or asynchronous task identifiers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and explicitly referenced media files are sent to the dLazy hosted service and generated outputs are hosted on files.dlazy.com. <br>
-Mitigation: Use only prompts and media appropriate for third-party cloud processing, and review dLazy service terms before use. <br>
-Risk: The CLI can persist a dLazy API key in a local config file. <br>
-Mitigation: Use npx or DLAZY_API_KEY for less persistent setup when appropriate, and rotate or revoke keys from the dLazy dashboard if exposure is suspected. <br>
-Risk: Generation consumes dLazy account credits and may fail when the account has insufficient balance. <br>
-Mitigation: Use the dry-run option for cost estimates where possible and confirm available credits before long or repeated generations. <br>
+## Use Case:
 
+Developers and agents use natural-language prompts to generate music for background tracks, advertisements, and short videos. The skill submits requests to dLazy and can return a hosted media URL or save the result locally.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-music) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Shell command guidance and JSON responses containing generated media URLs or async task metadata] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npm or npx, a dLazy API key, and a pinned @dlazy/cli version 1.2.3; generated outputs are hosted on files.dlazy.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: SKILL.md frontmatter and release evidence) <br>
+Risk: Prompts and any media supplied to the CLI are sent to dLazy, and generation consumes service credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review prompts and media before sending; use --dry-run to preview the request and estimated cost.
+
+Risk: The CLI stores an API key in the local user configuration when using its login or auth flow, and its implementation was not audited here.
+
+Mitigation: Review the pinned CLI before installation, use DLAZY_API_KEY when you prefer not to save a key, and rotate or revoke keys through the dLazy dashboard as needed.
+
+## Reference(s):
+
+- [dLazy service](https://dlazy.com)
+- [dLazy CLI repository (listed by the skill)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Audio files, JSON]
+
+**Output Format:** [JSON result metadata with a hosted media URL, or a locally saved audio file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prompt-based music generation for 10–300 seconds; supports asynchronous tasks and optional local saving.]
+
+## Skill Version(s):
+
+1.3.36 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

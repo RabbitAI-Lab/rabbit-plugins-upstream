@@ -1,7 +1,42 @@
 # AdaptlyPost API Reference
 
 Base URL: `https://post.adaptlypost.com/post/api/v1`
-Auth: `Authorization: Bearer <api-token>` header. Tokens start with `adaptly_` prefix.
+Auth: `Authorization: Bearer <api-token>` header. Tokens start with the `adaptly_` prefix.
+
+The same header also accepts a WorkOS OAuth token, which is how the hosted MCP server authenticates. For a skill, use an `adaptly_` token.
+
+## Roles and permissions
+
+Every key carries the workspace role chosen when it was created. Its permissions are that role's set intersected with the current permissions of the member who created it, so a key never does more than its creator: demoting the creator shrinks the key on the next request, and removing the creator from the workspace revokes it. An OAuth token reaches every workspace its member belongs to: `GET /workspaces` lists them, the `X-Workspace-Id` header picks one per request, and each workspace applies the member's own role there. An API key belongs to one workspace, so a skill using an `adaptly_` key never sends that header.
+
+| Role | Permissions |
+| --- | --- |
+| `admin` | every permission below |
+| `editor` | `workspace.read`, `posts.read`, `posts.draft`, `posts.others`, `posts.schedule`, `posts.publish`, `posts.delete`, `media.upload`, `accounts.read`, `analytics.read`, `analytics.sync`, `ai.generate`, `members.read`, `tokens.own`, `webhooks.read`, `webhooks.manage`, `signature.manage` |
+| `contributor` | `workspace.read`, `posts.read`, `posts.draft`, `media.upload`, `accounts.read`, `analytics.read`, `ai.generate`, `members.read`, `tokens.own` |
+| `viewer` | `workspace.read`, `posts.read`, `accounts.read`, `analytics.read`, `members.read`, `webhooks.read` |
+
+Which permission each endpoint needs:
+
+| Endpoint | Permission | Roles |
+| --- | --- | --- |
+| `GET /social-posts`, `GET /social-posts/:id`, `GET /social-posts/:id/results`, `GET /recurring-posts`, `GET /recurring-posts/:id` | `posts.read` | all |
+| `POST /social-posts` with `saveAsDraft: true`; `PATCH /social-posts/:id` and `DELETE /social-posts/:id` on a `DRAFT`; `POST /social-posts/:id/unschedule` on a dated `DRAFT` | `posts.draft` | admin, editor, contributor |
+| `POST /social-posts` and `POST /social-posts/:id/publish` with a future `scheduledAt` (so every `POST /social-posts` with `recurrence`); `POST /social-posts/:id/publish` without `scheduledAt` or `publishNow` on a draft whose planned date is in the future; `PATCH /social-posts/:id` and `POST /social-posts/:id/unschedule` on a post that is not a `DRAFT`; `POST /social-posts/bulk`; `POST /recurring-posts/:id/pause`, `POST /recurring-posts/:id/resume` | `posts.schedule` | admin, editor |
+| `POST /social-posts` without `scheduledAt` or with a past one; `POST /social-posts/:id/publish` with a past `scheduledAt`, with `publishNow: true`, or without either on a post that has no future planned date; `POST /social-posts/:id/retry`; `POST /social-posts/bulk` with any item due now or earlier | `posts.publish` | admin, editor |
+| `DELETE /social-posts/:id` on a post that is not a `DRAFT`; `DELETE /recurring-posts/:id` | `posts.delete` | admin, editor |
+| Any write on a post or recurring post another member created | the row above, plus `posts.others` | admin, editor |
+| `POST /upload-urls` | `media.upload` | admin, editor, contributor |
+| `GET /social-accounts` | `accounts.read` | all |
+| `GET /social-accounts/:id/instagram-audio`, `GET /social-accounts/:id/pinterest-boards`, `POST /social-posts/validate`, `POST /social-posts/bulk/validate` | `posts.draft` | admin, editor, contributor |
+| `POST /social-accounts/:id/check`, `DELETE /social-accounts/:id`, `POST /connect-links`, `DELETE /connect-links/:token` | `accounts.manage` | admin |
+| `GET /webhooks`, `GET /webhooks/:id` | `webhooks.read` | admin, editor, viewer |
+| `POST /webhooks`, `PATCH /webhooks/:id`, `DELETE /webhooks/:id`, `POST /webhooks/:id/test` | `webhooks.manage` | admin, editor |
+| `GET /analytics/*` | `analytics.read` | all |
+| `POST /analytics/sync` | `analytics.sync` | admin, editor |
+| `POST /ai/*`, `GET /ai/images/:jobId` | `ai.generate` | admin, editor, contributor |
+
+The permission is also written into each operation's description in `GET /openapi.json`.
 
 ## Endpoints
 
@@ -19,7 +54,8 @@ List all connected social media accounts for the account group tied to this API 
       "platform": "INSTAGRAM",
       "displayName": "John Doe",
       "username": "johndoe",
-      "avatarUrl": "https://..."
+      "avatarUrl": "https://...",
+      "status": "active"
     },
     {
       "id": "cmlxmnxn20006hzpzvo291abc",
@@ -27,24 +63,126 @@ List all connected social media accounts for the account group tied to this API 
       "displayName": "My Business Page",
       "username": "",
       "avatarUrl": "",
+      "status": "unauthorized",
+      "unauthorizedReason": "The session has been invalidated because the user changed their password.",
       "pageId": "123456789012345"
     }
   ]
 }
 ```
 
-Platform values: `TIKTOK`, `INSTAGRAM`, `FACEBOOK`, `TWITTER`, `YOUTUBE`, `LINKEDIN`, `THREADS`, `BLUESKY`, `PINTEREST`
+Platform values: `TIKTOK`, `INSTAGRAM`, `FACEBOOK`, `TWITTER`, `YOUTUBE`, `LINKEDIN`, `THREADS`, `BLUESKY`, `MASTODON`, `PINTEREST`, `GOOGLE_BUSINESS`, `TELEGRAM`
 
 **Notes:**
 
 - Facebook accounts represent pages, not personal profiles
-- For Facebook, the `id` field is what you pass in `pageIds` when creating posts. The extra `pageId` field is the page's public ID on facebook.com — informational only (shown since pages have no `username`), do NOT pass it as an identifier
+- For Facebook, pass the `id` field in `pageIds` when creating posts. The extra `pageId` field is the page's public ID on facebook.com (shown since pages have no `username`); `pageIds` and `POST /social-accounts/:id/check` accept it as well
 - LinkedIn and YouTube accounts may have empty `username`
 - Bluesky `username` is the handle (e.g., `user.bsky.social`)
+- Mastodon `username` is the full handle with the server (e.g., `user@mastodon.social`)
+- Google Business Profile accounts (`GOOGLE_BUSINESS`) are business locations: `displayName` is the location title and `username` is empty. Pass the `id` in `googleBusinessConnectionIds`
+- Instagram accounts carry `supportsInstagramAudio`: `true` when the account was connected through Facebook, which adding Instagram audio to Reels needs
+- Telegram accounts (`TELEGRAM`) are channels and groups: `displayName` is the chat title, `username` is the public @username without the `@` (empty for a private chat) and `avatarUrl` is empty. Pass the `id` in `telegramConnectionIds`. The API cannot connect a Telegram chat; the user adds the AdaptlyPost bot to the chat and sends it the connect code from the Connectors page in the app
+- `status` is `active` or `unauthorized`. An unauthorized account stays listed but the platform rejected its token (a locked Facebook profile, a security checkpoint, a page the user lost access to). `POST /social-posts` refuses it with a 400 until the user reconnects it in the dashboard, so skip it when scheduling and tell the user to reconnect. `unauthorizedReason` is the platform's own message. Registered webhooks receive `account.unauthorized` the moment this happens
+
+### POST /social-accounts/:id/check
+
+Asks Facebook whether the page token still works, right now. Pages are also checked automatically twice a day. `:id` is the account `id` from `/social-accounts` or the Facebook `pageId`. Facebook pages only; other platforms return 400.
+
+**Response:**
+
+```json
+{
+  "id": "cmlxmnxn20006hzpzvo291abc",
+  "platform": "FACEBOOK",
+  "displayName": "My Business Page",
+  "pageId": "123456789012345",
+  "status": "unauthorized",
+  "unauthorizedReason": "The session has been invalidated because the user changed their password.",
+  "checkedAt": "2026-09-13T09:10:00.000Z"
+}
+```
+
+A rejected token marks the page `unauthorized` and fires `account.unauthorized`; a working token clears an earlier mark. Use it before a scheduling run when the user has just reconnected, or when a post failed with a token error and you want to confirm the page is back.
+
+### DELETE /social-accounts/:id
+
+Disconnects the account from the workspace, the same as removing it on the Connectors page: the stored login is deleted, the account comes off every pending and recurring post, and it stops counting toward the plan. It works on any `status`, so an `unauthorized` account can be cleaned up without reconnecting it. `:id` is the account `id` from `/social-accounts` or the Facebook `pageId`; for Facebook only that page goes, and other pages from the same login stay connected. A removed Telegram chat stops getting posts, but the bot stays in the chat until someone removes it in Telegram. Returns 404 when the workspace does not hold the account. It cannot be undone, so confirm with the user first.
+
+**Response:**
+
+```json
+{
+  "id": "cmlxmnxn20006hzpzvo291abc",
+  "platform": "FACEBOOK",
+  "displayName": "My Business Page",
+  "pageId": "123456789012345",
+  "removed": true
+}
+```
+
+### GET /social-accounts/:id/instagram-audio
+
+Search Instagram music and original sounds to add to a Reel. `:id` is the Instagram account `id` from `/social-accounts`, and the account needs `supportsInstagramAudio: true`.
+
+**Query parameters:**
+
+- `audioType` (string, required): `music` or `original_sound`
+- `searchQuery` (string, optional): Keyword filter, max 100 characters. Leave it out for trending audio
+
+**Response:**
+
+```json
+{
+  "audio": [
+    {
+      "audioId": "1234567890",
+      "audioType": "music",
+      "title": "Summer Nights",
+      "displayArtist": "The Band",
+      "durationMs": 184000,
+      "coverArtworkUrl": "https://...",
+      "previewUrl": "https://...",
+      "instagramUrl": "https://www.instagram.com/reels/audio/1234567890/",
+      "isAdsEligible": true
+    }
+  ]
+}
+```
+
+`displayArtist` is set for music and `igUsername` for original sounds; original sounds also carry `profilePictureUrl`. `previewUrl` expires after about 1.5 days. Only audio Meta cleared for third-party publishing comes back, which can differ from what the Instagram app shows. Pass the chosen `audioId` in `instagramConfigs[].audio` (see [platform-configs.md](platform-configs.md#instagram--instagramconfigs)).
+
+Returns `400` when the account is not connected through Facebook or Instagram rejects the search, and `404` for an unknown account.
+
+### GET /social-accounts/:id/pinterest-boards
+
+List the boards a Pinterest account can pin to, secret boards included. `:id` is the Pinterest account `id` from `/social-accounts`.
+
+**Response:**
+
+```json
+{
+  "boards": [
+    {
+      "id": "549755885175",
+      "name": "Recipes",
+      "description": "Weeknight dinners",
+      "privacy": "PUBLIC",
+      "pinCount": 42
+    }
+  ]
+}
+```
+
+`id` and `name` are always set; `description`, `privacy` and `pinCount` are optional. `privacy` is `PUBLIC`, `PROTECTED` or `SECRET`. A board belongs to one Pinterest account, so list the boards of each Pinterest account you post to. Pass the chosen `id` as `pinterestConfigs[].boardId`, or skip this call and pass the name the user gave as `pinterestConfigs[].boardName` (see [platform-configs.md](platform-configs.md#pinterest--pinterestconfigs)).
+
+Returns `404` when the account is not found or is not a Pinterest account in this workspace, and `400` when Pinterest refuses the request, usually because the account must be reconnected.
 
 ### POST /social-posts
 
 Create or schedule a post to one or more social media platforms.
+
+A draft (`saveAsDraft: true`) needs `posts.draft`, with or without a planned date. A future `scheduledAt` also needs `posts.schedule`, and a post that publishes now also needs `posts.publish`; without it the call answers `403 permission_denied`.
 
 **Request:**
 
@@ -55,6 +193,7 @@ Create or schedule a post to one or more social media platforms.
   "text": "Post text with #hashtags",
   "platformTexts": [{ "platform": "TWITTER", "text": "Short version for X" }],
   "mediaUrls": ["https://cdn.adaptlypost.com/social-media-posts/uuid/photo.jpg"],
+  "mediaAltTexts": ["A red bicycle leaning on a brick wall"],
   "thumbnailUrl": "https://cdn.adaptlypost.com/social-media-posts/uuid/thumb.jpg",
   "scheduledAt": "2026-06-15T10:00:00.000Z",
   "timezone": "America/New_York",
@@ -72,34 +211,119 @@ Create or schedule a post to one or more social media platforms.
 
 **Required fields:**
 
-- `platforms` (string[]): At least one platform. Values: `FACEBOOK`, `INSTAGRAM`, `THREADS`, `TIKTOK`, `TWITTER`, `BLUESKY`, `LINKEDIN`, `PINTEREST`, `YOUTUBE`
-- `contentType` (string): `TEXT`, `IMAGE`, `VIDEO`, or `CAROUSEL`
-- `timezone` (string): IANA timezone string (e.g., `America/New_York`, `Europe/London`)
+- `platforms` (string[]): At least one platform. Values: `FACEBOOK`, `INSTAGRAM`, `THREADS`, `TIKTOK`, `TWITTER`, `BLUESKY`, `MASTODON`, `LINKEDIN`, `PINTEREST`, `YOUTUBE`, `GOOGLE_BUSINESS`, `TELEGRAM`
+- `contentType` (string): `TEXT`, `IMAGE`, `VIDEO`, `CAROUSEL`, or `DOCUMENT`. `CAROUSEL` takes 2 or more items in `mediaUrls`, up to 4 on `TWITTER`, `BLUESKY` and `MASTODON`, 5 on `PINTEREST`, 10 on `INSTAGRAM`, `FACEBOOK`, `THREADS` and `TELEGRAM`, 20 on `LINKEDIN` and 35 on `TIKTOK` (JPEG or WebP only). `INSTAGRAM` and `THREADS` mix images and videos in one carousel; the others take images only, and `YOUTUBE` has no carousel. `DOCUMENT` is LinkedIn only: exactly one PDF, PPT, PPTX, DOC or DOCX URL in `mediaUrls` (max 100 MB, 300 pages). `GOOGLE_BUSINESS` takes `TEXT` or `IMAGE` only
+- `timezone` (string): IANA timezone string (e.g., `America/New_York`, `Europe/London`). Stored with the post for display; it does not shift `scheduledAt`
 
 **Optional fields:**
 
-- `text` (string): Default post text for all platforms
-- `platformTexts` (array): Per-platform text overrides. Each: `{ "platform": "TWITTER", "text": "..." }`
+- `text` (string): Default post text for all platforms. On LinkedIn, mention a company page with `@[Page Name](urn:li:organization:<id>)`, using the page name exactly as LinkedIn shows it
+- `platformTexts` (array): Per-platform text overrides. Each: `{ "platform": "TWITTER", "text": "..." }`. The LinkedIn mention syntax works here too
 - `mediaUrls` (string[]): Public URLs of uploaded media files
-- `thumbnailUrl` (string): Thumbnail URL for video posts
-- `scheduledAt` (string): ISO 8601 UTC datetime, must be in the future
-- `saveAsDraft` (boolean): Save as draft instead of scheduling/publishing
-- `pageIds` (string[]): Facebook page account `id` values from `/social-accounts` (not the `pageId` field)
+- `mediaAltTexts` (string[]): Alt text for each image, in the same order as `mediaUrls` (max 1000 characters each; use `""` to skip an image). Sent to X, Bluesky, Mastodon, LinkedIn, Facebook, Instagram and Threads. Pinterest uses the first one, cut to 500 characters. TikTok, YouTube, Google Business Profile, Telegram and videos ignore it
+- `thumbnailUrl` (string): Video thumbnail as an https URL or an image data URI, used on every platform that takes one unless `platformThumbnails` overrides it
+- `thumbnailTimestampMs` (number): Video frame (ms) to use as the thumbnail on `INSTAGRAM`, `PINTEREST` and `TIKTOK` unless `platformThumbnails` overrides it
+- `platformThumbnails` (array): A different thumbnail per platform. See [Platform thumbnails](#platform-thumbnails)
+- `platformAspectRatios` (array): Reframe images to one shape per platform. See [Image shape per platform](#image-shape-per-platform)
+- `firstComments` (array): A comment posted right after the post goes out. See [First comments](#first-comments)
+- `twitterKeepLinks` (boolean): Keep links in the X text clickable. See [Links on X](#links-on-x)
+- `scheduledAt` (string): ISO 8601 UTC datetime. A future value schedules the post; omitted or in the past publishes immediately. With `saveAsDraft: true` it is the draft's planned date: the post stays a `DRAFT`, and `POST /social-posts/:id/publish` without `scheduledAt` schedules it for that date
+- `saveAsDraft` (boolean): Save as `DRAFT` instead of scheduling/publishing; validation is deferred to `POST /social-posts/:id/publish`
+- `recurrence` (object): Repeats the post. See [Recurrence](#recurrence) below
+- `pageIds` (string[]): Facebook page account `id` values from `/social-accounts` (the account's `pageId` value is accepted too)
 - `tiktokConnectionIds` (string[]): TikTok account connection IDs
 - `threadsConnectionIds` (string[]): Threads account connection IDs
 - `instagramConnectionIds` (string[]): Instagram account connection IDs
 - `twitterConnectionIds` (string[]): X/Twitter account connection IDs
 - `blueskyConnectionIds` (string[]): Bluesky account connection IDs
+- `mastodonConnectionIds` (string[]): Mastodon account connection IDs
 - `linkedinConnectionIds` (string[]): LinkedIn account connection IDs
 - `pinterestConnectionIds` (string[]): Pinterest account connection IDs
 - `youtubeConnectionIds` (string[]): YouTube account connection IDs
-- `pinterestConfigs` (array): Pinterest-specific settings per connection
+- `googleBusinessConnectionIds` (string[]): Google Business Profile location `id` values from `/social-accounts`. A location without a `googleBusinessConfigs` entry gets a `STANDARD` update
+- `telegramConnectionIds` (string[]): Telegram channel and group `id` values from `/social-accounts`. Text up to 4096 characters, up to 10 images (JPEG, PNG or WebP, 10 MB each) or one MP4 or MOV video (50 MB). A caption over 1024 characters goes out as its own message after the media
+- `pinterestConfigs` (array): Pinterest-specific settings per connection. Pick the board with `boardId` or `boardName` (the board's name on that account, resolved when the request is handled; `400` when no board or several boards have it), never both. With neither, the pin goes to a public board named "AdaptlyPost"
 - `tiktokConfigs` (array): TikTok-specific settings per connection
 - `instagramConfigs` (array): Instagram-specific settings per connection
 - `facebookConfigs` (array): Facebook-specific settings per page
 - `youtubeConfigs` (array): YouTube-specific settings per connection
+- `linkedinConfigs` (array): LinkedIn-specific settings per connection (`documentTitle` for `DOCUMENT` posts)
+- `googleBusinessConfigs` (array): Google Business Profile settings per location: topic (update, event or offer), button, event and offer details
 
 See [platform-configs.md](platform-configs.md) for detailed config schemas.
+
+#### First comments
+
+`firstComments` posts a comment from the same account right after the post goes out, one entry per platform:
+
+```json
+{ "firstComments": [{ "platform": "LINKEDIN", "text": "Read the full report at example.com/report" }] }
+```
+
+| Platform | Posted as | Max characters |
+| --- | --- | --- |
+| `LINKEDIN` | comment | 1250 |
+| `TWITTER` | reply | 280 |
+| `THREADS` | reply | 500 |
+| `BLUESKY` | reply | 300 |
+| `MASTODON` | reply | 500 |
+| `YOUTUBE` | comment | 10000 |
+| `FACEBOOK` | comment | 8000 |
+| `INSTAGRAM` | comment | 2200 |
+
+Any other platform returns `400`, as does a platform the post does not go to, an empty or too long text, a second entry for one platform, a private or made for kids YouTube video, and Facebook or Instagram stories. The comment goes out about 10 seconds after the platform publishes (60 on YouTube) and is retried up to 3 times. On X it is not retried, and on a lifetime-deal account it costs credits like any X post. A failed comment never fails the post: read `firstCommentStatus` and `firstCommentError` on the platform entry. A Facebook Page or Instagram account connected before Facebook and Instagram got first comments needs one reconnect from Connectors; until then its comment fails and `firstCommentError` says to reconnect. On `PATCH`, sending the array replaces every first comment and leaving it out keeps the stored ones.
+
+#### Platform thumbnails
+
+`platformThumbnails` gives one platform of a `VIDEO` post its own thumbnail, one entry per platform: `{ "platform", "thumbnailUrl", "thumbnailTimestampMs" }`. `thumbnailUrl` is an https URL or an image data URI; `thumbnailTimestampMs` is a video frame in ms (integer, 0 or more).
+
+- `YOUTUBE`, `FACEBOOK`, `LINKEDIN`, `TELEGRAM`: image only
+- `INSTAGRAM`, `PINTEREST`: image or frame; the image wins when both are sent
+- `TIKTOK`: frame only
+
+A platform without an entry uses the post-level `thumbnailUrl` and `thumbnailTimestampMs`. Other platforms, posts that are not videos, Facebook and Instagram stories, a second entry for one platform and an entry the platform cannot use return `400`. On `PATCH`, sending the array replaces every override and leaving it out keeps the stored ones.
+
+#### Image shape per platform
+
+`platformAspectRatios` reframes every image of an `IMAGE` or `CAROUSEL` post to one shape on a platform, one entry per platform: `{ "platform": "INSTAGRAM", "aspectRatio": "PORTRAIT", "fit": "CROP" }`.
+
+- `aspectRatio`: `SQUARE` (1:1), `PORTRAIT` (4:5), `VERTICAL` (9:16), `LANDSCAPE` (1.91:1). `INSTAGRAM` takes `SQUARE`, `PORTRAIT` and `LANDSCAPE`; `TIKTOK` takes all four
+- `fit`: `CROP` (default) cuts the image from the center; `PAD` keeps the whole image and fills the rest with a blurred copy
+
+Other platforms, video posts, Instagram stories and a second entry for one platform return `400`. Leave a platform out to keep its images as uploaded. On `PATCH` it applies to the `mediaUrls` sent in the same request.
+
+#### Links on X
+
+X charges over 10 times more for a post with a link, so by default every link in X text is broken (`example.com` becomes `example. com`). `twitterKeepLinks: true` keeps them clickable. Only AppSumo lifetime deals can turn it on, and a kept link costs 20 credits instead of 2; `true` on any other plan returns `400`. It is ignored when the X text has no link. `POST /social-posts` and `PATCH` take it; bulk does not.
+
+#### Recurrence
+
+`recurrence` repeats the post. The future `scheduledAt` is the first post and sets the time of day, and `timezone` decides which local day and time that is for every later post.
+
+```json
+{
+  "scheduledAt": "2026-10-05T07:00:00.000Z",
+  "timezone": "Europe/Berlin",
+  "recurrence": { "frequency": "WEEKLY", "weekdays": ["MONDAY", "FRIDAY"], "endsOn": "2026-12-31" }
+}
+```
+
+- `frequency` (string, required): `DAILY`, `WEEKLY`, `MONTHLY` or `YEARLY`. `YEARLY` comes back on the same date every year at the same local time; a series started on February 29 posts on February 28 in other years
+- `interval` (integer): Repeat every N days, weeks, months or years. Range: 1-30. Default: 1
+- `weekdays` (Weekday[]): `WEEKLY` only. The weekday of `scheduledAt` is always included
+- `endsOn` (string): `YYYY-MM-DD`, the last day an occurrence may go out on (inclusive). Must be on or after the day of the first post
+- `maxOccurrences` (integer): Total number of posts the series publishes. Range: 2-365
+
+`endsOn` and `maxOccurrences` cannot be combined; with neither the post repeats until it is paused or deleted. Each rule below returns `400` with the message shown:
+
+- no `frequency`: `Choose how often the post repeats`
+- `saveAsDraft: true`: `A recurring post cannot be saved as a draft. Schedule it instead`
+- no future `scheduledAt`: `Pick a future date and time for the first post of a recurring series`
+- both `endsOn` and `maxOccurrences`: `Choose either an end date or a number of posts, not both`
+- `endsOn` before the first post: `The end date must be on or after the first post`
+- a TikTok account: `TIKTOK posts cannot repeat. Remove the account or turn off repeat`
+
+Only `POST /social-posts` takes `recurrence`. `PATCH /social-posts/:id`, bulk items and `POST /social-posts/:id/publish` do not. See [Recurring posts](#recurring-posts) for how the series runs.
 
 **Response:**
 
@@ -114,23 +338,28 @@ See [platform-configs.md](platform-configs.md) for detailed config schemas.
     }
   ],
   "isScheduled": true,
-  "scheduledAt": "2026-06-15T10:00:00.000Z"
+  "scheduledAt": "2026-06-15T10:00:00.000Z",
+  "recurringPostId": "cmr1a2b3c0000i0r5rcp0abcd"
 }
 ```
 
+`recurringPostId` is only present when the request carried `recurrence`; `postId` is then the first post of the series.
+
+`queuedPlatforms` confirms that publishing jobs were queued, not that they succeeded: each platform publishes asynchronously and on its own, so read `GET /social-posts/:id/results` for the outcome. A future `scheduledAt` returns `isScheduled: true` with status `SCHEDULED`; a missing or past `scheduledAt` publishes immediately with status `PENDING`; `saveAsDraft: true` stores a `DRAFT`, with `scheduledAt` as its planned date when one was sent.
+
 ### GET /social-posts
 
-List posts for the authenticated account group with pagination.
+List every post in the authenticated account group, any status, with pagination. Newest first by default.
 
 **Query parameters:**
 
 - `limit` (integer, optional): Number of posts to return. Range: 1-100. Default: 20
 - `offset` (integer, optional): Number of posts to skip. Min: 0. Default: 0
 - `sortOrder` (string, optional): `NEWEST` or `OLDEST`. Default: `NEWEST`
-- `statuses` (PostStatus[], optional): Filter by one or more post statuses. Repeat the key per value.
+- `statuses` (PostStatus[], optional): Filter by one or more post statuses. Repeat the key per value. Any query parameter outside this list returns `400`.
 - `platforms` (PlatformType[], optional): Filter by one or more platforms. Repeat the key per value.
-- `startDate` (string, optional): Only posts created on or after this date (ISO 8601, e.g. `2026-07-20`).
-- `endDate` (string, optional): Only posts created on or before this date (ISO 8601, e.g. `2026-07-22`).
+- `startDate` (string, optional): Lower bound on `scheduledAt`, or on `createdAt` for posts that were never scheduled (ISO 8601, e.g. `2026-07-20`).
+- `endDate` (string, optional): Upper bound on `scheduledAt`, or on `createdAt` for posts that were never scheduled (ISO 8601, e.g. `2026-07-22`).
 
 Array filters (`statuses`, `platforms`) are sent as repeated keys, e.g. `platforms=FACEBOOK&platforms=TIKTOK`.
 
@@ -155,6 +384,8 @@ GET /social-posts?limit=10&offset=0&statuses=SCHEDULED&statuses=PUBLISHING&platf
       "scheduledAt": "2026-06-15T10:00:00.000Z",
       "timezone": "America/New_York",
       "status": "DRAFT",
+      "recurringPostId": null,
+      "occurrenceAt": null,
       "platforms": [
         {
           "id": "cmm0z0k3u0001i0r5dlbfa440",
@@ -164,6 +395,7 @@ GET /social-posts?limit=10&offset=0&statuses=SCHEDULED&statuses=PUBLISHING&platf
           "status": "PENDING",
           "connectionId": "cmlxly42t0004hzq1bh9kqpwl",
           "mediaUrls": [],
+          "previewUrls": [],
           "youtubeTags": []
         }
       ]
@@ -176,6 +408,23 @@ GET /social-posts?limit=10&offset=0&statuses=SCHEDULED&statuses=PUBLISHING&platf
 
 **Post status values:** `DRAFT`, `SCHEDULED`, `PENDING`, `PUBLISHING`, `COMPLETED`, `PARTIAL_FAILURE`, `FAILED`
 **Platform status values:** `PENDING`, `PUBLISHING`, `PUBLISHED`, `FAILED`
+
+The post carries its `mediaUrls` at the top level as well as on each platform entry. Once a platform entry is published, `platformPostId` and a clickable `postUrl` are set on every platform. Instagram and Facebook stories expire after 24 hours, so their `postUrl` links to the profile or page. `previewUrls` holds one permanent preview image per media item (WebP, up to 720px, a still frame for videos), filled in shortly after publishing starts; an empty string means that item could not be rendered. After publishing, `mediaUrls` may be replaced by the platform's own CDN links, which expire within days, and the uploaded source files are removed, so display `previewUrls`.
+
+`recurringPostId` names the recurring post this post is an occurrence of, and `occurrenceAt` is the series slot it fills, which stays the same when the post is rescheduled. Both are `null` on posts that are not part of a series.
+
+Platform entry fields set by the newer request fields (absent when not used):
+
+- First comment: `firstComment`, `firstCommentStatus` (`PENDING`, `PUBLISHED` or `FAILED`), `firstCommentId`, `firstCommentError`, `firstCommentPublishedAt`
+- Thumbnail override: `thumbnailUrl`, `thumbnailTimestampMs`
+- Image shape: `mediaAspectRatio`, `mediaAspectRatioFit`
+- Instagram: `instagramCollaborators`, `instagramUserTags` (each `{ username, x, y }`), `instagramAiGenerated` (the post carries the AI info label), `instagramUsername` (the handle it published from), `instagramAudioId`, `instagramAudioTitle`, `instagramAudioArtist`, `instagramAudioVolume`, `instagramVideoVolume`
+- Facebook: `facebookTextFormatPresetId`, `facebookImageLayout` (`GRID` or `CAROUSEL`), `facebookCarouselCards` (each with `link`, `title`, `description`)
+- YouTube: `youtubeAiGenerated` (the video carries the altered or synthetic content label; see `youtubeConfigs[].aiGenerated`)
+- X: `twitterKeepLinks`
+- Google Business Profile: `googleBusinessTopicType`, `googleBusinessCallToActionType`, `googleBusinessCallToActionUrl`, `googleBusinessEventTitle`, `googleBusinessEventStart`, `googleBusinessEventEnd`, `googleBusinessOfferCouponCode`, `googleBusinessOfferRedeemUrl`, `googleBusinessOfferTerms`
+
+A story shared next to a feed post or reel (`shareToStory`) is its own platform entry with `instagramPostType` or `facebookPostType` set to `STORY`.
 
 ### GET /social-posts/:id
 
@@ -234,21 +483,27 @@ Schedule up to 100 posts at once. Each post can have its own content, media, and
 
 **Optional fields (batch-level):**
 
-- Connection ID arrays: `twitterConnectionIds`, `linkedinConnectionIds`, `instagramConnectionIds`, `tiktokConnectionIds`, `youtubeConnectionIds`, `pinterestConnectionIds`, `blueskyConnectionIds`, `threadsConnectionIds`, `pageIds`
-- Platform configs (applied to all posts as default): `pinterestConfigs`, `tiktokConfigs`, `instagramConfigs`, `facebookConfigs`, `youtubeConfigs`
+- Connection ID arrays: `twitterConnectionIds`, `linkedinConnectionIds`, `instagramConnectionIds`, `tiktokConnectionIds`, `youtubeConnectionIds`, `pinterestConnectionIds`, `blueskyConnectionIds`, `mastodonConnectionIds`, `threadsConnectionIds`, `googleBusinessConnectionIds`, `telegramConnectionIds`, `pageIds`
+- Platform configs (applied to all posts as default): `pinterestConfigs`, `tiktokConfigs`, `instagramConfigs`, `facebookConfigs`, `youtubeConfigs`, `googleBusinessConfigs`
+
+`firstComments`, `platformThumbnails` and `platformAspectRatios` go on each post item, not the batch. Bulk does not take `twitterKeepLinks`.
 
 See [platform-configs.md](platform-configs.md) for config schemas.
 
 **Post item fields:**
 
-- `contentType` (string, required): `TEXT`, `IMAGE`, `VIDEO`, or `CAROUSEL`
+- `contentType` (string, required): `TEXT`, `IMAGE`, `VIDEO`, or `CAROUSEL`. `DOCUMENT` posts cannot be bulk scheduled; create them one at a time
 - `scheduledAt` (string, required): ISO 8601 UTC datetime
 - `text` (string): Post text
 - `platformTexts` (array): Per-platform text overrides
 - `mediaUrls` (string[]): Media file URLs
+- `mediaAltTexts` (string[]): Alt text for each image, in the same order as `mediaUrls` (max 1000 characters each; use `""` to skip an image). Sent to X, Bluesky, Mastodon, LinkedIn, Facebook, Instagram and Threads. Pinterest uses the first one, cut to 500 characters. TikTok, YouTube, Google Business Profile, Telegram and videos ignore it
 - `thumbnailUrl` (string): Thumbnail URL for video posts
 - `thumbnailTimestampMs` (number): Thumbnail position in video (ms)
-- Platform config overrides (per-post): `pinterestConfigs`, `tiktokConfigs`, `instagramConfigs`, `facebookConfigs`, `youtubeConfigs` — when set on a post item, these override the batch-level configs for that specific post
+- `firstComments`, `platformThumbnails`, `platformAspectRatios` (arrays): Same as on [POST /social-posts](#first-comments)
+- Platform config overrides (per-post): `pinterestConfigs`, `tiktokConfigs`, `instagramConfigs`, `facebookConfigs`, `youtubeConfigs`, `googleBusinessConfigs` — when set on a post item, these override the batch-level configs for that specific post
+
+A Pinterest `boardName`, at the batch level or on an item, is resolved per item. An item whose name matches no board, or several, fails alone with `success: false` and the reason in `errorMessage`; the other items are still scheduled.
 
 **Response:**
 
@@ -269,6 +524,59 @@ See [platform-configs.md](platform-configs.md) for config schemas.
 - Each post is processed independently — if one fails, others still schedule
 - Only one account per platform allowed (platform ToS compliance)
 - Per-post platform configs completely replace batch-level configs (no merging)
+
+### POST /social-posts/validate
+
+Dry-runs a post. Takes the same body as [POST /social-posts](#post-social-posts) and runs every check that call runs, plus the ones that usually fail only at publish time (TikTok creator limits and video length, the YouTube upload quota for channels without a backup upload, expired Instagram and Threads tokens, Mastodon attachments past the server's limit, Pinterest board ids, X credits on lifetime deals). It creates, uploads and records nothing. Needs `posts.draft` and no active plan.
+
+Content problems answer `200` with the report. `400` means a malformed body, `401` and `403` the usual auth answers.
+
+**Response:**
+
+```json
+{
+  "valid": false,
+  "outcome": "SCHEDULED",
+  "scheduledAt": "2026-03-15T10:00:00.000Z",
+  "requiredPermissions": ["posts.schedule"],
+  "issues": [],
+  "accounts": [
+    { "platform": "TWITTER", "connectionId": "conn_tw1", "accountName": "Acme", "status": "BLOCKED",
+      "issues": [{ "code": "TEXT_TOO_LONG", "severity": "ERROR", "message": "Text exceeds maximum length for X. Maximum is 280 characters", "platform": "TWITTER", "connectionId": "conn_tw1" }] },
+    { "platform": "LINKEDIN", "connectionId": "conn_li1", "accountName": "Acme Inc", "status": "READY", "issues": [] }
+  ],
+  "notChecked": [
+    { "code": "PLATFORM_PROCESSING", "message": "The platform processes media after upload and can still reject it then" }
+  ]
+}
+```
+
+- `valid` (boolean): `false` when any issue has severity `ERROR`
+- `outcome`: `PUBLISH_NOW`, `SCHEDULED` or `DRAFT`, what creating the post would do; `scheduledAt` is set when `SCHEDULED`
+- `requiredPermissions` (string[]): the permissions creating it needs. A missing one is reported as a `PERMISSION_DENIED` issue
+- `issues`: problems not tied to one selected account
+- `accounts`: one entry per selected account with `platform`, `connectionId`, `accountName` (may be missing), `status` (`READY`, `WARNING` or `BLOCKED`) and its `issues`
+- `notChecked`: what only the platform can decide at publish time, each `{ code, message }` with `code` one of `PLATFORM_PROCESSING`, `DUPLICATE_CONTENT`, `PLATFORM_RATE_LIMITS`, `LIVE_ACCOUNT_ACCESS`, `VIDEO_DURATION`
+
+An issue is `{ code, severity, message, platform?, connectionId? }`. `severity` is `ERROR` (blocks the post) or `WARNING` (the post goes through). `message` is translated into the request's language; show it as is. Codes include the media and text checks (`TEXT_TOO_LONG`, `VIDEO_TOO_LARGE`, ...) and `ACCOUNT_NOT_FOUND`, `ACCOUNT_DISCONNECTED`, `ACCOUNT_TOKEN_EXPIRED`, `MEDIA_NOT_UPLOADED`, `TIKTOK_POSTING_BLOCKED`, `TIKTOK_VIDEO_TOO_LONG`, `TIKTOK_MEDIA_DOMAIN`, `YOUTUBE_UPLOAD_QUOTA_EXHAUSTED`, `MASTODON_MEDIA_DROPPED`, `PINTEREST_BOARD_NOT_FOUND`, `X_CREDITS_INSUFFICIENT`, `PERMISSION_DENIED`, `SUBSCRIPTION_REQUIRED` and `CHECK_UNAVAILABLE`. The list grows; treat an unknown code as opaque and show its `message`.
+
+### POST /social-posts/bulk/validate
+
+Takes the same body as [POST /social-posts/bulk](#post-social-postsbulk) and returns one report per item, in request order. Needs `posts.draft`.
+
+```json
+{
+  "valid": false,
+  "totalValid": 1,
+  "totalInvalid": 1,
+  "results": [
+    { "index": 0, "report": { "valid": true, "outcome": "SCHEDULED", "...": "..." } },
+    { "index": 1, "report": { "valid": false, "outcome": "SCHEDULED", "...": "..." } }
+  ]
+}
+```
+
+`index` is the item's 0-based position in `posts`, and each `report` has the shape above.
 
 ### POST /upload-urls
 
@@ -292,6 +600,13 @@ Get presigned upload URLs for media files. Upload 1-20 files per request.
 - `image/webp` — WebP images
 - `video/mp4` — MP4 video
 - `video/quicktime` — MOV video
+- `application/pdf` — PDF document (LinkedIn `DOCUMENT` posts)
+- `application/vnd.ms-powerpoint` — PowerPoint 97-2003 document (LinkedIn `DOCUMENT` posts)
+- `application/vnd.openxmlformats-officedocument.presentationml.presentation` — PowerPoint document (LinkedIn `DOCUMENT` posts)
+- `application/msword` — Word 97-2003 document (LinkedIn `DOCUMENT` posts)
+- `application/vnd.openxmlformats-officedocument.wordprocessingml.document` — Word document (LinkedIn `DOCUMENT` posts)
+
+Keep the file extension in `fileName`: a post reads the document type from it.
 
 **Response:**
 
@@ -317,19 +632,524 @@ Get presigned upload URLs for media files. Upload 1-20 files per request.
 
 > **The file must be uploaded (step 2) before you reference its `publicUrl`.** `POST /social-posts` and `POST /social-posts/bulk` verify every `publicUrl` exists in storage. A URL whose PUT never completed (or whose upload URL expired after 1 hour) is rejected with `400 Bad Request` and `Media file(s) not found in storage: <url>`. In bulk requests this is reported per-post; the remaining posts are still scheduled.
 
+One `publicUrl` may be reused across any number of posts, bulk items included; the file is kept until the last post referencing it has published. Reuse the `publicUrl` you uploaded, not a `mediaUrls` value read back from a published post, since those may be the platform's own expiring links.
+
+### GET /social-posts/:id/results
+
+Per-platform publishing outcome for one post. Each platform reports on its own, so read this per row rather than treating the post as one pass or fail. Publishing is asynchronous, so poll until no row is `PENDING` or `PUBLISHING`.
+
+**Response:**
+
+```json
+{
+  "postId": "cmm0z0k3q0000i0r5mxn0hfhs",
+  "status": "PARTIAL_FAILURE",
+  "results": [
+    { "platformId": "pp_abc001", "platform": "TWITTER", "accountName": "johndoe", "status": "PUBLISHED", "platformPostId": "1234567890", "errorMessage": null, "publishedAt": "2026-06-15T10:00:12.000Z" },
+    { "platformId": "pp_abc002", "platform": "TIKTOK", "accountName": "johndoe", "status": "FAILED", "platformPostId": null, "errorMessage": "Spam risk: too many posts in a short window", "publishedAt": null }
+  ]
+}
+```
+
+Take `platformId` from `FAILED` rows when calling `POST /social-posts/:id/retry`. Use `GET /social-posts/:id` instead when you also need the content and schedule.
+
+### PATCH /social-posts/:id
+
+Update a `DRAFT` or `SCHEDULED` post. Any other status is rejected with `400` `Cannot edit post in current state` rather than partially applied.
+
+Moving a `SCHEDULED` post's `scheduledAt` more than a minute into the past returns `400` `The new scheduled time is in the past. Choose a time in the future`. Resending the time the post already has is accepted even after it passed. To publish now, use `POST /social-posts/:id/publish` without `scheduledAt`.
+
+Accepts the same body as `POST /social-posts`, minus `saveAsDraft` and `recurrence`. Updates are partial: `text`, `contentType`, `scheduledAt`, `timezone`, `thumbnailUrl`, `thumbnailTimestampMs`, `firstComments` and `platformThumbnails` you omit keep their values. Sending `firstComments` or `platformThumbnails` replaces every stored entry. `platforms` is the exception: sending it rebuilds the post's targets from that request alone, so resend every `*ConnectionIds` array and platform config you want to keep. `mediaUrls` only take effect together with `platforms`, and on a `SCHEDULED` post they are verified in storage the same way as on create. Omitting `platforms` leaves accounts, configs, and media untouched.
+
+**Response:** the updated post, in the same shape as `GET /social-posts/:id`.
+
+### POST /social-posts/:id/unschedule
+
+Take a post off the calendar without deleting it. Accepts a `SCHEDULED` post, or a `DRAFT` that still has a date, and turns it into an undated `DRAFT` with `scheduledAt: null`. Content, media and accounts are kept, and nothing publishes until the post is scheduled again with `POST /social-posts/:id/publish`. No request body.
+
+Any other status returns `400` `Cannot edit post in current state`. An id outside the workspace returns `404` `Post not found or access denied`.
+
+**Response:** the post as an undated draft, in the same shape as `GET /social-posts/:id`.
+
+### DELETE /social-posts/:id
+
+Delete a post record. Use it to cancel a `DRAFT` or `SCHEDULED` post; a deleted scheduled post will not publish. A post that is `PUBLISHING` right now is refused with `409` `Post is being published and cannot be deleted`; wait for it to finish. Other statuses are accepted, but deleting a `COMPLETED` or `PARTIAL_FAILURE` post only drops AdaptlyPost's record: the content already exists on each network, and removing it there is a manual step. Prefer `PATCH` over delete-and-recreate. Irreversible.
+
+**Response:** `{ "deleted": true }`
+
+### POST /social-posts/:id/publish
+
+Publish a draft, either immediately or on a schedule. Accepts a `DRAFT`, and also a `SCHEDULED` post to reschedule it or push it live; any other status returns `400` `Post is not a draft`.
+
+**Request:**
+
+```json
+{ "scheduledAt": "2026-03-15T10:00:00Z", "timezone": "UTC" }
+```
+
+- `scheduledAt` (string, optional): schedules the post for that time instead of the draft's planned date. A past time publishes now.
+- `timezone` (string, required)
+- `publishNow` (boolean, optional): publishes now even when the draft has a planned date. Sending it with `scheduledAt` returns `400` `Send either scheduledAt or publishNow, not both`.
+
+Without `scheduledAt`, a draft whose planned date is in the future is scheduled for that date, and any other post publishes now. Scheduling needs `posts.schedule` and publishing now needs `posts.publish`, so a key that holds only `posts.draft` gets `403 permission_denied`. Publishing now moves the post to `PENDING`, clears its stored `scheduledAt`, queues a publishing job per platform, and `queuedPlatforms` lists them. This is irreversible from the agent's side once it returns. Scheduling sets `SCHEDULED` and returns an empty `queuedPlatforms`. `timezone` is required (use `UTC` if unknown); it is stored for display and does not shift `scheduledAt`. Fails with `400` if an account on the draft was disconnected (`Connection not found for <platform>`) or a TikTok entry has no `privacyLevel` (`Privacy level is required for TikTok posts`); fix those with `PATCH` first.
+
+**Response:** `{ "postId", "queuedPlatforms", "isScheduled", "scheduledAt" }`. Read `GET /social-posts/:id/results` afterwards for the per-platform outcome.
+
+### POST /social-posts/:id/retry
+
+Retry the platforms that failed on a post. `platformIds` takes PostPlatform ids from the results endpoint, platform names such as `BLUESKY` (every failed entry of that platform), or can be omitted to retry every failed entry. Only rows whose status is `FAILED` are reset to `PENDING` and re-queued with the same content. A value that matches neither an entry id nor a platform of the post returns `400` `Unknown retry target: ...`; if nothing matched has failed the API returns `400` `No failed platforms to retry`. The post moves to `PUBLISHING` and the retry is asynchronous, so read the results endpoint again afterwards.
+
+**Request:**
+
+```json
+{ "platformIds": ["pp_abc002", "BLUESKY"] }
+```
+
+**Response:** `{ "postId", "queuedPlatforms", "isScheduled": false }`
+
+Get `platformIds` from `GET /social-posts/:id/results`, or name the platform. Retry only after the cause is fixed. A platform restriction is that network's decision about the account and a retry will not clear it, while a refreshed token or replaced media will.
+
+### POST /connect-links
+
+Mint a link that lets someone connect social accounts to this account group without an AdaptlyPost login of their own. Built for agencies onboarding a client, and for agents that need an account connected but must never handle the credentials.
+
+Every field is optional. With no body the link offers every platform, shows the client every account in the group, has no cap and expires after 7 days. An agent always sends a body: `PRIVATE`, the platforms asked for, `maxAccounts` and a short `expiresAt`, and widens a field only when the user asks.
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `name` | string, up to 80 characters | Label in the dashboard list of links |
+| `visibility` | `PUBLIC` or `PRIVATE` | `PRIVATE` shows the client only the accounts they connected through this link |
+| `allowedPlatforms` | array of platform types | Platforms the client can pick. Omit or send `[]` for every platform |
+| `maxAccounts` | integer, 1 or more | The link stops working once that many accounts are connected through it |
+| `expiresAt` | ISO 8601 date-time with `Z` or an offset | When the link stops working, at least 1 hour and at most 365 days away |
+| `neverExpires` | boolean | `true` keeps the link working until it is revoked. Don't send it with `expiresAt` |
+
+**Request:**
+
+```json
+{
+  "name": "Acme onboarding",
+  "visibility": "PRIVATE",
+  "allowedPlatforms": ["INSTAGRAM", "TIKTOK"],
+  "maxAccounts": 3,
+  "expiresAt": "2026-03-30T18:00:00Z"
+}
+```
+
+**Response:**
+
+```json
+{
+  "url": "https://adaptlypost.com/connect/abc123",
+  "token": "abc123",
+  "expiresAt": "2026-03-30T18:00:00.000Z",
+  "name": "Acme onboarding",
+  "visibility": "PRIVATE",
+  "allowedPlatforms": ["INSTAGRAM", "TIKTOK"],
+  "maxAccounts": 3
+}
+```
+
+`expiresAt` is `null` for a link made with `neverExpires: true`. An expiry outside the range, or both `expiresAt` and `neverExpires`, answers `400`.
+
+Send the `url` to the person who owns the account. Anyone holding it can attach an account to your group, so treat it as a secret and revoke it once used.
+
+### DELETE /connect-links/:token
+
+Revoke a connect link before it is used or after it expires.
+
+**Response:** `{ "success": true }`
+
+Returns `404` when the token does not exist or belongs to another account group.
+
+## Recurring posts
+
+A recurring post is a series created by passing `recurrence` to `POST /social-posts`. Only the next occurrence of an `ACTIVE` series exists, as a `SCHEDULED` post created about 24 hours ahead with `recurringPostId` and `occurrenceAt` set. Deleting that one post skips that date and the series continues. Occurrences missed while the series is paused are skipped, never published late.
+
+X and LinkedIn reject a post whose text matches an earlier one. Put spintax such as `{Hi|Hello}` in the text so each occurrence differs.
+
+Editing a series and skipping one date are only possible in the AdaptlyPost app.
+
+Reading needs `posts.read`. A series counts as a scheduled post, so pause and resume need `posts.schedule` and delete needs `posts.delete` (admin, editor), plus `posts.others` on a series another member created. A Contributor key gets `403 permission_denied`.
+
+### GET /recurring-posts
+
+List the recurring posts in the account group.
+
+**Query parameters:**
+
+- `limit` (integer, optional): Range: 1-100. Default: 20
+- `offset` (integer, optional): Min: 0. Default: 0
+- `statuses` (RecurringPostStatus[], optional): Filter by status. Repeat the key per value. Any query parameter outside this list returns `400`.
+
+**Example:**
+
+```
+GET /recurring-posts?limit=20&statuses=ACTIVE&statuses=PAUSED
+```
+
+**Response:**
+
+```json
+{
+  "recurringPosts": [
+    {
+      "id": "cmr1a2b3c0000i0r5rcp0abcd",
+      "userId": "user_01KH48SNHMPJNFYPJWZVJAKXDS",
+      "status": "ACTIVE",
+      "frequency": "WEEKLY",
+      "interval": 1,
+      "weekdays": ["MONDAY", "FRIDAY"],
+      "startsAt": "2026-10-05T07:00:00.000Z",
+      "timezone": "Europe/Berlin",
+      "endsOn": "2026-12-31T00:00:00.000Z",
+      "nextOccurrenceAt": "2026-10-09T07:00:00.000Z",
+      "occurrenceCount": 1,
+      "contentType": "TEXT",
+      "text": "{Hi|Hello} everyone, here is the tip of the week",
+      "mediaUrls": [],
+      "platformTypes": ["LINKEDIN"],
+      "platforms": [
+        {
+          "id": "cmr1a2b3c0000i0r5rcp0abcd-0",
+          "platform": "LINKEDIN",
+          "status": "PENDING",
+          "connectionId": "cmlxly42t0004hzq1bh9kqpwl",
+          "accountName": "Jane Doe"
+        }
+      ],
+      "createdAt": "2026-09-26T12:00:00.000Z",
+      "updatedAt": "2026-09-26T12:00:00.000Z"
+    }
+  ],
+  "total": 1,
+  "hasMore": false
+}
+```
+
+**Fields:**
+
+- `status`: `ACTIVE`, `PAUSED` or `ENDED`
+- `pauseReason`: Set when `PAUSED`. `USER`, `CONSECUTIVE_FAILURES`, `SUBSCRIPTION_INACTIVE`, `ACCESS_LOST`, `CONNECTION_REMOVED` or `INVALID_CONTENT`
+- `lastError`: The error that paused the series, when there was one
+- `frequency`, `interval`, `weekdays`, `endsOn`, `maxOccurrences`: The rule from `recurrence`
+- `startsAt`: The first post's time; `timezone` is the series timezone
+- `nextOccurrenceAt`: The next slot that does not exist as a post yet. Absent once the series has ended
+- `occurrenceCount`: Posts the series has created so far
+- `contentType`, `text`, `mediaUrls`, `mediaAltTexts`, `thumbnailUrl`, `platformTypes`, `platforms`: The content and targets every occurrence copies
+
+A series pauses itself after 3 failed posts in a row (`CONSECUTIVE_FAILURES`), when the subscription lapses (`SUBSCRIPTION_INACTIVE`), when its creator loses workspace access (`ACCESS_LOST`), when one of its accounts is disconnected (`CONNECTION_REMOVED`), or when a platform rejects the content (`INVALID_CONTENT`). Fix the cause before resuming it.
+
+### GET /recurring-posts/:id
+
+One recurring post, in the same shape as a list entry. An id outside the account group returns `404` `Recurring post not found`.
+
+### POST /recurring-posts/:id/pause
+
+Stops creating occurrences and deletes the upcoming scheduled post. No request body.
+
+**Response:** the recurring post with `status: "PAUSED"` and `pauseReason: "USER"`.
+
+### POST /recurring-posts/:id/resume
+
+Continues from the next occurrence after now. Occurrences missed while paused are not published. A series whose end has already passed comes back as `ENDED`. No request body.
+
+**Response:** the recurring post with its new `status` and `nextOccurrenceAt`.
+
+### DELETE /recurring-posts/:id
+
+Stops the series and deletes its upcoming scheduled post. Posts that already went out are kept. Irreversible.
+
+**Response:** `{ "deleted": true }`
+
+## Webhooks
+
+Rather than polling `GET /social-posts` to find out whether something published, register a URL and let AdaptlyPost call you.
+
+### Events
+
+| event | fires when |
+| --- | --- |
+| `post.scheduled` | A post is accepted onto the schedule |
+| `post.published` | Every targeted platform published |
+| `post.partially_failed` | Some platforms published and some failed |
+| `post.failed` | Every platform failed |
+| `account.unauthorized` | A platform rejected a connected account's token; `data.account` carries the account `id`, `platform`, `displayName`, `pageId` (Facebook), `status: "unauthorized"` and the platform's `reason`. The account stays on `/social-accounts` with `status: "unauthorized"` until reconnected |
+| `image.completed` | An AI image job finished; `data.image` carries `jobId`, `sessionId`, `prompt`, `imageUrl` and `imageId` |
+| `image.failed` | An AI image job failed; `data.image` carries `jobId`, `sessionId`, `prompt` and `error` |
+
+Every webhook receives every event of the workspace, for every post and account, until it is deleted: there is no per-event or per-account subscription. Register one only for a URL the user gave and after they agree to that scope; to follow one post, poll `GET /social-posts/:id`. Post events carry `data.post`, account events `data.account`, image events `data.image`. `data.post` has the same shape as `GET /social-posts/:id`, so it carries every platform entry field, first comments and Google Business Profile settings included.
+
+### POST /api/v1/webhooks
+
+**Request:** `{ "url": "https://example.com/hooks/adaptlypost" }`
+
+**Response:**
+
+```json
+{
+  "id": "wh_abc123",
+  "url": "https://example.com/hooks/adaptlypost",
+  "active": true,
+  "secret": "whsec_..."
+}
+```
+
+> The signing secret is returned **only here, only once**. It is not in `GET /webhooks` or `GET /webhooks/:id`. Store it when you create the webhook or delete it and make a new one.
+
+Maximum 10 webhooks per account group. The URL must reach a public host: deliveries to a private or internal address are refused and the delivery records an error.
+
+### GET /api/v1/webhooks
+
+Returns `{ "webhooks": [...] }` without secrets.
+
+### GET /api/v1/webhooks/:id
+
+One webhook, without its secret.
+
+### PATCH /api/v1/webhooks/:id
+
+Body accepts `url` and `active`. Set `active: false` to pause deliveries without losing the registration and its secret.
+
+### DELETE /api/v1/webhooks/:id
+
+**Response:** `{ "deleted": true }`
+
+### POST /api/v1/webhooks/:id/test
+
+Sends a `webhook.test` event to the registered URL so you can verify signature checking before a real post depends on it.
+
+### Verifying a delivery
+
+Each request carries four headers:
+
+| header | contents |
+| --- | --- |
+| `x-adaptly-signature` | `sha256=<hex>` |
+| `x-adaptly-timestamp` | Unix timestamp used in the signature |
+| `x-adaptly-event` | Event name, for example `post.published` |
+| `x-adaptly-webhook-id` | Which registration produced this delivery |
+
+The signature is `HMAC-SHA256(secret, "<timestamp>.<raw body>")`, hex encoded and prefixed with `sha256=`. Sign the **raw** body, before any JSON parsing, or the bytes will not match.
+
+```js
+const expected =
+  "sha256=" +
+  crypto.createHmac("sha256", secret).update(`${timestamp}.${rawBody}`).digest("hex");
+crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(received));
+```
+
+Compare with a timing-safe function, and reject timestamps that are far from now so an old capture cannot be replayed.
+
+### Delivery behaviour
+
+AdaptlyPost retries a failing endpoint 5 times with a 10 second timeout per attempt. After 20 consecutive failures the webhook is deactivated, which is why a receiver that has been down for a while goes quiet and stays quiet: reactivate it with `PATCH /webhooks/:id`.
+
+## Analytics
+
+Post performance for the connected accounts. Covered platforms: `FACEBOOK`, `INSTAGRAM`, `THREADS`, `TIKTOK`, `PINTEREST`, `BLUESKY`, `YOUTUBE`, `TWITTER`, `LINKEDIN`, `GOOGLE_BUSINESS`. `GOOGLE_BUSINESS` reports only location-level impressions (how often the location was seen); its posts are listed with every per-post metric `null`. `MASTODON` and `TELEGRAM` have no analytics and are ignored by every filter.
+
+Connecting an account imports its posts from the last 180 days, and less for accounts whose platform exposes less; `historyHorizonAt` on the sync status says how far. Analytics are kept from then on while the account stays connected, so any date range in that history can be queried. A post keeps refreshing for 180 days after it is published, then holds its last numbers. Weekly buckets and day boundaries follow the workspace defaults.
+
+Every window endpoint takes:
+
+- `from` (string, required): ISO 8601 start of the window
+- `to` (string, required): ISO 8601 end of the window, not earlier than `from`
+- `platforms` (PlatformType[], optional): repeat the key per value; omit for every covered platform
+
+Metrics count posts published inside the window. Every comparison uses the window of the same length immediately before `from`.
+
+### GET /analytics/overview
+
+```json
+{
+  "views": { "value": 48210, "previousValue": 39100, "deltaPercent": 23.3 },
+  "likes": { "value": 2210, "previousValue": 1980, "deltaPercent": 11.6 },
+  "comments": { "value": 340, "previousValue": 410, "deltaPercent": -17.1 },
+  "shares": { "value": 128, "previousValue": null, "deltaPercent": null },
+  "followers": { "value": 12980, "previousValue": 12410, "deltaPercent": 4.6 },
+  "postsCount": { "value": 42, "previousValue": 37, "deltaPercent": 13.5 },
+  "avgViewsPerPost": { "value": 1147.9, "previousValue": 1056.8, "deltaPercent": 8.6 },
+  "engagementRate": { "value": 5.55, "previousValue": 6.11, "deltaPercent": -9.2 },
+  "partialMetrics": ["shares"],
+  "lastSyncedAt": "2026-09-08T06:12:41.000Z"
+}
+```
+
+`followers` is the latest count as of `to`, compared with the count as of the end of the previous window. `engagementRate` is likes + comments + shares over views, as a percentage. `partialMetrics` lists metrics at least one selected platform cannot report, so their totals cover only the platforms that can; a metric no selected platform reports is `null`. `deltaPercent` is `null` when the previous value is 0 or unknown.
+
+### GET /analytics/timeseries
+
+Extra parameter: `granularity` (`DAILY`, the default, `WEEKLY` or `MONTHLY`).
+
+```json
+{
+  "points": [
+    { "date": "2026-08-01T00:00:00.000Z", "views": 1820, "likes": 90, "comments": 12, "shares": 4, "followers": 12420, "postsCount": 2, "engagementRate": 5.8 }
+  ]
+}
+```
+
+`date` is the start of the bucket in UTC. `followers` is the latest known count at the end of the bucket; the other counters sum posts published inside it.
+
+### GET /analytics/platform-breakdown
+
+Takes `from` and `to` only.
+
+```json
+{
+  "platforms": [
+    {
+      "platform": "INSTAGRAM",
+      "followers": { "value": 8210, "previousValue": 7990, "deltaPercent": 2.8 },
+      "views": { "value": 30100, "previousValue": 24800, "deltaPercent": 21.4 },
+      "likes": { "value": 1500, "previousValue": 1310, "deltaPercent": 14.5 },
+      "comments": { "value": 210, "previousValue": 260, "deltaPercent": -19.2 },
+      "shares": { "value": 128, "previousValue": 90, "deltaPercent": 42.2 },
+      "postsCount": { "value": 20, "previousValue": 18, "deltaPercent": 11.1 },
+      "avgViewsPerPost": { "value": 1505, "previousValue": 1377.8, "deltaPercent": 9.2 },
+      "engagementRate": { "value": 6.1, "previousValue": 6.7, "deltaPercent": -9 },
+      "supportedMetrics": ["followers", "views", "likes", "comments", "shares", "saves", "reach", "impressions"]
+    }
+  ]
+}
+```
+
+One row per platform with data in the workspace. Compare two platforms only on metrics both list in `supportedMetrics`.
+
+### GET /analytics/posts
+
+Extra parameters: `sortBy` (`VIEWS`, `LIKES`, `COMMENTS`, `SHARES`, `SAVES`, `CLICKS`, `IMPRESSIONS`, `ENGAGEMENT_RATE`, or `PUBLISHED_AT`, the default), `page` (from 1), `limit` (1-100, default 20).
+
+```json
+{
+  "posts": [
+    {
+      "id": "ap_01j9x…",
+      "postId": "cmm0z0k3q0000i0r5mxn0hfhs",
+      "postPlatformId": "cmm0z0k3u0001i0r5dlbfa440",
+      "platform": "INSTAGRAM",
+      "publishedAt": "2026-08-14T10:00:12.000Z",
+      "title": "Plan a week of posts in one sitting",
+      "thumbnailUrl": "https://…",
+      "permalink": "https://www.instagram.com/p/…",
+      "accountName": "adaptlypost",
+      "metrics": { "views": 9120, "likes": 410, "comments": 38, "shares": 22, "saves": 61, "clicks": null, "impressions": 10230, "reach": 8540, "engagementRate": 5.15 }
+    }
+  ],
+  "total": 42,
+  "page": 1,
+  "limit": 20,
+  "hasMore": true
+}
+```
+
+Includes posts published through AdaptlyPost and posts discovered on the accounts; discovered posts have `postId` and `postPlatformId` set to `null`. `postId` is the id for `GET /social-posts/:id`, and `postPlatformId` is the `platformId` from `/social-posts/:id/results`. A metric the platform does not report is `null`.
+
+### GET /analytics/top-posts
+
+Same rows as `/analytics/posts` without pagination: the top `limit` (1-50, default 10) ordered by `sortBy` (default `VIEWS`). Returns `{ "posts": [...] }`.
+
+### GET /analytics/discovered-posts
+
+Posts found on the connected accounts that AdaptlyPost did not publish, for a read-only calendar. Extra parameter: `limit` (1-1000, default 200).
+
+```json
+{
+  "posts": [
+    { "id": "ap_01j9x…", "platform": "TIKTOK", "publishedAt": "2026-08-20T17:30:00.000Z", "text": "…", "thumbnailUrl": "https://…", "permalink": "https://www.tiktok.com/@…", "accountName": "adaptlypost" }
+  ]
+}
+```
+
+### GET /analytics/sync-status
+
+No parameters.
+
+```json
+{
+  "accountGroupId": "ag_…",
+  "syncInProgress": false,
+  "lastSyncedAt": "2026-09-08T06:12:41.000Z",
+  "historyHorizonAt": "2026-03-12T00:00:00.000Z",
+  "platforms": [
+    {
+      "platform": "INSTAGRAM",
+      "connectionId": "cmlxmnxn20006hzpzvo291ckg",
+      "accountName": "adaptlypost",
+      "status": "IDLE",
+      "lastSyncedAt": "2026-09-08T06:12:41.000Z",
+      "lastErrorMessage": null,
+      "historyHorizonAt": "2026-03-12T00:00:00.000Z",
+      "lastDiscoveryAt": "2026-09-08T06:10:03.000Z",
+      "needsAnalyticsReconnect": false
+    }
+  ]
+}
+```
+
+`status` is `IDLE`, `QUEUED`, `SYNCING` or `FAILED`. `connectionId` is the account `id` from `/social-accounts`. Accounts on platforms without analytics are not listed. `needsAnalyticsReconnect: true` means the account was connected before the analytics permissions existed; it stays parked, with no syncs and no errors, until the user reconnects it (a connect link works) and approves the extra permissions.
+
+### POST /analytics/sync
+
+No body. Queues a sync for every covered account and re-reads the last 7 days. Analytics refresh on their own every few hours, so this is for "I just published" moments. One run per workspace every 10 minutes.
+
+```json
+{ "queued": false, "message": "Analytics were synced recently. Please try again in 412 seconds", "cooldownSecondsRemaining": 412 }
+```
+
+Inside the cooldown the response is still `200`; `queued` is `false` and `cooldownSecondsRemaining` says how long to wait. When queued, `cooldownSecondsRemaining` is `null`. The run is asynchronous: poll `GET /analytics/sync-status` until `syncInProgress` is `false`, then read the metrics again.
+
+## Rate limits
+
+600 requests per minute per API token, counted on a hash of the token rather than on IP.
+
+Every response carries the RFC 9331 headers:
+
+```
+RateLimit-Policy: "adaptlypost-api";q=600;w=60
+RateLimit-Limit: 600
+RateLimit-Remaining: 587
+RateLimit-Reset: 43
+```
+
+A `429` adds `Retry-After` in seconds. Wait it out rather than retrying immediately, since a retry inside the window just burns the next allowance.
+
+## GET /openapi.json
+
+The full OpenAPI 3 spec, and the one endpoint that needs no authentication, so Make, n8n and Zapier can import it without a token.
+
 ## Enums
 
 **PlatformType:**
-`FACEBOOK`, `INSTAGRAM`, `THREADS`, `TIKTOK`, `TWITTER`, `BLUESKY`, `LINKEDIN`, `PINTEREST`, `YOUTUBE`
+`FACEBOOK`, `INSTAGRAM`, `THREADS`, `TIKTOK`, `TWITTER`, `BLUESKY`, `MASTODON`, `LINKEDIN`, `PINTEREST`, `YOUTUBE`, `GOOGLE_BUSINESS`, `TELEGRAM`
 
 **ContentType:**
-`TEXT`, `IMAGE`, `VIDEO`, `CAROUSEL`
+`TEXT`, `IMAGE`, `VIDEO`, `CAROUSEL`, `DOCUMENT`
 
 **TikTokPrivacyLevel:**
 `PUBLIC_TO_EVERYONE`, `MUTUAL_FOLLOW_FRIENDS`, `FOLLOWER_OF_CREATOR`, `SELF_ONLY`
 
 **MetaVideoPostType (Instagram & Facebook):**
 `FEED`, `REEL`, `STORY`
+
+**GoogleBusinessTopicType:**
+`STANDARD`, `EVENT`, `OFFER`
+
+**GoogleBusinessCallToActionType:**
+`BOOK`, `ORDER`, `SHOP`, `LEARN_MORE`, `SIGN_UP`, `CALL`
+
+**MediaAspectRatio:**
+`SQUARE`, `PORTRAIT`, `VERTICAL`, `LANDSCAPE`
+
+**MediaAspectRatioFit:**
+`CROP`, `PAD`
+
+**FirstCommentStatus:**
+`PENDING`, `PUBLISHED`, `FAILED`
+
+**InstagramAudioType:**
+`music`, `original_sound`
 
 **YouTubePostType:**
 `VIDEO`, `SHORTS`
@@ -340,11 +1160,34 @@ Get presigned upload URLs for media files. Upload 1-20 files per request.
 **YouTubeLicense:**
 `youtube`, `creativeCommon`
 
+**RecurrenceFrequency:**
+`DAILY`, `WEEKLY`, `MONTHLY`, `YEARLY`
+
+**Weekday:**
+`MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY`, `SATURDAY`, `SUNDAY`
+
+**RecurringPostStatus:**
+`ACTIVE`, `PAUSED`, `ENDED`
+
+**RecurringPostPauseReason:**
+`USER`, `CONSECUTIVE_FAILURES`, `SUBSCRIPTION_INACTIVE`, `ACCESS_LOST`, `CONNECTION_REMOVED`, `INVALID_CONTENT`
+
+**AnalyticsGranularity:**
+`DAILY`, `WEEKLY`, `MONTHLY`
+
+**AnalyticsSortMetric:**
+`VIEWS`, `LIKES`, `COMMENTS`, `SHARES`, `SAVES`, `CLICKS`, `IMPRESSIONS`, `ENGAGEMENT_RATE`, `PUBLISHED_AT`
+
+**AnalyticsSyncJobStatus:**
+`IDLE`, `QUEUED`, `SYNCING`, `FAILED`
+
 ## Error Responses
 
 - `400` — Bad request (missing fields, invalid data, validation errors)
-- `401` — Invalid, expired, or missing API token
+- `401` — Invalid, expired, revoked or missing API token. `code: token_issuer_lost_access` means the member who created the key lost access to the workspace, so the key was revoked; a new key from a current member is the only fix
+- `403` — The key's role lacks the permission (`code: permission_denied`), or the workspace plan is not active (`code: subscription_required`)
 - `404` — Resource not found or access denied
+- `429` — Rate limit exceeded; see `Retry-After`
 
 **Example error:**
 
@@ -353,5 +1196,50 @@ Get presigned upload URLs for media files. Upload 1-20 files per request.
   "message": ["timezone must be a string", "timezone should not be empty"],
   "error": "Bad Request",
   "statusCode": 400
+}
+```
+
+**Post refused for its content (400):**
+
+```json
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "code": "post_validation_failed",
+  "message": "Text exceeds maximum length for X. Maximum is 280 characters",
+  "issues": [
+    { "code": "TEXT_TOO_LONG", "severity": "ERROR", "message": "Text exceeds maximum length for X. Maximum is 280 characters", "platform": "TWITTER", "connectionId": "conn_tw1" }
+  ]
+}
+```
+
+`POST /social-posts` answers this way when a check refuses the post. `message` is one string for one issue and an array of strings for several. `issues` has the same shape as in [POST /social-posts/validate](#post-social-postsvalidate). Fix what they name before sending again.
+
+**Permission denied (403):**
+
+```json
+{
+  "statusCode": 403,
+  "error": "Forbidden",
+  "code": "permission_denied",
+  "requiredPermission": "posts.publish",
+  "role": "contributor",
+  "keyRole": "contributor",
+  "issuerRole": "editor",
+  "tokenType": "api_token",
+  "message": "The Contributor role cannot publish posts. Send the post with saveAsDraft: true and ask a workspace member to publish it."
+}
+```
+
+`requiredPermission` is the permission the operation needs (see [Roles and permissions](#roles-and-permissions)), `role` is the role actually in force, which is the issuer's role when the member who created the key has since been demoted below the key's role; `keyRole` is the role recorded on the key, `issuerRole` the creator's current role, and `tokenType` is `api_token` or `oauth`. `message` says what the role cannot do and what to do instead, in the request's language. Stop on this error: a retry or another key of the same role gets the same answer.
+
+**Key revoked because its creator left (401):**
+
+```json
+{
+  "statusCode": 401,
+  "error": "Unauthorized",
+  "code": "token_issuer_lost_access",
+  "message": "This API key no longer works: the member who created it lost access to the workspace. Ask a workspace admin for a new key."
 }
 ```

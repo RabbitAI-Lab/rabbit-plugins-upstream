@@ -1,13 +1,13 @@
 ---
 name: openclaw-master-skills
-description: "A curated collection of 2409+ best OpenClaw skills — AI tools, productivity, marketing, frontend, mobile, backend, DevOps and more. Weekly updated by MyClaw.ai — Powered by MyClaw.ai"
+description: "A curated collection of 2703+ best OpenClaw skills — AI tools, productivity, marketing, frontend, mobile, backend, DevOps and more. Daily updated by MyClaw.ai — Powered by MyClaw.ai"
 metadata:
   openclaw: {}
 ---
 
 # OpenClaw Master Skills
 
-A curated, weekly-updated collection of **11211+ best skills** for OpenClaw agents.
+A curated, daily-updated collection of **2703+ best skills** for OpenClaw agents.
 
 ## Categories
 
@@ -34,5 +34,5 @@ clawhub install openclaw-master-skills
 ## Source
 
 - GitHub: https://github.com/LeoYeAI/openclaw-master-skills
-- ClawHub: https://clawhub.com/skills/openclaw-master-skills
+- ClawHub: https://clawhub.ai/skills/openclaw-master-skills
 - Powered by: https://myclaw.ai

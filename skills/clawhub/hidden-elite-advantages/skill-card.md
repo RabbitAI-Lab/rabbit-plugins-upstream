@@ -1,46 +1,54 @@
-## Description: <br>
-Helps agents distinguish learnable, partially imitable, and structurally constrained advantages when analyzing elite performers or designing long-term development plans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users compare elite performers’ learnable and path-dependent advantages so they can focus development plans on dimensions they can change.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Developers, coaches, founders, investors, and operators use this skill to analyze an elite performer or domain profile, separate investable green and yellow gaps from red constraints, and produce a measured 12-month development plan. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat the framework as an objective hiring or partnership scoring system. <br>
-Mitigation: Use it as coaching and decision support alongside relevant evidence, job-related criteria, structured interviews, references, and human judgment. <br>
-Risk: Users may over-invest in structural red dimensions or use them to rationalize inaction. <br>
-Mitigation: Audit red dimensions for partner, hire, or proxy substitutes and keep red-dimension effort at or below the skill's stated 20% threshold. <br>
+## Use Case:
 
+Coaches, founders, investors, and operators use this skill to compare a person’s strengths with elite performers, separate learnable gaps from structural constraints, and build a focused development plan.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/hidden-elite-advantages) <br>
-- [Primary sources](references/sources.md) <br>
-- [Charles Darwin vs. Alfred Russel Wallace example](examples/charles-darwin-vs-alfred-russel-wallace-1858.md) <br>
-- [Merton, The Matthew Effect in Science](https://doi.org/10.1126/science.159.3810.56) <br>
-- [Arthur, Increasing Returns and the New World of Business](https://hbr.org/1996/07/increasing-returns-and-the-new-world-of-business) <br>
-- [Wallace 1858 paper](https://www.darwinproject.ac.uk/letter/DCP-LETT-2299.xml) <br>
-- [Darwin, On the Origin of Species](https://darwin-online.org.uk/content/frameset?itemID=F373&viewtype=text&pageseq=1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with structured assessment fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a Hidden Advantage Portfolio with ratings, red design-around options, a 12-month plan, time split, and reference-case comparison.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill invites users to append real-session failure patterns to reusable instructions, which could expose confidential details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove the append instruction for confidential cases, or require explicit approval and anonymization before saving notes; keeping the skill read-only prevents persistence.
+
+## Reference(s):
+
+- [Primary sources](references/sources.md)
+- [Darwin and Wallace example](examples/charles-darwin-vs-alfred-russel-wallace-1858.md)
+- [Merton, The Matthew Effect in Science](https://doi.org/10.1126/science.159.3810.56)
+- [Arthur, Increasing Returns and the New World of Business](https://hbr.org/1996/07/increasing-returns-and-the-new-world-of-business)
+- [Darwin Correspondence Project: Wallace’s 1858 paper](https://www.darwinproject.ac.uk/letter/DCP-LETT-2299.xml)
+- [Darwin Online: On the Origin of Species](https://darwin-online.org.uk/content/frameset?itemID=F373&viewtype=text&pageseq=1)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured text or Markdown advantage portfolio]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Assesses nine advantage dimensions and may outline a focused 12-month development plan.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

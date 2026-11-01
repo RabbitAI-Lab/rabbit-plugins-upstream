@@ -1,43 +1,53 @@
-## Description: <br>
-Detects and mitigates undue deference to positional authority by testing authority signals against domain expertise, independent reasoning, and structural dissent checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detect and mitigate undue influence from positional authority when expertise on the specific question is unverified or reasoning lacks independent support.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, employees, and teams use this skill to evaluate decisions where authority signals may be replacing independent evidence, especially in committees, due diligence, expert advice, AI use, and organizational dissent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may over-rely on the skill's analysis in legal, medical, financial, or safety-critical decisions. <br>
-Mitigation: Treat outputs as a reasoning aid, verify load-bearing claims independently, and route high-stakes decisions through qualified human review. <br>
-Risk: Authority-bias framing could be applied too broadly when a verified domain expert is giving time-critical guidance. <br>
-Mitigation: Check whether the authority has demonstrated expertise on the exact question and whether the reasoning holds independently before discounting the advice. <br>
+## Use Case:
 
+Employees, leaders, and decision makers use this skill to assess whether an authority has relevant expertise, examine their reasoning independently, and make room for dissent in consequential decisions.
 
-## Reference(s): <br>
-- [Authority Bias sources](references/sources.md) <br>
-- [ClawHub Authority Bias skill page](https://clawhub.ai/deciqai/skills/authority-bias) <br>
-- [deciqAI Authority Bias page](https://www.deciqai.com/c/authority-bias) <br>
-- [deciqAI machine-readable metadata](https://www.deciqai.com/s/authority-bias.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown with structured analysis fields and checklist-style guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only reasoning aid; no executable behavior or hidden data access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server evidence) <br>
+Risk: Authority assessments or factual claims could be applied without enough context, especially in high-stakes decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Independently verify important facts, seek relevant expertise when needed, and avoid saving confidential case details in examples.
+
+## Reference(s):
+
+- [Sources and further reading](references/sources.md)
+- [Authority Bias skill page](https://clawhub.ai/deciqai/skills/authority-bias)
+- [Authority Bias overview](https://www.deciqai.com/c/authority-bias)
+- [Knowledge Skills project repository](https://github.com/deciqAI/knowledge-skills)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/authority-bias.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown, including a structured authority-bias analysis and decision checklist]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Applies a stepwise framework to the user's case; does not take actions in external systems.]
+
+## Skill Version(s):
+
+1.0.7 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

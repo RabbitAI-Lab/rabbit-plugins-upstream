@@ -1,46 +1,55 @@
-## Description: <br>
-Helps an agent analyze whether an extreme before-and-after result is likely regression to the mean or evidence of a real causal effect. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies a statistical framework for assessing whether performance changes after extreme results reflect regression to the mean or an intervention effect.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, developers, and analysts use this skill to evaluate interventions, pilots, performance swings, fund results, AI benchmark spikes, or other noisy extreme observations before assigning causal credit or blame. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat examples involving business, investment, AI benchmarks, or medical scenarios as professional advice or as standalone proof of causality. <br>
-Mitigation: Use the skill as an analytical prompt; require domain review and separate evidence before making professional, investment, medical, or operational decisions. <br>
-Risk: Before-and-after improvements can be over-credited to an intervention when no control group or baseline regression estimate is available. <br>
-Mitigation: Compare against untreated peers, historical variance, or a baseline regression estimate before assigning causal credit or blame. <br>
+## Use Case:
 
+Analysts and managers use the framework to assess whether a change after an extreme performance result reflects regression to the mean or a genuine intervention effect. It guides comparisons against controls or baseline expectations and helps calibrate causal claims.
 
-## Reference(s): <br>
-- [Primary Sources](references/sources.md) <br>
-- [Galton 1886 and Kahneman 2011 Israeli Air Force Example](examples/galton-1886-kahneman-2011-israeli-air-force.md) <br>
-- [AI Hot Streak Benchmark Spike Example](examples/ai-hot-streak-benchmark-spike-2023-2026.md) <br>
-- [Chatbot Arena Leaderboard](https://lmarena.ai/) <br>
-- [NLP Evaluation in Trouble](https://aclanthology.org/2023.findings-emnlp.722/) <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/regression-to-the-mean) <br>
-- [Machine-Readable Skill Metadata](https://www.deciqai.com/s/regression-to-the-mean.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown regression analysis with structured fields for observation, intervention, retest, expected regression, control comparison, causal calibration, and adjusted action.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step coaching questions and stop for user input when the user is new to the framework.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: ClawHub release evidence) <br>
+Risk: Regression estimates may be mistaken for proof that an intervention caused a performance change.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat conclusions as estimates and compare against a control group or baseline before assigning causal credit or blame.
+
+Risk: Real-use examples could contain confidential details.
+
+Mitigation: Omit confidential details when recording examples.
+
+## Reference(s):
+
+- [Sources](artifact/references/sources.md)
+- [NLP Evaluation in Trouble: On the Need to Measure LLM Data Contamination for each Benchmark](https://aclanthology.org/2023.findings-emnlp.722/)
+- [Chatbot Arena Leaderboard](https://lmarena.ai/)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown regression analysis with causal calibration]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the observations and control or baseline data provided by the user.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

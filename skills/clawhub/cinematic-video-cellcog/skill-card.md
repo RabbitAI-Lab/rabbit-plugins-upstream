@@ -1,42 +1,58 @@
-## Description: <br>
-AI cinematic video production powered by CellCog for short films, music videos, brand films, and widescreen cinematics from a prompt. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI cinematic video production powered by CellCog. Short films, music videos, brand films, widescreen cinematics. Consistent characters, cinematic lighting, visual storytelling — grand compositions from a single prompt.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-External creators, marketers, developers, and agents use this skill to ask CellCog to create cinematic videos such as short films, brand films, music videos, and narrative scenes from structured prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and creative inputs are sent to CellCog using CELLCOG_API_KEY. <br>
-Mitigation: Install only when the user intends to use CellCog, protect the API key, and avoid submitting sensitive inputs without approval. <br>
-Risk: Cinematic video generation can consume credits and produce variable or unsatisfactory results. <br>
-Mitigation: Set expectations before running requests, start with smaller prompts, and review generated outputs before using them in production. <br>
+## Use Case:
 
+External creators, filmmakers, and brand teams use the skill to turn prompts into cinematic short films, music videos, and brand videos through CellCog.
 
-## Reference(s): <br>
-- [CellCog Homepage](https://cellcog.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/nitishgargiitd/skills/cinematic-video-cellcog) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/nitishgargiitd) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with Python code snippets and shell setup commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, the cellcog package, and CELLCOG_API_KEY; opens a connection to the CellCog service and may consume credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: evidence.release.version) <br>
+Risk: Prompts may contain private or sensitive material sent to CellCog.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only include material you are authorized to share with CellCog.
+
+Risk: Video generation can consume significant credits without producing a usable result.
+
+Mitigation: Review credit costs before requesting generation and start with a modest scope when evaluating results.
+
+Risk: The separate CellCog dependency is outside this artifact's security review.
+
+Mitigation: Review and, where practical, pin the CellCog dependency using its own documentation.
+
+## Reference(s):
+
+- [Cinematic Video on ClawHub](https://clawhub.ai/cellcog/skills/cinematic-video-cellcog)
+- [CellCog](https://cellcog.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Video, Audio]
+
+**Output Format:** [Rendered cinematic video with generated music, voiceover, and sound effects as requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results can be unpredictable, and generation may consume significant credits.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

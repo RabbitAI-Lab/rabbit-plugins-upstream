@@ -1,44 +1,54 @@
-## Description: <br>
-AI tutoring and education powered by CellCog for study guides, exam prep, coding tutorials, language learning, math help, science explanations, practice problems, diagrams, analogies, worked examples, and interactive lessons. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI tutoring and education powered by CellCog. Study guides, exam prep, coding tutorials, language learning, math help, science explanations, practice problems — every subject, every level. Explains concepts via diagrams, analogies, worked examples, and interactive lessons.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-External users, students, educators, and developers use this skill to send tutoring and learning prompts to CellCog for concept explanations, homework support, study materials, coding tutorials, language practice, and practice problems. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided tutoring prompts are sent to CellCog as a third-party service. <br>
-Mitigation: Use only with content appropriate for CellCog's terms and data handling; avoid secrets, private records, regulated data, and confidential school or work materials unless approved. <br>
-Risk: The skill requires a CellCog API key for API-backed requests. <br>
-Mitigation: Store CELLCOG_API_KEY as an environment variable and do not paste credentials into prompts, examples, or shared logs. <br>
-Risk: Tutoring, homework, and study outputs may be incomplete or incorrect for high-stakes learning decisions. <br>
-Mitigation: Review generated explanations, practice answers, and study plans against trusted course materials or qualified instructors before relying on them. <br>
+## Use Case:
 
+Learners use this tutoring skill to understand concepts, practice problems, prepare for exams, and create study materials across subjects and skill levels. Developers can also use it for coding explanations, tutorials, and feedback.
 
-## Reference(s): <br>
-- [CellCog homepage](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/tutoring-education-cellcog) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/nitishgargiitd) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown or plain text responses with optional code blocks and learning structure] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires CELLCOG_API_KEY and the CellCog Python package for API-backed tutoring requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: release evidence) <br>
+Risk: Prompts and included essays, code, or other materials are sent to CellCog.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only material you intend the service to receive, and protect your API key.
+
+Risk: The separate CellCog dependency is outside this skill review.
+
+Mitigation: Review the CellCog dependency before installation.
+
+## Reference(s):
+
+- [Tutoring on ClawHub](https://clawhub.ai/cellcog/skills/tutoring-education-cellcog)
+- [CellCog](https://cellcog.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Guidance]
+
+**Output Format:** [Text or Markdown, with code examples and structured learning materials as requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include study guides, worked examples, practice problems, quizzes, analogies, and diagrams.]
+
+## Skill Version(s):
+
+1.0.19 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

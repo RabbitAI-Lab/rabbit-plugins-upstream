@@ -1,42 +1,51 @@
-## Description: <br>
-Helps insurance agents stress-test a client's coverage before a denied or underpaid claim exposes gaps in limits, exclusions, coverage type, life changes, or documentation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps insurance agents stress-test a client's coverage for potential gaps before a claim.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External insurance agents and agencies use this skill during policy placement, renewal, and annual review to identify coverage gaps and document recommendations before a claim occurs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The output could be mistaken for legal or binding coverage advice. <br>
-Mitigation: Treat it as a review aid and have a qualified insurance professional verify recommendations and client documentation. <br>
-Risk: Coverage-gap recommendations may be incorrect or incomplete if client policy documents or exposure details are missing. <br>
-Mitigation: Verify checklist results against current policy documents, client assets, exclusions, coverage type, life changes, and documented declined recommendations. <br>
+## Use Case:
 
+Insurance agents use this checklist during placement or policy reviews to identify potential gaps in limits, exclusions, coverage type, or life changes, and to document recommendations a client declines. It is a review aid, not legal or coverage advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/insurance-coverage-gap-premortem) <br>
-- [deciqAI Coverage-Gap Premortem](https://www.deciqai.com/c/insurance-coverage-gap-premortem) <br>
-- [deciqAI skill metadata](https://www.deciqai.com/s/insurance-coverage-gap-premortem.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown checklist and advisory text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Review aid only; recommendations should be verified by a qualified insurance professional.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Incomplete policy or client information can lead to missed coverage gaps or misleading conclusions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use this as a review checklist, share only necessary client information, and have a qualified insurance professional verify conclusions.
+
+## Reference(s):
+
+- [Skill information page](https://clawhub.ai/deciqai/skills/insurance-coverage-gap-premortem)
+- [Skill details and checklist](https://www.deciqai.com/c/insurance-coverage-gap-premortem)
+- [Machine-readable skill details](https://www.deciqai.com/s/insurance-coverage-gap-premortem.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown coverage-review checklist and guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.3 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

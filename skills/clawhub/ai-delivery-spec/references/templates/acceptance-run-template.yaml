@@ -1,11 +1,16 @@
+artifact: acceptance_run
+artifact_role: main
+stage: acceptance
+applicable_stages: [acceptance]
+applies_when: 记录已执行的验收及证据；不把计划当验收完成。
 schema_version: 5.1.0
 run_id: ARUN-CORE-001
 baseline_version: "1.0"
 environment: "{acceptance environment}"
 executor: "{executor}"
-executed_at: "2026-01-01T00:00:00Z"
+executed_at: null # 未执行不填写时间；执行后填写实际时间
 evidence_catalog: []
-# pass 时先登记：{id: EVD-CORE-001, uri: evidence/AC-CORE-001.png, sha256: 可选}
+# 执行后登记真实证据：id、uri（及可选 sha256）。
 items:
   - id: ARITEM-CORE-001
     acceptance_ref: AC-CORE-001
@@ -16,7 +21,8 @@ items:
     evidence_refs: []
     defect_refs: []
 residual_issues: []
+# 已发现问题才填写 description、owner 和真实决定的 disposition，不能默认延期。
 conclusion: pending
 conditions: []
 sign_offs: []
-# accepted 时每条签署必须填写 evidence_ref，并能解析到 evidence_catalog 或本地相对路径。
+# 签认后填写 role、actor、decision、at；接受结论须绑定真实 evidence_ref。

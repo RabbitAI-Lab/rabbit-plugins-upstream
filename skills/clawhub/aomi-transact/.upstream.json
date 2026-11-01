@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/aomi-transact",
   "slug": "aomi-transact",
   "ownerHandle": null,
-  "version": "0.10.1",
-  "updatedAt": 1783711863396,
-  "contentHash": "efe17d2c4e5f0ee60320518a09010728c668c30ab4eb91e652a65a243dbd6ce1",
-  "fetchedAt": "2026-07-26T18:17:01.277Z"
+  "version": "0.14.0",
+  "updatedAt": 1793363988163,
+  "contentHash": "d8f23f07d574a0ab3d450aa20fbf009f45f71b3cb91e395a36fdf2661751dfa1",
+  "fetchedAt": "2026-11-01T14:38:45.961Z"
 }

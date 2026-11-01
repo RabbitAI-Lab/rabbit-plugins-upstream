@@ -1,47 +1,58 @@
-## Description: <br>
-Analyzes office workstation images or video to estimate sitting duration and posture metrics, then produces prolonged-sitting and posture warning reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes office workstation video for sitting duration and posture indicators, then returns alerts and a structured report.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Employees, workplace health teams, and developers use this skill to analyze office workstation footage for prolonged sitting, forward-head posture, back curvature, shoulder asymmetry, and screen-distance warnings. It returns visual posture and activity monitoring results with directional health reminders, not medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uploads sensitive workplace video to a cloud service. <br>
-Mitigation: Use only where employees have been notified and consented, and where organizational policy allows the named cloud service, retention, and access controls. <br>
-Risk: The skill silently manages persistent identity, tokens, and cloud report history access. <br>
-Mitigation: Review identity and token storage before installation, limit access to approved operators, and avoid exposing internal identifiers in user-facing output. <br>
-Risk: Network video URLs can send third-party or sensitive footage to the analysis service. <br>
-Mitigation: Use trusted video sources that the organization controls and avoid arbitrary third-party URLs unless source ownership and retention rules are clear. <br>
-Risk: Posture warnings could be mistaken for medical advice. <br>
-Mitigation: Present results as visual posture and activity reminders only, and direct users with pain or medical concerns to qualified professionals. <br>
+## Use Case:
 
+Office health program operators and developers can use the skill to review workstation video for prolonged sitting and posture alerts. It provides visual monitoring results, not medical diagnosis or treatment advice.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-office-worker-posture-warning-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON text containing structured posture metrics, warning labels, reminders, history lists, and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include exported report image links and cloud history query results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Workplace video may be uploaded for external processing even when export-only behavior is selected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sensitive footage until the publisher fixes export-only behavior; confirm authorization for external processing and the provider's retention and deletion practices.
+
+Risk: The user's selected API server may be ignored, so footage could be sent to an unexpected service.
+
+Mitigation: Verify the processing destination and defer sensitive use until API-server selection is fixed.
+
+Risk: Stored accounts or tokens and credential-bearing logs could expose access data.
+
+Mitigation: Protect the workspace database and credential-bearing logs, and confirm how stored accounts and tokens can be removed.
+
+## Reference(s):
+
+- [Office posture analysis API reference](references/api_doc.md)
+- [Analysis API response and error reference](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Analysis Results, Guidance]
+
+**Output Format:** [Text with structured JSON results and a report export link]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include posture metrics, sitting duration, alert type and message, and a session summary; results are not a medical diagnosis.]
+
+## Skill Version(s):
+
+1.0.14 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

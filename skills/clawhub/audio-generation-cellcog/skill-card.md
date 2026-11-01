@@ -1,42 +1,54 @@
-## Description: <br>
-Audio Generation Cellcog helps agents create AI voiceovers, narration, cloned-avatar speech, sound effects, music, podcasts, and dialogue through CellCog providers including OpenAI, ElevenLabs, and MiniMax. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI audio generation and text-to-speech powered by CellCog. Voiceover, narration, voice cloning, avatar voices, sound effects, music, podcasts, dialogue. Three voice providers (OpenAI, ElevenLabs, MiniMax). Professional audio production from text prompts.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers and creators use this skill to ask an agent to generate voiceovers, narration, cloned-avatar speech, sound effects, music, podcasts, and dialogue through CellCog-supported audio providers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cloned voice generation can enable impersonation or non-consensual likeness use. <br>
-Mitigation: Use cloned voices only for the user's own voice or voices where the user has explicit permission and rights. <br>
-Risk: The skill requires a CellCog API key and uses CellCog for generated audio tasks. <br>
-Mitigation: Install and configure the skill only when the user intends to use CellCog for audio generation and is comfortable managing that credential. <br>
+## Use Case:
 
+External users and developers use the skill to create speech, voiceovers, cloned-avatar voices, sound effects, and music through CellCog using natural-language prompts.
 
-## Reference(s): <br>
-- [CellCog homepage](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/audio-generation-cellcog) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/nitishgargiitd) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration instructions, API calls, Files] <br>
-**Output Format:** [Markdown guidance with Python snippets, setup commands, and generated audio files from CellCog tasks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and CELLCOG_API_KEY; generated content may include speech, cloned-avatar voice, sound effects, or music depending on the prompt.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: server release evidence) <br>
+Risk: Prompts, scripts, and uploaded voice samples are processed by CellCog and the applicable provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only content you are authorized to share.
+
+Risk: Setup may install dependencies whose sources and versions affect the environment.
+
+Mitigation: Review dependency sources and versions before running setup commands.
+
+## Reference(s):
+
+- [CellCog](https://cellcog.ai)
+- [Audio Generation on ClawHub](https://clawhub.ai/cellcog/skills/audio-generation-cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [Audio files, Code, Guidance]
+
+**Output Format:** [Generated audio content; Markdown guidance with Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Audio type, duration, language, voice, and style depend on the request and selected provider.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

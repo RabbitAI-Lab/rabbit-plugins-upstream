@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/zhihu-research-page-skill",
   "slug": "zhihu-research-page-skill",
   "ownerHandle": null,
-  "version": "0.1.0",
-  "updatedAt": 1784874962139,
-  "contentHash": "241378f4c42ee9fe7bd1a439de8bd81463898fd1325633af14d1cc08b5e5e0ea",
-  "fetchedAt": "2026-07-26T18:05:37.331Z"
+  "version": "22.0.0",
+  "updatedAt": 1793265887380,
+  "contentHash": "5a1360b3836fb50c44c9d5a65b0953d55fc542ed920cf0ec8c3390094f0b945b",
+  "fetchedAt": "2026-11-01T14:49:14.884Z"
 }

@@ -1,43 +1,59 @@
-## Description: <br>
-用于抖音数据分析、抖音作品详情、图文详情、作品数据、互动指标、内容调研和内容分析。覆盖 Douyin work details，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过 SocialDataX 获取抖音视频或图文作品详情及互动指标，用于内容调研与分析。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and agents use this skill to retrieve structured details for a Douyin work from an aweme ID, content URL, short link, or share text. It supports content research and social data analysis by returning factual fields such as title, author, publish time, interaction counts, images, video, music, and media summaries when available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Douyin IDs, URLs, share text, and the SOCIALDATAX_API_KEY are sent to SocialDataX services for detail lookups. <br>
-Mitigation: Use the skill only with data you are allowed to share, keep the API key in the environment, and use the official SocialDataX AI access page for key management. <br>
-Risk: The documented direct CLI examples use socialdatax-skills@latest, so package behavior can change between runs. <br>
-Mitigation: Pin the npm package version when repeatable behavior is required. <br>
-Risk: Optional media download commands can write returned media assets to local storage. <br>
-Mitigation: Choose an explicit output path or directory and review saved media before reuse or redistribution. <br>
+## Use Case:
 
+External users and analysts use the skill to retrieve structured details and interaction metrics for a Douyin work by ID or content URL, supporting content research and analysis.
 
-## Reference(s): <br>
-- [SocialDataX AI API access](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin-detail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON data returned by SocialDataX tools] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY, node, and npm for direct CLI calls; optional media downloads write only to the requested local output path or directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.15 (source: server release evidence) <br>
+Risk: Detail requests use SocialDataX API credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated SocialDataX API key and account for API credit charges.
+
+Risk: Optional media downloads write files locally.
+
+Mitigation: Choose the intended output folder explicitly.
+
+Risk: The external CLI package code was not bundled and publisher provenance could not be independently verified.
+
+Mitigation: Prefer a reviewed, pinned CLI version.
+
+## Reference(s):
+
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill release](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin-detail)
+- [Publisher profile](https://clawhub.ai/user/devinchen2014)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Files]
+
+**Output Format:** [JSON detail response; optional downloaded media files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Detail requests require SOCIALDATAX_API_KEY; optional media downloads are saved to the requested local output path.]
+
+## Skill Version(s):
+
+0.1.19 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

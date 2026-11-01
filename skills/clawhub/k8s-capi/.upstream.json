@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/k8s-capi",
   "slug": "k8s-capi",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1779076390278,
-  "contentHash": "089e4502b5e5a86ca8a6b241f746d2ee5f33efa758037750a36a2f5edb802bc0",
-  "fetchedAt": "2026-07-26T18:56:54.734Z"
+  "version": "2.0.0",
+  "updatedAt": 1792679316960,
+  "contentHash": "7f4e2b85c17cfdd78d07b27d3a5bacfdd250ecf476ea3d9874b7f384ab89f63e",
+  "fetchedAt": "2026-11-01T15:46:37.930Z"
 }

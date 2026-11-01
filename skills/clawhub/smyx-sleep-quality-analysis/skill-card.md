@@ -1,44 +1,51 @@
-## Description: <br>
-Identifies sleep stages including falling asleep, light sleep, deep sleep, and REM; monitors body movement, nighttime awakenings, and sleep apnea for sleep monitoring scenarios. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes sleep-monitoring video to report sleep stages, body movement, awakenings, and possible sleep apnea.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers can use this skill to analyze sleep-monitoring video files or URLs and obtain structured sleep quality reports. It supports sleep stage recognition, body movement statistics, nighttime awakening counts, sleep apnea indicators, report links, and cloud-backed historical report queries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive sleep-monitoring videos and report queries are sent to the publisher's cloud service. <br>
-Mitigation: Use only media that is appropriate to share with the publisher service, avoid unnecessary personal or clinical content, and review the service destination before deployment. <br>
-Risk: The skill can silently create or reuse a persistent local or backend identity and token records. <br>
-Mitigation: Review or clear the workspace data directory and stored account records when persistent identity association is not desired. <br>
-Risk: Sleep analysis output is health-related and may be incomplete or misleading if treated as a diagnosis. <br>
-Mitigation: Present results as sleep-quality reference information and route medical decisions to qualified professionals or validated clinical workflows. <br>
+## Use Case:
 
+External users can submit a sleep-monitoring video or URL for a structured sleep analysis and query previous reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-sleep-quality-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON sleep analysis reports with report links and optional saved text output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include structured sleep metrics, sleep-stage summaries, apnea indicators, historical report records, and cloud report export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter is 1.0.7) <br>
+Risk: The skill may register an account, store access tokens, and upload sleep footage even when analysis is disabled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before using private footage, confirm the selected account and the service's retention and deletion terms; avoid sharing its workspace database between users and request token protection and export-only behavior.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-sleep-quality-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [API reference](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Report links]
+
+**Output Format:** [Structured JSON analysis results and Markdown report lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Sleep-stage, movement, awakening, and possible apnea results; historical reports can be listed.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,55 @@
-## Description: <br>
-AI pair programming powered by CellCog Desktop for coding, debugging, refactoring, and building on a user's machine with terminal and file operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI pair programming powered by CellCog Desktop. Code, debug, refactor, and build directly on the user's machine. Terminal access, file operations, full development workflows — auto-approved for agents.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers use this skill to delegate coding, debugging, refactoring, documentation, and development setup tasks to CellCog cloud agents connected to a chosen local working directory through CellCog Desktop. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: CellCog cloud agents may run commands and edit files automatically in the selected working directory without per-command approval. <br>
-Mitigation: Use a disposable or tightly scoped project directory, avoid locations with secrets or production credentials, and review generated changes before relying on them. <br>
+## Use Case:
 
+Developers use CellCog Desktop with cloud agents to work on local projects, including writing and changing code, debugging, refactoring, and development tasks. The agent can run local commands and access files in its working directory.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/nitishgargiitd/skills/pair-programming-cellcog) <br>
-- [CellCog](https://cellcog.ai) <br>
-- [CellCog Desktop Co-work](https://cellcog.ai/cowork) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and CELLCOG_API_KEY; outputs may instruct agents to use CellCog Desktop co-work against a selected local working directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release metadata) <br>
+Risk: Cloud agents can run local commands with automatic approval, while the limits on destructive actions are unclear.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an isolated project with backups and confirm how consequential commands are restricted before execution.
+
+Risk: Co-work can expose local project data to cloud agents, and Browse can use the user's real browser.
+
+Mitigation: Use a dedicated browser profile without sensitive accounts, and review the dependency and desktop installer separately.
+
+## Reference(s):
+
+- [Pair Programming on ClawHub](https://clawhub.ai/cellcog/skills/pair-programming-cellcog)
+- [CellCog](https://cellcog.ai)
+- [CellCog Co-work](https://cellcog.ai/cowork)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Files, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Code and file changes, shell commands, and text responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May read and modify files and run commands within the configured project working directory.]
+
+## Skill Version(s):
+
+1.0.16 (source: server-resolved ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

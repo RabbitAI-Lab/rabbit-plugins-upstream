@@ -1,0 +1,29 @@
+# Press Release Writer - starting point
+# Copy this file, replace every empty value with your own data, keep the field names.
+release:
+  announcement_type: <funding | product | partnership | hire | earnings>
+  headline: <plain statement of the news>
+  city_state: <city, state>
+  release_date: <YYYY-MM-DD>
+  embargo_time_et: <HH:MM ET or none>
+  company_name: <legal name>
+  one_sentence_news: <what happened>
+  who_is_affected: <customers, employees or market>
+  numbers:
+    - value: <figure>
+      meaning: <what it measures>
+      source: <document or person>
+  quotes:
+    - speaker: <name and title>
+      exact_words: <the quote>
+      confirmed_by: <name and date>
+  boilerplate: <two sentences about the company>
+  media_contact:
+    name: <name>
+    email: <work email>
+    phone: <phone>
+  reviewers:
+    legal: <name>
+    finance: <name>
+  forbidden_claims:
+    - <claim not to make>

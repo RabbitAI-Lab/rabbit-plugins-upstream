@@ -1,0 +1,27 @@
+# Product Description Writer - starting point
+# Copy this file, replace every empty value with your own data, keep the field names.
+product:
+  name: <product name>
+  sku: <sku>
+  category: <category>
+  price: <USD price>
+  spec_sheet:
+    dimensions: <inches and weight>
+    material: <material>
+    color_options:
+      - <color>
+  claims_allowed:
+    - <claim with the source>
+  claims_forbidden:
+    - <claim>
+  review_file: <csv file name>
+  buyers:
+    - <who buys this>
+  common_questions:
+    - <question>
+  shipping:
+    method: <method>
+    free_threshold: <USD amount or none>
+  returns_days: <number>
+  warranty: <warranty text>
+  fit_note: <who it does not fit>

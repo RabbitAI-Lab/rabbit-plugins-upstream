@@ -7,6 +7,12 @@ Use this replaceable domain module for higher-education digital campus, vocation
 
 This module is distilled from multi-year higher-education informationization materials. Keep customer/project details out of the public protocol; preserve reusable domain rules only.
 
+## 中文导读
+
+覆盖学生与学籍、课程与班级、选课学习、考试成绩、补考及培训档案。重点是身份与学期、学习证据、成绩生效和角色边界；学校及行业政策不能由样例替代。
+
+常用名称：教育、教务、学工、教育信息化、校园、高校、培训平台、学习平台。以下中文提示是现有章节的阅读入口，不新增项目规则；需要详细依据时阅读对应原文和来源。
+
 ## Contents
 
 - Domain Purpose
@@ -26,6 +32,8 @@ This module is distilled from multi-year higher-education informationization mat
 - Evaluation Profile
 - Acceptance Checklist
 
+> Use only the slices relevant to the project. State arrows and YAML/field lists below are design sketches, not executable schemas or a complete workflow. Instantiate the normal, exception and recovery paths, guards, data owner, permissions and version effects before handoff. A pattern does not override an authorized project decision or create a legal obligation. Where confidence is useful, declare its measurement and limits; do not invent a calibrated score from model self-report.
+
 ## Domain Purpose
 
 - Business outcome: make university teaching, learning, student growth, research activity, campus service, quality diagnosis, professional construction, and data governance visible, serviceable, measurable, and continuously improvable.
@@ -34,6 +42,24 @@ This module is distilled from multi-year higher-education informationization mat
 - AI may optimize: policy Q&A, one-stop service guidance, learning/career suggestions, counselor work assistance, data Q&A, classroom quality analysis, teaching report drafting, form/process filling, and risk hints.
 - AI must not decide automatically: student disciplinary action, scholarship/aid final result, psychological crisis classification, final grades, graduation eligibility, teacher performance conclusion, official evaluation result, or any legally/accountably binding school decision.
 - Representative system families to abstract from: academic affairs suites such as training-plan, course, scheduling, selection, exam, score, graduation-audit, and textbook management; learning/teaching platforms with course resources, classroom interaction, homework, analytics, and AI classroom signals; student-affairs platforms covering one-stop community, counselor workbench, aid/award/sanction/dorm/safety/employment; research management platforms covering project, fund, contract, output, IP, ethics/integrity, and achievement transformation; university data platforms covering standards, master data, indicators, reports, and dashboards.
+
+### Current Baseline and Change Watch (verified 2026-08-29)
+
+| Evidence class | Current signal | Requirement effect |
+|---|---|---|
+| binding_baseline | `KS-EDU-AI-PLUS-2026` adds an all-stage “AI+education” policy baseline; existing education data and classification rules still apply | every AI education PRD must state learner/teacher value, age/stage, human responsibility, data/content/model safety and evidence; the action plan is not a universal feature checklist |
+| design_guidance | `KS-EDU-AI-GUIDANCE-2025`, `KS-EDU-UNESCO-AI-COMP-2026` | design age-appropriate student use and progressive teacher competency, while keeping institutional/local rules authoritative |
+| product_pattern | `KS-EDU-DIGITAL-CASES-2026` and the National Smart Education Platform 2.0 AI direction | compare platform, classroom, teacher-support, inclusion and governance patterns; verify transferability before adoption |
+| change_watch | no national primary source was found for the exact term “AI education three-entry strategy / AI教育三进战略” | treat that phrase as `UNK` until the issuer and document are supplied; do not present it as an active national mandate |
+
+### AI Transformation Horizon
+
+| Axis | From -> toward | Non-negotiable product guard |
+|---|---|---|
+| learning | uniform content delivery -> teacher-governed adaptive tutoring, practice and feedback | age/stage suitability, learner agency, accessibility and clear AI identity are explicit |
+| teaching | isolated content generation -> lesson/course/assessment copilot grounded in curriculum and evidence | teachers own pedagogy, final assessment and publication; generated material keeps source/version review |
+| governance | lagging reports -> evidence-linked diagnosis and bounded service agents | grades, graduation, aid, discipline, mental health and official evaluation never become autonomous AI decisions |
+| learning loop | clicks/time-on-task -> mastery, transfer, teacher workload, equity and harmful-error slices | AI engagement is not educational outcome; preserve appeal, correction and non-AI paths |
 
 ## First-Principles Domain Lens
 
@@ -158,6 +184,12 @@ events:
 
 ## State Machines
 
+**中文阅读提示**
+
+**学籍管理**（入学、转学、休学、复学、student status、enrollment）：学籍状态、学习资格和历史记录分开；变更要明确生效时点及下游影响。
+
+**考试成绩**（考试、分数、成绩单、grade、score、exam、成绩、academic grade、exam score、examination score）：原始成绩、审核、发布及更正分别描述，不能把暂存分数当正式结果。
+
 ```text
 TrainingPlan: draft -> reviewing -> published -> revised -> archived
 ProgramConstructionPlan: draft -> executing -> diagnosing -> improved -> archived
@@ -199,6 +231,10 @@ State consistency:
 | indicator/report result | indicator registry + frozen snapshot | dashboard, report, external evaluation | immutable snapshot |
 
 ## Metric / Indicator Governance
+
+**中文阅读提示**
+
+**学习进度**（学时、学分、学习完成率、learning progress、completion）：学时、学分和完成率分别注明有效证据、周期、分母及重复学习的处理。
 
 ```yaml
 indicator:
@@ -255,6 +291,10 @@ Common categories:
 
 ## Content / Knowledge Assets
 
+**中文阅读提示**
+
+**培训档案**（培训记录、继续教育、training record、continuing education）：档案连接人员、课程、时间和有效学习证据，支持核对来源与留存。
+
 | Asset Type | Examples | Tags | Quality Rule |
 |---|---|---|---|
 | policy/regulation | student handbook, teaching rules, academic status rules, aid policy | role, department, effective date | owner office review; versioned |
@@ -269,6 +309,12 @@ Common categories:
 | workflow/form template | leave, award, aid, repair, certificate, approval forms | process_key, version, fields | field dictionary and approval path required |
 
 ## Core Workflows
+
+**中文阅读提示**
+
+**课程选课**（排课、选课、退课、课程、course、registration）：课程、班级和一次开课不是同一对象，核对容量、冲突和取消后的结果。
+
+**补考重修**（补考、缓考、重修、retake、resit、补考成绩、重修成绩、retake grade、retake score、resit grade、resit score）：资格、次数、成绩取舍和生效范围以项目决定为准，不能自行采用最高分或最新分。
 
 | Workflow | Actors | Trigger | State Change | Success Result |
 |---|---|---|---|---|
@@ -322,9 +368,16 @@ Common categories:
 
 ## Policy / Privacy Constraints
 
+**中文阅读提示**
+
+**学生数据**（未成年人、教育数据、学生隐私、education data）：学生、教师、家长和管理人员的可见与可改范围分别核对，语言不决定适用法域。
+
+- KS-EDU-CLASSIFICATION-0661 (JY/T 0661—2025, effective 2026-02-18) applies to the stated education-data scope; it excludes state-secret data and directs health and other sector data to their applicable industry requirements. A campus location does not make every dataset ordinary education data.
+- Distinguish authorized automatic practice feedback/objective scoring from official grades, credit, graduation or disciplinary decisions. The latter retain institutional authority and required review; do not add per-answer human approval to an already authorized low-risk exercise.
+
 - Student personal, academic, financial-aid, counseling, health, dorm, employment, and disciplinary data follow least privilege, masking, retention, and audit rules.
 - Mental-health and counseling AI can provide triage hints or conversation assistance only; diagnosis, crisis level, and intervention decision require authorized human/professional accountability.
-- Grades, credits, graduation eligibility, awards/aid/sanctions, and teacher evaluation conclusions require human approval and audit evidence.
+- Official grades, credits, graduation eligibility, awards/aid/sanctions, and teacher evaluation conclusions remain within institutional decision authority and applicable review/audit rules. Explicitly authorized objective scoring or calculation does not require per-item human approval unless the applicable source or institutional policy requires it; disputes and exceptions need accountable review.
 - Classroom audio/video/image use requires clear purpose, role access, retention period, and display/export control.
 - Research project, fund, contract, IP, ethics/integrity, and transformation data require confidentiality level, owner, proof attachment, finance/audit boundary, and export approval.
 - OBE/accreditation, 双高, and audit-evaluation evidence must distinguish draft analysis from official school evidence; published evidence is versioned and cannot be silently overwritten.
@@ -379,7 +432,7 @@ Mocked matrices and simulated reviewers cannot satisfy expert review or audit.
 
 ## Acceptance Checklist
 
-- [ ] All 15 domain module sections are present.
+- [ ] Relevant domain slices and their applicability are explicit; the pack structure is not a mandatory PRD outline.
 - [ ] Academic affairs, student affairs, research management, teaching quality, professional construction, one-stop service, data governance, and AI assistant boundaries are explicit when relevant.
 - [ ] Student, teacher, course, teaching class, score, service case, classroom evaluation, OBE achievement, research project/fund/output, data resource, and indicator lifecycles are defined.
 - [ ] Authoritative source, owner department, freshness, and conflict-resolution rule are named for cross-system data.
