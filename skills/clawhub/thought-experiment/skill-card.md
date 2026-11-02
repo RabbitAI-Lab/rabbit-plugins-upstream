@@ -1,43 +1,52 @@
-## Description: <br>
-Guides agents through structured thought experiments for high-stakes, hard-to-test strategic, counterfactual, ethical, or assumption-checking questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides structured thought experiments that make assumptions explicit, trace their consequences, and assess conclusions when empirical testing is impractical.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, developers, and decision-makers can use this skill to frame untestable or costly questions, make premises explicit, reason through consequences, and identify contradictions, hidden assumptions, or follow-up hypotheses. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Historical and business examples may be illustrative rather than authoritative for a user's specific decision. <br>
-Mitigation: Treat examples as reasoning aids and independently check factual, strategic, legal, or domain-specific claims before relying on them. <br>
-Risk: Conclusions can be misleading when premises are false, contested, or incomplete. <br>
-Mitigation: Make premises explicit, test each inference step, document confidence, and review the likely critique from a thoughtful skeptic. <br>
+## Use Case:
 
+People evaluating high-stakes or hard-to-test decisions can use this skill to state premises, reason through scenarios, surface hidden assumptions, and identify follow-up tests. It is also suited to counterfactual and ethical analysis when empirical testing is impractical.
 
-## Reference(s): <br>
-- [Sources - thought-experiment](references/sources.md) <br>
-- [Galileo, Einstein, and Strategic Applications](examples/galileo-einstein-strategic-applications.md) <br>
-- [Rawls's Veil of Ignorance](examples/rawls-veil-of-ignorance.md) <br>
-- [Thought Experiments - Stanford Encyclopedia of Philosophy](https://plato.stanford.edu/entries/thought-experiment/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with structured reasoning sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a recoverable reasoning trace with premises, step-by-step reasoning, conclusion, reliability checks, and application notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Hypothetical conclusions may be misleading when premises are weak or do not match available evidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check important premises and conclusions against evidence where available, and treat the exercise as a reasoning aid.
+
+## Reference(s):
+
+- [Sources](artifact/references/sources.md)
+- [Thought Experiments — Stanford Encyclopedia of Philosophy](https://plato.stanford.edu/entries/thought-experiment/)
+- [Thought Experiment — ClawHub skill page](https://clawhub.ai/deciqai/skills/thought-experiment)
+- [deciqAI Thought Experiment](https://www.deciqai.com/c/thought-experiment)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Structured Markdown with explicit premises, step-by-step reasoning, a conclusion, reliability checks, and an application step.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reasoning is based on the question and premises supplied by the user; conclusions should be checked against evidence where available.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

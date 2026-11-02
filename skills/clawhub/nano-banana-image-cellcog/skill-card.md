@@ -1,41 +1,59 @@
-## Description: <br>
-AI multi-image generation powered by CellCog via Nano Banana for coherent image sets, character consistency across scenes, and production-grade composition. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI multi-image generation powered by CellCog via Nano Banana. 10-20 coherent images in one prompt, character consistency across scenes, production-grade composition. Nano Banana AI, Nano Banana Pro, Gemini image generation.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers and creative agents use this skill to route image-generation and image-editing tasks through CellCog for coherent multi-image projects, character-consistent series, and composed visual assets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and provided images are sent to CellCog's service and may include sensitive content. <br>
-Mitigation: Avoid sending sensitive private images unless CellCog's privacy and data-handling requirements fit the deployment. <br>
-Risk: The skill depends on a CellCog API key and access to the CellCog service. <br>
-Mitigation: Store CELLCOG_API_KEY securely and verify CellCog access before relying on the skill in production workflows. <br>
+## Use Case:
 
+Agent users and developers use this skill to generate or edit images from prompts, including coordinated multi-image sequences with recurring characters, planned compositions, and optional reference images.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/nitishgargiitd/skills/nano-banana-image-cellcog) <br>
-- [CellCog homepage](https://cellcog.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python code examples and shell command setup notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and CELLCOG_API_KEY; prompts and provided images are sent to CellCog's service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release evidence) <br>
+Risk: Prompts and supplied reference images are processed by CellCog.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only material you are authorized to send.
+
+Risk: The skill requires an API key and image generation may incur costs.
+
+Mitigation: Protect the CELLCOG_API_KEY and monitor generation costs.
+
+Risk: Setup depends on the separate CellCog skill and its dependencies.
+
+Mitigation: Review the core CellCog skill and use reviewed dependency versions before setup.
+
+## Reference(s):
+
+- [CellCog](https://cellcog.ai)
+- [Nano Banana Image on ClawHub](https://clawhub.ai/cellcog/skills/nano-banana-image-cellcog)
+- [CellCog publisher profile](https://clawhub.ai/user/cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [Images, Text]
+
+**Output Format:** [Generated image files with a textual completion message]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce multiple images from one prompt; image generation and editing can use supplied reference images.]
+
+## Skill Version(s):
+
+1.0.15 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

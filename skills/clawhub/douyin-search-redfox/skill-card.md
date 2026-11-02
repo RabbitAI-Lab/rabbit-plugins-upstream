@@ -1,43 +1,54 @@
-## Description: <br>
-Searches Douyin for viral content by keyword and optional date range, then presents engagement data in structured result tables. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Douyin for trending videos by keyword or date range and presents engagement metrics in a structured table.
 
-## Publisher: <br>
-[redfox-data](https://clawhub.ai/user/redfox-data) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[redfox-data](https://clawhub.ai/user/redfox-data)
 
-## Use Case: <br>
-Content creators, MCN and brand operators, growth teams, and marketing teams use this skill to find high-engagement Douyin works, compare content performance, and monitor keyword trends. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends a RedFox API key and Douyin search terms to redfox.hk. <br>
-Mitigation: Confirm the key scope, retention policy, and reset or revocation process before use; keep the key in environment configuration rather than prompts, logs, or source files. <br>
-Risk: The subscription feature can create persistent daily scheduled tasks. <br>
-Mitigation: Before enabling daily pushes, confirm where the task will be created, how to pause or delete it, and what keyword and date data will be retained. <br>
+## Use Case:
 
+Content creators, brand operators, and marketing teams use this skill to research Douyin trends and compare video engagement when planning topics or campaigns.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/redfox-data/skills/douyin-search-redfox) <br>
-- [RedFoxHub API key settings](https://redfox.hk/settings/api-keys?source=clawhub) <br>
-- [RedFoxHub](https://redfox.hk) <br>
-- [RedFoxHub enterprise service](https://redfox.hk/dashboard/enterprise) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown tables and text, with helper-script JSON used as the source data.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search output includes clickable Douyin work links, engagement counts, publication time, hot recommendations, and optional subscription guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: release evidence) <br>
+Risk: When API credits are insufficient, the workflow can install payment software and initiate a recharge.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require separate user approval before installing payment software and before each recharge; confirm the merchant and total amount, and validate the payment destination.
+
+Risk: Search keywords are sent to RedFox and consume credits; daily subscriptions can create recurring searches.
+
+Mitigation: Disclose the data sharing and credit use, and enable recurring searches only with explicit user opt-in.
+
+## Reference(s):
+
+- [Alipay recharge workflow](references/alipay-recharge.md)
+- [ClawHub skill release](https://clawhub.ai/redfox-data/skills/douyin-search-redfox)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, JSON]
+
+**Output Format:** [Markdown table with linked video titles and engagement metrics; JSON search records.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Keyword and optional date range; results are ranked by likes, with up to 50 records per page.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

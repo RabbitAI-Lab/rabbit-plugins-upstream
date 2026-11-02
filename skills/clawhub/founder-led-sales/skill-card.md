@@ -1,42 +1,51 @@
-## Description: <br>
-Guides early founders to sell personally until the sales motion is repeatable before hiring or automating sales. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides early founders with a practical process for personally discovering, closing, and documenting repeatable sales before hiring or automating.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders and startup operators use this skill to decide when founder-led sales is still required and how to codify a repeatable sales motion before hiring or automation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may influence go-to-market and sales decisions that depend on market, customer, and company context. <br>
-Mitigation: Review recommendations against current business facts before acting on them. <br>
-Risk: The guidance is intended for early, pre-repeatability sales motions and may not fit teams already scaling a documented sales process. <br>
-Mitigation: Use the skill's activation boundary and verification checklist before applying its advice. <br>
+## Use Case:
 
+Early-stage founders use this skill to handle first-customer sales themselves, decide when a sales motion is repeatable, and document it before hiring or automating.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/founder-led-sales) <br>
-- [Founder-Led Sales guide](https://www.deciqai.com/c/founder-led-sales) <br>
-- [Founder-Led Sales machine-readable metadata](https://www.deciqai.com/s/founder-led-sales.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance and checklist-style recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Plain-text business guidance; no executable code or tool access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Customer transcripts and sales notes may contain confidential information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep customer transcripts and confidential sales notes private.
+
+## Reference(s):
+
+- [Founder-Led Sales overview](https://www.deciqai.com/c/founder-led-sales)
+- [Founder-Led Sales machine-readable resource](https://www.deciqai.com/s/founder-led-sales.json)
+- [Project repository linked by the skill](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown prose with an ordered process and verification checklist]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

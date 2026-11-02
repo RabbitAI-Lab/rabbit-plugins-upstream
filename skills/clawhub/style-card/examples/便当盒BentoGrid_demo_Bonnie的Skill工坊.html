@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+/* === html-base.css 底座 === */
+:root { --card-width: 1170px; --card-height: 1170px; --bg-page: #F7F7F7; --ink: #1A1A1A; --accent: #3B82F6; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:var(--card-width); height:var(--card-height); overflow:hidden; background:var(--bg-page); color:var(--ink); font-family:'Noto Sans SC',sans-serif; -webkit-font-smoothing:antialiased; }
+.card { position:relative; width:100%; height:100%; overflow:hidden; padding:36px; display:grid;
+        grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap:20px; }
+.cell { background:#fff; border:1.5px solid #E5E5E5; border-radius:22px; box-shadow:0 4px 16px rgba(0,0,0,.05);
+        padding:26px; display:flex; flex-direction:column; justify-content:center; gap:8px; }
+.cell .icon { font-size:40px; }
+.cell h3 { font-size:24px; font-weight:900; }
+.cell p { font-size:15.5px; color:#6B6B75; line-height:1.55; }
+.cell .num { font-size:64px; font-weight:900; color:var(--accent); line-height:1.1; }
+/* === 标题卡：横跨 4 列 === */
+.t-title { grid-column: 1 / 5; flex-direction:row; align-items:baseline; gap:18px; }
+.t-title h1 { font-size:44px; font-weight:900; }
+.t-title span { font-size:17px; color:#6B6B75; }
+/* === 大卡：2x2 === */
+.t-big { grid-column: 1 / 3; grid-row: 2 / 4; background:#EEF4FF; border-color:#D6E4FF; }
+.t-big p { font-size:17px; }
+/* === 其余 1x1 === */
+.span2 { grid-column: 3 / 5; }
+</style>
+</head>
+<body>
+<div class="card">
+  <!-- === 标题卡 === -->
+  <div class="cell t-title"><h1>Bonnie 的 Skill 工坊</h1><span>@bonniegeng-max · GitHub / ClawHub</span></div>
+  <!-- === 核心大卡 === -->
+  <div class="cell t-big">
+    <div class="icon">🎨</div>
+    <div class="num">5 张</div>
+    <h3>风格卡素材库</h3>
+    <p>从参考图反推可复用的结构化风格卡，双引擎出图：ImageGen 管质感，HTML 管文字，越用越厚</p>
+  </div>
+  <!-- === 模块小卡 === -->
+  <div class="cell"><div class="icon">📜</div><h3>poetry-resonance</h3><p>诗遇 · 1149 首古诗底库，四种复习模式</p></div>
+  <div class="cell span2"><div class="icon">🦞</div><h3>priority-coach</h3><p>主线聚焦教练 · 给妈妈和 seeker 的优先级守护，已上 GitHub / ClawHub</p></div>
+  <div class="cell"><div class="icon">💬</div><h3>md-out-of-chat</h3><p>对话内容一键归档成 Markdown</p></div>
+  <div class="cell"><div class="icon">🧩</div><h3>text-to-comic</h3><p>文转漫 v8.5 · 11 种画风，统一主角</p></div>
+  <div class="cell span2"><div class="icon">🀄</div><h3>Q 萌麻将 & 消消乐</h3><p>新手友好的小游戏框架，目标封装为可复用 skill</p></div>
+</div>
+</body>
+</html>

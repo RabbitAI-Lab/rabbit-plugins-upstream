@@ -1,24 +1,26 @@
-"""Pre-scan mode preference — remembers the last scan mode chosen (C-103).
+"""Pre-scan mode preference - remembers the last scan mode chosen (C-103).
 
 Design: ``docs/research/pre-scan-menu.md`` (workspace-root internal note; never
 ships). The pre-scan menu itself is SKILL.md-narrated (the host agent presents the
-screen and maps the user's choice to an existing flag) — there is no deterministic
+screen and maps the user's choice to an existing flag) - there is no deterministic
 Python menu to dispatch. This module is only the small, local-only persistence piece:
 "remember the last mode chosen" (item 1 of that doc's two optional engine touches),
 so a future narration can default to it instead of always falling back to Quick.
 
-Stores ``{"last_mode": "<mode>"}`` at ``~/.clawseccheck/prescan.json`` — a single
+Stores ``{"last_mode": "<mode>"}`` at ``~/.clawseccheck/prescan.json`` - a single
 current-value preference, not a tamper-evident audit trail, so (unlike
 ``history.jsonl`` / ``ledger.py``'s ``record_run``) writes are a plain overwrite: no
 ``journal_lock``, no hash chain, no ``_schema`` stamp.
 
-Local-only. No network. Pure stdlib. Python 3.9+.
+Local-only. No network. Pure stdlib. Python 3.10+.
 """
 from __future__ import annotations
 
 import json
 from pathlib import Path
 
+from . import pathprobe
+from .configloader import loads_bounded
 from .safeio import secure_dir, secure_write_text
 
 DEFAULT_PRESCAN = "~/.clawseccheck/prescan.json"
@@ -42,7 +44,7 @@ def _path(home: str | None = None) -> Path:
     """
     if home is not None:
         return Path(home) / ".clawseccheck" / "prescan.json"
-    return Path(DEFAULT_PRESCAN).expanduser()
+    return pathprobe.expand_user(DEFAULT_PRESCAN)
 
 
 def read_last_mode(home: str | None = None) -> str:
@@ -50,17 +52,17 @@ def read_last_mode(home: str | None = None) -> str:
 
     Fails safe to the default (`"quick"`) for every unusable state: an absent file,
     an unreadable file, malformed JSON, a non-object payload, or a stored value that
-    is not one of the known ``MODES`` — never raises.
+    is not one of the known ``MODES`` - never raises.
 
     Parameters
     ----------
     home:
         Override the file's parent HOME dir (for testing).
-        ``None`` → real ``~/.clawseccheck/`` via expanduser.
+        ``None`` -> real ``~/.clawseccheck/`` via expanduser.
     """
     p = _path(home)
     try:
-        data = json.loads(p.read_text(encoding="utf-8"))
+        data = loads_bounded(p.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return DEFAULT_MODE
     if not isinstance(data, dict):
@@ -75,7 +77,7 @@ def record_mode(mode: str, home: str | None = None) -> None:
     """Persist *mode* as the last-chosen pre-scan mode (plain overwrite).
 
     Silently drops write errors (same "never crash the caller" contract as
-    ``ledger.record_run``). An unknown/out-of-``MODES`` *mode* is ignored — nothing
+    ``ledger.record_run``). An unknown/out-of-``MODES`` *mode* is ignored - nothing
     is written, and any prior recorded mode is left untouched.
 
     Parameters
@@ -84,7 +86,7 @@ def record_mode(mode: str, home: str | None = None) -> None:
         One of ``MODES`` (``"quick"``, ``"deeper"``, ``"full"``, ``"whatchanged"``).
     home:
         Override the file's parent HOME dir (for testing).
-        ``None`` → real ``~/.clawseccheck/`` via expanduser.
+        ``None`` -> real ``~/.clawseccheck/`` via expanduser.
     """
     if mode not in MODES:
         return

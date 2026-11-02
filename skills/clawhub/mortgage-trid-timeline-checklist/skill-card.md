@@ -1,43 +1,59 @@
-## Description: <br>
-Helps agents check TRID disclosure timing, re-disclosure triggers, tolerance documentation, and record-retention checkpoints for mortgage files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A checklist for tracking TRID Loan Estimate and Closing Disclosure deadlines, re-disclosure triggers, tolerance changes, and timing records.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Mortgage lending teams and agents use this skill as a checklist/reference aid for Loan Estimate and Closing Disclosure timing, changed-circumstance review, tolerance buckets, and retained timing evidence. It is not legal advice and should be checked against current TILA-RESPA, Regulation Z/X, and CFPB guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill concerns mortgage disclosure timing and is not legal advice; outdated or misapplied TRID guidance could affect closing timelines or cure obligations. <br>
-Mitigation: Verify each use against current TILA-RESPA, Regulation Z/X, and CFPB guidance, and have qualified compliance or legal staff review file-specific decisions. <br>
-Risk: Checklist output may omit business-day nuances or file-specific changed-circumstance facts. <br>
-Mitigation: Use the checklist as a reference aid, retain LE/CD timing evidence, and document changed circumstances before relying on tolerance resets. <br>
+## Use Case:
 
+Mortgage loan officers and brokerage staff use this checklist to track disclosure deadlines, check re-disclosure triggers and tolerance changes, and retain timing evidence. Treat it as a checklist aid and verify current requirements with authoritative guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/mortgage-trid-timeline-checklist) <br>
-- [Publisher profile](https://clawhub.ai/user/deciqai) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/mortgage-trid-timeline-checklist) <br>
-- [deciqAI machine-readable metadata](https://www.deciqai.com/s/mortgage-trid-timeline-checklist.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown checklist guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces checklist-oriented compliance prompts and verification items; no executable code or credential access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Disclosure timing details or business-day rules may be incomplete or change over time.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use this as a checklist aid and verify current requirements with authoritative guidance.
+
+Risk: Borrower information may be shared more broadly than needed.
+
+Mitigation: Share only the borrower information necessary for the task.
+
+Risk: Referenced automation and parent workflows are not included with this skill.
+
+Mitigation: Confirm any required alerts and supporting workflow steps separately.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/mortgage-trid-timeline-checklist)
+- [deciqAI skill page](https://www.deciqai.com/c/mortgage-trid-timeline-checklist)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/mortgage-trid-timeline-checklist.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown checklist with concise compliance guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

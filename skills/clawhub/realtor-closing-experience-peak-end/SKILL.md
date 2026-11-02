@@ -6,6 +6,7 @@ description: "Activate when: a real estate agent wants clients who refer and ret
 # Real Estate — Closing Experience (Peak-End) Design
 
 > **Industry front door for peak-end-rule.** Adds domain triggers, example, packs. Parent Process unchanged.
+> **Guidance, not professional advice.** No legal, tax, financial or regulatory advice; verify anything jurisdiction- or rate-dependent against current authority. The professional who acts owns the decision.
 
 **Activate when:** designing the client experience across a transaction; planning the closing/keys moment; deciding where to invest effort for referrals.
 **Do NOT activate when:** no relationship/referral objective.
@@ -38,6 +39,6 @@ Agent works hard through contract, then goes quiet post-inspection; closing is a
 - [ ] Referral ask timed to the high
 
 ---
-*Part of **deciqAI Knowledge Skills** — 227 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/realtor-closing-experience-peak-end** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
+*Part of **deciqAI Knowledge Skills** — 253 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/realtor-closing-experience-peak-end** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
 
 *Agents: latest version & machine-readable metadata → https://www.deciqai.com/s/realtor-closing-experience-peak-end.json*

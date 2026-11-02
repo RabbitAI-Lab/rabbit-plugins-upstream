@@ -1,43 +1,55 @@
-## Description: <br>
-Helps agents identify hindsight bias in post-outcome reviews by reconstructing what was knowable at the time and separating decision quality from outcome quality. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents review past decisions for hindsight bias by comparing current judgments with what was knowable at the time.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and decision-makers use this skill to analyze post-mortems, reviews, and past decisions where outcome knowledge may distort judgments about what was foreseeable. It guides the agent to reconstruct the pre-outcome information set, diagnose memory distortion, inevitability, and foreseeability overclaims, and propose documentation practices for future decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be used in sensitive business, legal, medical, or investment post-mortems where users could mistake structured reasoning support for professional advice. <br>
-Mitigation: Users should share only appropriate information, treat outputs as reasoning support, and rely on qualified professionals for domain-specific advice. <br>
-Risk: Outcome knowledge can make past events appear more foreseeable than they were, producing misleading blame or credit. <br>
-Mitigation: Use contemporaneous records, list plausible alternative outcomes, and evaluate decision process separately from outcome quality. <br>
+## Use Case:
 
+External users and teams use this skill during post-mortems to compare a past decision with the information available at the time, separate decision quality from outcome, and plan future decision records.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/hindsight-bias) <br>
-- [deciqAI Hindsight Bias page](https://www.deciqai.com/c/hindsight-bias) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/hindsight-bias.json) <br>
-- [Sources - hindsight-bias](references/sources.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown analysis using a structured template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Interactive coaching may stop at wait prompts until the user responds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Predictions or attributed judgments shared in a forum may expose confidential details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Choose where decision notes are kept, review the audience, and remove confidential details before sharing.
+
+Risk: Retrospective judgments may unfairly credit or blame a decision-maker when outcome knowledge replaces the contemporaneous record.
+
+Mitigation: Review contemporaneous records first, assess decision quality separately from outcome, and use a blind post-mortem when possible.
+
+## Reference(s):
+
+- [Primary sources](artifact/references/sources.md)
+- [Hindsight Bias overview](https://www.deciqai.com/c/hindsight-bias)
+- [ClawHub release](https://clawhub.ai/deciqai/skills/hindsight-bias)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown decision review with structured prompts and recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Separates memory distortion, inevitability, and foreseeability; evaluates decision process apart from outcome.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

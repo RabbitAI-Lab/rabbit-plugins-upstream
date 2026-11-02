@@ -1,43 +1,51 @@
-## Description: <br>
-Guides agents to help founders, creators, and small businesses choose a specific minimum viable audience instead of defaulting to broad, undifferentiated positioning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides founders and small businesses in identifying a specific initial audience, sizing it realistically, and refining an offer and word-of-mouth strategy before expanding.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External founders, creators, indie product teams, and SMB operators use this skill to narrow an overly broad audience, choose a beachhead, sharpen positioning, and design word-of-mouth triggers. It is not intended for cases where evidence shows the business must address a mass market from day one. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: External deciqAI and GitHub links may change independently of the packaged skill. <br>
-Mitigation: Review referenced external content before relying on it for business decisions. <br>
-Risk: Strategic guidance can be misapplied when a business genuinely requires mass-market scale from day one. <br>
-Mitigation: Use the skill's stated exclusion and verify that niche selection is relevant before applying the process. <br>
+## Use Case:
 
+Founders, creators, and small business teams use this guidance to choose an initial audience they can serve exceptionally well, size that audience against business needs, and build positioning and word-of-mouth before expanding.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/minimum-viable-audience) <br>
-- [deciqAI Minimum Viable Audience page](https://www.deciqai.com/c/minimum-viable-audience) <br>
-- [deciqAI machine-readable metadata](https://www.deciqai.com/s/minimum-viable-audience.json) <br>
-- [deciqAI knowledge skills repository](https://github.com/deciqAI/knowledge-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with process steps, red flags, and verification checklist items] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code, shell commands, API calls, persistence, or sensitive data access are produced by the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence release.version) <br>
+Risk: A narrow-audience strategy may be a poor fit when a business needs mass-market scale from launch.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check whether broad reach is essential before narrowing the audience; the skill excludes cases where a niche is proven irrelevant.
+
+## Reference(s):
+
+- [Minimum Viable Audience overview](https://www.deciqai.com/c/minimum-viable-audience)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/minimum-viable-audience.json)
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/minimum-viable-audience)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Concise strategic guidance, optionally organized as a checklist]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tailored to the user's business context; no software execution or account access is required.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

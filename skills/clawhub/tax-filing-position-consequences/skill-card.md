@@ -1,42 +1,54 @@
-## Description: <br>
-Helps agents analyze tax filing positions and elections with multi-year consequences, including S-corp elections, depreciation, Section 179 or bonus treatment, accounting-method changes, filing status, Roth conversions, and entity choice. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps evaluate how tax elections and filing positions affect future years, recapture, state conformity, and long-term tax planning.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External tax-preparation and advisory agents use this skill to structure second-order review of filing positions whose effects extend beyond the current return. It helps compare current-year tax outcomes against future basis, carryforwards, recapture, lock-in, state conformity, and exit or sale consequences. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tax-election analysis may be mistaken for a final filing position or professional tax advice. <br>
-Mitigation: Use the skill to structure questions and multi-year review, then verify conclusions with a qualified tax professional before filing or making elections. <br>
-Risk: A current-year tax benefit may obscure later basis, carryforward, recapture, lock-in, state conformity, or exit consequences. <br>
-Mitigation: Model the multi-year arc before electing, including recapture, lock-in, conformity, and affected parties. <br>
+## Use Case:
 
+Tax preparers use this skill to evaluate elections with effects beyond the current return and explain the multi-year consequences to clients before filing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/tax-filing-position-consequences) <br>
-- [deciqAI tax filing-position consequence page](https://www.deciqai.com/c/tax-filing-position-consequences) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/tax-filing-position-consequences.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with checklists and worked examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory tax-analysis structure; not legal or tax advice.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Tax conclusions may be incomplete or incorrect if the checklist is treated as definitive or used without current, jurisdiction-specific rules and client facts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it as a planning checklist, check state conformity and other applicable rules, and verify conclusions before filing.
+
+Risk: The referenced parent second-order-thinking method is not bundled, which may limit the standalone context.
+
+Mitigation: Consult the full parent method when needed and review the analysis before filing.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/tax-filing-position-consequences)
+- [deciqAI skill overview](https://www.deciqai.com/c/tax-filing-position-consequences)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Text or Markdown with a multi-year consequence checklist and election comparison]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Planning guidance; verify tax conclusions before filing.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

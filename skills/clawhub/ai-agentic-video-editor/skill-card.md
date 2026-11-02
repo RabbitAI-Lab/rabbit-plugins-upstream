@@ -1,45 +1,59 @@
-## Description: <br>
-AI agentic video editor: send a prompt, the autonomous editor plans, uses internal tools, exports, and returns the result. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Compile and execute multi-step video editing plans with automated timeline verification.
 
-## Publisher: <br>
-[brajendrak00068](https://clawhub.ai/user/brajendrak00068) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[brajendrak00068](https://clawhub.ai/user/brajendrak00068)
 
-## Use Case: <br>
-External users and developers use this skill to request natural-language video edits, preview planned changes, manage asynchronous editing jobs, and export finished MP4 or ZIP video deliverables through the Levea/Livecore service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends video prompts, project or scene data, asset URLs, and related media metadata to the Levea/Livecore cloud service. <br>
-Mitigation: Install and use it only when that data sharing is acceptable, and avoid submitting sensitive media unless the service handling is approved for that content. <br>
-Risk: Mutating edits, auto-export behavior, or approval prompts can result in real changes to user media workflows. <br>
-Mitigation: Use plan approval for risky or destructive edits, require explicit confirmation before execution, and preview all exports before publishing or sharing. <br>
+## Use Case:
 
+Developers and video editors use the skill to carry out multi-step timeline edits, verify the result, and export an MP4.
 
-## Reference(s): <br>
-- [ClawHub Skill Listing](https://clawhub.ai/brajendrak00068/ai-agentic-video-editor) <br>
-- [Publisher Profile](https://clawhub.ai/user/brajendrak00068) <br>
-- [OpenClaw AI Video Editor README](https://github.com/brajendrak00068/openclaw-ai-video-editor#readme) <br>
-- [Levea MCP Server](https://www.npmjs.com/package/levea-mcp-server) <br>
-- [Livecore API](https://api.livecore.ai) <br>
-- [Livecore Studio](https://studio.livecore.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, API calls, JSON, markdown] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON request or response examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce video export URLs, async job IDs, project or scene data, and ZIP package links from the remote editing service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.21 (source: ClawHub release metadata) <br>
+Risk: Video editing uses Levea's cloud service, so source media is sent to that service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use media you are comfortable sending to Levea.
+
+Risk: Applying an edit could change a valuable project.
+
+Mitigation: Enable requirePlanApproval to review the planned changes before applying them.
+
+Risk: The separate OpenClaw plugin or MCP server has its own security considerations.
+
+Mitigation: Review the plugin or MCP server separately, keep the API key in its tool configuration, and inspect exports before sharing.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/brajendrak00068/skills/ai-agentic-video-editor)
+- [Levea editing service](https://livecore.ai/?openclaw=1&utm_source=clawhub&utm_medium=skill&utm_campaign=ai-agentic-video-editor)
+- [Levea API](https://api.livecore.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Video edits, Timeline verification, MP4 video, Structured project status and export details]
+
+**Output Format:** [Edited project with a structured status response and, after export, an MP4 URL]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Edits can pause for approval; rendering may complete synchronously or through a queued job.]
+
+## Skill Version(s):
+
+1.0.27 (source: frontmatter, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

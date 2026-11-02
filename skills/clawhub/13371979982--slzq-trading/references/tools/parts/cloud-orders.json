@@ -1,0 +1,535 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "list_cloud_orders",
+      "description": "分页查询云挂单/条件单/止盈止损。orderCategory：0=条件单 1=挂单 2=止盈止损；status：0待触发 1已触发 2委托中 3已成交 4已撤销 5失败 6部分成交。返回项里的 id 就是后续修改/撤销要用的 orderId。**仅 X-Trading-Env: live 可用**（云条件单由 cloud-ctp 托管真实 CTP 账号执行，模拟盘无此机制）；sim 下会报错并指回 place_order，那是环境能力差异，不要重试。 建完单不要定时回来查有没有触发——用户问了才查，那等于换个接口继续盯盘。 **条件单不要用这个接口查**：这里是旧口径，状态码和字段与用户在 App 里看到的对不上；查条件单用 list_cloud_condition_orders。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "orderCategory": {
+            "type": "integer",
+            "description": "0=条件单 1=挂单 2=止盈止损，不传查全部。"
+          },
+          "status": {
+            "type": "integer",
+            "description": "0待触发 1已触发 2委托中 3已成交 4已撤销 5失败 6部分成交。"
+          },
+          "instrumentId": {
+            "type": "string",
+            "description": "合约代码，如 'rb2601'。"
+          },
+          "pageNum": {
+            "type": "integer",
+            "description": "页码，从 1 开始，默认 1。"
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "每页条数，默认 20。"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_cloud_order_actions",
+      "description": "查询某张云条件单的动作历史（操作日志与状态变更，含触发价、失败原因）。排查『为什么没触发/为什么失败』先看这里，比反复查列表有效。**仅 X-Trading-Env: live 可用**（云条件单由 cloud-ctp 托管真实 CTP 账号执行，模拟盘无此机制）；sim 下会报错并指回 place_order，那是环境能力差异，不要重试。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "integer",
+            "description": "条件单 orderId，来自 list_cloud_orders 返回项的 id。"
+          }
+        },
+        "required": [
+          "orderId"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_cloud_pending_order",
+      "description": "【服务端当前未开放，别调】本接口在当前服务端没有开放，调用必失败，不要重试、不要换域名。收盘后想先把单子挂上，改用 create_cloud_condition_order（timeCondition=GTC），效果等价。（原用途：非交易时段先挂上限价单、开盘自动报出。）",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "instrumentId": {
+            "type": "string",
+            "description": "合约代码，如 'rb2601'。"
+          },
+          "exchangeId": {
+            "type": "string",
+            "description": "交易所代码，如 'SHFE'。"
+          },
+          "direction": {
+            "type": "integer",
+            "description": "0=买入，1=卖出。"
+          },
+          "offsetFlag": {
+            "type": "integer",
+            "description": "0=开仓 1=平仓 3=平今 4=平昨。"
+          },
+          "volume": {
+            "type": "integer",
+            "description": "委托手数。"
+          },
+          "limitPrice": {
+            "type": "number",
+            "description": "委托限价，须在涨跌停范围内。"
+          },
+          "timeCondition": {
+            "type": "string",
+            "enum": [
+              "GFD",
+              "GTC"
+            ],
+            "description": "GFD=当日有效，GTC=撤销前长期有效。"
+          },
+          "remark": {
+            "type": "string",
+            "description": "备注，可选。"
+          }
+        },
+        "required": [
+          "instrumentId",
+          "exchangeId",
+          "direction",
+          "offsetFlag",
+          "volume",
+          "limitPrice"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_cloud_stop_profit_loss",
+      "description": "【这就是替代自己盯盘的正式能力】用户说「跌到 X 就买」「涨到 Y 帮我平」「帮我盯着」「设个止损」时用它，建完单这一轮就结束，条件由服务端 cloud-ctp 7×24 盯着，会话关掉也照样生效。禁止改用行情/持仓接口循环轮询去等价格。 对已有持仓创建止盈止损（任何时间可创建）。positionDirection：0=买入持仓 1=卖出持仓；conditionType：2=止损 3=止盈；stopPriceType：1对手价 2最新价 3超价 4排队价 5涨跌停价(默认)。**禁止传 positionDateType**（那是立即下单 POST /open/v1/orders 的字段，本接口没有，传「今」「昨」会被丢掉）。要指定今/昨传可选 offsetFlag：今=3，昨=1，不必传 4；整仓止盈止损不要传 offsetFlag，由服务端按持仓拆。**平今不能传 GTC**：先说明只能当日有效（当天 15:00），等用户确认后再用 GFD 建单。exchangeId 不确定就不要传，服务端按合约代码补齐；**补不上会拒绝**，向用户确认合约代码，不要猜交易所。服务端会查 CTP 实际持仓校验合约/方向/数量，报『持仓不足』就是真的不足，不要改大数量重试。上期所、能源、中金所整仓止盈止损由服务端拆成两张：平昨用普通平仓 offsetFlag=1，平今用 offsetFlag=3，与 App 相同。用户只要平今时可在本接口传 offsetFlag=3，或改用条件单并传 3；只要平昨时传 1，不必传 4。**必须有用户明确指令才能调用**。**仅 X-Trading-Env: live 可用**（云条件单由 cloud-ctp 托管真实 CTP 账号执行，模拟盘无此机制）；sim 下会报错并指回 place_order，那是环境能力差异，不要重试。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "instrumentId": {
+            "type": "string",
+            "description": "合约代码。"
+          },
+          "exchangeId": {
+            "type": "string",
+            "description": "交易所代码，如 'SHFE'。**不确定就不要传**，服务端会按合约代码解析；解析不到会拒绝，向用户确认合约代码，不要猜。"
+          },
+          "positionDirection": {
+            "type": "integer",
+            "description": "0=买入持仓，1=卖出持仓。"
+          },
+          "volume": {
+            "type": "integer",
+            "description": "委托平仓手数，不得超过实际持仓。"
+          },
+          "offsetFlag": {
+            "type": "integer",
+            "description": "可选。1=平仓/平昨，3=平今。整仓止盈止损不要传，由服务端按持仓拆。禁止传 positionDateType。"
+          },
+          "conditionType": {
+            "type": "integer",
+            "description": "2=止损，3=止盈。"
+          },
+          "triggerPrice": {
+            "type": "number",
+            "description": "触发价格。"
+          },
+          "stopPriceType": {
+            "type": "integer",
+            "description": "触发后下单价格类型：1对手价 2最新价 3超价 4排队价 5涨跌停价(默认)。"
+          },
+          "timeCondition": {
+            "type": "string",
+            "enum": [
+              "GFD",
+              "GTC"
+            ],
+            "description": "GFD=当日有效，GTC=长期有效。**平今不能传 GTC**：先说明只能当日有效，等用户确认后再用 GFD 建。"
+          },
+          "remark": {
+            "type": "string",
+            "description": "备注，可选。"
+          }
+        },
+        "required": [
+          "instrumentId",
+          "positionDirection",
+          "volume",
+          "conditionType",
+          "triggerPrice"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_cloud_condition_order",
+      "description": "【这就是替代自己盯盘的正式能力】用户说「跌到 X 就买」「涨到 Y 帮我平」「帮我盯着」「设个止损」时用它，建完单这一轮就结束，条件由服务端 cloud-ctp 7×24 盯着，会话关掉也照样生效。禁止改用行情/持仓接口循环轮询去等价格。 创建条件单（任何时间可创建，条件满足由 cloud-ctp 自动报单）。**建出来的单和用户自己在 App 里下的是同一种**，他能在 App「交易 → 条件单」里看到、自己改自己撤。 触发条件只用 triggerMode + 触发价表达：triggerMode=ge 涨到触发价才动手，le 跌到触发价才动手，range 价格落进 [triggerPriceMin, triggerPriceMax] 才动手。**触发价只看最新价**，没有买一价/卖一价可选，也没有 conditionType 这个参数了——它们是旧版字段，不要再传。 orderPriceType 是触发之后按什么价报单：MARKET 市价 / LIMIT 限价（须给 limitPrice）/ LAST 最新价 / OPPONENT 对手价 / QUEUE 排队价（仅条件单；立即下单 POST /open/v1/orders 的市价是 priceType=ANY，禁止把 MARKET 写过去）。 **必须有用户明确指令才能调用**，下单前把合约、方向、手数、触发价、有效期复述给用户确认。**仅 X-Trading-Env: live 可用**（云条件单由 cloud-ctp 托管真实 CTP 账号执行，模拟盘无此机制）；sim 下会报错并指回 place_order，那是环境能力差异，不要重试。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "instrumentId": {
+            "type": "string",
+            "description": "合约代码，如 'rb2601'。"
+          },
+          "exchangeId": {
+            "type": "string",
+            "description": "交易所代码，如 'SHFE'。**不确定就不要传**，服务端会按合约代码解析；解析不到会拒绝，向用户确认合约代码，不要猜。"
+          },
+          "direction": {
+            "type": "integer",
+            "description": "0=买入，1=卖出。说的是这笔委托本身买还是卖，不是持仓方向：平多仓要传 1(卖出)，平空仓要传 0(买入)。"
+          },
+          "offsetFlag": {
+            "type": "integer",
+            "description": "0=开仓 1=平仓（平昨传 1，不必传 4）3=平今。上期所/能源/中金所要平今必须传 3，传 1 只平昨、平不到今仓。今仓和昨仓都有且要整仓到价平掉时，改用止盈止损。"
+          },
+          "volume": {
+            "type": "integer",
+            "description": "委托手数。"
+          },
+          "triggerMode": {
+            "type": "string",
+            "enum": [
+              "ge",
+              "le",
+              "range"
+            ],
+            "description": "ge=最新价涨到 triggerPrice 触发；le=最新价跌到 triggerPrice 触发；range=最新价落进 [triggerPriceMin, triggerPriceMax] 触发。"
+          },
+          "triggerPrice": {
+            "type": "number",
+            "description": "触发价。triggerMode=ge/le 时必填，range 时不要传。"
+          },
+          "triggerPriceMin": {
+            "type": "number",
+            "description": "区间下限。仅 triggerMode=range 时传。"
+          },
+          "triggerPriceMax": {
+            "type": "number",
+            "description": "区间上限。仅 triggerMode=range 时传。"
+          },
+          "orderPriceType": {
+            "type": "string",
+            "enum": [
+              "MARKET",
+              "LIMIT",
+              "LAST",
+              "OPPONENT",
+              "QUEUE"
+            ],
+            "description": "条件单触发后按什么价报单。用户没特别要求就用 MARKET。这是条件单字段，禁止写到 POST /open/v1/orders 的 priceType（立即下单市价是 ANY）。不是旧版的 1/2 数字。"
+          },
+          "limitPrice": {
+            "type": "number",
+            "description": "委托限价。仅 orderPriceType=LIMIT 时必填，其余类型不要传。"
+          },
+          "timeCondition": {
+            "type": "string",
+            "enum": [
+              "GFD",
+              "GTC"
+            ],
+            "description": "GFD=当日有效（默认）；GTC=撤销前长期有效。**平今不能传 GTC**：先说明只能当日有效，等用户确认后再用 GFD 建。"
+          },
+          "validUntil": {
+            "type": "string",
+            "description": "有效期截止日 yyyy-MM-dd，可选。不传由服务端按 timeCondition 算，正常不用传。"
+          },
+          "stopLossConfig": {
+            "type": "object",
+            "description": "可选。这张单触发成交后自动再挂一个止损。spread=相对成交价的价差（正数），orderPriceType 传 '市价'。用户没提就不要传。",
+            "properties": {
+              "spread": {
+                "type": "number",
+                "description": "价差，正数。"
+              },
+              "orderPriceType": {
+                "type": "string",
+                "description": "'市价'。"
+              }
+            }
+          },
+          "takeProfitConfig": {
+            "type": "object",
+            "description": "可选。触发成交后自动挂的止盈，字段同 stopLossConfig。用户没提就不要传。",
+            "properties": {
+              "spread": {
+                "type": "number",
+                "description": "价差，正数。"
+              },
+              "orderPriceType": {
+                "type": "string",
+                "description": "'市价'。"
+              }
+            }
+          },
+          "remark": {
+            "type": "string",
+            "description": "备注，可选。"
+          }
+        },
+        "required": [
+          "instrumentId",
+          "direction",
+          "offsetFlag",
+          "volume",
+          "orderPriceType",
+          "triggerMode"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "list_cloud_condition_orders",
+      "description": "查条件单：返回**全部盯盘中的单**（不限创建日） ∪ 时间窗内创建的任意状态，和用户在 App「交易 → 条件单」里看到的是同一份数据。不传时间窗时窗口就是当前交易日。 用户问「我那单还在吗 / 触发没有」时查这里；**建完单不要定时回来查**，那是换个接口继续盯盘。 状态看 status：0 盯盘中 1 已触发 2 已暂停 3 已撤销 4 已失效 5 失败，**和 list_cloud_orders 的状态码不是一套**，念给用户直接用 statusLabel 字段，不要自己按数字编文案。 返回项 type=group 的是同合约分组，真正的单在它的 orders[] 里，别把分组行当成一张单。**仅 X-Trading-Env: live 可用**（云条件单由 cloud-ctp 托管真实 CTP 账号执行，模拟盘无此机制）；sim 下会报错并指回 place_order，那是环境能力差异，不要重试。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "tabType": {
+            "type": "string",
+            "enum": [
+              "OPEN",
+              "CLOSE"
+            ],
+            "description": "OPEN=只看开仓条件单，CLOSE=只看平仓条件单；不传看全部。"
+          },
+          "startTime": {
+            "type": "string",
+            "description": "创建时间起 'yyyy-MM-dd HH:mm:ss'，要和 endTime 成对传。"
+          },
+          "endTime": {
+            "type": "string",
+            "description": "创建时间止 'yyyy-MM-dd HH:mm:ss'。"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_cloud_condition_order_detail",
+      "description": "查一张条件单的详情，含触发条件 conditions 与动作历史 actions。排查「为什么没触发 / 为什么失败」先看 actions，比反复查列表有效。**仅 X-Trading-Env: live 可用**（云条件单由 cloud-ctp 托管真实 CTP 账号执行，模拟盘无此机制）；sim 下会报错并指回 place_order，那是环境能力差异，不要重试。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "integer",
+            "description": "条件单 id。"
+          }
+        },
+        "required": [
+          "orderId"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "modify_cloud_pending_order",
+      "description": "【服务端当前未开放，别调】本接口在当前服务端没有开放，调用必失败，不要重试、不要换域名。（原用途：修改挂单的限价/数量/方向/开平/有效期。）",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "integer",
+            "description": "挂单 orderId。"
+          },
+          "limitPrice": {
+            "type": "number",
+            "description": "新的委托限价。"
+          },
+          "volume": {
+            "type": "integer",
+            "description": "新的委托手数。"
+          },
+          "direction": {
+            "type": "integer",
+            "description": "0=买入，1=卖出。"
+          },
+          "offsetFlag": {
+            "type": "integer",
+            "description": "0=开仓 1=平仓 3=平今 4=平昨。"
+          },
+          "orderPriceType": {
+            "type": "integer",
+            "description": "1=市价，2=限价。"
+          },
+          "timeCondition": {
+            "type": "string",
+            "enum": [
+              "GFD",
+              "GTC"
+            ],
+            "description": "有效期类型。"
+          },
+          "remark": {
+            "type": "string",
+            "description": "备注，可选。"
+          }
+        },
+        "required": [
+          "orderId"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "modify_cloud_stop_profit_loss",
+      "description": "修改止盈止损的触发价/数量/有效期/触发后下单价格类型。**仅 X-Trading-Env: live 可用**（云条件单由 cloud-ctp 托管真实 CTP 账号执行，模拟盘无此机制）；sim 下会报错并指回 place_order，那是环境能力差异，不要重试。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "integer",
+            "description": "止盈止损单 orderId。"
+          },
+          "triggerPrice": {
+            "type": "number",
+            "description": "新的触发价格。"
+          },
+          "volume": {
+            "type": "integer",
+            "description": "新的委托平仓手数。"
+          },
+          "stopPriceType": {
+            "type": "integer",
+            "description": "触发后下单价格类型：1对手价 2最新价 3超价 4排队价 5涨跌停价。"
+          },
+          "orderPrice": {
+            "type": "number",
+            "description": "触发后的下单价格，配合 stopPriceType 使用。"
+          },
+          "timeCondition": {
+            "type": "string",
+            "enum": [
+              "GFD",
+              "GTC"
+            ],
+            "description": "有效期类型。"
+          },
+          "remark": {
+            "type": "string",
+            "description": "备注，可选。"
+          }
+        },
+        "required": [
+          "orderId"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "modify_cloud_condition_order",
+      "description": "修改条件单：触发条件 / 数量 / 报单价格类型 / 有效期。只传 id 和要改的字段，没传的保持不变。**要改触发价就把 triggerMode 和触发价一起传**——触发条件是整体重建的，只传价格不带模式会被当成没说清。**仅盯盘中或已暂停的单可改**；报「状态不允许」就是已经触发/撤销/失效了，不要换参数重试，要换条件就撤了重建。**必须有用户明确指令才能调用**。**仅 X-Trading-Env: live 可用**（云条件单由 cloud-ctp 托管真实 CTP 账号执行，模拟盘无此机制）；sim 下会报错并指回 place_order，那是环境能力差异，不要重试。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "条件单 id（创建返回的 id，列表里的 id）。"
+          },
+          "direction": {
+            "type": "integer",
+            "description": "0=买入 1=卖出，可选；不传保持原方向。"
+          },
+          "volume": {
+            "type": "integer",
+            "description": "新的委托手数。"
+          },
+          "triggerMode": {
+            "type": "string",
+            "enum": [
+              "ge",
+              "le",
+              "range"
+            ],
+            "description": "改触发条件时必须连它一起传。"
+          },
+          "triggerPrice": {
+            "type": "number",
+            "description": "新的触发价（triggerMode=ge/le）。"
+          },
+          "triggerPriceMin": {
+            "type": "number",
+            "description": "新的区间下限（triggerMode=range）。"
+          },
+          "triggerPriceMax": {
+            "type": "number",
+            "description": "新的区间上限（triggerMode=range）。"
+          },
+          "orderPriceType": {
+            "type": "string",
+            "enum": [
+              "MARKET",
+              "LIMIT",
+              "LAST",
+              "OPPONENT",
+              "QUEUE"
+            ],
+            "description": "条件单触发后报单价格类型。仅本接口；立即下单市价是 ANY 不是 MARKET。"
+          },
+          "limitPrice": {
+            "type": "number",
+            "description": "限价，orderPriceType=LIMIT 时必填。"
+          },
+          "timeCondition": {
+            "type": "string",
+            "enum": [
+              "GFD",
+              "GTC"
+            ],
+            "description": "有效期类型。"
+          },
+          "validUntil": {
+            "type": "string",
+            "description": "有效期截止日 yyyy-MM-dd。"
+          },
+          "remark": {
+            "type": "string",
+            "description": "备注，可选。"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "cancel_cloud_order",
+      "description": "撤销云条件单/挂单/止盈止损（三类通用，按 orderId）。**必须有用户明确指令才能调用**。**仅 X-Trading-Env: live 可用**（云条件单由 cloud-ctp 托管真实 CTP 账号执行，模拟盘无此机制）；sim 下会报错并指回 place_order，那是环境能力差异，不要重试。 条件单、挂单、止盈止损都用这个接口撤，服务端按单子自己的类型走对应的撤销链路，不用先判断是哪一类。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "integer",
+            "description": "要撤销的 orderId。"
+          }
+        },
+        "required": [
+          "orderId"
+        ]
+      }
+    }
+  }
+]

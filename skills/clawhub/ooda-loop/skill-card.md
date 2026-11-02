@@ -1,47 +1,51 @@
-## Description: <br>
-Helps agents apply John Boyd's OODA Loop to competitive, crisis, and decision-tempo situations by mapping Observe, Orient, Decide, and Act cycles, identifying bottlenecks, and proposing targeted acceleration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the Observe–Orient–Decide–Act (OODA) loop to diagnose decision-cycle bottlenecks and improve competitive or crisis-response decisions.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Developers, operators, strategists, and business users use this skill to analyze competitive or time-sensitive decisions, compare their decision loop against an opponent's, and choose which OODA stage to improve first. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may frame business, crisis, or incident-response questions through a competitive speed-and-orientation lens even when slower deliberation, legal review, safety review, or non-competitive analysis would be more appropriate. <br>
-Mitigation: Confirm the situation is competitive or time-sensitive before applying the framework, and route legal, safety-critical, irreversible, or non-competitive decisions through the appropriate review process. <br>
-Risk: Overemphasizing cycle speed can produce faster incorrect decisions when orientation quality is poor. <br>
-Mitigation: Map all four stages, assess Orient quality separately from speed, and verify that the acceleration plan targets the actual bottleneck. <br>
+## Use Case:
 
+Teams and decision-makers use this skill to map their own and a competitor's decision loops, find the stage causing delay, and assess orientation quality before choosing how to respond. It provides a structured analysis for competitive planning and crisis response, with attention to decision quality and reversibility.
 
-## Reference(s): <br>
-- [Sources - ooda-loop](references/sources.md) <br>
-- [John Boyd and the F-86 vs MiG-15, Korean War 1950-1953](examples/john-boyd-f86-vs-mig15-korean-war-1950-1953.md) <br>
-- [The Gulf War Left Hook and Maneuver-Warfare Doctrine](examples/gulf-war-left-hook-maneuver-warfare-1991.md) <br>
-- [AI Startups Out-Cycling Incumbents When Capabilities Shift Monthly](examples/ai-startups-out-cycling-incumbents-2024-2026.md) <br>
-- [Stanford AI Index Report](https://aiindex.stanford.edu) <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/ooda-loop) <br>
-- [deciqAI OODA Loop page](https://www.deciqai.com/c/ooda-loop) <br>
-- [deciqAI OODA Loop machine-readable metadata](https://www.deciqai.com/s/ooda-loop.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown analysis with structured bullets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step coaching questions before producing the final analysis when the user lacks a concrete case.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Advice to accelerate a decision cycle could reduce orientation quality or rush an irreversible action.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Assess decision quality separately from speed, map the actual bottleneck, and preserve deliberation for irreversible decisions.
+
+## Reference(s):
+
+- [Primary sources and further reading](artifact/references/sources.md)
+- [Stanford AI Index](https://aiindex.stanford.edu)
+- [OODA Loop on ClawHub](https://clawhub.ai/deciqai/skills/ooda-loop)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown decision analysis with stage timings, bottleneck assessment, acceleration plan, and falsifier]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Case-specific; depends on the user's situation and available timing estimates.]
+
+## Skill Version(s):
+
+1.0.6 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

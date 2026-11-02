@@ -1,43 +1,53 @@
-## Description: <br>
-用于微博评论分析、微博评论回复、微博评论洞察、用户反馈、口碑分析、痛点总结和内容讨论分析。覆盖 Weibo comments and comment replies，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes Weibo comments and replies to surface audience feedback, sentiment themes, objections, pain points, and discussion summaries.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to retrieve Weibo post comments and comment replies through SocialDataX, then summarize audience feedback, sentiment themes, objections, pain points, FAQs, and discussion patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill calls SocialDataX with the user's SOCIALDATAX_API_KEY and can consume API credits. <br>
-Mitigation: Confirm the key belongs to the intended SocialDataX account before use, and prefer --max-items or --pages when cost or volume needs to be bounded. <br>
-Risk: Using --all or --include-replies can retrieve many comments or replies and increase API usage. <br>
-Mitigation: Start with one page or a low --max-items value, then expand pagination only when the extra coverage is needed. <br>
-Risk: Pagination tokens are opaque and changing them can cause failed or inconsistent retrieval. <br>
-Mitigation: Pass returned next_page_token values back unchanged for the same Weibo post or comment chain. <br>
+## Use Case:
 
+Social media analysts and teams use this skill to review Weibo post comments and replies, group observed themes, and summarize audience feedback, objections, and pain points.
 
-## Reference(s): <br>
-- [SocialDataX AI API access](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo-comments) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, API Calls, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include paginated Weibo comment data, merged item counts, next-page tokens, and user-facing analysis grouped by observed themes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: The integration uses an API key, and unbounded comment retrieval may incur usage-based costs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep SOCIALDATAX_API_KEY in the environment, set --pages or --max-items to bound retrieval, and consult the provider's service documentation.
+
+Risk: The documented @latest CLI reference can change between runs.
+
+Mitigation: Use a reviewed, fixed CLI version for repeatable runs.
+
+## Reference(s):
+
+- [SocialDataX service documentation](https://socialdatax.com/docs)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text summaries, Analysis]
+
+**Output Format:** [JSON comment and reply data with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Summaries group comments by observed themes and indicate whether retrieval covered one page or multiple pages.]
+
+## Skill Version(s):
+
+0.1.21 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,58 @@
-## Description: <br>
-Call the DeepSeek API (deepseek-v4-pro, deepseek-v4-flash) through RunAPI using the official OpenAI SDK, Anthropic SDK, or compatible clients. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Call the DeepSeek API through RunAPI using OpenAI-compatible Chat Completions and Responses, with deepseek-flash as the current V4.1 Flash 1017 model and the v4 names as compatibility aliases.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and engineers use this skill to configure agents and existing LLM SDK integrations for DeepSeek models through RunAPI. It provides setup guidance, code examples, streaming patterns, protocol compatibility notes, and constraints for the supported DeepSeek model subset. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and generated content are routed through RunAPI for DeepSeek requests, which can expose sensitive data to that service path. <br>
-Mitigation: Use the skill only when routing through RunAPI is intended, and review RunAPI data-handling expectations before sending sensitive prompts. <br>
-Risk: RunAPI tokens can be exposed if copied into source files, commits, or shell history. <br>
-Mitigation: Keep tokens in environment variables or a secret manager, and avoid inline credentials in committed code or long-lived command history. <br>
-Risk: Pricing, rate limits, and commercial usage terms may affect deployment decisions. <br>
-Mitigation: Review the linked RunAPI DeepSeek model overview for current pricing, rate limits, and usage expectations before production use. <br>
-Risk: Requests outside the documented cross-protocol subset may fail or behave differently than examples. <br>
-Mitigation: Stay within the documented model, streaming, and single-function constraints, and treat unsupported advanced fields as integration risks. <br>
+## Use Case:
 
+Developers use this skill to configure clients and send and verify DeepSeek API requests through RunAPI, with optional Anthropic Messages or Gemini contents guidance for existing clients.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-deepseek) <br>
-- [RunAPI DeepSeek model overview](https://runapi.ai/models/deepseek.md) <br>
-- [RunAPI DeepSeek provider comparison](https://runapi.ai/providers/deepseek.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [RunAPI DeepSeek homepage](https://runapi.ai/models/deepseek) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python, TypeScript, dotenv, and curl examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes environment-variable requirements, compatible API base URLs, model IDs, streaming guidance, and protocol constraints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: ClawHub release evidence) <br>
+Risk: Prompts, messages, and supported images are sent to RunAPI, which may not be approved for all data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm RunAPI is approved for the data being sent and use a RunAPI-specific API key.
+
+Risk: Environment settings could redirect unintended clients, and API usage may incur charges.
+
+Mitigation: Scope environment settings to the intended client and monitor API usage.
+
+## Reference(s):
+
+- [RunAPI DeepSeek model page](https://runapi.ai/models/deepseek)
+- [DeepSeek API documentation](https://runapi.ai/models/deepseek.md)
+- [RunAPI DeepSeek provider page](https://runapi.ai/providers/deepseek.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [DeepSeek V4.1 Flash model reference](https://runapi.ai/models/deepseek/v4.1-flash.md)
+- [Compatibility protocols](references/compatibility-protocols.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Configuration, Guidance]
+
+**Output Format:** [Markdown instructions with Python code examples and API request recipes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Model- and protocol-specific examples; no fixed output length]
+
+## Skill Version(s):
+
+0.1.7 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

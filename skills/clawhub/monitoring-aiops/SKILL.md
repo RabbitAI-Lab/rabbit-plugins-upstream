@@ -17,7 +17,7 @@ installer:
 argument-hint: "[node/sensor id, a SWQL question, or describe your NOC task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["MONITORING_AIOPS_CONFIG"],"bins":["monitoring-aiops"],"config":["~/.monitoring-aiops/config.yaml","~/.monitoring-aiops/secrets.enc"]},"optional":{"env":["MONITORING_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"MONITORING_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Monitoring-AIops","emoji":"📡","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["monitoring-aiops","uvx"]},"optional":{"env":["MONITORING_AIOPS_CONFIG","MONITORING_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Monitoring-AIops","emoji":"📡","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed monitoring operations across SolarWinds Orion (SWIS REST + SWQL, port 17774 on Orion 2023.1+ with an automatic one-shot fallback to the legacy 17778, HTTP Basic auth), Paessler PRTG (web API, port 443/8080, API token), and Zabbix 6.x/7.x (JSON-RPC 2.0 at /api_jsonrpc.php, API token as Bearer header on 6.4+/7.x with a legacy auth-field fallback for 6.0). Each target in the config names its own platform, so one config can span all NOCs. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.monitoring-aiops/ (relocatable via MONITORING_AIOPS_HOME).
@@ -30,6 +30,8 @@ compatibility: >
 ---
 
 # Monitoring AIops
+
+> **Audit availability:** Real writes require a durable audit intent. Reads and previews can continue if audit storage fails; check the warning and audit health before relying on their audit trail.
 
 > **Disclaimer**: Community-maintained open-source project, **not affiliated with, endorsed by, or sponsored by SolarWinds, Paessler, Zabbix, or any monitoring vendor.** SolarWinds, Orion, SWQL, THWACK, PRTG, Paessler and Zabbix are trademarks of their respective owners. Source at [github.com/AIops-tools/Monitoring-AIops](https://github.com/AIops-tools/Monitoring-AIops) under the MIT license.
 
@@ -78,6 +80,15 @@ uv tool install monitoring-aiops
 monitoring-aiops init       # wizard: pick platform (solarwinds/prtg/zabbix) + encrypted secret
 monitoring-aiops doctor
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/monitoring-aiops
+openclaw skills info monitoring-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 

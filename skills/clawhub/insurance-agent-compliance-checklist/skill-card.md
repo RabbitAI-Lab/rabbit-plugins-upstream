@@ -1,40 +1,51 @@
-## Description: <br>
-Helps insurance agents and agencies check licensing, appointment, disclosure, suitability, replacement, E&O, and record-retention steps before binding or replacing a policy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides insurance agents and agencies a sales checklist for licensing, disclosures, suitability, and policy replacements.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External insurance agents and agencies use this skill as a sales-compliance checklist for policy binding, replacement, suitability review, producer onboarding, and agency SOPs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users could treat the checklist as legal advice or assume it fully covers state-specific insurance requirements. <br>
-Mitigation: Use it as a checklist aid and verify requirements against the applicable state DOI, carrier rules, and qualified legal or compliance guidance. <br>
+## Use Case:
 
+Insurance agents and agencies use this checklist when binding or replacing policies, selling life or annuity products, onboarding producers, or building sales procedures. It prompts them to confirm licensing, suitability, replacement notices, disclosures, and recordkeeping before proceeding.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/insurance-agent-compliance-checklist) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/insurance-agent-compliance-checklist) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/insurance-agent-compliance-checklist.json) <br>
+### Deployment Geography for Use:
 
+United States (state-specific requirements)
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown] <br>
-**Output Format:** [Markdown checklist and compliance guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable output; users should verify guidance against applicable DOI, carrier, legal, and compliance requirements.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: ClawHub release evidence) <br>
+Risk: Insurance requirements vary by state and carrier, so checklist guidance may not reflect current requirements for a particular sale.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the checklist as a prompt, not proof of compliance; verify current requirements with the relevant state insurance department and carrier before acting.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/insurance-agent-compliance-checklist)
+- [deciqAI skill information](https://www.deciqai.com/c/insurance-agent-compliance-checklist)
+- [Machine-readable skill information](https://www.deciqai.com/s/insurance-agent-compliance-checklist.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Checklist]
+
+**Output Format:** [Markdown checklist and concise text guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Informational prompts for human review; no automated transactions or compliance determination.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

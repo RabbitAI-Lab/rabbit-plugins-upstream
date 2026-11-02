@@ -1,44 +1,55 @@
-## Description: <br>
-Analyzes pet race start and finish videos to identify false starts, lane crossings, finish order, lane assignment, and supporting evidence for referee review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes submitted pet race videos for start timing, finish order, lane assignment, and possible false starts or lane crossings, then returns a structured report.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Event organizers, referees, trainers, and developers use this skill to review pet racing video for objective foul-detection results. It supports adjudication workflows by returning structured findings, evidence snippets, and historical report listings without providing race advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Race videos may be uploaded to a configured cloud analysis service. <br>
-Mitigation: Use the skill only when that service and its data handling are acceptable for the video content being analyzed. <br>
-Risk: The skill can silently create or reuse a local identity and store identity tokens for report association. <br>
-Mitigation: Run it in a workspace where local identity-token storage is acceptable, and avoid placing unrelated secrets in the workspace data directory. <br>
-Risk: Historical report retrieval may return identity-linked cloud reports. <br>
-Mitigation: Review generated report listings before sharing them and limit use to environments where identity-linked report access is expected. <br>
+## Use Case:
 
+Race referees and event organizers use the skill to review submitted race footage for possible start and lane fouls, finish order, and lane assignment. Its report supports referee review of race fairness.
 
-## Reference(s): <br>
-- [Skill API Documentation](references/api_doc.md) <br>
-- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-race-foul-detection-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown reports and tables, with JSON available for detailed analysis output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links, detected foul status, lane and finish-order details, and history listings from the configured cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Account handling may mix users’ reports, reusable credentials are stored locally, and the export-only option may still run analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer waiting for fixes before using this in shared or sensitive workspaces. Require reliable per-user account separation, protected token storage, separation of API secrets from identity fields, restricted credential destinations, and a working export-only mode.
+
+Risk: Submitted files are uploaded to LifeEmergence’s service, and supplied URLs are forwarded for remote retrieval.
+
+Mitigation: Use only video files and URLs approved for remote processing, and restrict credential destinations as advised by the security guidance.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-race-foul-detection-analysis)
+- [API reference](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON]
+
+**Output Format:** [Structured race analysis report with detected events and a report link]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include start times, finish order, lane assignments, and possible foul evidence.]
+
+## Skill Version(s):
+
+1.0.13 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

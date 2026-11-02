@@ -1,43 +1,62 @@
-## Description: <br>
-Helps agents operate 蜀宁 OA timesheet workflows, including login, project lookup, timesheet submission, updates, daily queries, and detail checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users manage Shuning OA timesheets and expenses by submitting, editing, and querying work records and checking reimbursement status and approval progress.
 
-## Publisher: <br>
-[ithou](https://clawhub.ai/user/ithou) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ithou](https://clawhub.ai/user/ithou)
 
-## Use Case: <br>
-Employees or their delegated agents use this skill to manage 蜀宁 OA work records after authenticated login. It supports submitting daily timesheets, saving drafts, updating or logically deleting records, checking record status, viewing details, and listing projects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Stored OA credentials, encryption keys, or printed tokens could expose account access. <br>
-Mitigation: Use encrypted credentials, protect OA_ENC_KEY and any local key cache, avoid saving printed tokens, and verify the OA base URL before login. <br>
-Risk: Submit, update, batch, or delete actions can change business timesheet records. <br>
-Mitigation: Require explicit user confirmation before record-changing actions and review the target date, project, record ID, description, and draft versus submit mode. <br>
-Risk: Project IDs, time-entry IDs, and internal configuration values may be sensitive in normal chat responses. <br>
-Mitigation: Return business-readable fields by default and reveal internal IDs only when the user explicitly asks or an operation requires them. <br>
+## Use Case:
 
+OA users use the skill to manage work-time records and review reimbursement requests and their approval progress.
 
-## Reference(s): <br>
-- [蜀宁 OA 工时系统 API 参考](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/ithou/sn-work-record) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and optional JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run Python scripts that call OA APIs using local credentials; some commands can submit, update, or logically delete timesheet records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.3 (source: server release evidence) <br>
+Risk: Password handling and encryption-key handling need security review before connecting an OA account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require HTTPS and have the maintainer address passwords in URLs and encryption keys passed as command arguments.
+
+Risk: Timesheet changes, deletion, approval withdrawal, and scheduled monitoring can affect records or notifications.
+
+Mitigation: Confirm the exact timesheet changes and separately authorize deletion, approval withdrawal, and scheduled monitoring.
+
+Risk: Saved credentials and session tokens are sensitive.
+
+Mitigation: Keep saved credentials and tokens private.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/ithou/skills/sn-work-record)
+- [Publisher profile](https://clawhub.ai/user/ithou)
+- [Personal settings and submission boundaries](references/personal-settings.md)
+- [Submission idempotency](references/submission-idempotency.md)
+- [Timesheet amendment workflow](references/amendment-workflow.md)
+- [Reimbursement monitoring](references/reimbursement-monitoring.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [Text summaries and JSON records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Status and approval-progress summaries; internal identifiers are omitted by default.]
+
+## Skill Version(s):
+
+1.14.1 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

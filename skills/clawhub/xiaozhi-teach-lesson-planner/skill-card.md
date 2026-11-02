@@ -1,45 +1,53 @@
-## Description: <br>
-教案设计器 helps teachers turn lesson ideas into UbD-aligned, core-competency lesson plans with assessment evidence, Bloom question chains, time matrices, and optional A/B/C differentiation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps teachers draft lesson plans using UbD backward design, learning goals, assessment evidence, timed activities, question sequences, and differentiated tasks.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External teachers use this skill to draft and refine Chinese-language lesson plans, review-class plans, question chains, and differentiated task cards from curriculum goals and optional de-identified learning summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lesson planning may involve student-learning summaries or classroom observations. <br>
-Mitigation: Provide only de-identified or aggregate learning data, and avoid real student names, family identifiers, or individual rankings. <br>
-Risk: Generated lesson plans may be pedagogically incomplete or unsuitable for a specific class. <br>
-Mitigation: Teachers should review and adjust goals, tasks, timing, and questions before using the plan in class. <br>
-Risk: A/B/C differentiated plans depend on an existing learning summary. <br>
-Mitigation: Use the basic lesson-plan mode when no learning summary is available, and do not invent class or student data. <br>
+## Use Case:
 
+External educators use this skill to draft structured lesson plans, including learning outcomes, evidence of learning, lesson timing, question sequences, and differentiated activities. Teachers review the drafts before using them with students.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-planner) <br>
-- [Core output templates](references/core-output-templates.md) <br>
-- [Layered lesson example](references/layered-lesson-example.md) <br>
-- [Lesson plan template](references/lesson-plan-template.md) <br>
+### Deployment Geography for Use:
 
+China; curriculum guidance is aligned with mainland Chinese grade bands.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown lesson plans, task cards, question chains, and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-language output; differentiated plans depend on supplied de-identified learning summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Classroom information may contain sensitive student data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only authorized classroom data and student aliases; check the host platform's storage and sharing settings, and use the documented no-memory control when needed.
+
+Risk: Draft lesson content may be incorrect or unsuitable for a class.
+
+Mitigation: Have the teacher review drafts before teaching, and independently review separately installed companion skills.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-planner)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Structured Markdown lesson-plan drafts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher-reviewed drafts; does not implement lessons or independently assess students.]
+
+## Skill Version(s):
+
+2.12.0 (source: frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

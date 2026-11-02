@@ -170,6 +170,9 @@ def main(argv=None):
     p.add_argument('--api', default=DEFAULT_API, help='Override API base (advanced)')
     args = p.parse_args(argv)
 
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base({'api_base': args.api})
+
     try:
         beak_key, default_sd = _load_config()
     except FileNotFoundError as e:

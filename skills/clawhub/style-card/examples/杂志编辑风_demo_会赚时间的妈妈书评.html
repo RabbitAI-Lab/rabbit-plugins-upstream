@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* === html-base.css 底座 === */
+:root { --card-width: 1170px; --card-height: 1560px; --bg-page: #FAF6F0; --ink: #1A1A1A; --accent: #C05B3D; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:var(--card-width); height:var(--card-height); overflow:hidden; background:var(--bg-page); color:var(--ink); font-family:'Noto Sans SC',sans-serif; -webkit-font-smoothing:antialiased; }
+.card { position:relative; width:100%; height:100%; overflow:hidden; padding:80px 90px; display:flex; flex-direction:column; }
+::selection { background:transparent; }
+
+/* === 区块1：刊头 === */
+.masthead { display:flex; justify-content:space-between; align-items:baseline;
+            border-bottom:3px solid #1A1A1A; padding-bottom:16px; }
+.masthead .name { font-family:'Noto Serif SC',serif; font-weight:900; font-size:26px; letter-spacing:.2em; }
+.masthead .issue { font-size:14px; color:#8A857C; letter-spacing:.15em; }
+
+/* === 区块2：大标题区 === */
+.hero { margin-top:90px; text-align:center; }
+.hero .kicker { font-size:15px; letter-spacing:.4em; color:var(--accent); font-weight:700; margin-bottom:34px; }
+.hero h1 { font-family:'Noto Serif SC',serif; font-weight:900; font-size:96px; line-height:1.28; }
+.hero .sub { font-family:'Noto Serif SC',serif; font-size:24px; color:#5A554D; margin-top:36px; font-weight:600; }
+
+/* === 区块3：引文 === */
+.pullquote { margin:70px auto 0; max-width:760px; text-align:center;
+             font-family:'Noto Serif SC',serif; font-style:italic; font-size:22px; color:#5A554D; line-height:1.9; }
+.pullquote::before { content:"“"; display:block; font-size:56px; color:var(--accent); line-height:.6; margin-bottom:14px; }
+
+/* === 区块4：两栏正文 === */
+.body-cols { margin-top:70px; column-count:2; column-gap:56px; column-rule:1px solid #E5DFD5;
+             font-size:17.5px; line-height:2.05; color:#3A362F; text-align:justify; }
+.body-cols .dropcap::first-letter { font-family:'Noto Serif SC',serif; font-weight:900; font-size:64px;
+             float:left; line-height:.9; padding:6px 12px 0 0; color:var(--accent); }
+.body-cols p + p { margin-top:22px; }
+
+/* === 区块5：页脚 === */
+.footer { margin-top:auto; border-top:1px solid #E5DFD5; padding-top:20px;
+          display:flex; justify-content:space-between; font-size:14px; color:#8A857C; letter-spacing:.1em; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <!-- === 刊头 === -->
+  <div class="masthead">
+    <span class="name">巴扎嘿 · 读书</span>
+    <span class="issue">VOL.01 · 2026 · 滨海</span>
+  </div>
+
+  <!-- === 大标题区 === -->
+  <div class="hero">
+    <div class="kicker">本 期 共 读</div>
+    <h1>会赚时间的<br>妈妈</h1>
+    <div class="sub">—— 时间不是省出来的，是赚出来的</div>
+  </div>
+
+  <!-- === 引文 === -->
+  <div class="pullquote">先干起来，保持势头，胜过完美的计划——这本领我练了很多年，才终于肯承认它是对的。</div>
+
+  <!-- === 两栏正文 === -->
+  <div class="body-cols">
+    <p class="dropcap">这本书最打动我的，是它不再把"忙"当作勋章。作者把时间拆成了可经营的小单元：碎片十五分钟不是用来喘息的边角料，而是主线的滋养期。我开始把每天十五分钟固定留给学习劲头——不是刷课，就是保持在场。</p>
+    <p>读到"用系统替代意志力"那一章时，我在旁边贴了便签：我所有做成的 skill，都不是计划出来的，是顺手做出来之后再补的计划。种一棵树最好的时间是十年前，其次是现在——书里没有这句话，但它整本都在讲这句话。</p>
+  </div>
+
+  <!-- === 页脚 === -->
+  <div class="footer">
+    <span>文 / Bonnie</span>
+    <span>公众号 · 巴扎嘿的探索记录</span>
+  </div>
+
+</div>
+</body>
+</html>

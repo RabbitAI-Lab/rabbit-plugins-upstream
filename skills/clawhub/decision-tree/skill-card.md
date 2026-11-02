@@ -1,46 +1,53 @@
-## Description: <br>
-Guides agents through decision-tree analysis for multi-stage decisions with uncertain outcomes, estimated probabilities, quantified payoffs, rollback, sensitivity analysis, and EVPI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through sequential decisions by mapping choices, uncertain outcomes, probabilities, and payoffs into an expected-value decision tree.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to structure sequential decisions, make assumptions explicit, calculate expected values, and identify thresholds where recommendations change. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may over-rely on decision-tree outputs as financial or business advice. <br>
-Mitigation: Treat outputs as decision-support guidance and verify probabilities, assumptions, payoffs, and source claims before relying on recommendations. <br>
-Risk: Incorrect probabilities, inconsistent payoff units, or missing branches can produce misleading expected-value recommendations. <br>
-Mitigation: Require documented probability bases, consistent payoff units, sensitivity analysis, EVPI checks, and an explicit missing-branch audit. <br>
+## Use Case:
 
+Business leaders, analysts, and teams use this skill to structure multi-stage decisions with uncertain outcomes, compare expected values, and identify assumptions or information that could change a recommendation.
 
-## Reference(s): <br>
-- [Decision Tree Sources](references/sources.md) <br>
-- [Magee 1964 Chemical Plant Investment Example](examples/magee-1964-chemical-plant-investment-hbr.md) <br>
-- [Eisenhower D-Day Weather Decision Example](examples/eisenhower-1944-d-day-weather-decision.md) <br>
-- [Chipmaker Fab Investment Under AI Uncertainty Example](examples/chipmaker-leading-edge-fab-investment-2024-2026.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/decision-tree) <br>
-- [deciqAI Decision Tree Page](https://www.deciqai.com/c/decision-tree) <br>
-- [deciqAI Decision Tree Metadata](https://www.deciqai.com/s/decision-tree.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Analysis] <br>
-**Output Format:** [Markdown decision-tree worksheet with tables, calculations, sensitivity thresholds, and a recommendation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user-provided or estimated probabilities and consistent payoff units; no executable output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Unverified probabilities, payoffs, or omitted branches can produce misleading recommendations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check assumptions and calculations, test sensitivity, audit for missing branches, and review recommendations before making real commitments.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/decision-tree)
+- [Decision Tree project page](https://www.deciqai.com/c/decision-tree)
+- [Decision Tree source references](references/sources.md)
+- [Documented skill repository](https://github.com/deciqAI/knowledge-skills)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/decision-tree.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Structured Markdown or text with decision-tree branches, probability and payoff tables, rollback, and sensitivity analysis.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations should state the assumptions and conditions under which they hold or change.]
+
+## Skill Version(s):
+
+1.0.6 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -306,11 +306,11 @@
       }
       .chart-box {
         position: relative;
-        height: 300px;
-        margin: 10px 0 4px;
+        height: 400px;
+        margin: 16px 0 8px;
       }
       .chart-box.sm {
-        height: 220px;
+        height: 320px;
       }
       .chart-grid-2 {
         display: grid;
@@ -360,10 +360,34 @@
       .table-wrap {
         border: 1px solid var(--border);
         border-radius: var(--radius-md);
-        overflow: hidden;
+        /* 列多时在表内横向滚动，避免右侧指标被裁掉 */
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: #94a3b8 transparent;
+      }
+      .table-wrap::-webkit-scrollbar {
+        height: 8px;
+      }
+      .table-wrap::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 8px;
+      }
+      .table-wrap.is-scrollable {
+        box-shadow: inset -16px 0 12px -14px rgba(15, 23, 42, 0.28);
+      }
+      .table-wrap.is-scrollable::after {
+        content: "左右滑动查看其余列";
+        position: sticky;
+        left: 0;
+        display: block;
+        padding: 6px 12px 8px;
+        font-size: 0.75rem;
+        color: var(--muted);
       }
       table {
-        width: 100%;
+        width: max-content;
+        min-width: 100%;
         border-collapse: collapse;
         font-size: 0.86rem;
       }
@@ -373,6 +397,14 @@
         text-align: left;
         border-bottom: 1px solid var(--border);
         white-space: nowrap;
+      }
+      /* 名称列换行，避免一条长标题把消耗/点击/转化挤出视口 */
+      th:not(.num),
+      td:not(.num) {
+        white-space: normal;
+        word-break: break-word;
+        min-width: 6em;
+        max-width: 18em;
       }
       td {
         color: var(--text-dim);
@@ -472,6 +504,9 @@
         color: var(--muted);
         flex: none;
       }
+      .empty-note + .table-wrap {
+        margin-top: 10px;
+      }
 
       @keyframes fadeInUp {
         from {
@@ -535,7 +570,7 @@
           border-radius: 12px;
         }
         .chart-box {
-          height: clamp(220px, 56vw, 260px);
+          height: clamp(280px, 62vw, 360px);
         }
         .chart-grid-2 {
           grid-template-columns: 1fr;
@@ -589,6 +624,19 @@
           display: none !important;
           content: none !important;
         }
+        .table-wrap {
+          overflow: visible;
+        }
+        .table-wrap table {
+          width: 100%;
+        }
+        th:not(.num),
+        td:not(.num),
+        th.num,
+        td.num {
+          white-space: normal;
+          max-width: none;
+        }
       }
     </style>
   </head>
@@ -605,6 +653,25 @@
        */
       (function () {
         "use strict";
+
+        /** 只读 render 注入的 periodChrome，规则与 report-period.ts 相同。 */
+        function periodWord(data, neutral) {
+          const chrome = data && data.periodChrome;
+          if (chrome && chrome.unitLabel) return chrome.unitLabel;
+          const unit = chrome && chrome.unit;
+          return unit || neutral;
+        }
+
+        function statusText(row) {
+          const lang = (document.documentElement.getAttribute("lang") || "").toLowerCase();
+          if (lang.indexOf("en") !== 0) return (row && row.campaignStatusDisplay) || "—";
+          const raw = String((row && (row.campaignStatusV2 || row.campaignStatus)) || "").toUpperCase();
+          if (raw === "ENABLED" || raw === "ACTIVE") return "Active";
+          if (raw === "PAUSED") return "Paused";
+          if (raw === "REMOVED" || raw === "DELETED") return "Removed";
+          if (!raw) return "—";
+          return "Unknown";
+        }
 
         const PALETTE = [
           "#0ea5e9",
@@ -757,11 +824,7 @@
             .map((def, i) => {
               const v = kpiVal(kpis, def.key);
               const p =
-                def.key === "spend"
-                  ? prev.spend != null
-                    ? prev.spend
-                    : prev.cost
-                  : prev[def.key];
+                def.key === "spend" ? (prev.spend != null ? prev.spend : prev.cost) : prev[def.key];
               const color = PALETTE[i % PALETTE.length];
               const delta = deltaKeys.has(def.key) ? deltaLabel(v, p) : "";
               return `<div class="kpi" style="--kpi-color:${color}">
@@ -773,7 +836,7 @@
             .join("");
           return `
 <div class="hero">
-  <div class="eyebrow">BING ADS · 账户分析报告</div>
+  <div class="eyebrow">BING ADS · ${periodWord(data, "账户")}分析报告</div>
   <h1>${escapeHtml(meta.accountName || "Bing 广告账户")}</h1>
   <div class="meta-chips">
     <span class="meta-chip">📅 <b>${escapeHtml(period)}</b></span>
@@ -837,8 +900,8 @@
           const table =
             sorted.length > 0
               ? `<div class="chart-grid-2">
-  <div id="chart-devices-pie" class="chart-box" style="height:280px"></div>
-  <div id="chart-devices-bar" class="chart-box" style="height:280px"></div>
+  <div id="chart-devices-pie" class="chart-box" style="height:380px"></div>
+  <div id="chart-devices-bar" class="chart-box" style="height:380px"></div>
 </div>
 <div class="table-wrap"><table>
   <thead><tr><th>设备</th><th class="num">消耗</th><th class="num">展示</th><th class="num">点击</th><th class="num">CTR</th><th class="num">平均CPC</th><th class="num">转化</th><th class="num">CPA</th></tr></thead>
@@ -876,7 +939,7 @@
             .join("");
           const table =
             sorted.length > 0
-              ? `<div id="chart-geographic" class="chart-box" style="height:320px"></div>
+              ? `<div id="chart-geographic" class="chart-box" style="height:420px"></div>
 <div class="card-title-row"><h3>地域 Top 10</h3><span class="hint">共 ${rows.length} 个国家/地区，按消耗排序</span></div>
 <div class="table-wrap"><table>
   <thead><tr><th>国家/地区</th><th class="num">消耗</th><th class="num">展示</th><th class="num">点击</th><th class="num">CTR</th><th class="num">平均CPC</th><th class="num">转化</th><th class="num">CPA</th></tr></thead>
@@ -955,7 +1018,7 @@
             .map(
               (r) => `<tr>
   <td>${escapeHtml(r.campaignName || "—")}</td>
-  <td>${escapeHtml(r.campaignStatusDisplay || "—")}</td>
+  <td>${escapeHtml(statusText(r))}</td>
   <td class="num">${money(r.spend, currency)}</td>
   <td class="num">${int(r.impressions)}</td>
   <td class="num">${int(r.clicks)}</td>
@@ -967,7 +1030,7 @@
             .join("");
           const table =
             sorted.length > 0
-              ? `<div id="chart-campaigns" class="chart-box" style="height:280px"></div>
+              ? `<div id="chart-campaigns" class="chart-box" style="height:380px"></div>
 <div class="card-title-row"><h3>系列 Top 10</h3><span class="hint">共 ${rows.length} 个系列，按消耗排序</span></div>
 <div class="table-wrap"><table>
   <thead><tr><th>广告系列</th><th>状态</th><th class="num">消耗</th><th class="num">展示</th><th class="num">点击</th><th class="num">CTR</th><th class="num">转化</th><th class="num">CPA</th></tr></thead>
@@ -1026,6 +1089,10 @@
           const currency = currencyOf(data);
           const section = data.narrative?.sections?.ads;
           const sorted = topBySpend(rows, 10);
+          const usedFallback = sorted.some((r) => r.adTitleFallback);
+          const titleNotice = usedFallback
+            ? `<div class="empty-note">Bing 响应式搜索广告的报表不返回创意标题，本列用「系列 / 广告组」名称代替。</div>`
+            : "";
           const body = sorted
             .map(
               (r) => `<tr>
@@ -1042,6 +1109,7 @@
           const table =
             sorted.length > 0
               ? `<div class="card-title-row"><h3>广告 Top 10</h3><span class="hint">共 ${rows.length} 条广告，按消耗排序</span></div>
+${titleNotice}
 <div class="table-wrap"><table>
   <thead><tr><th>广告标题</th><th>广告组</th><th>广告类型</th><th class="num">消耗</th><th class="num">点击</th><th class="num">CTR</th><th class="num">转化</th></tr></thead>
   <tbody>${body}</tbody>
@@ -1144,7 +1212,8 @@
               return `<div class="rec-card">${num}<div class="rec-body">${title}<div class="rec-content">${escapeHtml(r?.content || "")}</div></div></div>`;
             })
             .join("");
-          const body = recs.length > 0 ? `<div class="recommendation-list">${cards}</div>` : emptyNoteHtml();
+          const body =
+            recs.length > 0 ? `<div class="recommendation-list">${cards}</div>` : emptyNoteHtml();
           return `
 <section id="sec-recommendations">
   ${sectionHead("10", "优化建议汇总", "跨维度归纳优先级，须与各 section 分析一致")}
@@ -1154,7 +1223,7 @@
 
         function renderFooter(data) {
           const generatedAt = data.meta?.generatedAt || new Date().toISOString();
-          return `<div class="footer"><span class="brand">siluzan-tso</span> · Bing 广告账户分析报告 · ${escapeHtml(generatedAt)} · 数据来源 bing-analysis</div>`;
+          return `<div class="footer"><span class="brand">siluzan-tso</span> · Bing 广告${periodWord(data, "账户")}分析报告 · ${escapeHtml(generatedAt)} · 数据来源 bing-analysis</div>`;
         }
 
         function styleAxis(extra) {
@@ -1175,11 +1244,12 @@
               { trigger: "item", formatter: (p) => `${p.name}: ${money(p.value, currency)}` },
               TOOLTIP_STYLE,
             ),
-            legend: { bottom: 0, textStyle: { color: AXIS_COLOR } },
+            legend: { bottom: 4, left: "center", textStyle: { color: AXIS_COLOR } },
             series: [
               {
                 type: "pie",
-                radius: ["42%", "70%"],
+                radius: ["36%", "54%"],
+                center: ["50%", "44%"],
                 itemStyle: { borderColor: "#ffffff", borderWidth: 3, borderRadius: 8 },
                 data: items.map((d, i) => ({
                   name: d[nameKey] || "—",
@@ -1203,7 +1273,7 @@
               { trigger: "axis", formatter: (p) => money(p[0].value, currency) },
               TOOLTIP_STYLE,
             ),
-            grid: { left: 140, right: 30, top: 16, bottom: 20 },
+            grid: { left: 140, right: 36, top: 28, bottom: 36 },
             xAxis: styleAxis({ type: "value" }),
             yAxis: styleAxis({
               type: "category",
@@ -1276,7 +1346,13 @@
             echarts
               .init(campaignsEl)
               .setOption(
-                hBarOption(campaigns, "campaignName", currency, "rgba(99,102,241,0.55)", PALETTE[1]),
+                hBarOption(
+                  campaigns,
+                  "campaignName",
+                  currency,
+                  "rgba(99,102,241,0.55)",
+                  PALETTE[1],
+                ),
               );
           }
 
@@ -1314,6 +1390,12 @@
               '<div class="card">未找到报告数据（window.__BING_PERIOD_REPORT__ 为空），请通过 `bing-analysis render` 生成本文件。</div>';
             return;
           }
+          const cover = periodWord(data, "账户");
+          document.title =
+            (data.meta && data.meta.accountName ? data.meta.accountName + " · " : "") +
+            "Bing 广告" +
+            cover +
+            "分析报告";
           root.innerHTML = [
             renderHero(data),
             renderExecutiveSummary(data),
@@ -1330,6 +1412,18 @@
           ].join("\n");
           renderCharts(data);
           setupScrollSpy();
+          markScrollableTables();
+        }
+
+        /** 表格比视口宽时标出来，提示左右滑动，避免右侧指标被看成「没有」。 */
+        function markScrollableTables() {
+          const mark = () => {
+            document.querySelectorAll(".table-wrap").forEach((el) => {
+              el.classList.toggle("is-scrollable", el.scrollWidth > el.clientWidth + 1);
+            });
+          };
+          mark();
+          window.addEventListener("resize", mark);
         }
 
         if (document.readyState === "loading") {

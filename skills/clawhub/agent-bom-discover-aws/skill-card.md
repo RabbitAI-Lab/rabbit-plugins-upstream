@@ -1,41 +1,58 @@
-## Description: <br>
-Discovers AWS-hosted AI agent and MCP-relevant assets, emits canonical agent-bom inventory JSON, and optionally scans or exports that inventory under operator control. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover AWS-hosted AI agent and MCP-relevant assets from the operator's environment, emit canonical agent-bom inventory JSON, and scan it without giving agent-bom long-lived cloud credentials. Use when a user asks to inventory AWS Bedrock, ECS, SageMaker, Lambda, EKS, Step Functions, EC2, or agentic AWS infrastructure as canonical inventory. Passing that inventory to agent-bom is optional and operator-chosen.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers, security engineers, and cloud operators use this skill to inventory AWS Bedrock, ECS, SageMaker, Lambda, EKS, Step Functions, EC2, and related agentic infrastructure as canonical agent-bom inventory without handing over long-lived cloud credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: AWS discovery can expose sensitive account, resource, and workload metadata in generated inventory files. <br>
-Mitigation: Use read-only AWS profiles or short-lived roles, choose the narrowest required regions and services, and review generated inventory before sharing or exporting it. <br>
-Risk: Using broad or long-lived AWS credentials could expand the impact of accidental disclosure or misuse. <br>
-Mitigation: Prefer AWS SSO, WebIdentity, or STS assumed-role credentials and do not paste or print access key values. <br>
+## Use Case:
 
+Developers and cloud security teams use this skill to discover AWS-hosted AI agents and workloads and create canonical inventory JSON for an operator-selected local workflow. They can optionally scan the inventory with agent-bom when requested.
 
-## Reference(s): <br>
-- [agent-bom GitHub repository](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON] <br>
-**Output Format:** [Markdown guidance with bash commands and generated JSON inventory files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes inventory or scan/export files only to operator-selected paths.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: frontmatter and server release metadata) <br>
+Risk: The required external adapter is not included in this package, so its read-only behavior and redaction have not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated read-only AWS role and review the adapter and dependency versions before execution.
+
+Risk: Inventory files may contain sensitive information about cloud assets and principals.
+
+Mitigation: Write only to an operator-selected path and protect the resulting inventory file.
+
+Risk: Sending inventory to an external service could expose retained evidence beyond the local workflow.
+
+Mitigation: Approve any external upload separately and confirm its destination, authentication method, and retained evidence.
+
+## Reference(s):
+
+- [agent-bom project repository](https://github.com/koda-ai-studio/agent-bom)
+- [agent-bom on PyPI](https://pypi.org/project/agent-bom/)
+
+## Skill Output:
+
+**Output Type(s):** [Files, JSON, Shell commands, Guidance]
+
+**Output Format:** [Canonical inventory JSON file and Markdown guidance with shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Inventory is written to an operator-selected path; scanning or external handoff is optional and operator-chosen.]
+
+## Skill Version(s):
+
+0.112.1 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,55 @@
-## Description: <br>
-Guides agents through a PMF and Crossing the Chasm audit for products with early traction, helping distinguish product-market-fit gaps from mainstream-adoption whole-product gaps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A coaching framework that helps early-stage teams measure product-market fit and plan a focused move from early adopters to mainstream customers.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, founders, product teams, and strategy agents use this skill to diagnose whether stalled early growth is a PMF problem or a chasm-crossing problem, then produce a focused PMF + Chasm Audit with segment, whole-product, and beachhead recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may ask for product, customer, and adoption details during coaching. <br>
-Mitigation: Avoid providing confidential customer data or sensitive business information unless the deployment environment is approved for that information. <br>
-Risk: Dated market examples may be mistaken for current research. <br>
-Mitigation: Treat examples as illustrative case studies and verify current market facts before making business decisions. <br>
-Risk: External links may change or contain information outside the reviewed artifact. <br>
-Mitigation: Review linked sources before relying on them in production analysis. <br>
+## Use Case:
 
+Startup founders and product or growth teams use the skill to evaluate product-market fit from active-user feedback and retention, then identify a specific beachhead and the whole-product gaps that block adoption by the next customer segment.
 
-## Reference(s): <br>
-- [Sources](references/sources.md) <br>
-- [Method in Action: Salesforce, 1999-2007](examples/salesforce-1999-2007.md) <br>
-- [Method in Action: AI Coding Assistants Crossing the Chasm (2023-2026)](examples/ai-coding-assistants-crossing-the-chasm-2023-2026.md) <br>
-- [Product-Market Fit and Crossing the Chasm Skill Page](https://clawhub.ai/deciqai/skills/pmf-crossing-the-chasm) <br>
-- [deciqAI Skill Metadata](https://www.deciqai.com/s/pmf-crossing-the-chasm.json) <br>
-- [The only thing that matters](https://pmarchive.com/guide_to_startups_part4.html) <br>
-- [The Startup Pyramid](https://web.archive.org/web/20100118091421/http://startup-marketing.com/the-startup-pyramid/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown audit with structured sections and concise recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask sequential clarification questions before producing the audit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Customer examples or observations could expose confidential business details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use aggregate or anonymized customer metrics and omit confidential details.
+
+## Reference(s):
+
+- [Product-Market Fit and Crossing the Chasm skill page](https://clawhub.ai/deciqai/skills/pmf-crossing-the-chasm)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/pmf-crossing-the-chasm.json)
+- [Sources (artifact/references/sources.md)](artifact/references/sources.md)
+- [Andreessen, The only thing that matters](https://pmarchive.com/guide_to_startups_part4.html)
+- [Ellis, The Startup Pyramid (archived)](https://web.archive.org/web/20100118091421/http://startup-marketing.com/the-startup-pyramid/)
+- [GitHub Blog](https://github.blog/)
+- [Stack Overflow Developer Survey](https://survey.stackoverflow.co/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Structured Markdown PMF + Chasm Audit with findings, segment choices, and a whole-product plan]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Coaching flow may ask for user input between audit steps.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

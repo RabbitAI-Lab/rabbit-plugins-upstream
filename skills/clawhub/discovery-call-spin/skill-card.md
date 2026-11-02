@@ -1,42 +1,52 @@
-## Description: <br>
-Guides agents through consultative sales discovery calls using SPIN Selling questions so buyers articulate their problem, urgency, payoff, and next step. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through SPIN discovery calls, using Situation, Problem, Implication, and Need-payoff questions to surface buyer needs and agree on next steps.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Sales teams and agents use this skill to structure discovery calls for consultative or considered purchases, especially when demos are not creating urgency or qualification depends on understanding buyer pain. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sales guidance could be applied without confirming buyer context, deal stage, or organizational sales policy. <br>
-Mitigation: Use the skill as coaching support and review recommendations against the buyer's situation and applicable sales or compliance requirements before relying on them. <br>
-Risk: The skill includes external reference links that may change or lead outside ClawHub. <br>
-Mitigation: Open external links deliberately and apply normal domain, browser, and organizational review practices. <br>
+## Use Case:
 
+Sales professionals use this skill to run consultative discovery calls, qualify whether a buyer's problem merits investment, and agree on a concrete next step. It is intended for considered purchases rather than transactional self-service or post-sale support.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/discovery-call-spin) <br>
-- [deciqAI discovery-call-spin page](https://www.deciqai.com/c/discovery-call-spin) <br>
-- [deciqAI discovery-call-spin metadata](https://www.deciqai.com/s/discovery-call-spin.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown guidance with ordered call steps, red flags, and verification checklist items] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code, shell commands, persistence, credential access, or hidden behavior indicated by security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The SPIN call structure may be applied to transactional self-service deals or post-sale support where discovery calls are not appropriate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use this guidance for consultative sales discovery; skip it for transactional self-service deals and post-sale support.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/discovery-call-spin)
+- [deciqAI skill overview](https://www.deciqai.com/c/discovery-call-spin)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/discovery-call-spin.json)
+- [deciqAI Knowledge Skills collection](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Conversational call guidance and example questions; no code or external tools required.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

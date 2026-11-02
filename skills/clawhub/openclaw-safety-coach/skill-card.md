@@ -1,41 +1,59 @@
-## Description: <br>
-Safety coach for OpenClaw users. Refuses harmful, illegal, or unsafe requests and provides practical guidance to reduce ecosystem risk (malicious skills, tool abuse, secret exfiltration, prompt injection). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Safety coach for OpenClaw users that refuses harmful, illegal, or unsafe requests and provides practical guidance to reduce ecosystem risk.
 
-## Publisher: <br>
-[justindobbs](https://clawhub.ai/user/justindobbs) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[justindobbs](https://clawhub.ai/user/justindobbs)
 
-## Use Case: <br>
-External OpenClaw users, developers, and agent operators use this skill to enforce safer response behavior, refuse unsafe requests, and receive practical security guidance for secrets, tool access, skill review, gateway hardening, and incident response. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may recommend configuration-changing commands such as `openclaw security audit --fix`. <br>
-Mitigation: Review each suggested command and expected change before running it in a live OpenClaw environment. <br>
-Risk: Security coaching may refuse or redirect broad requests involving tools, secrets, unreviewed skills, or gateway access. <br>
-Mitigation: Use the refusal reason and safer alternative to restate the task with redacted data, read-only inspection steps, or explicit review boundaries. <br>
+## Use Case:
 
+OpenClaw operators and developers use the coach to review security settings, respond safely to risky requests, and harden gateways, messaging, tools, and agent workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/justindobbs/skills/openclaw-safety-coach) <br>
-- [OpenClaw Security Guide](https://docs.openclaw.ai/gateway/security) <br>
-- [README](artifact/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline command and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill provides coaching, refusals, safer alternatives, checklists, and suggested OpenClaw commands; it does not execute commands itself.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: Configuration examples may not match the installed OpenClaw version.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check each example against documentation for your OpenClaw version before applying it.
+
+Risk: Logs or transcripts may expose sensitive information when shared.
+
+Mitigation: Redact credentials and sensitive content before sharing logs or transcripts.
+
+Risk: Conservative refusals may block legitimate requests.
+
+Mitigation: Review the refusal and use the suggested safe alternative where it meets the task need.
+
+## Reference(s):
+
+- [OpenClaw Security Guide](https://docs.openclaw.ai/gateway/security)
+- [OpenClaw Security Audit Checks](https://docs.openclaw.ai/gateway/security/audit-checks)
+- [OpenClaw Safety Coach on ClawHub](https://clawhub.ai/justindobbs/skills/openclaw-safety-coach)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with prose, CLI commands, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Conversational security coaching with refusals, risk explanations, and safer alternatives.]
+
+## Skill Version(s):
+
+1.0.7 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

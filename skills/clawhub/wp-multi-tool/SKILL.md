@@ -10,7 +10,7 @@ metadata: {"openclaw":{"emoji":"🔧","requires":{"bins":["wp"]},"permissions":{
 
 **Website:** https://wpmultitool.com
 **Author:** [Marcin Dudek](https://marcindudek.dev)
-**Pricing:** Pro $79/year (single site, all modules), $199/year or $499 lifetime license (unlimited sites, all modules). No free tier — a Lite edition with 11 modules is available separately ($9 one-time).
+**Pricing:** Pro $79/year (single site, all modules), $199/year or $499 lifetime license (unlimited sites, all modules).
 
 ## What This Skill Does
 
@@ -129,7 +129,7 @@ wp db query "SELECT COUNT(*) as option_count, ROUND(SUM(LENGTH(option_value))/10
 
 ```bash
 # Expired transients
-wp db query "SELECT COUNT(*) as expired_transients FROM wp_options WHERE option_name LIKE '_transient_timeout_%' AND option_value < UNIX_TIMESTAMP();"
+wp db query "SELECT COUNT(*) as expired_transients FROM wp_options WHERE option_name LIKE '\_transient\_timeout\_%' AND option_value < UNIX_TIMESTAMP();"
 
 # Post revisions
 wp db query "SELECT COUNT(*) as post_revisions FROM wp_posts WHERE post_type='revision';"
@@ -395,7 +395,7 @@ Ensure the user running WP-CLI has database read access. Write operations requir
 | **Website** | https://wpmultitool.com |
 | **Author** | [Marcin Dudek](https://marcindudek.dev) |
 | **Requires** | WordPress 5.8+, PHP 7.4+ |
-| **Modules** | 13 (6 Optimization, 7 Control) |
+| **Modules** | 19 (10 Optimization, 8 Control, 1 Debugging) |
 | **Pricing** | Pro $79/year (single site) · $199/year or $499 lifetime (unlimited sites) |
 | **License** | Commercial. Source code available to license holders. |
 

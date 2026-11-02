@@ -1,42 +1,52 @@
-## Description: <br>
-Helps agents diagnose competitive strategy by separating structural form from market momentum and identifying the configurational fix. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides strategic teams through a form-momentum diagnosis of competitive advantage, market direction, and configurational fit.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, employees, and strategy operators use this skill to diagnose why a competitor with weaker apparent assets may be winning, evaluate form-momentum fit for market entry, and avoid strategies that depend on heroic individual performance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Strategy discussions may include confidential competitive or business details. <br>
-Mitigation: Use the skill only in an agent environment appropriate for that information, and avoid sharing confidential details unless permitted. <br>
-Risk: A form-momentum diagnosis can be misleading when form, competitor form, or momentum are described vaguely or without evidence. <br>
-Mitigation: Require specific inventories, evidence for momentum classification, and an observable falsifier before acting on the diagnosis. <br>
+## Use Case:
 
+Founders, executives, and strategy teams use the skill to diagnose why a competitor is gaining ground, assess a market entry, or decide whether to build durable capabilities or act on favorable market momentum.
 
-## Reference(s): <br>
-- [Sources - momentum-and-form](references/sources.md) <br>
-- [Method in Action: Sun Tzu's Art of War, Chapters 4-5](examples/sun-tzu-art-of-war-chapters-4-5.md) <br>
-- [Momentum and Form skill page](https://clawhub.ai/deciqai/skills/momentum-and-form) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown strategy diagnosis with structured fields and, in coach mode, one question at a time] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a Form-Momentum Diagnosis covering form, competitor form, momentum, combination, diagnosis, configurational fix, rejected heroic approach, form to build, and falsifier.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Business-sensitive details shared during a strategy discussion could be retained in a reusable example.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only business details appropriate for the agent, and review real-case information before saving it as a reusable example.
+
+## Reference(s):
+
+- [Sources](artifact/references/sources.md)
+- [Sun Tzu, Art of War Chapters 4–5 example](artifact/examples/sun-tzu-art-of-war-chapters-4-5.md)
+- [Momentum and Form overview](https://www.deciqai.com/c/momentum-and-form)
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/momentum-and-form)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown form-momentum diagnosis with structured findings and a proposed strategic adjustment]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tailored to the competitive case and evidence supplied by the user.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

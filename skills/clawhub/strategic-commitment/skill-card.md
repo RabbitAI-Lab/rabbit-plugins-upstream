@@ -1,47 +1,59 @@
-## Description: <br>
-Guides agents through designing and evaluating strategic commitment devices that make threats, promises, or strategic signals credible by changing payoff structure. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Coaches users to make threats and promises credible by changing the payoff structure and evaluating commitment devices.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external advisors, and operators use this skill to test whether a threat, promise, or market signal is credible and to design commitment devices for negotiation, deterrence, public pledges, or strategic investments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Strategic commitment recommendations could be misapplied in negotiations, competition, contracts, or public promises. <br>
-Mitigation: Use the output as a planning aid and review it with appropriate legal, ethical, and business judgment before acting. <br>
-Risk: The skill may make a commitment tactic appear credible even when capability, visibility, enforcement, or rigidity risk has not been sufficiently validated. <br>
-Mitigation: Require the CAVE audit, post-commitment payoff test, and rigidity-risk review before relying on a recommendation. <br>
+## Use Case:
 
+Business leaders, founders, and negotiators use the skill to assess whether a threat or promise will be believed and to design commitment devices with a CAVE credibility audit. It also helps evaluate rigidity risks and whether a commitment remains rational when conditions change.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/strategic-commitment) <br>
-- [Strategic Commitment source references](references/sources.md) <br>
-- [The Strategy of Conflict](https://www.hup.harvard.edu/books/9780674840317) <br>
-- [Reexamination of the Perfectness Concept for Equilibrium Points in Extensive Games](https://doi.org/10.1007/BF01766400) <br>
-- [Reputation and Imperfect Information](https://doi.org/10.1016/0022-0531(82)90030-8) <br>
-- [Scientific Background: Thomas C. Schelling and Robert J. Aumann](https://www.nobelprize.org/prizes/economic-sciences/2005/advanced-information/) <br>
-- [U.S. Department of Commerce TSMC CHIPS announcement](https://www.commerce.gov/news/press-releases/2024/04/biden-harris-administration-announces-preliminary-terms-tsmc-expanded) <br>
-- [Microsoft and OpenAI extend partnership](https://blogs.microsoft.com/blog/2023/01/23/microsoftandopenaiextendpartnership/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown commitment design report with structured fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step clarification questions before producing the report when the user is unfamiliar with the method.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: A commitment recommendation may make retreat costly even when circumstances materially change.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review assumptions and exit conditions before making irreversible business commitments; assess capability and rigidity risks as part of the recommendation.
+
+Risk: Reusable examples may expose confidential case details.
+
+Mitigation: Avoid putting confidential case details into reusable examples.
+
+## Reference(s):
+
+- [Sources — strategic-commitment](references/sources.md)
+- [The Strategy of Conflict — Thomas C. Schelling](https://www.hup.harvard.edu/books/9780674840317)
+- [Reexamination of the Perfectness Concept for Equilibrium Points in Extensive Games — Reinhard Selten](https://doi.org/10.1007/BF01766400)
+- [Reputation and Imperfect Information — David M. Kreps and Robert Wilson](https://doi.org/10.1016/0022-0531(82)90030-8)
+- [Scientific Background: Thomas C. Schelling and Robert J. Aumann — Nobel Prize Committee](https://www.nobelprize.org/prizes/economic-sciences/2005/advanced-information/)
+- [CHIPS Incentives Award announcement for TSMC Arizona — U.S. Department of Commerce](https://www.commerce.gov/news/press-releases/2024/04/biden-harris-administration-announces-preliminary-terms-tsmc-expanded)
+- [Microsoft and OpenAI extend partnership — Microsoft](https://blogs.microsoft.com/blog/2023/01/23/microsoftandopenaiextendpartnership/)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown commitment design report with structured CAVE findings and recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tailored to the user's stated threat, audience, payoff structure, and rigidity risks.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,50 @@
-## Description: <br>
-Helps agents walk customs country-of-origin and USMCA preference decisions for goods with multi-country inputs, including product-specific rules, regional value content, de minimis, certification support, and marking checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides customs professionals through country-of-origin and USMCA or other free-trade-agreement qualification checks for goods with inputs from multiple countries.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Customs brokers, trade-compliance teams, and agents use this skill to structure origin and preference qualification analysis for USMCA or other free-trade-agreement questions. It is an analysis aid and should be checked against current rules, classifications, certifications, and CBP guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, for workflows involving country-of-origin, USMCA, and CBP-related customs analysis. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat customs-origin or USMCA preference output as legal advice or a final compliance determination. <br>
-Mitigation: Use the skill as an analysis aid and verify current USMCA rules, CBP guidance, tariff classifications, certifications, and recordkeeping requirements before relying on any conclusion. <br>
-Risk: Preference claims may be made without confirming product-specific rules, regional value content, de minimis treatment, certification support, or marking origin. <br>
-Mitigation: Follow the skill's verification checklist and document the qualification path separately from marking-origin analysis. <br>
+## Use Case:
 
+External customs brokers, importers, and trade compliance teams use this checklist to assess origin, USMCA or other FTA preference eligibility, and marking for goods with multi-country inputs. It structures product-specific rule, tariff-shift, Regional Value Content, de minimis, and certification checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/customs-origin-usmca-decision) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/customs-origin-usmca-decision) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/customs-origin-usmca-decision.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Analysis] <br>
-**Output Format:** [Markdown guidance with decision-tree checks and verification items] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Static text skill; no executable code, persistence, credential use, or hidden system access reported by security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence.release.version) <br>
+Risk: Customs conclusions may be wrong or outdated if applied without checking current product-specific rules.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill as a reasoning checklist and verify consequential conclusions against current official USMCA text and CBP guidance.
+
+## Reference(s):
+
+- [deciqAI skill overview](https://www.deciqai.com/c/customs-origin-usmca-decision)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/customs-origin-usmca-decision.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured text with decision branches, a worked example, and a verification checklist]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

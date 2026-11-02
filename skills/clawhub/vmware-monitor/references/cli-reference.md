@@ -15,6 +15,12 @@ vmware-monitor doctor [--skip-auth]
 
 Checks config file, connectivity, authentication, and pyVmomi version. Use `--skip-auth` to test config parsing without connecting.
 
+```bash
+vmware-monitor access-info [--tool <mcp-tool>] [--target <name>]
+```
+
+Which account the target sees, and whether it holds the privileges each MCP tool needs (one tool with `--tool`). Checked on the root folder: `not_granted_at_root` can still be granted on a cluster, folder or VM; `undetermined` is never read as granted. Prints JSON. MCP tool: `get_access_info`.
+
 ## MCP Config Generator
 
 ```bash
@@ -36,7 +42,7 @@ vmware-monitor summary [--top <n>] [--cluster <substring>] [--no-vms] [--html] [
 - `--no-vms`: skip the VM rollup pass (faster on very large fleets when only host/alarm/capacity signals are needed).
 - `--html`: write a self-contained, offline HTML snapshot (no external CSS/JS/fonts — nothing leaves the machine) to `~/vmware-health/cluster-health-<vc>-<YYYYMMDD-HHMMSS>.html`. The timestamped filename turns a folder of snapshots into a browsable point-in-time history. It is a snapshot, not a live page — re-run to refresh.
 - `--html-path <file>`: write the HTML snapshot to an explicit path instead of the auto-timestamped default (implies `--html`).
-- The rendered view is customizable — columns, thresholds, and layout live in [`health-summary-template.md`](health-summary-template.md). MCP tool: `cluster_health_summary`.
+- The rendered view is customizable — columns, thresholds, and layout live in [`health-summary-template.md`](health-summary-template.md). MCP tool: `get_cluster_health_summary`.
 
 ## Object Investigation (drill-down)
 
@@ -52,7 +58,7 @@ vmware-monitor investigate datastore <name> [--hours <n>] [--html] [--html-path 
 - **datastore**: capacity/free/accessibility, the hosts mounting it, a rollup of the VMs it backs, alarms, correlated timeline (per-datastore latency is a separate perf report, not included).
 - `--hours`: event-timeline look-back window (default 24).
 - `--html` / `--html-path`: self-contained offline snapshot to `~/vmware-health/investigate-<kind>-<object>-<timestamp>.html`; drill-down sections collapse/expand natively (no JS), nothing uploaded.
-- Unknown object names return a *teaching* error naming how to list objects. MCP tools: `vm_investigation_bundle`, `host_investigation_bundle`, `datastore_investigation_bundle`.
+- Unknown object names return a *teaching* error naming how to list objects. MCP tools: `investigate_vm`, `investigate_host`, `investigate_datastore`.
 
 ## Cross-vCenter Attention
 
@@ -63,7 +69,7 @@ vmware-monitor attention [--top <n>] [--cluster <substring>] [--html] [--html-pa
 - "What needs attention now?" across **every** configured vCenter — one globally-ranked `top_issues` list (each tagged with its `vcenter`) plus a per-target table. Use it instead of running `summary` once per target and merging by hand.
 - Degrades gracefully: a target that can't be reached (or errors mid-summary) is listed as `unreachable` with a reason, and the rest still aggregate — one dead vCenter never sinks the view.
 - `--top`: size of the merged focus list (default 10). `--cluster`: case-insensitive substring applied to every target.
-- `--html` / `--html-path`: offline snapshot to `~/vmware-health/attention-<timestamp>.html`. MCP tool: `cross_vcenter_attention`.
+- `--html` / `--html-path`: offline snapshot to `~/vmware-health/attention-<timestamp>.html`. MCP tool: `get_cross_vcenter_attention`.
 
 ## Inventory
 
@@ -75,7 +81,7 @@ vmware-monitor inventory clusters [--target <name>]
 vmware-monitor inventory networks [--target <name>]
 ```
 
-- `--target`: Named target from `config.yaml` (default: first target)
+- `--target`: Named target from `config.yaml` (default: `default_target` in `config.yaml`, else the first target)
 - `--limit`: Max VMs to return (default: unlimited)
 - `--sort-by`: Sort field for VM listing — `name` | `cpu` | `memory_mb` | `power_state` | `folder_path`
 - `--power-state`: Filter VMs by power state
@@ -87,14 +93,17 @@ vmware-monitor inventory networks [--target <name>]
 
 ```bash
 vmware-monitor health alarms [--target <name>]
-vmware-monitor health events [--hours 24] [--severity warning] [--target <name>]
+vmware-monitor health events [--hours 24] [--severity warning] [--start <iso>] [--end <iso>] [--include-routine] [--target <name>]
 vmware-monitor health sensors [--target <name>]
 vmware-monitor health services [--host <esxi-name>] [--target <name>]
 ```
 
 - `--hours`: Time range for event query (default: 24)
 - `--severity`: Minimum severity filter — `info`, `warning`, `error`, `critical` (default: `warning`)
+- `--start` / `--end`: Query a specific window instead of the last `--hours` — ISO 8601, a time with no zone is UTC (e.g. `--start 2026-09-03T12:00Z --end 2026-09-03T16:00Z`). `--start` alone runs to now.
+- `--include-routine`: List routine login/logout events too. By default they are folded and counted, because one local agent's logins can outnumber everything else
 - `--host` (services only): Filter service status to a single host by exact name (default: all hosts)
+- `sensors`: a connected host that reports no sensors is named under the table with its CIM Server (`sfcbd-watchdog`) state — ESXi reads sensors through it, so a stopped CIM Server means none are reported; a running one usually means no BMC/IPMI device. MCP `get_host_sensors` returns the same as `hosts_without_sensors` and `sensors_note`
 
 ## VM Info (Read-Only)
 
@@ -105,18 +114,54 @@ vmware-monitor vm snapshot-list <vm-name> [--target <name>]
 
 Returns detailed VM information: CPU, memory, disks, NICs, guest OS, IP, VMware Tools status, and snapshots.
 
-`snapshot-list` lists existing snapshots with name and creation time. No create, revert, or delete operations exist. The same data is exposed via the MCP tool `vm_list_snapshots`.
+`snapshot-list` lists existing snapshots with name and creation time. No create, revert, or delete operations exist. The same data is exposed via the MCP tool `list_vm_snapshots`.
+
+```bash
+vmware-monitor snapshots backup-window <vm> [--days 30] [--cycles]
+```
+
+Infers backup windows for one VM from its snapshot task history: image-level
+backup products snapshot the VM, copy the frozen disks, then delete the
+snapshot, and vCenter records both ends. Reports four hour statistics
+(backup active / snapshot present / total window / removal itself) plus
+creations that never got a matching removal.
+
+Two lines in the output change what the numbers mean, and both are printed
+rather than left to the reader: a note when vCenter could not be read at all
+(which is not "no backups"), and a note when part of the requested window has
+already aged out of task history (`task.maxAge`, 30 days by default — the
+option is not called `vpxd.task.maxAge`; that name raises `vim.fault.InvalidName`).
+Duplicate VM names are refused rather than resolved to one. The same data is
+exposed via the MCP tool `get_vm_backup_snapshot_history`.
+
+## vSphere 9.1 (read-only)
+
+```bash
+vmware-monitor memory tiering [--host <esxi>] [--limit <n>] [--target <name>]
+vmware-monitor patch compliance <cluster-moid> [--target <name>]
+vmware-monitor patch last-apply <cluster-moid> [--target <name>]
+vmware-monitor deployment-size [--target <name>]
+```
+
+- `memory tiering`: Per-host memory tiering (DRAM/NVMe tiers) and NVMe uplift ratio via pyVmomi `hardware.memoryTierInfo`. Requires ESXi/vCenter **8.0U3+**; on older targets the command fails with a teaching error naming the missing property. Same data as the MCP tool `get_host_memory_tiering`.
+- `patch compliance`: vLCM software (patch) compliance for one cluster over vSphere Automation REST. `<cluster-moid>` is the cluster **MoID** (e.g. `domain-c123`) — get it from `inventory clusters`, not the display name. When vCenter is mid-patch it answers 503 and the command prints a "state unavailable, retry shortly" line instead of crashing; `non-compliant` shows `?` when the host-status field is unknown (never a false 0). MCP tool: `get_cluster_patch_compliance`.
+- `patch last-apply`: Result (status + end time) of the last vLCM remediation on one cluster. `<cluster-moid>` as above. Reports the outcome only; it never runs a remediation. MCP tool: `get_cluster_last_apply_result`.
+- `deployment-size`: vCenter appliance deployment size class over REST (NEW in vSphere 9.1). MCP tool: `get_vcenter_deployment_size`.
+
+> These four commands resolve config **without opening a SOAP session** and only ever GET, so they still degrade gracefully when vCenter is mid-patch (answering 503). The three REST commands' endpoints are spec-verified, but their JSON field names are read defensively pending a live 9.1 vCenter replay — each result carries a `note` that self-labels the parse as best-effort.
 
 ## Scanning & Daemon
 
 ```bash
 vmware-monitor scan now [--target <name>]
+vmware-monitor scan logs [--host <name>] [--lines 500] [--raw] [--target <name>]
 vmware-monitor daemon start
 vmware-monitor daemon stop
 vmware-monitor daemon status
 ```
 
-- `scan now`: Run a one-time scan of alarms, events, and host logs
+- `scan now`: Run a one-time scan of alarms and events. It does not read ESXi host logs — use `scan logs` (MCP `scan_host_logs`); the daemon's host-log pass reads them too
+- `scan logs`: Read the last `--lines` lines of hostd/vmkernel/vpxa on each host (or `--host`) and list the lines matching a trouble pattern, grouped by pattern with a count, the hosts and the log time span; severity follows the level ESXi wrote on the line. `--raw` prints one row per line
 - `daemon start`: Start APScheduler-based background scanner (default: every 15 min)
 - `daemon stop`: Stop the background scanner
 - `daemon status`: Check if the daemon is running

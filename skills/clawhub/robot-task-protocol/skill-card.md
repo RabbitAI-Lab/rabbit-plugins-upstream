@@ -1,46 +1,61 @@
-## Description: <br>
-Dispatches paid tasks to physical robots through the Robot Task Protocol on the Spraay x402 gateway, with escrow-protected payment and operator registration workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dispatch paid tasks to physical robots via the Robot Task Protocol (RTP) on the Spraay x402 gateway, with payment held in escrow until the robot completes the work, or register and manage a robot to earn from tasks.
 
-## Publisher: <br>
-[plagtech](https://clawhub.ai/user/plagtech) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[plagtech](https://clawhub.ai/user/plagtech)
 
-## Use Case: <br>
-Developers, robot buyers, and robot operators use this skill to discover RTP-capable robots, dispatch paid tasks through the Spraay x402 gateway, poll task status, and register or manage robots on the network. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dispatched tasks can cause physical robots to move, actuate, or perform work in the real world. <br>
-Mitigation: Before dispatch, verify the robot, task parameters, physical environment, and safety expectations with the user. <br>
-Risk: Buyer workflows can trigger x402 micropayments and task fees. <br>
-Mitigation: Confirm the total fee and wallet payment behavior before any paid request or dispatch. <br>
-Risk: All requests and payment flows depend on the configured Spraay gateway URL. <br>
-Mitigation: Use a trusted SPRAAY_GATEWAY_URL and avoid dispatching tasks through an untrusted gateway. <br>
+## Use Case:
 
+External users and robot operators use the skill to discover robots, inspect capabilities and pricing, dispatch and monitor paid tasks, and register or manage their own robots on the RTP network.
 
-## Reference(s): <br>
-- [Robot Task Protocol on ClawHub](https://clawhub.ai/plagtech/skills/robot-task-protocol) <br>
-- [Spraay gateway](https://gateway.spraay.app) <br>
-- [Spraay app](https://spraay.app) <br>
-- [Spraay docs](https://docs.spraay.app) <br>
-- [RTP spec](https://github.com/plagtech/rtp-spec) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with curl command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SPRAAY_GATEWAY_URL plus curl and jq; paid buyer endpoints use an x402 wallet payment flow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Dispatching a task can move or actuate real hardware and incurs a dispatch payment plus the robot's task fee.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the target robot, task parameters, environmental safety, and total fee with the user before dispatch; check the robot profile and use a wallet with spending limits.
+
+Risk: Reporting a task complete releases its escrow payment, while robot updates and deregistration can take effect immediately.
+
+Mitigation: Verify the task outcome before reporting completion, and confirm the robot ID, intended change, and consequences before any operator mutation.
+
+Risk: Gateway ownership enforcement and escrow guarantees have not been independently tested.
+
+Mitigation: Use a trusted gateway and do not rely on escrow or ownership checks as independently verified guarantees.
+
+## Reference(s):
+
+- [Robot Task Protocol specification](https://github.com/plagtech/rtp-spec)
+- [RTP TypeScript SDK](https://github.com/plagtech/rtp-sdk)
+- [RTP Python SDK](https://github.com/plagtech/rtp-python-sdk)
+- [Spraay app](https://spraay.app)
+- [Spraay documentation](https://docs.spraay.app)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON API requests and responses, with shell command examples and concise workflow guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes robot and task identifiers, status and result data, and payment instructions when returned by the gateway.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

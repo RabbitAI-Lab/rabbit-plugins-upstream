@@ -1,44 +1,63 @@
-## Description: <br>
-Helps agents turn empirical claims, hypotheses, strategies, and investment theses into specific observations that could prove them wrong. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents turn empirical claims and hypotheses into specific, observable conditions that would refute them.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, developers, strategists, product teams, and analysts use this skill to make empirical claims testable by defining falsification conditions, observation plans, thresholds, and actions if disconfirming evidence appears. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill provides a reasoning structure rather than verified real-time facts. <br>
-Mitigation: Use it to define falsification conditions, then verify underlying facts, measurements, and deadlines with authoritative current sources before making decisions. <br>
-Risk: External links are optional references and may change outside the skill package. <br>
-Mitigation: Review external references separately before relying on them for evidence or citation. <br>
+## Use Case:
 
+Employees, developers, and decision makers can use this skill to turn empirical strategy, experiment, investment, and capability claims into observable tests, thresholds, monitoring plans, and pre-committed actions.
 
-## Reference(s): <br>
-- [Falsifiability sources](references/sources.md) <br>
-- [Popper 1934 + Eddington 1919 Eclipse + Modern Applications](examples/popper-1934-eddington-1919-eclipse-modern-applications.md) <br>
-- [Separating falsifiable from unfalsifiable AI claims (2024-2026)](examples/ai-claims-agi-is-near-vs-testable-predictions-2024-2026.md) <br>
-- [deciqAI Falsifiability page](https://www.deciqai.com/c/falsifiability) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/falsifiability.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown analysis template and step-by-step guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No system actions, API calls, credentials, or shell commands are requested by the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Applying falsifiability to non-empirical claims, or running a test whose cost exceeds its value, can produce misleading or wasteful analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check whether the claim is empirical and weigh the test cost against the value of the information before applying the process.
+
+Risk: Reusable failure-pattern notes could expose confidential details.
+
+Mitigation: Keep failure-pattern notes general and omit confidential information.
+
+Risk: Contaminated benchmark results may overstate evidence for an AI capability claim.
+
+Mitigation: Use held-out or post-cutoff items and seek independent replication when evaluating benchmark-based claims.
+
+## Reference(s):
+
+- [Primary sources and further reading](references/sources.md)
+- [Popper and Eddington example](examples/popper-1934-eddington-1919-eclipse-modern-applications.md)
+- [Falsifiability applied to AI claims](examples/ai-claims-agi-is-near-vs-testable-predictions-2024-2026.md)
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/falsifiability)
+- [Skill landing page](https://www.deciqai.com/c/falsifiability)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/falsifiability.json)
+- [Project repository linked in the skill](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured Markdown analysis with falsification conditions and a monitoring plan]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses a claim-specific template; no code or files are required.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

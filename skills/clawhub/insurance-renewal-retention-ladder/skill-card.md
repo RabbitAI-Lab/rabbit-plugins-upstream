@@ -1,42 +1,64 @@
-## Description: <br>
-Guides insurance agents through renewal and retention cadences, cross-sell timing, account rounding, and at-risk renewal signals for existing books of business. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps insurance agents build renewal and retention cadences, round out accounts, and time client outreach.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Insurance agents and agencies use this skill to plan proactive renewal outreach, annual reviews, account-rounding campaigns, and referral timing for an existing client book. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill links to external publisher content that may change independently of the submitted markdown skill. <br>
-Mitigation: Review the linked deciqAI references separately before relying on that external content. <br>
-Risk: Retention and outreach guidance may be applied without checking agency, carrier, or jurisdiction-specific requirements. <br>
-Mitigation: Have a qualified reviewer adapt the cadence, scripts, and referral timing to the applicable business and compliance context before deployment. <br>
+## Use Case:
 
+Insurance agents use this skill to plan annual reviews, pre-renewal outreach, account rounding, and referral requests for an existing book of business.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/insurance-renewal-retention-ladder) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/insurance-renewal-retention-ladder) <br>
-- [deciqAI machine-readable metadata](https://www.deciqai.com/s/insurance-renewal-retention-ladder.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown guidance with checklists and retention ladder recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable markdown-only guidance; no API calls, shell commands, or hidden access requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence release.version) <br>
+Risk: Proposed client outreach may be inaccurate or misleading.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each proposed message before contacting a client.
+
+Risk: Client information could be shared more broadly than necessary.
+
+Mitigation: Share only the customer information needed for the renewal discussion.
+
+Risk: Linked resources and the referenced parent framework are outside the inspected package.
+
+Mitigation: Review those materials before relying on them.
+
+Risk: Jurisdiction- or rate-dependent details may require current verification.
+
+Mitigation: Check current details with an authoritative source; the professional acting owns the decision.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/insurance-renewal-retention-ladder)
+- [Skill overview](https://www.deciqai.com/c/insurance-renewal-retention-ladder)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/insurance-renewal-retention-ladder.json)
+- [Project repository referenced by the skill](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Practical renewal cadence, account-rounding, and outreach suggestions; review proposed client communications before use.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

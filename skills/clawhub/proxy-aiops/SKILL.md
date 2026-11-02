@@ -17,7 +17,7 @@ installer:
 argument-hint: "[a route/service/backend name, a hostname, or describe your proxy task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["PROXY_AIOPS_CONFIG"],"bins":["proxy-aiops"],"config":["~/.proxy-aiops/config.yaml"]},"optional":{"env":["PROXY_AIOPS_MASTER_PASSWORD"],"config":["~/.proxy-aiops/secrets.enc"]},"primaryEnv":"PROXY_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Proxy-AIops","emoji":"🔀","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["proxy-aiops","uvx"]},"optional":{"env":["PROXY_AIOPS_CONFIG","PROXY_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Proxy-AIops","emoji":"🔀","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed reverse-proxy operations across Traefik (API /api/..., metrics-text counters via /metrics), Caddy (admin API, default localhost:2019 — carries the write surface) and HAProxy (Data Plane API v2 /v2/..., HTTP Basic auth). Each target in the config names its own platform, and a name-keyed platform registry selects the API shape; an explicit support matrix raises teaching errors for ops a platform cannot do (traefik writes → its providers; caddy error counters → access logs; haproxy certs → the .pem pipeline), never a silent no-op. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.proxy-aiops/ (relocatable via PROXY_AIOPS_HOME).
@@ -29,6 +29,8 @@ compatibility: >
 ---
 
 # Proxy AIops
+
+> **Audit availability:** Real writes require a durable audit intent. Reads and previews can continue if audit storage fails; check the warning and audit health before relying on their audit trail.
 
 > **Disclaimer**: Community-maintained open-source project, **not affiliated with, endorsed by, or sponsored by Traefik Labs, the Caddy project, HAProxy Technologies, or the HAProxy project.** Traefik, Caddy and HAProxy are trademarks of their respective owners. Source at [github.com/AIops-tools/Proxy-AIops](https://github.com/AIops-tools/Proxy-AIops) under the MIT license.
 
@@ -80,6 +82,15 @@ uv tool install proxy-aiops
 proxy-aiops init       # wizard: pick platform (traefik/caddy/haproxy) + optional encrypted secret
 proxy-aiops doctor
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/proxy-aiops
+openclaw skills info proxy-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 
@@ -207,7 +218,7 @@ of the account you connect it with (a read-only HAProxy Data Plane API role, a
 scoped Traefik/Caddy admin API — writes then fail at the server). There is no
 read-only switch, policy file, or approval gate.
 
-- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.proxy-aiops/audit.db` (relocatable via `PROXY_AIOPS_HOME`): params (secrets redacted), result, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
+- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.proxy-aiops/audit.db` (relocatable via `PROXY_AIOPS_HOME`): params (secrets redacted), outcome summary, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
 - `PROXY_AUDIT_APPROVED_BY` / `PROXY_AUDIT_RATIONALE` are optional annotations recorded on the audit row (who/why); they are never required and never block.
 - **Runaway guard** — a safety backstop, not authorization: the same call looped in a tight window trips a circuit breaker. Disable with `PROXY_RUNAWAY_MAX=0`.
 - Writes support `--dry-run` / `dry_run=True` and double confirmation at the CLI; CLI writes execute through the same governed tools, so they are audited + undo-recorded.

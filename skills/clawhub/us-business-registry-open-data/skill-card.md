@@ -1,51 +1,55 @@
-## Description: <br>
-Helps agents find, verify, and fetch bulk US business-registration open data from selected state Socrata portals for company registry analysis and lead-list workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in finding, validating, and downloading US state business registry data from public Socrata APIs.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Developers, analysts, and agents use this skill to identify commercially usable US state business-registry datasets, validate live endpoints, run sample or full pulls, and normalize records for analysis. It is suited to lead generation, formation-trend analysis, entity matching, registered-agent market maps, and vendor evaluation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A full pull can transfer and store millions of public registry records. <br>
-Mitigation: Run sample mode first, estimate storage and runtime, and set OUT_DIR deliberately before a full pull. <br>
-Risk: A Socrata app token is sent to the configured government open-data portals when provided. <br>
-Mitigation: Use only a token intended for those portals and avoid providing unrelated credentials. <br>
-Risk: Some public datasets are deferred because licensing, availability, or access conditions are not suitable for this workflow. <br>
-Mitigation: Use only enabled datasets with explicit public-domain or commercial-use terms, and confirm terms before enabling any deferred source. <br>
+## Use Case:
 
+Developers and analysts use the skill to locate state business registration datasets, assess their access terms and data quality, and fetch normalized records for analysis or entity matching.
 
-## Reference(s): <br>
-- [Skill Page](https://clawhub.ai/deciqai/skills/us-business-registry-open-data) <br>
-- [Sources](artifact/references/sources.md) <br>
-- [Method in Action](artifact/examples/method-in-action-12m-pull.md) <br>
-- [New York Active Corporations](https://data.ny.gov/Government-Finance/Active-Corporations-Beginning-1800/n9v6-gdp6) <br>
-- [Colorado Business Entities](https://data.colorado.gov/Business/Business-Entities-in-Colorado/4ykn-tg5h) <br>
-- [Pennsylvania Registered Businesses](https://data.pa.gov/Government-That-Works/Registered-Businesses-in-PA-Current-Monthly-County/xvd7-5r2c) <br>
-- [Oregon Active Businesses](https://data.oregon.gov/Business/Active-Businesses-ALL/tckn-sxa6) <br>
-- [Connecticut Business Registry Master](https://data.ct.gov/Business/Connecticut-Business-Registry-Business-Master/n7gp-d28j) <br>
-- [Socrata SODA API Queries](https://dev.socrata.com/docs/queries/) <br>
-- [Socrata App Tokens](https://dev.socrata.com/docs/app-tokens) <br>
+### Deployment Geography for Use:
 
+United States
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and Python configuration references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local JSONL files when the bundled fetcher is run by an agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence.release.version) <br>
+Risk: Full registry downloads can take substantial time and disk space.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with --sample or limit the pull to one state and a smaller row count.
+
+Risk: Downloaded registry records may include personal names and addresses, and reuse terms can vary by dataset.
+
+Mitigation: Store downloaded records appropriately and verify the current terms for each source before commercial use.
+
+## Reference(s):
+
+- [Registry sources and dataset landing pages](artifact/references/sources.md)
+- [Socrata SODA API query documentation](https://dev.socrata.com/docs/queries/)
+- [Socrata app token documentation](https://dev.socrata.com/docs/app-tokens)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Files]
+
+**Output Format:** [Markdown guidance, Python fetcher, and normalized JSON Lines data files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The fetcher supports sample, state, and row-limit options; full downloads may be large.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

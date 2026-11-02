@@ -34,6 +34,30 @@ send_peck → 403 grant_required
                     └─ allowed:true → re-run send_peck
 ```
 
+## Grant classes & expiry (0.9.1)
+
+When the owner approves a grant they pick a **class** that sets how long it lasts:
+
+| Class | Lasts | When offered |
+|---|---|---|
+| **Once** (`one_shot`) | a single use, then consumed | always |
+| **7 days** (`timed`) | 7-day TTL, no renewal (today's default) | always |
+| **Standing** (`standing`) | renews on each authorized use — never dies while used | **only when the peer is CERTIFIED** |
+
+A cross-owner `timed` grant lapses after 7 days with nothing renewing it — the
+peck then 403s again and re-approval is needed. A **Standing** grant removes that
+weekly re-approval loop (connection-level caps — rate / daily / budget / topics —
+still apply on every send; a Standing grant only drops the re-approval, never the
+caps). If a peer is CERTIFIED, prefer Standing.
+
+**Expiry warnings (advisory, fail-open).** `send_peck.py` prints a one-line
+warning before sending when the active grant has **<7 days** left, and
+`check_pecks.py` prints a once-per-window nudge for any active outbound grant
+nearing expiry (de-duped in `~/.space-duck/expiry_nudges.json`). Both are
+advisory only — they never block or delay a send. They surface `expires_at` /
+`grant_class` from the `/beak/grants/check` response *when the server includes
+them*; until then they simply stay quiet.
+
 ## Agent commands
 
 ```bash

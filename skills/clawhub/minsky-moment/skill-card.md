@@ -1,48 +1,58 @@
-## Description: <br>
-Minsky Moment helps agents diagnose whether prolonged financial stability is hiding leverage-driven fragility by classifying debt structure, trigger stress, and collapse cascades. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes debt structures, prolonged stability, trigger stresses, and collapse cascades to assess financial-system fragility using Minsky's framework.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External analysts, developers, and agent users use this skill to examine leveraged companies, sectors, markets, or credit cycles for Minsky-style fragility and produce a structured fragility diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial-risk analysis may influence real investment, lending, or counterparty decisions. <br>
-Mitigation: Verify financial claims, debt-service data, and current market facts independently before applying the diagnosis to decisions. <br>
-Risk: The skill can produce an overconfident diagnosis when cash-flow, debt-service, or rollover data is missing. <br>
-Mitigation: Follow the skill's stop rule by naming the data gap instead of forcing a debt-stage classification. <br>
-Risk: Users may mistake structural fragility analysis for a prediction of when a collapse will occur. <br>
-Mitigation: State that the diagnosis identifies fragility and trigger mechanisms, not market timing. <br>
+## Use Case:
 
+Investors, credit analysts, and financial risk teams use this skill to examine whether a leveraged company, sector, or market may be building fragility during a prolonged stable period. It organizes available evidence into debt-stage classifications, trigger scenarios, and a collapse-cascade diagnosis.
 
-## Reference(s): <br>
-- [Primary Sources](references/sources.md) <br>
-- [Method in Action: US Subprime Mortgage Market (2003-2008)](examples/us-subprime-mortgage-market-2003-2008.md) <br>
-- [Method in Action: The AI Capex Financing Loop (2023-2026)](examples/ai-capex-circular-financing-2023-2026.md) <br>
-- [Hyman P. Minsky, The Financial Instability Hypothesis](https://www.levyinstitute.org/pubs/wp74.pdf) <br>
-- [Financial Crisis Inquiry Report](https://www.govinfo.gov/content/pkg/GPO-FCIC/pdf/GPO-FCIC.pdf) <br>
-- [NVIDIA Investor Relations](https://investor.nvidia.com) <br>
-- [U.S. Bureau of Industry and Security](https://www.bis.doc.gov) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown diagnostic report with structured fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires current debt-service, rollover, lending-standard, and market-stress evidence for reliable diagnosis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release evidence) <br>
+Risk: A fragility assessment may be mistaken for a crisis forecast or may overstate certainty when financial data is incomplete or stale.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current source data, state cash-flow and debt-service gaps, and avoid forcing a diagnosis or predicting timing.
+
+Risk: Saved failure-pattern notes could expose confidential financial details.
+
+Mitigation: Keep confidential financial details out of saved notes.
+
+## Reference(s):
+
+- [Skill source references](references/sources.md)
+- [Minsky, The Financial Instability Hypothesis (Working Paper 74)](https://www.levyinstitute.org/pubs/wp74.pdf)
+- [Financial Crisis Inquiry Report](https://www.govinfo.gov/content/pkg/GPO-FCIC/pdf/GPO-FCIC.pdf)
+- [Bureau of Industry and Security](https://www.bis.doc.gov)
+- [NVIDIA Investor Relations](https://investor.nvidia.com)
+- [Minsky Moment on ClawHub](https://clawhub.ai/deciqai/skills/minsky-moment)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured Markdown fragility diagnosis with debt-stage classifications, trigger scenarios, and cascade analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires current financial evidence; assesses structural fragility and does not predict timing.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,51 @@
-## Description: <br>
-Guides creators, SMBs, and indie founders in applying the 1,000 True Fans model to build sustainable direct audience revenue without relying on viral scale. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides creators and niche businesses in building a sustainable income through a small, deeply engaged audience and direct monetization.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Creators, coaches, indie makers, and niche SMB operators use this skill to compute sustainable true-fan targets, design direct audience relationships, and evaluate whether a monetization strategy depends on depth rather than viral reach. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Business strategy guidance may be mistaken for guaranteed financial results. <br>
-Mitigation: Treat the skill as an advisory framework and validate assumptions with real per-fan profit, direct channel ownership, and independent business judgment. <br>
-Risk: External links and claims may change outside the published ClawHub artifact. <br>
-Mitigation: Review external links and source claims before relying on them for business decisions. <br>
+## Use Case:
 
+Creators, coaches, indie makers, and niche businesses can use this guidance to estimate a sustainable audience size and plan direct or membership-based revenue.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/thousand-true-fans) <br>
-- [deciqAI 1,000 True Fans](https://www.deciqai.com/c/thousand-true-fans) <br>
-- [deciqAI Machine-Readable Metadata](https://www.deciqai.com/s/thousand-true-fans.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Analysis] <br>
-**Output Format:** [Markdown guidance with numbered steps and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable advisory content; no shell commands, code, or configuration are generated.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: ClawHub release evidence) <br>
+Risk: The illustrative per-fan profit figure may not match a creator's actual costs or audience spending.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Calculate the target using actual annual profit per fan and validate assumptions before making business decisions.
+
+## Reference(s):
+
+- [1,000 True Fans guide](https://www.deciqai.com/c/thousand-true-fans)
+- [deciqAI Knowledge Skills repository](https://github.com/deciqAI/knowledge-skills)
+- [Machine-readable skill information](https://www.deciqai.com/s/thousand-true-fans.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Checklist]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Text guidance and a verification checklist; no files or executable actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

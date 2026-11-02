@@ -1,46 +1,60 @@
-## Description: <br>
-End-to-end guide for building AI Agents from Genes: intent decomposition, Gene selection, Genome composition, Agent creation, and testing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build a Rotifer Agent by decomposing intent into capability units, selecting Genes, composing a Genome, and creating and testing the Agent.
 
-## Publisher: <br>
-[xiaoba-dev](https://clawhub.ai/user/xiaoba-dev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xiaoba-dev](https://clawhub.ai/user/xiaoba-dev)
 
-## Use Case: <br>
-Developers and engineers use this skill to decompose a desired Rotifer agent into capability units, select Genes, choose a Genome composition strategy, create the agent, and validate its run behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation wording may cause the skill to be used for general agent-building requests. <br>
-Mitigation: Use explicit Rotifer-specific requests and review the skill guidance before relying on generated plans. <br>
-Risk: Seq compositions can fail at runtime when adjacent Gene schemas are incompatible. <br>
-Mitigation: Manually compare adjacent Gene inputSchema and outputSchema fields before creating or running a Seq agent. <br>
+## Use Case:
 
+Developers working with Rotifer use this skill to plan an Agent from Genes, choose and compose those Genes into a Genome, then create and test the Agent with the Rotifer CLI.
 
-## Reference(s): <br>
-- [Rotifer Protocol](https://rotifer.dev) <br>
-- [Rotifer Documentation](https://rotifer.dev/docs) <br>
-- [Rotifer Protocol Specification](https://github.com/rotifer-protocol/rotifer-spec) <br>
-- [Rotifer Playground Repository](https://github.com/rotifer-protocol/rotifer-playground) <br>
-- [Rotifer Guide Skill](https://clawhub.ai/skills/rotifer-guide) <br>
-- [Rotifer Arena Skill](https://clawhub.ai/skills/rotifer-arena) <br>
-- [Rotifer Self-Evolving Agent Skill](https://clawhub.ai/skills/rotifer-self-evolving-agent) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with tables, checklists, JSON snippets, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Rotifer CLI commands, MCP configuration snippets, and agent composition plans for user review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and clawhub.json) <br>
+Risk: The workflow can install or execute the Rotifer CLI and selected Genes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review npm packages and selected Genes before approving installation or execution.
+
+Risk: Registry or Arena requests may involve external services when private inputs are used.
+
+Mitigation: Check the external API use before supplying private inputs.
+
+Risk: Publishing an Agent or Gene may expose project content externally.
+
+Mitigation: Keep publishing subject to explicit approval.
+
+## Reference(s):
+
+- [Rotifer documentation](https://rotifer.dev/docs)
+- [Rotifer Protocol](https://rotifer.dev)
+- [Rotifer Protocol Specification](https://github.com/rotifer-protocol/rotifer-spec)
+- [ClawHub release page](https://clawhub.ai/xiaoba-dev/skills/rotifer-agent)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown plans with CLI command examples and JSON configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provides recommendations and command examples for user review before installation, publishing, or overwriting actions.]
+
+## Skill Version(s):
+
+1.2.7 (source: server-resolved release metadata, clawhub.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

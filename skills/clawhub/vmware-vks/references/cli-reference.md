@@ -7,10 +7,17 @@ All commands accept an optional `--target <name>` parameter to specify a named v
 ## Pre-flight Check
 
 ```bash
-vmware-vks check [--target <name>]
+vmware-vks check   # or: vmware-vks doctor — same checks, both names
 ```
 
 Verifies connectivity, credentials, and WCP status for all configured vCenters (or a specific target).
+
+```bash
+# Which account is in use, and does it hold each tool's vSphere privileges (root folder)?
+vmware-vks access-info [--tool create_namespace] [-t <target>]
+```
+
+`not_granted_at_root` may still be granted on a specific cluster. TKC, VM Service and kubeconfig calls are authorized by the namespace's own view/edit/owner permission, which this does not check.
 
 ## Supervisor
 
@@ -78,19 +85,29 @@ vmware-vks tkc upgrade <cluster-name> -n <namespace> \
 
 # Delete TKC cluster (rejects if workloads running, use --force to override)
 vmware-vks tkc delete <cluster-name> -n <namespace> \
-  [--force] [--target <name>]
+  [--skip-workload-check] [--target <name>]
+# Asks you to type the cluster name back before it deletes. No bypass flag;
+# --skip-workload-check only skips the running-workload guard.
 ```
 
 ## Kubeconfig
 
 ```bash
-# Get Supervisor-level kubeconfig
-vmware-vks kubeconfig supervisor -n <namespace> [--target <name>]
+# Get Supervisor-level kubeconfig (stdout, or -o to write a file)
+vmware-vks kubeconfig supervisor -n <namespace> [-o <output-path>] [--target <name>]
 
-# Get TKC cluster kubeconfig (stdout or write to file)
+# Get TKC cluster kubeconfig (stdout, or -o to write a file)
 vmware-vks kubeconfig get <cluster-name> -n <namespace> \
   [-o <output-path>] [--target <name>]
 ```
+
+Both commands are **credential access**: the kubeconfig embeds a Supervisor
+bearer token (JWT from `/wcp/login`) that acts as your vCenter account until it
+expires (typically hours). Run them only when the user asked for a kubeconfig,
+and pass `-o`: the file is created owner-only (0600), also when it replaces an
+existing file, and a symlink target is refused. Both are `@guarded`, so the
+retrieval is recorded in `~/.vmware/audit.db` (the token is not). Delete the
+file when you no longer need it.
 
 ## Harbor & Storage
 

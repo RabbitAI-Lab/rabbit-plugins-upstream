@@ -1,44 +1,56 @@
-## Description: <br>
-Helps an agent coach users through viral coefficient analysis by defining activated-user units, calculating K = invites per user times invite conversion rate, checking cycle time and wave stability, and identifying invite and conversion levers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides product teams in measuring viral acquisition through invite volume, activation conversion, cycle time, growth ceilings, and cohort stability.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External growth, product, founder, and investor-facing agents use this skill to test whether a product's claimed virality is supported by K-factor math. It is most useful for referral programs, invite mechanics, and growth forecasts where activated users, invite conversion, cycle time, and K stability need to be made explicit. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill provides business and growth-analysis guidance that may be applied to forecasts or referral programs without enough supporting data. <br>
-Mitigation: Treat K-factor claims as analytical guidance and require activated-user definitions, cohort windows, invite conversion data, cycle time, and wave-stability checks before relying on conclusions. <br>
-Risk: Referral or invite mechanics can create consent, trust, or platform-policy issues if teams optimize for high invite volume without guardrails. <br>
-Mitigation: Keep invitation mechanics consent-based, separate invite-volume and conversion levers, and review any address-book import or automated invitation flow before deployment. <br>
+## Use Case:
 
+Product managers, founders, and growth teams use this skill to evaluate whether an acquisition loop is genuinely viral and to decide whether invite volume, conversion, or cycle time needs attention.
 
-## Reference(s): <br>
-- [Sources - k-factor-viral](references/sources.md) <br>
-- [Method in Action: Hotmail, 1996-1998](examples/hotmail-1996-1998.md) <br>
-- [Viral Marketing - The Science Of Sharing](https://www.forentrepreneurs.com/lessons-learnt-viral-marketing/) <br>
-- [Andrew Chen growth and virality essays](https://andrewchen.com/) <br>
-- [DFJ viral marketing reference](https://www.dfj.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Structured K-factor analysis with activated-user definition, invite and conversion events, cycle window, K interpretation, growth ceiling or multiplier, lever tests, and wave-stability checks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Saved case notes could expose confidential product or customer details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use aggregate growth metrics and omit confidential details from saved notes; account and contact access is unnecessary.
+
+Risk: Aggressive address-book imports or other non-consensual invitations can create platform-ban risk.
+
+Mitigation: Use consent-based invitation mechanics.
+
+## Reference(s):
+
+- [Sources](references/sources.md)
+- [Viral Marketing — The Science Of Sharing](https://www.forentrepreneurs.com/lessons-learnt-viral-marketing/)
+- [Andrew Chen](https://andrewchen.com/)
+- [K-Factor and Viral Coefficient guide](https://www.deciqai.com/c/k-factor-viral)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown K-factor analysis with calculations, interpretation, and suggested growth levers]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses aggregate growth metrics; does not require account or contact access.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

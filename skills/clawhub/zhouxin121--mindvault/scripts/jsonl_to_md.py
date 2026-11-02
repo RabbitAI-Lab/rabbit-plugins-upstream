@@ -1,18 +1,12 @@
 #!/usr/bin/env python3
-"""MindVault 基础版 — JSONL → Markdown
-
-基础版：仅 --style minimal，最多处理 3 文件
-赞赏版：--style full + --css + 无限制 → https://pay.ldxp.cn/item/p0r2lb
-
+"""MindVault — JSONL → Markdown（基础版 · 免费）
 
 用法：
-  python jsonl_to_md.py <jsonl_file> [--style minimal|full] [--output <md_file>]
-  python jsonl_to_md.py <jsonl_file> --css <css_template_file>
+  python jsonl_to_md.py <jsonl_file> [--style minimal] [--output <md_file>]
 
 默认输出到 stdout，--output 写入文件。
---style minimal：仅用户+Agent 消息（默认）
---style full：全部角色（system/tool/scheduled）
---css：可选 HTML+CSS 输出模板（将 Markdown 嵌入 HTML 模板）
+--style minimal：仅用户+Agent 消息（默认，也是基础版唯一可用模式）
+--style full / --css HTML 模板输出需按版本核对，对照表见https://www.jinengpu.chat/mindvault-detail.html
 """
 
 import json
@@ -80,29 +74,60 @@ def render_jsonl(filepath: str, style: str = "minimal") -> str:
                     if trunc:
                         content += "\n\n*（内容已截断）*"
                     lines.append(f"{content}\n")
-                tools = entry.get("tool_calls", [])
+                tools = entry.get("tool_calls", []) or []
                 if tools:
                     lines.append("**工具调用：**\n")
+                    # 参数优先取 tool_calls 元素内的 args（真实工具参数）；
+                    # 回退读取 Agent 条目顶层 key_params（兼容 archive_export 的扁平导出格式）
+                    top_params = entry.get("key_params", {}) or {}
                     for t in tools:
-                        lines.append(f"- `{t.get('name','?')}`")
-                        params = t.get("key_params", {})
-                        if params:
-                            lines.append(f"  - {json.dumps(params, ensure_ascii=False)}")
+                        name = t.get('name', '?')
+                        args = t.get('args', {}) or {}
+                        if args:
+                            params_text = json.dumps(args, ensure_ascii=False)
+                        elif top_params:
+                            params_text = json.dumps(top_params, ensure_ascii=False)
+                        else:
+                            params_text = ""
+                        lines.append(f"- `{name}`")
+                        if params_text:
+                            lines.append(f"  - {params_text}")
                     lines.append("")
 
             elif role == "tool":
                 tool_name = entry.get("tool_name", "?")
                 lines.append(f"**工具：** `{tool_name}`\n")
-                error = entry.get("error")
-                if error:
-                    lines.append(f"⚠️ 错误：{error}\n")
-                else:
+                # 读取 archive_export 实际导出的 v3.1 字段：
+                # args_summary(key_param+计数) / files / urls / errors
+                args_summary = entry.get("args_summary", "") or ""
+                if args_summary:
+                    lines.append(f"- {args_summary}\n")
+                files = entry.get("files", []) or []
+                if files:
+                    lines.append("- 涉及文件：")
+                    for f in files:
+                        lines.append(f"  - `{f}`")
+                    lines.append("")
+                urls = entry.get("urls", []) or []
+                if urls:
+                    lines.append("- 涉及 URL：")
+                    for u in urls:
+                        lines.append(f"  - `{u}`")
+                    lines.append("")
+                errors = entry.get("errors", []) or []
+                if errors:
+                    lines.append("⚠️ 错误：")
+                    for e in errors:
+                        lines.append(f"  - {e}")
+                    lines.append("")
+                # 兼容旧版字段（summary / result_preview）
+                if not (args_summary or files or urls or errors):
                     summary = entry.get("summary", "")
                     if summary:
                         lines.append(f"{summary}\n")
-                result = entry.get("result_preview", "")
-                if result:
-                    lines.append(f"```\n{result}\n```\n")
+                    result = entry.get("result_preview", "")
+                    if result:
+                        lines.append(f"```\n{result}\n```\n")
 
             elif role == "system":
                 content = entry.get("content", "") or entry.get("origin", "")
@@ -118,42 +143,39 @@ def render_jsonl(filepath: str, style: str = "minimal") -> str:
 
 
 def main():
-    print("📖 MindVault 基础版：仅 minimal 模式。完整功能见赞赏版。")
-
     import argparse
     parser = argparse.ArgumentParser(description="JSONL 归档 → Markdown 阅读器")
     parser.add_argument("jsonl_file", help="JSONL 归档文件路径")
     parser.add_argument("--style", choices=["minimal"], default="minimal",
-                        help="渲染风格：minimal=仅用户+Agent，full=全部角色")
+                        help="渲染风格：minimal=仅用户+Agent 消息")
     parser.add_argument("--output", "-o", help="输出 Markdown 文件路径")
-    # --css 为赞赏版功能
     args = parser.parse_args()
 
     md = render_jsonl(args.jsonl_file, style=args.style)
 
+    # 中性提示（留针不留墙）：统计未被 minimal 渲染的消息数，N=0 不打印
+    if args.style == "minimal":
+        try:
+            tool_n = 0
+            with open(args.jsonl_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        entry = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    if entry.get("role") not in ("user", "agent"):
+                        tool_n += 1
+            if tool_n:
+                print(f"本分片含 {tool_n} 条工具调用记录，当前渲染仅显示用户 / Agent 消息（对照表见https://www.jinengpu.chat/mindvault-detail.html）")
+        except OSError:
+            pass
+
     if args.output:
         out_path = Path(args.output)
-        if args.css:
-            css_content = Path(args.css).read_text(encoding="utf-8")
-            html = f"""<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>对话归档 — {Path(args.jsonl_file).stem}</title>
-<style>
-{css_content}
-</style>
-</head>
-<body>
-<div class="conversation">
-{md.replace(chr(10), chr(10)+"  ")}
-</div>
-</body>
-</html>"""
-            out_path.write_text(html, encoding="utf-8")
-        else:
-            out_path.write_text(md, encoding="utf-8")
+        out_path.write_text(md, encoding="utf-8")
         print(f"已写入: {out_path}")
     else:
         print(md)

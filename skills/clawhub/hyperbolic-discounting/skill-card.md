@@ -1,45 +1,54 @@
-## Description: <br>
-Guides agents to recognize hyperbolic discounting in repeated deferral or present-bias cases and design commitment devices that bind future behavior. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents to identify present-biased preference reversals and design commitment devices for goals people repeatedly defer.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to diagnose recurring preference reversals in personal, product, or organizational decisions and produce a concrete commitment-device design. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Commitment-device recommendations may be mistaken for professional financial, medical, or legal advice. <br>
-Mitigation: Treat outputs as behavioral-economics guidance and route financial, medical, legal, or employment decisions to qualified professionals. <br>
-Risk: Users may disclose private real-world cases while seeking coaching. <br>
-Mitigation: Avoid pasting sensitive personal or business details unless the user deliberately wants those details included in the agent session. <br>
+## Use Case:
 
+Individuals and teams use the skill to examine repeated gaps between intended and actual behavior, map immediate and delayed incentives, and choose a commitment device with a planned review date.
 
-## Reference(s): <br>
-- [Sources - hyperbolic-discounting](references/sources.md) <br>
-- [Method in Action: David Laibson's Golden Eggs and Hyperbolic Discounting, 1997](examples/david-laibson-golden-eggs-1997.md) <br>
-- [Method in Action: The AI Demo-Dopamine Trap - Chasing the Launch Over the Moat (2023-2026)](examples/ai-demo-dopamine-vs-durable-moats-2023-2026.md) <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/hyperbolic-discounting) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/hyperbolic-discounting) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/hyperbolic-discounting.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown commitment-device design with structured fields for reversal, asymmetry, beta estimate, device, and re-check criteria.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Markdown-only skill; security evidence reports no executable behavior, hidden data access, or required credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill recommends financial penalties, enrollment, access restrictions, and public accountability without clear approval boundaries.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Get user approval before any payment, enrollment, access restriction, disclosure, or stronger replacement; agree on costs, recipients, duration, and cancellation first.
+
+## Reference(s):
+
+- [Sources — hyperbolic discounting](artifact/references/sources.md)
+- [Laibson's Golden Eggs example](artifact/examples/david-laibson-golden-eggs-1997.md)
+- [AI Demo-Dopamine example](artifact/examples/ai-demo-dopamine-vs-durable-moats-2023-2026.md)
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/hyperbolic-discounting)
+- [deciqAI skill overview](https://www.deciqai.com/c/hyperbolic-discounting)
+- [Machine-readable skill information](https://www.deciqai.com/s/hyperbolic-discounting.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown coaching and a commitment-device design template]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Stepwise prompts include explicit wait points for user responses.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

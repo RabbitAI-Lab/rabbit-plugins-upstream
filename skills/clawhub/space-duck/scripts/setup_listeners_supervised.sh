@@ -56,9 +56,22 @@ ok()   { echo "✓ $*"; }
 info() { echo "→ $*"; }
 warn() { echo "⚠ $*" >&2; }
 
+# 0.8.6 — F1: kill -0 returns EPERM for a live process under another uid;
+# only "no such process" means dead. Check /proc + the error text.
+# Without this, this script mis-reads a live supervisord under root as
+# dead and races a duplicate on port 8788 (HARDEN-071 rerun).
+proc_alive() {
+  local pid="$1"
+  [[ -n "$pid" ]] || return 1
+  if kill -0 "$pid" 2>/dev/null; then return 0; fi
+  [[ -d "/proc/$pid" ]] && return 0
+  kill -0 "$pid" 2>&1 | grep -qi 'not permitted' && return 0
+  return 1
+}
+
 # ─────────────────────────────── action: status ───────────────────────────────
 cmd_status() {
-  if [[ ! -f "$SUP_PID" ]] || ! kill -0 "$(cat "$SUP_PID")" 2>/dev/null; then
+  if [[ ! -f "$SUP_PID" ]] || ! proc_alive "$(cat "$SUP_PID")"; then  # 0.8.6 — F1
     echo "supervisord: NOT RUNNING"
     echo "  Start with: $0  (without args)"
     exit 1
@@ -71,7 +84,7 @@ cmd_status() {
 
 # ─────────────────────────────── action: stop ─────────────────────────────────
 cmd_stop() {
-  if [[ ! -f "$SUP_PID" ]] || ! kill -0 "$(cat "$SUP_PID")" 2>/dev/null; then
+  if [[ ! -f "$SUP_PID" ]] || ! proc_alive "$(cat "$SUP_PID")"; then  # 0.8.6 — F1
     info "supervisord not running; nothing to stop"
     exit 0
   fi
@@ -80,7 +93,7 @@ cmd_stop() {
   ~/.local/bin/supervisorctl -c "$SUP_CONF" shutdown 2>&1 || true
   # Give it a moment, then verify
   sleep 2
-  if [[ -f "$SUP_PID" ]] && kill -0 "$(cat "$SUP_PID")" 2>/dev/null; then
+  if [[ -f "$SUP_PID" ]] && proc_alive "$(cat "$SUP_PID")"; then  # 0.8.6 — F1
     warn "supervisord still running after shutdown — sending SIGTERM"
     kill -TERM "$(cat "$SUP_PID")"
   fi
@@ -89,7 +102,7 @@ cmd_stop() {
 
 # ─────────────────────────────── action: restart ──────────────────────────────
 cmd_restart() {
-  if [[ ! -f "$SUP_PID" ]] || ! kill -0 "$(cat "$SUP_PID")" 2>/dev/null; then
+  if [[ ! -f "$SUP_PID" ]] || ! proc_alive "$(cat "$SUP_PID")"; then  # 0.8.6 — F1
     info "supervisord not running — performing fresh start"
     cmd_install
     exit 0
@@ -159,9 +172,19 @@ cmd_install() {
   chmod 700 "$SUP_DIR"
 
   # If something is already running under our PID file, refuse to overwrite
-  if [[ -f "$SUP_PID" ]] && kill -0 "$(cat "$SUP_PID")" 2>/dev/null; then
+  if [[ -f "$SUP_PID" ]] && proc_alive "$(cat "$SUP_PID")"; then  # 0.8.6 — F1
     warn "supervisord already running (PID $(cat "$SUP_PID")) — use --restart to bounce, or --status to inspect"
     exit 0
+  fi
+  # [HARDEN-071] The pidfile guard alone races: two same-second invocations
+  # (e.g. heal path + manual start) each see no pidfile and both launch a
+  # daemon on the same conf/socket (field incident: dual supervisord PIDs
+  # 519/521, listener crash-loop on :8788). Also catch pidfile-less daemons.
+  local other_sup
+  other_sup="$(pgrep -f "supervisord.*${SUP_CONF}" 2>/dev/null || true)"
+  if [[ -n "$other_sup" ]]; then
+    warn "A supervisord using $SUP_CONF is already running (PID(s): $other_sup) but the pidfile is missing/stale."
+    die "Refusing to start a second daemon. Kill it first (kill -TERM $other_sup) or use --restart."
   fi
   # Stale PID file? Clean up.
   rm -f "$SUP_PID" "$SUP_SOCK"
@@ -170,10 +193,16 @@ cmd_install() {
   local pre_existing
   pre_existing="$(pgrep -fa 'telegram_listener\.py\|peck_listener\.py' 2>/dev/null | grep -v supervisord || true)"
   if [[ -n "$pre_existing" ]]; then
-    warn "Found existing listener processes — supervisord will spawn alongside, you may have duplicates:"
+    # [HARDEN-071] duplicates restart-loop on 'Address already in use'
+    # and flood the .err logs — abort instead of spawning alongside.
+    warn "Found existing listener processes — installing supervisord alongside WILL create duplicates:"
     echo "$pre_existing" | sed 's/^/    /'
-    warn "Stop them first with: pkill -f 'telegram_listener.py|peck_listener.py'"
-    info "Continuing anyway (idempotency)..."
+    warn "Stop them first: pkill -f 'telegram_listener.py|peck_listener.py'"
+    if [[ "${SPACEDUCK_ALLOW_DUP_LISTENERS:-}" == "1" ]]; then
+      warn "SPACEDUCK_ALLOW_DUP_LISTENERS=1 set — continuing anyway."
+    else
+      die "Aborting to avoid duplicate listeners (set SPACEDUCK_ALLOW_DUP_LISTENERS=1 to override)."
+    fi
   fi
 
   # Write supervisord config
@@ -260,27 +289,13 @@ stderr_logfile_maxbytes=2MB
 stderr_logfile_backups=2
 environment=HOME="${HOME}",PATH="${PATH}"
 
-; v0.4.2 — daily version-check daemon (Apple-grade Phase 5 of 5).
-; Runs every 6h via supervisord's eventlistener mechanism is overkill for our
-; needs; instead we use a simple long-sleep loop in a wrapper. See
-; version_check_daemon.sh — it self-rate-limits to one nudge per version.
-[program:version_check]
-; v0.4.3 (Josh, 2026-06-15): explicit bash-script invocation so ClawHub-
-; CLI-stripped exec bit doesn't break the cron. Survives skill upgrades.
-command=/bin/sh -c "while true; do bash ${SCRIPT_DIR}/version_check_daemon.sh; sleep 21600; done"
-directory=${SD_DIR}
-autostart=true
-autorestart=true
-startsecs=3
-startretries=10
-stdout_logfile=${LOG_DIR}/version_check.log
-stdout_logfile_maxbytes=5MB
-stdout_logfile_backups=2
-stderr_logfile=${LOG_DIR}/version_check.err
-stderr_logfile_maxbytes=5MB
-stderr_logfile_backups=2
-environment=HOME="${HOME}",PATH="${PATH}"
 EOF
+  # 0.8.11 [VER-0811] — the [program:version_check] block was REMOVED here.
+  # It ran version_check_daemon.sh on a 6h loop while telegram_listener.py
+  # also checks daily from the pulse thread: two nudgers, two sources of
+  # truth (clawhub inspect vs /beak/skill/latest). Invisible only while the
+  # listener path 401'd; fixing that contract in 0.8.11 would have made every
+  # supervised box double-nudge. Do not re-add.
   chmod 600 "$SUP_CONF"
   ok "Config written"
 
@@ -290,7 +305,7 @@ EOF
   sleep 3
 
   # Verify
-  if [[ ! -f "$SUP_PID" ]] || ! kill -0 "$(cat "$SUP_PID")" 2>/dev/null; then
+  if [[ ! -f "$SUP_PID" ]] || ! proc_alive "$(cat "$SUP_PID")"; then  # 0.8.6 — F1
     die "supervisord failed to start — check $SUP_DIR/supervisord.log"
   fi
   ok "supervisord running (PID $(cat "$SUP_PID"))"

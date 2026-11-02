@@ -6,11 +6,11 @@
 |---------|-----------|
 | Latest release | Fully supported |
 | Previous minor release | Critical security fixes only |
-| Older releases | Unsupported — please update (`openclaw skills update clawseccheck`) |
+| Older releases | Unsupported - please update (`openclaw skills update clawseccheck`) |
 
 ## Reporting a vulnerability
 
-Please **do not** open a public GitHub issue for security vulnerabilities — use one of
+Please **do not** open a public GitHub issue for security vulnerabilities - use one of
 the private channels below so the issue can be assessed and patched before public
 disclosure.
 
@@ -37,15 +37,23 @@ as `<REDACTED>` or `sk-XXXX`.
 
 ClawSecCheck is a **local, read-only** audit tool. Its read scope is bounded and
 documented: your OpenClaw config, bootstrap markdown, installed-skill text, OpenClaw log
-files and agent session logs, and — unless you pass `--no-host` — a host-posture scan
-beyond OpenClaw's own scope (security-tool config paths and binaries on `PATH`, the text
-of a few known firewall config files, the names of proxy-shaped env vars, and on Windows
-read-only `HKEY_LOCAL_MACHINE` registry queries). `SKILL.md` and
-[`SECURITY_MODEL.md`](SECURITY_MODEL.md) list the full surface. It writes only
-its own state under `~/.clawseccheck/` — by default a one-line score-history entry
-(opt out with `--no-history`), and other files only when you ask (`--save`, `--badge`,
-`--sarif`, `--monitor`, `--log`). It never writes to your OpenClaw config, and it makes
-no network calls. Findings stay on your machine.
+files and agent session logs, the ClawHub CLI's own token-store path outside the OpenClaw
+home (B182, credential-hygiene check), and three default-on scans, each individually
+disabled with its own flag: a host-posture scan beyond OpenClaw's own scope (`--no-host`:
+security-tool config paths and binaries on `PATH`, the text of a few known firewall config
+files, the names of proxy-shaped env vars, and on Windows read-only
+`HKEY_LOCAL_MACHINE` registry queries), a socket scan (`--no-sockets`: `/proc/net/tcp{,6}`
+and a read-only `/proc/*/fd` walk), and an npm dependency-tree walk (`--no-deptree`:
+`node_modules` under the installed OpenClaw package, outside the OpenClaw home -
+manifests and install-time targets only, nothing executed). `SKILL.md` and
+[`SECURITY_MODEL.md`](SECURITY_MODEL.md) list the full surface. It writes only its own
+state under `~/.clawseccheck/` - by default a one-line run-history entry (opt out with
+`--no-history`), which records the score only when the run earned a grade and otherwise
+just notes that it did not, and other files only when you ask (`--save`, `--badge`, `--html`,
+`--sarif`, `--pdf`, `--monitor`, `--log`). The one named exception, opt-in and
+confirmation-gated: `--apply-ignore-proposals` appends previously-proposed entries to
+`<home>/.clawseccheckignore` inside the audited OpenClaw home. Otherwise it never writes
+to your OpenClaw config, and it makes no network calls. Findings stay on your machine.
 
 For the full breakdown of the tool's own capability surface, least-privilege posture,
 data-handling/redaction discipline, tamper-evident audit trail, and the forward-looking
@@ -55,8 +63,8 @@ In-scope issues include:
 
 - Logic bugs that produce false PASS results for genuinely unsafe configs.
 - Output channels that could be exploited for prompt injection (the text report,
-  `--json`, `--sarif`, `--html`) — anywhere untrusted config or skill content reaches
-  a reader without being sanitized as quoted evidence.
+  `--json`, `--sarif`, `--html`, `--pdf`) - anywhere untrusted config or skill content
+  reaches a reader without being sanitized as quoted evidence.
 - Any code path that reads, writes, or executes more than the documented scope.
 - Dependency or supply-chain issues in the publish workflow.
 
@@ -74,5 +82,5 @@ days for confirmed issues. Complex issues may take longer; we will communicate d
 
 The full maintainer release checklist (tests, doc alignment, dependency review,
 signed release assets) lives in [`docs/RELEASING.md`](docs/RELEASING.md). It
-exists to prevent release drift — code, docs, and operational security guidance
+exists to prevent release drift - code, docs, and operational security guidance
 must always describe the same shipped behavior.

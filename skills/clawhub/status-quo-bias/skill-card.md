@@ -1,43 +1,59 @@
-## Description: <br>
-Helps agents identify status quo bias, test whether inaction is justified, and design or audit defaults using fresh-choice, switching-cost, and cost-of-inaction checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides users in identifying status quo bias, weighing alternatives and inaction costs, and auditing or designing defaults.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to coach decisions where current policies, vendors, workflows, or product defaults may be retained by inertia rather than active evaluation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Guidance about default settings can affect privacy, fairness, consent, or user autonomy when applied to real products, policies, or benefits decisions. <br>
-Mitigation: Before applying recommendations, confirm affected users understand the default, can choose differently without undue friction, and that privacy, fairness, and consent impacts have been reviewed. <br>
+## Use Case:
 
+Decision makers, teams, and people designing policies or product defaults use this framework to examine whether an existing choice remains best or persists through inertia. It helps compare alternatives, switching costs, and the cost of inaction, then document an active decision or a default review plan.
 
-## Reference(s): <br>
-- [Primary sources](references/sources.md) <br>
-- [Samuelson & Zeckhauser 1988 + Johnson & Goldstein 2003 example](examples/samuelson-zeckhauser-1988-johnson-goldstein-2003.md) <br>
-- [New Jersey-Pennsylvania Auto Insurance Defaults example](examples/new-jersey-pennsylvania-auto-insurance-defaults.md) <br>
-- [Enterprise AI Adoption and the Incumbent-Vendor Default example](examples/enterprise-ai-adoption-incumbent-default-2023-2026.md) <br>
-- [The state of AI](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai) <br>
-- [AI and Business Strategy](https://sloanreview.mit.edu/big-ideas/artificial-intelligence-business-strategy/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, analysis] <br>
-**Output Format:** [Markdown status quo audit with structured decision fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes hard-stop coaching prompts for novice users and a checklist for verification.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: A proposed default or change could be based on incomplete or misleading decision guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review recommendations against the specific decision and its evidence before applying consequential changes.
+
+Risk: Examples based on real decisions could expose confidential details.
+
+Mitigation: Omit confidential details when recording real-use examples.
+
+## Reference(s):
+
+- [Sources and further reading](references/sources.md)
+- [Samuelson and Zeckhauser; Johnson and Goldstein examples](examples/samuelson-zeckhauser-1988-johnson-goldstein-2003.md)
+- [New Jersey–Pennsylvania auto insurance defaults example](examples/new-jersey-pennsylvania-auto-insurance-defaults.md)
+- [Enterprise AI adoption example](examples/enterprise-ai-adoption-incumbent-default-2023-2026.md)
+- [The State of AI](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai)
+- [AI and Business Strategy](https://sloanreview.mit.edu/big-ideas/artificial-intelligence-business-strategy/)
+- [Skill information](https://www.deciqai.com/c/status-quo-bias)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown coaching prompts or a Status Quo Audit with decision comparisons and review actions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include alternatives, switching costs, cost of inaction, a default justification, and a review date.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

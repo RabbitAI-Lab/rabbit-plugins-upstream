@@ -1,43 +1,56 @@
-## Description: <br>
-Analyzes WeRead bookshelf, reading statistics, highlights, and personal thoughts to produce reading dashboards, book analyses, cross-book connections, and exportable notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A WeRead/WeChat Reading skill for reading dashboards, book analysis, cross-book connections, and confirmed note exports.
 
-## Publisher: <br>
-[yamyeed](https://clawhub.ai/user/yamyeed) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yamyeed](https://clawhub.ai/user/yamyeed)
 
-## Use Case: <br>
-WeRead users and agents use this skill to turn authorized reading data into personal dashboards, focused book analysis, cross-book synthesis, reading-personality summaries, and Markdown or HTML exports. It is intended for workflows where the user explicitly requests WeRead or Weixin Reading data processing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses WEREAD_API_KEY to access personal WeRead bookshelf, reading statistics, highlights, and personal thoughts. <br>
-Mitigation: Install and run only when comfortable granting that access, keep the API key private, and confirm the requested data scope before analysis. <br>
-Risk: Cross-book analysis can aggregate private notes and reading history beyond the minimum needed for a single-book request. <br>
-Mitigation: Confirm the books and data range before cross-book analysis, and limit requests to the smallest useful scope. <br>
-Risk: Generated Markdown or HTML exports may contain private notes, highlights, and reading history. <br>
-Mitigation: Review generated files before sharing and confirm the file type, path, and included data before export or opening. <br>
+## Use Case:
 
+External readers use the skill to review WeRead reading activity, analyze books, connect ideas across books, and create requested Markdown or HTML exports. It requests confirmation before accessing each new private-data scope and before writing files.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yamyeed/skills/weread-ai-brain) <br>
-- [WeRead agent gateway](https://i.weread.qq.com/api/agent/gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports, single-file HTML dashboards, Markdown exports, shell command examples, and API request guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the user's WEREAD_API_KEY to read authorized WeRead data; export paths, local files, browser opening, and cross-book aggregation require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Private reading history, highlights, or personal notes may be exposed through analysis or agent context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the API key in the environment rather than chat, request only the books and data fields needed, and obtain explicit confirmation for each new private-data scope.
+
+Risk: Exported notes or analysis may persist sensitive content in local files.
+
+Mitigation: Before writing, confirm the exact file path and content; review the export and destination before saving.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/yamyeed/skills/weread-ai-brain)
+- [Project homepage (skill metadata)](https://github.com/yamyeed/weread-ai-brain)
+- [Dashboard guidance](artifact/references/dashboard.md)
+- [Analysis and export guidance](artifact/references/analysis-and-export.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Analysis, Markdown, HTML files]
+
+**Output Format:** [Conversational text or Markdown; optional offline HTML dashboards and Markdown exports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Private reading data is limited to the confirmed scope; file exports require confirmation of content and destination.]
+
+## Skill Version(s):
+
+1.1.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

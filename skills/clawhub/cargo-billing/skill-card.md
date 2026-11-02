@@ -1,44 +1,61 @@
-## Description: <br>
-Pull usage metrics, check subscription status, view invoices, and manage credits using the Cargo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Cargo workspace admins review credit balances, usage, subscriptions, invoices, and payment methods.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Cargo workspace administrators and operators use this skill to inspect billing usage, subscription state, invoices, credit balances, and billing portal access through the Cargo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Billing, invoice, card-on-file, and portal-session commands can reveal sensitive workspace billing details. <br>
-Mitigation: Use trusted Cargo CLI credentials, limit use to intended admin workflows, and review commands before running them. <br>
-Risk: Sample workflow-run commands used for cost estimates can consume credits. <br>
-Mitigation: Run only small samples, check available credits before larger batches, and monitor usage during execution. <br>
+## Use Case:
 
+Cargo workspace admins use this skill to understand credit consumption, inspect usage by workflow or connector, check subscription and invoice details, estimate costs, and manage payment methods.
 
-## Reference(s): <br>
-- [Cargo Billing skill page](https://clawhub.ai/cargo-ai/skills/cargo-billing) <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Response shapes](references/response-shapes.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
-- [Usage metrics examples](references/examples/usage-metrics.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the Cargo CLI and admin-level Cargo billing access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence release metadata and skill frontmatter) <br>
+Risk: The cost-estimation instructions start a real sample workflow that may consume credits and trigger downstream actions without separate approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require separate approval for the sample workflow, its inputs, credit cost, and downstream actions; prefer historical usage for estimates.
+
+Risk: Billing and payment operations use privileged workspace credentials and can involve sensitive payment details.
+
+Mitigation: Limit reporting credentials to billing reads and use the hosted form for payment details.
+
+Risk: The install metadata selects the latest CLI release, which may change over time.
+
+Mitigation: Pin a reviewed CLI version.
+
+## Reference(s):
+
+- [Cargo Skills homepage](https://github.com/getcargohq/cargo-skills)
+- [cargo-billing on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-billing)
+- [Usage metrics examples](references/examples/usage-metrics.md)
+- [Response shapes](references/response-shapes.md)
+- [Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown instructions with shell commands and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+2.1.3 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

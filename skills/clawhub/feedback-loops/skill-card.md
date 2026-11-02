@@ -1,47 +1,59 @@
-## Description: <br>
-Helps agents diagnose feedback-driven systems by mapping reinforcing and balancing loops, delays, stocks, flows, leverage points, interventions, and falsifiers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes feedback loops, delays, stocks, and flows to explain system behavior and identify structural intervention points.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and agents use this skill to analyze organizational, market, supply-chain, and technology dynamics where feedback loops, delays, or bullwhip effects may cause overshoot, oscillation, collapse, or growth flywheels. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Confidential business situations may become persistent if real case notes are appended to local skill files. <br>
-Mitigation: Keep confidential case details out of skill source files unless persistence is intended and approved. <br>
-Risk: Feedback-loop analysis can become misleading when the system variable, causal loops, delays, or falsifier are vague. <br>
-Mitigation: Use the skill's verification checks to name the system and variable, map at least one loop with delays, and state an observable falsifier. <br>
+## Use Case:
 
+Business leaders, analysts, and operators use this skill to understand recurring patterns such as overshoot, oscillation, growth flywheels, and supply-chain bullwhip. It structures a case into reinforcing and balancing loops, delays, likely behavior, and possible interventions with backfire risks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/feedback-loops) <br>
-- [Primary sources](references/sources.md) <br>
-- [Forrester's Beer Distribution Game and Sterman's 1989 Measurement](examples/forresters-beer-distribution-game-stermans-1989-measurement.md) <br>
-- [AI Capex Boom Feedback-Loop Example](examples/ai-capex-boom-reinforcing-and-balancing-loops-2024-2026.md) <br>
-- [Sterman 1989, Management Science](https://doi.org/10.1287/mnsc.35.3.321) <br>
-- [Lee, Padmanabhan, and Whang 1997, Management Science](https://doi.org/10.1287/mnsc.43.4.546) <br>
-- [Meadows, Leverage Points](https://donellameadows.org/archives/leverage-points-places-to-intervene-in-a-system/) <br>
-- [IEA Electricity 2024](https://www.iea.org/reports/electricity-2024) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown diagnosis template with structured text sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask follow-up questions before producing a one-case feedback-loop diagnosis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: ClawHub release evidence) <br>
+Risk: An incomplete loop map or incorrect assumptions could lead to misleading forecasts or interventions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate the mapped loops and assumptions against observations before acting on recommendations.
+
+Risk: Real-use examples saved into shared copies could expose confidential case details.
+
+Mitigation: Remove confidential details before saving or sharing real-use observations.
+
+## Reference(s):
+
+- [Primary sources and further reading](artifact/references/sources.md)
+- [Sterman (1989), Modeling Managerial Behavior](https://doi.org/10.1287/mnsc.35.3.321)
+- [Lee, Padmanabhan, and Whang (1997), The Bullwhip Effect](https://doi.org/10.1287/mnsc.43.4.546)
+- [Meadows (1999), Leverage Points](https://donellameadows.org/archives/leverage-points-places-to-intervene-in-a-system/)
+- [International Energy Agency, Electricity 2024](https://www.iea.org/reports/electricity-2024)
+- [Beer Distribution Game example](artifact/examples/forresters-beer-distribution-game-stermans-1989-measurement.md)
+- [AI capital expenditure example](artifact/examples/ai-capex-boom-reinforcing-and-balancing-loops-2024-2026.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured Markdown feedback-loop diagnosis with causal chains, delay estimates, behavior forecasts, and intervention guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Case-specific qualitative analysis; conclusions depend on the evidence and assumptions supplied.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

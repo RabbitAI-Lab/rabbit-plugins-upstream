@@ -1,45 +1,59 @@
-## Description: <br>
-Helps an agent diagnose throughput problems in multi-step systems, identify the bottleneck with evidence, and produce a focused Theory of Constraints action plan. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent in applying the Theory of Constraints to locate bottlenecks and improve throughput in multi-step systems.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external operators, and developers use this skill to analyze operational, project, software, sales, or infrastructure workflows where throughput is below expectations and work accumulates at one stage. It guides the agent through the Five Focusing Steps and returns a concise TOC analysis with constraint evidence, exploit/subordinate/elevate actions, and a re-identification plan. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Business examples and current-market claims may be incomplete or outdated for operational or financial decisions. <br>
-Mitigation: Verify examples, market claims, and investment recommendations against current authoritative sources before acting. <br>
-Risk: The method can be misapplied to single-step systems, demand-side problems, or cases where the bottleneck is assumed without evidence. <br>
-Mitigation: Confirm the system is multi-step, map capacities and work-in-process, and identify the constraint from observable evidence before applying the action plan. <br>
+## Use Case:
 
+Operations leaders, project managers, and teams use this skill to map a multi-step system, identify its binding constraint, and prioritize changes that improve end-to-end throughput. It also guides reassessment after the constraint moves.
 
-## Reference(s): <br>
-- [Sources - theory-of-constraints](references/sources.md) <br>
-- [Goldratt's The Goal (1984) and TOC's Lineage](examples/goldratts-the-goal-1984-and-tocs-lineage.md) <br>
-- [Critical Chain Project Management (1997)](examples/critical-chain-project-management-1997.md) <br>
-- [The AI buildout's true constraint - packaging and power, not GPU design (2024-2026)](examples/ai-buildout-packaging-and-power-constraint-2024-2026.md) <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/theory-of-constraints) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/theory-of-constraints.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a TOC analysis with system map, constraint evidence, exploit/subordinate/elevate actions, and re-identification guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: An incorrect bottleneck diagnosis could lead to ineffective operational changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate the system map and supporting evidence, and review proposed operational changes before applying them.
+
+Risk: Reusable failure-pattern examples could expose confidential business details.
+
+Mitigation: Avoid putting confidential business details in the skill's reusable failure-pattern table.
+
+## Reference(s):
+
+- [Primary sources](artifact/references/sources.md)
+- [Goldratt's The Goal and TOC's lineage](artifact/examples/goldratts-the-goal-1984-and-tocs-lineage.md)
+- [Critical Chain Project Management](artifact/examples/critical-chain-project-management-1997.md)
+- [AI buildout constraint example](artifact/examples/ai-buildout-packaging-and-power-constraint-2024-2026.md)
+- [Theory of Constraints skill page](https://clawhub.ai/deciqai/skills/theory-of-constraints)
+- [deciqAI Theory of Constraints guide](https://www.deciqai.com/c/theory-of-constraints)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/theory-of-constraints.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured Markdown TOC analysis or concise conversational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide the user through the Five Focusing Steps one step at a time.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

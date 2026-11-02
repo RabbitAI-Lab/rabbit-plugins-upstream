@@ -1,45 +1,59 @@
-## Description: <br>
-Generates 1-22 second sound effects from text prompts using the ElevenLabs text-to-sound model through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates 1–22 second sound effects from text descriptions using the ElevenLabs text-to-sound model.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, creators, and game or audio teams use this skill to generate short foley, ambience, alerts, and game sound effects from text descriptions through a cloud generation API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review flagged persistent API-key storage whose promised file-permission protection was not evident in the reviewed CLI package. <br>
-Mitigation: Prefer passing DLAZY_API_KEY per invocation on shared machines, or verify the permissions on ~/.dlazy/config.json after login. <br>
-Risk: Prompts and supported media paths are sent to the dLazy hosted API and generated outputs are hosted by dLazy media storage. <br>
-Mitigation: Avoid sending sensitive prompts or private media unless the user accepts the service and data-handling implications. <br>
-Risk: The documented output example uses image/png for a sound-effect skill, and the security guidance treats that example as unreliable. <br>
-Mitigation: Validate returned output types, MIME types, and URLs before presenting generated media as final audio output. <br>
+## Use Case:
 
+Developers and creators use the skill to generate short sound effects from text prompts for foley, ambience, alerts, and game audio.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-sfx) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Files, Guidance] <br>
-**Output Format:** [JSON responses and generated media URLs, with shell-command guidance for setup and error recovery.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key and supports prompt, duration, prompt_influence, dry-run, no-wait, and timeout options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: server release and frontmatter) <br>
+Risk: Prompts are sent to dLazy for generation, and submitted content may be processed by its hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Send only prompts and media you intend to share with the service.
+
+Risk: Generation can consume paid credits.
+
+Mitigation: Use --dry-run to review the request and cost estimate before generation, and check available credits.
+
+Risk: The dLazy API key may be stored in the CLI configuration.
+
+Mitigation: Use DLAZY_API_KEY for per-invocation credentials when preferred, and rotate or revoke keys from the dLazy dashboard.
+
+## Reference(s):
+
+- [dLazy service](https://dlazy.com)
+- [dLazy CLI package](https://www.npmjs.com/package/@dlazy/cli)
+- [ClawHub release](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-sfx)
+
+## Skill Output:
+
+**Output Type(s):** [Audio, JSON]
+
+**Output Format:** [JSON result with generated audio URLs; audio can also be saved to a local file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated sound effects are 1–22 seconds long; asynchronous jobs and local saving are supported.]
+
+## Skill Version(s):
+
+1.3.36 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

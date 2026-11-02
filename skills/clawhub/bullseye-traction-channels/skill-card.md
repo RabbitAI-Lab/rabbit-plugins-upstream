@@ -1,42 +1,51 @@
-## Description: <br>
-Helps founders evaluate customer-acquisition options with the Bullseye framework, test promising traction channels cheaply, and focus on the one channel that is currently working. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps founders identify and test promising customer acquisition channels before focusing on the one that performs.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders, growth teams, and startup operators use this skill when they do not yet have a repeatable acquisition channel and need to compare traction-channel options, run small tests, and choose where to focus. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Server-resolved provenance is unavailable for this release. <br>
-Mitigation: Review the linked deciqAI resources if provenance matters before relying on the skill. <br>
-Risk: The skill produces business-strategy guidance that can be misleading if applied without validating channel tests against real acquisition data. <br>
-Mitigation: Use pre-set success bars such as CAC or response thresholds and make channel decisions from observed test results. <br>
+## Use Case:
 
+Founders and growth teams use this Agent when they lack a repeatable customer acquisition channel or need to reassess a stalled one. It guides them to consider and rank 19 channels, run small tests against preset success criteria, and focus on the strongest result.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/bullseye-traction-channels) <br>
-- [deciqAI Bullseye resource](https://www.deciqai.com/c/bullseye-traction-channels) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/bullseye-traction-channels.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown guidance with checklist-style recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces business-strategy guidance only; it does not request credentials, execute code, or make system changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Marketing experiments may consume budget or involve external campaigns and outreach.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set experiment budgets and approve campaigns or outreach before execution.
+
+## Reference(s):
+
+- [Bullseye ClawHub release](https://clawhub.ai/deciqai/skills/bullseye-traction-channels)
+- [Bullseye publisher guide](https://www.deciqai.com/c/bullseye-traction-channels)
+- [Bullseye machine-readable information](https://www.deciqai.com/s/bullseye-traction-channels.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis]
+
+**Output Format:** [Markdown text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Channel evaluation framework and recommendations for a single assessment.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

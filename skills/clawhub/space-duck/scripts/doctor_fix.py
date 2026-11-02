@@ -46,6 +46,14 @@ Authored 2026-07-16 — per Josh #25945 ("space-duck-doctor / -fix").
 import argparse, json, os, shutil, subprocess, sys, time, urllib.request
 from pathlib import Path
 
+# 0.8.17 — one resolver for the claude CLI, shared with peck_responder /
+# peck_critic / pulse so doctor probes the same binary the responder execs.
+try:
+    from _claudebin import resolve_claude
+except Exception:
+    def resolve_claude():
+        return shutil.which('claude') or str(Path.home() / '.npm-global' / 'bin' / 'claude')
+
 HOME = Path(os.environ.get('HOME', str(Path.home())))
 SD_DIR = HOME / '.space-duck'
 CONFIG = SD_DIR / 'config.json'
@@ -117,9 +125,12 @@ class Card:
 
 def load_cfg():
     try:
-        return json.loads(CONFIG.read_text())
+        cfg = json.loads(CONFIG.read_text())
     except Exception:
         return None
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base(cfg)
+    return cfg
 
 
 def check_identity(card, cfg):
@@ -250,7 +261,11 @@ def check_tg(card, cfg, args):
     elif not any('--on-message' in c for _, c in ls):
         issues.append('listener MUTE (no --on-message brain)')
     if not owner:
-        issues.append('no owner_chat_id in config (responder refuses all inbound)')
+        # 0.9.7 [RESP-D] — without a resolvable owner chat, skip notices can't
+        # be delivered; they buffer durably to ~/.space-duck/owner-notices.jsonl
+        # instead of being lost, but the owner still won't be pinged live.
+        issues.append('no owner_chat_id in config (skip notices only buffer to '
+                      '~/.space-duck/owner-notices.jsonl, no live ping)')
     if not issues and port:
         try:
             with urllib.request.urlopen(f'http://127.0.0.1:{port}/healthz', timeout=5) as r:
@@ -325,7 +340,7 @@ def check_claude(card, deep):
     if not deep:
         card.add('R3', 'claude auth', OK, 'credentials present (use --deep for a live test)')
         return True
-    claude = shutil.which('claude') or str(Path.home() / '.npm-global' / 'bin' / 'claude')
+    claude = resolve_claude()
     try:
         r = subprocess.run([claude, '-p', 'Reply AUTH_OK only.'], capture_output=True,
                            text=True, timeout=90, cwd='/tmp',

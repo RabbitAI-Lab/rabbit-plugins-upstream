@@ -1,42 +1,51 @@
-## Description: <br>
-Guides freight brokers through lane pricing and accept, counter, or pass decisions using market benchmarks, carrier costs, margin, win probability, and relationship value. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps freight brokers evaluate lane quotes and decide whether to accept, counter, or pass based on market rates, carrier costs, margins, win probability, and relationship value.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Freight brokers use this skill to quote spot lanes, compare carrier rates against market benchmarks and cost-to-cover, and choose whether to accept, counter, or pass. It is decision support for lanes where no locked contract rate already governs the price. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pricing guidance can be wrong when market benchmarks, carrier cost-to-cover, repositioning, or deadhead inputs are stale or missing. <br>
-Mitigation: Verify current lane benchmarks and carrier costs before relying on the recommendation. <br>
-Risk: A suggested quote, acceptance, counter, or pass decision may conflict with locked contract rates or company approval rules. <br>
-Mitigation: Do not use the skill where a contract rate governs the lane, and require a human owner to approve real pricing decisions. <br>
+## Use Case:
 
+Freight brokers use this skill to compare shipper quotes and carrier rates, weigh market benchmarks, true carrier cost, expected margin, win probability, and shipper relationship value, then consider accepting, countering, or passing on a load. It is guidance rather than professional advice, and does not apply when a locked contract rate governs the lane.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/freight-lane-pricing-decision) <br>
-- [deciqAI freight lane pricing decision page](https://www.deciqai.com/c/freight-lane-pricing-decision) <br>
-- [Agent metadata](https://www.deciqai.com/s/freight-lane-pricing-decision.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown decision guidance with checklists and worked examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Decision-support guidance only; no executable code or hidden access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server-resolved release metadata) <br>
+Risk: A suggested price may rely on stale lane benchmarks, carrier costs, or assumptions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current lane benchmarks, carrier costs, and assumptions before acting on a suggested price.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/freight-lane-pricing-decision)
+- [deciqAI freight lane pricing page](https://www.deciqai.com/c/freight-lane-pricing-decision)
+- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/freight-lane-pricing-decision.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Lane pricing comparisons and accept, counter, or pass guidance based on supplied inputs.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

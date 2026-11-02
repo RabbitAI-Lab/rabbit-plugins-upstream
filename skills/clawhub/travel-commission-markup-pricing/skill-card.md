@@ -1,40 +1,53 @@
-## Description: <br>
-Guides travel advisors on balancing supplier commissions, client planning fees, and markups for complex or low-commission travel work. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps travel advisors set planning fees, commissions, markups, and service-tier pricing for complex or low-commission trips.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Travel advisors and agencies use this skill to decide when to use planning fees, supplier commissions, service tiers, or markups so pricing reflects complexity, value, and cost to serve. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pricing guidance could be mistaken for legal, tax, or payment-network compliance advice. <br>
-Mitigation: Use the skill as business-pricing guidance and verify fee disclosures, seller-of-travel obligations, state rules, and card-network surcharge practices before relying on outputs. <br>
+## Use Case:
 
+Travel advisors use this skill to compare supplier commission, client-paid planning fees, and markups, then price services by trip complexity and cost to serve. It also prompts advisors to disclose fees before charging.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/travel-commission-markup-pricing) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/travel-commission-markup-pricing) <br>
-- [Agent-readable skill metadata](https://www.deciqai.com/s/travel-commission-markup-pricing.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance] <br>
-**Output Format:** [Markdown guidance and checklist-style recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only skill; no executable behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Fee and disclosure suggestions may not match current jurisdiction or card-network requirements.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check applicable seller-of-travel and card-network rules, and disclose agreed fees before charging.
+
+Risk: The referenced parent pricing method and linked websites are outside this release package.
+
+Mitigation: Review those materials and verify their assumptions before applying the recommendations.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/travel-commission-markup-pricing)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

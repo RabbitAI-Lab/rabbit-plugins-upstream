@@ -1,0 +1,57 @@
+# API boundaries
+
+## Framework Selection
+
+| Context | Choose | Why |
+|---------|--------|-----|
+| Edge/Serverless | Hono | Zero-dep, fastest cold starts |
+| Performance API | Fastify | Higher throughput than Express, built-in schema validation |
+| Enterprise/team | NestJS | DI, decorators, structured conventions |
+| Legacy/ecosystem | Express | Most middleware, widest adoption |
+
+Ask user: deployment target, cold start needs, team experience, existing codebase.
+
+
+## Validation
+
+**Zod** (TypeScript inference) or **TypeBox** (Fastify native). Validate at boundaries only: request entry, before DB ops, env vars at startup. Use `.extend()`, `.pick()`, `.omit()`, `.partial()`, `.merge()` for DRY schemas.
+
+- **`z.coerce.boolean()` is `Boolean(v)`.** Every non-empty string is truthy, so the literal strings `"false"`, `"0"`, `"no"` and `"off"` all coerce to `true`; only `""` and a real boolean `false` yield `false`. Clients and LLM callers routinely emit booleans as JSON strings, and the advertised schema saying `type: boolean` does not stop a host that forwards arguments unvalidated. The damage concentrates exactly where it is worst: a default-true flag can be forced on but never string-off, and a destructive flag (`kill_existing`, `force`, `active`) passed `"false"` fires. Use plain `z.boolean()` where fail-loud is acceptable, or `z.preprocess` the known spellings before `z.boolean()` so unrecognized strings still reject rather than silently becoming `true`. `.optional()` short-circuits `undefined` before the preprocess, so optional params still default correctly, and JSON Schema generation still emits `{ type: "boolean" }`.
+- **Zod v4 removed the single-argument `z.record(valueType)`**; it requires `z.record(keyType, valueType)`, e.g. `z.record(z.string(), z.number())`. TypeScript rejects the single-arg form immediately (`tsc`: `Expected 2-3 arguments, but got 1`). If the type error is suppressed, the lone argument becomes the KEY schema and `valueType` stays `undefined`, so the first `.parse()` on a non-empty object throws `TypeError: Cannot read properties of undefined (reading '_zod')`, a raw TypeError, not a Zod validation error.
+- **A custom NestJS `ValidationPipe` `exceptionFactory` that forwards raw class-validator errors** (such as `errors => new RpcException(errors)`) echoes input back. Each error's `target` is the whole validated object, so a payload with many invalid items multiplies the reply size; each error's `value` is the rejected input, so a failing `password` field returns the password. v12.2.0 defaults `validationError.target` to `false` and caps the built-in factory's total message length (`maxErrorMessagesLength`, 1,000,000 characters); `value` still defaults to included. Set `validationError: { target: false, value: false }` and map errors to `{ property, constraints }` in any custom factory.
+- **Before NestJS v12.3.0, an overriding controller method inherits the parent method's param decorators by argument index.** In a generic base-controller pattern, an inherited `@Query('page')` can overwrite the override's `@Param('id')` (`GET /items/42?page=7` hands `7` to the handler as `id`), and inherited pipes validate the wrong argument, so a guard that authorizes `req.params.id` no longer matches the ID the handler uses. Upgrade, or leave parameters undecorated on base methods that subclasses override, and e2e-test each override with a conflicting query string.
+
+
+## Error Handling
+
+Custom error hierarchy: `AppError(message, statusCode, code, isOperational)` → `ValidationError(400)`, `NotFoundError(404)`, `UnauthorizedError(401)`, `ForbiddenError(403)`, `ConflictError(409)`
+
+Centralized handler middleware:
+- `AppError` → return `{ error: { code, message, details? } }` with `statusCode`; expose only client-safe details
+- Unknown → log full stack, return 500 with `{ error: { code: 'INTERNAL_ERROR', message: 'Internal server error' } }` in production
+- Async wrapper: `const asyncHandler = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);`
+
+When mapping a third-party error to NestJS `HttpException`/`UnauthorizedException`, `RpcException`, or `WsException`, construct an explicit client-safe payload instead of passing the original `Error` as the response body. Enumerable HTTP-client config can expose credentials through the transport serializer. Keep the original as a server-side cause where supported, but do not log the raw HTTP-client error object, and keep the cause out of logger error serializers that walk `cause`: it carries the request config, including the `Authorization` header (axios `error.config.headers`), and common loggers and `util.inspect` walk its enumerable properties. Log the stack plus allowlisted fields (status, method, sanitized URL); logger `redact` paths are defense in depth, not the fix. Verify the installed adapter/filter with a fake credential in the error config; exposure varies by adapter and version. Preserve recognized transport control exceptions, such as `KafkaRetriableException`, before mapping error replies so redelivery still works.
+
+For custom transport callbacks, event listeners, and subscription handlers, establish the error boundary where the callback runs. Catch synchronous parsing or serialization failures there. Handle rejected promises when the SDK does not await the callback. An RxJS `catchError` upstream does not catch a throw from the final `subscribe` callback. Use the transport's error response, failed-message disposition, or bounded logging as appropriate. Verify that a malformed message and a rejected callback leave the process alive and the next valid message usable. Inspect framework-provided HTTP boundaries before adding another wrapper.
+
+For NestJS `@Sse()` routes through v12.1.2 (fixed in v12.1.3), event data that throws during serialization (such as BigInt or circular objects) leaves the stream hanging. Pre-serialize data inside the observable with `map` and `JSON.stringify` so failures enter its error path. Interceptor-set status and headers were dropped on Fastify; status was also ignored on Express. Even after the header/status fix, a header set after an `await` in an interceptor is still not sent on either adapter. Through v12.1.3, an error raised after an `@Sse()` route sends its headers bypasses exception filters: the raw `err.message` (SQL fragments, hostnames, file paths) goes to the client as an `error` event and is never logged, and a client that stops reading makes the server buffer events without limit. On those versions, `catchError` inside the observable, log the error server-side, and emit a generic event. From v12.2.0, non-HTTP failures receive "Internal server error" and failures other than `IntrinsicException` are logged. v12.2.0 still forwards an `http-errors` message when `expose: false`; keep safe observable-level error mapping until the installed implementation honors that flag. From v12.2.0, a backed-up client can be dropped past `maxPendingDataLength` (4M characters by default, set per route in the `@Sse()` options). v12.2.x checks the limit only when the observable emits, so a synchronous burst (such as replaying past events on connect) is queued in full before the first write backs up the stream and bypasses the limit. v12.3.0 also checks after each write, so a slow reader of a replay larger than the limit is now dropped; size the per-route limit to the largest replay, or set it to `0` or `Infinity` to keep every event.
+
+Codes: 400 bad input | 401 no auth | 403 no permission | 404 missing | 409 conflict | 422 business rule | 429 rate limited | 500 server fault
+
+
+## API Design
+
+**Contract-first**: define route schemas (Zod schemas, Fastify JSON Schema, or OpenAPI spec) before writing handler logic. The schema is the contract; implementation follows. Generate OpenAPI/Swagger docs from these schemas for interactive API documentation.
+
+- **Hyrum's Law awareness**: every observable response field, ordering, or timing becomes a dependency for callers. Use Zod schemas or Fastify response schemas to control exactly what's serialized; never return raw ORM objects or untyped objects from handlers.
+- **Addition over modification**: add new optional fields rather than changing or removing existing ones. Removing a field from a response schema breaks callers silently. Deprecate first (mark in OpenAPI spec), remove in a later version.
+- **Consistent error envelope**: all errors (validation, auth, not-found, application) must produce the same `{ error: { code, message, details? } }` structure. Centralize in the error handler middleware. Callers build error handling once; inconsistent errors force per-endpoint special cases.
+- **Boundary validation**: validate at the middleware/route handler level (Zod `.parse()` on request body/params, Fastify schema validation). Services and repositories trust that input was validated at entry, with no redundant checks scattered through business logic.
+- **Third-party responses are untrusted data**: validate shape and content of external API responses before using them in logic, rendering, or decision-making. A compromised or misbehaving service can return unexpected types, malicious content, or missing fields. Parse through a Zod schema before use.
+- **Resources**: plural nouns (`/users`), max 2 nesting levels (`/users/:id/orders`)
+- **Methods**: GET read | POST create | PUT replace | PATCH partial | DELETE remove
+- **Versioning**: URL path `/api/v1/`
+- **Response**: `{ data, pagination?: { page, limit, total, totalPages } }`
+- **Queries**: `?page=1&limit=20&status=active&sort=createdAt,desc`
+- Return `Location` header on 201. Use 204 for successful DELETE with no body.

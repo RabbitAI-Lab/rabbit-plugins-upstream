@@ -1,44 +1,57 @@
-## Description: <br>
-Wu Wei helps an agent coach users through situations where pushing harder is creating resistance, using a Daoist effortless-action lens to identify forcing, subtract friction, and act with the situation's natural dynamic. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides users to recognize counterproductive effort and choose actions that work with a situation's natural dynamics.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, managers, founders, coaches, and agents use this skill to analyze ambiguous coaching, management, product, negotiation, and personal-practice situations where increased effort is producing resistance. It guides the agent to distinguish necessary action from forcing, identify what to subtract, and propose an aligned next action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may steer ambiguous coaching or management conversations toward a subtractive, non-forcing interpretation. <br>
-Mitigation: Use it as a reflective framework and check whether the situation instead requires urgent intervention, domain-specific training, or concrete execution. <br>
-Risk: Users may misapply effortless action as inaction, avoidance, or a shortcut around skill development. <br>
-Mitigation: Require the agent to distinguish necessary action from forcing and to confirm that the underlying skill has been trained before recommending wu wei as the primary lens. <br>
+## Use Case:
 
+Individuals, managers, founders, and teams use this coaching aid to examine where extra effort is increasing resistance, identify what to stop or keep doing, and choose a practical next action. It guides one question at a time when the user needs help applying the method.
 
-## Reference(s): <br>
-- [Sources - wu-wei](references/sources.md) <br>
-- [Method in Action: Zhuangzi's Cook Ding, ~3rd century BCE](examples/zhuangzi-cook-ding-3rd-century-bce.md) <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/wu-wei) <br>
-- [deciqAI Wu Wei page](https://www.deciqai.com/c/wu-wei) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/wu-wei.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown coaching response or Wu Wei Analysis template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step clarification questions before producing the analysis when the user lacks a concrete case.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: release evidence) <br>
+Risk: Coaching examples could expose confidential or identifying details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Omit confidential and identifying details from recorded examples.
+
+Risk: The wu wei lens could be misapplied to a situation that needs immediate action or to a domain where the user has not trained the underlying skill.
+
+Mitigation: Check the fit conditions first; use active intervention for emergencies and treat wu wei as the product of deliberate practice.
+
+## Reference(s):
+
+- [Sources — Wu Wei](references/sources.md)
+- [Method in Action: Zhuangzi's Cook Ding](examples/zhuangzi-cook-ding-3rd-century-bce.md)
+- [Wu Wei skill page](https://www.deciqai.com/c/wu-wei)
+- [Machine-readable Wu Wei skill resource](https://www.deciqai.com/s/wu-wei.json)
+- [Knowledge Skills repository (link listed in the artifact)](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown analysis or stepwise coaching prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May pause after a question and wait for the user's response before continuing.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

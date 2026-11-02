@@ -1,41 +1,57 @@
-## Description: <br>
-Helps agents diagnose organization-size coordination problems using Dunbar's number and produce structured recommendations to split, formalize, or layer teams. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps teams diagnose coordination strain against Dunbar's group-size layers and choose organizational structures as headcount grows.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, operators, founders, and organizational-design advisors use this skill to evaluate whether headcount growth is causing coordination failures and to choose structural interventions such as splitting units, formalizing process, or adding management layers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Organizational recommendations may be over-applied as a substitute for business judgment. <br>
-Mitigation: Use the skill as a diagnostic framework and have responsible leaders validate recommendations against the organization's context before changing structure. <br>
+## Use Case:
 
+Employees and organizational leaders use this skill to assess whether coordination problems relate to team size and to plan when to split, formalize, or add management structure. It produces a structured diagnosis and suggested review thresholds for the organization's circumstances.
 
-## Reference(s): <br>
-- [Dunbar's Number ClawHub skill page](https://clawhub.ai/deciqai/skills/dunbars-number) <br>
-- [Primary sources](references/sources.md) <br>
-- [Dunbar 1992 + W.L. Gore & Associates example](examples/dunbar-1992-wl-gore-associates.md) <br>
-- [Scaling an AI-native startup team example](examples/ai-native-startup-scaling-2023-2026.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with a structured organizational analysis template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask follow-up questions before producing a diagnosis when the user is unfamiliar with the framework.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Headcount thresholds may not fit an organization's circumstances.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate suggested thresholds against the organization's structure and context before acting.
+
+Risk: Saved examples could expose sensitive employee details.
+
+Mitigation: Omit sensitive employee details when saving observed examples.
+
+## Reference(s):
+
+- [Sources cited by the skill](references/sources.md)
+- [Dunbar and W.L. Gore example](examples/dunbar-1992-wl-gore-associates.md)
+- [AI-native startup scaling example](examples/ai-native-startup-scaling-2023-2026.md)
+- [Dunbar's Number on ClawHub](https://clawhub.ai/deciqai/skills/dunbars-number)
+- [Dunbar's Number skill information](https://www.deciqai.com/s/dunbars-number.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown with a structured organizational analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the user's headcount and coordination context; recommendations are planning guidance.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

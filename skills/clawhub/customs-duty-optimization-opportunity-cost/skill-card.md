@@ -1,42 +1,55 @@
-## Description: <br>
-Helps agents evaluate whether recurring customs duty spend could be reduced or deferred through lawful programs such as FTZs, duty drawback, first-sale valuation, bonded warehouses, or FTAs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps importers assess potential customs duty savings across drawback, FTZ, first-sale valuation, bonded warehouse, and free trade agreement options.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Customs teams, brokers, advisors, and enterprise importers use this skill to structure opportunity-cost analysis for duty optimization, shortlist applicable programs, and size net savings against setup and administrative cost. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States-focused; adapt only with qualified local customs review. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can influence customs, legal, and financial decisions. <br>
-Mitigation: Use it to structure analysis only, then verify eligibility, documentation, and savings assumptions with qualified customs counsel, brokers, or CBP guidance before acting. <br>
-Risk: Duty optimization programs can have strict eligibility and documentation requirements. <br>
-Mitigation: Confirm that each candidate program has feasible supporting documentation and that setup and administrative costs are weighed against expected savings. <br>
+## Use Case:
 
+Importers with recurring, material U.S. duty spend, along with customs brokers or advisers, use this skill to compare duty drawback, FTZ, first-sale valuation, bonded warehousing, and FTA options against the status quo and setup costs. It supports program screening and savings analysis; verify eligibility and savings with a qualified customs adviser before acting.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/customs-duty-optimization-opportunity-cost) <br>
-- [deciqAI skill overview](https://www.deciqai.com/c/customs-duty-optimization-opportunity-cost) <br>
-- [deciqAI machine-readable metadata](https://www.deciqai.com/s/customs-duty-optimization-opportunity-cost.json) <br>
+### Deployment Geography for Use:
 
+United States
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown advisory analysis with checklists and program-fit recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only; no code execution, tool use, persistence, or data collection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Program eligibility or estimated savings may not be reliable for a specific importer.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify program eligibility and savings with a qualified customs adviser before acting.
+
+Risk: Sharing unnecessary business information could expose sensitive details.
+
+Mitigation: Share only the business information needed for analysis.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/customs-duty-optimization-opportunity-cost)
+- [Customs duty optimization overview](https://www.deciqai.com/c/customs-duty-optimization-opportunity-cost)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/customs-duty-optimization-opportunity-cost.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Text]
+
+**Output Format:** [Structured text or Markdown with program comparisons and a verification checklist]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Planning aid; eligibility and savings require qualified review.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

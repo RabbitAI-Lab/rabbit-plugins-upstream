@@ -6,7 +6,7 @@ description: >-
   agent-bom inventory JSON, and scan it without giving agent-bom long-lived
   Snowflake credentials. Use when a user asks to inventory Snowflake AI or
   Cortex infrastructure as canonical inventory.
-version: 0.98.0
+version: 0.112.1
 license: Apache-2.0
 compatibility: >-
   Requires Python 3.11+, agent-bom installed with the snowflake extra, and
@@ -14,8 +14,8 @@ compatibility: >-
   key-pair auth over passwords.
 metadata:
   author: msaad00
-  homepage: https://github.com/msaad00/agent-bom
-  source: https://github.com/msaad00/agent-bom
+  homepage: https://github.com/koda-ai-studio/agent-bom
+  source: https://github.com/koda-ai-studio/agent-bom
   pypi: https://pypi.org/project/agent-bom/
   openclaw:
     requires:
@@ -39,8 +39,8 @@ metadata:
       - snow
       - snowsql
     emoji: "search"
-    homepage: https://github.com/msaad00/agent-bom
-    source: https://github.com/msaad00/agent-bom
+    homepage: https://github.com/koda-ai-studio/agent-bom
+    source: https://github.com/koda-ai-studio/agent-bom
     license: Apache-2.0
     os:
       - darwin

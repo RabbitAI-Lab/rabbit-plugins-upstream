@@ -1,42 +1,56 @@
-## Description: <br>
-用于小红书博主数据、小红书博主信息、账号资料、达人画像、主页信息和粉丝规模查询，覆盖 Xiaohongshu / XHS / RedNote creator profiles，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill retrieves Xiaohongshu (XHS/RedNote) creator profile information, including account details, creator positioning, and follower scale.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Social media analysts, marketers, and researchers use this skill to look up Xiaohongshu creator profile facts, such as account details and audience size. It can retrieve a profile by creator ID or profile link and report available fields separately from strategic interpretation.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The API key could be exposed through prompts, logs, or other local files.
+
+Mitigation: Keep SOCIALDATAX_API_KEY in protected environment configuration and do not include its value in prompts or logs.
+
+Risk: The external package can change between runs, and its documented read-only behavior does not technically limit local permissions.
+
+Mitigation: Use a reviewed fixed package version and inspect it before execution; limit its local permissions to what the task needs.
+
+Risk: Profile queries use an external service and may consume paid credits.
+
+Mitigation: Check expected usage and available credits before running repeated or broad profile lookups.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External users and agents use this skill to look up Xiaohongshu / XHS / RedNote creator profile facts through SocialDataX, including account basics, creator positioning, audience scale, and profile metadata. It is intended for read-only profile information retrieval using the user's SocialDataX API key. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [JSON, Text]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends lookup requests through the SocialDataX npm package using the user's SOCIALDATAX_API_KEY. <br>
-Mitigation: Install only if you trust the SocialDataX package and provide only an API key intended for these read-only lookups. <br>
-Risk: API errors, malformed profile links, or insufficient account balance can prevent profile data retrieval. <br>
-Mitigation: Check the API key, request parameters, and returned error message; avoid repeated retries on insufficient-balance errors and use the recharge URL returned by the service. <br>
+**Output Format:** [JSON profile data with a concise text summary]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-xhs-creator-profile) <br>
-- [SocialDataX API access page](https://socialdatax.com/ai?from=clawhub) <br>
-- [Publisher profile](https://clawhub.ai/user/devinchen2014) <br>
+**Other Properties Related to Output:** [Available fields depend on the profile data returned by the external service.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, API calls] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY and node/npm; reports available creator profile fields while separating profile facts from strategic interpretation.] <br>
+0.1.17 (source: server-resolved release evidence)
 
-## Skill Version(s): <br>
-0.1.14 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,58 @@
-## Description: <br>
-Generate multilingual, highly natural audio using Gemini 2.5 text-to-speech. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate multilingual, highly natural audio using Gemini 2.5 text-to-speech.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to generate Chinese or English text-to-speech audio through the dLazy CLI, choosing a prompt and voice for cloud generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected local media paths may be processed by dLazy's hosted API and media storage. <br>
-Mitigation: Use only prompts and files appropriate for third-party cloud processing, and confirm the user intends to send them before invocation. <br>
-Risk: The dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Prefer per-invocation environment variables for temporary use, keep local config permissions restricted, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: The skill documentation shows an output schema mismatch for this text-to-speech workflow. <br>
-Mitigation: Inspect the actual CLI JSON response at runtime before downstream processing and avoid assuming the documented image-oriented example is authoritative. <br>
+## Use Case:
 
+Developers and content creators use this skill to turn text prompts into spoken audio with Gemini 2.5, choosing Chinese or English and a voice option.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-gemini-2-5-tts) <br>
-- [Publisher profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI homepage from skill metadata](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package from skill metadata](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands; command responses are JSON containing hosted generation result URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; prompts are sent to api.dlazy.com and generated assets are hosted on files.dlazy.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.3 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and submitted media are sent to dLazy for cloud processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Send only text and files you are comfortable sharing with dLazy, and review its privacy terms.
+
+Risk: The dLazy API key is saved in local CLI configuration or supplied through the environment.
+
+Mitigation: Protect the saved organization API key and rotate or revoke it if exposed.
+
+Risk: Speech generation consumes account credits, and the external CLI and hosted service are not covered by the skill-instruction assessment.
+
+Mitigation: Review credit costs and service terms, use the CLI dry-run estimate when useful, and review the external CLI before installing it.
+
+## Reference(s):
+
+- [dLazy CLI project page](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Audio files, API response metadata]
+
+**Output Format:** [Generated speech audio with result URLs and task metadata returned by the CLI]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The prompt, selected voice language, and voice determine the generated speech; result URLs are hosted by dLazy.]
+
+## Skill Version(s):
+
+1.3.35 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

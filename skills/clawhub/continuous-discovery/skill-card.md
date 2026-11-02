@@ -1,42 +1,51 @@
-## Description: <br>
-Guides product teams in replacing opinion-driven roadmap decisions with weekly customer touchpoints, opportunity solution trees, and cheap assumption tests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps product teams build a weekly customer discovery habit and use opportunity solution trees to test product decisions.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Product managers, designers, engineers, and product teams use this skill to establish a continuous discovery habit, map opportunity trees, and test assumptions before committing roadmap work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: External publisher links may change outside the ClawHub release evidence. <br>
-Mitigation: Treat those links as publisher references and review them before relying on their contents. <br>
-Risk: Product discovery guidance can be misapplied to teams without an existing product or users. <br>
-Mitigation: Confirm the skill's activation conditions before using it to guide roadmap decisions. <br>
+## Use Case:
 
+Product managers, designers, and engineers use this framework to connect weekly customer interviews to a measurable product outcome, map customer needs, and test assumptions before building.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/continuous-discovery) <br>
-- [deciqAI continuous discovery page](https://www.deciqai.com/c/continuous-discovery) <br>
-- [deciqAI continuous discovery metadata](https://www.deciqai.com/s/continuous-discovery.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown guidance with process steps, red flags, and verification checklist items] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No tool calls, scripts, credentials, or system access requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Applying interview advice may involve sharing customer information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Choose what customer information to share and follow your organization's privacy practices.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/continuous-discovery)
+- [deciqAI skill guide](https://www.deciqai.com/c/continuous-discovery)
+- [Machine-readable skill information](https://www.deciqai.com/s/continuous-discovery.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

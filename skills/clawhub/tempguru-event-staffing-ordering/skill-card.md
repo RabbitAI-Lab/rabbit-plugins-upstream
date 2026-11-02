@@ -1,44 +1,51 @@
-## Description: <br>
-Order temporary event staff for events in US and Canadian markets through TempGuru, including requirement gathering, coverage, rate and compliance lookups, budget planning, and confirmed quote request submission. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Plans temporary W-2 event staffing in the United States and Canada and prepares a buyer-operated quote request for coordinator review.
 
-## Publisher: <br>
-[kissmyabs32](https://clawhub.ai/user/kissmyabs32) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kissmyabs32](https://clawhub.ai/user/kissmyabs32)
 
-## Use Case: <br>
-External users and event planners use this skill to plan temporary W-2 staffing for conventions, trade shows, festivals, concerts, sporting events, corporate gatherings, brand activations, and multi-city programs. It helps gather event details, estimate rates, check availability and compliance, and submit a human-reviewed quote request after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States and Canada <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Quote submission may send contact, company, event, role, headcount, and scheduling details to TempGuru for follow-up. <br>
-Mitigation: Confirm the user intends to create a quote or lead before submission, and send only the information needed for the staffing request. <br>
-Risk: Planning rate ranges or lead-time guidance could be mistaken for a final quote, reservation, or availability guarantee. <br>
-Mitigation: Label estimates clearly, state that final pricing and availability come from TempGuru review, and submit a quote request only after user confirmation. <br>
+## Use Case:
 
+Event organizers and buyers use this skill to plan temporary event staffing, estimate rates, and prepare a quote request for their own review and submission.
 
-## Reference(s): <br>
-- [TempGuru MCP endpoint](https://mcp.tempguru.co/mcp) <br>
-- [TempGuru machine-readable site overview](https://tempguru.co/llms.txt) <br>
-- [TempGuru city staffing guides](https://tempguru.co/insights/{city}-event-staffing) <br>
-- [TempGuru role staffing guides](https://tempguru.co/insights/{roles}-in-{city}) <br>
-- [ClawHub skill page](https://clawhub.ai/kissmyabs32/skills/tempguru-event-staffing-ordering) <br>
+### Deployment Geography for Use:
 
+United States and Canada
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown responses with structured staffing plans, rate ranges, compliance notes, and quote-request confirmations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call a TempGuru MCP server for coverage, pricing, availability, compliance, benchmarks, and opt-in quote submission.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Planning sends event requirements to TempGuru, which may retain a non-PII plan snapshot for 30 days, including before a quote is requested.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only event details you are comfortable sending to the vendor, then review the prefilled form and enter contact information yourself before submitting.
+
+## Reference(s):
+
+- [TempGuru MCP server](https://mcp.tempguru.co/mcp?source=openai-codex)
+- [TempGuru machine-readable service overview](https://tempguru.co/llms.txt)
+- [TempGuru Event Staffing Planner GPT](https://chatgpt.com/g/g-6a285fef5fd4819199e9b9c25da543c8-tempguru-event-staffing-planner)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown staffing plans with rate estimates, lead-time guidance, compliance notes, and a buyer-operated quote form link]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Rates and availability are planning guidance; the vendor confirms the specific order and quote.]
+
+## Skill Version(s):
+
+1.7.3 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

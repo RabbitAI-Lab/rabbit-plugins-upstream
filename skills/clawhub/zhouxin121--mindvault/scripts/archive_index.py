@@ -1,24 +1,25 @@
 #!/usr/bin/env python3
-"""MindVault 基础版 — _index.json 管理工具
+"""MindVault — _index.json 管理工具（基础版 · 免费）
 
 基础版命令：stats, pending
-赞赏版命令：mark, search, summary → https://pay.ldxp.cn/item/p0r2lb
-
+更多命令（mark / search / summary）需按版本核对，对照表见https://www.jinengpu.chat/mindvault-detail.html
 
 子命令：
   stats      — 统计：文件数 / 总条目 / 轮次 / processed 比例
   pending    — 列出 processed=false 的文件
-  mark       — 将指定文件标记为 processed=true
-  search     — 按日期/轮次范围搜索文件
-  summary    — 输出 JSON 摘要（供 Agent 消费）
+  mark       — （赞赏版）将指定文件标记为 processed=true，写入前做 if_version 读前校验
+  search     — （赞赏版）按日期/轮次范围搜索文件
+  summary    — （赞赏版）输出 JSON 摘要（供 Agent 消费）
 
-用法：
+写入纪律（B9/B15，适用于写入类操作）：
+  - 写入类操作（mark）必须先确认 _index.json 存在（不存在即异常），
+    禁止在索引缺失时静默创建或静默返回空。
+  - 每次写索引 index_version +1，作为乐观版本令牌；
+    并发/多端写入前应先读取并核对 version，避免覆盖他人写入。
+
+用法（基础版）：
   python archive_index.py <archive_dir> stats
   python archive_index.py <archive_dir> pending
-  python archive_index.py <archive_dir> mark "chat_20260703_rounds-16-30.jsonl"
-  python archive_index.py <archive_dir> search 2026-07-03
-  python archive_index.py <archive_dir> search --rounds 20-40
-  python archive_index.py <archive_dir> summary
 """
 
 import json
@@ -26,6 +27,24 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
+
+
+def parse_rounds(f: dict):
+    """从归档文件条目解析轮次区间，返回 (start, end) 或 None。
+
+    兼容 archive_export 实际写入的 rounds 字符串（如 "16-30"），
+    并向后兼容的 round_start / round_end 数字字段。
+    """
+    rs = f.get("rounds")
+    if rs and isinstance(rs, str) and "-" in rs:
+        try:
+            a, b = rs.split("-")
+            return int(a), int(b)
+        except ValueError:
+            pass
+    if "round_start" in f or "round_end" in f:
+        return int(f.get("round_start", 0) or 0), int(f.get("round_end", 0) or 0)
+    return None
 
 
 def load_index(index_dir: str) -> dict:
@@ -55,7 +74,8 @@ def cmd_stats(index_dir: str):
     files = idx.get("files", [])
     total_entries = sum(f.get("entries", 0) for f in files)
     total_rounds = sum(f.get("round_count", f.get("entries", 0)) for f in files)
-    total_msgs = sum(f.get("total_messages", 0) or 0 for f in files)
+    # 消息数 = 每条 JSONL 记录（entries）即为一条消息；兼容旧 total_messages 字段
+    total_msgs = sum(f.get("total_messages", 0) or f.get("entries", 0) for f in files)
     processed = sum(1 for f in files if f.get("processed", False))
     pending = len(files) - processed
 
@@ -79,14 +99,33 @@ def cmd_pending(index_dir: str):
     if len(pending) >= 5:
         print("⚠️  积压严重，建议执行进化引擎。")
     for f in pending:
-        print(f"  - {f.get('file', '?')}  (rounds: {f.get('round_count', f.get('entries', '?'))}, "
-              f"messages: {f.get('total_messages', '?')}, "
+        rr = parse_rounds(f)
+        rng = f"{rr[0]:04d}-{rr[1]:04d}" if rr else f.get('rounds', '?')
+        print(f"  - {f.get('file', '?')}  (rounds: {rng}, "
+              f"round_count: {f.get('round_count', '?')}, "
+              f"messages: {f.get('entries', '?')}, "
               f"date: {f.get('date', '?')})")
 
 
-def cmd_mark(index_dir: str, filename: str):
+def cmd_mark(index_dir: str, filename: str, expect_version: int = None):
+    """标记文件为 processed（B9 乐观版本令牌 + B15 不存在即异常）。
+
+    expect_version：调用方在读取索引后携带的版本号；若与当前索引 version
+    不一致，说明索引在你读取之后被其他端修改过，拒绝写入以避免覆盖。
+    """
     idx = load_index(index_dir)
+    if not idx:
+        print(f"错误：未找到 _index.json（{index_dir}）——索引缺失时禁止静默写入。")
+        sys.exit(1)
     files = idx.get("files", [])
+    if not files:
+        print("错误：_index.json 缺少 files 列表，索引结构异常。")
+        sys.exit(1)
+    current_version = idx.get("index_version", 0)
+    if expect_version is not None and current_version != expect_version:
+        print(f"冲突：索引版本已变化（期望 {expect_version}，当前 {current_version}）。"
+              f"请重新读取索引核对后再写入，避免覆盖其他端的修改。")
+        sys.exit(1)
     found = False
     for f in files:
         if f.get("file") == filename:
@@ -98,8 +137,9 @@ def cmd_mark(index_dir: str, filename: str):
         print(f"错误：未找到文件 '{filename}'")
         sys.exit(1)
     idx["files"] = files
+    idx["index_version"] = current_version + 1
     save_index(index_dir, idx)
-    print(f"已标记: {filename}")
+    print(f"已标记: {filename}  (index_version {current_version} -> {idx['index_version']})")
 
 
 def cmd_search(index_dir: str, date_str: str = None, rounds_range: str = None):
@@ -117,19 +157,28 @@ def cmd_search(index_dir: str, date_str: str = None, rounds_range: str = None):
         except ValueError:
             print("错误：rounds 范围格式应为 '20-40'")
             sys.exit(1)
-        results = [
-            f for f in results
-            if lo <= f.get("round_start", 0) <= hi
-            or lo <= f.get("round_end", 0) <= hi
-        ]
+        # 解析 export 写入的 rounds 字符串（rounds: "16-30"）
+        # P1-2 修复：区间重叠判定应为 `s <= hi and e >= lo`（含完全包含场景），
+        # 旧版 `lo <= s <= hi or lo <= e <= hi` 漏掉「目标区间完全覆盖文件区间」的情形。
+        matched = []
+        for f in results:
+            rr = parse_rounds(f)
+            if rr is None:
+                continue
+            s, e = rr
+            if s <= hi and e >= lo:
+                matched.append(f)
+        results = matched
 
     if not results:
         print("无匹配结果。")
         return
     for f in results:
+        rr = parse_rounds(f)
+        rng = f"{rr[0]:04d}-{rr[1]:04d}" if rr else f.get('rounds', '?')
         print(f"{f.get('file', '?')}  date={f.get('date','?')} "
-              f"rounds=[{f.get('round_start','?')}-{f.get('round_end','?')}] "
-              f"entries={f.get('entries','?')}  msgs={f.get('total_messages','?')} "
+              f"rounds=[{rng}] "
+              f"entries={f.get('entries','?')}  msgs={f.get('entries','?')}  "
               f"processed={f.get('processed',False)}")
 
 
@@ -139,7 +188,7 @@ def cmd_summary(index_dir: str):
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "file_count": len(idx.get("files", [])),
         "total_entries": sum(f.get("entries", 0) for f in idx.get("files", [])),
-        "total_messages": sum(f.get("total_messages", 0) or 0 for f in idx.get("files", [])),
+        "total_messages": sum(f.get("total_messages", 0) or f.get("entries", 0) for f in idx.get("files", [])),
         "processed_count": sum(1 for f in idx.get("files", []) if f.get("processed", False)),
         "pending_count": sum(1 for f in idx.get("files", []) if not f.get("processed", False)),
         "date_range": {
@@ -167,20 +216,13 @@ if __name__ == "__main__":
     elif cmd == "pending":
         cmd_pending(index_dir)
     elif cmd == "mark":
-        if not args:
-            print("用法: archive_index.py <dir> mark <filename>")
-            sys.exit(1)
-        print("🚫 赞赏版功能：mark。基础版支持 stats 和 pending。\n获取完整版：https://pay.ldxp.cn/item/p0r2lb")
+        print("mark 需按版本核对（对照表见https://www.jinengpu.chat/mindvault-detail.html）；本包开放 stats / pending")
         sys.exit(1)
     elif cmd == "search":
-        date_str = args[0] if args else None
-        rounds_range = None
-        if len(args) >= 2 and args[0] == "--rounds":
-            rounds_range = args[1]
-        print("🚫 赞赏版功能：search。基础版支持 stats 和 pending。\n获取完整版：https://pay.ldxp.cn/item/p0r2lb")
+        print("search 需按版本核对（对照表见https://www.jinengpu.chat/mindvault-detail.html）；本包开放 stats / pending")
         sys.exit(1)
     elif cmd == "summary":
-        print("🚫 赞赏版功能：summary。基础版支持 stats 和 pending。\n获取完整版：https://pay.ldxp.cn/item/p0r2lb")
+        print("summary 需按版本核对（对照表见https://www.jinengpu.chat/mindvault-detail.html）；本包开放 stats / pending")
         sys.exit(1)
     else:
         print(f"未知子命令: {cmd}")

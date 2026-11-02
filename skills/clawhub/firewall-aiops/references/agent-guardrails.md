@@ -30,15 +30,22 @@ What the tool *does* guarantee is that you can always see what happened:
 |---|---|
 | "Never restart the web GUI / lock yourself out" | **Already enforced.** `restart_service` refuses the daemon serving this appliance's own API (`nginx`, `lighttpd`, `configd`, `webgui`, ...), and `apply_changes` / `reconfigure` refuse a staged rule set that would provably cut management access. Both are exact and fail open — see `capabilities.md`. Do not spend prompt budget on it. |
 | "Don't invent a value when a field is missing" | OPNsense and pfSense populate different keys for the same concept. A field neither platform returned comes back as `null`, never as `""`. Absent and empty are distinguishable in the payload. |
-| "Tell me if the output was cut off" | `firewall_log`, `states_table` and `top_talkers` return `{"entries": [...], "returned": N, "limit": L, "truncated": true/false}`. Truncation is measured, not guessed from a length coincidence. |
-| "Preserve the ordering / tell me what's most urgent" | The RCA tools (`gateway_health_rca`, `rule_hit_and_shadow_analysis`, `blocked_traffic_rca`) return findings with the measured numbers attached, worst-first. Priority is in the payload, not implied by list position. |
-| "Confirm before anything destructive" | Write operations require a `--dry-run`-able preview plus double confirmation at the CLI. |
+| "Tell me if the output was cut off" | `firewall_log`, `states_table` and `top_talkers` all return `{"<items>": [...], "returned": N, "limit": L, "truncated": true/false}` — the list key is `entries`, `states` and `topTalkers` respectively. Truncation is measured, not guessed from a length coincidence. |
+| "Make it show the number it judged on" | Gateway and blocked-source entries carry the numbers they were judged on — `lossPercent` and `rttMs` for a gateway (`lossPct`/`latencyMs` are the *thresholds* they were compared against, reported separately under `thresholds`), `hits`, `distinctPorts` and `topPort` for a blocked source — so those claims can be checked against a figure. `blocked_traffic_rca` orders `topSources` by `hits`, which is in the payload. Rule findings are qualitative: they carry `uuid`, `description`, `interface`, `shadowedBy`/`duplicateOf` and no count, because the hit counter they would be judged on is not always available — `hitCountersUnavailable` says whether it was. |
+| "Confirm before anything destructive" | Every write takes `dry_run=True` for a preview that runs the same guards as the real call. ⚠️ **The double confirmation is a CLI feature, and only `toggle_rule` and `undo apply` have CLI commands** — `apply_changes`, `reconfigure`, `reboot`, `restart_service`, `kill_states`, `add_alias_entry` and `remove_alias_entry` are reachable only over MCP, where nothing prompts. Keep your own confirmation for those. |
 | "Log what you did" | Every governed call is audited to `~/.firewall-aiops/audit.db` regardless of what the model says it did. |
 
 ## What still needs a prompt
 
 These are model-behaviour problems the harness cannot fix from the outside.
-Copy this into your agent's system prompt:
+
+⚠️ **Only one of the three orderings can be checked from the output.** `blocked_traffic_rca`
+sorts `topSources` by `hits`, and `hits` is returned — that order is verifiable.
+`gateway_health_rca` sorts on an internal score that is dropped before the payload is
+returned, so its order cannot be rechecked; and `rule_hit_and_shadow_analysis` does not order
+its output at all. No entry from these three carries a `rank` or a `severity`.
+
+Recommended setup for a local model (adapt it to your agent client):
 
 ```text
 You operate an OPNsense or pfSense firewall through the firewall-aiops MCP tools.
@@ -55,6 +62,10 @@ READING RESULTS
 - Read the whole result before concluding. If a result contains a "truncated"
   field that is true, say so and re-run with a higher limit instead of treating
   the partial result as complete.
+- Of the three RCAs, only `blocked_traffic_rca`'s order is checkable (by `hits`). Do not read
+  priority off the position of a gateway finding, and do not look for a number on a rule
+  finding — there is none; read `hitCountersUnavailable` to see whether "never hit" was even
+  measurable.
 - A null field means neither platform returned that value. Report it as "not
   available" — never infer it. In particular, a rule with a null "interface" is
   not a rule on an interface named "none".
@@ -62,6 +73,10 @@ READING RESULTS
   rule actions, gateway statuses, or interface names.
 - A gateway whose status is "none" is unmonitored, not down. A gateway with no
   status field at all is unknown — say so rather than calling it healthy.
+
+- Only `toggle_rule` has a CLI command. `apply_changes`, `reconfigure`, `reboot`,
+  `restart_service`, `kill_states` and the alias writes are MCP-only and nothing will ask
+  you to confirm them: call with `dry_run=True` first and wait for an explicit go-ahead.
 
 SCOPE
 - Separate observation from interpretation. State what the tools returned, then

@@ -24,8 +24,13 @@ CACHE_TTL   = 3600  # 60 min
 def _load_config():
     if not CONFIG_PATH.exists():
         return {}
-    try: return json.loads(CONFIG_PATH.read_text())
-    except Exception: return {}
+    try:
+        cfg = json.loads(CONFIG_PATH.read_text())
+    except Exception:
+        return {}
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base(cfg)
+    return cfg
 
 
 def _http_get(url, beak_key):

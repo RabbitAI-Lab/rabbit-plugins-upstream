@@ -42,13 +42,24 @@ ALLOWED_FIELDS = {
     'notify_parent_on':     'list[str]',
     'shared_files':         'list[str]',
     'muted_until':          'int',  # epoch seconds; 0 = unmuted (added 2026-05-17)
+    # 0.8.9 [LANE-089] — auto_respond/auto_reply were missing here, so an owner
+    # could only change them in the Mission Control web UI. The SERVER already
+    # accepts both (_PERMISSION_ALLOWED_FIELDS derives from
+    # _DEFAULT_PERMISSIONS.keys()); this was purely a client-side gap. Default
+    # stays True per v751 canon ("the connection bond IS the consent") — this
+    # adds the off switch, it does not change the default.
+    'auto_respond':         'bool (true|false)',
+    'auto_reply':           'bool (true|false)',
 }
 
 def load_config():
     if not CONFIG_PATH.exists():
         print('ERROR: No Space Duck config found. Run setup.py first.')
         sys.exit(1)
-    return json.loads(CONFIG_PATH.read_text())
+    cfg = json.loads(CONFIG_PATH.read_text())
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base(cfg)
+    return cfg
 
 def _headers(cfg):
     h = {'Content-Type': 'application/json',
@@ -149,6 +160,18 @@ def _parse_set(pairs):
                 out[k] = float(v)
             elif kind.startswith('list'):
                 out[k] = [s.strip() for s in v.split(',') if s.strip()]
+            elif kind.startswith('bool'):
+                # 0.8.9 — without this branch `auto_respond=false` would ship the
+                # STRING "false", which is truthy server-side: the off switch
+                # would silently do nothing. Reject anything ambiguous rather
+                # than guess at a value that gates auto-reply.
+                lv = v.strip().lower()
+                if lv in ('true', '1', 'yes', 'on'):
+                    out[k] = True
+                elif lv in ('false', '0', 'no', 'off'):
+                    out[k] = False
+                else:
+                    print(f'ERROR: {k} must be true or false, got "{v}"'); sys.exit(1)
             else:
                 out[k] = v
         except ValueError:

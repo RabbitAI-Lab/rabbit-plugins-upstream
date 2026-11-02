@@ -1,0 +1,106 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "get_market_snapshot",
+      "description": "获取单个期货合约的实时行情快照（读 Redis 缓存）。返回最新价 lastPrice、今开 openPrice、最高 highestPrice、最低 lowestPrice、买一/卖一价量 bidPrice1/bidVolume1/askPrice1/askVolume1、昨结算 preSettlementPrice、今结算 settlementPrice、交易日 tradingDay、更新时间 updateTime，以及合约乘数 volumeMultiple（算盈亏必须用它）与最小变动价位 priceTick。**本接口不返回涨停价/跌停价，也不返回成交量与持仓量**——要涨跌停去查 get_contract_detail，缺什么就说缺什么，不要编造。除 volumeMultiple 是整数外**价格与量都是字符串**，算术前先转数字。priceTick 可能为 null。仅读缓存不回源：缓存缺失时字段为 null，**null 表示这一刻没缓存，不代表合约停牌或不存在**。 【不要用它盯盘】禁止为了等一个触发价而循环/定时/sleep 后重查本工具。带触发条件的需求（跌到 X 就买、涨到 Y 就平、帮我盯着、设止损）一律建云单：开仓/平仓条件用 create_cloud_condition_order，已有持仓的止盈止损用 create_cloud_stop_profit_loss，由服务端 cloud-ctp 7×24 盯行情自动报单。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "instrumentId": {
+            "type": "string",
+            "description": "合约代码，如 'au2606'、'cu2506'。与 contractCode 二选一，优先 instrumentId。"
+          },
+          "contractCode": {
+            "type": "string",
+            "description": "合约代码的别名，与 instrumentId 等价；两个都不传会报参数错误并指引你先调 get_hot_contracts。"
+          }
+        },
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_market_snapshots",
+      "description": "批量获取多个合约的行情快照。instrumentIds 用英文逗号分隔，建议一次不超过 20 个；返回数组顺序与传入顺序一致，每条结构与 get_market_snapshot 完全相同（同样不含涨跌停与持仓量）。 【不要用它盯盘】禁止为了等一个触发价而循环/定时/sleep 后重查本工具。带触发条件的需求（跌到 X 就买、涨到 Y 就平、帮我盯着、设止损）一律建云单：开仓/平仓条件用 create_cloud_condition_order，已有持仓的止盈止损用 create_cloud_stop_profit_loss，由服务端 cloud-ctp 7×24 盯行情自动报单。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "instrumentIds": {
+            "type": "string",
+            "description": "逗号分隔的合约代码，如 'au2606,ag2612,cu2506'。建议最多 20 个。"
+          }
+        },
+        "required": [
+          "instrumentIds"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_tick_data",
+      "description": "获取期货合约今日分时图数据（每分钟一条 tick），包含价格、成交量、持仓量、成交额。用于盘中价格走势分析。 返回 ticks 数组，每条 {t,p,v,i,a}：t=**毫秒**时间戳字符串（13 位，按秒解析会算出五万年后的日期，要先除以 1000）、p=价格、v=该分钟成交量、i=持仓量；**a 恒为 \"0\"**（服务端在分时路径上从未赋值，不要当成交额用）。外层 startTime/endTime/closeTime/totalVolume/reqTime，其中 reqTime 是**秒**——与数组里的毫秒 t 单位不同，别混用。 【不要用它盯盘】禁止为了等一个触发价而循环/定时/sleep 后重查本工具。带触发条件的需求（跌到 X 就买、涨到 Y 就平、帮我盯着、设止损）一律建云单：开仓/平仓条件用 create_cloud_condition_order，已有持仓的止盈止损用 create_cloud_stop_profit_loss，由服务端 cloud-ctp 7×24 盯行情自动报单。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "exchangeId": {
+            "type": "string",
+            "description": "可选。交易所代码，如 'SHFE'、'DCE'、'CZCE'、'INE'、'CFFEX'、'GFEX'。**不确定就不要传**——服务端会按合约代码自动解析交易所；自己猜一个错的交易所会拿到空数据，而空数据很容易被误读成「这个合约没有行情」。要确认交易所请调 get_contract_detail。"
+          },
+          "instrumentId": {
+            "type": "string",
+            "description": "合约代码，如 'au2606'、'cu2506'。与 contractCode 二选一，优先 instrumentId。"
+          },
+          "contractCode": {
+            "type": "string",
+            "description": "合约代码的别名，与 instrumentId 等价。"
+          }
+        },
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_kline_data",
+      "description": "获取期货合约 K 线（蜡烛图/OHLC）数据，用于技术分析。返回开高低收、成交量、成交额、持仓量、结算价（仅日K线）。数组从旧到新排列（chats 字段）。下单前可调用此接口分析趋势。 返回 chats 数组，每条 {t,o,h,l,c,v,a,u,i,s}：t=格式化时间标签（分钟线 MM-dd HH:mm，日/周线 yyyy-MM-dd）、o/h/l/c=开高低收、v=成交量、u=**秒**级时间戳（排序计算用它，不要解析 t）、i=持仓量、s=结算价（**只有 type=6 日线才赋值**，其余周期为 null，不要当 0）；**a 恒为 \"0\"**（服务端从未赋值，不要当成交额用）。除 u 是数字外其余都是字符串，算术前先转数字。 【不要用它盯盘】禁止为了等一个触发价而循环/定时/sleep 后重查本工具。带触发条件的需求（跌到 X 就买、涨到 Y 就平、帮我盯着、设止损）一律建云单：开仓/平仓条件用 create_cloud_condition_order，已有持仓的止盈止损用 create_cloud_stop_profit_loss，由服务端 cloud-ctp 7×24 盯行情自动报单。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "exchangeId": {
+            "type": "string",
+            "description": "可选。交易所代码，如 'SHFE'、'DCE'、'CZCE'、'INE'、'CFFEX'、'GFEX'。**不确定就不要传**——服务端会按合约代码自动解析交易所；自己猜一个错的交易所会拿到空数据，而空数据很容易被误读成「这个合约没有行情」。要确认交易所请调 get_contract_detail。"
+          },
+          "instrumentId": {
+            "type": "string",
+            "description": "合约代码，如 'au2606'、'cu2506'。与 contractCode 二选一，优先 instrumentId。"
+          },
+          "type": {
+            "type": "integer",
+            "enum": [
+              10,
+              2,
+              3,
+              4,
+              5,
+              9,
+              6,
+              7
+            ],
+            "description": "K 线周期，只接受这 8 个值：10=1分钟，2=5分钟，3=15分钟，4=30分钟，5=1小时，9=4小时，6=日线，7=周线。不传默认 10（1分钟）。**没有月线，也没有 1/8 这样的值**，传其它数字拿不到数据——不要按「1=1分钟」之类的直觉推。"
+          },
+          "contractCode": {
+            "type": "string",
+            "description": "合约代码的别名，与 instrumentId 等价。"
+          }
+        },
+        "required": []
+      }
+    }
+  }
+]

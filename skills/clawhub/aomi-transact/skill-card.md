@@ -1,52 +1,61 @@
-## Description: <br>
-Transact helps agents use the Aomi CLI to turn natural-language crypto and DeFi requests into reviewed, simulated, wallet-signed transactions across supported EVM and Solana flows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fund, review, execute, and reconcile user-authorized Aomi payment Commits.
 
-## Publisher: <br>
-[ceciliaz030](https://clawhub.ai/user/ceciliaz030) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ceciliaz030](https://clawhub.ai/user/ceciliaz030)
 
-## Use Case: <br>
-Developers and external agent users use this skill to inspect balances and quotes, build wallet requests, simulate transaction batches, and sign approved crypto or DeFi transactions through the Aomi CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can prepare and sign high-impact crypto transactions. <br>
-Mitigation: Use a test wallet first, inspect every queued transaction, simulate multi-step batches, and sign only transactions the user explicitly approved. <br>
-Risk: Private keys, seed phrases, RPC URLs, backend URLs, or account bearer tokens may expose funds or accounts if mishandled. <br>
-Mitigation: Do not paste production seed phrases, do not echo credential values, and only approve custom RPC or backend URLs that the operator trusts. <br>
-Risk: The on-demand npm path can run the latest Aomi CLI version and may change behavior over time. <br>
-Mitigation: For stricter environments, install or pin a reviewed CLI version and restrict npx, backend, and RPC network access externally. <br>
+## Use Case:
 
+Developers and users use this skill to prepare and review payment intents, then execute and reconcile authorized EVM transactions through Aomi. It guides wallet funding checks, durable Commit review, signing, submission, and receipt verification.
 
-## Reference(s): <br>
-- [Source repository](https://github.com/aomi-labs/skills/tree/main/aomi-transact) <br>
-- [Aomi CLI npm package](https://www.npmjs.com/package/@aomi-labs/client) <br>
-- [Command Reference](references/commands.md) <br>
-- [Workflows](references/workflows.md) <br>
-- [Gotchas, Hard Rules, and Security Model](references/gotchas.md) <br>
-- [Account Abstraction Reference](references/account-abstraction.md) <br>
-- [Apps Reference](references/apps.md) <br>
-- [Flow Examples](references/examples.md) <br>
-- [Thread Reference](references/thread.md) <br>
-- [Drain Vectors](references/drain-vectors.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash commands and command-output interpretation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May stage transaction instructions for explicit user review, simulation, and signing through the Aomi CLI; does not require the agent to echo private keys or seed phrases.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.10.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill's setup and network instructions exceed the permissions it declares, making its actual access scope unclear.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installation, reconcile required RPC hosts, installation location, export directory, and persistent MCP configuration with the declared permissions; use a reviewed CLI version.
+
+Risk: An authorized signing flow can sign and broadcast real transactions; Aomi receives transaction requests and wallet context, while RPC providers receive balance and transaction queries.
+
+Mitigation: Keep signing under the user's control, review the exact Commit and its simulation against the approved intent before signing, and keep credentials opaque.
+
+## Reference(s):
+
+- [Command reference](references/commands.md)
+- [Payment workflows](references/workflows.md)
+- [Account abstraction](references/account-abstraction.md)
+- [Session handling](references/session.md)
+- [Credential and state gotchas](references/gotchas.md)
+- [Troubleshooting](references/troubleshooting.md)
+- [Payment examples](references/examples.md)
+- [Protocol recipient warnings](references/drain-vectors.md)
+- [App reference](references/apps.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands and transaction review summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+0.14.0 (source: SKILL.md frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

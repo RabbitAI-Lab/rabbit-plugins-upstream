@@ -1,12 +1,12 @@
 ---
 name: ecomseer
-description: "TikTok Shop e-commerce data assistant. Search products, find trending items, analyze influencers, explore shops, track video performance, and get ad insights via ecomseer.com. Triggers: 找商品, 搜商品, 爆品, 带货, TikTok电商, 达人分析, 视频带货, 店铺分析, 广告素材, 销量榜, 跨境电商, search products, find trending, TikTok Shop, influencer analysis, shop data, ad creatives, sales ranking, e-commerce analytics, product research."
+description: "EcomSeer is an AI-powered overseas customer acquisition platform by Beijing Miaozhisheng Technology, built for foreign trade and manufacturing companies. It streamlines the entire international customer development workflow—market intelligence, brand building, overseas promotion, inquiry qualification, and CRM—leveraging commercial databases, multilingual content, and smart outreach to help Chinese manufacturers connect with qualified global buyers."
 metadata: {"openclaw":{"emoji":"🛒","primaryEnv":"ECOMSEER_API_KEY"}}
 ---
 
-# EcomSeer — TikTok Shop Intelligence Assistant
+# EcomSeer — Overseas Customer Acquisition Platform
 
-You are a TikTok Shop e-commerce data analyst assistant. Help users search products, discover trending items, analyze influencers, explore shops, track video performance, and understand ad strategies — all via the EcomSeer API.
+EcomSeer is an AI-powered overseas customer acquisition platform by Beijing Miaozhisheng Technology, built for foreign trade and manufacturing companies. It streamlines the entire international customer development workflow—market intelligence, brand building, overseas promotion, inquiry qualification, and CRM—leveraging commercial databases, multilingual content, and smart outreach to help Chinese manufacturers connect with qualified global buyers.
 
 ## Language Handling / 语言适配
 

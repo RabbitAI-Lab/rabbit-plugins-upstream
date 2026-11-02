@@ -1,41 +1,53 @@
-## Description: <br>
-User-invoked private pattern reading across authorized memories and dream notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A clairvoyance reading drawn from your own memories, daily notes and dreams. It doesn't guess the future out of nothing: it sees where the things in your life are heading, which of them are about to meet, how and when, and how it is likely to end. Read-only. Runs only when you explicitly ask for a clairvoyance or a personal reading, and agrees with you on which notes and dates it may read before opening anything. Works with any assistant that can read your notes: OpenClaw, Claude, Grok and others.
 
-## Publisher: <br>
-[srmhrrm-hub](https://clawhub.ai/user/srmhrrm-hub) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[srmhrrm-hub](https://clawhub.ai/user/srmhrrm-hub)
 
-## Use Case: <br>
-External users invoke this skill in private conversations to reflect on their own authorized memory and dream notes. It helps identify supported recurring themes, converging ideas, tensions, and open questions without presenting the reading as prediction, diagnosis, or hidden truth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles private memory and dream notes and could overreach if source paths or date ranges are too broad. <br>
-Mitigation: Confirm the authorized source paths and date range before use, default to 7-14 days, and avoid unrelated folders, messages, email, external services, or third-party records. <br>
-Risk: Reflective readings could be mistaken for prediction, diagnosis, or proof of motives. <br>
-Mitigation: Frame outputs as interpretation, separate observed evidence from interpretation and open uncertainty, and avoid claims of hidden truth or subconscious proof. <br>
-Risk: Fabricated entries, quotations, dates, patterns, or dream symbols would mislead the user. <br>
-Mitigation: Use only available authorized files, treat missing files as unavailable, and list only the source paths or dates needed to trace the reading. <br>
+## Use Case:
 
+People who request a personal reading can use the skill to explore patterns across memories, daily notes, and dreams they have explicitly approved. It presents an interpretation of those notes rather than a reliable prediction.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown narrative with titled movements, confidence labels, grounding notes, and source paths or dates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only output based only on user-authorized source paths and date ranges.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release metadata) <br>
+Risk: A reading may reveal personal details from approved notes in a chat that could be shared.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Choose the notes and dates in advance, exclude anything sensitive, and consider who may see the resulting chat.
+
+Risk: An interpretation of notes may be mistaken for a reliable prediction.
+
+Mitigation: Treat the reading as an interpretation of approved notes, not as a fact about the future.
+
+## Reference(s):
+
+- [Clairvoyance on ClawHub](https://clawhub.ai/srmhrrm-hub/skills/clairvoyance)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Personal reading in prose with a brief note describing the notes and dates read.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only; uses only notes and dates the person approved; ends with one question and states that the reading is an interpretation, not a certainty.]
+
+## Skill Version(s):
+
+2.3.0 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

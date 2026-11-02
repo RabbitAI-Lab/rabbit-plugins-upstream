@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "siluzan-tso/google-period-report.schema.json",
   "title": "GooglePeriodReport",
-  "description": "Google Ads 周期分析报告 JSON（对齐 google-period-report.md 8 默认维度；供 google-analysis render 注入 HTML）。Agent 只需撰写 narrative 字段，kpis/charts/tables 可省略由 --snapshot-dir 从 google-analysis 落盘快照自动合并。",
+  "description": "Google Ads 周期分析报告 JSON（对齐 google-period-report.md 10 章：9 个数据维 + 优化建议；供 google-analysis render 注入 HTML）。Agent 只需撰写 narrative；kpis/charts/tables 由 --snapshot-dir 从 google-analysis 快照合并。render 校验要求合并后 kpis.cost/impressions/clicks 至少一项为有效数字，且 tables.negativeKeywords 为数组（0 条也要是 []），否则拒绝出 HTML。",
   "type": "object",
   "required": ["meta", "narrative"],
   "properties": {
@@ -21,7 +21,7 @@
     },
     "kpis": {
       "type": "object",
-      "description": "账户级 KPI（执行摘要 KPI 网格）；可省略，由 --snapshot-dir 从 overview 合并",
+      "description": "账户级 KPI（执行摘要 KPI 网格）；Agent 可省略，但 render 时须经 --snapshot-dir 合并出 cost/impressions/clicks",
       "properties": {
         "cost": { "type": "number" },
         "impressions": { "type": "number" },
@@ -30,6 +30,14 @@
         "ctr": { "type": "number", "description": "0~1 小数" },
         "averageCpc": { "type": "number" },
         "costPerConversion": { "type": "number" },
+        "activeDays": {
+          "type": "number",
+          "description": "本期消耗>0 的自然日数；来自 overview.record.activeDays，不在 currentPeriod"
+        },
+        "averageDailyCost": {
+          "type": "number",
+          "description": "本期日均消耗；来自 overview.record.averageDailyCost，不在 currentPeriod"
+        },
         "previousPeriod": {
           "type": "object",
           "description": "环比上期（用于 KPI 卡片环比箭头），可省略",
@@ -84,7 +92,9 @@
         "campaigns": { "$ref": "#/$defs/campaignRows" },
         "devices": { "$ref": "#/$defs/deviceRows" },
         "geographic": { "$ref": "#/$defs/geographicRows" },
-        "keywords": { "$ref": "#/$defs/keywordRows" }
+        "audience": { "$ref": "#/$defs/audienceRows" },
+        "keywords": { "$ref": "#/$defs/keywordRows" },
+        "negativeKeywords": { "$ref": "#/$defs/negativeKeywordRows" }
       }
     },
     "narrative": {
@@ -100,7 +110,7 @@
         },
         "sections": {
           "type": "object",
-          "description": "7 个数据维度各自的分析+建议（对应报告 §1~§7）；每维度 analysis ≥2 条、suggestions ≥1 条",
+          "description": "9 个数据维度各自的分析+建议（对应报告 §1~§9）；每维度 analysis ≥2 条、suggestions ≥1 条",
           "required": [
             "overview",
             "dailyTrend",
@@ -108,7 +118,9 @@
             "campaigns",
             "devices",
             "geographic",
-            "keywords"
+            "audience",
+            "keywords",
+            "negativeKeywords"
           ],
           "properties": {
             "overview": { "$ref": "#/$defs/sectionNarrative" },
@@ -117,12 +129,14 @@
             "campaigns": { "$ref": "#/$defs/sectionNarrative" },
             "devices": { "$ref": "#/$defs/sectionNarrative" },
             "geographic": { "$ref": "#/$defs/sectionNarrative" },
-            "keywords": { "$ref": "#/$defs/sectionNarrative" }
+            "audience": { "$ref": "#/$defs/sectionNarrative" },
+            "keywords": { "$ref": "#/$defs/sectionNarrative" },
+            "negativeKeywords": { "$ref": "#/$defs/sectionNarrative" }
           }
         },
         "recommendations": {
           "type": "array",
-          "description": "报告 §8 优化建议；≥3 条，可跨维度综合",
+          "description": "报告 §10 优化建议；≥3 条，可跨维度综合",
           "minItems": 3,
           "items": {
             "oneOf": [
@@ -207,6 +221,23 @@
       }
     },
     "geographicRows": { "type": "array", "items": { "$ref": "#/$defs/geographicRow" } },
+    "audienceRow": {
+      "type": "object",
+      "properties": {
+        "audience": { "type": "string", "description": "受众名称（audienceName 回填到此字段）" },
+        "audienceName": { "type": "string" },
+        "audienceType": { "type": "string", "description": "SystemDefined / UserDefined 等，有则保留" },
+        "campaignName": { "type": "string" },
+        "spend": { "type": "number" },
+        "impressions": { "type": "number" },
+        "clicks": { "type": "number" },
+        "ctr": { "type": "number" },
+        "averageCpc": { "type": "number" },
+        "conversions": { "type": "number" },
+        "costPerConversion": { "type": "number" }
+      }
+    },
+    "audienceRows": { "type": "array", "items": { "$ref": "#/$defs/audienceRow" } },
     "keywordRow": {
       "type": "object",
       "properties": {
@@ -221,6 +252,19 @@
         "costPerConversion": { "type": "number" }
       }
     },
-    "keywordRows": { "type": "array", "items": { "$ref": "#/$defs/keywordRow" } }
+    "keywordRows": { "type": "array", "items": { "$ref": "#/$defs/keywordRow" } },
+    "negativeKeywordRow": {
+      "type": "object",
+      "description": "当前账户否词一行。0 条时数组为空，不要省略字段。",
+      "properties": {
+        "keyword": { "type": "string" },
+        "matchType": { "type": "string" },
+        "level": { "type": "string" },
+        "levelZh": { "type": "string" },
+        "campaignName": { "type": "string" },
+        "adGroupName": { "type": "string" }
+      }
+    },
+    "negativeKeywordRows": { "type": "array", "items": { "$ref": "#/$defs/negativeKeywordRow" } }
   }
 }

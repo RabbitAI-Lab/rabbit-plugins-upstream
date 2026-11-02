@@ -1,13 +1,13 @@
 ---
 name: toutiao-search
-description: 今日头条爆款内容查询 — 输入关键词搜索今日头条最新作品（图文/视频），支持按阅读量/时间排序、限定时间范围，终端表格展示 + CSV 导出 + 交互式 HTML 报告。当用户需要搜索今日头条热门内容、追踪头条热点、分析爆款文章时使用。
+description: 今日头条爆款内容查询 — 输入关键词搜索今日头条最新作品（图文/视频），支持按阅读量/时间排序、限定时间范围，终端表格展示 + CSV 导出 + 交互式 HTML 报告。当用户需要搜索今日头条热门内容、追踪头条热点、分析爆款文章时使用。当接口返回积分不足（code=3210）时，自动唤起支付宝完成充值后继续查询。
 ---
 
 # 今日头条爆款内容查询
 
 输入关键词搜索今日头条最新作品（图文/视频），终端表格展示 + CSV 导出 + 交互式 HTML 报告。
 
-> API 请求均携带 `今日头条爆款查询-RedSkill` 标识。需先配置 API Key，通过环境变量 REDFOX_API_KEY 或 --api-key 参数传入。
+> 需先配置 API Key，通过环境变量 REDFOX_API_KEY 或 --api-key 参数传入。
 > 搜索范围：今日头条平台**最新发布的作品**，实时拉取，无缓存延迟。
 
 ---
@@ -33,19 +33,13 @@ description: 今日头条爆款内容查询 — 输入关键词搜索今日头�
 # 基础搜索
 python3 "$SKILL_PATH/scripts/search.py" "关键词"
 
-# 主题扩展搜索（自动关联同义词/相关词，联合检索去重）
-python3 "$SKILL_PATH/scripts/search.py" "美伊战争" --expand
-
-# 手动追加多个关键词联合检索
-python3 "$SKILL_PATH/scripts/search.py" "美伊战争" --also "美伊冲突,美国伊朗"
-
-# 按阅读量排序（默认）
+# 按阅读量排序（默认按时间）
 python3 "$SKILL_PATH/scripts/search.py" "AI" --sort views
 
 # 限定最近 24 小时内发布的作品
 python3 "$SKILL_PATH/scripts/search.py" "大模型" --hours 24
 
-# 只查视频类作品（已修复详情缺失导致的误判，类型未确认的会被排除）
+# 只查视频类作品
 python3 "$SKILL_PATH/scripts/search.py" "测评" --video-only
 
 # 多页翻页，获取更多结果
@@ -101,9 +95,7 @@ CSV / HTML 默认保存在 `~/Downloads/QoderToutiaoSearch/`。
 | `--sort` | 排序方式：`views` / `time` | `views` |
 | `--hours` | 限定最近 N 小时内发布的作品（0=不限） | `0` |
 | `--pages` | 翻页次数（每页约 10 条） | `3` |
-| `--video-only` | 只返回确认的视频类作品（类型未确认的会被排除并提示） | — |
-| `--expand` | 主题扩展模式：自动关联同义词/相关词联合检索 | — |
-| `--also` | 手动追加搜索关键词，逗号分隔 | — |
+| `--video-only` | 只返回视频类作品 | — |
 | `--output-dir` | 输出目录 | `~/Downloads/QoderToutiaoSearch` |
 | `--api-key` | 指定 API Key | — |
 | `--no-open` | 不自动打开浏览器 | — |
@@ -122,18 +114,26 @@ CSV / HTML 默认保存在 `~/Downloads/QoderToutiaoSearch/`。
 | 命令行参数 | `--api-key ak_你的密钥` |
 | 配置文件 | `echo '{"api_key":"ak_你的密钥"}' > ~/.qoder/apis/redfox.json` |
 
-注册地址：[redfox.hk](https://redfox.hk/settings/api-keys?source=redskill)
+注册地址：[redfox.hk](https://redfox.hk/settings/api-keys?source=clawhub)
+
+---
+
+## 💳 积分不足充值（支付宝接管）
+
+当脚本以**退出码 3** 结束、并在 stdout 打印 `===PAYMENT_REQUIRED_JSON_START===` 区块时，表示当前 API Key 积分不足（接口 `code=3210`，兼容 `3201`）。响应体 `data` 内含结构化支付信息：`cashierUrl`（支付宝收银台链接）、`amount`（订单金额，元）、`goodsName`（商品名称）、`outTradeNo`（订单号）。
+
+脚本退出码说明：`0` 正常返回；`1` 参数/鉴权/接口错误；`3` **积分不足，需要充值**（按下述流程处理）。
+
+完整的前置检查、`alipay-bot trigger-payment-signal` → `submit-payment` → `poll-payment-status` 编排步骤、钱包绑定处理、支付接管规则与失败处理，统一见 **[references/alipay-recharge.md](references/alipay-recharge.md)**（通用流程，可被其他 skill 复用）。`submit-payment` 后由 Agent 用 `poll-payment-status --out-shake-no <查询单号>` **自动监听支付回调到账**，无需用户再手动确认；到账（`outcome=success`）后自动用用户原始的查询参数重新运行 `scripts/search.py` 输出结果。
 
 ---
 
 ## 功能特点
 
 - **双接口深度查询**：`searchWork` 搜索列表 + `workDetail` 获取完整数据（阅读/点赞/评论/转发/分享）
-- **主题扩展搜索**：`--expand` 自动关联同义词，`--also` 手动追加多词，联合检索自动去重
 - **时间过滤**：限定最近 N 小时内的新鲜内容，拒绝过期缓存
 - **灵活排序**：按发布时间或阅读量降序排列
-- **视频筛选**：`--video-only` 只保留确认的视频；详情未获取的作品标记为「未知」，不误判为图文
-- **检索透明**：终端显示各关键词贡献条数、类型分布统计（图文/视频/未确认）
+- **视频筛选**：`--video-only` 只找视频类爆款
 - **终端表格**：标题、作者、阅读、点赞、评论、转发、发布时间、链接、类型
 - **CSV 导出**：自动生成 UTF-8 BOM 编码的 CSV
 - **HTML 交互报告**：深色主题，图文/视频标签区分，支持页内搜索
@@ -164,10 +164,7 @@ A：搜索接口只返回基础信息，同时提供单作品补全阅读量、�
 A：可以让 AI 为你导出 Excel，也可以让 AI 导出 HTML。
 
 **Q：额度用完怎么办？**
-A：前往 [redfox.hk](https://redfox.hk/settings/api-keys?source=redskill) 注册获取 Token。
+A：前往 [redfox.hk](https://redfox.hk/settings/api-keys?source=clawhub) 注册获取 Token。
 
 **Q：最多能获取多少条？**
 A：每页约 10 条，默认翻 3 页（约 30 条）。可通过 `--pages` 参数调整。
-
-**Q：搜「美伊战争」结果很少怎么办？**
-A：使用 `--expand` 开启主题扩展搜索，自动关联「美伊冲突」「美国伊朗」等相关词联合检索，结果更完整。也可用 `--also "词1,词2"` 手动指定相关词。

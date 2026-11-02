@@ -1,41 +1,56 @@
-## Description: <br>
-Gravity Field Empowerment helps an agent evaluate business transformations by measuring whether an intervention creates a lasting growth-velocity change rather than only a short-term lift. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A business coaching framework for assessing whether an intervention creates a lasting change in growth velocity or only a short-term addition.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Use when a user needs to decide whether coaching, strategy, capital, organizational change, or another business intervention produced a durable velocity change, compare competing empowerment options, or project the long-term integral effect of an intervention. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global use, subject to the user's organizational policies and applicable business, legal, and regulatory requirements. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate for broad transformation or ROI questions where a different strategy framework is intended. <br>
-Mitigation: Confirm the user's desired framework, baseline metric, and evaluation horizon before applying the analysis; redirect the agent when the user wants another approach. <br>
+## Use Case:
 
+Business leaders and advisors use the skill to evaluate transformations, coaching, strategy, or investment by comparing baseline and later growth velocity, then framing the potential long-term effect.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/gravity-field-empowerment) <br>
-- [deciqAI skill metadata](https://www.deciqai.com/s/gravity-field-empowerment.json) <br>
-- [deciqAI Gravity Field Empowerment page](https://www.deciqai.com/c/gravity-field-empowerment) <br>
-- [Dyson, Eddington, and Davidson 1920 eclipse paper](https://doi.org/10.1098/rsta.1920.0009) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Stepwise business analysis, fit checks, coaching questions, and an Empowerment Field Analysis with integral effect projection.] <br>
-**Output Parameters:** [Baseline growth metric, intervention or transformation, primary lever, acceleration period, measured v0 and v1, costs, and projection horizon.] <br>
-**Other Properties Related to Output:** [The skill is non-executable and may ask the agent to pause for user input during coached use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 <br>
+Risk: Business metrics or saved failure examples could contain confidential information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only metrics intended for disclosure and omit confidential details from saved examples.
+
+Risk: Readers could mistake the gravity-field framing for an established scientific model of business outcomes.
+
+Mitigation: Present it as a conceptual analogy and base conclusions on measured business metrics.
+
+## Reference(s):
+
+- [Sources (skill reference)](references/sources.md)
+- [Dyson, Eddington, and Davidson (1920), solar gravitational field measurement](https://doi.org/10.1098/rsta.1920.0009)
+- [Einstein text linked from the skill's sources](https://www.fourmilab.ch/etexts/einstein/specrel/)
+- [Eddington, Space, Time and Gravitation](https://archive.org/details/spacetimegravita00eddi)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown text, including a structured Empowerment Field Analysis and Integral Effect Projection]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Applies a conceptual business framework; projections depend on user-provided metrics and assumptions.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

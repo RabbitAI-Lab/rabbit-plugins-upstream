@@ -1,0 +1,844 @@
+# Video Prompting Guide (LTX-2.x, MiniMax H3, pacing, orientation, camera language)
+
+Read this before writing any text-to-video or image-to-video prompt for LTX
+models, before writing any MiniMax H3 prompt, and whenever the user asks for
+"hd", "1080p", "4k", "uhd", or "high-res" video so you can choose between the
+LTX and Seedance paths.
+
+The families require different prompt **shapes**. LTX wants one unbroken prose
+paragraph with no line breaks and no negative phrasing. MiniMax H3 requires the
+official ordered-field rewrite contract, shot notation, speaker IDs, dialogue
+tags, and mode-specific alignment preamble. Do not carry LTX's
+single-paragraph, positive-only, no-markup rule into an H3 prompt. Pick the
+section that matches the model you are about to invoke.
+
+If the creator asks only for a prompt, the requested text is the final
+deliverable: author it in the selected model's native shape without invoking
+the CLI or hosted API. A request to generate/write a prompt does not authorize
+media generation. A compound request that also asks to render or make the
+video now does authorize execution after the prompt is shaped. This applies to
+every video model and workflow, not only the families documented below. The
+target model and mode are required. If either is omitted, ask for it. If that
+exact model/mode has no validated native contract, say so and request the exact
+specification; never substitute a generic prompt or another model's syntax.
+
+## LTX-2.x Prompt Rule
+
+Whenever the chosen video model is LTX-2.5 (or an LTX-2.3 rollback model), do
+not pass the user's short request through unchanged. Rewrite it into an
+LTX-safe prompt before calling `sogni-agent`.
+
+- Output one single paragraph only. No line breaks, bullet points, section labels, tag lists, or screenplay formatting.
+- Use 4-8 flowing present-tense sentences describing one continuous shot. No cuts, montage, or unrelated scene jumps.
+- Start with shot scale plus the scene's visual identity, then describe environment, time of day, atmosphere, textures, and specific light sources.
+- Keep people, clothing, props, and locations concrete and stable across the whole paragraph.
+- Give the scene one main action thread from start to finish. Use connectors like `as`, `while`, and `then` so motion reads as a continuous filmed moment.
+- Be specific and literal about motion. Describe what moves, where it moves,
+  what it contacts, and what happens next in chronological order. Do not replace
+  visible actions with euphemisms or broad summaries. For example, replace "a
+  ball bouncing around" with "A red ball moves right, bounces off the wall,
+  and returns to the center"; replace "fluid pouring" with "Water flows from
+  the left container through the connecting tube into the right container
+  until both levels are equal."
+- Treat native audio as part of the scene design. Integrate relevant dialogue,
+  voice delivery, foley, environmental sound, and music with the actions that
+  produce or accompany them.
+- Write dialogue out verbatim in double quotes and identify the speaker and
+  delivery. Never merely suggest dialogue with phrases such as "they talk,"
+  "she says something," or "the couple discusses the scene."
+- Budget spoken dialogue at about 3 words per second, plus about 1 second for each meaningful acting beat or pause.
+- Express emotion through visible physical cues such as posture, grip, jaw tension, breathing, or pacing. Ambient sound can be woven into the prose naturally.
+- Use positive phrasing only. Do not add negative prompts, "no ..." clauses, on-screen text/logo requests, vague filler words like `beautiful` or `nice`, or structural markup such as `[DIALOGUE]`. **This positive-only, no-markup rule is scoped to the LTX family only.** MiniMax H3 has no separate negative-prompt input and instead requires its ordered fields, `[Shot N]` notation, `(Sx)` speaker IDs, and `<d>` dialogue tags; see [MiniMax H3 Prompting](#minimax-h3-prompting).
+- Keep action density proportional to duration. For short clips, describe one main beat rather than several separate events.
+- Preserve the user's request, but expand it into cinematic prose. Do not invent a different story just to make the prompt longer.
+
+### Duration-Aware Pacing
+
+Match scene density to clip length so prompts stay filmable:
+
+- About `1-4s`: describe exactly 1 action or moment.
+- About `5-8s`: describe about 2 sequential actions.
+- About `9-12s`: describe about 3 sequential actions.
+- Longer clips: add only a small number of additional sequential beats. Do not turn the prompt into a montage or a full story arc unless the duration clearly supports it.
+
+### Orientation Mapping
+
+When the user explicitly asks for an orientation or aspect ratio, map it to safe LTX dimensions:
+
+- `vertical`, `portrait`, `story`, `reel`, `tiktok` -> `-w 1088 -h 1920`
+- `landscape`, `horizontal`, `widescreen`, `youtube`, `16:9` -> `-w 1920 -h 1088`
+- `square`, `1:1` -> `-w 1088 -h 1088`
+- `4:3 portrait` -> `-w 832 -h 1088`
+- `4:3 landscape` -> `-w 1088 -h 832`
+
+### Camera Language Normalization
+
+When the user uses loose camera language, translate it into concrete motion phrasing inside the prose prompt:
+
+- `zoom in` -> `slow push-in`
+- `zoom out` -> `slow pull-back`
+- `pan left` / `pan right` -> `smooth pan left` / `smooth pan right`
+- `orbit` / `circle around` -> `slow arc left` or `slow arc right`
+- `follow` -> `tracking follow`
+
+### Example rewrite
+
+```text
+User ask: "4k video of a woman in a neon alley"
+
+Use this shape instead: "A medium cinematic shot frames a woman in her 30s standing in a rain-soaked neon alley at night, violet and amber signs reflecting across the wet pavement while warm steam drifts from street vents. She wears a dark trench coat with damp strands of black hair clinging near her cheek as light glances across the fabric texture and the brick walls behind her. She turns toward the camera and steps forward with measured focus, one hand tightening around the strap of her bag while rain taps softly on the metal fire escape and a distant train hum rolls through the block. The camera performs a slow push-in as her jaw sets and her breathing steadies, maintaining smooth stabilized motion and a tense urban-thriller mood."
+```
+
+## MiniMax H3 Prompting
+
+For MiniMax reference-to-video, default to **FastH3 Omni R2V** (`minimax-h3-fasth3-r2v-turbo`), the newest and preferred option (as of 2026-10). Use `minimax-h3-fasth3-r2v-turbo-2stage` for two-stage, 1080p or 2K output. Keep Standard, Balanced, or LightX2V Turbo only when explicitly requested.
+
+Write every H3 prompt using MiniMax's official structured rewrite contract. Do
+not substitute an unstructured prompt for the required fields. The field names,
+order, shot notation, alignment preamble, reference labels, and dialogue markup
+are part of the model contract.
+
+For prompt-only authoring, return only the applicable ordered-field document.
+Do not wrap it in Markdown, add a title or preamble, append generic prompting
+tips, explain the format, offer to generate the video, or ask a follow-up
+question after the contract. Those additions make the text invalid as direct
+H3 input.
+
+Applies to Standard `minimax-h3` / `minimax-h3-t2v`, `minimax-h3-i2v` for both
+opening-frame I2VA and closing-frame L2VA, and `minimax-h3-flf2v`; their 8-step
+Balanced `*-balanced` and 4-step Turbo `*-turbo` variants; and—with its own
+six-field contract—to `minimax-h3-r2v`, `minimax-h3-r2v-balanced`,
+`minimax-h3-r2v-turbo`, and FastH3 Reference `minimax-h3-fasth3-r2v-turbo`. The
+exact FL2VA worker ids are `minimax-h3-fl2va-fp8_{t2v,i2v,flf2v}` with an
+optional `_balanced` or `_turbo` suffix; Ref2VA uses `minimax-h3-ref2va-fp8_r2v`
+with the same tier suffixes, and FastH3 Reference uses
+`minimax-h3-fastvideo-omni-int8_r2v_turbo`. See
+[MiniMax H3 reference-to-video (r2v)](#minimax-h3-reference-to-video-r2v) below
+before writing an r2v prompt.
+
+This guidance follows MiniMax's official H3 prompt-writing skill from
+[MiniMax-H3 commit d21241f](https://github.com/MiniMax-AI/MiniMax-H3/tree/d21241f0a4b3acbb34c97dae47fa417b7065e438/skills/h3-prompt-writing).
+
+### Fixed model facts
+
+- **24 fps, always.** Do not pass an fps override.
+- **Frame counts sit on the `124 + n×17` grid**, from `124` through `362` —
+  i.e. **5.17 s to 15.08 s**. The CLI snaps `--duration` onto that grid; an
+  off-grid explicit `--frames` is a hard error.
+- **Dimensions divisible by 32**, total pixels ≤ **1,032,192**. Use
+  `-w 1344 -h 768` (landscape) or `-w 768 -h 1344` (portrait). The exception
+  is `minimax-h3-r2v-turbo`: at most **522,240** pixels, its own canvas, so use
+  `-w 960 -h 544` or `-w 544 -h 960`; larger requests are fitted inside it.
+- **1080p and 2K output is the FastH3 Two-Stage model, not a canvas.**
+  `-m minimax-h3-fasth3-turbo-2stage` (or `minimax-h3-fasth3-t2v-turbo-2stage`,
+  `minimax-h3-fasth3-i2v-turbo-2stage`, `minimax-h3-fasth3-flf2v-turbo-2stage`)
+  renders FastH3 on a half-size canvas and delivers the clip at exactly twice
+  it with the same length and audio; apart from Ref2VA Two-Stage (below), no
+  other H3 tier delivers above 768p.
+  `--target-resolution` names the delivered size: `2K` (or `1440`, the default)
+  renders 1344×768 → 2688×1536, `1080` renders 960×544 → 1920×1088, and `720`
+  renders 672×384 → 1344×768, in the prompt's or reference's aspect; any other
+  value is refused. Do not enlarge `-w`/`-h` to reach 2K — the pixel budget
+  still applies to the canvas. 1080p costs 10 Spark per second (FastH3's 4 plus
+  6), 2K costs 16 (plus 12), and 720p costs the FastH3 rate of 4. Use it
+  when the user asks for 1080p, 1440p or 2K H3 output, two-stage, or the
+  sharpest H3 output; ordinary 768p stays on the regular FastH3 selectors. The
+  prompt contract is FastH3's.
+- **1080p and 2K reference-to-video is Ref2VA Two-Stage.**
+  `-m minimax-h3-r2v-2stage` (Standard, 20 steps),
+  `-m minimax-h3-r2v-balanced-2stage` (Balanced, 8 steps) and
+  `-m minimax-h3-fasth3-r2v-turbo-2stage` (FastH3 Reference) take exactly the
+  references, limits, durations, LoRAs and six-field Ref2VA prompt contract of
+  `minimax-h3-r2v` / `minimax-h3-r2v-balanced` / `minimax-h3-fasth3-r2v-turbo`,
+  render the half-size canvas and deliver twice it. `--target-resolution` reads as above (2K default, `1080`,
+  `720`); a reference image never sets the canvas aspect. Each bills its
+  tier's reference rate plus the two-stage surcharge of the delivered class;
+  quote it with `--estimate-video-cost`. Keep ordinary 768p reference video on
+  the one-stage R2V selectors.
+- **20 steps for Standard; 8 for Balanced; 4 for both Turbo engines; guidance/CFG 1.** Do not
+  send steps, guidance, scheduler, or a **negative prompt**. Standard and
+  Balanced accept no sampler override; Balanced is fixed to Euler/simple.
+  FL2VA H3 Turbo defaults to `er_sde` on Socket, and
+  the CLI omits the sampler unless `--sampler` is passed. Direct FL2VA CLI A/B tests
+  may pass exactly `--sampler euler`, `--sampler er_sde`, or
+  `--sampler sa_solver`. Ref2VA Turbo uses the exact upstream Euler/simple recipe,
+  defaults to 960×544, and accepts only `--sampler euler`. The checkpoint is CFG-distilled with
+  guidance locked at 1, so there is no negative branch at all: a
+  `negativePrompt` parameter is ignored wherever it is accepted. Negative
+  direction goes in the prompt text instead.
+- **Balanced and Turbo use the same prompt contract as Standard H3.** Balanced
+  is fixed at 8 steps with Euler/simple; Turbo is fixed at 4 steps with the
+  `simple` scheduler. Existing `minimax-h3-turbo` / `minimax-h3-*-turbo`
+  selectors are the LightX2V engine and retain the three sampler variants above.
+  FastH3 is the separate FastVideo VSA engine: use
+  `minimax-h3-fasth3-turbo`, `minimax-h3-fasth3-t2v-turbo`,
+  `minimax-h3-fasth3-i2v-turbo`, or `minimax-h3-fasth3-flf2v-turbo`.
+  FastH3 uses Euler/simple only and is about 2x faster than LightX2V Turbo and up
+  to 6x faster than Standard for comparable 768p, 15-second requests. Its
+  reference-to-video is FastH3 Reference, `minimax-h3-fasth3-r2v-turbo`, which
+  uses the six-field Ref2VA contract and takes no sampler override.
+- **Native 32 kHz stereo audio is generated jointly with the picture.** Every
+  sound — dialogue, foley, ambience, score — exists only because the prompt
+  asked for it. `generateAudio=false` strips that generated track from the
+  delivered file; it does not skip audio generation.
+- **FastH3 audio-to-video takes the user's own audio instead.**
+  `minimax-h3-fasth3-ia2v-turbo` (`--ref` + `--ref-audio`),
+  `minimax-h3-fasth3-flfa2v-turbo` (`--ref` + `--ref-end` + `--ref-audio`) and
+  `minimax-h3-fasth3-a2v-turbo` (`--ref-audio` only), plus their `-2stage`
+  forms, drive the picture from the uploaded track and deliver that track as
+  the soundtrack. Keep the same ordered-field contract, with the I2V or FLF2V
+  preamble when frames are supplied. Write the words actually spoken in the
+  upload, exactly, inside `<d>[Language] …</d>` with their `(Sx)` speaker so the
+  mouth follows the right text, and describe the uploaded sound in the sound
+  fields rather than requesting different audio. `--audio-start` picks the
+  window; its length is the clip length. No LoRAs; see
+  [models.md § FastH3 audio-to-video](./models.md#fasth3-audio-to-video).
+- **Intermediate keyframes pin extra images at chosen times.** Repeatable
+  `--keyframe <image>@<seconds>` (up to 8) works on the image-to-video,
+  first/last-frame, Sound to Video, and Ref2VA selectors, in addition to
+  `--ref` / `--ref-end`. The prompt names each keyframe `<Picture N>` and, since
+  H3's text encoder never sees keyframe images, describes each one at its time; see
+  [Intermediate keyframes](#intermediate-keyframes) below.
+- **Sogni's H3 tiers render the 768p-class open-weights release.** Only FastH3
+  Two-Stage delivers 1080p or 2K (Sogni's own latent enlargement); do not claim
+  either for any other H3 selector. MiniMax's hosted 2K stage is not part of
+  the open release.
+- The Sogni CLI does not truncate H3 prompts. If another surface has a shorter
+  cap, flag it explicitly instead of silently removing required fields.
+- FL2VA/Balanced/Turbo and image-only R2V are routed to 32 GB-class workers;
+  video-conditioned R2V requires a worker above 40 GB.
+
+Because `--duration` snaps to the frame grid, the delivered length is rarely the
+integer the user asked for:
+
+| `--duration` | Frames | Actual length |
+|---|---|---|
+| 5 | 124 | 5.17 s |
+| 6 | 141 | 5.88 s |
+| 8 | 192 | 8.00 s |
+| 10 | 243 | 10.13 s |
+| 12 | 294 | 12.25 s |
+| 15 | 362 | 15.08 s |
+
+### Standard, Balanced, and Turbo contract: T2V, I2V, L2V, and FLF2V
+
+After the mode-specific preamble described below, write exactly these three
+fields in this order:
+
+```text
+integrated_multimodal_description: [Shot 1] ...
+
+overall_soundscape: ...
+
+non_diegetic_music: ...
+```
+
+`integrated_multimodal_description` carries the complete visual and diegetic
+audio timeline. `[Shot 1]` has no timestamp; each later cut begins with a
+strictly increasing marker such as `[Shot 2] At 00:03.500, the camera cuts
+to...`. Describe camera movement as part of the shot. Use
+`overall_soundscape` for ambience, physical action sounds, and non-verbal human
+sound, without repeating dialogue, singing, or diegetic music. Use
+`non_diegetic_music` only for audience-only score, or `N/A` when there is none.
+
+Assign speaking or singing subjects stable `(S1)`, `(S2)`, ... IDs in order of
+their first vocal event and reuse each ID across all shots. Keep the speaker,
+action, and delivery outside the dialogue tag. Inside the tag, preserve only
+the language and exact words:
+
+```text
+The record-store owner with a warm, gravelly voice (S1) says: <d>[English] I kept this one behind the counter for you.</d>
+```
+
+Do not translate, paraphrase, or clean up the user's dialogue. If the user
+explicitly requests speaking, dialogue, lyrics, or a vocal performance but
+supplies no words, author one concise line that realizes that request. If there
+is no vocal intent, do not invent speech. Use a compound ID such as `(S1,S2)`
+only when already-numbered speakers vocalize together.
+
+### Writing the body the way the Base model reads it
+
+Audited 2026-09-10 against MiniMax's `VIDEO_PROMPT_WRITING_GUIDE_base_en.md`
+(the guide the h3-prompt-writing skill wraps) and the LightX2V rewriter that
+was trained on the same rewrite policy. The open-weights H3-Base checkpoint
+reads the prompt directly with no hosted Context-IR rewrite in front of it, so
+every sentence is model input. Everything below is what the official examples
+do and never deviate from:
+
+- **Open `[Shot 1]` with the medium and look as concrete facts** (`Live-action,
+  cinematic`, `2D-animated`, `3D CG`, `claymation`, `watercolor`, `vintage
+  film`) plus the initial composition. In frame-anchored modes derive the look
+  from the picture. Genre, mood, audience, and intent labels (`horror`, `eerie`,
+  `adult`, `tense`, `jump scare`) are not visible and never appear in an
+  official example; write the light, surfaces, distances, movements, and sounds
+  that produce them.
+- **Every sentence is a depiction.** The guide's rule is that every detail must
+  correspond to something visible or audible. Never write notes to the model
+  (`preserve believable anatomy`, `keep the foley prominent`, `hard cut, no
+  morph or dissolve`, `hold six frames only`, `this anchor is excluded from the
+  presentation`) and never shout in capitals.
+- **State exclusions as positive facts.** There is no negative field and the
+  contract has no negation grammar, so `no people, faces or words` names the
+  things it tries to remove. Write `the hall is empty and still`, `the walls are
+  bare`, `the air is clear and sharply lit`. Keep a user-supplied exclusion only
+  when it cannot be stated positively, phrased once. `non_diegetic_music: N/A`
+  is the reliable way to keep score out even when the rest of the structure is
+  loose.
+- **Clock times exist only on cut markers.** `[Shot 2] At 00:03.500, the camera
+  cuts to …` is the only place a time appears. Inside a shot, order events with
+  words (`early in the shot`, `as the doors part`, `toward the end`). In-shot
+  ranges such as `From 00:02.000 to 00:04.000` are not H3 syntax; the shaper now
+  flags them.
+- **Camera moves use the official vocabulary** as natural prose: `Zoom In/Out`,
+  `Push In/Pull Out`, `Pan Left/Right`, `Truck Left/Right`, `Tilt Up/Down`,
+  `Pedestal Up/Down`, `Arc Shot`, `Tracking Shot`, `Static Shot`, `Shake
+  Slightly/Strongly`, `POV`, `Roll Clockwise/Counterclockwise`, with `with
+  small/large amplitude` and `at slow/fast speed` only when they matter. One
+  primary move per shot. First-person coverage is a `POV shot`; `handheld` reads
+  as camera shake, so write it only when shake is wanted.
+- **Frame-anchored modes describe the path, not the pictures.** The model sees
+  every attached picture; describing one back at length, or adding objects,
+  text, fluids, or figures that are not in it, produces crossfades and invented
+  props. I2VA: first-frame anchor → action onset → continuous development →
+  result or reaction. FL2VA: first-frame state → observable intermediate
+  changes → progressively narrowing differences → last-frame state, in **one
+  continuous shot** unless the user explicitly asks for cuts; begin `in the
+  position and framing established by Picture 1`, carry the identity anchors
+  that must stay fixed into the motion sentences, and end by settling `into the
+  pose, spacing, and composition established by Picture 2 at the end of the
+  shot`. L2VA: plausible preceding state → explicit action and transition path →
+  gradual convergence in the final shot → last-frame landing on `<Picture 1>`.
+  Exact composition matching applies only at a picture's assigned timestamp.
+- **Bind every vocal line to its speaker in the same sentence:**
+  `The young woman with a quiet, breathy voice (S1) says: <d>[English] I get
+  off at the next station.</d>` and `The two children (S1,S2) shout together,
+  <d>[English] Wait for us!</d>`.
+- **Length.** Official bodies run roughly 150–450 words; Ref2VA
+  `detailed_description` targets 350–500. Long is fine when every sentence is a
+  visible or audible event.
+
+### Beats and voices (2026-09-11 review lessons)
+
+Tested on a branching horror route the same day, on top of the rules above:
+
+- **One continuous shot is still the default.** In most cases it is preferred
+  and the shot count stays as low as the content allows. What made the slow
+  takes boring was emptiness, not the lack of cuts: something new should
+  happen every 1.5–2.5 seconds inside the shot (an action, a reaction, a
+  reveal, a line), never walking or waiting.
+- **Beats and multi-shot are tools for when the context calls for them.** A
+  chase, a reveal that needs a new viewpoint, an exchange of lines, a jump in
+  space or time: then cut (`[Shot 2] At 00:01.500, the camera cuts to …`),
+  keep continuous motion inside each shot, and let the final shot cut to the
+  Picture 2 composition and hold with a live action, which lands cleanly where
+  a long interpolation would crossfade. Never cut a simple movement into
+  pieces, and if both pictures share one camera position the camera does not
+  move at all (a curtain dropping needs a static shot, not a tracking shot
+  away).
+- **Write physical acts as acts.** A fall is the rail giving, the wall of
+  windows streaking upward, the ground rushing in. A bite is the jaws snapping
+  shut over the picture. A shove is two palms filling the frame. "His lips
+  part as he bends closer" produced no bite; "You brought it back" followed by
+  a cut to an aftermath still produced no fall.
+- **Describe the voice, not just the mood.** At a speaker's first line give
+  accent, pitch, timbre and speaking rate: `The woman (S1), speaking in a
+  plain American accent with a light, mid-pitched voice at a quick, breathless
+  pace, says: <d>[English] …</d>`. "A bright, breathless voice" alone drifted
+  to a British accent between takes.
+- **Dialogue after the action that motivates it.** She says "That's my dad"
+  after she has picked the photograph up, in the shot where she holds it.
+- **Whose hands.** In first-person coverage say whose hands are in frame
+  ("both his palms fill the frame as he shoves"); "hands seizing the front of
+  the cardigan" was rendered as the attacker's own point of view.
+
+### Worked example — first frame → last frame
+
+```text
+User ask (two uploaded stills): "the elevator doors open onto the laundry and we walk in"
+
+sogni-agent -q --video -m minimax-h3-flf2v-balanced --ref ./elevator.png --ref-end ./laundry.png --duration 8 -w 1344 -h 768 -o ./press-b.mp4 "<prompt below>"
+```
+
+```text
+How the reference pictures align with the target video — Picture 1 (from Shot 1) aligns with the 0.00-second mark of the target video; Picture 2 (from Shot 1) aligns with the 8.00-second mark of the target video.
+
+integrated_multimodal_description: [Shot 1] Live-action, cinematic, a POV shot at standing eye level begins in the position and framing established by Picture 1, facing the closed brass elevator doors from inside the small wood-panelled vestibule with its dark red velvet panels, marble floor and crystal ceiling lamp. Early in the shot the lamp flickers twice and the floor shudders as the car settles. The brass doors slide apart with a slow steady motion, and bright white fluorescent light from beyond spills across the marble floor and the brass door frame. Through the widening gap the long white-tiled laundry hall comes into view: the raised tiled walkway with steel rails, the row of round steel washing-machine doors along the left wall, and the open steel service door with its amber wall lamp at the far right. The camera pushes in with large amplitude at slow speed through the open doorway, the brass frame sliding out of the picture on both sides as the tiled floor takes over the foreground and the red brake lever comes into view at the near left. Toward the end the differences narrow as the camera glides forward and settles into the composition, spacing and lighting established by Picture 2 at the end of the shot, with the machines still, the grey curtains hanging straight and the hall empty and quiet.
+
+overall_soundscape: A low electrical hum from the crystal lamp, a muffled cable groan and a soft mechanical shudder as the car settles, then the smooth metallic slide of the brass doors parting. Beyond the doors an even ventilation hum and the buzz of fluorescent tubes grow louder over slow footsteps that move from marble onto tile.
+
+non_diegetic_music: N/A
+```
+
+### Worked example — text-to-video
+
+```text
+User ask: "10 second video of a barista and a customer arguing about oat milk"
+
+sogni-agent -q --video -m minimax-h3 --duration 10 -w 1344 -h 768 -o ./cafe.mp4 "<prompt below>"
+```
+
+```text
+integrated_multimodal_description: [Shot 1] Live-action, cinematic, slightly desaturated, a medium two-shot frames a narrow espresso bar on a weekday morning. Soft window light rakes across the brushed-steel machine and pastry case. A barista in her late twenties slides a white cup across the counter. A customer in a grey overcoat with a quiet, clipped voice (S1) stops the saucer with two fingers and says: <d>[English] I asked for oat milk.</d> [Shot 2] At 00:03.000, the camera cuts to a static close-up over the customer's shoulder. The barista with a flat, even voice (S2) lifts the oat carton, turns it upside down, sets it on the wood, and says: <d>[English] We ran out at six this morning.</d> [Shot 3] At 00:07.000, the camera cuts back to the two-shot. The customer tightens his jaw and pulls the cup toward himself while steam curls past his face and the barista turns to the next ticket.
+
+overall_soundscape: Low cafe room tone continues under the scene. A steam wand hisses, ceramic clinks against the saucer, the empty carton knocks against wood, and a chair leg scrapes in the background.
+
+non_diegetic_music: N/A
+```
+
+### Worked example — image-to-video
+
+```text
+User ask (with an uploaded portrait): "have her look up and say she's not going back"
+
+sogni-agent -q --video -m minimax-h3-i2v --ref ./portrait.png --duration 6 -w 768 -h 1344 -o ./reply.mp4 "<prompt below>"
+```
+
+```text
+For the target video, at 0.00 seconds into the target video, <Picture 1> (from [Shot 1]) is fully referenced.
+
+integrated_multimodal_description: [Shot 1] Live-action, cinematic, a static medium close-up begins exactly from <Picture 1>, preserving the woman's dark chin-length hair, olive canvas jacket, red vinyl seatback, and the rain-streaked night-bus window. She lowers her phone into her lap and lifts her gaze toward the window as sodium streetlights slide across her cheek. The woman with a low, unhurried voice (S1) says: <d>[English] I'm not going back.</d> She turns slightly toward the aisle, sets her jaw, and closes one hand around her bag strap while the camera remains static.
+
+overall_soundscape: A steady diesel drone and the bus-frame rattle continue throughout. Rain ticks against the glass, canvas shifts as she moves, and an air brake hisses near the end.
+
+non_diegetic_music: Two widely spaced piano notes over sustained low strings, fading before the final second.
+```
+
+`--duration 6` renders 141 frames (5.88 s) and `--duration 10` renders 243
+frames (10.13 s). Keep every `[Shot N] At MM:SS.mmm` cut time within the actual
+snapped duration.
+
+### Required dialogue and shot markup
+
+The structured field document and its dialogue, speaker, and shot notation are
+the default H3 rewrite format. Preserve valid markup a user supplied, and repair
+free-form input into this contract before submission.
+
+**Dialogue tags.** Only the language tag and the spoken words go inside
+`<d>…</d>`. The speaker's identifying phrase, ID, action, and delivery all stay
+outside it:
+
+```text
+The young woman with a quiet, breathy voice (S1) says: <d>[English] I get off at the next station.</d>
+The two children (S1,S2) shout together, <d>[English] Wait for us!</d>
+```
+
+- Speaker IDs are `(S1)`, `(S2)`, … assigned in order of first vocal event and
+  kept stable across every shot. A character who never vocalizes gets no ID. Two
+  or more already-numbered speakers vocalizing together use a compound ID such
+  as `(S1,S2)`.
+- MiniMax documents stable dialogue support for Arabic, Chinese, English,
+  French, German, Italian, Japanese, Korean, Portuguese, Russian, and Spanish,
+  with varying support for additional languages. This list is advisory, not a
+  validation allowlist: preserve the user's actual language. Write its language
+  name in square brackets, e.g. `<d>[Japanese] …</d>`.
+- **Voiceover** uses the exact phrase `says in an off-screen voiceover`, and the
+  `<d>` block is followed by a statement that the on-screen character's lips
+  stay closed:
+
+  ```text
+  The man (S1) says in an off-screen voiceover: <d>[English] I still remember that road.</d> while his lips remain completely closed.
+  ```
+
+- `<scenetrans>` marks one line of dialogue or lyrics that crosses a cut: place
+  it at the connecting point in **both** parts, and state explicitly that the
+  audio continues across the cut (`continues seamlessly across the cut`,
+  `continues uninterrupted into the next shot`, `carries over from the previous
+  shot`, `remains audible across the transition`).
+- `<cutoff>` marks speech that is truncated by the end of the video.
+
+**Tokenizer tokens versus prompt markup.** The open-weights H3 tokenizer also
+reserves the learned tokens `<d>`, `</d>`, `<|cutoff|>`,
+`<|lyrics_start|>`, `<|lyrics_end|>`, `<|caption_start|>`, and
+`<|caption_end|>`. Inference integrations must register all seven exactly as
+released. Prompt authors should still follow MiniMax's public writing guide:
+emit `<d>…</d>`, `<scenetrans>`, and the plain `<cutoff>` spelling described
+above. The vertical-bar lyrics, caption, and cutoff tokens are tokenizer
+internals, not documented author-facing prompt markup. Never "repair" them by
+globally deleting pipe characters. Rewrite the meaning: caption boundaries and
+their contents become exact visible text in English double quotes; lyrics
+boundaries become an ordinary `<d>[Language] exact words</d>` block with the
+singer and delivery outside it; and `<|cutoff|>` becomes plain `<cutoff>`.
+Plain `<caption_start>`, `<caption_end>`, `<lyrics_start>`, and `<lyrics_end>`
+are not valid substitutes. If a generated draft still leaks one of these forms,
+warn and make one bounded semantic repair attempt, then keep the best non-empty
+structured prompt rather than blocking generation.
+
+**Shot markers and the camera vocabulary.** In the IR format, `[Shot 1]` opens
+with the overall style and initial composition and takes no timestamp; every
+later shot opens with a strictly increasing cut time — `[Shot 2] At 00:03.500,
+the camera cuts to …` (also `the shot cuts to` / `transitions to` / `changes
+to` / `switches to`). The IR's camera motion types are `Zoom In/Out`, `Push
+In/Pull Out`, `Pan Left/Right`, `Truck Left/Right`, `Tilt Up/Down`, `Pedestal
+Up/Down`, `Arc Shot`, `Tracking Shot`, `Static Shot`, `Shake
+Slightly/Strongly`, `POV`, and `Roll Clockwise/Counterclockwise`, optionally
+qualified `with small amplitude` / `with large amplitude` and `at slow speed` /
+`at fast speed`.
+
+**The three-field document.** MiniMax's rewriter emits the required alignment
+line when applicable, a blank line, then exactly three labelled fields in this
+order:
+
+```text
+integrated_multimodal_description: [Shot 1] ...
+
+overall_soundscape: ...
+
+non_diegetic_music: ...
+```
+
+`integrated_multimodal_description` is the whole audiovisual timeline;
+`overall_soundscape` is 1-4 sentences of ambience, physical action sound, and
+non-verbal human sound (no dialogue, singing, or diegetic music);
+`non_diegetic_music` is 1-3 sentences of score-only instrumentation, tempo, and
+dynamics. `N/A` is the schema's token for "nothing here" — used in
+`non_diegetic_music` for no score, and in `overall_soundscape` only for a
+deliberately silent video.
+
+**Alignment instruction lines (i2v / l2v / flf2v only).** These exact preambles pin
+reference images to the target timeline. They are mandatory for those modes and
+must be the first line, followed by one blank line. T2V has no preamble.
+
+Image-to-video (`minimax-h3-i2v` or `minimax-h3-i2v-turbo`, one `--ref`):
+
+```text
+For the target video, at 0.00 seconds into the target video, <Picture 1> (from [Shot 1]) is fully referenced.
+```
+
+Last-frame-only video (`minimax-h3-i2v` or `minimax-h3-i2v-turbo`, one
+`--ref-end`; there is deliberately no separate L2V selector):
+
+```text
+How the reference pictures align with the target video — <Picture 1> (from [Shot N]) aligns with the S.SS-second mark of the target video.
+```
+
+`N` is the actual final shot. Infer a plausible earlier state and describe the
+continuous action, object state, camera, light, and composition converging on
+the supplied closing frame at the snapped `S.SS` endpoint.
+
+First frame → last frame (`minimax-h3-flf2v` or
+`minimax-h3-flf2v-turbo`, `--ref` plus `--ref-end`). Note the bare `Picture 1`
+and `Shot 1` with **no** angle or square brackets, and the em dash (`—`) with a
+space on each side:
+
+```text
+How the reference pictures align with the target video — Picture 1 (from Shot 1) aligns with the 0.00-second mark of the target video; Picture 2 (from Shot N) aligns with the S.SS-second mark of the target video.
+```
+
+`N` is the index of the actual final shot (`Shot 1` for the usual single-shot
+transition; FL2VA favours one continuous shot and cuts only when the user asks),
+and `S.SS` is the effective duration to exactly two decimal places — `10.13` for
+243 frames at 24 fps (243 ÷ 24 = 10.125, rounded up).
+
+### MiniMax H3 reference-to-video (r2v)
+
+`minimax-h3-r2v` conditions on a whole **reference set** rather than one or two
+locked frames: up to **9 reference images**,
+**3 reference videos** (24 fps, 2–15 s, each with an optional soundtrack) and
+**3 standalone audio clips** (2–15 s each), **12 files maximum in total**.
+The 24 fps requirement applies to the reference files themselves: normalize any
+other frame rate without changing duration before submission, or H3 will
+time-distort the visual reference relative to its soundtrack.
+Reference-video duration totals may not exceed 15 seconds, and standalone
+reference-audio duration totals may not exceed 15 seconds. It runs a separate
+ref2va checkpoint, so it is never inferred — the Standard, Balanced, Turbo, or
+FastH3 Reference selector must be chosen by name with direct CLI
+`-m minimax-h3-r2v*` or `-m minimax-h3-fasth3-r2v-turbo`, or the
+`generate_video` tool's matching `videoModel` (including callers such as Sogni
+Chat). Direct CLI
+uses `--ref` then repeatable `-c` for images, plus repeatable `--ref-video` and
+`--ref-audio` for those modalities. At least one visual reference (image or
+video) is required. A reference video can be the only visual input; audio alone
+is invalid. r2v
+has no frame anchors at all—for
+a locked opening frame use `minimax-h3-i2v`, and for a first-to-last-frame
+transition use `minimax-h3-flf2v`. Ref2VA can still pin stills strictly inside
+the clip with `--keyframe`; those are not references, but each is named
+`<Picture N>` after the reference pictures (see
+[Intermediate keyframes](#intermediate-keyframes)).
+
+Ref2VA does not use the three-field Standard contract. Write exactly these six
+fields, in this order:
+
+```text
+subject_definitions:
+
+summary:
+
+retention_analysis:
+
+detailed_description:
+
+overall_soundscape:
+
+non_diegetic_music:
+```
+
+`subject_definitions` assigns stable labels and roles to every reused subject or
+asset. `summary` begins with one or more exact task types: `keyframe completion`,
+`reference generation`, `video editing`, `video continuation`, `audio reuse`,
+or `audio reference`. Join multiple types with exactly ` + ` and never repeat
+one. Choose tasks from the reference's assigned job, not merely because a file
+is attached. A direct video-editing summary begins its body exactly `The target
+video is an edited version of <Video 1>.` `retention_analysis` gives one line
+per label using the official relationship values, such as `fully_preserved`,
+`partially_preserved`, `attribute_transfer`, or `weak_reference` for visual
+content and `fully_copy`, `partially_copy`, `reference`, or `weak_reference` for
+audio. `detailed_description` is the shot-by-shot target-video timeline and
+uses the same `[Shot N]`, `(Sx)`, and `<d>[Language] ...</d>` rules as Base H3.
+
+**Immutable soundtrack rule.** If the user asks for the same, specific,
+original, or trending song/soundtrack—or choreography tied to that audio—the
+source signal and timeline are locked. Never generate a substitute, loose
+imitation, remix, recomposition, or copyright-avoidance melody/lyric change.
+Use `audio reuse` in `summary`, assign every locked `<Audio N>` `fully_copy` in
+`retention_analysis`, name it directly in `non_diegetic_music`, and put the
+source action onset/beat times in `detailed_description`. `audio reference`
+means H3 may generate a new signal and is valid only when the user explicitly
+wants style, timbre, rhythm, or delivery guidance rather than the original
+track. A generative request cannot guarantee waveform identity, so the final
+exact-song deliverable must stream-copy/remux the original audio after render.
+Soundtrack identity and choreography timing are separate: Ref2VA is loose
+conditioning, not an edit-level timing guarantee. If exact movement timing is
+mandatory, use a pose/edit-controlled workflow or stop before paid generation.
+
+**Reference grammar.** Reference assets are numbered from 1 independently per
+type. Use the exact angle-bracket labels:
+
+- `<Picture 1>` … `<Picture 9>` for images
+- `<Video 1>` … `<Video 3>` for videos
+- `<Audio 1>` … for audio
+
+Visible people, objects, scenes, or effects reused from an image or video become
+`<Subject N>` entries whose definitions cite their source asset. Reserve
+`<Picture N>` for a concrete frame or storyboard relationship, `<Video N>` for
+a whole-video edit, continuation, camera, cut, rhythm, or temporal relationship,
+and `<Audio N>` for a standalone audio asset or a reference-video soundtrack.
+Every soundtracked reference video contributes an `<Audio N>` ordinal before
+standalone audio clips; probe the files and use the runtime's reported order so
+the soundtrack cannot bind to the wrong label.
+
+Rewrite aliases such as "image 2", `@Image2`, or `[Image 2]` to the correct H3
+label. Seedance's `@Image1` / `@Video1` / `@Audio1` grammar must not leak into an
+H3 prompt. Never invent, drop, or renumber references after the prompt is
+written. Give every asset one explicit role and state the winner when sources
+conflict.
+
+Compact format example:
+
+```text
+subject_definitions:
+<Subject 1> is the woman in <Picture 1>; preserve her face, hairstyle, and dark-red jacket.
+<Video 1> is the camera-motion reference for the target video's slow handheld push-in.
+<Audio 1> is the voice-timbre reference for <Subject 1> (S1).
+
+summary:
+[reference generation + audio reference] The target video shows <Subject 1> walking through a rain-slicked street while following <Video 1>'s camera movement and <Audio 1>'s voice timbre.
+
+retention_analysis:
+<Subject 1> (appears in [Shot 1]): fully_preserved - her identity, hairstyle, and jacket are retained.
+<Video 1> (camera movement): weak_reference - its slow handheld push-in guides the new shot.
+<Audio 1>: reference - its vocal timbre guides <Subject 1>'s dialogue without copying the source signal.
+
+detailed_description:
+The target video uses a live-action cinematic style with wet neon street lighting. [Shot 1] <Subject 1> (S1) walks toward the camera while the camera performs the slow handheld push-in referenced from <Video 1>. She stops beneath a streetlight, looks over her shoulder, and says with the dry, low timbre referenced from <Audio 1>: <d>[English] It was never going to be the last train.</d>
+
+overall_soundscape:
+Steady rain falls on asphalt while tyres hiss through standing water and a bus engine passes from left to right.
+
+non_diegetic_music:
+N/A
+```
+
+Trim definitions for references that were not attached; unresolved labels are
+invalid.
+
+Sogni's current agent-facing R2V attachments are loose references. A prompt may
+borrow a clip's motion, pacing, or temporal structure, but must not claim
+`video editing` or `video continuation` unless the caller actually supplies a
+typed transformation relationship. Use I2VA, L2VA, or FL2VA when an endpoint
+must be locked.
+
+For voice references, bind the voice to the speaking subject by reusing that
+subject's `(Sx)` in `subject_definitions`; do not put the speaker ID in
+`retention_analysis`. A timbre/rhythm/emotion/delivery reference must not import
+the source recording's words. If the user explicitly asks to reuse or reperform
+reference speech, preserve its words and language and mark unintelligible spans
+`[unclear]` rather than guessing. A verbal cue embedded in copied background
+music can cite `<Audio N>` without an invented speaker ID. Put copied ambience
+and effects in `overall_soundscape`, audience-only score in
+`non_diegetic_music`, and use both fields when the source contains both.
+
+### Intermediate keyframes
+
+`--keyframe <image>@<seconds>` pins a still image (local path or URL) at an
+exact moment inside an H3 clip, in addition to the first and last frame. Repeat
+it for up to 8 keyframes. It works on every image-to-video and first/last-frame
+selector (Standard, Balanced, Turbo, FastH3, and FastH3 Two-Stage), on the FastH3
+Sound to Video selectors (`minimax-h3-fasth3-ia2v-turbo`, `-flfa2v-turbo`,
+`-a2v-turbo`, and their `-2stage` forms), and on every Ref2VA selector.
+Text-to-video cannot pin keyframes.
+
+- **Timing.** A keyframe lands on frame `round(seconds × 24)`, which must fall
+  strictly inside the snapped clip: from 0.1 s to one frame before the last
+  (0.1–7.9 s on an 8 s, 192-frame clip). The first and last frames belong to
+  `--ref` and `--ref-end`, never to a keyframe, and two keyframes cannot share a
+  frame. The CLI refuses anything else and names the range to use; it never
+  moves or drops a keyframe.
+- **Name each keyframe `<Picture N>` (MiniMax's keyframe format).** Keyframes
+  are numbered in time order after the mode's own pictures: after the first
+  frame `<Picture 1>` on I2V and IA2V, after the last frame `<Picture 1>` on L2V,
+  after `<Picture 1>` (first) and `<Picture 2>` (last) on FLF2V and FLFA2V, from
+  `<Picture 1>` on A2V, and after the last reference `<Picture N>` on Ref2VA.
+  They are still not references, get no `<Subject N>`, and never count toward
+  the reference caps. The word keyframe is allowed.
+  - **I2V, L2V, FLF2V, and Sound to Video:** the first line is one alignment
+    line listing every picture at its mark (frame ÷ 24, two decimals; the last
+    frame at the clip's end), in time order, each credited to the shot on
+    screen there. It replaces the I2V and L2V preambles:
+    `How the reference pictures align with the target video — Picture 1 (from Shot 1) aligns with the 0.00-second mark of the target video; Picture 2 (from Shot 2) aligns with the 2.88-second mark of the target video.`
+  - **Ref2VA:** add `<Picture N> is the keyframe of [Shot M], showing …` to
+    `subject_definitions`, `keyframe completion` to the summary task prefix (as
+    in `[reference generation + keyframe completion]`), and
+    `<Picture N> ([Shot M] keyframe): fully_preserved - …` to
+    `retention_analysis`.
+  - The shot where a keyframe lands names it: "the shot's keyframe corresponds
+    to `<Picture N>`", or, at a cut, `[Shot N] At MM:SS.mmm, the camera cuts to
+    …, whose keyframe corresponds to <Picture N>.` (Ref2VA: "the shot cuts to").
+- **H3's text encoder never sees the keyframe images.** Only the frame-pinning
+  node receives them, so H3 knows what a keyframe shows only from your words:
+  describe each one where it lands.
+- **Compare each keyframe with the anchor before it** (the first frame or the
+  previous keyframe):
+  - **Same camera angle, place, and light; only the subjects moved.** Stay in the
+    same shot and bring the action to the pose, position, facing, expression,
+    and props the keyframe shows, ordered with words (`as she reaches the rail`),
+    never with a clock time, and write "the shot's keyframe corresponds to
+    `<Picture N>`" where that moment arrives. A tighter framing from the same
+    angle can arrive as a push-in.
+  - **New camera angle, place, or light.** Start a new shot exactly at its time,
+    `[Shot N] At MM:SS.mmm, the camera cuts to …, whose keyframe corresponds to
+    <Picture N>`, and open that shot with the
+    keyframe's composition: shot size, camera angle, where each subject stands
+    and faces, the setting, and the light. An action in progress carries across
+    the cut. These cuts apply even when the request prefers one continuous shot,
+    and the alignment line's final `Shot N` counts them. If the last frame is
+    framed or lit differently from the last keyframe, the final shot cuts to it.
+- **Never put two differently framed or lit anchors in one shot.** They
+  cross-fade into each other, and a shot described differently from its keyframe
+  can flash the keyframe for a single frame.
+- **The cut clock** is the keyframe's frame ÷ 24, rounded down to the
+  millisecond: `@3.5` is frame 84, `00:03.500`; `@2.3` is frame 55, `00:02.291`.
+  The CLI prints each one before rendering (`Keyframe at 00:03.500 (frame 84)`).
+- **Sound to Video:** the uploaded audio still drives the performance; keyframes
+  pin how the clip looks at their times.
+- **Framing and price.** Each keyframe is centre-cropped onto the clip's canvas
+  like the last frame, so use stills with the clip's aspect ratio. Two keyframes
+  are included in the price; each additional keyframe adds a little output time
+  (see [models.md § MiniMax H3 keyframes](./models.md#minimax-h3-keyframes)).
+
+Worked example — the courier leaves the alley (first frame), is inside a
+stairwell at 4 s (a new place, so a cut), and reaches the top of the stairs
+(last frame, same stairwell and light, so no second cut):
+
+```bash
+sogni-agent -q --video -m minimax-h3-fasth3-flf2v-turbo --ref ./alley.png --ref-end ./stair-top.png --keyframe ./stairwell.png@4 --duration 8 -w 1344 -h 768 -o ./courier.mp4 "<prompt below>"
+```
+
+```text
+How the reference pictures align with the target video — Picture 1 (from Shot 1) aligns with the 0.00-second mark of the target video; Picture 3 (from Shot 2) aligns with the 4.00-second mark of the target video; Picture 2 (from Shot 2) aligns with the 8.00-second mark of the target video.
+
+integrated_multimodal_description: [Shot 1] Live-action, cinematic. In the position and framing established by Picture 1, a bike courier in a yellow rain jacket wheels her bike down a narrow wet alley toward a steel side door while rain drips from the fire escape above. She leans the bike against the brick, hauls the door open, and steps through as the static wide shot holds on the alley. [Shot 2] At 00:04.000, the camera cuts to a low-angle shot inside a bare concrete stairwell lit by a caged orange bulb, whose keyframe corresponds to <Picture 3>: the courier on the bottom step with her helmet in one hand, facing up the stairs. She climbs two steps at a time, one hand sliding along the painted rail, and settles into the pose, spacing, and composition established by Picture 2 at the end of the shot.
+
+overall_soundscape: Rain patters on metal in the alley, the steel door clangs shut behind her, and her footsteps echo up the stairwell.
+
+non_diegetic_music: N/A
+```
+
+### Agent-ready H3 command shapes
+
+```bash
+# Text-to-video (landscape)
+sogni-agent -q --video -m minimax-h3 --duration 10 -w 1344 -h 768 -o ./video.mp4 "<three-field H3 prompt>"
+
+# Image-to-video from one first frame (portrait)
+sogni-agent -q --video -m minimax-h3-i2v --ref ./first.png --duration 8 -w 768 -h 1344 -o ./video.mp4 "<I2V preamble plus three-field H3 prompt>"
+
+# Last-frame-only L2VA reuses the I2V selector
+sogni-agent -q --video -m minimax-h3-i2v --ref-end ./last.png --duration 8 -w 768 -h 1344 -o ./video.mp4 "<L2V preamble plus three-field H3 prompt>"
+
+# First frame -> last frame transition
+sogni-agent -q --video -m minimax-h3-flf2v --ref ./first.png --ref-end ./last.png --duration 8 -w 1344 -h 768 -o ./video.mp4 "<FLF2V preamble plus three-field H3 prompt>"
+
+# Balanced and Turbo use the same T2V/I2V/L2V/FLF2V prompt contracts
+sogni-agent -q --video -m minimax-h3-balanced --duration 8 -w 1344 -h 768 -o ./video.mp4 "<three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-i2v-balanced --ref ./first.png --duration 8 -w 768 -h 1344 -o ./video.mp4 "<I2V preamble plus three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-flf2v-balanced --ref ./first.png --ref-end ./last.png --duration 8 -w 1344 -h 768 -o ./video.mp4 "<FLF2V preamble plus three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-turbo --duration 8 -w 1344 -h 768 -o ./video.mp4 "<three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-i2v-turbo --ref ./first.png --duration 8 -w 768 -h 1344 -o ./video.mp4 "<I2V preamble plus three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-i2v-turbo --ref-end ./last.png --duration 8 -w 768 -h 1344 -o ./video.mp4 "<L2V preamble plus three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-flf2v-turbo --ref ./first.png --ref-end ./last.png --duration 8 -w 1344 -h 768 -o ./video.mp4 "<FLF2V preamble plus three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-fasth3-turbo --duration 8 -w 1344 -h 768 -o ./video.mp4 "<three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-fasth3-i2v-turbo --ref ./first.png --duration 8 -w 768 -h 1344 -o ./video.mp4 "<I2V preamble plus three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-fasth3-flf2v-turbo --ref ./first.png --ref-end ./last.png --duration 8 -w 1344 -h 768 -o ./video.mp4 "<FLF2V preamble plus three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-fasth3-ia2v-turbo --ref ./first.png --ref-audio ./voice.m4a --duration 8 -o ./video.mp4 "<I2V preamble plus three-field H3 prompt with the uploaded words in <d> tags>"
+
+# Intermediate keyframes: repeat --keyframe <image>@<seconds> (up to 8) on i2v, flf2v, Sound to Video, or Ref2VA
+sogni-agent -q --video -m minimax-h3-fasth3-i2v-turbo --ref ./first.png --keyframe ./turn.png@3.5 --keyframe ./wave.png@6 --duration 8 -o ./video.mp4 "<keyframe alignment line plus three-field H3 prompt that names each keyframe <Picture N> where it lands>"
+
+# Reference-to-video (reference order defines the prompt ordinals)
+sogni-agent -q --video -m minimax-h3-r2v --ref ./identity.png -c ./wardrobe.png --ref-video ./motion.mp4 --ref-audio ./voice.m4a --duration 8 -w 1344 -h 768 -o ./video.mp4 "<six-field Ref2VA prompt>"
+sogni-agent -q --video -m minimax-h3-r2v-balanced --ref ./identity.png -c ./wardrobe.png --duration 8 -w 1344 -h 768 -o ./video.mp4 "<six-field Ref2VA prompt>"
+```
+
+When local primary `--ref-audio` is combined with `--audio-start` and/or
+`--audio-duration` on MiniMax H3 R2V, the CLI prepares and physically trims the
+audio window before upload. The worker receives only that window, and the CLI
+does not forward redundant `audioStart` / `audioDuration` project fields. This
+avoids worker failures on long source files and makes the attached `<Audio 1>`
+the exact waveform-conditioned lip-sync input. Remote audio URLs and additional
+audio references keep their existing handling.
+
+## High-Res Video Routing
+
+When the user asks for video in **"hd"**, **"1080p"**, **"4k"**, **"uhd"**, or **"high-res"**, do not use the default WAN video models.
+
+- For **native Seedance 4K / UHD**, use full Seedance with `-m seedance2 --target-resolution 2160`. This is a Premium Spark vendor path; do not use `seedance2-mini`, `seedance2-fast`, or `seedance2-5` for 4K — Mini and Fast cap at 720p, and Seedance 2.5 renders up to 1080p.
+- For **Seedance 2.5 HD / 1080p**, preserve the requested model with `-m seedance2-5 --target-resolution 1080`. Its frame, loose-reference, edit, and extend workflows also accept 1080p; edit/extend inherit the source video's aspect ratio.
+- For **non-vendor HD / 1080p text-to-video**, use `-m ltx25`.
+- For **non-vendor HD / 1080p image-to-video**, use `-m ltx25-i2v`.
+- Prefer LTX-sized dimensions such as `-w 1920 -h 1088` when the chosen model is LTX.
+- For bare "720p" on LTX/WAN 2.2 without orientation or exact pixels, prefer `--target-resolution 768` instead of forcing landscape dimensions. Seedance uses `--target-resolution 720`; honor the selected model's supported tiers.
+- When the prompt combines a named resolution with an aspect ratio, such as "720p 9:16", let the CLI infer both instead of forcing manual `-w`/`-h` unless the user gave exact pixels.
+- If the user explicitly asks for `vertical`, `portrait`, `story`, `reel`, `tiktok`, `square`, or `4:3`, apply the matching dimensions from the **Orientation Mapping** rules instead of defaulting to 16:9.
+- Rewrite the user's request using the **LTX-2.x Prompt Rule** only when invoking an LTX model. Do not send short slogan-style prompts to LTX.
+
+## Agent-ready command shapes
+
+```bash
+# Native Seedance 4K / UHD text-to-video
+sogni-agent -q --video -m seedance2 --target-resolution 2160 -o ./video.mp4 "A polished cinematic product reveal with native ambient sound"
+
+# HD / 1080p text-to-video without the Seedance vendor path: prefer LTX-2.5
+sogni-agent -q --video -m ltx25 -w 1920 -h 1088 -o ./video.mp4 "<LTX-rewritten paragraph>"
+
+# HD / 1080p image-to-video without the Seedance vendor path: prefer LTX i2v
+sogni-agent -q --video --ref /path/to/image.png -m ltx25-i2v -w 1920 -h 1088 -o ./video.mp4 "<LTX-rewritten paragraph>"
+
+# LTX-2.3 voice identity / persona
+sogni-agent --video --reference-audio-identity voice.webm 'NARRATOR: "This is my voice."'
+
+# Seedance 2.0 standard (4-15s vendor video path with native audio)
+sogni-agent --video -m seedance2 --duration 8 "A polished product reveal with native ambient sound"
+
+# Seedance 2.5 (4-30s single clips, 480p/720p/1080p — the one Seedance that renders past 15s in one call)
+sogni-agent --video -m seedance2-5 --duration 24 "A continuous one-take product story with native ambient sound"
+
+# Seedance 2.5 edit (duration must match @Video1; aspect ratio is inherited)
+sogni-agent --video -m seedance2-5-v2v --seedance-task-type edit --ref-video source.mp4 --duration 8 --target-resolution 720 "Edit @Video1 while preserving its subject and timing"
+
+# Seedance 2.5 extension (duration is the new continuation length)
+sogni-agent --video -m seedance2-5-v2v --seedance-task-type extend --ref-video source.mp4 --duration 8 --target-resolution 720 "Extend @Video1 after its ending"
+```
+
+Prefer `.webm`, `.m4a`, or `.mp3` voice clips. Local `.wav` clips are normalized
+to `.m4a` before upload when `ffmpeg` is available.

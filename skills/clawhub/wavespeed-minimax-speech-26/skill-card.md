@@ -1,42 +1,57 @@
-## Description: <br>
-Convert text to speech using MiniMax Speech 2.6 Turbo via WaveSpeed AI with voice presets, emotion controls, language support, and configurable audio output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Convert text to speech using MiniMax Speech 2.6 Turbo via WaveSpeed AI, with selectable voices, language, emotion, speed, pitch, and audio format.
 
-## Publisher: <br>
-[chengzeyi](https://clawhub.ai/user/chengzeyi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wavespeed](https://clawhub.ai/user/wavespeed)
 
-## Use Case: <br>
-Developers and agents use this skill to configure WaveSpeed AI MiniMax Speech 2.6 Turbo text-to-speech requests, choose voices and audio settings, and handle generated audio URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Submitted text is processed by WaveSpeed AI as an external service. <br>
-Mitigation: Do not submit secrets, credentials, regulated data, confidential scripts, or other sensitive text unless the applicable data-sharing policy permits it. <br>
-Risk: The skill uses a WaveSpeed API key for billable requests. <br>
-Mitigation: Store WAVESPEED_API_KEY in an environment variable or secret manager, avoid hardcoding it, and monitor usage according to account policy. <br>
-Risk: JavaScript examples depend on the wavespeed client package. <br>
-Mitigation: Verify the official wavespeed client package before running examples and validate request parameters against the documented options. <br>
+## Use Case:
 
+Developers can use the skill to generate speech audio from text with MiniMax Speech 2.6 Turbo, choosing a voice and optional speech settings such as language, emotion, speed, pitch, and audio format.
 
-## Reference(s): <br>
-- [WaveSpeed AI API Keys](https://wavespeed.ai/accesskey) <br>
-- [ClawHub Skill Page](https://clawhub.ai/chengzeyi/wavespeed-minimax-speech-26) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash and JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance covers text, voice, emotion, speed, pitch, audio format, sample rate, bitrate, channel, and language boost settings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Text and selected uploads are sent to WaveSpeed, and speech generation may incur charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only content you are authorized to send and review pricing before generation.
+
+Risk: API key exposure or mutable package releases could affect account security and execution integrity.
+
+Mitigation: Keep API keys out of chat and consider reviewed package versions instead of mutable releases.
+
+Risk: External npm package code was outside the supplied security review.
+
+Mitigation: Review the package and its version before installation or use.
+
+## Reference(s):
+
+- [WaveSpeed MCP server](https://github.com/WaveSpeedAI/mcp-server)
+
+## Skill Output:
+
+**Output Type(s):** [Audio files, API calls]
+
+**Output Format:** [Generated speech audio (MP3, WAV, PCM, or FLAC) with a result URL or saved file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Voice, language, emotion, speed, pitch, sample rate, bitrate, and channel can be configured.]
+
+## Skill Version(s):
+
+2.1.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
