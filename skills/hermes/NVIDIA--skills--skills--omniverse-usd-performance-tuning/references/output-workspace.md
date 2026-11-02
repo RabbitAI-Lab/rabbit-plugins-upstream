@@ -5,10 +5,8 @@ agent_routes:
 agent_next:
   - setup-usd-performance-tuning/references/runtime-context-header.md
 freshness: 2026-05-20
-version: "0.1.0"
+version: "0.4.1"
 ---
-<!-- SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved. -->
-<!-- SPDX-License-Identifier: Apache-2.0 -->
 
 # Output Workspace Contract
 
@@ -36,7 +34,7 @@ artifacts under the skill repo or the shell working directory.
 ```
 
 `setup-preflight.json` is the canonical session-scoped runtime configuration.
-The setup, validation, Scene Optimizer, compare, and report references all read
+The setup, validation, Usd Optimize, compare, and report references all read
 this exact filename from this exact location.
 
 ## Runtime Gate
@@ -44,19 +42,12 @@ this exact filename from this exact location.
 If `output_path` is missing and the request will write any artifact, ask the
 user for one before continuing. If `<output_path>/setup-preflight.json` is
 missing or unreadable, invoke `setup-usd-performance-tuning`; do not improvise a
-silent runtime probe. If the file exists, print the runtime context before
-asking the user to continue, change Kit, switch to standalone, or refresh the
-probe.
+silent runtime probe. If the file exists, print the runtime context header and
+wait for the user's answer before continuing.
 
-```text
-─── Runtime context ───────────────────────────────────────────────────────
-Kit application:    {runtime_context.kit.application} {runtime_context.kit.version}
-  path:             {runtime_context.kit.path}
-  build:            {runtime_context.kit.build}
-Scene Optimizer:    {runtime_context.sceneOptimizer.extension} {runtime_context.sceneOptimizer.version}
-Asset Validator:    {runtime_context.assetValidator.package} {runtime_context.assetValidator.version} via {runtime_context.assetValidator.source}
-───────────────────────────────────────────────────────────────────────────
-```
+The header template and its option set live in
+`setup-usd-performance-tuning/references/runtime-context-header.md`, which owns
+Format A and Format B. Read it there; this file does not carry a copy.
 
 ## Anti-Patterns
 
