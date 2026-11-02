@@ -1,44 +1,58 @@
-## Description: <br>
-Guides an agent through a second-curve business strategy audit for companies deciding when and how to invest in a new growth curve before the current one peaks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides business leaders in deciding when and how to invest in a second growth curve alongside an established core business.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Developers, operators, and business teams use this skill to help an AI agent diagnose first-curve maturity, compare second-curve candidates, recommend timing and resource allocation, and produce a concise second-curve audit. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Strategic recommendations could be mistaken for automatic business instructions, including advice about resource allocation or pivots. <br>
-Mitigation: Treat outputs as decision support and review recommendations with responsible business owners before acting. <br>
+## Use Case:
 
+Business leaders use this skill to assess the stage of their core business, compare adjacent growth opportunities, and plan the timing and resource allocation for a second curve.
 
-## Reference(s): <br>
-- [Primary sources](references/sources.md) <br>
-- [Intel 1985 memory-to-microprocessor pivot example](examples/intel-1985-memory-to-microprocessor-pivot.md) <br>
-- [Incumbent AI second-curve example](examples/incumbent-ai-second-curve-2024-2026.md) <br>
-- [The Second Curve on ClawHub](https://clawhub.ai/deciqai/skills/second-curve) <br>
-- [deciqAI second-curve page](https://www.deciqai.com/c/second-curve) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/second-curve.json) <br>
-- [deciqAI knowledge skills repository](https://github.com/deciqAI/knowledge-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown audit and stepwise coaching prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May stop at explicit wait checkpoints in coach mode.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Investment percentages are planning heuristics and may not fit an organization's circumstances.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate assumptions and adapt recommendations to the company's constraints before making business decisions.
+
+Risk: Saved usage observations could contain confidential business details.
+
+Mitigation: Omit confidential details from saved usage observations.
+
+## Reference(s):
+
+- [Second-Curve Sources](artifact/references/sources.md)
+- [Intel's 1985 Memory-to-Microprocessor Pivot](artifact/examples/intel-1985-memory-to-microprocessor-pivot.md)
+- [The Incumbent's AI Second Curve (2024–2026)](artifact/examples/incumbent-ai-second-curve-2024-2026.md)
+- [Second Curve Skill Page](https://clawhub.ai/deciqai/skills/second-curve)
+- [deciqAI Second Curve Resource](https://www.deciqai.com/c/second-curve)
+- [deciqAI Knowledge Skills Repository](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown second-curve audit with findings and recommended actions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Covers first-curve stage, candidate second curves, timing, resource allocation, and defenses against common failure patterns.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,56 @@
-## Description: <br>
-Helps agents guide founders, operators, and investors through choosing a Spirit, Physical, or Hybrid international expansion mode before committing capital or local operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides companies planning their first international expansion to choose and validate a digital-first, local-presence, or hybrid entry model.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders, operators, investors, and strategy teams use this skill to evaluate whether a first overseas move should stay digital/export-led, require a local entity and staff, or follow a hybrid validation sequence. It produces an expansion mode decision record with rationale, validation triggers, risk audit status, capital guardrails, and review cadence. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users could treat the expansion recommendation as legal, tax, regulatory, or market-entry advice. <br>
-Mitigation: Use it as strategic guidance only, and validate regulated industries, local entity decisions, and market-entry obligations with qualified local counsel. <br>
+## Use Case:
 
+Founders, executives, and investors use it to assess a company's first move into a new country, compare digital-first and local-presence models, and record validation triggers, risks, and capital commitments.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/overseas-expansion-framework) <br>
-- [Primary sources](references/sources.md) <br>
-- [Nintendo Spirit-first example](examples/nintendo-spirit-first-physical-second-us-market-entry-1985.md) <br>
-- [Nintendo corporate history](https://www.nintendo.co.jp/corporate/en/history/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown decision record and step-by-step strategic guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May pause for user input during coaching mode; produces business strategy guidance, not legal, tax, regulatory, or market-entry advice.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Market, regulatory, or cost assumptions in an expansion plan may be inaccurate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate assumptions with qualified local advisers and confirm evidence before committing resources.
+
+Risk: Shared examples or lesson notes may expose confidential company information.
+
+Mitigation: Remove confidential company details before sharing examples or notes.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/overseas-expansion-framework)
+- [Nintendo corporate history](https://www.nintendo.co.jp/corporate/en/history/)
+- [Source notes](artifact/references/sources.md)
+- [Skill overview and method](https://www.deciqai.com/c/overseas-expansion-framework)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown expansion-mode decision record with rationale, validation triggers, risk review, and review cadence.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tailored to the company and target market; coach mode proceeds one question at a time.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

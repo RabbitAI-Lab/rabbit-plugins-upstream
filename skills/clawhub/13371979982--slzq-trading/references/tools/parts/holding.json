@@ -1,0 +1,253 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "get_holding_trade_dates",
+      "description": "获取持仓龙虎榜的可用交易日列表（倒序）。**查快照前必须先调它拿 tradeDate**——龙虎榜由交易所收盘后公布，盘中当天没有数据，直接拿今天的日期去查会返回空，据此得出『没人持仓』是错误结论。传 symbol，或传 exchange+product。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "合约代码，如 'rb2601'。"
+          },
+          "exchange": {
+            "type": "string",
+            "description": "交易所代码，如 'SHFE'。"
+          },
+          "product": {
+            "type": "string",
+            "description": "品种前缀，如 'rb'。"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_holding_contracts",
+      "description": "获取某品种下持仓龙虎榜可查询的合约列表。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "exchange": {
+            "type": "string",
+            "description": "交易所代码，如 'SHFE'。"
+          },
+          "product": {
+            "type": "string",
+            "description": "品种前缀，如 'rb'。"
+          }
+        },
+        "required": [
+          "exchange",
+          "product"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_holding_brokers",
+      "description": "获取持仓龙虎榜里可选的期货公司会员列表。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "合约代码。"
+          },
+          "exchange": {
+            "type": "string",
+            "description": "交易所代码。"
+          },
+          "product": {
+            "type": "string",
+            "description": "品种前缀。"
+          },
+          "tradeDate": {
+            "type": "string",
+            "description": "交易日 yyyy-MM-dd。"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_holding_update_time",
+      "description": "查询持仓龙虎榜数据的最新交易日，用于判断数据是否已更新到最近一个交易日。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "合约代码。"
+          },
+          "exchange": {
+            "type": "string",
+            "description": "交易所代码。"
+          },
+          "product": {
+            "type": "string",
+            "description": "品种前缀。"
+          }
+        }
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_holding_snapshot",
+      "description": "获取商品期货持仓龙虎榜快照：交易所公布的期货公司会员持买/持卖仓量、多空占比和会员排行。**这是市场上各家期货公司客户的整体多空分布，不是用户本人的持仓**——本人持仓请用 get_positions。tradeDate 必填且必须是已公布的交易日，先用 get_holding_trade_dates 取。数据滞后一个交易日，不能当作实时行情；可以辅助判断，但须说明数据滞后。不要解读成某公司看多。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "tradeDate": {
+            "type": "string",
+            "description": "交易日 yyyy-MM-dd，必填，须来自 get_holding_trade_dates。"
+          },
+          "symbol": {
+            "type": "string",
+            "description": "合约代码，summary=false 时使用。"
+          },
+          "exchange": {
+            "type": "string",
+            "description": "交易所代码。"
+          },
+          "product": {
+            "type": "string",
+            "description": "品种前缀，summary=true 时必填。"
+          },
+          "summary": {
+            "type": "boolean",
+            "description": "true=品种下全部合约汇总；false（默认）=单合约。"
+          }
+        },
+        "required": [
+          "tradeDate"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_holding_position_trend",
+      "description": "获取持仓龙虎榜的多空持仓趋势（近 90 自然日双折线）。返回 categories/longSeries/shortSeries 三个等长数组。**按自然日补全，非交易日与无数据日的值是 null 不是 0**——算变化率或求和时必须跳过 null，当成 0 会凭空造出持仓归零的暴跌。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "endDate": {
+            "type": "string",
+            "description": "截止日期 yyyy-MM-dd，必填。"
+          },
+          "symbol": {
+            "type": "string",
+            "description": "合约代码，summary=false 时使用。"
+          },
+          "exchange": {
+            "type": "string",
+            "description": "交易所代码。"
+          },
+          "product": {
+            "type": "string",
+            "description": "品种前缀，summary=true 时必填。"
+          },
+          "summary": {
+            "type": "boolean",
+            "description": "是否品种汇总。"
+          }
+        },
+        "required": [
+          "endDate"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_holding_broker_summary",
+      "description": "查看某一家期货公司会员在某个品种上的持仓结构（该品种全部合约按会员前缀聚合），用来看这家整体偏多还是偏空。注意：会员持仓含其全部客户的净头寸与套保盘，方向与盈亏没有必然联系，不要解读成『该公司看多』或据此评价公司优劣。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "exchange": {
+            "type": "string",
+            "description": "交易所代码。"
+          },
+          "product": {
+            "type": "string",
+            "description": "品种前缀。"
+          },
+          "brokerPrefix": {
+            "type": "string",
+            "description": "期货公司会员简称前缀。"
+          },
+          "tradeDate": {
+            "type": "string",
+            "description": "交易日 yyyy-MM-dd。"
+          }
+        },
+        "required": [
+          "exchange",
+          "product",
+          "brokerPrefix",
+          "tradeDate"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_holding_broker_volume_trend",
+      "description": "查看某一家期货公司会员在某个品种上的成交量趋势。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "exchange": {
+            "type": "string",
+            "description": "交易所代码。"
+          },
+          "product": {
+            "type": "string",
+            "description": "品种前缀。"
+          },
+          "brokerPrefix": {
+            "type": "string",
+            "description": "期货公司会员简称前缀。"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "截止日期 yyyy-MM-dd。"
+          },
+          "range": {
+            "type": "string",
+            "enum": [
+              "1m",
+              "3m",
+              "6m"
+            ],
+            "description": "时间范围，默认 1m。"
+          },
+          "productName": {
+            "type": "string",
+            "description": "品种展示名，可选。"
+          }
+        },
+        "required": [
+          "exchange",
+          "product",
+          "brokerPrefix",
+          "endDate"
+        ]
+      }
+    }
+  }
+]

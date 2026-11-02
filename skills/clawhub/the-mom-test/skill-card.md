@@ -1,42 +1,51 @@
-## Description: <br>
-This skill guides founders through Mom Test-style customer interviews that validate demand by focusing on past behavior, current workarounds, and concrete commitments instead of compliments or hypotheticals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides founders through customer interviews that uncover real problems and past behavior instead of relying on polite reactions to an idea.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders, product teams, and startup operators use this skill to prepare and evaluate customer discovery interviews before product-market fit. It helps them test whether a problem is real and painful by collecting evidence about past behavior, existing workarounds, and concrete commitments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Advisory interview guidance can still lead to poor business decisions if users treat outputs as validation without checking real customer behavior. <br>
-Mitigation: Use the skill's outputs as interview coaching, then verify conclusions against specific past behavior, paid workarounds, and concrete customer commitments. <br>
-Risk: The skill includes external web references. <br>
-Mitigation: Treat external links as normal web references and independently evaluate them before relying on their business advice. <br>
+## Use Case:
 
+Founders and product teams use this guidance to plan customer discovery interviews, ask about specific past behavior, and evaluate whether a problem is supported by existing workarounds or commitments.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/the-mom-test) <br>
-- [deciqAI The Mom Test](https://www.deciqai.com/c/the-mom-test) <br>
-- [deciqAI Machine-Readable Metadata](https://www.deciqai.com/s/the-mom-test.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Analysis] <br>
-**Output Format:** [Markdown guidance with checklists and interview coaching] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory content only; does not request access, execute tools, or perform actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Compliments, hypothetical purchase intent, or pitching the idea can create misleading demand signals.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Ask about specific past experiences, current workarounds, and concrete commitments before treating interest as validation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/the-mom-test)
+- [The Mom Test — deciqAI](https://www.deciqai.com/c/the-mom-test)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/the-mom-test.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Concise interview guidance, example questions, and feedback evaluation criteria]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Planning and interpretation guidance; no automated actions or additional permissions are requested.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

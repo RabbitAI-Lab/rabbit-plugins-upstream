@@ -1,45 +1,54 @@
-## Description: <br>
-Helps an agent analyze whether growth, decline, diffusion, or adoption dynamics are near a tipping point driven by thresholds, network effects, social proof, or other self-reinforcing mechanisms. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes whether growth, decline, or behavior diffusion is approaching a self-reinforcing threshold and where intervention may have the most leverage.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to structure analysis of critical mass, phase transitions, network-effect thresholds, social diffusion, and downward-tipping risk. It is suited for strategy, market, community, public-health, and policy questions where the user needs a threshold-distance estimate, leverage zones, monitoring metrics, and defenses. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may over-treat threshold estimates in business, investment, public-health, or policy examples as authoritative advice. <br>
-Mitigation: Verify empirical threshold estimates against current primary sources and domain experts before acting on high-impact conclusions. <br>
-Risk: The framework can mislead when applied to a genuinely linear system or to a setting without network effects, social proof, or positive feedback. <br>
-Mitigation: First confirm that a plausible self-reinforcing threshold mechanism exists; otherwise use a linear or product-market-fit analysis instead. <br>
+## Use Case:
 
+Developers, analysts, and decision-makers use the skill to assess network growth, market or social diffusion, and declining communities. It structures the work around a threshold estimate, the system's current position, leverage points, monitoring signals, and downward-tipping risks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/tipping-point) <br>
-- [Publisher profile](https://clawhub.ai/user/deciqai) <br>
-- [Primary sources](references/sources.md) <br>
-- [Schelling Segregation + Hush Puppies + Modern Platform Tipping](examples/schelling-segregation-hush-puppies-modern-platform-tipping.md) <br>
-- [Measles Herd-Immunity Threshold](examples/measles-herd-immunity-threshold.md) <br>
-- [Fine 1993 herd immunity review](https://doi.org/10.1093/oxfordjournals.epirev.a036121) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown with a structured tipping-point analysis template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step coaching questions before producing the analysis when the user is new to the framework.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Threshold estimates may not fit the system being analyzed and could mislead decisions if treated as precise forecasts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate estimates against relevant data and historical comparables, and make assumptions and uncertainty clear.
+
+Risk: Real-use examples could disclose confidential information.
+
+Mitigation: Remove confidential details before including examples.
+
+## Reference(s):
+
+- [Tipping Point source references](artifact/references/sources.md)
+- [Fine (1993), Herd Immunity: History, Theory, Practice](https://doi.org/10.1093/oxfordjournals.epirev.a036121)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown tipping-point analysis with threshold estimates, assumptions, leverage zones, monitoring metrics, and defensive actions.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations depend on the system and evidence provided; threshold estimates should be calibrated to relevant data and comparables.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

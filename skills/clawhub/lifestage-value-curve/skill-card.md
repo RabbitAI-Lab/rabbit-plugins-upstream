@@ -1,48 +1,56 @@
-## Description: <br>
-Guides agents through a life-stage career planning framework that maps current age, behavioral evidence, investment patterns, and next-stage unlocks into a Lifestage Investment Audit and Next-Stage Unlock Plan. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Maps career-life stages to different investment priorities and guides users through a stage-specific investment audit and next-stage plan.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, founders, knowledge workers, and coaching agents use this skill to decide which career-life stage strategy fits a person's current context and to identify a specific next-stage investment. It is most useful when someone feels misaligned with their age or career phase and needs a structured audit rather than generic career advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may ask about age, career goals, and personal investment patterns. <br>
-Mitigation: Share only the level of personal detail appropriate for the agent session and avoid including private or identifying details in examples. <br>
-Risk: The stage framework can be over-applied as a rigid or deterministic model. <br>
-Mitigation: Use age as a starting hypothesis and calibrate against behavioral evidence, as the skill instructs. <br>
-Risk: Observed examples added after real use could contain sensitive personal details. <br>
-Mitigation: Review any observed examples before saving them back into the skill and remove private or identifying information. <br>
+## Use Case:
 
+People planning their careers use this skill to assess whether their current investments fit their career-life stage and identify a concrete investment and next-stage unlock plan.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/lifestage-value-curve) <br>
-- [Primary sources](references/sources.md) <br>
-- [Charles Darwin career stages example](examples/charles-darwin-career-stages-1809-1882.md) <br>
-- [Hesiod, Works and Days](https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0132) <br>
-- [Erik Erikson, Childhood and Society](https://archive.org/details/childhoodsociety00erik) <br>
-- [Darwin Project](https://www.darwinproject.ac.uk/) <br>
-- [deciqAI skill metadata](https://www.deciqai.com/s/lifestage-value-curve.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown coaching response or structured markdown audit] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step questions and stop at explicit wait points before producing the final audit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill asks an agent to retain real-use failure patterns, which could expose private career details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove the real-use example instruction or require explicit approval and anonymization before saving anything.
+
+Risk: Users could mistake the career-stage age bands for validated developmental stages or apply them deterministically.
+
+Mitigation: Treat age as a starting hypothesis, weigh behavioral evidence, and explain that the bands are practical defaults rather than empirically validated milestones.
+
+## Reference(s):
+
+- [Primary sources and framework caveats](references/sources.md)
+- [Hesiod, Works and Days](https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0132)
+- [Erikson, Childhood and Society](https://archive.org/details/childhoodsociety00erik)
+- [Charles Darwin Project](https://www.darwinproject.ac.uk/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Markdown with a Lifestage Investment Audit and Next-Stage Unlock Plan]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Personalized using user-provided age and behavioral evidence; the skill says age bands are practical starting hypotheses, not validated developmental milestones.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

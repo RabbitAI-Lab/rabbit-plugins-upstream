@@ -1,40 +1,54 @@
-## Description: <br>
-Helps agents assess whether customer acquisition, lifetime value, contribution margin, and payback period support disciplined growth spending. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides per-customer profitability analysis using fully loaded CAC, gross-margin LTV, and payback period to inform growth-spending decisions.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders, operators, finance teams, and growth teams use this skill to evaluate CAC, LTV, gross-margin contribution, payback period, and whether growth channels should be scaled, fixed, or cut. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial guardrails may be misleading if CAC, LTV, margin, churn, runway, or segment inputs are incomplete or stale. <br>
-Mitigation: Verify calculations against current accounting, sales, marketing, and cohort data before changing spend or budgets. <br>
+## Use Case:
 
+Founders, operators, and growth teams use this skill to assess acquisition channels and decide whether customer acquisition spending can scale, using segmented CAC, gross-margin contribution, payback, and runway.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/unit-economics-cac-ltv-payback) <br>
-- [deciqAI unit economics guide](https://www.deciqai.com/c/unit-economics-cac-ltv-payback) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/unit-economics-cac-ltv-payback.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or structured text with financial checks, calculations, and decision guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No code execution; outputs depend on user-provided business metrics.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: ClawHub release evidence) <br>
+Risk: Incomplete or optimistic customer economics can lead to unsound growth-spending decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only the business figures needed and review CAC, gross-margin and payback assumptions against runway before changing spend.
+
+Risk: Linked publisher content is outside the reviewed skill package.
+
+Mitigation: Treat linked content as separate and assess it independently before relying on it.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/unit-economics-cac-ltv-payback)
+- [deciqAI unit economics guide](https://www.deciqai.com/c/unit-economics-cac-ltv-payback)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance]
+
+**Output Format:** [Markdown checklist and concise business analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses business figures supplied for analysis; does not access accounts or change spending automatically.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

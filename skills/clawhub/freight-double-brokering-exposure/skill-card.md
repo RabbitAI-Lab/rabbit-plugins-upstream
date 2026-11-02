@@ -1,44 +1,55 @@
-## Description: <br>
-Helps freight brokers identify double-brokering and fraud exposure by tracing downstream payment, carrier identity, cargo, bond, and shipper-account risks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps freight brokers identify double-brokering, payment, and downstream liability risks when shipment or carrier details do not match.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Freight brokers and brokerage teams use this skill to spot double-brokering patterns, assess payment and liability exposure, and structure verification steps before taking operational action. It is operational risk guidance and is not legal advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat freight dispute, payment-hold, fraud-reporting, bond, or liability guidance as legal advice. <br>
-Mitigation: Use the skill as operational risk guidance and involve qualified counsel or compliance staff before taking high-impact business action. <br>
-Risk: Acting on an apparent carrier identity mismatch without verification could disrupt payment, service, or counterparty relationships. <br>
-Mitigation: Confirm the hauling carrier, booked carrier, tracking data, bill of lading, and supporting records before holding payment or escalating a fraud report. <br>
-Risk: Freight fraud signals can be incomplete or context-dependent. <br>
-Mitigation: Cross-check the skill's red flags against current carrier vetting records, insurance or bond exposure, shipper requirements, and documented exception handling. <br>
+## Use Case:
 
+External freight brokers and brokerage teams use this checklist to investigate suspected double-brokering, carrier identity mismatches, unpaid-carrier claims, and related exposure before deciding how to handle a load.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/freight-double-brokering-exposure) <br>
-- [deciqAI Freight Double-Brokering Exposure Skill](https://www.deciqai.com/c/freight-double-brokering-exposure) <br>
-- [deciqAI Machine-Readable Skill Metadata](https://www.deciqai.com/s/freight-double-brokering-exposure.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown guidance with freight-risk checks, red flags, examples, and verification steps] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable guidance; no external tool, credential, or data-access behavior indicated by the supplied security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: A mismatch between the booked carrier and the hauling carrier can lead to payment disputes, cargo claims, or downstream liability.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the hauling carrier against the booked carrier, require active tracking, and assess relevant bond or insurance exposure.
+
+Risk: Withholding payment or reporting fraud based only on checklist signals could lead to an incorrect decision.
+
+Mitigation: Review the evidence and applicable obligations before withholding payment or reporting fraud.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/freight-double-brokering-exposure)
+- [Publisher skill page](https://www.deciqai.com/c/freight-double-brokering-exposure)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/freight-double-brokering-exposure.json)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Risk analysis]
+
+**Output Format:** [Markdown checklist with explanatory guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory only; it does not execute actions or change payment status.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

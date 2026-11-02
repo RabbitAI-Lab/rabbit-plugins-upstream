@@ -1,47 +1,53 @@
-## Description: <br>
-Strategic Execution 3D9 helps diagnose execution breakdowns by scoring strategy decoding, organizational support, and execution control across nine evidence-based elements. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Diagnoses organizational execution gaps across the 3D9 framework and guides a 90-day improvement plan.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Business leaders, operators, and strategy teams use this skill to diagnose why agreed plans are not producing results and to turn the strongest bottleneck finding into a 90-day improvement program. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The diagnostic can involve sensitive business details such as strategy failures, leadership resistance, budgets, headcount, and response plans. <br>
-Mitigation: Use sanitized examples where possible and avoid sharing confidential business information unless the deployment environment is approved for it. <br>
-Risk: Outputs may be misleading if scores are based on impressions rather than observable behavior. <br>
-Mitigation: Require specific behavioral evidence for each score and have the diagnostic reviewed by someone at a different organizational level. <br>
+## Use Case:
 
+Leaders and organizational teams use this skill to diagnose why execution is falling short, assess nine execution capabilities, and develop an evidence-based 90-day improvement plan.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/strategic-execution-3d9) <br>
-- [deciqAI Strategic Execution 3D9 page](https://www.deciqai.com/c/strategic-execution-3d9) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/strategic-execution-3d9.json) <br>
-- [Sources - strategic-execution-3d9](references/sources.md) <br>
-- [GE execution infrastructure example](examples/ge-execution-infrastructure-jack-welch-1981-2001.md) <br>
-- [The Balanced Scorecard](https://www.hbs.edu/faculty/Pages/item.aspx?num=9919) <br>
-- [Execution: The Discipline of Getting Things Done](https://www.penguinrandomhouse.com/books/293905/execution-by-larry-bossidy-and-ram-charan/) <br>
-- [Control Your Destiny or Someone Else Will](https://archive.org/details/controlyourdestin00tich) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown diagnostic scorecard and 90-day intervention plan] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses staged questions and hard stops when coaching novice users.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The workflow asks agents to preserve real organizational failure patterns in reusable instructions, which may expose confidential business information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove that instruction, or require explicit approval for anonymized lessons stored in a private location.
+
+## Reference(s):
+
+- [Skill source references](artifact/references/sources.md)
+- [ClawHub release](https://clawhub.ai/deciqai/skills/strategic-execution-3d9)
+- [The Balanced Scorecard — Harvard Business School](https://www.hbs.edu/faculty/Pages/item.aspx?num=9919)
+- [Execution: The Discipline of Getting Things Done](https://www.penguinrandomhouse.com/books/293905/execution-by-larry-bossidy-and-ram-charan/)
+- [Control Your Destiny or Someone Else Will](https://archive.org/details/controlyourdestin00tich)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown with a structured 3D9 scorecard and 90-day improvement plan]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scores should cite specific behavioral evidence; the plan includes an owner, metric, and 30/60/90-day checkpoints.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

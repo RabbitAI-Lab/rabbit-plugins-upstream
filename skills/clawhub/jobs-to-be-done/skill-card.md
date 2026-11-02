@@ -1,46 +1,58 @@
-## Description: <br>
-Helps agents coach users through Jobs to Be Done analysis for product switching, churn, segmentation, roadmap, and competitive-positioning questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through Jobs to Be Done analysis of customer switching, churn, and product decisions, including interview questions, job statements, competitor sets, and product implications.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Product teams, founders, marketers, and strategy operators use this skill to identify the job customers hire a product for, run or structure Switch Interviews, map functional, emotional, and social dimensions, and turn those findings into roadmap, churn, positioning, and competitor-set decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can influence customer research interpretation, product strategy, and roadmap decisions. <br>
-Mitigation: Verify important claims, sources, interview evidence, and strategic conclusions before using its output for business decisions. <br>
-Risk: JTBD analysis may overfit to weak or unrepresentative interview data. <br>
-Mitigation: Use the skill's own verification posture: conduct 5-10 Switch Interviews, name the circumstance, dimensions, competitor set, and Push/Pull/Anxiety/Habit evidence before acting. <br>
+## Use Case:
 
+Product managers, founders, and customer research teams use this skill to understand why customers switch, churn, or choose alternatives. It turns switching interviews into job statements, competitor sets, and product implications.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/jobs-to-be-done) <br>
-- [Primary sources](references/sources.md) <br>
-- [Christensen and the Milkshake Study example](examples/christensen-and-the-milkshake-study-2003.md) <br>
-- [AI assistant JTBD example](examples/what-people-hire-an-ai-assistant-to-do-2023-2026.md) <br>
-- [Clay Christensen's Milkshake Marketing](https://hbswk.hbs.edu/item/clay-christensens-milkshake-marketing) <br>
-- [Stack Overflow Developer Survey](https://survey.stackoverflow.co) <br>
-- [GitHub Blog](https://github.blog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown analysis and coaching prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May pause for user input during novice coaching and produces JTBD job statements, competitor sets, dimensions, forces of progress, and implications.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Customer research examples may expose sensitive customer information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use anonymized customer examples.
+
+Risk: Product or business recommendations may not fit the specific customer context.
+
+Mitigation: Review recommendations before changing a product or business process.
+
+## Reference(s):
+
+- [Primary sources](references/sources.md)
+- [Christensen and the Milkshake Study example](examples/christensen-and-the-milkshake-study-2003.md)
+- [AI Assistant Jobs to Be Done example](examples/what-people-hire-an-ai-assistant-to-do-2023-2026.md)
+- [Clay Christensen's Milkshake Marketing](https://hbswk.hbs.edu/item/clay-christensens-milkshake-marketing)
+- [Stack Overflow Developer Survey](https://survey.stackoverflow.co)
+- [GitHub Blog](https://github.blog)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured Markdown JTBD analysis with a job statement, competitor set, dimensions, forces of progress, and product implications.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can guide the user one question at a time when no concrete product or customer case is provided.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

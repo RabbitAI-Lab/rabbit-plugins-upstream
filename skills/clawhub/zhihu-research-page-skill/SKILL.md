@@ -1,10 +1,13 @@
 ---
 name: zhihu-research-page
-version: "21.0.0"
+slug: zhihu-research-page
+displayName: "一键生成知乎高质量回答网页（可自由剪裁）"
+version: "22.0.0"
+summary: "大规模联网搜索 + 知乎风深度知识网页生成，支持任意比例裁剪、单文件 HTML 交付"
+license: MIT
 title: "知乎研究页生成器 — 一句话生成知乎高质量回答网页"
 author: "timeRATE-966"
-description: 通过大规模联网搜索自动创建知乎风格的深度知识网页，样式高度还原 zhihu.com。生成 10 个章节的多答主模拟回答页面，含 ≥10 万有效中文字和 ≥500 次真实搜索引用。支持手动裁剪为任意比例版本（如"执行 5% 版本"→ ≥5 千字 / ≥25 次搜索），多次执行自动创建带版本号的独立文件夹。适用于生成知识专题页、学习路径教程、产品深度百科、行业研究报告等需要系统整理某一主题知识的场景。
-**[重要]100%版本约需 100 分钟且token消耗巨大，建议先生成 2% 版本检验效果**
+description: 通过大规模联网搜索自动创建知乎风格的深度知识网页，样式高度还原 zhihu.com。生成 10 个章节的多答主模拟回答页面，含 ≥10 万有效中文字和 ≥500 次真实搜索引用。支持手动裁剪为任意比例版本（如"执行 5% 版本"→ ≥5 千字 / ≥25 次搜索），多次执行自动创建带版本号的独立文件夹。适用于生成知识专题页、学习路径教程、产品深度百科、行业研究报告等需要系统整理某一主题知识的场景。**[重要]100%版本约需 100 分钟且token消耗巨大，建议先生成 2% 版本检验效果**
 type: "agent"
 category: "research"
 invocation: "/zhihu-research-page"
@@ -30,7 +33,7 @@ examples:
     output: "自动搜索 ≥500 次，生成 10 章节完整深度网页（≥100,000 字），约 100 分钟"
 ---
 
-<!-- VERSION:v21 | 2026-07-21 | 教程模式+自动同步+版本头 -->
+<!-- VERSION:v22 | 2026-10-29 | 单文件HTML交付 + 可选上传资料库 -->
 # 一句话生成知乎高质量回答网页（可自由剪裁）
 
 ## 用法示例
@@ -48,13 +51,25 @@ examples:
 
 ---
 
+## 概述
+
+输入一个研究主题 → 自动产出：
+- 📄 一个知乎风格的完整 HTML 单页（含顶栏/问题头/侧栏/10 章节/页脚）
+- 🔗 每章 ≥11,000 有效中文字，全页 ≥100,000 字
+- 🔍 累计 ≥500 次真实 WebSearch（7~8 个并行搜索代理）
+- 📎 242+ 条真实可点击外链（禁止编造 URL）
+- 🧪 字数核验 + 结构校验脚本
+
+该工作流基于已验证的 LILYGO T-WATCH-2020 项目实战流程提炼而成。
+
 ## Skill 版本与更新日志
 
-当前版本：**v21**（2026-07-21）
+当前版本：**v22**（2026-10-29）
 
 > 运行时需检查此版本号：若高于上次执行记录，则从 skill 目录重新读取最新 SKILL.md 和脚本更新工作区。
 
 更新日志（每行一句，格式 `vN [yyyy-MM-dd HH:mm:ss] 内容`）：
+- v22 [2026-10-29 13:39:49] 新增单文件 HTML 交付（图片 base64 内嵌、删除 index.html）与可选上传 WorkBuddy 资料库
 - v21 [2026-07-21 22:26:31] 新增教程/学习模式（提炼答主背景、面向学习目标），自动同步检查，版本头
 - v20 [2026-07-19 07:41:47] 修复 f-string 转义、emoji 崩溃(→ASCII)、TARGET_WORDS 可配、Edit→Python 追加
 - v19 [2026-07-18 22:05:01] 新增部分执行模式(N% 版本)，任意百分比等比缩放
@@ -77,24 +92,14 @@ examples:
 - v2  [2026-07-14 10:00:00] Skill 目录只读约定
 - v1  [2026-07-13 22:00:00] 初始 8 阶段工作流
 
-## 概述
-
-输入一个研究主题 → 自动产出：
-- 📄 一个知乎风格的完整 HTML 单页（含顶栏/问题头/侧栏/10 章节/页脚）
-- 🔗 每章 ≥11,000 有效中文字，全页 ≥100,000 字
-- 🔍 累计 ≥500 次真实 WebSearch（7~8 个并行搜索代理）
-- 📎 242+ 条真实可点击外链（禁止编造 URL）
-- 🧪 字数核验 + 结构校验脚本
-
-该工作流基于已验证的 LILYGO T-WATCH-2020 项目实战流程提炼而成。
-
 ### 工作区目录约定
 
 为避免工作区根目录散落大量中间文件，所有产出严格按以下目录存放：
 
 ```
 工作区/
-├── index.html                  # 最终 HTML 骨架（唯一留在根目录的文件）
+├── {文件夹名}_{ASCII主题名}.html  # 最终交付物：单文件，图片已 base64 内嵌
+├── index.html                  # 中间产物：拼接骨架（阶段 7 打包后删除）
 ├── CHANGELOG.md                # 更新日志（可选）
 ├── images/                     # 所有图片资源（与 HTML 同目录，相对路径引用）
 │   ├── ch-01.png               # 答主头像缓存（.png/.jpg/.svg）
@@ -115,18 +120,18 @@ examples:
 **铁律**：
 - 阶段 0 第一步：`mkdir -p ./images ./other ./research_result`
 - 所有路径在命令行和代码中**显式使用 `./other/` 和 `./research_result/` 前缀**，不依赖 `cd`
-- 最终交付的 `index.html` 仍在根目录
+- 最终交付物是根目录下的**单文件 HTML**（`{文件夹名}_{ASCII主题名}.html`），`index.html` 是中间产物，阶段 7 打包后删除
 
 ### 异常处理（TROUBLESHOOTING）
 
-**遇到异常时，必须先读取 `TROUBLESHOOTING.md`** 查找匹配方案。该文件覆盖 12 类高频异常的根因和修复步骤（配额耗尽、task-notification 不实、`<code>` 字体异常、Windows 编码崩溃、颜色归一误伤、字数失真、权限被拒等）。仅在文件中无匹配方案时，才自行分析处理。
+**遇到异常时，必须先读取 `TROUBLESHOOTING.md`** 查找匹配方案。该文件覆盖 15 类高频异常的根因和修复步骤（配额耗尽、task-notification 不实、`<code>` 字体异常、Windows 编码崩溃、颜色归一误伤、字数失真、权限被拒、单文件打包、资料库上传等）。仅在文件中无匹配方案时，才自行分析处理。
 
 ---
 
 ## 工作流总览（8 阶段）
 
 ```
-[0] 收集输入 → [1] 诊断问题 → [2] 创建骨架 HTML → [3] 并行搜索(500+) → [4] 规划章节(基于搜索) → [4.5] 答主身份与头像配置 → [5] 并行写章 → [6] 组装校验 → [7] 交付
+[0] 收集输入 → [1] 诊断问题 → [2] 创建骨架 HTML → [3] 并行搜索(500+) → [4] 规划章节(基于搜索) → [4.5] 答主身份与头像配置 → [5] 并行写章 → [6] 组装校验 → [7] 打包单文件 + 交付 + 可选上传资料库
 ```
 
 **严禁跳过任何阶段**。搜索和撰写都通过 Subagent 委托执行，主流程不直接生成章节内容。
@@ -268,7 +273,7 @@ examples:
 | 研究主题 | **从对话上下文自动提炼** | 若用户未明确指定主题，扫描当前对话中涉及的课题/项目/问题域，提炼为一句中文主题 |
 | 参考材料 | 空 | 用户提供的文档/链接/笔记，将注入所有子代理 |
 | 章节建议 | 按主题自动规划 | 用户可指定 >5 个章节标题 |
-| 输出路径 | `./index.html` | 成品 HTML 路径 |
+| 输出路径 | `./{文件夹名}_{ASCII主题名}.html` | 单文件成品 HTML（图片全部内嵌）路径 |
 | 语言 | 中文 | 章节撰写语言 |
 | **部分执行比例** | 无（完整执行） | 如用户说"仅执行 3%"，则按比例缩减所有参数（见下方规则） |
 
@@ -887,16 +892,63 @@ open('./other/index_skeleton.html', 'w', encoding='utf-8').write(html)
 
 用 WebFetch 对 2~3 条最关键的官方/核心链接做可达性验证，确保不是死链。
 
-### 7.3 交付
+### 7.3 打包单文件 HTML（图片全部 base64 内嵌）
 
-运行 `present_files` 把成品 HTML 交付用户，并通报：
+把 `index.html` 里所有本地图片转成 base64 data URI，输出可独立分发的单文件 HTML，然后删除 `index.html`。
+
+**命名规则**：`{工作区文件夹名}_{ASCII 主题名}.html`
+- 文件夹名 = `basename(cwd)`，如 `v3_5pct`
+- ASCII 主题名 = 由阶段 1 拟定标题**意译成英文**：中文→英文（不是拼音）、单词首字母大写、空格→`-`、去标点、每个词首字母大写、≤32 字符
+- 例：
+  - 「什么是 Harness Engineering？」→ `v3_5pct_What-Is-Harness-Engineering.html`
+  - 「国际象棋怎么学？」→ `v2_How-to-Learn-Chess.html`
+  - 「各种调式的流行歌曲都有什么特点」→ `v2_Musical-Modes-in-Pop-Music.html`
+- 主题过长时保留核心词，删修饰语，确保 ≤32 字符
+
+```bash
+python -X utf8 <skill_dir>/scripts/inline_images.py \
+  --src index.html \
+  --topic What-Is-Harness-Engineering
+```
+
+脚本行为：
+1. 替换三类图片引用：`<img src>` / `<style>` 与 `style=` 内的 `url()` / `<source srcset>`
+2. 缺失图片保留原路径并打印警告，不中断
+3. 生成新文件后做**三重校验**，通过才删除 `index.html`
+4. 打印 `内嵌 N 张 / 缺失 M 张 / X KB -> Y KB`
+
+**三重校验（缺一不可，防止删了原文件但新文件是坏的）**：
+- 新文件含 `zh-header` 与 `</main>`
+- 新文件 `<article ... id="ch-` 计数 == 原文件
+- 新文件 `data:image/` 出现次数 ≥ 成功内嵌张数
+
+校验失败 → 两个文件都保留，报错终止，**不得交付**。
+
+### 7.4 交付
+
+运行 `present_files` 交付**单文件 HTML**（`{文件夹名}_{ASCII主题名}.html`），并通报：
 - 全页有效中文字数
 - 各章字数分布
 - 搜索总次数
 - 外链总数
 - 链接抽检结果
+- 单文件体积 + 内嵌图片张数
 
-### 7.4 工作记忆
+### 7.5 可选：上传 WorkBuddy 资料库
+
+交付完成后，**主动询问一次**：
+
+> 是否将 `{文件名}.html` 上传到 WorkBuddy 资料库？（保存为「网页」，仅你私有、可检索，不生成分享链接）
+
+- 用户同意 → 调用 `LibraryUpload`，`path` 传**绝对路径**
+- 用户拒绝或未回应 → 跳过，不影响交付
+- 单文件 > 100 MiB → 直接告知「体积超限，不支持上传」，不要再问
+
+**铁律**：
+- ❌ 不得自动上传（对外动作，必须先问）
+- ❌ 不得替用户回答
+
+### 7.6 工作记忆
 
 使用模型的 Memory 机制，将任务完成记录追加到当前工作区的 `.workbuddy/memory/YYYY-MM-DD.md`。不要硬编码绝对路径。
 
@@ -919,6 +971,9 @@ open('./other/index_skeleton.html', 'w', encoding='utf-8').write(html)
 | 图片路径 | 网页中所有 `<img>` 的 `src` 必须指向本地 `./images/` 相对路径（如 `./images/ch-01.png`），禁止外链图片 |
 | CSS 类名隔离 | 页面级包裹层使用 `zh-page`（非 `zh-body`），章节正文容器使用 `zh-answer__body`；避免同名类在不同层级复用；多个 `<style>` 块合并去重 |
 | 组装前扫描 | 运行 `assemble.py` 前必须先跑 `scan_html.py`，问题清零后方可拼接 |
+| 单文件交付 | 交付物必须是单文件 HTML：所有 `<img src>` 与 CSS `url()` 均为 `data:` 内嵌，零外链图片；`index.html` 打包后删除 |
+| 删除前校验 | 删除 `index.html` 前必须通过三重校验（`zh-header` + `</main>`、`<article id="ch-` 计数一致、`data:image/` 计数达标）；校验失败两个文件都保留 |
+| 资料库上传 | 必须先询问用户；不得自动上传；单文件 > 100 MiB 直接跳过并告知体积超限 |
 
 ---
 
@@ -941,6 +996,8 @@ open('./other/index_skeleton.html', 'w', encoding='utf-8').write(html)
 | 搜索代理集体触顶（主配额耗尽） | 减少并发数至 `floor(剩余配额/72)`，优先 WebFetch 抓取官网文档（不计入搜索配额） |
 | scan_html.py 在 Windows 上报 UnicodeEncodeError | 加 `-X utf8` 标志运行：`python -X utf8 ./other/scan_html.py`；或 `set PYTHONIOENCODING=utf-8` |
 | 撰写代理 `<code>` 自检不通过 | 代理在草稿完成后立即修复 `<code>` 开闭/嵌套问题；问题消灭在草稿内，避免 assemble 阶段重跑多轮 |
+| inline_images.py 报「缺失 M 张」 | 核对 `./images/` 实际文件名与 HTML 引用（常见为大小写差异或 curl 下载失败），补图后重跑；只差 1-2 张可接受，但需在交付通报中说明 |
+| 单文件 HTML > 100 MiB 无法上传资料库 | 交付本身不受影响，仅告知体积超限；如需上传，先压缩 `./images/`（转 webp / 降分辨率）再重跑 `inline_images.py` |
 
 ---
 
@@ -950,6 +1007,7 @@ open('./other/index_skeleton.html', 'w', encoding='utf-8').write(html)
 - `scripts/assemble.py` — 通用拼接与字数核验脚本（使用前编辑 CHAPTERS）
 - `scripts/scan_html.py` — HTML `<code>` 标签预扫描脚本（assembly 前兜底）
 - `scripts/wordcount_check.py` — 独立字数核验 + `<code>` 完整性检查（每章写完后运行）
+- `scripts/inline_images.py` — 单文件 HTML 打包脚本（图片 base64 内嵌 + 删 index.html 前三重校验）
 - `templates/writing_agent_prompt.md` — 章节撰写代理 Prompt 模板
 - `templates/search_agent_prompt.md` — 搜索代理 Prompt 模板
 - `templates/author_block.html` — 统一作者块 HTML 模板

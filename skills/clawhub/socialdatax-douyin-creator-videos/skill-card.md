@@ -1,41 +1,50 @@
-## Description: <br>
-Helps agents retrieve and summarize Douyin creator works, image/text posts, short-drama series, and recent publishing activity using SocialDataX. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于查询抖音创作者的作品与短剧/合集列表，支持近期发布跟踪、内容调研和创作者内容分析。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to inspect Douyin creator content lists and short-drama series for content research, creator benchmarking, recent publishing review, and account tracking. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unbounded pagination with --all can trigger large data pulls or unexpected API usage. <br>
-Mitigation: Use bounded options such as --max-items, --pages, or --since-days unless complete retrieval is explicitly needed. <br>
-Risk: The skill uses a user-provided SocialDataX API key at runtime. <br>
-Mitigation: Provide SOCIALDATAX_API_KEY through the environment only when intending to use SocialDataX; do not store API keys in skill files. <br>
+## Use Case:
 
+创作者研究人员、营销团队和内容分析人员可用此技能查询抖音创作者发布的视频、图文作品及短剧合集，用于近期内容回顾、创作者比较和内容风格分析。
 
-## Reference(s): <br>
-- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin-creator-videos) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands; SocialDataX data calls return JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY at runtime and supports bounded pagination options such as --max-items, --pages, and --since-days.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: Creator lookups use an external service and may consume account credits; API access also depends on protecting the SocialDataX API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Protect the API key, use a reviewed and pinned CLI version, and set --pages or --max-items to bound larger requests.
+
+## Reference(s):
+
+- [SocialDataX API access and management](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill release](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin-creator-videos)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Analysis, Text]
+
+**Output Format:** [Structured JSON data with concise text summaries]
+
+**Output Parameters:** [Variable-length creator work or series results]
+
+**Other Properties Related to Output:** [Read-only lookup results may span multiple pages; users can limit requests by page count or item count.]
+
+## Skill Version(s):
+
+0.1.21 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

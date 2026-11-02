@@ -1,49 +1,52 @@
-## Description: <br>
-Wire up a governed Mailbuttons email inbox for an AI agent, including sandbox setup, policy review, integration scaffolding, self-test, and human-gated promotion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scaffolds a sandboxed, policy-governed email inbox and integration for an AI agent, with human approval required before production promotion or external sending.
 
-## Publisher: <br>
-[mailbuttons](https://clawhub.ai/user/mailbuttons) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mailbuttons](https://clawhub.ai/user/mailbuttons)
 
-## Use Case: <br>
-Developers and teams use this skill to add governed sandbox email capabilities to an AI agent, app, bot, or workflow. It helps create sender allowlists, scaffold framework-specific integration code, run a sandbox self-test, and request human approval before production or external sending. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A generated policy or scaffold could allow the wrong sender, recipient, or email workflow if accepted without review. <br>
-Mitigation: Review the generated policy and scaffold files before use, and only continue after the allowlist, send scope, and approval request match the user's intent. <br>
-Risk: External sending or production promotion could create unintended email access if treated as an automated action. <br>
-Mitigation: Keep setup in the sandbox and use the Mailbuttons approval flow for promotion or external sending; the agent should present the approval URL and stop. <br>
-Risk: Mail from untrusted or quarantined senders could influence agent behavior or expose content that policy intended to withhold. <br>
-Mitigation: Treat inbound mail as untrusted data, rely on policy-passed reads, and do not retrieve or reconstruct quarantined message bodies. <br>
-Risk: Sandbox API keys could be exposed if copied into generated source files or prompts. <br>
-Mitigation: Keep MAILBUTTONS_API_KEY in the environment and verify generated code reads secrets from environment variables rather than embedding them. <br>
+## Use Case:
 
+Developers and agent operators use this skill to set up a sandbox email inbox, configure governed inbound and outbound email, and scaffold an integration for their agent framework.
 
-## Reference(s): <br>
-- [Mailbuttons](https://mailbuttons.com) <br>
-- [Mailbuttons developer docs](https://mailbuttons.com/developers) <br>
-- [ClawHub skill listing](https://clawhub.ai/mailbuttons/skills/mailbuttons) <br>
-- [Claude Agent SDK integration reference](references/claude-agent-sdk.md) <br>
-- [LangChain and LangGraph integration reference](references/langchain.md) <br>
-- [Plain SDK integration reference](references/plain-sdk.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with generated policy JSON, scaffold code, and command or API-call examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a Mailbuttons sandbox API key from MAILBUTTONS_API_KEY and expects generated policy and scaffold files to be reviewed before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Setup uses an account-level API key to provision the inbox, so key handling needs review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Have a person create the sandbox inbox and give the agent only its scoped sandbox token. Review the generated policy, verify the provider's external-send approval controls, and use a verified, pinned MCP server release.
+
+## Reference(s):
+
+- [Mailbuttons developer documentation](https://mailbuttons.com/developers)
+- [Claude Agent SDK integration reference](references/claude-agent-sdk.md)
+- [LangChain integration reference](references/langchain.md)
+- [Plain TypeScript or Python integration reference](references/plain-sdk.md)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance, code examples, and JSON policy configuration]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Integration examples are sandbox-only and read the API key from MAILBUTTONS_API_KEY.]
+
+## Skill Version(s):
+
+0.1.4 (source: SKILL.md frontmatter, server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

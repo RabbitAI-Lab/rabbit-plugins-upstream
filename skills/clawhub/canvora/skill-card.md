@@ -1,46 +1,60 @@
-## Description: <br>
-Canvora helps agents create on-brand visuals such as social posts, carousels, decks, ads, and documents from text, URLs, or PDFs through the Canvora CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create on-brand visuals (social posts, carousels, decks, PDFs, ads, landing-page kits, infographics) from any idea, text, URL, or PDF via Canvora. 100+ formats, native generation in 150+ languages, per-client brand kits. Use when the user asks to create, generate, or design visual content for social media, marketing, presentations, or documents.
 
-## Publisher: <br>
-[canvora](https://clawhub.ai/user/canvora) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[canvora](https://clawhub.ai/user/canvora)
 
-## Use Case: <br>
-Developers, marketers, and agent operators use this skill to select Canvora formats, brand kits, input modes, and CLI commands for generating or refining visual content. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Content sent through URL, file-url, or input modes may be processed by Canvora. <br>
-Mitigation: Do not use those modes with confidential, internal, or customer-sensitive material unless the user intends to send that content to Canvora. <br>
-Risk: CANVORA_API_KEY exposure could allow unauthorized use of the Canvora account. <br>
-Mitigation: Keep the API key out of logs, screenshots, shared scripts, and generated examples. <br>
-Risk: Regenerating after a timeout can create a new paid generation. <br>
-Mitigation: Use canvora status with the existing generation ID instead of rerunning generate after a timeout. <br>
-Risk: Large or repeated jobs can consume paid credits quickly. <br>
-Mitigation: Check canvora credits --json before large jobs and account for per-visual and per-slide costs. <br>
+## Use Case:
 
+Creators, marketers, and teams use this agent skill to turn ideas, source text, URLs, or PDFs into branded social graphics, carousels, presentations, PDFs, ads, and landing-page visuals using Canvora. It guides preparation and refinement, then provides links and status for the generated visuals.
 
-## Reference(s): <br>
-- [Canvora ClawHub skill page](https://clawhub.ai/canvora/skills/canvora) <br>
-- [Canvora publisher profile](https://clawhub.ai/user/canvora) <br>
-- [Canvora MCP server](https://api.canvora.ai/mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON-oriented CLI usage] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Canvora CLI commands should use --json; generated results include output URLs and metadata from the Canvora service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+Risk: User-provided content or photos may be processed by Canvora's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only content and photos you are permitted to share, and review Canvora's privacy policy before using confidential material.
+
+Risk: An exposed API key could allow account access and credit use.
+
+Mitigation: Protect the API key and set a credit budget before generating visuals.
+
+Risk: A generation may continue after its local command is stopped and may still use credits.
+
+Mitigation: Check generation status and account credits; stopping the local command does not cancel a running generation.
+
+## Reference(s):
+
+- [Canvora for Agents](https://canvora.ai/for-agents)
+- [Canvora Privacy Policy](https://canvora.ai/privacy)
+- [Canvora ClawHub Skill Page](https://clawhub.ai/canvora/skills/canvora)
+- [Canvora Publisher Profile](https://clawhub.ai/user/canvora)
+
+## Skill Output:
+
+**Output Type(s):** [Visual assets, Files, Guidance, Shell commands]
+
+**Output Format:** [Generated images and multi-slide visual files such as PDFs or presentations, with text or JSON status and links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The visual format and slide count depend on the user's request.]
+
+## Skill Version(s):
+
+1.4.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

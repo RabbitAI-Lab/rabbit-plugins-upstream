@@ -164,8 +164,8 @@ fi
 
 # ─────────────────────────── step 3: install clawhub ──────────
 if ! command -v clawhub >/dev/null; then
-  info "Installing @clawhub/cli via npm..."
-  npm install -g @clawhub/cli || die "clawhub install failed — ensure npm has write access (try sudo or nvm)"
+  info "Installing clawhub via npm..."
+  npm install -g clawhub || die "clawhub install failed — ensure npm has write access (try sudo or nvm)"
 fi
 CLAWHUB_VER=$(clawhub --version 2>&1 | head -1)
 ok "clawhub: $CLAWHUB_VER"

@@ -1,46 +1,53 @@
-## Description: <br>
-Guides agents to investigate the history and purpose of a rule, process, code path, or institution before recommending removal, replacement, or repeal. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through investigating the purpose and current value of a rule, process, code path, or institution before deciding whether to remove, modify, keep, or replace it.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, developers, operators, and organizational decision-makers use this skill when a proposed cleanup, refactor, restructure, or repeal needs a structured origin investigation before action. The skill helps the agent identify the fence, trace its original purpose, judge current applicability, decide whether to keep, modify, replace, or remove it, and document the result. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill intentionally causes agents to pause and investigate before deleting or repealing something, which can slow urgent change work. <br>
-Mitigation: Use it when origin rationale is unclear; skip it when the history is fully documented and the purpose is confirmed obsolete. <br>
-Risk: If the relevant history cannot be recovered, a confident keep-or-remove recommendation may rest on incomplete context. <br>
-Mitigation: Use a small, reversible experiment with monitoring rather than bulk removal when history is unavailable. <br>
-Risk: The skill's output is advisory and can miss organization-specific legal, security, or operational constraints. <br>
-Mitigation: Review the investigation with domain owners before applying recommendations to high-impact code, policy, compliance, or organizational changes. <br>
+## Use Case:
 
+Developers, organizational leaders, and policy teams use this skill to investigate the origin and current function of an existing safeguard before deciding whether to change it, then document the reasoning and follow-up.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/chestertons-fence) <br>
-- [Sources - chestertons-fence](references/sources.md) <br>
-- [Chesterton 1929 and the Modern Software / Regulatory Application](examples/chesterton-1929-and-the-modern-software-regulatory-application.md) <br>
-- [The AI-Rewrite Wave and the Guardrails That Encoded Hard-Won Knowledge (2024-2026)](examples/ai-rewrite-wave-deleting-guardrails-2024-2026.md) <br>
-- [The Great Sparrow Campaign and the Ecological Fence (1958-1962)](examples/1958-great-sparrow-campaign-and-the-ecological-fence.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown text with a fence investigation summary, decision, documentation actions, and follow-up questions when needed] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May stop at WAIT checkpoints in coach mode until the user provides more context.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: An investigation may suggest documentation or test changes beyond the intended project scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed changes and keep them within the project's intended scope.
+
+## Reference(s):
+
+- [Primary sources cited by the skill](references/sources.md)
+- [Chesterton's Fence skill page](https://clawhub.ai/deciqai/skills/chestertons-fence)
+- [Publisher's skill guidance](https://www.deciqai.com/c/chestertons-fence)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/chestertons-fence.json)
+- [Source repository linked by the skill](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis]
+
+**Output Format:** [Markdown with investigative questions and a structured decision summary]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A stepwise investigation followed by a documented decision and follow-up.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

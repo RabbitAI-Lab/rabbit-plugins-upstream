@@ -1,46 +1,56 @@
-## Description: <br>
-Second-Order Thinking helps agents trace downstream consequences, actor responses, reversals, and confidence limits for decisions where the immediate effect is clearer than later effects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent to trace a decision's downstream effects, including actor responses, feedback loops, reversals, and uncertainty.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to evaluate decisions whose first-order effects are obvious but whose downstream effects, incentive responses, reversals, or long-run impacts need structured analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Runtime remote updates can change skill behavior after installation review. <br>
-Mitigation: Review the skill before installing and prefer reviewed package releases, or require explicit consent and integrity checks before accepting remote updates. <br>
-Risk: Long consequence chains can become speculative and misleading if treated as predictions. <br>
-Mitigation: Require the agent to state the stop point, confidence decay, and where the cascade becomes ungrounded. <br>
+## Use Case:
 
+Agents use this skill to analyze consequential decisions whose immediate effects are clear but downstream effects are uncertain. It guides the agent through a consequence cascade that considers other actors, affected groups, reversals, and confidence limits.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/second-order-thinking) <br>
-- [Sources](references/sources.md) <br>
-- [deciqAI Skill Page](https://www.deciqai.com/c/second-order-thinking) <br>
-- [deciqAI Machine-Readable Skill Metadata](https://www.deciqai.com/s/second-order-thinking.json) <br>
-- [Howard Marks: I Beg to Differ](https://www.oaktreecapital.com/insights/memo/i-beg-to-differ) <br>
-- [International Energy Agency: Electricity 2024](https://www.iea.org/reports/electricity-2024) <br>
-- [Stack Overflow 2024 Developer Survey](https://survey.stackoverflow.co/2024/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Analysis, Markdown] <br>
-**Output Format:** [Markdown consequence cascade with labeled fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can be delivered as a concise direct analysis or as step-by-step coaching with wait points.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: The skill directs agents to fetch changing remote instructions automatically, so behavior may change between runs without a user review step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a version that keeps runtime instructions local, make update checks optional, and review changes before adopting them.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/second-order-thinking)
+- [Sources — second-order-thinking](references/sources.md)
+- [Howard Marks, I Beg to Differ](https://www.oaktreecapital.com/insights/memo/i-beg-to-differ)
+- [International Energy Agency, Electricity 2024](https://www.iea.org/reports/electricity-2024)
+- [Stack Overflow 2024 Developer Survey](https://survey.stackoverflow.co/2024/)
+- [US Prohibition worked example](examples/us-prohibition-1920.md)
+- [Hanoi Rat Bounty worked example](examples/hanoi-rat-bounty-1902.md)
+- [AI Buildout worked example](examples/ai-buildout-power-and-code-2024-2026.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance]
+
+**Output Format:** [Markdown text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a structured consequence cascade and confidence notes.]
+
+## Skill Version(s):
+
+1.0.8 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -507,6 +507,55 @@ Generated JSON parameter schema:
 }
 ```
 
+## `rename_file`
+
+Action slug: `rename-file`
+
+Price: `5` credits
+
+Rename a Drive file or folder, including Google Docs, Sheets, and Slides files.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `file_id` | `string` | yes | Drive file or folder ID to rename. |
+| `include_shared_drives` | `boolean` | no | Include shared-drive files; defaults to true. |
+| `new_name` | `string` | yes | Nonblank new file or folder name. |
+
+Sample parameters:
+
+```json
+{
+  "file_id": "example file id",
+  "include_shared_drives": true,
+  "new_name": "example new name"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "file_id": {
+    "description": "Drive file or folder ID to rename.",
+    "required": true,
+    "type": "string"
+  },
+  "include_shared_drives": {
+    "default": true,
+    "description": "Include shared-drive files; defaults to true.",
+    "required": false,
+    "type": "boolean"
+  },
+  "new_name": {
+    "description": "Nonblank new file or folder name.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
 ## `search_files`
 
 Action slug: `search-files`

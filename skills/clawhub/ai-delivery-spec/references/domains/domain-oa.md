@@ -10,6 +10,12 @@ and enterprise intelligent office scenarios.
 This is a replaceable domain module. Public protocol files must stay
 domain-neutral.
 
+## 中文导读
+
+覆盖组织权限、待办审批、公文、会议、任务督办、知识与电子签章。重点是工作对象、责任交接和正式结果，区分通知、审批、发文、签署及归档。
+
+常用名称：办公、协同办公、OA、办公自动化、组织管理、政务办公。以下中文提示是现有章节的阅读入口，不新增项目规则；需要详细依据时阅读对应原文和来源。
+
 ## Contents
 
 - Domain Purpose
@@ -29,6 +35,8 @@ domain-neutral.
 - Evaluation Profile
 - Multi-Module PRD Quality Gate
 - Acceptance Checklist
+
+> Use only the slices relevant to the project. State arrows and YAML/field lists below are design sketches, not executable schemas or a complete workflow. Instantiate the normal, exception and recovery paths, guards, data owner, permissions and version effects before handoff. A pattern does not override an authorized project decision or create a legal obligation. Where confidence is useful, declare its measurement and limits; do not invent a calibrated score from model self-report.
 
 ## Domain Purpose
 
@@ -55,12 +63,36 @@ domain-neutral.
   official document, meeting, calendar, task/supervision, knowledge, cloud docs,
   low-code forms, data/reporting, helpdesk, HR/expense/legal integrations,
   mobile office, e-signature, and AI office assistant.
-- When the core Product Truth scale/audit threshold is met, Product Truth must
-  lock module/view/region/action ownership when OA spans
-  multiple modules, roles, PC/mobile surfaces, or todo -> workflow -> document
-  -> archive lifecycles.
-- Keep organization, user, workflow-node, document, and archive fields canonical
-  as `FLD-*`; projections add only relevant differences.
+- Keep object, field and action meaning consistent across modules, roles and
+  todo -> workflow -> document -> archive lifecycles. Reuse the existing
+  specification and stable identifiers; use Product Truth or machine field IDs
+  only when an actual consumer or authorized governance workflow needs them.
+  Multiple modules or surfaces alone do not require a new machine artifact.
+
+### Current Baseline and Change Watch (verified 2026-08-29)
+
+| Evidence class | Current signal | Requirement effect |
+|---|---|---|
+| binding_baseline | existing e-signature, official-document and electronic-archive rules remain the authority for signatures, issuance, integrity, transfer and preservation | preserve document authority, version, signer, hash, timestamp, correction and archive evidence across workflow changes |
+| design_guidance | `KS-OA-ARCHIVE-PLAN-2026` | prepare for more complete digital archive resources, governance, services and security without treating planning language as a feature mandate |
+| product_pattern | existing OA vendor and open-component evidence | learn object-centric low-code work, automation, AI assistance and collaborative views; vendor capability is not outcome or open-core proof |
+| change_watch | `KS-OA-ARCHIVE-STANDARD-GUIDE-2026` names single-copy archives, long-term preservation, data governance and AI topics | create a re-verification item for future standards; a project guide or consultation is not a final standard and cannot block delivery by itself |
+
+### AI Transformation Horizon
+
+Durable judgment: AI office is becoming the organization's **system of action**; OA does not disappear. It becomes the permission, transaction, evidence and archive control plane that makes agent action trustworthy.
+
+| Axis | From -> toward | Product implication |
+|---|---|---|
+| entry | menu/search/form-first -> intent entry plus artifact canvas and exception inbox | deterministic menus/forms remain for discoverability, bulk work and high-risk confirmation |
+| work unit | chat answer -> inspectable task plan, tool execution and accepted deliverable | every step exposes object, source, actor, tool, state, result and recovery |
+| context | document/IM silos -> permissioned business context and durable organizational memory | inherit source ACL, freshness, confidentiality, retention and citation rules before retrieval |
+| execution | fixed workflow only -> bounded agents over workflow/document/meeting/data tools | workflow engine remains the transaction guard; agents may propose/route/execute only within declared side effects |
+| organization | one assistant -> role experts, reusable skills and multi-agent teams | identity, registry, owner, version, evaluation, cost and retirement are first-class assets |
+| runtime | foreground session -> local/cloud managed runtimes for long tasks and event triggers | sandbox, secret isolation, checkpoints, trace, cancellation, retry and human takeover are required |
+| business model | OA seats/modules -> seats + governed compute + skill/connector ecosystem + measurable work outcomes | avoid lock-in by keeping portable work objects, APIs/protocols, evidence and export/exit paths |
+
+`KS-OA-WORKBUDDY-WMA-2026`, `KS-OA-QWEN-WORK-2026` and `KS-OA-FEISHU-DOUBAO-2026` support this product-pattern direction. Check their dated source and edition/client limits before making an availability claim: a whitelist beta, a forecast release and a dated scenario article do not establish general availability or customer outcomes.
 
 ## First-Principles Domain Lens
 
@@ -151,6 +183,10 @@ events:
 
 ## State Machines
 
+**中文阅读提示**
+
+**审批流转**（审批、会签、或签、加签、退回、approval、workflow）：节点处理者、允许动作、条件和流转结果需一致；通知到达不等于审批完成。
+
 ```text
 WorkItem: pending -> read -> processing -> closed
 WorkItem: pending | processing -> overdue -> escalated -> closed
@@ -233,11 +269,17 @@ ai_office_context_source:
   allowed_ai_use: search | summarize | draft | classify | propose_action
   prohibited_ai_use:
   citation_required: true
-  human_gate_required: true
+  human_gate_required: true | false  # resolve per action and authorized policy; not a default
   audit_fields: [trace_id, user_id, role_id, object_id, source_version, used_at]
 ```
 
 ## Content / Knowledge Assets
+
+**中文阅读提示**
+
+**公文管理**（发文、收文、拟稿、签发、official document）：文稿、正式编号、签发和发布有不同权威；历史证据与当前修改分开。
+
+**档案归档**（归档、档案、保管期限、archive、retention）：归档对象、正式版本、保管和更正需要可追溯，不能只用文件名判断权威。
 
 | Asset | Use | Governance |
 |---|---|---|
@@ -262,6 +304,12 @@ is deliberately deferred.
 
 ## Core Workflows
 
+**中文阅读提示**
+
+**报销费用**（报销、费用申请、差旅、reimbursement、expense）：申请、审批、付款和入账分别有结果，失败重试须避免重复支付。
+
+**任务督办**（待办、催办、办结、任务闭环、task、supervision）：任务分派、处理、验收和关闭需要可见证据，超期或拒绝须能继续处理。
+
 | Workflow | Actors | Trigger | State Change | Success Result |
 |---|---|---|---|---|
 | unified todo handling | employee/manager | todo created by workflow/document/task | pending -> processing -> closed | work item closed with evidence |
@@ -276,6 +324,10 @@ is deliberately deferred.
 | mobile approval | mobile employee/manager | todo opened on mobile | pending -> processed | server-validated action with fallback |
 
 ## Role Path Patterns
+
+**中文阅读提示**
+
+**委托交办**（临时授权、代办、转交、改派、delegation、assignment）：委托对象、范围、生效和到期分别定义，旧待办和正在提交的动作需要重查资格。
 
 | Role | Entry | Core Actions | Forbidden Actions | Exit |
 |---|---|---|---|---|
@@ -327,18 +379,22 @@ Mobile rules:
 
 ## Policy / Privacy Constraints
 
+**中文阅读提示**
+
+**组织权限**（机构、部门、超管、超级管理员、数据范围、租户隔离、org permission、access control、administrator）：分别说明组织边界、角色、数据范围与动作授权；权限名称不能代替具体授权条件，继承和例外以项目确认的规则为准。
+
+**电子签章**（用印、盖章、电子签名、e-signature、seal）：印章或签名使用需明确操作者、对象及授权，不能把预览当正式签署。
+
 - Data minimization: every role path must justify access to org, person,
   document, approval opinion, finance, HR, legal, or meeting content.
 - Permission isolation: org_permission_scope must cover menu, action, data,
   field, document level, export, mobile, API, and AI context retrieval.
-- Approval accountability: workflow_human_gate is mandatory for approval,
-  rejection, issue, seal/signature, payment, HR, performance, and archive.
+- Approval accountability: define workflow_human_gate for consequential approvals, official issue, seal/signature, payments and personnel-right decisions according to applicable authority. Do not add individual human approval to explicitly authorized routine routing, indexing or ordinary archiving. Approval that is a prerequisite for publication does not itself execute publication.
 - Document integrity: issued, sealed, signed, or archived documents use
   versioned correction/withdrawal, not silent overwrite.
-- E-signature: certificate status, signer identity, file hash, timestamp,
-  revocation, and verification evidence are required.
-- Export and watermark: sensitive export needs permission, watermark, reason,
-  audit, and retention/deletion rule.
+- E-signature: establish the applicable signing method, signer authority, integrity and verification evidence. Where PKI/CA is adopted, check certificate validity/revocation and the required hash/time evidence; CA is not a universal requirement for every electronic signature.
+- Archive transformation: KS-OA-EARCHIVE-2024 article 17 specifies signature-information handling for Party/government electronic official documents; other organizations may refer to it. Implement the applicable archive rendition with the required seal graphic and original/version association and verification evidence. Do not silently overwrite source evidence or impose that scope on every enterprise file.
+- Sensitive export needs permission, purpose, audit and a retention/deletion rule; watermarking follows the applicable protection policy rather than an assumed universal mandate.
 - AI boundary: AI suggestions require citation, confidence/quality boundary,
   forbidden write scope, fallback, and review record.
 - Test/shadow data: automated tests must not create real approval, seal,
@@ -359,7 +415,7 @@ Mobile rules:
 | OA-006 | Employee asks AI to summarize a confidential document outside scope | AI refuses or hides source; access is audited |
 | OA-007 | Mobile manager approves during weak network | draft opinion is preserved; final approval waits for server validation |
 | OA-008 | Workflow definition changes while old instances are running | old instances continue on snapshot version; new submits use new version |
-| OA-009 | E-signature certificate is expired | signing is blocked and routed to certificate renewal/manual handling |
+| OA-009 | PKI/CA signing certificate is expired | signing is blocked and routed to certificate renewal/manual handling |
 | OA-010 | Browser test submits a real approval path | request uses shadow/test mode; no production workflow/seal/payment side effect remains |
 | OA-011 | Submitter recalls while parallel approvers are processing, then resubmits | recall uses a configured state guard; stale approvals are rejected; new run/version, opinions and prior audit remain traceable |
 
@@ -405,10 +461,8 @@ Mocked matrices and simulated reviewers cannot satisfy expert review or audit.
       gate, forbidden write scope, fallback, and linked tests.
 - [ ] PC+mobile state consistency and weak-network behavior are defined when
       mobile is in scope.
-- [ ] Common OA fields use canonical `FLD-*` definitions; projections do not
-      duplicate unchanged definitions.
-- [ ] When the core scale/audit threshold is met, Product Truth is locked before
-  projections when scope spans multiple
-      modules, roles, or surfaces.
+- [ ] Common OA facts are defined once with existing stable identifiers;
+      projections state only relevant differences. Product Truth and `FLD-*`
+      identifiers are used only when the selected delivery needs them.
 - [ ] Coding-agent delivery package paths are explicit when implementation by
       Claude Code, Cursor, Codex, or Copilot is expected.

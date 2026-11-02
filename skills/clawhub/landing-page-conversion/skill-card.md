@@ -1,40 +1,54 @@
-## Description: <br>
-Guides agents to improve landing pages where existing traffic is not converting by clarifying the offer, proof, calls to action, and friction points. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a clarity-first checklist for improving landing pages with adequate traffic but weak conversion by refining messaging, proof, calls to action, and friction.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Marketing teams, founders, growth operators, and agents use this skill to review landing pages with decent traffic but weak conversion, then produce focused messaging, CTA, proof, friction, and testing guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The guidance may be misapplied to pages that lack traffic or to product-market-fit, acquisition, or broader business strategy problems. <br>
-Mitigation: Use it for landing pages with existing traffic and poor conversion; address acquisition, offer, or product issues separately before applying page-level optimization. <br>
+## Use Case:
 
+Marketing teams and page owners use this skill to diagnose underperforming landing pages and plan focused improvements for new offers or paid traffic. It guides message matching, proof placement, simpler calls to action and forms, and one-variable testing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/landing-page-conversion) <br>
-- [deciqAI landing page conversion resource](https://www.deciqai.com/c/landing-page-conversion) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/landing-page-conversion.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance-only; no code execution, credentials, persistence, or privileged access requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Page changes may introduce inaccurate claims or reduce conversion.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed page changes before publishing and test one hypothesis at a time.
+
+Risk: Analytics and session recordings may not be authorized for sharing.
+
+Mitigation: Share only authorized analytics or session recordings.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/deciqai/skills/landing-page-conversion)
+- [deciqAI landing page conversion guide](https://www.deciqai.com/c/landing-page-conversion)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Checklist]
+
+**Output Format:** [Markdown guidance and a landing page optimization checklist]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations and verification checklist; no automatic publishing.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

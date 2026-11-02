@@ -1,45 +1,55 @@
-## Description: <br>
-Analyzes pet water-fountain videos or URLs through server-side APIs to estimate drinking frequency, session duration, daily intake, historical baseline changes, and abnormal intake alerts without providing diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet water fountain videos to estimate drinking frequency, session duration, and daily intake, compare results with historical baselines, and flag unusual changes for follow-up.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, pet-care product teams, and developers use this skill to submit water-fountain video evidence and receive structured drinking-behavior metrics, historical report links, and abnormal intake alerts for pet health monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet videos or video URLs are sent to lifeemergence.com services for analysis and historical report retrieval. <br>
-Mitigation: Submit only footage and URLs the user is permitted to share, and review privacy expectations before installation or use. <br>
-Risk: The skill can silently create or reuse a local identity and store reusable account tokens in a workspace SQLite database. <br>
-Mitigation: Run the skill in a controlled workspace, protect workspace data, and clear local data when the identity or tokens should not persist. <br>
-Risk: Water-intake estimates and health-risk alerts can be mistaken for medical diagnosis. <br>
-Mitigation: Treat results as informational monitoring signals and defer diagnosis or treatment decisions to a qualified veterinarian. <br>
+## Use Case:
 
+Pet owners and operators of smart fountains can use the skill to review drinking behavior from fountain-area videos, track changes over time, and identify patterns that may warrant veterinary follow-up. Its estimates are for health monitoring and do not provide a diagnosis or treatment recommendation.
 
-## Reference(s): <br>
-- [Pet Water Fountain Intake Analysis API Documentation](references/api_doc.md) <br>
-- [Common Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-water-fountain-intake-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis report with optional report export link] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save output to a requested local file; local video inputs must be mp4/avi/mov and 10 MB or smaller.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter lists 1.0.5) <br>
+Risk: The export-only behavior may still upload selected videos or URLs to LifeEmergence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Have that behavior corrected before relying on it. For analysis, submit only footage intended to be shared with the service.
+
+Risk: Shared account credentials may associate reports or submitted media with another user's service identity.
+
+Mitigation: Avoid shared workspaces containing other users' service identities, and clarify account isolation and data retention before submitting private recordings.
+
+## Reference(s):
+
+- [API reference](references/api_doc.md)
+- [Skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-water-fountain-intake-analysis)
+- [Sample](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured analysis report with estimated drinking metrics, alerts, and report links; JSON or Markdown presentation]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Intake is estimated from video behavior rather than directly measured; results are for reference and are not a veterinary diagnosis.]
+
+## Skill Version(s):
+
+1.0.13 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,23 +3,36 @@
 ## Requirements
 
 - Docker
-- An Anthropic-compatible LLM endpoint + credentials (`ANTHROPIC_AUTH_TOKEN`/`ANTHROPIC_API_KEY` + `ANTHROPIC_BASE_URL`) — Z.AI, direct Anthropic, or any compatible proxy. pi drives the model; pibox drives pi.
-- A host workspace directory to bind-mount (`-v $PWD/workspace:/workspace`), so agent output/session state persists across container restarts.
+- An LLM endpoint supported by Pi's custom HTTP provider configuration. `PIBOX_PROVIDER_*` accepts an endpoint URL, protocol, API key or token, and model. It covers LiteLLM, Anthropic Messages endpoints, and Google Generative AI. `ANTHROPIC_*` remains available for existing Anthropic-compatible deployments. Pi drives the model; pibox drives Pi.
+- A target workspace. Run the wrapper from that directory so it mounts the path and preserves Pi state.
 
 ## Quick Install
+
+### Host wrapper
+
+Install the wrapper for interactive and one-shot use:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/psyb0t/docker-pibox/main/install.sh | bash
+```
+
+Install `pibox`, `codexbox`, and `claudebox` in the same command directory,
+normally `/usr/local/bin`, when a box needs to launch another. Each wrapper
+mounts sibling wrapper files read-only. The sibling wrapper then asks the host
+Docker daemon to mount its own data directory.
 
 ### Interactive / one-shot (no server)
 
 ```bash
-docker run -it --rm \
-  -e ANTHROPIC_AUTH_TOKEN=your-token \
-  -e ANTHROPIC_BASE_URL=https://api.z.ai/api/anthropic \
-  -e ANTHROPIC_MODEL=glm-4.6 \
-  -v "$PWD/workspace:/workspace" \
-  psyb0t/pibox:latest
+pibox
+pibox -p "inspect this workspace"
+PIBOX_FULL=1 pibox -p "run the full test suite"
 ```
 
-Append `-p "your prompt"` (or any other pi CLI flags) to the `docker run` line for one-shot exec instead of an interactive shell.
+Use the wrapper for normal interactive and one-shot work. It handles the
+workspace mount, Pi state, aicodebox state, SSH state, image selection, and
+nested launch context. Do not construct a `docker run` command unless the user
+explicitly asks for a direct container deployment.
 
 ### REST / OpenAI-compatible / MCP server
 
@@ -97,7 +110,7 @@ services:
 
 `PIBOX_API_MODE`, `PIBOX_TELEGRAM_MODE`, `PIBOX_CRON_MODE` are the foreground modes. Priority order if multiple are set: API wins over everything. Telegram + Cron together is the one allowed pairing (cron runs in-thread inside the telegram process). If none are set, the container falls through to pi's own CLI (interactive shell, or one-shot exec if args are passed).
 
-`PIBOX_MCP_MODE` is independent of the above — it coexists with any foreground mode (mounted at `/mcp` in API mode, sidecar elsewhere) or with none at all (sidecar only, no other surface reachable).
+`PIBOX_MCP_MODE` is independent of the above — it coexists with any foreground mode (mounted at `/mcp/` in API mode, sidecar elsewhere) or with none at all (sidecar only, no other surface reachable). The slashless `/mcp` spelling reaches the same handler; a standalone sidecar serves at its port root `/`.
 
 ## Environment Variables
 
@@ -112,7 +125,7 @@ The image is built on [aicodebox](https://github.com/psyb0t/docker-aicodebox); t
 | `PIBOX_API_MODE` | `0` | Boot the HTTP API server (foreground) |
 | `PIBOX_TELEGRAM_MODE` | `0` | Boot the Telegram bot (foreground) |
 | `PIBOX_CRON_MODE` | `0` | Boot the cron scheduler (foreground; in-thread when telegram is also on) |
-| `PIBOX_MCP_MODE` | `0` | Expose MCP — mounted at `/mcp` in API mode, or as a sidecar elsewhere |
+| `PIBOX_MCP_MODE` | `0` | Expose MCP — mounted at `/mcp/` in API mode, or as a sidecar elsewhere |
 
 ### API mode config
 
@@ -134,7 +147,7 @@ The image is built on [aicodebox](https://github.com/psyb0t/docker-aicodebox); t
 | Var | Default | What it does |
 |-----|---------|---------------|
 | `PIBOX_CRON_MODE_FILE` | — | Path to the cron yaml (required) |
-| `PIBOX_CRON_MODE_HISTORY_DIR` | `~/.aicodebox/cron/history` | Where cron writes per-run history dirs (`meta.json`, `stdout.log`, `stderr.log`, `result.txt`, `telegram.json`) |
+| `PIBOX_CRON_MODE_HISTORY_DIR` | `~/.aicodebox/cron` | Cron state root. Per-run history dirs live under `<root>/history/<workspace>/<timestamp>-<job>/` (`meta.json`, `stdout.log`, `stderr.log`, `result.txt`, `telegram.json`); per-job summaries append to `<root>/<job>.jsonl` |
 
 ### MCP mode config
 
@@ -142,17 +155,50 @@ The image is built on [aicodebox](https://github.com/psyb0t/docker-aicodebox); t
 |-----|---------|---------------|
 | `PIBOX_MCP_MODE_PORT` | `8081` | Port the sidecar MCP server binds to (ignored when mounted inside API mode) |
 | `PIBOX_MCP_MODE_TOKEN` | empty | Bearer token for MCP. Empty = no auth — see [Security & safety](../SKILL.md#security--safety). No fallback to `PIBOX_API_MODE_TOKEN` |
+| `PIBOX_MCP_MODE_ALLOWED_HOSTS` | loopback hosts | Comma-separated MCP `Host` allowlist for DNS-rebinding protection. Add each reverse-proxy host name |
+| `PIBOX_MCP_MODE_ALLOWED_ORIGINS` | loopback HTTP origins | Comma-separated MCP browser Origin allowlist. Add each reverse-proxy origin |
 
 ### Workspace & runtime
 
 | Var | Default | What it does |
 |-----|---------|---------------|
 | `PIBOX_WORKSPACE` | `/workspace` | Root workspace dir inside the container |
-| `PIBOX_CONTAINER_NAME` | `aicodebox` | Used to scope per-container state files (auth, etc.) |
-| `PIBOX_AVAILABLE_MODELS` | — | **Required for API mode.** CSV list returned by `/openai/v1/models` and shown in the telegram `/model` picker |
+| `PIBOX_CONTAINER_NAME` | `aicodebox` | Used to scope per-container state files in direct Docker runs. The host wrapper derives a per-workspace name. |
+| `PIBOX_AVAILABLE_MODELS` | — | **Required for API mode.** CSV list returned by `/openai/v1/models` and shown in the telegram `/model` picker. pibox registers every listed model with the upstream provider under `PIBOX_PROVIDER_API` |
 | `PIBOX_AVAILABLE_EFFORTS` | adapter list (`off,minimal,low,medium,high,xhigh`) | Override the effort/`--thinking` list shown by the telegram `/effort` picker (comma-separated) |
 
-### LLM upstream (Anthropic wire protocol)
+Under the aicodebox state directory (`$HOME/.aicodebox`, mounted from `PIBOX_STATE_DIR` by the wrapper): executables in `bin/` are on `PATH` ahead of everything else, for pi in every mode, for init scripts, and for `docker exec` shells; scripts in `init.d/*.sh` run once per container, after the image's own `/aicodebox-init.d/*.sh`, as `aicode` with passwordless sudo, with a failing script logged and the rest still run.
+
+### LLM upstream
+
+#### Generic custom HTTP provider
+
+Use these variables for Pi's documented custom HTTP APIs. They configure the upstream model Pi uses, not pibox's own OpenAI-compatible `/openai/v1` endpoint.
+
+| Var | Default | What it does |
+|-----|---------|--------------|
+| `PIBOX_PROVIDER_NAME` | `pibox` | Provider identifier. Lowercase letters, numbers, and `-` only. |
+| `PIBOX_PROVIDER_API` | `openai-completions` | `openai-completions`, `openai-responses`, `anthropic-messages`, or `google-generative-ai` |
+| `PIBOX_PROVIDER_BASE_URL` | none | Required upstream HTTP base URL |
+| `PIBOX_PROVIDER_API_KEY` | none | Required upstream API key or token |
+| `PIBOX_PROVIDER_MODEL` | none | Required default upstream model ID |
+
+LiteLLM example:
+
+```bash
+docker run --rm --network host \
+  -e PIBOX_PROVIDER_BASE_URL=http://127.0.0.1:4000/v1 \
+  -e PIBOX_PROVIDER_API=openai-completions \
+  -e PIBOX_PROVIDER_API_KEY=your-litellm-virtual-key \
+  -e PIBOX_PROVIDER_MODEL=your-model-id \
+  -v "$PWD/workspace:/workspace" \
+  psyb0t/pibox:latest \
+  -p "list the files in /workspace"
+```
+
+For API mode, set `PIBOX_AVAILABLE_MODELS=your-model-id` too. Do not combine `PIBOX_PROVIDER_*` with `ANTHROPIC_BASE_URL`. pibox rejects the ambiguous configuration. The generic variables cover Pi's documented custom HTTP APIs, not every cloud-specific built-in provider.
+
+#### Anthropic compatibility
 
 | Var | Purpose |
 |-----|---------|
@@ -181,7 +227,7 @@ Non-standard `x-aicodebox-*` request headers extend `POST /openai/v1/chat/comple
 
 | Port | Default | Service |
 |---|---|---|
-| API/OAI/MCP-in-API | `8080` (`PIBOX_API_MODE_PORT`) | REST, `/openai/v1/*`, `/mcp` (when `PIBOX_MCP_MODE=1`) |
+| API/OAI/MCP-in-API | `8080` (`PIBOX_API_MODE_PORT`) | REST, `/openai/v1/*`, `/mcp/` (when `PIBOX_MCP_MODE=1`) |
 | MCP sidecar | `8081` (`PIBOX_MCP_MODE_PORT`) | MCP only, used when API mode is not the foreground |
 
 No ports are opened for Telegram, cron, interactive, or one-shot exec modes — they're outbound-only or container-boundary-trusted.

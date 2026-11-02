@@ -105,13 +105,16 @@ Speak in observations rather than declarations. Notice the quality of light, the
 
 ---
 
-## Try Before You Install
+---
 
-See this Taste Skill in action before adding it to Claude.
+## Explore on InspiredHub
 
-→ **[Live Demo on InspiredHub](https://inspiredhub.ai/demo)** — paste any text and see the aesthetic feedback in real time. No account required.
+- **[See this public Taste Skill in practice](https://inspiredhub.ai/demo)** — a source-aware comparison using the public Skill.
+- **[Use this public Skill as an optional Personal Taste Brief reference](https://inspiredhub.ai/personal-taste-brief#clawhub/taste-monet)** — add it only if you choose, then edit or remove it in your own working Brief.
 
-*Powered by [InspiredHub](https://inspiredhub.ai) — the aesthetic intelligence platform for artists and designers.*
+A public cultural Skill is not a diagnosis of your taste. Opening the Brief does not create a profile, save a draft, synchronize an agent, or send ClawHub account, installation, or download data to InspiredHub.
+
+*Powered by [InspiredHub](https://inspiredhub.ai/) — public cultural references and private, user-controlled working Briefs.*
 
 
 ---

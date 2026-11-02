@@ -1,42 +1,50 @@
-## Description: <br>
-Taste Van Gogh helps agents apply Vincent van Gogh's Post-Impressionist visual language to writing, UI design, branding, and conversation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Aesthetic skill for AI agents — Van Gogh's Post-Impressionist visual language, with style tokens, anti-tokens, and creative direction distilled from 843 works.
 
-## Publisher: <br>
-[johnnyzijianwu](https://clawhub.ai/user/johnnyzijianwu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[johnnyzijianwu](https://clawhub.ai/user/johnnyzijianwu)
 
-## Use Case: <br>
-External users, developers, designers, and creative agents use this skill to translate Van Gogh-inspired style tokens and anti-tokens into creative direction for text, interface design, branding, and critique. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The linked third-party demo asks users to paste text. <br>
-Mitigation: Avoid pasting private or sensitive material into the demo unless that service is trusted for the intended data. <br>
-Risk: Generated creative guidance may overstate or misapply Van Gogh-inspired aesthetic claims. <br>
-Mitigation: Review outputs against the skill's style tokens, anti-tokens, and evaluation criteria before using them in final work. <br>
+## Use Case:
 
+Designers, developers, and creators use this skill to shape writing, visual design, branding, and conversation with Van Gogh's Post-Impressionist visual language.
 
-## Reference(s): <br>
-- [Taste Van Gogh on ClawHub](https://clawhub.ai/johnnyzijianwu/skills/taste-van-gogh) <br>
-- [InspiredHub live demo](https://inspiredhub.ai/demo) <br>
-- [InspiredHub](https://inspiredhub.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Style tokens, anti-tokens, application rules, and evaluation criteria for Van Gogh-inspired creative work.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: The behavior and privacy claims of linked sites could not be independently verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the linked site's privacy and interaction terms before entering information or relying on statements about tracking, saving, or data transfer.
+
+## Reference(s):
+
+- [InspiredHub public skill demo](https://inspiredhub.ai/demo)
+- [Optional Personal Taste Brief reference](https://inspiredhub.ai/personal-taste-brief#clawhub/taste-van-gogh)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Natural-language creative direction and requested writing or design content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Applies style tokens, anti-tokens, and examples to the requested medium.]
+
+## Skill Version(s):
+
+1.0.7 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

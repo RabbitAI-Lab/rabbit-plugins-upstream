@@ -7,7 +7,7 @@ description: >-
   Use when the user asks to find robots, dispatch a robot task, hire a robot,
   pay a robot for work, check a robot task status, or register/update/remove
   their own robot on the RTP network.
-version: 1.0.0
+version: 1.0.2
 homepage: https://spraay.app
 metadata:
   openclaw:
@@ -50,6 +50,12 @@ confirm the following with the user before dispatching:
 gateway and released to the robot operator only on reported completion —
 the buyer is not paying blind.
 
+**Operator actions are permanent.** Updating a robot's payment address,
+pricing, or status takes effect immediately. Deregistering a robot removes
+it from the network — it will no longer appear in discovery or accept tasks
+until re-registered. Always confirm the robot ID and intended change with
+the user before executing any operator mutation.
+
 ## Setup
 
 The gateway URL must be set in your environment or `openclaw.json`:
@@ -58,9 +64,29 @@ The gateway URL must be set in your environment or `openclaw.json`:
 SPRAAY_GATEWAY_URL=https://gateway.spraay.app
 ```
 
-No API key is needed. Payments are made per-request via the x402 HTTP payment
-protocol (HTTP 402 → pay → retry). An x402-compatible wallet (Coinbase CDP
-or similar) handles this automatically.
+No standalone API key is needed for buyer-side calls — payments are made
+per-request via the x402 HTTP payment protocol (HTTP 402 → pay → retry).
+An x402-compatible wallet (Coinbase CDP or similar) handles this
+automatically.
+
+## Authorization model
+
+**Buyer-side endpoints** (list, profile, dispatch, status) are authorized
+by x402 payment — if you can pay, you can call.
+
+**Operator-side endpoints** (register, update, complete, deregister) are
+mutation operations that modify robots and release escrow. The gateway
+enforces ownership server-side: each robot is bound to the identity that
+registered it, and each task is bound to its assigned robot. The curl
+examples below are simplified for readability — the gateway rejects
+mutation requests that do not come from the authorized owner.
+
+> **Note for skill consumers:** this skill documents the API surface. It
+> does not bypass or weaken whatever authorization the gateway enforces.
+> If the gateway's ownership enforcement changes or the skill examples
+> diverge from the live API's auth requirements, follow the gateway's
+> requirements. When in doubt, consult the
+> [RTP spec](https://github.com/plagtech/rtp-spec).
 
 ## What is RTP?
 
@@ -137,11 +163,19 @@ curl "$SPRAAY_GATEWAY_URL/api/v1/robots/status?id=TASK_ID"
 Registering and managing a robot on the RTP network costs nothing. Operators
 get paid per completed task via escrow release.
 
+> **All operator mutations require user confirmation.** Before calling
+> register, update, complete, or deregister, confirm the robot ID,
+> intended change, and consequences with the user. These actions take
+> effect immediately on the gateway.
+
 ### Register a Robot — FREE
 
 Required fields: `name`, `capabilities`, `payment_address`, `connection`.
 Optional: `description`, `price_per_task`, `currency`, `chain`, `tags`,
 `metadata`. Connection types: `webhook`, `xmtp`, `wifi`, `websocket`.
+
+Save the returned `robot_id` — it is needed for all subsequent management
+calls and is bound to your operator identity.
 
 ```bash
 curl -X POST "$SPRAAY_GATEWAY_URL/api/v1/robots/register" \
@@ -161,9 +195,13 @@ curl -X POST "$SPRAAY_GATEWAY_URL/api/v1/robots/register" \
 ### Report Task Completion — FREE (called by the robot)
 
 Reports a task done and triggers escrow release to the operator wallet.
+Only the robot assigned to the task can report completion.
 
 Required: `task_id` and `status` (`COMPLETED` or `FAILED`). Optional:
 `result`.
+
+**Confirm the task ID and status with the user before reporting.** A
+`COMPLETED` report triggers immediate escrow release.
 
 ```bash
 curl -X POST "$SPRAAY_GATEWAY_URL/api/v1/robots/complete" \
@@ -177,6 +215,10 @@ Requires `robot_id`. Updatable: `name`, `description`, `capabilities`,
 `price_per_task`, `currency`, `chain`, `payment_address`, `connection`,
 `tags`, `status`, `metadata`.
 
+**Confirm changes with the user before updating**, especially
+`payment_address` (changes where earnings are sent) and `status` (can
+take the robot offline). Changes take effect immediately.
+
 ```bash
 curl -X PATCH "$SPRAAY_GATEWAY_URL/api/v1/robots/update" \
   -H "Content-Type: application/json" \
@@ -184,6 +226,12 @@ curl -X PATCH "$SPRAAY_GATEWAY_URL/api/v1/robots/update" \
 ```
 
 ### Deregister a Robot — FREE
+
+> **Destructive action.** Deregistration removes the robot from the RTP
+> network immediately. It will no longer appear in discovery results or
+> accept new tasks. Any in-flight tasks may be affected. The robot must
+> be re-registered from scratch to rejoin. Always confirm the robot ID
+> with the user and verify there are no active tasks before proceeding.
 
 ```bash
 curl -X POST "$SPRAAY_GATEWAY_URL/api/v1/robots/deregister" \
@@ -193,12 +241,13 @@ curl -X POST "$SPRAAY_GATEWAY_URL/api/v1/robots/deregister" \
 
 ## Free Endpoints
 
-These require no x402 payment:
+These require no x402 payment (but are subject to gateway ownership
+enforcement for mutation operations):
 
 - `POST /api/v1/robots/register` — Register a robot
-- `POST /api/v1/robots/complete` — Report task completion (robot-side)
-- `PATCH /api/v1/robots/update` — Update robot profile/pricing
-- `POST /api/v1/robots/deregister` — Remove a robot
+- `POST /api/v1/robots/complete` — Report task completion (robot-side, authorized to assigned robot only)
+- `PATCH /api/v1/robots/update` — Update robot profile/pricing (authorized to registering owner only)
+- `POST /api/v1/robots/deregister` — Remove a robot (authorized to registering owner only)
 - `GET /health` — Gateway health check
 
 ## x402 Payment Flow
@@ -219,6 +268,8 @@ listings and profiles.
 - `402` — Payment required. Follow instructions in response body.
 - `400` — Bad request. Validate the task payload against the robot's
   capability profile.
+- `401` / `403` — Unauthorized. The caller does not own the target robot
+  or task. Verify the correct operator identity is being used.
 - `404` — Robot or task ID not found. Re-list robots.
 - `500` — Server error. Retry after a moment.
 

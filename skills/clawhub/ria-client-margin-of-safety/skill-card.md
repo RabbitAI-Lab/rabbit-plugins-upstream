@@ -1,40 +1,49 @@
-## Description: <br>
-Guides agents through retirement decumulation margin-of-safety checks for cash buffers, withdrawal haircuts, early-crash stress tests, and guardrail rules. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps financial advisers stress-test retirement plans for sequence-of-returns risk, spending buffers, and sustainable withdrawals.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External financial planning agents and advisory teams use this skill to add conservative decumulation checks to retirement plans. It helps frame cash and bond buffers, withdrawal-rate haircuts, early-market-crash stress tests, and documented spending guardrails. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Retirement planning guidance could be mistaken for personalized financial advice. <br>
-Mitigation: Treat outputs as a thinking framework and review retirement-plan decisions with a qualified professional where appropriate. <br>
+## Use Case:
 
+External financial advisers use this skill when creating or reviewing retirement decumulation plans. It helps size spending buffers, set conservative withdrawal guardrails, and test early-crash scenarios.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/ria-client-margin-of-safety) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/ria-client-margin-of-safety) <br>
-- [deciqAI machine-readable metadata](https://www.deciqai.com/s/ria-client-margin-of-safety.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Analysis, Markdown] <br>
-**Output Format:** [Markdown guidance with checklists and planning examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No commands, system access, persistence, or data handling are requested by the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence) <br>
+Risk: Illustrative examples or stress-test assumptions may not fit a client's circumstances.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the worked example as illustrative and verify assumptions and stress-test results before relying on a retirement plan.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/ria-client-margin-of-safety)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Text]
+
+**Output Format:** [Markdown guidance and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Illustrative planning guidance; not investment advice.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

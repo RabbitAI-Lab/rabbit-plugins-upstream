@@ -1,44 +1,51 @@
-## Description: <br>
-Guides agents through a monopoly-vs-competition audit for startups and products, stress-testing market definition, durable moat traits, beachhead sequencing, and verdict confidence. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides users through an evidence-based audit of market definition, competitive position, durable advantages, and niche-first expansion.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External founders, operators, and strategy-focused teams use this skill to evaluate whether a product or startup can escape direct competition through an honest market definition, defensible moat traits, and a niche-first expansion path. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Business-strategy recommendations may overstate a company's monopoly potential if user-provided market definitions or evidence are weak. <br>
-Mitigation: Require explicit customer substitutes, evidence for each moat trait, and a confidence-rated verdict before acting on the analysis. <br>
-Risk: The framework may influence commercial decisions through Peter Thiel-style monopoly and moat concepts. <br>
-Mitigation: Treat outputs as advisory strategy analysis and review consequential recommendations with qualified business stakeholders. <br>
-Risk: Users may confuse creative monopoly analysis with legal or antitrust monopoly assessment. <br>
-Mitigation: Route regulatory, antitrust, or legal monopoly questions to appropriate legal review instead of using this skill as authority. <br>
+## Use Case:
 
+Startup founders and product leaders use this skill to assess whether a business can build a durable advantage, define its market through customer substitutes, and plan a niche-first expansion path.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/monopoly-vs-competition) <br>
-- [deciqAI Monopoly vs Competition page](https://www.deciqai.com/c/monopoly-vs-competition) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/monopoly-vs-competition.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown text with a structured monopoly audit template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include WAIT-gated coaching prompts for novice users and a structured audit covering honest market, rivals, four moat traits, beachhead sequencing, verdict, and confidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Business conclusions may mislead if the framework's claims or market assumptions are treated as established facts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Test market definitions, substitutes, and competitive claims against customer and market evidence.
+
+## Reference(s):
+
+- [Monopoly vs Competition on ClawHub](https://clawhub.ai/deciqai/skills/monopoly-vs-competition)
+- [Monopoly vs Competition overview](https://www.deciqai.com/c/monopoly-vs-competition)
+- [Machine-readable skill description](https://www.deciqai.com/s/monopoly-vs-competition.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured Markdown audit or stepwise coaching prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Adapts to a direct audit of a concrete business or guided, one-step-at-a-time coaching.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

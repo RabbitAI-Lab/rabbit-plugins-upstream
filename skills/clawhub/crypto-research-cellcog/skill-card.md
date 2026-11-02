@@ -1,43 +1,58 @@
-## Description: <br>
-Crypto Research Cellcog provides CellCog-powered crypto research for token deep dives, on-chain metrics, DeFi protocol analysis, wallet portfolio reviews, market sentiment, whitepaper analysis, and smart contract evaluation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI crypto research and analysis powered by CellCog. Token deep-dives, on-chain metrics, DeFi protocol breakdowns, wallet portfolio reviews, market sentiment, whitepaper analysis, smart contract evaluation. Comprehensive crypto intelligence from a single prompt.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers, analysts, and crypto researchers use this skill to delegate crypto market research, token and DeFi protocol analysis, portfolio review, and due diligence prompts to CellCog. It is intended as research support and should not replace professional financial, legal, investment, or tax advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Crypto research and portfolio analysis may be incomplete, stale, or unsuitable for financial, legal, investment, or tax decisions. <br>
-Mitigation: Treat outputs as research support and verify prices, on-chain data, protocol risk, and tax conclusions with primary sources or qualified professionals before acting. <br>
-Risk: Prompts may expose sensitive wallet, exchange, seed phrase, private key, or account information if users include secrets. <br>
-Mitigation: Do not include exchange credentials, seed phrases, private keys, or other secrets in prompts; keep CELLCOG_API_KEY in secret storage or the local environment. <br>
-Risk: The skill depends on CellCog access and may fail without the required Python package, API key, or sufficient credits for high-depth modes. <br>
-Mitigation: Install and authenticate CellCog before use, confirm CELLCOG_API_KEY is configured, and choose chat modes appropriate to the available credits and decision risk. <br>
+## Use Case:
 
+Crypto investors, researchers, and developers use the skill to analyze tokens, DeFi protocols, on-chain activity, market sentiment, portfolios, whitepapers, and smart-contract risk.
 
-## Reference(s): <br>
-- [CellCog](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/crypto-research-cellcog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python snippets and optional research outputs such as HTML dashboards, PDF reports, XLSX spreadsheets, or Markdown analysis.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and CELLCOG_API_KEY; high-depth modes may require additional CellCog credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: server release metadata) <br>
+Risk: Prompts may include identifying portfolio details or wallet information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Minimize identifying details and never include wallet secrets.
+
+Risk: Crypto research may be inaccurate or incomplete, and market information can change quickly.
+
+Mitigation: Treat results as a starting point and verify on-chain data and claims with primary sources before acting.
+
+Risk: Use may involve API credit costs, background notifications, and installed dependencies.
+
+Mitigation: Review dependencies before installation and understand credit costs and notification behavior.
+
+## Reference(s):
+
+- [Crypto Research on ClawHub](https://clawhub.ai/cellcog/skills/crypto-research-cellcog)
+- [CellCog](https://cellcog.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Reports, Markdown, HTML, PDF, Spreadsheets]
+
+**Output Format:** [Markdown, interactive HTML, PDF, or XLSX reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include charts, metrics, comparisons, and research recommendations.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,50 @@
-## Description: <br>
-Helps tax practices identify and manage seasonal throughput constraints, especially reviewer capacity and missing-document bottlenecks, when returns pile up before deadlines. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides tax practices in finding and managing seasonal return-processing bottlenecks with the Theory of Constraints.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Tax practice operators, firm managers, and agents use this skill during filing season to measure queues across intake, document completion, preparation, review, and e-file, then protect or increase the constraint that limits total returns completed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tax-practice details shared with an agent can include sensitive client or firm information. <br>
-Mitigation: Share only necessary operational context and follow firm data-handling policies before using the skill with client-specific details. <br>
+## Use Case:
 
+Tax preparers, reviewers, and practice leads use this guidance to identify seasonal workflow constraints, manage queues, and plan capacity. It is workflow guidance, not professional tax advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/tax-season-throughput-constraints) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/tax-season-throughput-constraints) <br>
-- [deciqAI machine-readable metadata](https://www.deciqai.com/s/tax-season-throughput-constraints.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown guidance with checklists and operational triage steps] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable planning aid; no API calls, shell commands, or credential requirements are indicated by the evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Staffing, review-threshold, and extension decisions based on workflow estimates may not fit the practice's circumstances or current requirements.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use aggregate workload counts where possible, and have the responsible professional review these decisions and verify jurisdiction-dependent requirements against current authority.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/tax-season-throughput-constraints)
+- [Tax season throughput overview](https://www.deciqai.com/c/tax-season-throughput-constraints)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown workflow guidance, examples, and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

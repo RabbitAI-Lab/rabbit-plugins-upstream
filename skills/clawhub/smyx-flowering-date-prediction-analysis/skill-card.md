@@ -1,45 +1,59 @@
-## Description: <br>
-Predicts flowering dates for ornamental and cut-flower plants from bud images or videos, optional temperature and light data, and a pre-trained phenology model, producing a structured report for planning pollination, harvesting, or visitor timing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered flowering-date prediction for ornamental and cut-flower plants, using flower-bud images and optional accumulated temperature and light data to estimate full bloom within 3–7 days.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Growers, greenhouse operators, botanical garden teams, and agricultural developers use this skill to estimate full-bloom timing from flower-bud media and optional environmental context. The output supports production scheduling, harvest planning, pollination timing, and flower tourism planning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review marks the release as suspicious because it sends media or URLs to a remote service. <br>
-Mitigation: Review the publisher, service endpoint, and data-handling expectations before installing or using the skill with sensitive media. <br>
-Risk: The security review notes that the skill silently creates or reuses a local identity and can store authentication tokens in a workspace SQLite database. <br>
-Mitigation: Run the skill in a controlled workspace, inspect local storage policies, and avoid using shared or persistent workspaces unless token storage is acceptable. <br>
-Risk: The security review notes mismatched pet-health and generic-analysis artifacts in the package. <br>
-Mitigation: Confirm the backend behavior, report access, and publisher expectations before relying on the flower analysis output. <br>
+## Use Case:
 
+Greenhouse growers, cut-flower producers, botanical gardens, and flower-tourism operators can use this skill to estimate flowering dates from bud images or video, optionally combined with temperature and light accumulation data, and plan pollination, harvesting, or visitor schedules. Predictions are for planning reference and should be checked against field observations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-flowering-date-prediction-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON or text analysis results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return structured reports, history report tables, report links, and optional saved output files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence; artifact frontmatter reports 1.0.5) <br>
+Risk: The security review reports that the skill can register accounts silently and retain credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Defer installation until account registration is clearly disclosed; protect credentials and restrict them to trusted destinations.
+
+Risk: The security review reports that media may be uploaded even when `--export-env-only` is specified.
+
+Mitigation: Do not provide sensitive imagery, and verify that this option prevents analysis before relying on it.
+
+Risk: The security review says service charges, data retention, and account deletion options need confirmation.
+
+Mitigation: Confirm charges, retention practices, and account deletion options before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-flowering-date-prediction-analysis)
+- [API interface notes](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Guidance]
+
+**Output Format:** [Structured JSON or Markdown analysis report with flowering-date estimates, bud-stage findings, confidence information, and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts image or video inputs; predictions are estimates for planning and the skill documentation notes an approximate ±1–2 day error.]
+
+## Skill Version(s):
+
+1.0.12 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

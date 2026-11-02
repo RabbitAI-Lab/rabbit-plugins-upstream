@@ -1,42 +1,51 @@
-## Description: <br>
-Provides mortgage-specific guardrails for designing or reviewing loan-originator compensation, marketing services agreements, lead buys, and referral arrangements under LO Comp and RESPA constraints. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Activate when: designing/reviewing loan-originator compensation; considering a marketing services agreement (MSA), lead-buy, or referral arrangement; 'can we pay for these referrals?', 'can comp vary by loan?'. Do NOT activate when: unrelated ops incentives with no mortgage-referral nexus. More: deciqai.com/c/mortgage-lo-comp-respa-design
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Mortgage compliance, operations, and incentive-design teams use this skill to screen loan-originator compensation plans, MSAs, lead buys, and referral arrangements for term-neutral and referral-clean design before legal or compliance sign-off. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Mortgage compensation and RESPA guidance may be mistaken for legal advice or applied without qualified review. <br>
-Mitigation: Use the skill as domain-specific compliance guidance only and require counsel or compliance sign-off before implementing any plan or arrangement. <br>
-Risk: An agent could incorrectly approve compensation tied to loan terms, referral payments, or unsupported marketing services agreements. <br>
-Mitigation: Apply the terms-neutral proxy test, confirm no payment is made for settlement-business referrals, document actual services at fair market value, and escalate red flags. <br>
+## Use Case:
 
+Mortgage lenders, brokers, and compliance teams can use this skill as a checklist when reviewing loan-originator compensation plans and marketing or referral arrangements. It helps identify term-linked compensation and referral-payment concerns for qualified counsel or compliance review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/mortgage-lo-comp-respa-design) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/mortgage-lo-comp-respa-design) <br>
-- [deciqAI machine-readable metadata](https://www.deciqai.com/s/mortgage-lo-comp-respa-design.json) <br>
+### Deployment Geography for Use:
 
+United States
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, text, markdown] <br>
-**Output Format:** [Markdown guidance with checklists and red-flag criteria] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable domain guidance; mortgage compensation and RESPA decisions require qualified legal or compliance review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The referenced parent incentive-design process is not included, and the skill's guidance is not legal advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the checklist as a review aid and obtain qualified counsel or compliance approval before implementing an arrangement.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/mortgage-lo-comp-respa-design)
+- [Mortgage LO Compensation & RESPA Guardrails overview](https://www.deciqai.com/c/mortgage-lo-comp-respa-design)
+- [Machine-readable skill information](https://www.deciqai.com/s/mortgage-lo-comp-respa-design.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Checklists]
+
+**Output Format:** [Markdown review guidance and checklist]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory text; does not perform financial actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -360,12 +360,6 @@ body {
     border: 1px solid var(--article-tag-border);
 }
 
-.type-tag.unknown {
-    background: rgba(156,163,175,0.12);
-    color: #9CA3AF;
-    border: 1px solid rgba(156,163,175,0.28);
-}
-
 /* ── Status ── */
 .status-message {
     text-align: center;
@@ -643,9 +637,8 @@ function renderCard(item) {
     const url = item.workUrl || '#';
     const cover = getCoverUrl(item);
     const video = isVideo(item);
-    const isUnknown = item.workType === null || item.workType === undefined;
-    const tagClass = video ? 'video' : isUnknown ? 'unknown' : 'article';
-    const tagLabel = video ? '视频' : isUnknown ? '未知' : '图文';
+    const tagClass = video ? 'video' : 'article';
+    const tagLabel = video ? '视频' : '图文';
 
     const card = document.createElement('a');
     card.className = 'article-card';
@@ -685,7 +678,7 @@ function applyFilters(items) {
     if (currentFilter === 'video') {
         filtered = filtered.filter(e => isVideo(e));
     } else if (currentFilter === 'article') {
-        filtered = filtered.filter(e => e.workType === false && e.hasVideo === false);
+        filtered = filtered.filter(e => !isVideo(e));
     }
     if (currentHours > 0) {
         const cutoff = Date.now() - currentHours * 3600 * 1000;
@@ -801,8 +794,8 @@ async function fetchDetailsBatch(items) {
             authorName: d.authorName || item.nickname || '未知作者',
             publishTime: d.publishTime || new Date(parseInt(item.publishTime || 0) * 1000).toISOString().replace('T', ' ').slice(0, 19),
             publishTs: item.publishTime || '',
-            workType: d.workType !== undefined ? d.workType : null,
-            hasVideo: d.hasVideo !== undefined ? d.hasVideo : null,
+            workType: d.workType || false,
+            hasVideo: d.hasVideo || false,
             workUrl: d.workUrl || item.opusUrl || '',
             viewCount: d.viewCount || 0,
             likeCount: d.likeCount || 0,

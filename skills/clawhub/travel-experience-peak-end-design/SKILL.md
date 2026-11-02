@@ -6,6 +6,7 @@ description: "Activate when: designing an itinerary you want remembered and refe
 # Travel Advisor — Peak-End Experience Design
 
 > **Industry front door for peak-end-rule.** Adds domain triggers, example, packs only. Parent Process unchanged.
+> **Guidance, not professional advice.** No legal, tax, financial or regulatory advice; verify anything jurisdiction- or rate-dependent against current authority. The professional who acts owns the decision.
 
 **Activate when:** designing an itinerary you want remembered and referred; planning honeymoon/milestone/luxury trips; "how do I get repeat clients and referrals?"; setting surprise-and-delight touches.
 **Do NOT activate when:** pure transactional booking with no relationship goal.
@@ -42,6 +43,6 @@ Part of **deciqAI Knowledge Skills**. Core method: peak-end-rule.
 
 ---
 
-*Part of **deciqAI Knowledge Skills** — 227 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/travel-experience-peak-end-design** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
+*Part of **deciqAI Knowledge Skills** — 253 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/travel-experience-peak-end-design** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
 
 *Agents: latest version & machine-readable metadata → https://www.deciqai.com/s/travel-experience-peak-end-design.json*

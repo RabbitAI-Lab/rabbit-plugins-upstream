@@ -1,42 +1,62 @@
-## Description: <br>
-Transcribes user-selected audio files or media URLs with Speech is Cheap automatic speech-to-text, including optional diarization, word timestamps, audio labels, language selection, and subtitle formats. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Transcribe audio and video for agents by Speech is Cheap. Fast, high-quality, and cost-effective ($0.06 - $0.12/hr). Use an API key or x402 USDC.
 
-## Publisher: <br>
-[ilyakam](https://clawhub.ai/user/ilyakam) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[speechischeap](https://clawhub.ai/user/speechischeap)
 
-## Use Case: <br>
-Developers and agents use this skill to submit audio URLs or local media files to Speech is Cheap for transcription and to check transcription job status. It is suited to automated speech-to-text workflows that need JSON, SRT, VTT, or WebVTT output. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected audio files or media URLs are sent to a third-party transcription API. <br>
-Mitigation: Use the skill only for recordings you are permitted to process, and avoid confidential, regulated, or third-party recordings unless Speech is Cheap privacy and retention terms are acceptable. <br>
-Risk: A missing or misconfigured API key prevents transcription requests from running. <br>
-Mitigation: Configure SIC_API_KEY before use and restrict the credential to environments authorized to send data to Speech is Cheap. <br>
+## Use Case:
 
+External users and developers use this skill to transcribe audio or video from a URL or local file, retrieve asynchronous job results, and optionally request speaker labels, word timestamps, or sound labels.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/ilyakam/skills/asr) <br>
-- [Speech is Cheap](https://speechischeap.com) <br>
-- [Speech is Cheap API Documentation](https://docs.speechischeap.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands; command results are JSON or subtitle text depending on requested output format] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SIC_API_KEY and sends selected audio files or media URLs to the Speech is Cheap API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata, artifact manifest, CHANGELOG) <br>
+Risk: Transcription sends the selected media or media URL, options, and any webhook URL to Speech is Cheap; retention and refund promises were not independently verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Send only caller-approved media, consider --private for sensitive recordings, and review the service's privacy and retention terms.
+
+Risk: Wallet mode can authorize USDC payments and uses local purchase recovery state.
+
+Mitigation: Use a trusted signer with approval controls, approve a per-purchase --max-usd ceiling, and keep recovery state private.
+
+Risk: Dependency code and live payment behavior were not tested.
+
+Mitigation: Review dependencies and verify payment behavior before relying on wallet mode.
+
+## Reference(s):
+
+- [Speech is Cheap privacy policy](https://speechischeap.com/privacy/)
+- [Speech is Cheap security](https://speechischeap.com/company/security/)
+- [x402 errors and refunds](https://docs.speechischeap.com/errors/)
+- [x402 payments and refunds](https://docs.speechischeap.com/x402-v2/payments/)
+- [x402 webhooks](https://docs.speechischeap.com/x402-v2/webhooks/)
+- [Maintenance repository listed by the publisher](https://github.com/speechischeap/clawhub-asr)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, SRT subtitles, VTT/WebVTT subtitles, Shell commands, Guidance]
+
+**Output Format:** [Transcripts as JSON, SRT, or VTT/WebVTT; job status as JSON or text; shell commands and configuration guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional speaker labels, word timestamps, sound labels, and asynchronous webhook delivery.]
+
+## Skill Version(s):
+
+1.5.0 (source: release evidence, CHANGELOG.md, manifest.json; released 2026-11-01)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

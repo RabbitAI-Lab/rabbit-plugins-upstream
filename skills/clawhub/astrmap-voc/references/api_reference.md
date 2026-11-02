@@ -371,40 +371,27 @@ Content-Type: application/json
 
 ---
 
-### 4.4 桌面客户端下载配置
+### 4.4 浏览器扩展下载配置
 
 **端点**: `GET /download-config.json`
 
-这是一个公开的配置文件（无需 API Key 认证），用于获取桌面客户端的下载链接。
+这是一个公开的配置文件（无需 API Key 认证），用于获取浏览器扩展的下载链接。
+注：网站已不再提供桌面客户端下载，`downloads` 中现仅有 `extension` 一项。
 
 **响应**:
 ```json
 {
-  "version": "1.0.0",
-  "last_updated": "2026-04-27T14:31:08.795719Z",
+  "version": "1.5.1",
+  "last_updated": "2026-09-19T00:00:00Z",
   "downloads": {
-    "macos": {
-      "name_zh": "macOS 版",
-      "name_en": "macOS Version",
+    "extension": {
+      "name_zh": "Chrome 扩展",
+      "name_en": "Chrome Extension",
       "url": "<实际下载地址>",
-      "version": "1.0.0",
-      "size": "156MB",
+      "version": "0.6.11",
+      "size": "150.8 KB",
       "requirements": {
-        "min_version": "10.15",
-        "recommended_memory": "8GB",
-        "disk_space": "500MB"
-      }
-    },
-    "windows": {
-      "name_zh": "Windows 版",
-      "name_en": "Windows Version",
-      "url": "<实际下载地址>",
-      "version": "1.0.0",
-      "size": "142MB",
-      "requirements": {
-        "min_version": "10",
-        "recommended_memory": "8GB",
-        "disk_space": "500MB"
+        "min_chrome_version": "88"
       }
     }
   }
@@ -727,7 +714,6 @@ Content-Type: application/json
 **⚠️ 好评侧关键陷阱**（实测 2026-06-23）：
 - `polarity="positive"` 的 items **可能混入少量 1★/2★** 评论——服务端按 AI 综合情感切分而非 `review_star` 单值
 - 做频次榜/文案摘录前**必须过滤 `review_star >= 4`**
-- 完整 V1 自检清单 + 典型用法见 `references/positive-reviews-workflow.md`
 
 **Python 调用**:
 ```python
@@ -1056,7 +1042,110 @@ pos = client.get_sentiment_reviews(tid, polarity="positive", page=1, page_size=5
 
 ---
 
-### 14. 积分余额查询
+### 14. 商品信息查询
+
+**端点**: `POST /api/v1/external/product/detail`
+
+获取商品信息（完整字段，含 bullets / product_description / A+ 图片，供 Agent 二次分析）。
+
+两种查询方式（二选一）：
+- **task_id**：按任务查，返回该任务下所有商品
+- **asin + site**：按商品直查，无需先建任务
+
+**请求体（方式一）**:
+```json
+{
+  "task_id": "TSK_xxx"
+}
+```
+
+**请求体（方式二）**:
+```json
+{
+  "asin": "B0XXXXXXXX",
+  "site": "US",
+  "platform": "amazon"
+}
+```
+
+**请求参数**:
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| task_id | string | 与 asin 二选一 | 按任务查，返回该任务下所有商品 |
+| asin | string | 与 task_id 二选一 | 按商品直查 |
+| site | string | 否（asin 直查时建议传） | 站点码，默认 `US` |
+| platform | string | 否 | 平台，默认 `amazon` |
+
+**响应**:
+```json
+{
+  "code": 0,
+  "msg": "获取 1 个商品信息",
+  "data": {
+    "asin": "B0XXXXXXXX",
+    "site": "US",
+    "queried_by": "asin",
+    "products": [
+      {
+        "asin": "B0XXXXXXXX",
+        "site": "US",
+        "product_title": "...",
+        "brand": "...",
+        "image_main": "https://...",
+        "rating_average": 4.3,
+        "rating_count": 1250,
+        "rating_distribution": {"5": 62, "4": 18, "3": 8, "2": 5, "1": 7},
+        "rating_health": "healthy",
+        "category_path": "...",
+        "category_levels": 4,
+        "category_node_ids": [...],
+        "category_leaf_id": "...",
+        "price_current": 29.99,
+        "price_original": 39.99,
+        "price_discount": 25,
+        "price_off_amount": 10.0,
+        "currency": "USD",
+        "bullets": ["卖点1", "卖点2", "..."],
+        "product_description": "...或 null（见下方提示）",
+        "has_aplus_content": false,
+        "aplus_image_urls": null,
+        "availability": "In Stock",
+        "date_first_available": "2024-01-15",
+        "featured_badge": null,
+        "is_active": true,
+        "fetched_at": "..."
+      }
+    ]
+  }
+}
+```
+
+**响应字段说明**:
+| 字段 | 说明 |
+|------|------|
+| queried_by | `task_id` 或 `asin`，标识本次查询方式 |
+| rating_distribution | 5→1 星占比（key 为字符串数字）；无数据时为 `null` |
+| rating_health | 口碑健康度：`healthy`（5星≥80%）/ `polarized`（5星≥40% 且 1星≥10%，平均分掩盖两极分化）/ `poor`（5星<40%）/ `moderate`；无法计算时为 `null` |
+| price_off_amount | 派生字段：`price_original - price_current`（任一缺失则为 `null`） |
+| bullets / product_description / aplus_image_urls | 完整返回，供「差评 vs 卖点」语义对齐等二次分析 |
+
+> ⚠️ **归属校验（asin 直查）**：product 表按 `(platform, site, asin)` 全局存储、无 user_id。
+> asin 直查要求该 ASIN 出现在**当前用户某个任务**的 `parse_content` 中，否则返回
+> `PRODUCT_NOT_ACCESSIBLE`（防止跨用户数据泄露）。
+>
+> 提示：`product_description` 可能为 `null` 且**不代表采集失败**——品牌备案卖家常把描述
+> 做成纯图片（A+ 内容），此时 `has_aplus_content=true`，可展示 `aplus_image_urls`。
+
+**错误码**:
+| 内部 code | 典型 msg |
+|------|-------------|
+| INVALID_TASK_ID_ERROR | 请提供 task_id 或 asin |
+| MISSING_REQUIRED_PARAM | 缺少必需参数 |
+| PRODUCT_NOT_ACCESSIBLE | 无权访问该商品信息（该 ASIN 不在您的任何任务中） |
+
+---
+
+### 15. 积分余额查询
 
 **端点**: `POST /api/v1/external/account/points`
 
@@ -1154,6 +1243,7 @@ else:
 | AccessDenied | 无权访问该任务 | 任务不属于当前账号（部分接口用此码） |
 | INSUFFICIENT_POINTS | 积分余额不足 | 分析类操作扣积分失败 |
 | DEVICE_NOT_FOUND | 设备未找到 | 端点未绑定或不在线（部分接口） |
+| PRODUCT_NOT_ACCESSIBLE | 无权访问该商品信息（该 ASIN 不在您的任何任务中） | asin 直查商品信息时，该 ASIN 不在当前用户的任何任务中 |
 | API_RATE_LIMIT | 请求过于频繁，请稍后再试 | 触发速率限制（默认 100/min） |
 | UNKNOWN | 未知错误，请稍后重试 | 兜底 |
 
@@ -1181,12 +1271,12 @@ else:
 
 创建任务前，需确保满足以下条件：
 
-1. AstrMap 桌面客户端已登录
-2. 桌面客户端已登录亚马逊买家账号（勿使用正在做业务的卖家账号）
+1. 采集通道在线（Chrome 扩展已安装并连接）
+2. 已在浏览器中登录亚马逊买家账号（勿使用正在做业务的卖家账号）
 3. 确保亚马逊访问畅通
 
 ### 错误处理建议
-1. 端点不在线（`is_alive: false` 或 msg 含"设备"）：检查桌面客户端是否登录
+1. 端点不在线（`is_alive: false` 或 msg 含“设备”）：提示用户安装并登录浏览器扩展
 2. 积分不足（msg 含"积分"）：提示用户充值积分
 3. API Key 无效（HTTP 400 + msg 含"API Key"）：检查 API Key 是否正确
 4. 写操作被拒（msg 含"只读"）：只读 Key 不能创建任务/触发分析/增量/重命名

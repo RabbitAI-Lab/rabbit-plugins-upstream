@@ -1,6 +1,6 @@
 ---
 name: codexbox
-description: OpenAI Codex CLI running inside an aicodebox container, put on the network. Exposes seven ways in — interactive shell, one-shot exec, an HTTP REST API (workspace file ops, sync/async prompt runs with run-id polling), an OpenAI-compatible /openai/v1/chat/completions endpoint (streaming, client-executed tools/tool_choice, response_format/JSON-schema), an MCP server (streamable HTTP, mounted at /mcp in API mode or as a sidecar), a Telegram bot, and a cron scheduler that fires codex on a schedule. Auth is bearer-token per surface (CODEXBOX_API_MODE_TOKEN, CODEXBOX_MCP_MODE_TOKEN) plus codex's own OpenAI API-key or ChatGPT-subscription login. Use when the user wants to run OpenAI Codex programmatically over HTTP/MCP/Telegram/cron instead of only in a local terminal, or wants an OpenAI-compatible endpoint backed by Codex.
+description: "Install, configure, or run Codex through the codexbox wrapper, or connect to its HTTP, MCP, Telegram, or cron surfaces."
 homepage: https://github.com/psyb0t/docker-codexbox
 user-invocable: true
 metadata:
@@ -12,6 +12,50 @@ metadata:
 [OpenAI Codex CLI](https://github.com/openai/codex) inside an [aicodebox](https://github.com/psyb0t/docker-aicodebox) container, put on the network. codexbox is aicodebox's `codex` adapter — the HTTP/MCP/Telegram/cron surfaces are aicodebox's, the argv/JSON-event translation is codexbox's.
 
 For installation and configuration, see [references/setup.md](references/setup.md).
+
+## Agent execution
+
+Use `codexbox` when it is on `PATH`. Run it from the workspace the user
+named. Do not assemble a new `docker run` command for routine interactive or
+one-shot work. The wrapper owns the workspace mount, `~/.codex`, SSH state,
+image selection, and session lifecycle.
+
+```bash
+codexbox                                      # interactive Codex TUI
+codexbox exec "inspect this workspace"        # one-shot work
+printf '%s\n' "summarize README.md" | codexbox exec -
+CODEXBOX_FULL=1 codexbox exec "run the full suite"
+```
+
+For a wrapper-started server, prefix container variables with
+`CODEXBOX_ENV_`. For example,
+`CODEXBOX_ENV_CODEXBOX_API_MODE=1 codexbox` passes
+`CODEXBOX_API_MODE=1` into the container. Bare `CODEXBOX_API_MODE` is not
+forwarded and does not start the server.
+
+Start a local API and MCP server only when the user asks for one. Authenticate
+Codex with `codexbox login --device-auth` or `CODEXBOX_ENV_OPENAI_API_KEY`,
+then set the actual model identifiers and distinct bearer tokens:
+
+```bash
+CODEXBOX_ENV_CODEXBOX_API_MODE=1 \
+CODEXBOX_ENV_CODEXBOX_MCP_MODE=1 \
+CODEXBOX_ENV_CODEXBOX_AVAILABLE_MODELS=your-model-id \
+CODEXBOX_ENV_CODEXBOX_API_MODE_TOKEN=your-api-token \
+CODEXBOX_ENV_CODEXBOX_MCP_MODE_TOKEN=your-mcp-token \
+codexbox
+```
+
+Use an HTTP or MCP endpoint only when the user asks for a service or provides
+an already-running remote URL. MCP plugins connect to a server. They do not
+replace the local wrapper.
+
+If `codexbox`, `claudebox`, and `pibox` were installed in the same command
+directory, a box can invoke a sibling command directly. The parent wrapper
+passes the real host paths and the sibling wrapper file. Do not set
+`AICODEBOX_HOST_*`, copy wrapper files, or manually mount another box's state
+directory. If the sibling command is absent, ask the user to install it or to
+choose another approach.
 
 ## Security & safety
 
@@ -98,15 +142,22 @@ With `CODEXBOX_API_MODE_TOKEN` unset the API surface is unauthenticated — anyo
 | `DELETE` | `/files/{path}` | delete a file (refuses directories — 400) |
 | `POST` | `/openai/v1/chat/completions` | OpenAI-compatible chat endpoint (see below) |
 | `GET` | `/openai/v1/models` | model list from `CODEXBOX_AVAILABLE_MODELS` |
-| `POST` | `/mcp` | MCP server, mounted only when `CODEXBOX_MCP_MODE=1` (see MCP mode) |
+| `POST` | `/mcp/` | MCP server, mounted only when `CODEXBOX_MCP_MODE=1` (see MCP mode) |
 
 `DELETE /files/{path}` removes a workspace file (no undo). Confirm the target path first and only remove files the current task created — see [Security & safety](#security--safety).
 
 `POST /run` body: `prompt` (required), `workspace`, `model`, `systemPrompt`, `appendSystemPrompt`, `jsonSchema`, `noContinue`, `resume`, `timeoutSeconds`, `thinking`, `noTools`, `toolsAllowlist`, `includeRaw`, `async`, `fireAndForget`. With `jsonSchema` set, the response adds `json`, `events`, `sessionId`, `usage`, `attempts` — codex has native `--output-schema` enforcement, so `jsonSchema` maps straight onto it (no self-correction retries needed, unlike adapters without native schema support).
 
+Default programmatic runs continue the exact top-level Codex `exec` root
+pinned to the canonical workspace. The first run creates the pin; existing
+workspaces migrate their newest top-level `exec` rollout. Newer subagent
+rollouts are deliberately excluded because Codex rejects direct turns on
+multi-agent children. Explicit `resume` re-pins the confirmed thread;
+`noContinue` is ephemeral and leaves the workspace pin unchanged.
+
 ```bash
 curl -s http://localhost:8080/run \
-  -H "Authorization: Bearer your-secret" \
+  --oauth2-bearer "$CODEXBOX_API_MODE_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"prompt": "say HELLO", "workspace": "/workspace"}'
 ```
@@ -116,10 +167,10 @@ Async: set `"async": true`, poll `GET /run/result?runId=<id>` until `status != "
 All `/files/*` paths are resolved against the workspace root with traversal checking — `..` segments that escape the root return 400.
 
 ```bash
-curl -sS -X PUT -H "Authorization: Bearer your-secret" \
+curl -sS -X PUT --oauth2-bearer "$CODEXBOX_API_MODE_TOKEN" \
   --data-binary @local.txt http://localhost:8080/files/notes/hello.txt
 
-curl -sS -H "Authorization: Bearer your-secret" \
+curl -sS --oauth2-bearer "$CODEXBOX_API_MODE_TOKEN" \
   http://localhost:8080/files/notes/hello.txt
 ```
 
@@ -134,7 +185,7 @@ curl -sS -H "Authorization: Bearer your-secret" \
 
 ```bash
 curl -s http://localhost:8080/openai/v1/chat/completions \
-  -H "Authorization: Bearer your-secret" \
+  --oauth2-bearer "$CODEXBOX_API_MODE_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
         "model": "gpt-5.1-codex",
@@ -151,12 +202,16 @@ Coexists with any foreground mode:
 
 | Foreground | MCP placement |
 |---|---|
-| API mode (`CODEXBOX_API_MODE=1`) | mounted at `/mcp` on the API port — no extra process |
+| API mode (`CODEXBOX_API_MODE=1`) | mounted at `/mcp/` on the API port — no extra process |
 | Telegram / Cron / shell-only | sidecar uvicorn on `CODEXBOX_MCP_MODE_PORT` (default `8081`), served at the process root |
+
+The slashless `/mcp` spelling reaches the same API-mounted handler without a redirect.
 
 Auth: `CODEXBOX_MCP_MODE_TOKEN=<token>` — bearer in `Authorization: Bearer ...`, or `?apiToken=...` for clients that can't set headers. Empty = no auth. **No fallback to `API_MODE_TOKEN`** — MCP has its own bearer, checked independently.
 
-With `CODEXBOX_MCP_MODE_TOKEN` unset the MCP surface (`run_prompt`, `list_files`, `read_file`, `write_file`, `delete_file`) is unauthenticated — anyone who can reach `/mcp` or the sidecar port gets run-execution plus full workspace file access. This surface has its own bearer; setting `CODEXBOX_API_MODE_TOKEN` does not protect it. Set the token and bind to loopback / behind an authenticating proxy before exposing it beyond localhost.
+With `CODEXBOX_MCP_MODE_TOKEN` unset the MCP surface (`run_prompt`, `list_files`, `read_file`, `write_file`, `delete_file`) is unauthenticated — anyone who can reach `/mcp/` or the sidecar port gets run-execution plus full workspace file access. This surface has its own bearer; setting `CODEXBOX_API_MODE_TOKEN` does not protect it. Set the token and bind to loopback / behind an authenticating proxy before exposing it beyond localhost.
+
+MCP keeps DNS rebinding protection enabled. Loopback hosts and origins work by default; allow a reverse proxy's exact `Host` and browser `Origin` with `CODEXBOX_MCP_MODE_ALLOWED_HOSTS` and `CODEXBOX_MCP_MODE_ALLOWED_ORIGINS` before exposing MCP through it.
 
 ```bash
 docker run -d --name codexbox-api \
@@ -171,7 +226,7 @@ docker run -d --name codexbox-api \
 Wire into an MCP-aware client:
 
 ```bash
-claude mcp add --transport http codexbox http://localhost:8080/mcp \
+claude mcp add --transport http codexbox http://localhost:8080/mcp/ \
   --header "Authorization: Bearer your-mcp-secret"
 ```
 
@@ -242,13 +297,13 @@ jobs:
     thinking: low
 ```
 
-Each run gets a history dir at `CODEXBOX_CRON_MODE_HISTORY_DIR/<workspace>/<timestamp>-<job>/` with `meta.json`, `stdout.log`, `stderr.log`, `result.txt` (plus `telegram.json` when telegram is also configured — the next run's prompt gets a "prior run" hint automatically).
+`CODEXBOX_CRON_MODE_HISTORY_DIR` (default `$HOME/.aicodebox/cron`) is the whole cron state root. Each run gets a history dir at `<root>/history/<workspace>/<timestamp>-<job>/` with `meta.json`, `stdout.log`, `stderr.log`, `result.txt` (plus `telegram.json` when telegram is also configured — the next run's prompt gets a "prior run" hint automatically). A per-job summary jsonl lands at `<root>/<job>.jsonl`. Set a job's `telegram_chat_id` to `0` to opt it out of an inherited root-level notification target; a successful job with an explicit `telegram_chat_id` still posts a notice even when its result text is empty.
 
 ## Auth
 
 Two independent auth layers:
 
-**1. Surface auth** (who can call the HTTP/MCP endpoints): `CODEXBOX_API_MODE_TOKEN` gates `/run`, `/files/*`, `/openai/v1/*`; `CODEXBOX_MCP_MODE_TOKEN` gates `/mcp` (its own bearer, no fallback to the API token). Empty = no auth on that surface.
+**1. Surface auth** (who can call the HTTP/MCP endpoints): `CODEXBOX_API_MODE_TOKEN` gates `/run`, `/files/*`, `/openai/v1/*`; `CODEXBOX_MCP_MODE_TOKEN` gates `/mcp/` (its own bearer, no fallback to the API token). Empty = no auth on that surface.
 
 **2. codex's own upstream auth** (how codex talks to OpenAI): pick one —
   - `OPENAI_API_KEY` — seeded into `$CODEX_HOME/auth.json` on every boot; safe to always set (never overwrites an existing ChatGPT-subscription login).

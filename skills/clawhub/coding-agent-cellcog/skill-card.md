@@ -1,41 +1,58 @@
-## Description: <br>
-AI coding agent powered by CellCog Co-work. Code generation, debugging, refactoring, codebase exploration, terminal operations - executed directly on your machine. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A CellCog Co-work coding agent for code generation, debugging, refactoring, codebase exploration, terminal operations, and on-demand multimedia tasks.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers and agents use this skill to delegate coding tasks to CellCog Co-work for code generation, debugging, refactoring, codebase exploration, file editing, and terminal operations in a selected project directory. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can let a CellCog-powered agent read, edit, and run commands in a user-selected project directory. <br>
-Mitigation: Keep write and execute approvals manual unless the task and repository are trusted, and review proposed changes before relying on them. <br>
-Risk: Using the skill in directories containing secrets or deployment controls may expose or affect sensitive assets. <br>
-Mitigation: Choose a scoped working directory and avoid sensitive paths unless the user has carefully reviewed the task and access. <br>
+## Use Case:
 
+Developers and coding agents use this skill to delegate codebase exploration, code generation and editing, debugging, refactoring, and project command execution to CellCog Co-work. Tasks run against a specified project directory, with user approval required for writes and command execution unless approval settings are changed.
 
-## Reference(s): <br>
-- [CellCog](https://cellcog.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/nitishgargiitd/skills/coding-agent-cellcog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or text responses with code blocks, command snippets, and configuration guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the CellCog dependency, CELLCOG_API_KEY, and CellCog Desktop for direct Co-work access to a selected project directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release evidence) <br>
+Risk: Co-work can access project files and run terminal commands on the user's machine; unreviewed actions could affect project data or the local environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated project directory and keep write and command approvals enabled. Review proposed changes and commands before approving them.
+
+Risk: Code and logs shared for debugging may be handled by an external service, and debugging context can contain secrets or personal information.
+
+Mitigation: Remove credentials and personal information from prompts, code excerpts, and logs before sharing them.
+
+Risk: The external SDK and CellCog Desktop implementation were not verified in the supplied security evidence.
+
+Mitigation: Review the prerequisite CellCog skill and downloaded software before enabling access.
+
+## Reference(s):
+
+- [CellCog](https://cellcog.ai)
+- [Coding Agent release on ClawHub](https://clawhub.ai/cellcog/skills/coding-agent-cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Files, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Code and task results, with shell commands and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May read and write project files and run commands through CellCog Co-work; task results are returned to the calling agent.]
+
+## Skill Version(s):
+
+1.0.16 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,51 @@
-## Description: <br>
-Helps founders assess whether current revenue, margin, burn, and runway make the company default alive or default dead, then decide whether to cut burn, grow revenue, or raise. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps founders assess whether their startup can reach profitability before cash runs out and identify actions to preserve runway.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders and startup operators use this skill to evaluate runway pressure, default alive/default dead status, and the path to ramen profitability before making burn, hiring, or fundraising decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Guidance may influence runway, cost-cutting, hiring, or fundraising decisions when inputs are incomplete or inaccurate. <br>
-Mitigation: Verify monthly revenue, gross margin, burn, founder living costs, runway, and committed funding before acting; treat the skill as planning guidance, not financial certainty. <br>
-Risk: Default alive/default dead status can change as revenue growth, spending, or fixed costs change. <br>
-Mitigation: Re-check the model monthly and before new fixed-cost commitments; require a dated plan when the company is default dead. <br>
+## Use Case:
 
+Founders use this skill to assess whether current revenue growth and spending can reach profitability before cash and committed funding run out. It helps them plan runway-conscious changes to revenue, burn, hiring, or fundraising.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/ramen-profitability) <br>
-- [deciqAI ramen profitability page](https://www.deciqai.com/c/ramen-profitability) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/ramen-profitability.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance and checklist-style analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory business-planning output; no code execution, credential handling, persistence, or external actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Runway estimates may mislead if the financial figures provided are incomplete or assumptions are not revisited as the business changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide only the financial figures needed, include revenue, margin, total burn, and committed funding, re-check monthly, and review spending or staffing decisions yourself.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/ramen-profitability)
+- [Ramen Profitability overview](https://www.deciqai.com/c/ramen-profitability)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/ramen-profitability.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance]
+
+**Output Format:** [Text guidance with a concise runway assessment and checklist]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

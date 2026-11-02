@@ -17,7 +17,7 @@ installer:
 argument-hint: "[vm/sr/snapshot uuid or describe your XCP-ng task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["XCPNG_AIOPS_CONFIG"],"bins":["xcpng-aiops"],"config":["~/.xcpng-aiops/config.yaml","~/.xcpng-aiops/secrets.enc"]},"optional":{"env":["XCPNG_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"XCPNG_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/XCPng-AIops","emoji":"🖥️","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["xcpng-aiops","uvx"]},"optional":{"env":["XCPNG_AIOPS_CONFIG","XCPNG_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/XCPng-AIops","emoji":"🖥️","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed XCP-ng operations via Xen Orchestra's REST API /rest/v0. REQUIRES a Xen Orchestra instance (XO from sources or the Xen Orchestra Appliance, 5.x) — XO is the management plane; direct per-host XAPI access is out of scope for v0.1. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.xcpng-aiops/ (relocatable via XCPNG_AIOPS_HOME).
@@ -30,6 +30,8 @@ compatibility: >
 ---
 
 # XCP-ng AIops
+
+> **Audit availability:** Real writes require a durable audit intent. Reads and previews can continue if audit storage fails; check the warning and audit health before relying on their audit trail.
 
 > **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by Vates, the XCP-ng project, or the Xen Orchestra project.** "XCP-ng", "Xen Orchestra", and "Xen" are trademarks of their owners. Source code is publicly auditable at [github.com/AIops-tools/XCPng-AIops](https://github.com/AIops-tools/XCPng-AIops) under the MIT license.
 
@@ -60,6 +62,15 @@ uv tool install xcpng-aiops
 xcpng-aiops init       # interactive wizard: XO URL + encrypted token
 xcpng-aiops doctor     # XO reachability + token validity + pool count
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/xcpng-aiops
+openclaw skills info xcpng-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 
@@ -227,7 +238,7 @@ of the Xen Orchestra account whose token you connect it with (give that XO user
 a read-only ACL or scope its token down — writes then fail at Xen Orchestra).
 There is no read-only switch, policy file, or approval gate.
 
-- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.xcpng-aiops/audit.db` (relocatable via `XCPNG_AIOPS_HOME`): params (secrets redacted), result, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
+- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.xcpng-aiops/audit.db` (relocatable via `XCPNG_AIOPS_HOME`): params (secrets redacted), outcome summary, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
 - The XO token is stored **encrypted** in `~/.xcpng-aiops/secrets.enc` (Fernet/AES-128 + scrypt key derivation; chmod 600) — never plaintext on disk; the master password is never stored, only a per-store salt + ciphertext.
 - `XCPNG_AUDIT_APPROVED_BY` / `XCPNG_AUDIT_RATIONALE` are optional annotations recorded on the audit row (who/why); they are never required and never block.
 - **Budget / runaway guard** — a safety backstop, not authorization: caps cumulative tool calls and wall-time, and trips on tight task-poll loops.

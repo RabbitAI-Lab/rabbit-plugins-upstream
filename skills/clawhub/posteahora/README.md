@@ -2,7 +2,8 @@
 
 **Social media scheduling & publishing CLI for AI agents and developers** — plan,
 schedule, and publish posts across Instagram, TikTok, YouTube, X (Twitter),
-Facebook, LinkedIn, Threads, Bluesky, and Discord, programmatically.
+Facebook, LinkedIn, Threads, Bluesky, Mastodon, Discord, Telegram, WordPress,
+Dev.to, Tumblr, Pinterest and Google Business, programmatically.
 
 The PosteAhora CLI is a thin, zero-dependency command-line interface to the
 [PosteAhora](https://posteahora.com) public REST API. It lets developers, scripts,
@@ -136,13 +137,25 @@ posteahora upload ./reel.mp4
 posteahora post "New reel" --to instagram:e5f6 --media https://cdn.posteahora.com/… --at 2026-07-20T09:00:00Z
 ```
 
-**Multi-platform, per-platform caption:**
+**Multi-platform, multi-line caption** (a heredoc keeps the line breaks — inside
+double quotes the shell would publish a backslash-n literally):
 
 ```bash
-posteahora post "Big news" \
-  --to twitter:a1b2 --to linkedin:c3d4 --to threads:g7h8 \
-  --hashtags launch,product
+CAPTION=$(cat <<'EOF'
+Big news 🚀
+
+We shipped the thing you asked for.
+
+#launch #product
+EOF
+)
+
+posteahora post "$CAPTION" \
+  --to twitter:a1b2 --to linkedin:c3d4 --to threads:g7h8
 ```
+
+Captions publish byte for byte, so spacing is yours to get right — see
+[PUBLISHING.md](PUBLISHING.md#caption-formatting).
 
 **Options:**
 - `--to platform:accountId` — target channel (repeatable or comma-separated) **(required)**
@@ -150,10 +163,11 @@ posteahora post "Big news" \
 - `--at <ISO 8601>` — schedule for a future time (otherwise publishes now)
 - `--draft` — create a draft instead of publishing
 - `--title <text>` — optional title (used where the platform supports it)
-- `--hashtags a,b,c` — comma-separated hashtags
 - `--media-type image|video`
 - `--post-type post|reel|story`
 - `--json` — machine-readable output
+- `--hashtags a,b,c` — stored on the post but **not published**; put hashtags in
+  the caption text instead
 
 ---
 
@@ -217,10 +231,17 @@ See [SUPPORTED_FILE_TYPES.md](SUPPORTED_FILE_TYPES.md) for accepted formats.
 | YouTube | ✅ | ✅ | ✅ |
 | X (Twitter) | ✅ | ✅ | ✅ |
 | Facebook | ✅ | ✅ | ✅ |
-| LinkedIn | ✅ | ✅ | ✅ |
+| LinkedIn | ✅ | ✅ | — |
 | Threads | ✅ | ✅ | ✅ |
 | Bluesky | ✅ | ✅ | ✅ |
+| Mastodon | ✅ | ✅ | ✅ |
 | Discord | ✅ | ✅ | — |
+| Telegram | ✅ | ✅ | — |
+| WordPress | ✅ | ✅ | — |
+| Dev.to | ✅ | ✅ | — |
+| Tumblr | ✅ | ✅ | — |
+| Pinterest | ✅ | ✅ | ✅ |
+| Google Business | ✅ | ✅ | — |
 
 Connect accounts in the PosteAhora app; the CLI targets them by ID.
 

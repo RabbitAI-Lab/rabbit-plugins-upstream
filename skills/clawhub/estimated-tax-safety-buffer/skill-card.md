@@ -1,42 +1,55 @@
-## Description: <br>
-Helps agents plan estimated-tax safe-harbor buffers for self-employed, K-1, or variable-income clients while flagging cases where W-2 withholding already covers liability. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides estimated-tax safe-harbor planning guidance for self-employed and variable-income taxpayers deciding how much to pay quarterly.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External tax preparers, advisors, and agents use this skill to size quarterly estimated-tax safe-harbor buffers for self-employed, K-1, or variable-income clients and to decide when annualized installment planning may be needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Estimated-tax thresholds, deadlines, and safe-harbor applicability can change or depend on individual facts. <br>
-Mitigation: Verify all percentages, deadlines, and client-specific assumptions against current IRS rules or a qualified tax professional before relying on the guidance. <br>
-Risk: The skill may be applied when W-2 withholding already covers the taxpayer's liability or when a different payment strategy is more appropriate. <br>
-Mitigation: Confirm the activation criteria, withholding coverage, safe-harbor floor, high-AGI threshold, and annualized-income method applicability before using the recommendation. <br>
+## Use Case:
 
+Self-employed, K-1, and other variable-income taxpayers can use this skill to plan quarterly estimated-tax payments against safe-harbor thresholds and consider annualized installments for uneven income.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/estimated-tax-safety-buffer) <br>
-- [deciqAI estimated-tax safe-harbor page](https://www.deciqai.com/c/estimated-tax-safety-buffer) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/estimated-tax-safety-buffer.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown guidance with checklists and tax-planning prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; requires current tax-rule verification before reliance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: Tax rules or personal assumptions used in examples may be out of date or inapplicable.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current tax rules and personal assumptions before relying on the examples.
+
+Risk: A separately installed parent or deadline skill may affect the guidance or reminders.
+
+Mitigation: Review any separately installed parent or deadline skill, and choose reminder settings yourself.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/estimated-tax-safety-buffer)
+- [Estimated-Tax Safe-Harbor Buffer overview](https://www.deciqai.com/c/estimated-tax-safety-buffer)
+- [Machine-readable skill information](https://www.deciqai.com/s/estimated-tax-safety-buffer.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Markdown guidance with calculations and a verification checklist]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,54 @@
-## Description: <br>
-AI meme generator powered by CellCog for meme concepts, viral content, reaction images, internet humor, audience targeting, trend research, and multi-angle generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates audience-targeted memes, reaction images, and internet humor with trend research and multiple creative angles.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers, content creators, and social media teams use this skill to ask an agent to create, refine, and adapt meme concepts, captions, reaction images, and template-based humor for a target audience. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a CellCog API key. <br>
-Mitigation: Store CELLCOG_API_KEY in the agent environment or secret manager and avoid pasting it into prompts, logs, or shared files. <br>
-Risk: Meme prompts or supplied media context may be sent to CellCog. <br>
-Mitigation: Review CellCog's setup and data-handling expectations before sharing private images, personal data, confidential text, or sensitive context. <br>
-Risk: Generated humor is subjective and may miss the intended tone or audience. <br>
-Mitigation: Review generated captions and images before publication, especially for brand, workplace, or community-sensitive use. <br>
+## Use Case:
 
+External users and creators use the skill to develop audience-specific meme concepts, reaction images, captions, and other internet humor, then refine the results through variations and feedback.
 
-## Reference(s): <br>
-- [Meme Generator Cellcog on ClawHub](https://clawhub.ai/nitishgargiitd/skills/meme-generator-cellcog) <br>
-- [Publisher profile](https://clawhub.ai/user/nitishgargiitd) <br>
-- [CellCog homepage](https://cellcog.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with prompt examples, Python code snippets, setup commands, and generated meme guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses CellCog through python3 and requires CELLCOG_API_KEY.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: server release metadata) <br>
+Risk: Prompts and supplied content are processed by CellCog.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only material you are authorized to send.
+
+Risk: The skill depends on a separate CellCog integration and package.
+
+Mitigation: Review those sources before installation and prefer reviewed, pinned versions where practical.
+
+## Reference(s):
+
+- [CellCog](https://cellcog.ai)
+- [Meme Generator on ClawHub](https://clawhub.ai/cellcog/skills/meme-generator-cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Images]
+
+**Output Format:** [Text and meme image content; text responses may use Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Audience, meme format, tone, and humor style can be specified; the skill can provide multiple variations.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

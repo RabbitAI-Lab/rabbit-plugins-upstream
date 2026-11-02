@@ -1,42 +1,52 @@
-## Description: <br>
-Guides agents through a demand-leadership coaching framework for diagnosing whether customers see a company as a commodity and designing a stage-up move toward stronger problem framing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps teams assess customer positioning and develop behavior-based moves that make their problem framing distinctive.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Business operators, founders, product leaders, and sales teams use this skill to diagnose demand-leadership stage, identify latent demand gaps, and produce a practical 60-day stage-up move based on customer behavior evidence. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may share confidential customer, sales-process, or strategy details while using the coaching framework. <br>
-Mitigation: Avoid entering confidential customer data unless workspace policies permit it, and review any generated recommendations before using them in business decisions. <br>
+## Use Case:
 
+Founders, product leaders, and B2B sales or marketing teams use this skill to diagnose commodity positioning and plan customer-behavior changes that help buyers adopt their problem framing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/demand-leadership) <br>
-- [Demand Leadership source references](references/sources.md) <br>
-- [McKinsey trusted advisor example](examples/mckinsey-trusted-advisor-1930s-1960s.md) <br>
-- [The World's Newest Profession](https://www.cambridge.org/9780521812832) <br>
-- [Value Innovation: The Strategic Logic of High Growth](https://hbr.org/1997/01/value-innovation-the-strategic-logic-of-high-growth) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown coaching prompts and a structured Demand Leadership Stage Map] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include staged diagnostic questions, customer-behavior evidence, a latent demand gap, a 60-day stage-up move, success indicator, owner, due date, and scene-creation workflow details.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Positioning recommendations may rely on unsupported assumptions about customer needs or expose confidential customer information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use customer information you are authorized to share, keep confidential details out of retained failure-pattern notes, and review proposed strategies before implementing them.
+
+## Reference(s):
+
+- [Christopher McKenna, The World's Newest Profession (Cambridge University Press)](https://www.cambridge.org/9780521812832)
+- [Kim and Mauborgne, Value Innovation (Harvard Business Review)](https://hbr.org/1997/01/value-innovation-the-strategic-logic-of-high-growth)
+- [Demand Leadership overview (deciqAI)](https://www.deciqai.com/c/demand-leadership)
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/demand-leadership)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown demand leadership stage map with evidence, positioning diagnosis, a 60-day move, and a customer-behavior success indicator.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide the user one question at a time and wait for their response.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

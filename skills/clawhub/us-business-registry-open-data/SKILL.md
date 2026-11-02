@@ -5,6 +5,8 @@ description: "Activate when: user needs US company registration data (LLCs, corp
 
 # US Business Registry Open Data
 
+> **Guidance, not professional advice.** No legal, tax, financial or regulatory advice; verify anything jurisdiction- or rate-dependent against current authority. The professional who acts owns the decision.
+
 ## Overview
 
 Several US states publish their **entire business registry** — every LLC, corporation, and nonprofit ever registered — as open data on Socrata portals, explicitly in the public domain or licensed for commercial use. Five states (New York, Colorado, Pennsylvania, Oregon, Connecticut) yield **~12.4 million entities** with names, entity types, formation dates, addresses, and registered agents, for free, via a documented API. Most people assume this data is locked behind OpenCorporates pricing or state paywalls; for these states, it isn't.
@@ -77,6 +79,6 @@ Everything enabled here is official government open data with explicit public-do
 
 ---
 
-*Part of **deciqAI Knowledge Skills** — 227 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/us-business-registry-open-data** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
+*Part of **deciqAI Knowledge Skills** — 253 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/us-business-registry-open-data** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
 
 *Agents: latest version & machine-readable metadata → https://www.deciqai.com/s/us-business-registry-open-data.json*

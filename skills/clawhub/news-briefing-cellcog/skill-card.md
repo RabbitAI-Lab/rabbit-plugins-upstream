@@ -1,42 +1,58 @@
-## Description: <br>
-News Briefing Cellcog helps agents create CellCog-powered news digests, competitive intelligence, market updates, trend reports, industry reports, and current events briefs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI news intelligence and daily briefing powered by CellCog. News digests, competitive intelligence, market updates, trend monitoring, industry reports, current events research. Multi-source synthesis for accurate, comprehensive briefs.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-External developers and teams use this skill to ask an agent for concise, sourced news briefings, competitive intelligence, market updates, trend reports, and custom digests powered by CellCog. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Requests and prompts are sent to CellCog as an external news research provider. <br>
-Mitigation: Use a CellCog account whose data-handling terms support the intended use, and avoid confidential strategy, customer data, or non-public financial information unless approved. <br>
-Risk: News briefings may contain outdated, incomplete, or misleading source interpretation. <br>
-Mitigation: Request source URLs and review important claims before using the output for business, legal, financial, or public communications. <br>
+## Use Case:
 
+Developers and agents use this skill to create concise, sourced news briefings, competitive intelligence updates, market summaries, and trend reports tailored to a topic, timeframe, and audience.
 
-## Reference(s): <br>
-- [CellCog](https://cellcog.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/nitishgargiitd/skills/news-briefing-cellcog) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/nitishgargiitd) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python code snippets and shell commands; resulting CellCog tasks may return structured text, Markdown, PDF reports, or interactive HTML.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, the CellCog dependency, and CELLCOG_API_KEY; output may include source links when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: ClawHub release evidence) <br>
+Risk: Prompts may contain private or confidential information sent to CellCog.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only information you are authorized to share with CellCog.
+
+Risk: The API key or the separate CellCog dependency could be exposed or installed without review.
+
+Mitigation: Protect CELLCOG_API_KEY and review the separate CellCog skill and SDK before installation, preferably using reviewed, pinned releases.
+
+Risk: Notifications may go to an unintended destination, and premium-tier reruns may incur service costs.
+
+Mitigation: Confirm the notification destination and service costs before sending notifications or rerunning at a premium tier.
+
+## Reference(s):
+
+- [News Briefing release on ClawHub](https://clawhub.ai/cellcog/skills/news-briefing-cellcog)
+- [CellCog](https://cellcog.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, PDF reports, HTML dashboards]
+
+**Output Format:** [Structured briefings and reports in text, Markdown, PDF, or interactive HTML, depending on the request.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can be tailored by topic, timeframe, audience, and requested length; source citations can be requested.]
+
+## Skill Version(s):
+
+1.0.16 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

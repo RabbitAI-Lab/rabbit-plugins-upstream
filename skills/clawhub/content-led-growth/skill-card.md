@@ -1,44 +1,54 @@
-## Description: <br>
-Guides founders and SMBs in building durable organic acquisition with search intent mapping, pillar pages, and topic clusters. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides founders and small businesses in planning durable organic growth through topic clusters organized around search intent.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders, SMB operators, and content marketers use this skill to plan durable non-paid acquisition by mapping buyer questions to search intent and organizing content into pillar and cluster pages. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The content strategy may be a poor fit when buyers do not search for the problem or the user needs immediate paid-channel response. <br>
-Mitigation: Confirm search demand, buyer research behavior, and timeline fit before applying the framework. <br>
-Risk: Business advice may be incomplete or unsuitable for a specific market, product, or audience. <br>
-Mitigation: Validate recommendations against current market data, internal expertise, and performance metrics before acting. <br>
-Risk: The skill links to external deciqAI references. <br>
-Mitigation: Treat external links as third-party references and review them before relying on their content. <br>
+## Use Case:
 
+Founders, small businesses, and content marketers can use this skill to plan organic acquisition around buyer questions, search intent, and connected pillar and cluster pages.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/content-led-growth) <br>
-- [deciqAI content-led growth page](https://www.deciqai.com/c/content-led-growth) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/content-led-growth.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Analysis] <br>
-**Output Format:** [Markdown advisory guidance with process steps, red flags, and verification checklist items] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory only; no executable behavior, credential use, persistence, or hidden data access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Content-planning suggestions may not fit the audience or search intent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed topics and content before publishing, and validate them against buyer questions and search intent.
+
+Risk: The linked website and latest-version metadata are external resources outside the inspected package.
+
+Mitigation: Review external content before relying on it.
+
+## Reference(s):
+
+- [Content-Led Growth overview](https://www.deciqai.com/c/content-led-growth)
+- [Latest machine-readable skill metadata](https://www.deciqai.com/s/content-led-growth.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Content strategy and topic-cluster planning guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

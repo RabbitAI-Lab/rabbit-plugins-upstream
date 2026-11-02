@@ -1,43 +1,57 @@
-## Description: <br>
-Neurological Levels helps agents diagnose repeated change failures by identifying whether resistance lives in environment, behavior, capability, beliefs, identity, or purpose. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides coaches and change leaders through diagnosing repeated behavior change failures with the Neurological Levels framework and choosing an intervention at the level where resistance appears.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Coaches, leaders, founders, and change teams use this skill to diagnose repeated behavior or culture-change failures and design interventions at the level where resistance actually appears. It is intended for coaching and organizational diagnosis, not acute crisis support or professional mental-health, HR, legal, or organizational advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat the coaching framework as crisis support or a substitute for professional mental-health, HR, legal, or organizational advice. <br>
-Mitigation: Use it only for coaching and change-diagnosis workflows; escalate acute crisis or professional advisory needs to qualified support before using the skill. <br>
-Risk: A level diagnosis may be applied as an external label without engagement from the affected person or team. <br>
-Mitigation: Validate the diagnosis through conversation, document behavioral or verbal evidence, and review the diagnostic artifact with the person or change team. <br>
+## Use Case:
 
+Coaches, managers, and change leaders use the skill to examine why a repeated behavior or organizational change has not lasted, identify the level where resistance may sit, and plan a discussion about a fitting intervention. It advises against using the framework for acute crises or as an external label without participant engagement.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/neurological-levels) <br>
-- [Bateson, Steps to an Ecology of Mind](https://archive.org/details/stepstoecology00bate) <br>
-- [Dilts, Neurological Levels Summary](https://www.nlpu.com/Articles/LevelsSummary.htm) <br>
-- [National Archives, Emancipation Proclamation](https://www.archives.gov/exhibits/featured-documents/emancipation-proclamation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown diagnostic template and coaching prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a structured Neurological Level Diagnostic with change history, evidence by level, diagnosis, intervention, expected cascade, and success indicator.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The framework's interpretation could be treated as a definitive assessment or imposed as an external label.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it as a discussion aid and confirm interpretations with the people involved.
+
+Risk: Reusable coaching examples could include sensitive personal details.
+
+Mitigation: Avoid copying sensitive personal details into reusable examples.
+
+## Reference(s):
+
+- [Sources for Neurological Levels](artifact/references/sources.md)
+- [Bateson, Steps to an Ecology of Mind (1972)](https://archive.org/details/stepstoecology00bate)
+- [Dilts, Levels Summary](https://www.nlpu.com/Articles/LevelsSummary.htm)
+- [National Archives, Emancipation Proclamation](https://www.archives.gov/exhibits/featured-documents/emancipation-proclamation)
+- [Lincoln Emancipation Strategy example](artifact/examples/lincoln-emancipation-strategy-1858-1865.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Conversational coaching prompts and a structured neurological-level diagnostic report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [In Coach mode, presents one question at a time; in Engine mode, applies the process to a described case.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

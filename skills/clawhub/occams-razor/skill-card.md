@@ -1,43 +1,54 @@
-## Description: <br>
-Occam's Razor helps an agent rank competing explanations, designs, or diagnoses by checking that each candidate fits the evidence and then preferring the one with the fewest unsupported assumptions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Occam's Razor to rank competing explanations, designs, or diagnoses that fit the evidence by comparing their unsupported assumptions.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users and developers use this skill to compare multiple plausible hypotheses or designs, run a parsimony audit, and identify what evidence would overturn the preferred option. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Runtime freshness checks can make agent behavior depend on remote, changeable instructions. <br>
-Mitigation: Review, pin, or disable the remote update path when reproducible, locally reviewed behavior is required. <br>
+## Use Case:
 
+People comparing multiple explanations, designs, or diagnoses use the skill to check that each candidate fits the evidence, count unsupported assumptions, and identify what could overturn a provisional preference.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/occams-razor) <br>
-- [Sources](references/sources.md) <br>
-- [deciqAI current skill metadata](https://www.deciqai.com/s/occams-razor.json) <br>
-- [Stanford Encyclopedia of Philosophy: William of Ockham](https://plato.stanford.edu/entries/ockham/) <br>
-- [Encyclopaedia Britannica: Occam's razor](https://www.britannica.com/topic/Occams-razor) <br>
-- [Anthropic: Reasoning models don't always say what they think](https://www.anthropic.com/research/reasoning-models-dont-say-think) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown Parsimony Audit with candidates, fit check, assumption load, preferred option, over-shave check, and overturning evidence.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask follow-up questions in coach mode and pause at explicit wait points when guiding a novice.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: The startup check fetches changeable hosted instructions, and the request signals skill use to the publisher.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a fixed local copy with the startup fetch removed, and review hosted instruction changes before adopting them.
+
+## Reference(s):
+
+- [Sources](references/sources.md)
+- [Stanford Encyclopedia of Philosophy: William of Ockham](https://plato.stanford.edu/entries/ockham/)
+- [Britannica: Occam's razor](https://www.britannica.com/topic/Occams-razor)
+- [Anthropic: Reasoning models don't always say what they think](https://www.anthropic.com/research/reasoning-models-dont-say-think)
+- [Occam's Razor on ClawHub](https://clawhub.ai/deciqai/skills/occams-razor)
+- [Occam's Razor skill page](https://www.deciqai.com/c/occams-razor)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown Parsimony Audit with candidate fit checks, assumption counts, a preferred hypothesis, an over-shave check, and overturning evidence]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Evidence-oriented comparison; the preferred explanation is a provisional prior, not proof.]
+
+## Skill Version(s):
+
+1.0.8 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

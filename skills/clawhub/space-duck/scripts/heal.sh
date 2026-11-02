@@ -56,6 +56,17 @@ skip()    { echo "${C_DIM}↷ $*${C_RESET}"; ACTIONS_SKIPPED=$((ACTIONS_SKIPPED+
 warn()    { echo "${C_YELLOW}⚠${C_RESET} $*"; }
 fail()    { echo "${C_RED}✗${C_RESET} $*"; ACTIONS_FAILED=$((ACTIONS_FAILED+1)); }
 
+# 0.8.6 — F1: kill -0 returns EPERM for a live process under another uid;
+# only "no such process" means dead. Check /proc + the error text.
+proc_alive() {
+  local pid="$1"
+  [[ -n "$pid" ]] || return 1
+  if kill -0 "$pid" 2>/dev/null; then return 0; fi
+  [[ -d "/proc/$pid" ]] && return 0
+  kill -0 "$pid" 2>&1 | grep -qi 'not permitted' && return 0
+  return 1
+}
+
 # ─── 0. Banner + skill location ───────────────────────────────────────────────
 echo
 echo "${C_BOLD}🦆 Space Duck Heal${C_RESET}  ${C_DIM}(one-button fix)${C_RESET}"
@@ -162,7 +173,7 @@ fi
 step "Supervisord"
 SUP_PID="$HOME/.space-duck/supervisor/supervisord.pid"
 if [[ -f "$SUP_PID" ]]; then
-  if ! kill -0 "$(cat "$SUP_PID")" 2>/dev/null; then
+  if ! proc_alive "$(cat "$SUP_PID")"; then  # 0.8.6 — F1
     acted "Stale PID file at $SUP_PID — cleaning and restarting"
     rm -f "$SUP_PID"
     if [[ -x "$SKILL_DIR/scripts/setup_listeners_supervised.sh" ]]; then

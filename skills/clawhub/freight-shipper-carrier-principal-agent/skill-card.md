@@ -1,43 +1,51 @@
-## Description: <br>
-Helps freight brokers balance shipper and carrier interests, disclose their intermediary role, reason about margin transparency, and manage conflicts between shipper rates and carrier relationships. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Activate when: a freight broker must balance shipper and carrier interests and disclose their intermediary role; 'whose side am I on', margin transparency, conflicts between best rate for shipper vs relationship with carrier. Do NOT activate when: acting as an asset carrier (not a broker) with no intermediary conflict. More: deciqai.com/c/freight-shipper-carrier-principal-agent
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External freight brokers and brokerage teams use this skill as decision-support guidance when structuring shipper agreements, choosing a margin transparency model, balancing service expectations, and protecting carrier relationships. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat freight-broker decision support as legal or regulatory advice. <br>
-Mitigation: Use the skill as business guidance only and have qualified reviewers assess legal, regulatory, and contract-specific questions. <br>
-Risk: Server evidence reports unavailable provenance for this version. <br>
-Mitigation: Review the publisher profile and linked publisher resources before relying on provenance-sensitive claims. <br>
+## Use Case:
 
+Freight brokers use this skill to examine incentive conflicts between shippers and carriers, consider margin disclosure and service commitments, and weigh reliability and long-term relationships in brokerage decisions. It is a reasoning aid; professionals should verify current requirements before acting.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/freight-shipper-carrier-principal-agent) <br>
-- [Publisher profile](https://clawhub.ai/user/deciqai) <br>
-- [deciqAI freight broker principal-agent page](https://www.deciqai.com/c/freight-shipper-carrier-principal-agent) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/freight-shipper-carrier-principal-agent.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown decision-support guidance with checklists and examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No code execution, credentials, persistence, or tool access described in the release evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Contractual or rate-dependent guidance may be outdated or unsuitable for the decision at hand.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill as a reasoning aid and verify current requirements before making contractual or rate-dependent decisions.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/deciqai/skills/freight-shipper-carrier-principal-agent)
+- [Freight broker skill page](https://www.deciqai.com/c/freight-shipper-carrier-principal-agent)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/freight-shipper-carrier-principal-agent.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Concise analysis or guidance, optionally with a worked example and verification checklist]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reasoning aid; verify current, jurisdiction- or rate-dependent requirements before decisions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

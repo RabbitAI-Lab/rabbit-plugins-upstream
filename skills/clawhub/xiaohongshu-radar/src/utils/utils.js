@@ -3,12 +3,12 @@
  */
 
 function printBanner() {
-  console.log("╔════════════════════════════════════════════╗");
-  console.log("║                                            ║");
-  console.log("║       📕 小红书运营全链路数据工具           ║");
-  console.log("║                                            ║");
-  console.log("╚════════════════════════════════════════════╝");
-  console.log("");
+  process.stderr.write("╔════════════════════════════════════════════╗\n");
+  process.stderr.write("║                                            ║\n");
+  process.stderr.write("║       📕 小红书运营全链路数据工具           ║\n");
+  process.stderr.write("║                                            ║\n");
+  process.stderr.write("╚════════════════════════════════════════════╝\n");
+  process.stderr.write("\n");
 }
 
 function printLog(level, message) {
@@ -18,8 +18,11 @@ function printLog(level, message) {
     WARN: "\x1b[33m",
     ERROR: "\x1b[31m",
   };
-  console.log(
-    `${colorMap[level] || ""}[${new Date().toLocaleString()}] [${level}] ${message}\x1b[0m`,
+  const tty = Boolean(process.stderr.isTTY);
+  const color = tty ? colorMap[level] || "" : "";
+  const reset = tty ? "\x1b[0m" : "";
+  console.error(
+    `${color}[${new Date().toISOString()}] [${level}] ${message}${reset}`,
   );
 }
 

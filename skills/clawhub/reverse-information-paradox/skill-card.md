@@ -1,50 +1,55 @@
-## Description: <br>
-Diagnoses how external AI adoption can expose proprietary knowledge through prompts, tool calls, corrections, and evals, then guides users to define a trust boundary and portable orchestration layer that keeps data, memory, adapted weights, evals, and learning loops under their control. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps organizations assess how external AI systems use proprietary prompts, corrections, evaluations, and data, then design trust boundaries that preserve control of their learning assets.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External business, product, security, and engineering teams use this skill when adopting or expanding third-party AI systems to map intelligence exhaust, identify who owns the learning loop, and decide whether to proceed, renegotiate, self-host, or walk away. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat the skill as a legal or privacy compliance checklist. <br>
-Mitigation: Treat outputs as strategic guidance and involve appropriate legal and security review before applying them to customer tickets, proprietary datasets, or vendor contracts. <br>
-Risk: Vendor no-train, retention, tenant-isolation, export, and reuse terms may be assumed rather than verified. <br>
-Mitigation: Verify the applicable vendor tier and contract terms for prompts, corrections, evals, memory, adapted weights, tenant isolation, retention, exports, and shared-model training before expanding a deployment. <br>
-Risk: The Reverse Information Paradox is presented as a July 2026, single-origin strategic thesis rather than established empirical canon. <br>
-Mitigation: Frame conclusions as a decision aid, cite the thesis maturity, and avoid presenting the pattern as empirically validated beyond the provided sources. <br>
+## Use Case:
 
+Enterprise and small-business teams use this skill when adopting external AI with proprietary context, corrections, evaluations, or fine-tuning data. It helps map what leaves their boundary, assess who controls the learning loop, and choose data, evaluation, memory, and portability safeguards.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/reverse-information-paradox) <br>
-- [Sources - reverse-information-paradox](artifact/references/sources.md) <br>
-- [Reverse Information Paradox companion page](https://www.deciqai.com/c/reverse-information-paradox) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/reverse-information-paradox.json) <br>
-- [MIT Sloan Management Review Middle East coverage](https://mitsloanme.com) <br>
-- [ANI News coverage](https://www.aninews.in) <br>
-- [Trending Topics EU coverage](https://www.trendingtopics.eu) <br>
-- [PPC Land coverage](https://ppc.land) <br>
-- [Kenneth J. Arrow (1962), Economic Welfare and the Allocation of Resources for Invention](https://www.nber.org/books-and-chapters/rate-and-direction-inventive-activity-economic-and-social-factors) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown containing an Intelligence Exhaust Map, trust-boundary tables, and a decision recommendation.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask for a concrete deployment before producing the map; no executable behavior is included.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Recommendations may be unreliable if descriptions of company data, vendor terms, retention settings, or data flows are incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use authorized, redacted descriptions and verify the applicable vendor terms, retention settings, and data flows before acting on recommendations.
+
+## Reference(s):
+
+- [Sources and maturity notes](artifact/references/sources.md)
+- [Arrow (1962), The Rate and Direction of Inventive Activity](https://www.nber.org/books-and-chapters/rate-and-direction-inventive-activity-economic-and-social-factors)
+- [MIT Sloan Management Review Middle East coverage](https://mitsloanme.com)
+- [ANI News coverage](https://www.aninews.in)
+- [Trending Topics EU coverage](https://www.trendingtopics.eu)
+- [PPC Land coverage](https://ppc.land)
+- [Reverse Information Paradox overview](https://www.deciqai.com/c/reverse-information-paradox)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown, including an Intelligence Exhaust Map and trust-boundary recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory; recommendations depend on the user's deployment details, contract terms, and data flows.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

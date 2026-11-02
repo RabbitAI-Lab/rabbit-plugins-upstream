@@ -1,47 +1,58 @@
-## Description: <br>
-Guides agents through compressing strategic timelines by mapping default paths, identifying critical bottlenecks, and redesigning work around accessible partners, platforms, capital, or talent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps teams shorten a goal’s timeline by finding existing resources, parallelizing critical-path work, and weighing access costs and integration risks.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders, operators, and strategy teams use this skill to convert slow sequential plans into realistic compressed paths by finding existing capabilities, running work in parallel, and evaluating integration risk. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Strategic recommendations may influence partner, acquisition, platform, or capital allocation decisions from incomplete assumptions. <br>
-Mitigation: Treat outputs as planning guidance, validate costs, access, risks, and sources with responsible business owners before acting. <br>
-Risk: Compressed timelines can hide integration overhead or dependencies that cannot actually be parallelized. <br>
-Mitigation: Map the critical path explicitly and apply the skill's stop-rules for unavailable resources, non-parallelizable dependencies, and integration risk. <br>
+## Use Case:
 
+Business leaders, founders, and planners use this skill to redesign a slow multi-year plan around existing partners, platforms, capital, and talent. It helps compare the compressed path with access costs and integration risks.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/deciqai/skills/resource-time-compression) <br>
-- [Resource-Time Compression overview](https://www.deciqai.com/c/resource-time-compression) <br>
-- [Resource-Time Compression agent metadata](https://www.deciqai.com/s/resource-time-compression.json) <br>
-- [Sources](references/sources.md) <br>
-- [Method in Action: Edison's Menlo Park Laboratory](examples/edisons-menlo-park-laboratory-1876-1882.md) <br>
-- [The Theory of the Growth of the Firm](https://archive.org/details/theoryofgrowthof00penr) <br>
-- [Firm Resources and Sustained Competitive Advantage](https://doi.org/10.1177/014920639101700108) <br>
-- [Edison Papers at Rutgers](https://edison.rutgers.edu/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown planning guidance with path maps, tables, questions, calculations, and risk flags] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use stepwise coaching prompts and hard stops when a user needs to supply case details.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Illustrative timeline and cost assumptions may not fit a specific business case.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate estimates against the organization’s actual constraints and costs before making commitments.
+
+Risk: Reusable examples may contain confidential details.
+
+Mitigation: Remove confidential or sensitive information from examples before sharing or reusing them.
+
+## Reference(s):
+
+- [Sources reference](references/sources.md)
+- [Penrose, The Theory of the Growth of the Firm](https://archive.org/details/theoryofgrowthof00penr)
+- [Barney, Firm Resources and Sustained Competitive Advantage](https://doi.org/10.1177/014920639101700108)
+- [Edison Papers at Rutgers](https://edison.rutgers.edu/)
+- [Resource-Time Compression on ClawHub](https://clawhub.ai/deciqai/skills/resource-time-compression)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/resource-time-compression.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown with tables and concise coaching questions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A staged planning process ending in a Time-Compressed Path Map.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

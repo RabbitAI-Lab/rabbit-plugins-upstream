@@ -1,44 +1,53 @@
-## Description: <br>
-BATNA & ZOPA helps agents coach users through non-trivial negotiations by modeling walk-away alternatives, reservation prices, zones of possible agreement, and concrete next moves. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users evaluate non-trivial negotiations by estimating their BATNA, reservation point, and ZOPA and choosing a strategy.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, employees, and agents use this skill to prepare for salary, term-sheet, vendor, partnership, customer-pricing, M&A, and other transactional negotiations. It guides the user to compute their BATNA, estimate the counterparty's BATNA, identify whether a ZOPA exists, and choose an opening, concession, walk-away, or structural move. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may share confidential deal terms, salaries, investor details, contract data, or other sensitive negotiation information during coaching. <br>
-Mitigation: Avoid entering confidential negotiation details unless the user is comfortable providing that information to the agent session. <br>
+## Use Case:
 
+Negotiators use this skill to assess whether a deal is worth pursuing, identify alternatives and walk-away points, and plan a strategy within or beyond the ZOPA. It can guide users step by step or produce a structured analysis for a specific deal.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/batna-zopa) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/batna-zopa.json) <br>
-- [Sources - batna-zopa](references/sources.md) <br>
-- [Fisher and Ury, 1981 - The Harvard Negotiation Project](examples/fisher-and-ury-1981-the-harvard-negotiation-project.md) <br>
-- [The Camp David Accords - Egypt, Israel, and the Sinai (1978)](examples/camp-david-accords-sinai-1978.md) <br>
-- [An AI Startup's Term Sheet & Compute Contract (2024-2026)](examples/ai-startup-term-sheet-and-compute-negotiation-2024-2026.md) <br>
-- [Harvard Program on Negotiation](https://www.pon.harvard.edu/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown analysis with structured headings and short coaching prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May operate interactively by asking one question at a time before producing the final BATNA and ZOPA analysis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server evidence release.version) <br>
+Risk: Saving lessons from a negotiation could expose confidential prices, counterparties, or walk-away positions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep reusable lessons general and anonymous, and exclude confidential prices, counterparties, and walk-away positions.
+
+## Reference(s):
+
+- [Primary sources and further reading](artifact/references/sources.md)
+- [Harvard Program on Negotiation](https://www.pon.harvard.edu/)
+- [BATNA and ZOPA analysis example: Fisher and Ury](artifact/examples/fisher-and-ury-1981-the-harvard-negotiation-project.md)
+- [BATNA and ZOPA analysis example: Camp David](artifact/examples/camp-david-accords-sinai-1978.md)
+- [BATNA and ZOPA analysis example: AI startup term sheet and compute contract](artifact/examples/ai-startup-term-sheet-and-compute-negotiation-2024-2026.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown analysis with a structured BATNA and ZOPA summary, strategy, and falsifier]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses deal details and assumptions supplied in the conversation; estimates should be treated as uncertain when counterparty information is limited.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -70,6 +70,8 @@ def _load_config():
             f'Config not found at {CONFIG_PATH}. Run `python3 pair.py` first.')
     with open(CONFIG_PATH) as f:
         cfg = json.load(f)
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base(cfg)
     return cfg.get('beak_key', ''), cfg.get('spaceduck_id', '')
 
 

@@ -1,50 +1,59 @@
-## Description: <br>
-Helps agents diagnose whether a negotiation, market, policy, or strategy problem is truly zero-sum before choosing competitive or cooperative moves. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents determine whether a competitive situation is zero-sum, non-zero-sum, or mixed before recommending a strategy.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and agents use this skill to test fixed-pie assumptions in strategy, negotiation, market-entry, policy, and competition questions. It guides the agent to name the contested resource, test whether the total value is fixed, audit zero-sum bias, and recommend either minimax/capture or cooperative surplus creation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Important business, policy, financial, or negotiation recommendations may be incorrect or incomplete if accepted without review. <br>
-Mitigation: Review high-stakes recommendations with qualified stakeholders before acting, especially where legal, financial, or policy consequences are material. <br>
-Risk: The skill can misclassify a mixed or changing situation if the contested resource and time horizon are not stated clearly. <br>
-Mitigation: Require the agent to name the resource, test fixity across innovation, cooperation, and time, and state the short-term and long-term diagnosis separately. <br>
+## Use Case:
 
+Strategy teams, analysts, and decision-makers use this skill to test whether a negotiation, market, or policy contest has a fixed total value. It guides them toward minimax for confirmed zero-sum cases and toward concrete surplus-creation mechanisms when value can grow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/zero-sum-game) <br>
-- [Primary sources](references/sources.md) <br>
-- [Von Neumann and the Foundation of Zero-Sum Analysis](examples/von-neumann-rand-1944-1950.md) <br>
-- [The Smoot-Hawley Tariff and the Fixed-Pie Fallacy in Trade](examples/smoot-hawley-tariff-1930.md) <br>
-- [Where the AI Race Is Zero-Sum and Where It Isn't](examples/ai-competition-fixed-vs-growing-pie-2024-2026.md) <br>
-- [Theory of Games and Economic Behavior](https://press.princeton.edu/books/paperback/9780691130613/theory-of-games-and-economic-behavior) <br>
-- [The Strategy of Conflict](https://www.hup.harvard.edu/books/9780674840317) <br>
-- [Equilibrium Points in N-Person Games](https://doi.org/10.1073/pnas.36.1.48) <br>
-- [Zero-Sum Bias](https://doi.org/10.3389/fpsyg.2010.00191) <br>
-- [Energy and AI](https://www.iea.org/reports/energy-and-ai) <br>
-- [Artificial Intelligence Index Report 2025](https://hai.stanford.edu/ai-index/2025-ai-index-report) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown diagnosis with structured reasoning fields and a strategic recommendation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step questions when the user lacks a concrete case; otherwise produces a zero-sum diagnosis and recommendation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: Strategic recommendations may mislead if assumptions about resource fixity or the time horizon are wrong.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify assumptions and test fixity across innovation, cooperation, and time before acting.
+
+Risk: Reusable examples could disclose confidential business details.
+
+Mitigation: Avoid including confidential business details in reusable examples.
+
+## Reference(s):
+
+- [Primary sources and further reading](artifact/references/sources.md)
+- [Theory of Games and Economic Behavior](https://press.princeton.edu/books/paperback/9780691130613/theory-of-games-and-economic-behavior)
+- [The Strategy of Conflict](https://www.hup.harvard.edu/books/9780674840317)
+- [Equilibrium Points in n-Person Games](https://doi.org/10.1073/pnas.36.1.48)
+- [Zero-Sum Bias: Perceived Competition Despite Unlimited Resources](https://doi.org/10.3389/fpsyg.2010.00191)
+- [IEA Energy and AI report](https://www.iea.org/reports/energy-and-ai)
+- [Stanford AI Index Report 2025](https://hai.stanford.edu/ai-index/2025-ai-index-report)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Text, Markdown]
+
+**Output Format:** [Markdown with a structured Zero-Sum Diagnosis and strategic recommendation]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Names the contested resource, tests fixity across innovation, cooperation, and time, audits zero-sum bias, and states the time horizon.]
+
+## Skill Version(s):
+
+1.0.7 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

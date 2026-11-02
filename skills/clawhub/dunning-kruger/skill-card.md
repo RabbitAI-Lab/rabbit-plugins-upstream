@@ -1,46 +1,52 @@
-## Description: <br>
-Helps an agent diagnose overconfidence and self-assessment gaps by comparing confidence claims with external performance evidence, feedback loops, and metacognitive prerequisites. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent in comparing confidence with demonstrated competence using external evidence and feedback.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to evaluate claims of competence, hiring or promotion self-presentation, project confidence, and AI-readiness assertions against measurable external feedback. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may influence analysis of confidence, hiring, performance, or AI-readiness claims without adding new evidence. <br>
-Mitigation: Apply it only to specific cases with evidence-backed claims, external performance data, and documented feedback loops. <br>
-Risk: A diagnosis could be misleading if applied to a known expert or to a domain with recent, reliable feedback. <br>
-Mitigation: Use the skill's exclusion checks before diagnosing overconfidence and prefer external measurements over casual confidence cues. <br>
+## Use Case:
 
+People making coaching, hiring, promotion, or project decisions use this skill to examine whether a confidence claim is supported by measurable performance, peer comparison, or expert feedback. It suggests feedback and re-measurement steps for improving calibration.
 
-## Reference(s): <br>
-- [Primary Sources](references/sources.md) <br>
-- [Kruger and Dunning's 1999 Cornell Studies](examples/kruger-and-dunnings-1999-cornell-studies.md) <br>
-- [Cost Forecasts in Public Works Projects](examples/cost-forecasts-in-public-works-projects.md) <br>
-- [I Built a Demo, So I Understand Production AI](examples/llm-overconfidence-in-the-ai-wave-2023-2026.md) <br>
-- [Dunning-Kruger Skill Page](https://clawhub.ai/deciqai/skills/dunning-kruger) <br>
-- [deciqAI Dunning-Kruger Overview](https://www.deciqai.com/c/dunning-kruger) <br>
-- [deciqAI Machine-Readable Skill Metadata](https://www.deciqai.com/s/dunning-kruger.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown diagnosis and coaching guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask stepwise clarification questions before producing a diagnosis when the user is learning the framework.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Saved coaching examples could retain personal, medical, employment, or confidential business details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep reusable examples general and anonymous; require user approval before adding material from interactions to the skill.
+
+## Reference(s):
+
+- [Primary sources](references/sources.md)
+- [Dunning-Kruger Effect skill page](https://www.deciqai.com/c/dunning-kruger)
+- [deciqAI Knowledge Skills repository](https://github.com/deciqAI/knowledge-skills)
+- [Machine-readable Dunning-Kruger skill metadata](https://www.deciqai.com/s/dunning-kruger.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Text, Markdown]
+
+**Output Format:** [Stepwise coaching guidance and a structured diagnosis template]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Coaching proceeds one question at a time and pauses at marked WAIT points.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

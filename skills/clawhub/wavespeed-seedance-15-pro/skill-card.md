@@ -1,42 +1,57 @@
-## Description: <br>
-Generate text-to-video and image-to-video clips with ByteDance's Seedance V1.5 Pro model through WaveSpeed AI, including options for duration, resolution, audio, camera control, and seed configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate videos using ByteDance's Seedance V1.5 Pro model via WaveSpeed AI. Supports text-to-video and image-to-video generation with 4-12 second duration at up to 1080p. Features audio generation, camera control, smart duration, and configurable seeds. Use when the user wants to create videos from text prompts or animate images.
 
-## Publisher: <br>
-[chengzeyi](https://clawhub.ai/user/chengzeyi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wavespeed](https://clawhub.ai/user/wavespeed)
 
-## Use Case: <br>
-Developers and creators use this skill to generate short videos from text prompts or animate trusted source images through WaveSpeed AI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: WaveSpeed API key exposure. <br>
-Mitigation: Store WAVESPEED_API_KEY in environment variables or a secret manager, and do not hardcode or commit it. <br>
-Risk: Prompts and selected images are sent to WaveSpeed for processing. <br>
-Mitigation: Avoid uploading confidential media unless the provider's terms are acceptable, and validate media URLs before use. <br>
-Risk: Video generation can create billing impact. <br>
-Mitigation: Monitor usage and choose duration, resolution, and audio settings deliberately. <br>
+## Use Case:
 
+Developers and creators can use the skill to generate short videos from text prompts or animate provided images, with optional generated audio and configurable camera behavior.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chengzeyi/wavespeed-seedance-15-pro) <br>
-- [WaveSpeed AI access keys](https://wavespeed.ai/accesskey) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with JavaScript and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include WaveSpeed model endpoint names, generation parameters, output URL handling, and secret-management guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Prompts and selected images are sent to WaveSpeed, and video generation uses paid credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Upload only intended media and check the estimated price before generation.
+
+Risk: API credentials could be exposed if shared in chat.
+
+Mitigation: Authenticate through the CLI and do not paste API keys into chat.
+
+Risk: The CLI and MCP implementations are external to the artifact review.
+
+Mitigation: Prefer reviewed, pinned CLI and MCP versions.
+
+## Reference(s):
+
+- [WaveSpeedAI MCP server](https://github.com/WaveSpeedAI/mcp-server)
+
+## Skill Output:
+
+**Output Type(s):** [Video, URLs, Shell commands]
+
+**Output Format:** [Generated video file or output URL, with optional audio]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Text-to-video or image-to-video; 4-12 seconds; up to 1080p.]
+
+## Skill Version(s):
+
+2.1.0 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

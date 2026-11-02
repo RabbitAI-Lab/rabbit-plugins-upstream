@@ -1,46 +1,59 @@
-## Description: <br>
-Analyzes child activity videos or video URLs to identify happy moments such as laughter, jumping, clapping, and joyful reactions, then returns structured reports with captured moment links and positive-reinforcement actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Using fixed cameras at home, kindergartens, or playgrounds, the system analyzes children's behavior and expressions in real time to identify happy moments: big laughter (mouth corners sharply raised, eyes squinted into crescents, teeth showing), jumping (both feet off the ground), clapping (rhythmic hand clapping), and joyful reactions to praise or rewards. | 通过家庭、幼儿园或游乐场的固定摄像头，实时分析儿童的行为和表情，识别开心瞬间：大笑（面部表情：嘴角大幅度上翘、眼睛眯成月牙、露出牙齿）、蹦跳（双脚离地跳跃）、拍手（双手有节奏地拍击）、以及接收到表扬或奖励时的愉悦反应。当检测到开心事件时，自动抓拍高清图片或短视频（前后2秒），生成'开心日记'推送至家长手机APP，并播放鼓励音效（如'你真棒！
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, parents, caregivers, and developers can use this skill to process child activity media through Life Emergence cloud services and review structured happy-moment reports. Use requires appropriate consent and controls for child photos, videos, report access, retention, and deletion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Child photos, videos, or video URLs are sent to Life Emergence cloud services for analysis and historical report retrieval. <br>
-Mitigation: Use only with explicit guardian consent, documented retention and deletion expectations, and clear limits on who may access generated reports. <br>
-Risk: The skill can create or reuse local account identity records and tokens in the workspace. <br>
-Mitigation: Review workspace data storage before deployment, restrict filesystem access, and rotate or delete local identity data when the skill is removed or transferred. <br>
-Risk: Captured child moments and report links may expose sensitive media if shared beyond authorized caregivers. <br>
-Mitigation: Limit report access to approved guardians or operators, verify deletion controls, and avoid use on shared devices without account separation. <br>
-Risk: Positive-reinforcement outputs can be inappropriate if they over-trigger, misclassify emotional context, or encourage performative behavior. <br>
-Mitigation: Keep human review and opt-out controls in place, apply the documented safety checks before saving clips, and maintain conservative reinforcement frequency. <br>
+## Use Case:
 
+Caregivers use the skill to review detected positive behavior in submitted child video and query prior reports. Developers can integrate it with camera or parenting applications to generate event summaries and report links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-happy-moment-capture-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON text with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write an optional output file when the user supplies an output path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Shared accounts can expose children's reports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a separate authenticated account for each user and avoid shared-agent use until account isolation is verified.
+
+Risk: The no-analysis option may still allow processing.
+
+Mitigation: Verify that export-only mode prevents analysis before using real footage.
+
+Risk: The workflow handles sensitive video of children through a cloud service.
+
+Mitigation: Confirm guardian consent, the cloud destination, and deletion and retention controls before processing footage.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-child-happy-moment-capture-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [API reference](artifact/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance, Report links]
+
+**Output Format:** [Structured event summaries and historical report listings, available as JSON or Markdown with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include detected event details and references to captured images or video clips.]
+
+## Skill Version(s):
+
+1.0.15 (source: server-resolved release metadata; artifact frontmatter differs: 1.0.21)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

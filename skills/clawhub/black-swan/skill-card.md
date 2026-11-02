@@ -1,44 +1,54 @@
-## Description: <br>
-Black Swan helps agents audit strategies, portfolios, and systems for fat-tail exposure, hidden normal-distribution assumptions, tail-survival design, and hindsight-driven narratives. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides users in examining extreme risks in fat-tailed domains and designing for survival without relying on predictions of specific rare events.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users and agents use this skill to stress-test decisions, portfolios, infrastructure plans, and post-event explanations against rare, high-impact events. It is most useful when a model, strategy, or narrative treats a fat-tailed domain as stable or normally distributed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may produce guidance that users mistake for financial, engineering, or operational advice. <br>
-Mitigation: Treat outputs as a reasoning aid and review recommendations with appropriate domain experts before acting on portfolio, infrastructure, or operational decisions. <br>
-Risk: The audit can over-label foreseeable grey swans as unpredictable black swans. <br>
-Mitigation: Require users to distinguish black swans from grey swans and document whether known historical or domain evidence made the event category foreseeable. <br>
+## Use Case:
 
+External users and decision-makers use this skill to stress-test strategies, risk models, and systems against rare, high-impact events. It helps identify hidden assumptions and plan for tail survival without claiming to predict the next event.
 
-## Reference(s): <br>
-- [Black Swan on ClawHub](https://clawhub.ai/deciqai/skills/black-swan) <br>
-- [Primary sources](references/sources.md) <br>
-- [Long-Term Capital Management example](examples/long-term-capital-management-collapse-1998.md) <br>
-- [Fukushima Daiichi tsunami example](examples/fukushima-daiichi-tsunami-2011.md) <br>
-- [AI trade concentration example](examples/ai-trade-concentration-2023-2026.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown audit with structured sections and concise recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step questions before producing a Black Swan Audit when the user needs coaching.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The framework is qualitative and could lead to misleading conclusions if its assumptions are not checked before financial or engineering decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify assumptions and evidence with appropriate domain expertise before making financial or engineering decisions.
+
+Risk: Saved failure-pattern notes could expose confidential details.
+
+Mitigation: Remove confidential details before saving failure-pattern notes.
+
+## Reference(s):
+
+- [Primary sources](references/sources.md)
+- [Black Swan skill page](https://www.deciqai.com/c/black-swan)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

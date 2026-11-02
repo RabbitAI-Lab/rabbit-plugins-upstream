@@ -1,39 +1,52 @@
-## Description: <br>
-Guides agents through recognizing founder burnout, identifying its drivers, protecting health inputs, delegating draining work, and building sustainable recovery into company operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides founders in recognizing and addressing unsustainable workload, reduced recovery, isolation, and declining decision quality.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders, operators, and advising agents use this skill to assess unsustainable founder workload, separate short bounded sprints from burnout risk, and turn recovery, delegation, and prioritization into operational safeguards. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/founder-burnout-sustainability) <br>
-- [deciqAI Founder Sustainability Page](https://www.deciqai.com/c/founder-burnout-sustainability) <br>
-- [deciqAI Machine-Readable Skill Metadata](https://www.deciqai.com/s/founder-burnout-sustainability.json) <br>
+Founders use this checklist to identify early signs and drivers of burnout, protect recovery, reduce or delegate workload, and maintain a sustainable pace.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Analysis, Markdown] <br>
-**Output Format:** [Markdown guidance and checklist] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable advisory output; no credentials, system access, persistence, or data movement requested.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: General burnout guidance may not address an individual's specific health needs.
+
+Mitigation: Use the checklist to support discussion and workload changes; seek qualified support for serious or persistent health concerns.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/founder-burnout-sustainability)
+- [deciqAI founder sustainability guide](https://www.deciqai.com/c/founder-burnout-sustainability)
+- [Knowledge Skills repository (linked by the skill)](https://github.com/deciqAI/knowledge-skills)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/founder-burnout-sustainability.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Conversational guidance and a structured checklist]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No files or automated actions; guidance supports discussion and follow-up.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,63 @@
-## Description: <br>
-今日头条爆款内容查询 — 输入关键词搜索今日头条最新作品（图文/视频），支持按阅读量/时间排序、限定时间范围，终端表格展示 + CSV 导出 + 交互式 HTML 报告。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches recent Toutiao articles and videos by keyword, summarizes engagement, and exports results as CSV or an interactive HTML report; low-credit responses can initiate Alipay recharge.
 
-## Publisher: <br>
-[redfox-data](https://clawhub.ai/user/redfox-data) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[redfox-data](https://clawhub.ai/user/redfox-data)
 
-## Use Case: <br>
-External users and content analysts use this skill to search recent Toutiao articles and videos, track hot topics, monitor competitor or brand keywords, and export results for analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated HTML reports can expose the user's Redfox API key. <br>
-Mitigation: Use a low-privilege Redfox API key, avoid sharing generated HTML reports, and prefer CSV-only mode when an interactive report is not required. <br>
-Risk: The local report proxy is unauthenticated while the report server is running. <br>
-Mitigation: Run the report server only on a trusted machine, keep it bound to localhost, stop it when finished, and prefer a revised version with proxy protection for shared environments. <br>
-Risk: Search terms are sent to Redfox services. <br>
-Mitigation: Avoid sensitive search terms unless the user is comfortable sending those queries to Redfox. <br>
+## Use Case:
 
+Content creators, analysts, and brand teams use this skill to find recent Toutiao posts, track popular topics, compare engagement, and export results for further analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/redfox-data/skills/toutiao-search) <br>
-- [Redfox API key settings](https://redfox.hk/settings/api-keys?source=redskill) <br>
-- [Redfox Toutiao searchWork API](https://redfox.hk/story/api/toutiao/searchWork) <br>
-- [Redfox Toutiao workDetail API](https://redfox.hk/story/api/toutiao/workDetail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Terminal text plus CSV files and interactive HTML reports; usage guidance is Markdown with shell commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Redfox API key. By default the script writes CSV and HTML reports under ~/Downloads/QoderToutiaoSearch and may start a local browser report server.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Reports may expose the API key through unsafe content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Until credential handling and report rendering are corrected, use CSV-only mode; rotate keys exposed in existing reports.
+
+Risk: The local report service lacks access controls.
+
+Mitigation: Avoid using the local report service until authenticated proxy access is available.
+
+Risk: A low-credit response can start payment setup without explicit approval.
+
+Mitigation: Require explicit approval and verify payment details before enabling recharge.
+
+Risk: Search terms are sent to RedFox and searches consume API credits.
+
+Mitigation: Confirm the query is appropriate to share and check expected credit use before searching.
+
+## Reference(s):
+
+- [Skill release](https://clawhub.ai/redfox-data/skills/toutiao-search)
+- [RedFox API key settings](https://redfox.hk/settings/api-keys?source=clawhub)
+- [Alipay recharge instructions](artifact/references/alipay-recharge.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, CSV, HTML]
+
+**Output Format:** [Terminal results table, CSV file, and interactive HTML report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes post titles, authors, engagement metrics, publication times, content type, and source links.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
