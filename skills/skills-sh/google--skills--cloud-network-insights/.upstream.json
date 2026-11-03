@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/cloud-network-insights",
+  "repo": "google/skills",
+  "skillId": "cloud-network-insights",
+  "branch": "main",
+  "pushedAt": "2026-11-03T13:58:48Z",
+  "contentHash": "6baa252bafd911d9e4effcb05f1c3f5bb6c29b571bf8d698448762e414f2fd5c",
+  "fetchedAt": "2026-11-03T15:19:06.774Z"
+}
