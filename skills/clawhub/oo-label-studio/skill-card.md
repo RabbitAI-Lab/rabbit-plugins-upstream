@@ -1,43 +1,56 @@
-## Description: <br>
-Label Studio (labelstud.io). Use this skill for ANY Label Studio request — reading, creating, and updating data. Whenever a task involves Label Studio, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Label Studio through your OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and data annotation teams use this skill to inspect Label Studio schemas, read project and task data, and create projects or tasks through an OOMOL-connected Label Studio account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Label Studio data visible to the connected API key. <br>
-Mitigation: Install and use it only for workspaces where agent access to that Label Studio data is acceptable. <br>
-Risk: Write actions can create Label Studio projects or tasks. <br>
-Mitigation: Review the exact payload and user-visible effect before approving any create action. <br>
+## Use Case:
 
+Developers and Label Studio users use this skill to inspect projects and tasks, retrieve connected-account details, and create projects or tasks through their OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-label-studio) <br>
-- [Label Studio homepage](https://labelstud.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs agents to fetch live connector schemas before constructing Label Studio action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter) <br>
+Risk: The setup fallback runs downloaded installer code without verification or a separate approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, use a verified fixed release, and review automatic skill-installation settings.
+
+Risk: The connected account can access Label Studio data and create projects or tasks.
+
+Mitigation: Inspect the live action schema and confirm the exact project or task payload before running a write action.
+
+## Reference(s):
+
+- [Label Studio](https://labelstud.io)
+- [Label Studio API documentation](https://api.labelstud.io/api-reference/introduction/getting-started)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill listing](https://clawhub.ai/oomol/skills/oo-label-studio)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Text]
+
+**Output Format:** [JSON requests and structured results with brief text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can create Label Studio projects and tasks; confirm write actions and their payloads before execution.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

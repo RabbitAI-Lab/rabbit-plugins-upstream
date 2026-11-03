@@ -1,45 +1,55 @@
-## Description: <br>
-Taggun helps agents operate Taggun through an OOMOL-connected account for receipt and invoice extraction, campaign lookup, and receipt URL validation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Taggun (taggun.io). Use this skill for ANY Taggun request — searching and reading data. Whenever a task involves Taggun, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when an agent needs to extract receipt or invoice data from public HTTPS file URLs, list Taggun campaign IDs, inspect campaign settings, or validate receipt URLs through a connected Taggun account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates through OOMOL as the broker for a connected Taggun account. <br>
-Mitigation: Install only when the user is comfortable using OOMOL for Taggun account access and keep credential setup limited to the documented connection flow. <br>
-Risk: Receipts and invoices can contain sensitive personal, financial, or business information. <br>
-Mitigation: Submit only public HTTPS file URLs that the user intends to process with Taggun, and avoid sending unrelated or private documents. <br>
-Risk: Unnecessary setup commands could trigger sign-in, installation, or account-connection flows. <br>
-Mitigation: Run oo CLI install, login, or connection steps only when an action fails with the matching missing-command, authentication, or connection error. <br>
+## Use Case:
 
+External users and developers use the skill to search Taggun account data, extract receipt or invoice details from public HTTPS URLs, inspect campaign settings, and validate receipts against campaign rules.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-taggun) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Taggun Homepage](https://www.taggun.io/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schema checks before action execution so payloads match the current Taggun connector contract.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence metadata and release) <br>
+Risk: The oo CLI dependency may automatically install persistent skills beyond Taggun without clearly disclosing that broader change; the deployed connector implementation was not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI dependency before automatic setup, use a reviewed release, and set OO_SKILLS_SYNC_DISABLED=1 to disable startup skill synchronization.
+
+Risk: Receipt or invoice URLs submitted for extraction or validation will be processed by OOMOL and Taggun.
+
+Mitigation: Submit only document URLs you intend OOMOL and Taggun to process.
+
+## Reference(s):
+
+- [Taggun homepage](https://www.taggun.io/)
+- [Taggun API documentation](https://api.taggun.io/)
+- [oo CLI controls](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON connector responses with shell command examples and Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Receipt and invoice extraction responses may contain data from submitted public HTTPS URLs.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

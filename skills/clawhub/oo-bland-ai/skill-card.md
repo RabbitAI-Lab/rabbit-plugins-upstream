@@ -1,40 +1,56 @@
-## Description: <br>
-Use this skill to search and read Bland AI account, call, transcript, and voice data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bland AI (bland.ai). Use this skill for ANY Bland AI request — searching and reading data. Whenever a task involves Bland AI, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Bland AI account status, billing balance, calls, transcripts, and available voices through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read account-scoped Bland AI data, including billing status, call details, and transcripts. <br>
-Mitigation: Install only when that access is acceptable, and review specific call or transcript requests before running them when the data is sensitive. <br>
+## Use Case:
 
+External users can use this skill to read information from a connected Bland AI account, including account status, call details and transcripts, and available voices. Developers can use it to run these account and call lookups through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-bland-ai) <br>
-- [Bland AI Homepage](https://www.bland.ai/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Bland AI account, call, transcript, and voice lookup through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: The required oo CLI can change other agents’ installed skills without this skill explaining those changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI’s broader installation effects and prefer a verified release with explicit approval. If cross-agent skill changes are unwanted, configure OO_SKILLS_SYNC_DISABLED=1 before CLI use after checking version support.
+
+Risk: Remote installer bytes and the exact installed release were not verified.
+
+Mitigation: Review the CLI’s broader installation effects before proceeding and prefer a verified release.
+
+## Reference(s):
+
+- [Bland AI](https://www.bland.ai/)
+- [Bland AI API documentation](https://docs.bland.ai/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON]
+
+**Output Format:** [oo CLI commands and JSON response data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only account, call, transcript, and voice data; available fields depend on the selected action.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

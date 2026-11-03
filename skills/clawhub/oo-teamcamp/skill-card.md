@@ -1,43 +1,55 @@
-## Description: <br>
-Teamcamp lets agents read, create, and update Teamcamp workspace data through the OOMOL oo CLI connector instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to read, create, and update Teamcamp data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users who manage Teamcamp workspaces use this skill to list projects, tasks, customers, and users, inspect project or task details, and post task comments with explicit confirmation for write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad Teamcamp trigger wording could cause the skill to be invoked for requests where Teamcamp access was not intended. <br>
-Mitigation: Install only when Teamcamp access is intended and be explicit when a request should remain read-only. <br>
-Risk: The post_task_comment action changes Teamcamp state. <br>
-Mitigation: Confirm the exact task, comment payload, and expected effect with the user before running write actions. <br>
+## Use Case:
 
+People using Teamcamp through OOMOL can retrieve project, task, user, and customer information, and post comments on tasks.
 
-## Reference(s): <br>
-- [Teamcamp ClawHub Skill](https://clawhub.ai/oomol/skills/oo-teamcamp) <br>
-- [Teamcamp Homepage](https://www.teamcamp.app) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Initial setup can execute downloaded software whose contents and full local effects were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI separately and require approval before running its installer.
+
+Risk: Task comments change Teamcamp data.
+
+Mitigation: Confirm before posting a task comment.
+
+## Reference(s):
+
+- [Teamcamp](https://www.teamcamp.app)
+- [Teamcamp API reference](https://api.teamcamp.app/api-reference/introduction)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [oo CLI commands with JSON payloads and structured JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses include Teamcamp action data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

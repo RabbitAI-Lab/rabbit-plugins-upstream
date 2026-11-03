@@ -1,45 +1,56 @@
-## Description: <br>
-Enables agents to operate Geckoboard datasets through the OOMOL oo CLI, including schema inspection and dataset create, append, replace, and delete actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Geckoboard (geckoboard.com). Use this skill for ANY Geckoboard request — reading, creating, updating, and deleting data. Whenever a task involves Geckoboard, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent inspect the live Geckoboard connector contract and run dataset operations through an OOMOL-connected account. It is suited to maintaining operational dashboards where records may need to be appended, replaced, created, or deleted. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The append_dataset_data action changes Geckoboard data but is not tagged as a write action in the skill text. <br>
-Mitigation: Treat append_dataset_data as a write action and confirm the target dataset, records, and update behavior before execution. <br>
-Risk: Dataset operations can replace or delete important dashboard data. <br>
-Mitigation: Require explicit user confirmation for replace_dataset_data and delete_dataset, including the dataset identifier and expected effect. <br>
-Risk: Use depends on the external oo CLI, OOMOL account state, connected Geckoboard credentials, and available billing credit. <br>
-Mitigation: Review the oo CLI setup and OOMOL connection requirements before installing, and resolve authentication, scope, credential, or billing errors before retrying actions. <br>
+## Use Case:
 
+Agents use this skill to inspect Geckoboard action schemas and operate datasets through an OOMOL-connected account. Dataset creation, updates, replacement, and deletion require approval as specified by the skill.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-geckoboard) <br>
-- [Geckoboard homepage](https://www.geckoboard.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may return JSON from the oo CLI, including data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence, release metadata, and skill frontmatter) <br>
+Risk: First-time setup directs the agent to run remote installer code without a separate approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified oo CLI release yourself and prevent automatic download-and-execute setup.
+
+Risk: Dataset writes, replacement, and deletion can change or remove data.
+
+Mitigation: Keep the skill's explicit approval checks and confirm the exact target and effect before these actions.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI command controls](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+- [Geckoboard](https://www.geckoboard.com/)
+- [Geckoboard API documentation](https://developer.geckoboard.com/)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [Shell commands, JSON payloads, and Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [State-changing actions require user approval; destructive actions require approval of the target and effect.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter and server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

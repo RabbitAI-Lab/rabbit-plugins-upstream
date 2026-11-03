@@ -1,40 +1,51 @@
-## Description: <br>
-Operates Pivotal Tracker through the OOMOL pivotal_tracker connector for reading, creating, and updating projects, stories, comments, and story state. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pivotal Tracker (pivotaltracker.com). Use this skill for ANY Pivotal Tracker request — reading, creating, and updating data. Whenever a task involves Pivotal Tracker, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, product teams, and agents with an OOMOL-connected Pivotal Tracker account use this skill to inspect projects and stories, create stories or comments, and update story state through schema-checked oo CLI connector calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Pivotal Tracker data, including creating stories, adding comments, or updating story state. <br>
-Mitigation: Confirm the exact action payload and expected effect with the user before running write actions, and ensure the intended OOMOL account and Pivotal Tracker connection are active. <br>
+## Use Case:
 
+Developers and project teams use this skill to read Pivotal Tracker projects and stories, create stories or comments, and update story state through their connected OOMOL account.
 
-## Reference(s): <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Pivotal Tracker](https://www.pivotaltracker.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Fetches the live connector schema before constructing action payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill metadata) <br>
+Risk: Setup can execute remote installer code without a clear approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and verify the CLI version before installation; check whether installation also installs agent skills, and confirm Pivotal Tracker changes before running write actions.
+
+## Reference(s):
+
+- [Pivotal Tracker skill release on ClawHub](https://clawhub.ai/oomol/skills/oo-pivotal-tracker)
+- [Pivotal Tracker](https://www.pivotaltracker.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [JSON connector responses and Markdown usage instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [JSON responses include action data and an execution ID.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

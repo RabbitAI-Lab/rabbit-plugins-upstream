@@ -1,43 +1,60 @@
-## Description: <br>
-Mailercloud skill for reading, creating, updating, and deleting Mailercloud data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the oo CLI to create Mailercloud contacts and lists, and to list, create, update, or delete contact properties.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Mailercloud via the OOMOL oo CLI, including contact, list, and contact-property workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Mailercloud contacts, contact properties, or recipient lists. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: Destructive actions can delete Mailercloud contact properties. <br>
-Mitigation: Confirm the target and get explicit approval before running destructive actions. <br>
-Risk: Setup commands and account-connection steps affect the user's OOMOL environment. <br>
-Mitigation: Run installer, login, or connection steps only when a command fails for the matching setup or authentication reason. <br>
+## Use Case:
 
+Developers and operations teams use the skill to manage Mailercloud contacts, recipient lists, and contact properties through an OOMOL-connected account. It supports these tasks with approval checks for changes and deletions.
 
-## Reference(s): <br>
-- [Mailercloud homepage](https://www.mailercloud.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Setup may execute remote installer code whose source and exact runtime release are unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve a verified CLI installation before use; confirm the installer and runtime release before proceeding.
+
+Risk: Automatic installation or synchronization may introduce undisclosed changes to other agent skills.
+
+Mitigation: Review these changes and disable automatic skill installation or synchronization when they are not needed.
+
+Risk: Connector actions can create, update, or delete Mailercloud data.
+
+Mitigation: Keep account permissions limited and confirm the exact payload and effect before writes; explicitly approve the target before deletions.
+
+## Reference(s):
+
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [Mailercloud website](https://www.mailercloud.com/)
+- [Mailercloud API documentation](https://apidoc.mailercloud.com/)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance, Shell commands]
+
+**Output Format:** [Mailercloud connector responses as JSON, with shell command instructions and task guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions may read or change Mailercloud data; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

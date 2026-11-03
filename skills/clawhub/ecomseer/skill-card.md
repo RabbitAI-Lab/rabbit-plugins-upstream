@@ -1,50 +1,56 @@
-## Description: <br>
-EcomSeer helps agents search TikTok Shop products, find trending items, analyze influencers, explore shops, track video performance, and review ad insights through EcomSeer APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+EcomSeer is an AI-powered overseas customer acquisition platform by Beijing Miaozhisheng Technology, built for foreign trade and manufacturing companies. It streamlines the entire international customer development workflow—market intelligence, brand building, overseas promotion, inquiry qualification, and CRM—leveraging commercial databases, multilingual content, and smart outreach to help Chinese manufacturers connect with qualified global buyers.
 
-## Publisher: <br>
-[fly0pants](https://clawhub.ai/user/fly0pants) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fly0pants](https://clawhub.ai/user/fly0pants)
 
-## Use Case: <br>
-E-commerce analysts, marketplace operators, and agent users use this skill to retrieve TikTok Shop product, creator, shop, video, and ad data and turn it into bilingual summaries, rankings, comparisons, and research reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles an EcomSeer API key and sends research prompts to hosted EcomSeer services. <br>
-Mitigation: Use a dedicated or limited API key, avoid submitting confidential business strategy, and install only if you trust EcomSeer with these inputs. <br>
-Risk: Deep Research results may be returned as hosted, shareable report links. <br>
-Mitigation: Ask the publisher how report links are protected and deleted before using the skill for sensitive work. <br>
-Risk: The security review flagged the embedded Deep Research bearer token as something users should review. <br>
-Mitigation: Confirm the publisher's rationale for the token and review network behavior before deployment. <br>
+## Use Case:
 
+External trade and manufacturing teams use EcomSeer to research TikTok Shop products, categories, shops, creators, videos, and advertising across supported markets. They can also request deeper market and competitor analyses for overseas promotion planning.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fly0pants/ecomseer) <br>
-- [EcomSeer website](https://www.ecomseer.com) <br>
-- [README](README.md) <br>
-- [Goods API reference](references/api-goods.md) <br>
-- [Product detail API reference](references/api-product-detail.md) <br>
-- [Influencer API reference](references/api-influencer.md) <br>
-- [Video API reference](references/api-video.md) <br>
-- [Shop API reference](references/api-shop.md) <br>
-- [Ads API reference](references/api-ad.md) <br>
+### Deployment Geography for Use:
 
+Global; supported TikTok Shop markets include the US, UK, Indonesia, Thailand, Vietnam, Malaysia, the Philippines, and Singapore.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown responses with tables, summaries, links, and inline shell or curl commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce hosted Deep Research report links; API key values should not be printed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence release.version) <br>
+Risk: Routine requests can trigger remote research that forwards credentials and requires polling indefinitely without interruption.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a version that supports research cancellation and polling timeouts; review credential and context sharing plus report access and retention before submitting confidential business information.
+
+## Reference(s):
+
+- [EcomSeer website](https://www.ecomseer.com)
+- [EcomSeer ClawHub release](https://clawhub.ai/fly0pants/skills/ecomseer)
+- [Product search and rankings API reference](artifact/references/api-goods.md)
+- [Product detail API reference](artifact/references/api-product-detail.md)
+- [Influencer API reference](artifact/references/api-influencer.md)
+- [Video API reference](artifact/references/api-video.md)
+- [Shop API reference](artifact/references/api-shop.md)
+- [Advertising and creative API reference](artifact/references/api-ad.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown]
+
+**Output Format:** [Markdown summaries and tables, with links to hosted HTML research reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Bilingual English and Chinese responses; content varies by query and selected market.]
+
+## Skill Version(s):
+
+2.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

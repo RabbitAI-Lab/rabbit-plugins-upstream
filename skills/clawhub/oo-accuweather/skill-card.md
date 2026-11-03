@@ -1,42 +1,55 @@
-## Description: <br>
-AccuWeather lets agents search AccuWeather locations and retrieve current conditions, daily forecasts, and hourly forecasts through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search AccuWeather locations and retrieve current conditions and daily or hourly forecasts through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to look up AccuWeather locations and retrieve current, daily, or hourly weather data through the oo CLI after their AccuWeather connection is configured in OOMOL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL's oo CLI and an OOMOL-managed AccuWeather connection, which may require installing the CLI and persisting an OOMOL login. <br>
-Mitigation: Install and connect only in environments where OOMOL account access is acceptable, and run authentication or connection setup only when a command reports an auth or connection error. <br>
-Risk: Weather lookups can return incorrect results if an action is called with an outdated schema or the wrong AccuWeather location key. <br>
-Mitigation: Inspect the live connector schema before each action and resolve or confirm the intended location key before requesting conditions or forecasts. <br>
+## Use Case:
 
+External users can use the skill to find AccuWeather locations and retrieve current conditions or forecasts through an existing OOMOL AccuWeather connection.
 
-## Reference(s): <br>
-- [ClawHub AccuWeather Skill](https://clawhub.ai/oomol/skills/oo-accuweather) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [AccuWeather](https://www.accuweather.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON command output from the oo CLI] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before running AccuWeather actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Setup may execute changing remote code, and startup may write skills into other agents' directories.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified oo CLI release yourself rather than running an automatic remote installer. Set OO_SKILLS_SYNC_DISABLED=1 to prevent startup writes to other agents' skill directories.
+
+Risk: OOMOL mediates weather requests and connected credentials; the hosted connector implementation was not inspected.
+
+Mitigation: Use an OOMOL connection intended for this service and review the CLI and connection setup before connecting an account.
+
+## Reference(s):
+
+- [AccuWeather API Documentation](https://developer.accuweather.com/core-weather)
+- [AccuWeather](https://www.accuweather.com)
+- [oo CLI Environment Variables](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md#environment-variables)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Text]
+
+**Output Format:** [JSON connector requests and responses, with weather information summarized in text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Weather information depends on the selected AccuWeather location and forecast action.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

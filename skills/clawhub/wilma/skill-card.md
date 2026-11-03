@@ -1,43 +1,57 @@
-## Description: <br>
-Access Finland's Wilma school system from AI agents to fetch schedules, homework, exams, grades, attendance and lesson notes, messages, and news through the wilma CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Access Finland's Wilma school system from AI agents, for parents (and students with their own login). Fetch schedules, homework, exams, grades and the gradebook, lesson notes (merkinnät) and absence summaries, messages with replies, news, printouts and linked news resources — through the WilmAI MCP tools (`wilma_*`) when connected, or the wilma CLI. Start with a summary, drill into messages and news, and fetch linked attachments. Requires wilma-cli 2.0+.
 
-## Publisher: <br>
-[aikarjal](https://clawhub.ai/user/aikarjal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[aikarjal](https://clawhub.ai/user/aikarjal)
 
-## Use Case: <br>
-Parents, guardians, and authorized school users can use this skill to retrieve Wilma student information through non-interactive JSON CLI commands and produce concise summaries of actionable school updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill accesses sensitive student records and Wilma account credentials. <br>
-Mitigation: Install and use it only for Wilma accounts the user is authorized to access, protect the local Wilma config file, and avoid passing TOTP secrets on the command line when possible. <br>
-Risk: AI-generated summaries may contain private student information or omit important context. <br>
-Mitigation: Review summaries before sharing and limit distribution to people who are authorized to see the underlying Wilma data. <br>
+## Use Case:
 
+Parents and students use the skill to retrieve and understand school information from Wilma, including schedules, homework, grades, lesson notes, messages, and news. It can also fetch linked bulletin resources and school printouts.
 
-## Reference(s): <br>
-- [Wilma Skill on ClawHub](https://clawhub.ai/aikarjal/skills/wilma) <br>
-- [Wilma CLI npm package](https://www.npmjs.com/package/@wilm-ai/wilma-cli) <br>
-- [Wilmai GitHub repository](https://github.com/aikarjal/wilmai) <br>
-- [Wilmai website](https://wilm.ai) <br>
+### Deployment Geography for Use:
 
+Finland
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON-oriented CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the wilma CLI and a local Wilma configuration file created through an authorized interactive login.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.3 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: School records and saved login or MFA credentials are sensitive.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted agent environment, keep secrets in the agent's secret settings, and never ask the user to enter a Wilma password in chat.
+
+Risk: The skill runs an external CLI that may be installed or updated from npm; its credential storage protections were not audited in this bundle.
+
+Mitigation: Use a trusted environment and follow the documented logout and credential removal steps when access should end.
+
+## Reference(s):
+
+- [WilmAI project on GitHub](https://github.com/aikarjal/wilmai)
+- [WilmAI website](https://wilm.ai)
+- [WilmAI Home](https://wilm.ai/home)
+- [WilmAI CLI on npm](https://www.npmjs.com/package/@wilm-ai/wilma-cli)
+- [Wilma skill on ClawHub](https://clawhub.ai/aikarjal/skills/wilma)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Files, Guidance]
+
+**Output Format:** [Structured JSON records, concise text or Markdown summaries, and downloaded documents when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results are organized by student; requests can be narrowed by student and date.]
+
+## Skill Version(s):
+
+2.4.0 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

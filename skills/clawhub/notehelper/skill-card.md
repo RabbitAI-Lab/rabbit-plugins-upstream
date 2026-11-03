@@ -1,42 +1,55 @@
-## Description: <br>
-当用户想保存文章或链接到笔记库、搜索已保存文章、或配置 NoteHelper API 密钥时触发，并指导代理使用 /notehelper save、link、search 和 config 命令。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Save an article or link to the user's NoteHelper (笔记同步助手) cloud notebook, or search articles already saved there, via https://claw.notebooksyncer.com. Use ONLY when the user explicitly asks to save/clip something to NoteHelper (e.g. "存到笔记同步助手", "剪藏到笔记库", "save this to NoteHelper"), to search their NoteHelper notebook ("在笔记同步助手里搜 X"), or to set up their NoteHelper key. Do NOT use for general web search, summarizing or debugging a link, browser bookmarks, other note apps, or a bare URL without a save request — in that case ask first. Explicit commands - /notehelper save | link | search | config.
 
-## Publisher: <br>
-[notesynchelper](https://clawhub.ai/user/notesynchelper) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[notesynchelper](https://clawhub.ai/user/notesynchelper)
 
-## Use Case: <br>
-Developers and knowledge workers use this skill to save article content or bare URLs into a NoteHelper-backed note library, search saved articles, and configure the API key needed to reach the external service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided notes, URLs, article content, and search terms may be sent to the external NoteHelper service, including bare URLs when the link route is selected. <br>
-Mitigation: Install only if you trust notebooksyncer.com, prefer explicit /notehelper link or /notehelper save commands, and confirm ambiguous bare URLs before sending them. <br>
-Risk: The API key is stored locally and used as a request header, so exposure could allow use of the note service. <br>
-Mitigation: Store the key only in ~/.openclaw/notehelper.json or NOTEHELPER_API_KEY, avoid sharing command transcripts that contain it, and revoke the key if it is exposed. <br>
+## Use Case:
 
+People using NoteHelper can save user-approved articles or links to their cloud notebook, search saved articles, and get instructions for configuring the service key. The skill is limited to explicit NoteHelper requests.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/notesynchelper/notehelper) <br>
-- [NoteHelper homepage](https://notebooksyncer.com) <br>
-- [OpenClaw NoteHelper service](https://claw.notebooksyncer.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, API calls, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell, JSON, curl, and GraphQL examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires NOTEHELPER_API_KEY for save, link, and search actions; may send user-provided article content, URLs, and search terms to claw.notebooksyncer.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: User-approved content and links are sent to NoteHelper’s cloud service, and link processing can spend credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Show the destination, content to be sent, and applicable cost before submission, and proceed only after confirmation.
+
+Risk: The API key can access the notebook and spend credits if exposed.
+
+Mitigation: Keep the key private and use the documented secret-reference configuration where available.
+
+## Reference(s):
+
+- [NoteHelper developer integration guide](https://www.bijitongbu.site/tutorials/developer-integration/)
+- [NoteHelper points and pricing](https://www.bijitongbu.site/tutorials/points-explained/)
+- [NoteHelper ClawHub release](https://clawhub.ai/notesynchelper/skills/notehelper)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, API calls]
+
+**Output Format:** [User-facing text and structured API request/response data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can save user-approved content or links, search the cloud notebook, or provide setup instructions; link processing may consume credits.]
+
+## Skill Version(s):
+
+1.1.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

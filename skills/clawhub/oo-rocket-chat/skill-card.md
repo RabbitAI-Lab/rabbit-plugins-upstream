@@ -1,42 +1,53 @@
-## Description: <br>
-Rocket.Chat lets an agent read rooms and messages and, with confirmation, post, update, or delete messages through OOMOL's Rocket.Chat connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an agent to Rocket.Chat to inspect rooms and messages and to post, update, or delete messages.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to operate a connected Rocket.Chat workspace from Codex, including profile and room lookups, message reads, and confirmed message changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can post, update, or delete Rocket.Chat messages when write or destructive actions are requested. <br>
-Mitigation: Confirm the exact target, payload, and effect with the user before running post, update, or delete actions. <br>
-Risk: First-time setup may install the oo CLI or connect Rocket.Chat credentials through OOMOL. <br>
-Mitigation: Run setup steps only after the matching auth, connection, or missing-CLI failure, and install this skill only when OOMOL is trusted for the connected account. <br>
+## Use Case:
 
+People using Rocket.Chat can inspect their profile, rooms, and messages, and post, edit, or delete messages through their connected account.
 
-## Reference(s): <br>
-- [Rocket.Chat ClawHub skill](https://clawhub.ai/oomol/skills/oo-rocket-chat) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Rocket.Chat homepage](https://www.rocket.chat) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions are expected to return JSON when executed with the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Setup directs the agent to run downloaded software without separate approval, and the installer and connector implementations were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review automatic setup, install the CLI from a verified release, review the Rocket.Chat access granted to OOMOL, and keep confirmation requirements for posting, editing, and deleting messages.
+
+## Reference(s):
+
+- [Rocket.Chat homepage](https://www.rocket.chat)
+- [Rocket.Chat API documentation](https://developer.rocket.chat/apidocs)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill release](https://clawhub.ai/oomol/skills/oo-rocket-chat)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON action requests and structured responses with concise usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions include reads, posting and editing messages, and message deletion; confirmation is required for writes and destructive actions.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

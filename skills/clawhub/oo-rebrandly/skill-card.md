@@ -1,43 +1,55 @@
-## Description: <br>
-Rebrandly helps an agent operate a connected Rebrandly account to read, create, update, and soft-delete branded short links through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Rebrandly (rebrandly.com). Use this skill for ANY Rebrandly request — reading, creating, updating, and deleting data. Whenever a task involves Rebrandly, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill when they want an agent to manage Rebrandly account details, branded domains, and branded short links through their OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive actions can change or soft-delete Rebrandly links. <br>
-Mitigation: Confirm the exact payload, target, and expected effect with the user before creating, updating, or deleting links. <br>
-Risk: Fallback first-time setup may run an oo CLI install script. <br>
-Mitigation: Review the oo CLI install script before running fallback setup commands. <br>
+## Use Case:
 
+External users can use this skill to read and manage Rebrandly account data through their connected account. It supports link and domain lookup, link creation and updates, and link deletion, with approval required for state-changing actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-rebrandly) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Rebrandly homepage](https://www.rebrandly.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance, Configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector action results are returned as JSON with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Setup runs a remote CLI installer whose release and hosted runtime are unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve the CLI installation separately, preferably using a verified release, before using the skill.
+
+Risk: Setup may install additional agent skills and the connected account may grant OOMOL access to Rebrandly data.
+
+Mitigation: Review the additional skills and the account permissions granted to OOMOL before connecting the account.
+
+## Reference(s):
+
+- [Rebrandly API documentation](https://developers.rebrandly.com/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Rebrandly homepage](https://www.rebrandly.com)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON action results and Markdown guidance with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action results may include execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

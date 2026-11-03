@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "WorkOS"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["workos"]
   icon: "https://static.oomol.com/logo/third-party/workos.svg"
 ---
@@ -47,7 +47,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `list_organization_memberships` — List WorkOS organization memberships filtered by user, organization, or membership status.
 - `list_organizations` — List WorkOS organizations with optional cursor, domain, and text filters.
 - `list_users` — List WorkOS AuthKit users with optional cursor and identity filters.
-- `reactivate_organization_membership` — Reactivate an inactive WorkOS organization membership.
+- `reactivate_organization_membership` — Reactivate an inactive WorkOS organization membership. [write]
 - `update_organization` — Update properties of an existing WorkOS organization. [write]
 - `update_organization_membership` — Update roles on an existing WorkOS organization membership. [write]
 - `update_user` — Update properties of an existing WorkOS AuthKit user. [write]
@@ -81,11 +81,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — WorkOS is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=workos
+  https://console.oomol.com/connections/workos
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - WorkOS homepage: https://workos.com
+- API documentation: https://workos.com/docs/reference/api-authentication

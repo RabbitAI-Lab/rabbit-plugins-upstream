@@ -1,44 +1,55 @@
-## Description: <br>
-Discourse helps agents read Discourse content and create topics or replies through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discourse (discourse.org). Use this skill for ANY Discourse request — reading, creating, and updating data. Whenever a task involves Discourse, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect Discourse connector schemas, read visible forum content, search topics, and create topics or replies after confirming write payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions can access forum content visible to the connected Discourse account. <br>
-Mitigation: Use an account with appropriate permissions and review the requested read action before running commands. <br>
-Risk: Write actions can publish topics or replies as the connected account. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running any write action. <br>
-Risk: First-time CLI installation and account connection require trusting the OOMOL integration. <br>
-Mitigation: Run installer and connection steps only when the user trusts OOMOL and intends to use the connected Discourse workflow. <br>
+## Use Case:
 
+People using a connected Discourse account can search and read topics, browse categories, and create topics or replies. The skill is intended for users who want an agent to handle Discourse requests through the connected account.
 
-## Reference(s): <br>
-- [Discourse homepage](https://www.discourse.org/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and JSON payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may return Discourse data visible to the connected account; write actions require payload confirmation before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Setup directs automatic execution of remote code, and the documented changes the CLI can make to other agents’ skills are omitted from the setup instructions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review CLI installation separately, verify a fixed release before execution, and consider setting OO_SKILLS_SYNC_DISABLED=1 before running the CLI. The remote installers’ complete effects remain unverified.
+
+Risk: Creating a topic or reply changes Discourse content and may publish it to others.
+
+Mitigation: Use only the intended Discourse account and confirm public post contents before running write actions.
+
+## Reference(s):
+
+- [Discourse](https://www.discourse.org/)
+- [Discourse API Documentation](https://docs.discourse.org/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, API Calls]
+
+**Output Format:** [JSON responses and natural-language text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses are returned as JSON; the agent can summarize results in text. Write actions create a topic or reply.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

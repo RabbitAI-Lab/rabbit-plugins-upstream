@@ -1,45 +1,60 @@
-## Description: <br>
-Pinata (pinata.cloud). Use this skill for Pinata requests, including reading, creating, updating, and deleting data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Pinata through an OOMOL-connected account to manage IPFS files, groups, and pin requests.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate Pinata through the OOMOL oo CLI, including file and group reads, group management, pin-by-CID workflows, metadata updates, and controlled destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive Pinata actions can create, update, remove, or overwrite Pinata data. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running write or destructive commands. <br>
-Risk: The skill can operate a user's Pinata account through an OOMOL-connected account. <br>
-Mitigation: Install and use it only when the user intends to let the agent operate that Pinata account through OOMOL. <br>
-Risk: First-time setup may use a remote oo CLI installer if the CLI is not already installed. <br>
-Mitigation: Prefer an already installed oo CLI where available, and review the installer source before approving remote installation. <br>
+## Use Case:
 
+Developers use this skill to read and manage Pinata files and groups, submit CID pin requests, and inspect pin request status through a connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-pinata) <br>
-- [Pinata Homepage](https://pinata.cloud) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses from the connector include data and meta.executionId when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Pinning content changes storage state, and the skill's approval rules may not adequately identify that effect.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before pinning, confirm the CID, destination account, and storage effect with the user.
+
+Risk: The setup runs a remote installer, and the installer's behavior and hosted connector behavior were not verified.
+
+Mitigation: Install the CLI through a separately reviewed, verified process and check its documented changes to other agent skills.
+
+Risk: Connecting Pinata entrusts OOMOL with access to the connected account.
+
+Mitigation: Connect an account whose access is appropriate for the requested Pinata actions.
+
+## Reference(s):
+
+- [Pinata](https://pinata.cloud)
+- [Pinata API documentation](https://docs.pinata.cloud/api-reference/introduction)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [Shell command instructions with JSON inputs and structured connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions can read data or change Pinata state; write and destructive actions are identified in the skill.]
+
+## Skill Version(s):
+
+1.0.5 (source: SKILL.md frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

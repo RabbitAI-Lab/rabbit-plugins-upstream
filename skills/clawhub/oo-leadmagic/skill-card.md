@@ -1,45 +1,56 @@
-## Description: <br>
-LeadMagic lets an agent search and read LeadMagic data through the OOMOL oo CLI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate LeadMagic through an OOMOL-connected account to search and retrieve company and professional contact data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Sales, growth, and revenue operations users can ask an agent to enrich company and professional profiles, find work emails or mobile numbers, validate email deliverability, and check LeadMagic credits through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can request business and personal lead data, including work emails and mobile phone numbers. <br>
-Mitigation: Use it only for authorized LeadMagic workflows, minimize submitted identifiers, and review returned contact data before use or sharing. <br>
-Risk: First-time use may require installing the oo CLI and connecting an OOMOL account to LeadMagic. <br>
-Mitigation: Review the oo CLI install command and confirm the intended OOMOL account connection before running setup. <br>
-Risk: Connector actions depend on live LeadMagic schemas and account scopes. <br>
-Mitigation: Fetch the action schema with oo before constructing each payload and resolve missing scopes or expired credentials through the OOMOL connection page. <br>
+## Use Case:
 
+External users and developers can use this skill to search company data and retrieve professional contact information through a connected LeadMagic account.
 
-## Reference(s): <br>
-- [LeadMagic homepage](https://leadmagic.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub LeadMagic skill page](https://clawhub.ai/oomol/skills/oo-leadmagic) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before action execution and relies on server-side OOMOL credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Setup may run unverified downloads and make broader changes to installed agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before use, install a CLI version you have reviewed, and control whether it can install or synchronize other agent skills.
+
+Risk: Identifiers submitted for lookup may disclose information to OOMOL and LeadMagic.
+
+Mitigation: Send only identifiers you intend to share with OOMOL and LeadMagic.
+
+## Reference(s):
+
+- [LeadMagic API documentation](https://leadmagic.io/docs/)
+- [LeadMagic](https://leadmagic.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [API responses, JSON, Guidance]
+
+**Output Format:** [JSON connector results with concise explanatory text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Available data depends on the selected LeadMagic action, account access, and credits.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

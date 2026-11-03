@@ -1,44 +1,54 @@
-## Description: <br>
-Greenhouse lets agents retrieve recruiting records and add candidate notes through an OOMOL-connected Greenhouse account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use an OOMOL-connected Greenhouse account to retrieve jobs, candidates, and applications or add candidate notes.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Recruiting and operations teams use this skill to query Greenhouse candidates, applications, and jobs. They can also add candidate activity notes after reviewing the exact payload and intended effect. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Greenhouse candidate and application data can contain sensitive recruiting information. <br>
-Mitigation: Treat candidate and application data as sensitive and review outputs before sharing or storing them. <br>
-Risk: The add_candidate_note action changes Greenhouse state. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write actions. <br>
-Risk: First-time setup may require installing the oo CLI from a remote script. <br>
-Mitigation: Only run the CLI install script from a trusted source and after the command fails because the CLI is missing. <br>
+## Use Case:
 
+Recruiting teams can use the skill to inspect Greenhouse jobs, candidates, and applications, and to add candidate activity notes through their connected account.
 
-## Reference(s): <br>
-- [ClawHub Greenhouse skill page](https://clawhub.ai/oomol/skills/oo-greenhouse) <br>
-- [Greenhouse homepage](https://www.greenhouse.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Greenhouse connector calls and JSON command output when the agent runs the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server evidence) <br>
+Risk: Setup may run unverified software or make broader agent changes without clear approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified CLI release separately and require approval before automatic setup; consider disabling startup skill synchronization with OO_SKILLS_SYNC_DISABLED=1.
+
+Risk: Recruiting data is processed through the OOMOL-connected service.
+
+Mitigation: Confirm that OOMOL may process the relevant recruiting data and retain approval requirements for changes to Greenhouse records.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Greenhouse Harvest API documentation](https://developers.greenhouse.io/harvest.html)
+
+## Skill Output:
+
+**Output Type(s):** [API responses, Guidance]
+
+**Output Format:** [JSON connector requests and responses with concise natural-language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions that add candidate notes change Greenhouse data.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

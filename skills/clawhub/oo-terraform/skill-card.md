@@ -1,45 +1,56 @@
-## Description: <br>
-Operates HCP Terraform through an OOMOL-connected account using the oo CLI to inspect account, organization, workspace, and run data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read Terraform account, organization, workspace, and run data through OOMOL's oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and infrastructure engineers use this skill to inspect Terraform account details, organizations, workspaces, runs, and run history through an OOMOL-connected Terraform account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can query Terraform account, organization, workspace, and run information through OOMOL. <br>
-Mitigation: Install only where that read access is acceptable, and review requested Terraform actions before execution. <br>
-Risk: Future connector actions may become write-capable or destructive even though the current artifact evidence is read-oriented. <br>
-Mitigation: Require explicit user confirmation for any action marked write or destructive and verify the live connector schema before building the payload. <br>
-Risk: The skill may be invoked broadly for general Terraform requests. <br>
-Mitigation: Use it for OOMOL connector-backed Terraform data access, and avoid unnecessary connector calls for general Terraform advice. <br>
+## Use Case:
 
+Developers and infrastructure operators use this skill to inspect Terraform organizations, workspaces, runs, and account details through a connected OOMOL account.
 
-## Reference(s): <br>
-- [Terraform homepage](https://www.hashicorp.com/products/terraform) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-terraform) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and connector result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo CLI connector schemas before constructing Terraform connector payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: Fallback setup executes remote CLI installers without first requesting approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a reviewed, pinned CLI release yourself and review any changes it makes before use.
+
+Risk: OOMOL brokers access to the connected Terraform account.
+
+Mitigation: Use a Terraform API key limited to the reads you need and understand that OOMOL brokers the account access.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Terraform](https://www.hashicorp.com/products/terraform)
+- [Terraform Cloud API documentation](https://developer.hashicorp.com/terraform/cloud-docs/api-docs)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-terraform)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Guidance]
+
+**Output Format:** [JSON responses and Markdown guidance with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Terraform account, organization, workspace, and run data; inputs follow the selected action's schema.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

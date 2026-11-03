@@ -1,43 +1,54 @@
-## Description: <br>
-Operate Userlist through an OOMOL-connected account, including reading records and creating or updating users, companies, relationships, events, and transactional messages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Userlist (userlist.com). Use this skill for ANY Userlist request — reading, creating, and updating data. Whenever a task involves Userlist, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to run Userlist connector actions through the oo CLI for customer, company, relationship, event, and transactional messaging workflows. It is intended for agents working with a Userlist account that has already been connected through OOMOL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan reports that create-or-update actions are mislabeled as untagged actions, which could let an agent change Userlist customer or business data without confirmation. <br>
-Mitigation: Treat push_user, push_company, and push_relationship as write actions and require explicit user confirmation of the exact payload before execution. <br>
-Risk: Connector actions can create events, send transactional messages, and update users, companies, or relationships in a connected Userlist account. <br>
-Mitigation: Fetch the live action schema before building payloads, review the target account and action effect, and run only with a Userlist account where these changes are acceptable. <br>
+## Use Case:
 
+Developers and customer operations teams use this skill to read, create, and update Userlist data, and to send transactional messages through a connected account. It directs users to approve write actions before they run.
 
-## Reference(s): <br>
-- [ClawHub Userlist skill page](https://clawhub.ai/oomol/skills/oo-userlist) <br>
-- [oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Userlist homepage](https://userlist.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute oo CLI connector schema and run commands that return JSON responses from Userlist.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: Setup may execute unverified remote code and may add undisclosed changes to other agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup behavior and install a reviewed CLI release. Set OO_SKILLS_SYNC_DISABLED=1 before invoking the CLI to prevent startup changes to other agent skills.
+
+Risk: The connected service processes Userlist data and credentials, and write actions can change data or send messages.
+
+Mitigation: Confirm OOMOL may process the data and credentials, and keep the existing approval requirement for each write action.
+
+## Reference(s):
+
+- [Userlist Push API documentation](https://userlist.com/docs/developers/push-api/)
+- [oo CLI controls](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [Text and JSON returned from oo CLI actions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write actions require user approval.]
+
+## Skill Version(s):
+
+1.0.6 (source: SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

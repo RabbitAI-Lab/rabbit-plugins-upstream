@@ -1,45 +1,61 @@
-## Description: <br>
-Guides an agent to pressure-test claims by reducing assumptions to irreducible or cited facts, separating inherited beliefs from bedrock, and reconstructing an answer from the surviving foundations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent to decompose claims, decisions, or assumptions to irreducible facts, then rebuild a concise first-principles analysis.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Developers, operators, and decision-makers use this skill to analyze high-impact claims or decisions by surfacing assumptions, tagging bedrock versus inherited beliefs, and producing a structured First-Principles Teardown. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks the agent to fetch a remote replacement copy at runtime, so its instructions can change after marketplace review. <br>
-Mitigation: Install only if you trust the deciqAI hosted endpoint; review fetched updates before relying on them, or block network access and continue with the packaged copy in controlled environments. <br>
-Risk: A teardown can produce misleading conclusions when empirical bedrock claims lack citations or when demolished assumptions are reused during reconstruction. <br>
-Mitigation: Require sources or numbers for empirical bedrock claims and review the final assumptions, reconstruction, and open questions before using the output for important decisions. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to pressure-test expensive or hard-to-reverse decisions, inherited assumptions, business models, architecture choices, and AI cost claims by reducing them to citable or irreducible foundations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/first-principles) <br>
-- [First Principles Sources](references/sources.md) <br>
-- [Runtime Skill Metadata](https://www.deciqai.com/s/first-principles.json) <br>
-- [Wright Brothers Worked Example](examples/wright-brothers-1901.md) <br>
-- [SpaceX Rocket Cost Worked Example](examples/spacex-rocket-cost-2002.md) <br>
-- [AI Inference Cost Worked Example](examples/ai-inference-cost-physics-2024-2026.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown structured as Claim, Assumptions, Bedrock, Reconstruction, What changes, and Confidence & open questions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May pause for user input in coach mode; requests a remote freshness check at the start of a run when network access is available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata) <br>
+Risk: The security evidence flags that the skill tells agents to fetch and prefer mutable remote instructions at runtime.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, and prefer operation where the installed SKILL.md is authoritative or update checks require explicit approval with version and hash verification.
+
+Risk: First-principles analysis can produce misleading guidance if bedrock claims are asserted without citations or if inherited assumptions are not fully interrogated.
+
+Mitigation: Require cited or irreducible bedrock facts, tagged assumptions, and an explicit reconstruction audit before using the output for high-impact decisions.
+
+## Reference(s):
+
+- [First Principles ClawHub Listing](https://clawhub.ai/deciqai/skills/first-principles)
+- [Sources - first-principles](references/sources.md)
+- [Wright Brothers and the Lift Tables (1901)](examples/wright-brothers-1901.md)
+- [SpaceX and the Cost of a Rocket (2002-2008)](examples/spacex-rocket-cost-2002.md)
+- [The Physics of AI Inference Cost (2024-2026)](examples/ai-inference-cost-physics-2024-2026.md)
+- [Aristotle's Logic](https://plato.stanford.edu/entries/aristotle-logic/)
+- [Euclidean Geometry](https://www.britannica.com/science/Euclidean-geometry)
+- [Wright Brothers and the Invention of the Aerial Age](https://airandspace.si.edu/explore/stories/wright-brothers-and-invention-aerial-age)
+- [Llama Models](https://www.llama.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Structured teardown with claim, tagged assumptions, bedrock facts, reconstruction, changes, confidence, and open questions.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,59 @@
-## Description: <br>
-Recurly lets an agent read, create, and update Recurly accounts, plans, and subscriptions through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recurly (recurly.com). Use this skill for ANY Recurly request — reading, creating, and updating data. Whenever a task involves Recurly, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and support teams use this skill to inspect and manage Recurly billing objects through the OOMOL oo CLI without handling raw Recurly credentials directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions may expose customer, account, subscription, and billing data. <br>
-Mitigation: Install and use the skill only when the agent is expected to access Recurly, and treat returned billing data as sensitive. <br>
-Risk: Write actions can change billing-related data such as accounts, plans, and subscriptions. <br>
-Mitigation: Review every write payload and confirm the intended effect with the user before approving changes. <br>
-Risk: Action payloads may become incorrect if the connector contract changes. <br>
-Mitigation: Inspect the live action schema before building or running each connector payload. <br>
+## Use Case:
 
+External users and developers can use the skill to read Recurly accounts, plans, and subscriptions, and to create or update supported account and billing records through their connected Recurly account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-recurly) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Recurly Homepage](https://recurly.com) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [OOMOL Recurly Connection](https://console.oomol.com/app-connections?provider=recurly) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live connector schema inspection before running Recurly actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: The setup instructions run remote installers without pinning a release, and the remote installer contents were unavailable for inspection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer contents and use a reviewed, pinned CLI release before installation.
+
+Risk: Automatic skill syncing may make broader agent changes outside clear user control.
+
+Mitigation: Review and control CLI installation and automatic syncing, and retain confirmation for every change.
+
+Risk: The connected OOMOL account mediates access to business data in Recurly.
+
+Mitigation: Connect only the Recurly permissions needed for the task.
+
+## Reference(s):
+
+- [Recurly API documentation](https://recurly.com/developers/api/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Recurly skill release](https://clawhub.ai/oomol/skills/oo-recurly)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON API responses and shell commands, with Markdown usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read actions retrieve Recurly records; create and update actions change account data and require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

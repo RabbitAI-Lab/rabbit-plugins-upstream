@@ -1,45 +1,61 @@
-## Description: <br>
-Recharge helps agents operate Recharge through an OOMOL-connected account for reading, creating, and updating Recharge data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recharge (getrecharge.com). Use this skill for ANY Recharge request — searching and reading data. Whenever a task involves Recharge, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve and manage Recharge charges, customers, orders, products, and subscriptions through the OOMOL oo CLI connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The setup instructions include remote installer commands for the oo CLI. <br>
-Mitigation: Use a verified or manual oo CLI installation path before granting the skill access to Recharge operations. <br>
-Risk: Recharge customer, order, charge, and subscription data can include sensitive business or customer information. <br>
-Mitigation: Install only for trusted OOMOL accounts and limit use to users authorized to access the connected Recharge data. <br>
-Risk: Some connector actions are marked as write-capable and may affect Recharge state. <br>
-Mitigation: Inspect the live action schema and confirm the exact payload and expected effect with the user before running write actions. <br>
+## Use Case:
 
+Developers and operators use this skill to search and read Recharge charges, customers, orders, products, and subscriptions through a connected OOMOL account.
 
-## Reference(s): <br>
-- [Recharge homepage](https://getrecharge.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-recharge) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce live oo CLI connector commands that return JSON responses from Recharge.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions use remote installer scripts whose contents remain unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review CLI setup separately and use a verified release before allowing installation.
+
+Risk: Startup may automatically install additional skills without disclosing the full scope.
+
+Mitigation: Consider setting OO_SKILLS_SYNC_DISABLED=1 before running oo.
+
+Risk: OOMOL mediates access to the connected Recharge account.
+
+Mitigation: Use a read-only Recharge connection and account for OOMOL's role in access.
+
+## Reference(s):
+
+- [Recharge API documentation](https://developer.rechargepayments.com/2021-11)
+- [oo CLI documentation](https://github.com/oomol-lab/oo-cli)
+- [oo CLI command controls](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+- [Recharge homepage](https://getrecharge.com/)
+- [Recharge skill release page](https://clawhub.ai/oomol/skills/oo-recharge)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API calls, JSON]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON payloads; Recharge responses are returned as JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Recharge records returned through the connected account.]
+
+## Skill Version(s):
+
+1.0.5 (source: artifact frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

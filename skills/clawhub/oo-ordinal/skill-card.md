@@ -1,45 +1,56 @@
-## Description: <br>
-Ordinal (tryordinal.com) connector for reading, creating, and updating workspace data through OOMOL's oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Ordinal (tryordinal.com). Use this skill for ANY Ordinal request — searching and reading data. Whenever a task involves Ordinal, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate an OOMOL-connected Ordinal workspace from an agent, including reading workspace records and preparing confirmed write actions through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: First-time setup includes pipe-to-shell installer commands that execute downloaded code on the user's machine. <br>
-Mitigation: Use installer commands only after oo is missing, and review OOMOL's official installation guidance before running them. <br>
-Risk: Connector actions can affect Ordinal workspace data when an action is marked write or destructive. <br>
-Mitigation: Fetch the live action schema first and confirm the exact payload and expected effect with the user before write or destructive actions. <br>
-Risk: The skill runs oo connector commands against a connected Ordinal workspace and may return workspace data. <br>
-Mitigation: Run commands only for the user's intended workspace task and rely on OOMOL-managed credentials rather than handling raw tokens. <br>
+## Use Case:
 
+External users can ask an agent to read and search information in a connected Ordinal workspace, including ideas, posts, users, labels, and workspace or profile details. The skill guides the agent to inspect each action's live schema and returns the connector's JSON response.
 
-## Reference(s): <br>
-- [Ordinal homepage](https://www.tryordinal.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI installation guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ordinal) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: If the oo CLI is missing, the setup guidance can lead to a remote installer running without a separate approval step; the installer contents and hosted connector behavior were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve a fixed installer or release separately, and inspect any bundled-skill changes before installation.
+
+Risk: Ordinal requests pass through OOMOL and may incur usage charges.
+
+Mitigation: Restrict the connected Ordinal account to the access needed for the task and account for applicable usage charges.
+
+## Reference(s):
+
+- [Ordinal homepage](https://www.tryordinal.com)
+- [Ordinal API documentation](https://docs.tryordinal.com/api/introduction)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Ordinal on ClawHub](https://clawhub.ai/oomol/skills/oo-ordinal)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [Connector JSON responses with concise Markdown action guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses contain action data and may include execution metadata.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

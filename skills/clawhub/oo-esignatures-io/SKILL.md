@@ -1,11 +1,11 @@
 ---
 name: oo-esignatures-io
-description: "eSignatures.com (esignatures.com). Use this skill for ANY eSignatures.com request — reading, creating, and updating data. Whenever a task involves eSignatures.com, use this skill instead of calling the API directly."
+description: "eSignatures.com (esignatures.com). Use this skill for ANY eSignatures.com request — reading, creating, updating, and deleting data. Whenever a task involves eSignatures.com, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "eSignatures.com"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.6"
   services: ["esignatures_io"]
   icon: "https://static.oomol.com/logo/third-party/esignatures_io.png"
 ---
@@ -44,7 +44,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `get_template` — Retrieve one eSignatures.com template by ID.
 - `get_template_content` — Retrieve the Markdown content for one eSignatures.com template.
 - `list_templates` — List eSignatures.com templates available to the connected account.
-- `withdraw_contract` — Withdraw an eSignatures.com contract so it can no longer be signed while preserving query access.
+- `withdraw_contract` — Withdraw an eSignatures.com contract so it can no longer be signed while preserving query access. [destructive]
 
 ## Safety
 
@@ -75,11 +75,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — eSignatures.com is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=esignatures_io
+  https://console.oomol.com/connections/esignatures_io
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - eSignatures.com homepage: https://esignatures.com
+- API documentation: https://esignatures.com/docs/api

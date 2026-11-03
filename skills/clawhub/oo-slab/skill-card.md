@@ -1,42 +1,57 @@
-## Description: <br>
-Slab (slab.com). Use this skill for ANY Slab request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Slab (slab.com). Use this skill for ANY Slab request — reading, creating, updating, and deleting data. Whenever a task involves Slab, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external collaborators, and developers use this skill to search, read, create, update, sync, and delete Slab workspace content through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, sync, or delete Slab content in a connected workspace. <br>
-Mitigation: Review write and delete requests carefully, confirm the exact payload and target, and require explicit approval before destructive actions. <br>
-Risk: First-time setup may install or run the remote OOMOL oo CLI. <br>
-Mitigation: Install the CLI only if you trust OOMOL and are comfortable allowing the agent to operate through an OOMOL-connected Slab account. <br>
+## Use Case:
 
+Users with an OOMOL-connected Slab account use this skill to search and read Slab content, manage posts and topics, and synchronize external content into Slab.
 
-## Reference(s): <br>
-- [Slab homepage](https://slab.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: SKILL.md metadata and release evidence) <br>
+Risk: Setup runs unverified downloads, and its instructions omit the CLI's automatic installation of additional agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified, pinned CLI installation; review or disable additional skill installation; grant only needed Slab permissions; keep required approvals for changes and deletions.
+
+Risk: Post and topic write or deletion actions can change Slab content.
+
+Mitigation: Keep the required approvals for changes and deletions, and confirm the exact action and payload before execution.
+
+## Reference(s):
+
+- [Slab](https://slab.com)
+- [Slab API documentation](https://help.slab.com/en/articles/6545629-developer-tools-api-webhooks)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [Slab skill release](https://clawhub.ai/oomol/skills/oo-slab)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Guidance]
+
+**Output Format:** [Shell commands with JSON payload examples and API results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill checks each action's input schema before constructing its request.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

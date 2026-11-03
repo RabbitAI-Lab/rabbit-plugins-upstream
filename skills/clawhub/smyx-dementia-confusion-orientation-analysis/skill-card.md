@@ -1,47 +1,59 @@
-## Description: <br>
-Analyzes fixed-camera video, with optional microphone input, from dementia care settings or homes to identify confusion and disorientation behaviors and produce orientation-soothing guidance and reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes care video and optional audio for signs of confusion or disorientation in people with dementia and can trigger orientation-soothing actions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External caregivers, care-facility operators, and care-system developers use this skill to analyze dementia-care video or audio-video inputs, detect confusion or disorientation indicators, retrieve historical reports, and generate structured monitoring results with orientation-soothing recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive dementia-care video and optional audio through remote services. <br>
-Mitigation: Deploy only in authorized care settings with resident or family consent, clear camera and microphone notices, retention controls, and confirmed endpoint governance. <br>
-Risk: The skill can create or reuse identity state and store tokens locally. <br>
-Mitigation: Confirm token storage, identity mapping, access controls, and deletion procedures before production use. <br>
-Risk: Confusion recognition and soothing outputs could be mistaken for clinical diagnosis or medical advice. <br>
-Mitigation: Use outputs as behavioral observations and care workflow support only; route repeated or severe events to qualified care or clinical resources. <br>
-Risk: Automated soothing can distress residents if voices, lighting, or volume are inappropriate. <br>
-Mitigation: Use only authorized prerecorded family audio, keep volume and lighting within documented limits, and review escalation behavior with caregivers. <br>
+## Use Case:
 
+Care teams and care-platform operators use the skill to request analysis of submitted camera footage for behavioral signs of confusion or disorientation and to retrieve structured results or prior reports. It can also initiate orientation prompts or caregiver notifications, so deployment should be consent-based and its configured actions should be reviewed.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-dementia-confusion-orientation-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown summaries and structured JSON returned from remote analysis and history-report APIs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links, structured detection fields, orientation-soothing actions, and historical report lists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact SKILL.md frontmatter states 1.0.6) <br>
+Risk: The security evidence says the documented export-only mode can still upload care recordings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not use real care recordings in export-only mode until the behavior is corrected and verified; confirm what is sent before processing recordings.
+
+Risk: Ordinary requests may silently create service accounts, and the account that will own reports may be unclear.
+
+Mitigation: Confirm the service account and report owner before use, and review token storage and account creation with the service operator.
+
+Risk: Cloud processing, deletion and retention behavior, and any enabled speaker, lighting, or notification actions are not verified in the security evidence.
+
+Mitigation: Verify data processing and deletion terms and review or disable intervention actions until their safeguards are understood; obtain required care-recipient or representative consent before deployment.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-dementia-confusion-orientation-analysis)
+- [API interface notes](artifact/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured analysis results and report links; history listings can be presented as Markdown tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may include behavioral observations, orientation-soothing actions, and links to reports.]
+
+## Skill Version(s):
+
+1.0.12 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

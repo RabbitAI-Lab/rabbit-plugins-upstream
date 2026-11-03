@@ -1,6 +1,6 @@
 # Find Trending Content
 
-Check today's trends and explore trending videos.
+Check today's Pop culture & News (what people are talking about: news and pop culture, by region) and explore trending videos. For the video formats creators are copying, use Content Trends instead (see `find-a-format-to-copy.md`).
 
 ## User Prompt
 
@@ -8,28 +8,28 @@ Check today's trends and explore trending videos.
 
 ## Agent Steps
 
-1. Get today's trends:
+1. Get today's Pop culture & News (`/v1/trends/digest`; the digest always returns one daily list of 15 to 20 trends; `limit` has no effect here):
 ```bash
-curl "https://api.virlo.ai/v1/trends/digest?limit=10" \
+curl "https://api.virlo.ai/v1/trends/digest" \
   -H "Authorization: Bearer $VIRLO_API_KEY"
 ```
-If the user asks about a specific country, pass `region` (`us`, `gb`, `au` — default is `global`, the worldwide feed):
+If the user asks about a specific country, pass `region` (`us`, `gb`, `au`, `sg`; default is `global`, the worldwide feed):
 ```bash
-curl "https://api.virlo.ai/v1/trends/digest?limit=10&region=gb" \
+curl "https://api.virlo.ai/v1/trends/digest?region=gb" \
   -H "Authorization: Bearer $VIRLO_API_KEY"
 ```
-`GET /v1/trends/regions` (free) lists the currently available region codes — more are added over time.
+`GET /v1/trends/regions` (free) lists the currently available region codes: more are added over time.
 
-If the user asks what's *emerging* or *about to take off* (rather than the full daily list), use the free, momentum-ranked emerging endpoint — composable with `region`:
+If the user asks what's *emerging* or *about to take off* (rather than the full daily list), use the momentum-ranked emerging endpoint ($0.25): composable with `region`:
 ```bash
 curl "https://api.virlo.ai/v1/trends/emerging?region=gb&limit=20" \
   -H "Authorization: Bearer $VIRLO_API_KEY"
 ```
-It returns only `new`/`rising` trends sorted by momentum heat (each with `status`, `momentum_score`, `views_per_hour`) — ideal for "what's emerging in the UK right now". It's a free read but rate-limited per plan.
+It returns only `new`/`rising` trends sorted by momentum heat (each with `status`, `momentum_score`, `views_per_hour`): ideal for "what's emerging in the UK right now". It costs $0.25 per call and is rate-limited per plan.
 
 2. Present trend names and descriptions to the user.
 
-3. Get top viral videos:
+3. Get the most-viewed videos published in the last 48 hours ($0.25 whatever the limit, max 100):
 ```bash
 curl "https://api.virlo.ai/v1/videos/digest?limit=10" \
   -H "Authorization: Bearer $VIRLO_API_KEY"
@@ -41,8 +41,8 @@ curl "https://api.virlo.ai/v1/hashtags?start_date={today_minus_7}&end_date={toda
   -H "Authorization: Bearer $VIRLO_API_KEY"
 ```
 
-5. If the user is interested in a specific trend, offer to run a Full Niche Analysis — a one-shot agent (`POST /v1/agents` with `is_recurring: false`) seeded with the trend keywords.
+5. If the user is interested in a specific trend, offer to run a Full Niche Analysis: a one-shot agent (`POST /v1/agents` with `is_recurring: false`) seeded with the trend keywords.
 
 ## Total Cost
 
-$0.25 for trends + $0.25 for videos + $0.05 for hashtags = $0.55 total.
+$0.25 for Pop culture & News + $0.25 for videos + $0.05 for hashtags = $0.55 total.

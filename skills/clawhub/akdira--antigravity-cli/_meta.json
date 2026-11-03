@@ -1,0 +1,14 @@
+{
+  "name": "antigravity-cli",
+  "slug": "antigravity-cli",
+  "version": "1.0.0",
+  "description": "Google Antigravity CLI (agy) — autonomous coding agent for code generation, refactoring, debugging, and multi-step programming tasks",
+  "author": "PT Akdira Labs International",
+  "homepage": "https://antigravity.google",
+  "repository": "https://github.com/akdira/openclaw-skill-antigravity-cli",
+  "license": "MIT",
+  "tags": ["coding-agent", "google", "ai", "programming", "refactoring", "debugging", "code-generation"],
+  "category": "development",
+  "publishedAt": null,
+  "ownerId": null
+}

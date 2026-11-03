@@ -1,44 +1,54 @@
-## Description: <br>
-Webflow (webflow.com). Use this skill for Webflow requests involving reading, creating, updating, and deleting data through the OOMOL Webflow connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Webflow (webflow.com). Use this skill for ANY Webflow request — reading, creating, updating, and deleting data. Whenever a task involves Webflow, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect and manage Webflow sites, CMS collections, and CMS items through an OOMOL-connected Webflow account. It supports read operations plus confirmed create, update, publish, and delete workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and publish actions can change Webflow CMS items or site state. <br>
-Mitigation: Confirm the exact action, target site, collection or item, and payload with the user before running write or publish actions. <br>
-Risk: The delete action can remove a draft CMS item. <br>
-Mitigation: Require explicit approval for the specific item before destructive actions and verify the target with a read operation first when practical. <br>
-Risk: The skill operates through a connected Webflow account. <br>
-Mitigation: Install and use it only for intended Webflow accounts, and resolve authentication, scope, or billing errors through the documented first-time setup flow. <br>
+## Use Case:
 
+Developers and site operators use this skill to read and manage Webflow sites and CMS collections through an OOMOL-connected account. It supports retrieving content and making changes such as creating, updating, publishing, or deleting items.
 
-## Reference(s): <br>
-- [Webflow homepage](https://webflow.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-webflow) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, API calls] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector responses in JSON format when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Setup instructions can run downloaded code before its behavior is verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installer and installation guide before running them, and check whether bundled-skill synchronization affects other agents.
+
+Risk: Write and destructive actions can change Webflow content or publish a site.
+
+Mitigation: Use narrowly scoped Webflow access and confirm the exact target and payload before publishing, editing, or deleting content.
+
+## Reference(s):
+
+- [Webflow Data API documentation](https://developers.webflow.com/data/reference/rest-introduction)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON Webflow connector results and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the selected Webflow action and connected account.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

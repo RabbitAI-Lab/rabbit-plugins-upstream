@@ -1,43 +1,52 @@
-## Description: <br>
-Document360 (document360.com). Use this skill for ANY Document360 request — searching and reading data. Whenever a task involves Document360, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read content in a user's connected Document360 account through OOMOL.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, developers, and agents use this skill to search and read Document360 workspaces through an OOMOL-connected account. It supports workspace discovery, category retrieval, article listing, and workspace search. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The broad Document360 trigger routes Document360 search and read tasks through the user's OOMOL-connected account. <br>
-Mitigation: Install only when agents should access Document360 through that account, and review requested actions before execution. <br>
-Risk: First-time setup may install the oo CLI or require OOMOL sign-in and a Document360 connection. <br>
-Mitigation: Review setup steps before allowing them and run them only after an authentication, connection, or missing-CLI failure. <br>
+## Use Case:
 
+Users with an OOMOL-connected Document360 account can search workspace content, list workspaces and articles, and inspect category hierarchies.
 
-## Reference(s): <br>
-- [Document360 homepage](https://document360.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-document360) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+Risk: Automatic setup may execute unverified remote code and make persistent agent changes without clear approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a separately reviewed, version-controlled CLI installation and require approval for setup changes. Review or disable managed-skill synchronization with the documented OO_SKILLS_SYNC_DISABLED control.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Document360](https://document360.com)
+- [Document360 API documentation](https://apidocs.document360.com/)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands]
+
+**Output Format:** [JSON connector requests and results with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action input fields depend on the selected connector schema.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

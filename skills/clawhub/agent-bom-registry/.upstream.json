@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-bom-registry",
   "slug": "agent-bom-registry",
   "ownerHandle": null,
-  "version": "0.98.0",
-  "updatedAt": 1784946264344,
-  "contentHash": "9c43d280e27e0c0724adc599ce18e09bb389d3fa64484a42815bb9bbaddd08ea",
-  "fetchedAt": "2026-07-26T18:04:22.472Z"
+  "version": "0.113.0",
+  "updatedAt": 1793646953199,
+  "contentHash": "741d4ba58bdd321b348e0dde01b0680e39eaa9a46cba7a7c8337fb86fc9d34a1",
+  "fetchedAt": "2026-11-03T15:27:53.519Z"
 }

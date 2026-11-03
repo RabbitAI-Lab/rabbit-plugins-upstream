@@ -1,44 +1,54 @@
-## Description: <br>
-Enables agents to read, create, and update Atlas.so customer, account, and session data through OOMOL's oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Atlas.so to read, create, and update customer and account data, and to list session recordings, through a connected OOMOL account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and Atlas.so operators use this skill to let an agent inspect live connector schemas, retrieve Atlas.so records, and prepare approved customer or account updates through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Atlas.so customer, account, and session data through an OOMOL-connected account. <br>
-Mitigation: Connect only the intended Atlas.so account and scopes, and confirm this data access is acceptable before installing or running the skill. <br>
-Risk: Write actions can create, update, or upsert Atlas.so customer and account records. <br>
-Mitigation: Review the exact action name, target record, and JSON payload with the user before executing any write action. <br>
-Risk: First-time setup may require installing the oo CLI. <br>
-Mitigation: Use the documented installer only when the CLI is missing, and inspect the installer before running it. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Atlas.so customer and account records, list session recordings, and make approved customer or account changes through their connected OOMOL account.
 
-## Reference(s): <br>
-- [Atlas.so homepage](https://atlas.so) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill metadata) <br>
+Risk: Setup may execute remote installer code, and the installer's full effects were unavailable for review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the CLI installer before enabling setup; consider setting OO_SKILLS_SYNC_DISABLED=1 to prevent startup skill synchronization.
+
+Risk: The connected OOMOL account can access customer data and session recordings, and Atlas.so writes change customer or account data.
+
+Mitigation: Limit the connected account to appropriate data and approve each proposed Atlas.so data change.
+
+## Reference(s):
+
+- [Atlas.so](https://atlas.so)
+- [Atlas API documentation](https://developers.atlas.so/reference/getting-started-with-your-api)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payloads; connector results are JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the requested Atlas.so action and the connected account's accessible data.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

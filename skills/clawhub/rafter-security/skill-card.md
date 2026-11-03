@@ -1,41 +1,54 @@
-## Description: <br>
-Security toolkit for AI workflows that supports scanning code or repositories for vulnerabilities, auditing third-party skills, MCPs, and agent configurations before installation, evaluating shell commands before running them, and generating secure design questions for new features. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Security toolkit for AI workflows. Use when scanning code or repos for vulnerabilities, auditing third-party skills/MCPs/agent configs before installing, evaluating shell commands before running them, or generating secure design questions for new features. Provides `rafter run` (remote SAST + SCA, needs RAFTER_API_KEY), `rafter secrets` (offline secrets-only), `rafter agent exec --dry-run` (command-risk classification), and `rafter skill review`.
 
-## Publisher: <br>
-[rafter](https://clawhub.ai/user/rafter) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rafter](https://clawhub.ai/user/rafter)
 
-## Use Case: <br>
-Developers, engineers, and agent users use this skill to run Rafter security checks, scan for secrets, review third-party skills or agent configurations, and evaluate risky shell commands before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The command-validation workflow may be unclear about whether `rafter agent exec <command>` classifies a command or executes it. <br>
-Mitigation: Confirm the Rafter CLI behavior before use and prefer a documented dry-run mode when the intent is only risk assessment. <br>
-Risk: Initialization can add agent integrations or hooks through the Rafter CLI. <br>
-Mitigation: Install only after deciding which integrations are trusted, and use the documented opt-in `--with-*` flags for targeted setup. <br>
+## Use Case:
 
+Developers and security engineers use this skill to scan repositories for vulnerabilities and exposed secrets, assess shell commands, and review third-party skills and agent configurations before use.
 
-## Reference(s): <br>
-- [Rafter homepage](https://rafter.so) <br>
-- [ClawHub skill page](https://clawhub.ai/rafter/skills/rafter-security) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and optional JSON scan output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Secret scan JSON output redacts raw secret values when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.9.1 (source: frontmatter and server release metadata) <br>
+Risk: The `rafter run` workflow performs remote code analysis, so private code may be sent to a cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the service's data handling before scanning private code, and enable only the integrations you intend to use. Use `rafter secrets` when an offline secrets-only scan is sufficient.
+
+Risk: The supplied skill documentation does not include the external `rafter` executable or cloud service, so their behavior and security guarantees were not reviewed in this release evidence.
+
+Mitigation: Review the CLI and service documentation and treat scan results as guidance to inspect before acting.
+
+## Reference(s):
+
+- [Rafter](https://rafter.so)
+- [Rafter Security on ClawHub](https://clawhub.ai/rafter/skills/rafter-security)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands, Configuration instructions, JSON]
+
+**Output Format:** [Markdown guidance and reports, shell command examples, and structured JSON scan results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Command and configuration examples are provided for the user's environment; scan output may include redacted findings.]
+
+## Skill Version(s):
+
+0.11.7 (source: skill frontmatter; server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

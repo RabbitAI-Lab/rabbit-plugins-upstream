@@ -1,42 +1,55 @@
-## Description: <br>
-This skill helps agents search and retrieve IT Glue organizations, users, contacts, and configurations through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to search and read data in IT Glue.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill when an agent needs to search or read IT Glue records for organizations, users, contacts, and configurations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can retrieve IT Glue records through an OOMOL-connected account when invoked. <br>
-Mitigation: Use the skill only for explicit IT Glue read requests, and inspect the action schema before sending payloads. <br>
-Risk: Use depends on trusting OOMOL, the oo CLI, and the connected IT Glue account. <br>
-Mitigation: Install and connect the oo CLI only in environments where OOMOL and the account connection are approved. <br>
+## Use Case:
 
+IT administrators and service providers can use the skill to search and read configurations, contacts, organizations, and users in an IT Glue account connected through OOMOL.
 
-## Reference(s): <br>
-- [IT Glue homepage](https://www.itglue.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-it-glue) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only IT Glue get and list actions; inspect the live action schema before constructing payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The setup fallback runs downloaded code without clear approval or limits on lasting local changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup behavior before enabling the skill; prefer a separately approved and reviewed CLI installation, and retain control over additional agent-skill changes.
+
+Risk: Using the connected IT Glue account involves trusting OOMOL with the connection and returned records.
+
+Mitigation: Connect IT Glue only if you trust OOMOL to handle the connection and returned records.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [IT Glue](https://www.itglue.com/)
+- [IT Glue API documentation](https://api.itglue.com/developer/)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Guidance]
+
+**Output Format:** [Structured IT Glue records with natural-language summaries and usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read operations for configurations, contacts, organizations, and users.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

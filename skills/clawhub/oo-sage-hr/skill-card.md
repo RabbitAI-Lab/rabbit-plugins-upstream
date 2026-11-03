@@ -1,43 +1,55 @@
-## Description: <br>
-Use this skill to search and read Sage HR data through an OOMOL-connected account and the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sage HR (sage.com). Use this skill for ANY Sage HR request — searching and reading data. Whenever a task involves Sage HR, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and business users use this skill to let an agent retrieve Sage HR employee, team, position, termination, and time-off information from their connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose sensitive HR records, including employee, termination, and time-off data. <br>
-Mitigation: Install it only when the agent should read Sage HR data through the user's OOMOL-connected account, and treat returned HR data as sensitive. <br>
-Risk: Connector requests may be incorrect if the agent relies on stale action inputs. <br>
-Mitigation: Inspect the live action schema before constructing a payload, and review any setup or connection step before proceeding. <br>
+## Use Case:
 
+HR teams and authorized employees use the skill to search and read workforce records in Sage HR, including employee, position, team, termination, and time-off information.
 
-## Reference(s): <br>
-- [Sage HR ClawHub skill page](https://clawhub.ai/oomol/skills/oo-sage-hr) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Sage HR homepage](https://www.sage.com/en-us/sage-business-cloud/people/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses read-only Sage HR connector actions and live action schemas before payload construction.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill metadata) <br>
+Risk: The automatic setup can run downloaded software without a separate approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified CLI release yourself and require approval before the agent runs downloaded installers.
+
+Risk: Use involves employee data handled through OOMOL, and the remote installers and connector implementation could not be verified.
+
+Mitigation: Review the setup and whether your organization permits OOMOL to handle employee data before use.
+
+## Reference(s):
+
+- [Sage HR](https://www.sage.com/en-us/sage-business-cloud/people/)
+- [Sage HR API documentation](https://developer.sage.com/hr/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Guidance]
+
+**Output Format:** [JSON responses with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented Sage HR data returned through the connected account.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

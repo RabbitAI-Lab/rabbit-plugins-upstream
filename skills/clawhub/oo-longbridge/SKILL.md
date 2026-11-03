@@ -1,11 +1,11 @@
 ---
 name: oo-longbridge
-description: "Longbridge (longbridge.com). Use this skill for ANY Longbridge request — reading, creating, and updating data. Whenever a task involves Longbridge, use this skill instead of calling the API directly."
+description: "Longbridge (longbridge.com). Use this skill for ANY Longbridge request — searching and reading data. Whenever a task involves Longbridge, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Longbridge"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.7"
   services: ["longbridge"]
   icon: "https://static.oomol.com/logo/third-party/longbridge.png"
 ---
@@ -63,7 +63,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `forecast_eps` — Get Longbridge EPS forecast data for a security.
 - `fund_holder` — List Longbridge funds and ETFs holding a security.
 - `get_market_temperature` — Get the current Longbridge market sentiment temperature for a market.
-- `get_order_detail` — Get a Longbridge order detail record by order ID. [write]
+- `get_order_detail` — Get a Longbridge order detail record by order ID.
 - `industry_peers` — List Longbridge industry peer securities for a security.
 - `industry_valuation` — Get Longbridge industry peer valuation comparison for a security.
 - `industry_valuation_dist` — Get Longbridge industry valuation distribution for a security.
@@ -147,11 +147,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Longbridge is not connected, or the connection expired or lacks a scope. Connect once (auth type: OAuth2) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=longbridge
+  https://console.oomol.com/connections/longbridge
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Longbridge homepage: https://longbridge.com
+- API documentation: https://open.longbridge.com/docs

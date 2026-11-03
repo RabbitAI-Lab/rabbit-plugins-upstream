@@ -1,43 +1,55 @@
-## Description: <br>
-Neutrino API (neutrinoapi.com) supports agent requests for searching and reading Neutrino data through the documented connector workflow instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Neutrino API to search and read data for Neutrino-related requests.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to run Neutrino lookup and validation actions through an OOMOL-connected account, including IP blocklist checks, IP geolocation, domain lookups, email validation, and phone validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lookup inputs may include IP addresses, domains, email addresses, or phone numbers that are sensitive or personal. <br>
-Mitigation: Use the skill only when sending that data to Neutrino through an OOMOL-connected account is appropriate for the user and task. <br>
-Risk: First-time CLI installation or account connection can affect the local environment or authenticated account state. <br>
-Mitigation: Review installation, sign-in, and connection steps before running them, and use them only when an action fails because setup is missing or expired. <br>
+## Use Case:
 
+Developers use this skill to make Neutrino API lookups for IP blocklists and geolocation, domain information, and email or phone validation through their connected account.
 
-## Reference(s): <br>
-- [Neutrino API homepage](https://www.neutrinoapi.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-neutrino) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces guidance for invoking oo CLI connector schema and run commands; command responses are JSON from Neutrino via OOMOL.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Skill setup can execute changing remote code and add agent skills without clearly explaining those effects.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review CLI installation and any additional skill changes before enabling the skill. Use a verified CLI release and consider setting OO_SKILLS_SYNC_DISABLED=1 before invocation to prevent startup skill writes.
+
+Risk: Lookup data is sent to OOMOL and Neutrino when actions run.
+
+Mitigation: Submit only lookup data you are authorized to share with OOMOL and Neutrino.
+
+## Reference(s):
+
+- [Neutrino API](https://www.neutrinoapi.com/)
+- [Neutrino API documentation](https://www.neutrinoapi.com/api/api-basics/)
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Shell commands]
+
+**Output Format:** [JSON API responses and concise text summaries, with shell commands for invoking actions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a connected Neutrino account; response details depend on provider data and account access.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

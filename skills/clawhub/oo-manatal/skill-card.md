@@ -1,44 +1,55 @@
-## Description: <br>
-Manatal (manatal.com). Use this skill for ANY Manatal request - reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to read, create, and update Manatal recruitment records through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Recruiting and talent operations users use this skill to read, create, and update Manatal candidates, jobs, matches, and organizations through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create and update actions can change Manatal records. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: Broad or stale Manatal credentials could expose or modify recruiting data beyond the user's intent. <br>
-Mitigation: Use a limited-scope Manatal API token where possible and reconnect or refresh credentials only when an authenticated command fails. <br>
+## Use Case:
 
+Recruiting teams and operators use the skill to retrieve candidates, jobs, organizations, and matches, and to create or update those records through a connected Manatal account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-manatal) <br>
-- [Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Manatal Homepage](https://www.manatal.com/) <br>
-- [OOMOL Manatal Connection](https://console.oomol.com/app-connections?provider=manatal) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns Manatal connector responses as JSON when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and frontmatter) <br>
+Risk: The recommended CLI setup executes an unverified remote installer, and automatic skill synchronization may make broad, persistent changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the CLI separately, and explicitly control automatic skill synchronization before enabling the skill.
+
+Risk: Manatal contains private recruitment records, and create or update actions change account data.
+
+Mitigation: Connect the intended account and confirm the exact payload and effect before each write.
+
+## Reference(s):
+
+- [Manatal API documentation](https://developers.manatal.com/reference/getting-started)
+- [Manatal](https://www.manatal.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON requests and structured Manatal responses, with Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions may read records or create and update recruitment records.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

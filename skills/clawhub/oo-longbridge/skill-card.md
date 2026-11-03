@@ -1,45 +1,55 @@
-## Description: <br>
-Operates Longbridge through an OOMOL-connected account for market data, account data, rankings, news, filings, valuation, analyst ratings, financial reports, and related Longbridge connector actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Longbridge (longbridge.com). Use this skill for ANY Longbridge request — searching and reading data. Whenever a task involves Longbridge, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve Longbridge market data, account balances, positions, orders, executions, cash flow, watchlists, portfolio analytics, news, filings, corporate actions, valuation data, analyst ratings, and financial reports through an OOMOL-connected Longbridge account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Longbridge account balances, positions, orders, executions, cash flow, and portfolio analytics can contain private financial data. <br>
-Mitigation: Retrieve only the specific records needed for the user's task and treat returned account data as private financial information. <br>
-Risk: One-time CLI installation, sign-in, or Longbridge connection steps may affect the user's local environment or account session. <br>
-Mitigation: Review the setup commands before allowing them and only run setup recovery after an auth, connection, scope, credential, or missing-command failure. <br>
-Risk: Actions tagged as write or destructive may change Longbridge state if invoked with an incorrect payload. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions, and require explicit approval for destructive actions. <br>
+## Use Case:
 
+External users use this skill to search and read Longbridge market, company, and connected-account information through their OOMOL-connected account. It is intended for Longbridge information requests, including account data such as cash balances, positions, orders, and executions.
 
-## Reference(s): <br>
-- [ClawHub Longbridge skill page](https://clawhub.ai/oomol/skills/oo-longbridge) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Longbridge homepage](https://longbridge.com) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads and returns connector responses as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: skill metadata and server release metadata) <br>
+Risk: Automatic setup can execute installation code that has not been reviewed, and the CLI implementation and credential-storage behavior are not included for inspection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the CLI separately, and require approval before installing or synchronizing agent skills.
+
+Risk: Retrieved account information can include balances, holdings, and order history.
+
+Mitigation: Limit the connected account to the read access needed for the requested information.
+
+## Reference(s):
+
+- [Longbridge API documentation](https://open.longbridge.com/docs)
+- [Longbridge](https://longbridge.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API data, Text, JSON]
+
+**Output Format:** [Structured data and concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may include account balances, holdings, orders, and execution history.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter, server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

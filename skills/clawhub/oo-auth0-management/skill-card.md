@@ -1,45 +1,56 @@
-## Description: <br>
-Auth0 Management (auth0.com). Use this skill for ANY Auth0 Management request: reading, creating, updating, and deleting data through the OOMOL Auth0 Management connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill guides agents in using the oo CLI to read, create, update, and delete Auth0 Management data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, administrators, and support teams use this skill to inspect Auth0 users, roles, and permissions and to make confirmed role or permission changes through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Auth0 role or permission assignments. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running actions tagged as write. <br>
-Risk: Destructive actions can remove Auth0 access by removing roles or permissions. <br>
-Mitigation: Require explicit approval for the target and payload before running actions tagged as destructive. <br>
-Risk: Connector credentials and scopes may be missing, expired, or insufficient. <br>
-Mitigation: Use first-time setup or reconnection steps only after a command fails with an authentication, scope, credential, or connection error. <br>
+## Use Case:
 
+Developers and Auth0 administrators use this skill to inspect users, roles, and permissions, and to make approved changes through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Auth0 Management homepage](https://auth0.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-auth0-management) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, API Calls, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing Auth0 Management payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server evidence) <br>
+Risk: The setup fallback runs a downloaded CLI installer whose code has not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup fallback before installing; use a verified CLI release or require approval before downloaded code runs.
+
+Risk: Role and permission changes can affect access to Auth0 resources.
+
+Mitigation: Connect only the Auth0 permissions needed and confirm the exact target and effect before write or destructive actions.
+
+## Reference(s):
+
+- [Auth0 Management API documentation](https://auth0.com/docs/api/management/v2)
+- [Auth0](https://auth0.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Auth0 Management on ClawHub](https://clawhub.ai/oomol/skills/oo-auth0-management)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [JSON request payloads and Auth0 API results with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write and destructive operations require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: artifact/SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,11 +1,11 @@
 ---
 name: oo-trigger-dev
-description: "Trigger.dev (trigger.dev). Use this skill for ANY Trigger.dev request — reading, creating, and updating data. Whenever a task involves Trigger.dev, use this skill instead of calling the API directly."
+description: "Trigger.dev (trigger.dev). Use this skill for ANY Trigger.dev request — reading, creating, updating, and deleting data. Whenever a task involves Trigger.dev, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Trigger.dev"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["trigger_dev"]
   icon: "https://static.oomol.com/logo/third-party/trigger_dev.svg"
 ---
@@ -37,11 +37,11 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `cancel_run` — Cancel an in-progress Trigger.dev run. [write]
+- `cancel_run` — Cancel an in-progress Trigger.dev run. [destructive]
 - `get_run` — Retrieve a Trigger.dev run by ID.
 - `get_run_result` — Retrieve the execution result for a completed Trigger.dev run.
 - `list_runs` — List Trigger.dev runs with optional status, task, version, and time filters.
-- `replay_run` — Replay a Trigger.dev run with the same payload and options.
+- `replay_run` — Replay a Trigger.dev run with the same payload and options. [write]
 - `trigger_task` — Trigger a Trigger.dev task by task identifier. [write]
 
 ## Safety
@@ -73,11 +73,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Trigger.dev is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=trigger_dev
+  https://console.oomol.com/connections/trigger_dev
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Trigger.dev homepage: https://trigger.dev
+- API documentation: https://trigger.dev/docs/management/authentication

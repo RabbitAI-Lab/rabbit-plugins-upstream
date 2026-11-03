@@ -1,44 +1,55 @@
-## Description: <br>
-WebScraping.AI helps agents use an OOMOL-connected WebScraping.AI account to extract visible text, fetch rendered HTML, select page areas, and inspect account details through the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WebScraping.AI (webscraping.ai). Use this skill for ANY WebScraping.AI request — searching and reading data. Whenever a task involves WebScraping.AI, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate WebScraping.AI through an OOMOL-connected account for page text extraction, rendered HTML retrieval, selected-area HTML retrieval, and account quota checks. It is intended for workflows that need scraping results without exposing raw WebScraping.AI API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated scraping payloads could target the wrong URL or selector. <br>
-Mitigation: Review target URLs, selectors, and JSON payloads before running connector actions. <br>
-Risk: Setup commands can initiate authentication, account connection, installation, or billing flows. <br>
-Mitigation: Run setup only after an action fails for the matching missing CLI, authentication, connection, or billing condition. <br>
-Risk: The skill depends on OOMOL's CLI and the user's connected WebScraping.AI account. <br>
-Mitigation: Install and use the skill only when the user is comfortable with that CLI and account connection. <br>
+## Use Case:
 
+Developers and other agents use the skill to search and read web data through a connected WebScraping.AI account. It provides actions for extracting page text, fetching rendered HTML, selecting page areas, and checking account information.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-webscraping-ai) <br>
-- [WebScraping.AI homepage](https://webscraping.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, HTML, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands; connector responses are JSON containing extracted text, rendered HTML, selected HTML, or account data.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, an OOMOL sign-in, and a connected WebScraping.AI account; setup commands are used only when an action fails due to missing authentication or connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Fallback setup can execute an unverified remote installer without a separate user approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, preferably using a verified fixed release; check whether bundled-skill synchronization is acceptable before first use.
+
+Risk: Requests use the connected OOMOL/WebScraping.AI account and may consume credits.
+
+Mitigation: Check account and credit usage before running actions when consumption matters.
+
+## Reference(s):
+
+- [WebScraping.AI API documentation](https://webscraping.ai/docs)
+- [WebScraping.AI](https://webscraping.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Text, HTML, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON action responses with extracted text, HTML, or account information; Markdown guidance with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Response content depends on the selected action and target page.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "SaaS Custom Domains"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["saas_custom_domains"]
   icon: "https://static.oomol.com/logo/third-party/saas_custom_domains.svg"
 ---
@@ -47,7 +47,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `list_custom_domains` — List custom domains for a SaaS Custom Domains upstream.
 - `list_upstreams` — List upstreams for a SaaS Custom Domains account.
 - `purge_custom_domain_http_cache` — Initiate an HTTP cache purge for one SaaS Custom Domains custom domain. [destructive]
-- `verify_custom_domain_dns_records` — Trigger DNS record verification for one SaaS Custom Domains custom domain.
+- `verify_custom_domain_dns_records` — Trigger DNS record verification for one SaaS Custom Domains custom domain. [write]
 
 ## Safety
 
@@ -78,11 +78,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — SaaS Custom Domains is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=saas_custom_domains
+  https://console.oomol.com/connections/saas_custom_domains
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - SaaS Custom Domains homepage: https://saascustomdomains.com
+- API documentation: https://docs.saascustomdomains.com/authentication
