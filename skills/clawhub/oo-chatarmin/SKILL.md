@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Chatarmin"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.6"
   services: ["chatarmin"]
   icon: "https://static.oomol.com/logo/third-party/chatarmin.svg"
 ---
@@ -37,7 +37,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `add_or_replace_voucher_codes` — Add new voucher codes to a Chatarmin pool or replace one unused code. [write]
+- `add_or_replace_voucher_codes` — Add new voucher codes to a Chatarmin pool or replace one unused code. [destructive]
 - `create_contact` — Create a new Chatarmin contact. [write]
 - `create_voucher_pool` — Create a Chatarmin voucher pool with an initial list of voucher codes. [write]
 - `create_webhook` — Create a Chatarmin webhook for one supported topic. [write]
@@ -90,11 +90,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Chatarmin is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=chatarmin
+  https://console.oomol.com/connections/chatarmin
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Chatarmin homepage: https://chatarmin.com/
+- API documentation: https://apidocs.chatarmin.com/reference/api-overview

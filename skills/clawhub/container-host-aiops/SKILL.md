@@ -17,7 +17,7 @@ installer:
 argument-hint: "[container/image/volume id or describe your container-host task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["CONTAINER_HOST_AIOPS_CONFIG"],"bins":["container-host-aiops"],"config":["~/.container-host-aiops/config.yaml"]},"optional":{"env":["CONTAINER_HOST_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"CONTAINER_HOST_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Container-Host-AIops","emoji":"🐳","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["container-host-aiops","uvx"]},"optional":{"env":["CONTAINER_HOST_AIOPS_CONFIG","CONTAINER_HOST_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Container-Host-AIops","emoji":"🐳","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed Docker + Portainer + Podman container-host operations. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency. Multi-platform by construction (a platform registry); a per-target 'platform' field (docker / portainer / podman) selects the API shape.
   All write operations are audited to a local SQLite DB under ~/.container-host-aiops/ (relocatable via CONTAINER_HOST_AIOPS_HOME).
@@ -31,6 +31,8 @@ compatibility: >
 ---
 
 # Container Host AIops
+
+> **Audit availability:** Real writes require a durable audit intent. Reads and previews can continue if audit storage fails; check the warning and audit health before relying on their audit trail.
 
 > **Disclaimer**: Community-maintained open-source project, **not affiliated with, endorsed by, or sponsored by Docker, Inc., Portainer.io, or any container-platform vendor.** Product and trademark names belong to their owners. Source at [github.com/AIops-tools/Container-Host-AIops](https://github.com/AIops-tools/Container-Host-AIops) under the MIT license.
 
@@ -63,6 +65,15 @@ uv tool install container-host-aiops
 container-host-aiops init       # interactive wizard: Docker/Podman socket or Portainer target
 container-host-aiops doctor
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/container-host-aiops
+openclaw skills info container-host-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 
@@ -121,7 +132,10 @@ container-host-aiops doctor
 4. `container-host-aiops manage prune-images --dry-run` → exactly what would be removed;
    re-run without `--dry-run` (double-confirm, high risk).
 5. `container-host-aiops manage prune-volumes --dry-run` → **read this one carefully**;
-   volume pruning destroys data and records no undo. Only then re-run for real.
+   volume pruning destroys data and records no undo. Note that Docker's default
+   prune removes only ANONYMOUS unused volumes — the preview reports the named
+   unused ones it will not touch as `alsoUnusedNamed*`; add `--all` to include
+   them. Only then re-run for real.
 6. `container-host-aiops system df` again → confirm the space came back.
 7. **Failure branch**: pruning is not reversible. If you removed a volume you needed,
    the undo store cannot help — restore from your backup. The dry-run in steps 4–5 is
@@ -175,7 +189,7 @@ of the account you connect it with (a read-only Docker socket, a Portainer
 account without write scope — writes then fail at the server). There is no
 read-only switch, policy file, or approval gate.
 
-- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.container-host-aiops/audit.db` (relocatable via `CONTAINER_HOST_AIOPS_HOME`): params, result, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
+- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.container-host-aiops/audit.db` (relocatable via `CONTAINER_HOST_AIOPS_HOME`): params, outcome summary, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
 - `CONTAINER_HOST_AUDIT_APPROVED_BY` / `CONTAINER_HOST_AUDIT_RATIONALE` are optional annotations recorded on the audit row (who/why); they are never required and never block.
 - **Runaway guard** — a safety backstop, not authorization: the same call looped in a tight window trips a circuit breaker. Disable with `CONTAINER_HOST_RUNAWAY_MAX=0`.
 - Writes support `--dry-run` / `dry_run=True` and double confirmation at the CLI; prune previews list what would be removed + reclaimable bytes.

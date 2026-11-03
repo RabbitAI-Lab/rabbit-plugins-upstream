@@ -1,43 +1,55 @@
-## Description: <br>
-Trigger.dev helps agents operate Trigger.dev through an OOMOL-connected account for reading run data and carrying out user-approved state-changing actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Trigger.dev (trigger.dev). Use this skill for ANY Trigger.dev request — reading, creating, updating, and deleting data. Whenever a task involves Trigger.dev, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Trigger.dev action schemas, list and retrieve run data, fetch completed results, cancel or replay runs with confirmation, and trigger tasks through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credentialed Trigger.dev actions can change run state or trigger tasks. <br>
-Mitigation: Use scoped API tokens where possible and confirm exact payloads and expected effects before write or destructive actions. <br>
-Risk: Commands can fail when authentication, Trigger.dev connection scope, or billing state is missing. <br>
-Mitigation: Run setup steps only after the matching error and resolve authentication, app connection, or billing before retrying. <br>
+## Use Case:
 
+Developers use this skill to inspect Trigger.dev runs and retrieve results, trigger or replay tasks, and cancel runs through an OOMOL-connected account. Writes and cancellations require user confirmation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-trigger-dev) <br>
-- [Trigger.dev homepage](https://trigger.dev) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Fetches live action schemas before constructing JSON payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: artifact frontmatter and release evidence) <br>
+Risk: Setup instructions can run an unverified remote installer without separate user approval; the remote installer payload was unavailable for inspection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, preferably using a verified, fixed release. Check automatic skill-synchronization settings before use.
+
+Risk: OOMOL is part of the credential and request trust boundary for connected Trigger.dev actions.
+
+Mitigation: Review the connection and request handling, and preserve the skill's confirmation requirements for changes and cancellations.
+
+## Reference(s):
+
+- [Trigger.dev](https://trigger.dev)
+- [Trigger.dev management API authentication](https://trigger.dev/docs/management/authentication)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON results with Markdown guidance and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action results depend on the connected Trigger.dev account and the selected action.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

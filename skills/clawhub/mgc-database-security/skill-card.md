@@ -1,42 +1,53 @@
-## Description: <br>
-Secure database credential management using MGC Blackbox for MySQL, PostgreSQL, SQLite, MariaDB, and related database workflows while avoiding direct credential exposure to AI models. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through encrypted database credential handling and user-supplied analysis scripts and workflows with MGC Blackbox.
 
-## Publisher: <br>
-[zkeviny](https://clawhub.ai/user/zkeviny) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zkeviny](https://clawhub.ai/user/zkeviny)
 
-## Use Case: <br>
-Developers and automation engineers use this skill to design database workflows that store credentials in MGC Blackbox, reference them by identifier, and retrieve them through trusted local execution paths instead of placing passwords in prompts, logs, or skill files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Calling mgc_get for real credential records can place secret material into the agent context. <br>
-Mitigation: Use trusted local scripts to retrieve credentials and return only non-sensitive results; call mgc_get for real credential records only with explicit user approval. <br>
-Risk: Sealed-script examples using action="run" represent code execution. <br>
-Mitigation: Require explicit user approval and trusted script provenance before running sealed scripts; inspect or scan scripts where possible before execution. <br>
-Risk: The release under-discloses sensitive credential retrieval and script execution paths. <br>
-Mitigation: Review the security guidance before enabling the skill and define deployment-specific boundaries for MGC access and database operations. <br>
+## Use Case:
 
+Developers and database operators use this skill to manage database credentials and run user-owned SQL analysis scripts or multi-step workflows while keeping credentials out of agent context.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zkeviny/skills/mgc-database-security) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown documentation with tool-call examples, configuration snippets, and conceptual code patterns] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; examples reference MGC MCP tools and local script patterns rather than providing executable code in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: The zero-exposure promise conflicts with password-storage instructions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enter passwords yourself through the WebUI and keep them out of chat and agent-generated tool arguments.
+
+Risk: Encrypted packaging does not sandbox scripts after they are unsealed; scripts run with the user's permissions.
+
+Mitigation: Use trusted scripts or capsules and minimally privileged database accounts. Keep bulk deletion subject to explicit approval.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/zkeviny/skills/mgc-database-security)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, API calls, Configuration instructions, Python code]
+
+**Output Format:** [Markdown guidance with JSON tool arguments and Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Database result files are produced by user-owned scripts and depend on the selected workflow.]
+
+## Skill Version(s):
+
+2.0.0 (source: frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

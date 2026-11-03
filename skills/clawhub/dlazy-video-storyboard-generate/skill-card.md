@@ -1,42 +1,54 @@
-## Description: <br>
-Convert storyboard details into a video-generation pipeline that can be added to an OpenClaw canvas. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts storyboard details into a video-generation pipeline that can be added to a canvas.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and content-production agents use this skill to turn storyboard context, dialogue, and video prompts into a canvas-ready generation pipeline for cloned audio, scene imagery, and videos. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill's stated storyboard purpose is narrower than its behavior around CLI use, credential storage, external service calls, and terminal generation commands. <br>
-Mitigation: Install it only when dLazy cloud media generation is intended, and review each proposed terminal command before allowing generation. <br>
-Risk: Prompts and selected local media can be uploaded to dLazy services, and an API key may be stored locally. <br>
-Mitigation: Use appropriate input data for cloud processing, prefer npx or an environment variable for less persistent setup, and rotate or revoke API keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Developers can use the skill to turn storyboard context, dialogue, and video prompts into a JSON generation pipeline and add it to a canvas.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-video-storyboard-generate) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown instructions with JSON pipeline examples and CLI command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces canvas-ready JSON pipeline elements; may invoke dLazy CLI workflows and external dLazy API endpoints when generation is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.3 (source: release evidence and frontmatter) <br>
+Risk: Generation can submit story content or media to the external provider and may incur charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before generation, approve the provider, submitted content, and possible charges; request a preparation-only version if only storyboard preparation is needed.
+
+Risk: The executable package and credential-file protections were not verified in this review.
+
+Mitigation: Verify the intended CLI version and confirm package integrity and credential-file access restrictions before installation.
+
+## Reference(s):
+
+- [CLI project homepage (skill metadata)](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Configuration, Guidance]
+
+**Output Format:** [JSON generation pipeline and canvas tool action]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses storyboard names, dialogue, prompts, aspect ratio, and resolution as inputs.]
+
+## Skill Version(s):
+
+1.2.35 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

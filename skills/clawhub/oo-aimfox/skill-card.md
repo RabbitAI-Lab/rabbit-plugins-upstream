@@ -1,45 +1,55 @@
-## Description: <br>
-Aimfox lets agents operate Aimfox through an OOMOL-connected account for reading, creating, updating, and deleting Aimfox data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects agents to Aimfox to retrieve campaign and lead information and manage campaign audiences.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers who use Aimfox with OOMOL use this skill to inspect campaigns, leads, metrics, interactions, and labels, and to manage campaign audiences through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write or destructive Aimfox actions can change campaign audiences or remove campaign profiles. <br>
-Mitigation: Confirm the exact payload, target, and expected effect with the user before running tagged write or destructive actions. <br>
-Risk: Aimfox action payloads are sent through the OOMOL oo connector and depend on the user's connected Aimfox account. <br>
-Mitigation: Install and use this skill only for OOMOL-connected Aimfox workflows, and review each requested action payload before approval. <br>
-Risk: The oo CLI installer and connector toolchain must be trusted before use. <br>
-Mitigation: Run the OOMOL CLI installer only when the user trusts that toolchain and needs the CLI for Aimfox access. <br>
+## Use Case:
 
+Aimfox account users use this skill to retrieve campaign, lead, interaction, and workspace-label data, and to add or remove LinkedIn profiles from campaign audiences.
 
-## Reference(s): <br>
-- [Aimfox homepage](https://aimfox.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub Aimfox skill listing](https://clawhub.ai/oomol/skills/oo-aimfox) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo connector schema before action payloads; write and destructive Aimfox actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup may execute remote installers without separate consent or a clear account of lasting changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and separately approve CLI installation before use; check the oo CLI synchronization control before allowing it to modify agent settings.
+
+Risk: Using this integration entrusts OOMOL with access to the connected Aimfox account.
+
+Mitigation: Confirm OOMOL is trusted for the account and review the connection and its scopes before use.
+
+## Reference(s):
+
+- [Aimfox homepage](https://aimfox.com)
+- [Aimfox API documentation](https://docs.aimfox.com/)
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [Structured Aimfox data with concise natural-language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the connected Aimfox account and selected action.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

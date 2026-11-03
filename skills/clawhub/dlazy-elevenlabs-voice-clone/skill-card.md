@@ -1,44 +1,59 @@
-## Description: <br>
-ElevenLabs Instant Voice Cloning (IVC) uploads a clean voice sample to create a custom voice usable with ElevenLabs text-to-speech. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ElevenLabs Instant Voice Cloning (IVC). Upload a clean voice sample to clone a custom voice usable with ElevenLabs TTS.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to invoke the pinned dLazy CLI for ElevenLabs voice cloning from an authorized clean voice sample. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-supplied audio may be uploaded to dLazy-hosted services for processing. <br>
-Mitigation: Use only audio that is appropriate to send to dLazy services and review the service terms before using sensitive material. <br>
-Risk: Voice cloning can misuse a person's voice if authorization is unclear. <br>
-Mitigation: Clone only voices the user is authorized to clone. <br>
-Risk: The skill depends on a third-party CLI package and hosted API. <br>
-Mitigation: Review the pinned @dlazy/cli package before installation in sensitive environments. <br>
+## Use Case:
 
+Users can provide a clean audio sample to create an ElevenLabs Instant Voice Clone for use with text-to-speech. Use only recordings they have permission to clone.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown instructions with shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npm or npx, a dLazy API key, and the pinned @dlazy/cli 1.2.3 package.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Voice samples can be used to clone a person's voice without their permission.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Upload only audio you have permission to use for voice cloning.
+
+Risk: Audio samples are uploaded to dLazy storage, and authentication saves an API key in local CLI configuration.
+
+Mitigation: Review dLazy's service terms before uploading, protect the local configuration, and rotate or revoke the API key if needed.
+
+Risk: Installing the CLI adds an external package that was not covered by the supplied security review.
+
+Mitigation: Review the pinned CLI package before installing or running it.
+
+## Reference(s):
+
+- [dLazy website](https://dlazy.com)
+- [dLazy CLI package on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, URLs]
+
+**Output Format:** [JSON response with generation status and hosted output URL]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return a task identifier for asynchronous generation; requires a dLazy API key and uses service credits.]
+
+## Skill Version(s):
+
+1.3.36 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

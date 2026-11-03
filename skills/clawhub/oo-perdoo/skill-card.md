@@ -1,42 +1,55 @@
-## Description: <br>
-Perdoo lets agents read, create, and update Perdoo data through OOMOL's oo CLI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Perdoo (perdoo.com). Use this skill for ANY Perdoo request — reading, creating, and updating data. Whenever a task involves Perdoo, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to work with Perdoo goals, filters, progress updates, and GraphQL operations from an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad Perdoo GraphQL operations can include mutations that change workspace data. <br>
-Mitigation: Require explicit user confirmation for execute_graphql mutations and any operation that changes Perdoo data. <br>
-Risk: The skill can access sensitive company goals or metrics from a connected Perdoo workspace. <br>
-Mitigation: Review the skill before installation and limit use to appropriately authorized Perdoo accounts. <br>
+## Use Case:
 
+Users with a connected Perdoo account can read Perdoo data and create or update goals, key results, KPIs, and progress updates.
 
-## Reference(s): <br>
-- [Perdoo homepage](https://www.perdoo.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs agents to inspect live connector schemas before building payloads and returns connector responses as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup may execute unverified downloaded code, and automatic agent-skill synchronization may install additional skills without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified CLI release before enabling the skill, and review or disable automatic agent-skill synchronization.
+
+Risk: A connected Perdoo account permits operations that can change data.
+
+Mitigation: Use appropriate account permissions and review write payloads before running them.
+
+## Reference(s):
+
+- [Perdoo](https://www.perdoo.com)
+- [Perdoo API documentation](https://api-docs.perdoo.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Shell commands, Guidance]
+
+**Output Format:** [Shell commands with JSON request payloads and structured result data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Perdoo data returned by read actions and write-action results]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

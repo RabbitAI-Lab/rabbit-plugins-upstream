@@ -1,47 +1,61 @@
-## Description: <br>
-Manage models, datasets, columns, and relationships and query workspace storage with SQL using the Cargo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Cargo workspace data by inspecting and modifying models, datasets, columns, relationships, records, and SQL queries.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and workspace operators use this skill to inspect and manage Cargo workspace storage, including models, datasets, columns, relationships, records, and SQL queries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to remove models or columns and export large workspace datasets. <br>
-Mitigation: Require explicit user confirmation before removal or full-export commands, preview SQL with LIMIT, and use least-privilege Cargo credentials. <br>
-Risk: The install metadata references @cargo-ai/cli@latest, which can change over time. <br>
-Mitigation: Review or pin the Cargo CLI package version in managed environments before granting access to production workspaces. <br>
+## Use Case:
 
+Developers and Cargo workspace operators use this skill to inspect and manage storage data, including models, datasets, schema, relationships, records, and SQL queries.
 
-## Reference(s): <br>
-- [Cargo Storage on ClawHub](https://clawhub.ai/cargo-ai/cargo-storage) <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Response shapes](references/response-shapes.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
-- [Model examples](references/examples/models.md) <br>
-- [Dataset examples](references/examples/datasets.md) <br>
-- [Column examples](references/examples/columns.md) <br>
-- [Storage query examples](references/examples/queries.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands require @cargo-ai/cli and Cargo authentication.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: frontmatter and release evidence) <br>
+Risk: Webhook setup can expose an existing workspace API token without confirming that its permissions are appropriate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Choose a dedicated token with no unnecessary permissions, prefer header authentication where supported, and keep credentials out of shared transcripts and logs.
+
+Risk: Storage changes or reset operations may affect the wrong workspace, delete data, or incur additional costs.
+
+Mitigation: Confirm the active workspace and review deletions and reset costs before running write or reset commands; pin a reviewed CLI version.
+
+## Reference(s):
+
+- [Cargo Storage release on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-storage)
+- [Cargo Skills project homepage](https://github.com/getcargohq/cargo-skills)
+- [Model examples](references/examples/models.md)
+- [Dataset examples](references/examples/datasets.md)
+- [Column examples](references/examples/columns.md)
+- [Storage query examples](references/examples/queries.md)
+- [Webhook ingestion examples](references/examples/ingest-webhook.md)
+- [Response shapes](references/response-shapes.md)
+- [Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, SQL queries, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands, SQL, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands and examples are tailored to the user's Cargo workspace and requested data task.]
+
+## Skill Version(s):
+
+1.5.0 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

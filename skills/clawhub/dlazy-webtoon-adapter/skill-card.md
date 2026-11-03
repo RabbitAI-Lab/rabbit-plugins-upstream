@@ -1,45 +1,55 @@
-## Description: <br>
-Dlazy Webtoon Adapter helps agents adapt web novel material into Chinese-language webtoon plot breakdowns, episode tags, and per-episode scripts, with optional dLazy CLI-backed image generation guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Adapts web novels into Chinese webtoon plot breakdowns, episode outlines, and scripts, and guides user-approved image generation through the dLazy CLI.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, creators, and agents use this skill to turn web novel source text into structured webtoon adaptation outputs in Chinese, including plot breakdowns, episode tagging, revision handling, and script drafts. When image generation is requested, it guides the agent through single-step dLazy CLI commands after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The dLazy CLI stores an API key in local configuration or accepts it through an environment variable. <br>
-Mitigation: Use a dedicated dLazy organization key, keep local configuration access-limited, and rotate or revoke the key from the dLazy dashboard when access changes. <br>
-Risk: Prompts and referenced local media may be sent to dLazy API and file services during generation. <br>
-Mitigation: Avoid sending sensitive source material or private media unless the user has approved that disclosure and accepts dLazy processing. <br>
-Risk: The skill asks agents to install or run @dlazy/cli@1.2.3 through npm or npx. <br>
-Mitigation: Review the npm package and CLI source before use, and prefer npx for one-off runs when a persistent global install is unnecessary. <br>
+## Use Case:
 
+External creators use the skill to adapt Chinese-language web novels into structured webtoon plots and episode scripts. It can also prepare and run user-approved image-generation requests through dLazy.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-webtoon-adapter) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown and structured Chinese prose with optional inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are conversation-bound; generation commands require user confirmation and use @dlazy/cli@1.2.3.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: evidence release and frontmatter) <br>
+Risk: Prompts and supplied media may be sent to dLazy's hosted API and media storage for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Send only prompts and media approved for cloud processing, and remove sensitive content before submitting.
+
+Risk: The guide saves an API key in local CLI configuration and contains conflicting CLI version references.
+
+Mitigation: Protect or rotate the API key, and confirm the intended CLI version before installation or use.
+
+## Reference(s):
+
+- [dLazy CLI project (linked in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Image-generation prompts, Shell commands, Configuration guidance, Generated image links]
+
+**Output Format:** [Chinese-language Markdown, with structured plot and episode scripts, inline shell examples, and image result URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides image generation one request at a time after user confirmation.]
+
+## Skill Version(s):
+
+1.3.37 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

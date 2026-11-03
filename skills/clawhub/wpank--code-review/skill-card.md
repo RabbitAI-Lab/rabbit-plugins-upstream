@@ -1,38 +1,48 @@
-## Description: <br>
-Systematic code review patterns covering security, performance, maintainability, correctness, and testing, with severity levels, structured feedback guidance, review process, and anti-patterns to avoid. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Systematic code review patterns covering security, performance, maintainability, correctness, and testing, with severity levels, structured feedback guidance, review process, and anti-patterns to avoid.
 
-## Publisher: <br>
-[wpank](https://clawhub.ai/user/wpank) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wpank](https://clawhub.ai/user/wpank)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to review pull requests, establish shared review standards, train reviewers, and improve the consistency of security, correctness, performance, maintainability, and testing feedback. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Remote install commands in the README can install from an external source if used directly. <br>
-Mitigation: Confirm trust in the referenced source before running remote install commands, or use the standard ClawHub install path. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub Code Review skill page](https://clawhub.ai/wpank/code-review) <br>
-- [ClawHub wpank publisher profile](https://clawhub.ai/user/wpank) <br>
+## Use Case:
 
+Developers and engineering teams use this skill to review pull requests, establish review standards, train reviewers, and produce structured feedback across security, performance, correctness, maintainability, and testing.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured checklists, severity labels, process steps, and example review comments] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No execution, data collection, or tool invocation behavior found in security evidence.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Mutable remote npx installation commands can change after review.
+
+Mitigation: Avoid running the documented npx install commands unless the package and source are trusted at execution time; prefer a pinned installer version and immutable source commit, or inspect and manually copy the reviewed files.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wpank/skills/code-review)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown guidance with structured checklists, severity labels, and example review comments]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces review prompts and recommendations; it does not execute code or call external tools.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata; artifact frontmatter version 1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

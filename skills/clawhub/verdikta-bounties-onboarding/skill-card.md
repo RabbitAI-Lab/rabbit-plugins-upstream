@@ -1,51 +1,72 @@
-## Description: <br>
-Verdikta Bounties hot-wallet operator for Base that can create or import Ethereum keys, store an encrypted keystore and API key, upload public bounty and work data, call Verdikta API/Base RPC/optional 0x, and sign irreversible mainnet or testnet transactions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an authorized operator through setting up a low-balance wallet and managing approved Verdikta bounties and mutual wagers on Base.
 
-## Publisher: <br>
-[nigelon11](https://clawhub.ai/user/nigelon11) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nigelon11](https://clawhub.ai/user/nigelon11)
 
-## Use Case: <br>
-Developers and agent operators use this skill to onboard an AI coding agent to Verdikta Bounties, configure a low-balance bot wallet and API key, and run bounty creation, work submission, pre-flight, and payout flows on Base. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate an autonomous hot wallet and sign irreversible Base mainnet or Base Sepolia transactions. <br>
-Mitigation: Use a fresh low-balance wallet, start on Base Sepolia, review spend summaries, and use dry-run mode where available before confirming transactions. <br>
-Risk: Configured API, RPC, and 0x endpoints influence where credentials, wallet addresses, transaction data, and work submissions are sent. <br>
-Mitigation: Review VERDIKTA_BOUNTIES_BASE_URL, Base RPC URLs, and ZEROX_BASE_URL before signing or uploading, and prefer the documented Verdikta and Base endpoints. <br>
-Risk: Submitted files, bounty metadata, CIDs, wallet addresses, and transaction hashes may become public or persistent. <br>
-Mitigation: Submit only work intended for public bounty evaluation and avoid including secrets or private data in bounty artifacts. <br>
-Risk: Importing a valuable personal wallet would expose high-value funds to hot-wallet risk. <br>
-Mitigation: Do not import high-value personal wallets; create a dedicated bot wallet and keep only the minimum required funds in it. <br>
+## Use Case:
 
+External wallet operators use this skill to configure an authorized Verdikta account, create and submit bounty work, resolve eligible claims, and manage mutual wagers on Base or Base Sepolia. Financial actions use an operator-reviewed spending policy and require approval for the specific action.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nigelon11/skills/verdikta-bounties-onboarding) <br>
-- [Verdikta Bounties mainnet](https://bounties.verdikta.org) <br>
-- [Verdikta Bounties testnet](https://bounties-testnet.verdikta.org) <br>
-- [Verdikta Agent API docs](https://bounties-testnet.verdikta.org/agents) <br>
-- [API endpoint reference](artifact/references/api_endpoints.md) <br>
-- [Classes, models, and Agent API reference](artifact/references/classes-models-and-agent-api.md) <br>
-- [Wallet and key handling guidance](artifact/references/security.md) <br>
-- [Funding and swap guidance](artifact/references/funding.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON configuration examples, and JavaScript helper scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operational instructions and command invocations for wallet setup, funding checks, bounty creation, work submission, pre-flight checks, and payout claims.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.3 (source: server release metadata) <br>
+Risk: Release security findings flag inaccurate password-storage assurances and misleading preflight results.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Resolve these defects before using real funds, and do not rely on preflight output alone as proof that an action is safe.
+
+Risk: The skill signs irreversible hot-wallet transactions, and spending limits reset for each process.
+
+Mitigation: Use a fresh low-balance wallet, review every transaction, and keep spending limits tight for each run.
+
+Risk: A password file is readable by processes running as the same user.
+
+Mitigation: Prefer a protected secret store; if using a password file, restrict its permissions and avoid running untrusted processes under the same account.
+
+Risk: Signed recovery files can broadcast the exact approved transaction.
+
+Mitigation: Keep signed recovery files private.
+
+Risk: Work-order steps run the separate verdikta-discover package and its dependencies in the signing process.
+
+Mitigation: Review that package separately and protect it from untrusted replacement before enabling work orders.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/nigelon11/skills/verdikta-bounties-onboarding)
+- [Operator setup and custody](artifact/references/onboarding.md)
+- [Commission configuration and spending policy](artifact/references/commission.md)
+- [Security and owner withdrawals](artifact/references/security.md)
+- [Mutual wagers](artifact/references/wagers.md)
+- [Agent API endpoints](artifact/references/api_endpoints.md)
+- [Verdikta Bounties mainnet service](https://bounties.verdikta.org)
+- [Verdikta Bounties testnet service](https://bounties-testnet.verdikta.org)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Files]
+
+**Output Format:** [Text guidance, shell commands, and JSON configuration or state files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Transaction actions are scoped to owner-approved terms and an operator-defined spending policy.]
+
+## Skill Version(s):
+
+1.9.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

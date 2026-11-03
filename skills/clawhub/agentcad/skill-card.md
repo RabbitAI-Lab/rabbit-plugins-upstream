@@ -1,43 +1,59 @@
-## Description: <br>
-agentcad is a CAD tool for AI agents that executes build123d or CadQuery Python scripts and produces STEP files, PNG renders, mesh exports, and geometric metrics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CAD tool for AI agents that designs and builds 3D objects with build123d scripts and produces CAD files, renders, mesh exports, and geometric metrics.
 
-## Publisher: <br>
-[jdilla1277](https://clawhub.ai/user/jdilla1277) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[jdilla1277](https://clawhub.ai/user/jdilla1277)
 
-## Use Case: <br>
-Developers, designers, and AI agents use agentcad to create, inspect, iterate on, and export 3D CAD models from build123d or CadQuery scripts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on local code execution through the agentcad CLI to generate and modify CAD models. <br>
-Mitigation: Review generated CAD scripts before execution and keep backups of important Fusion or CAD documents before using the workflow. <br>
-Risk: Installation or setup commands may run code from external package or repository sources. <br>
-Mitigation: Install from trusted package sources and review installer commands before running them. <br>
+## Use Case:
 
+Developers and engineers use AgentCAD to design or revise 3D objects, inspect and validate geometry, and deliver STEP files, renders, or mesh exports.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/jdilla1277/skills/agentcad) <br>
-- [agentcad documentation](https://agentcad.dev) <br>
-- [agentcad PyPI package](https://pypi.org/project/agentcad/) <br>
-- [agentcad CLI source](https://github.com/jdilla1277/agentcad) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Code, Shell commands, Files, Analysis, Configuration instructions] <br>
-**Output Format:** [Markdown guidance with Python and shell command examples; agentcad commands return JSON and produce CAD artifacts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python 3.10-3.12 and the agentcad CLI on PATH.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.0 (source: frontmatter and server release metadata) <br>
+Risk: Generated Python scripts execute code to create geometry.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review scripts before execution and use a dedicated Python environment.
+
+Risk: Initialization changes project files, while builds preserve model history.
+
+Mitigation: Use a dedicated project and inspect its configuration and history when needed.
+
+Risk: Previews may start a local service.
+
+Mitigation: Disable or stop the preview service when it is no longer needed.
+
+## Reference(s):
+
+- [AgentCAD website and gallery](https://agentcad.dev)
+- [AgentCAD on PyPI](https://pypi.org/project/agentcad/)
+- [AgentCAD ClawHub release](https://clawhub.ai/jdilla1277/skills/agentcad)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Shell commands, Files, Analysis, Guidance]
+
+**Output Format:** [Python build123d scripts, shell commands, structured JSON, STEP files, PNG renders, STL/GLB/OBJ meshes, and Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Geometry outputs include validation metrics; file types depend on the requested deliverables.]
+
+## Skill Version(s):
+
+0.7.1 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

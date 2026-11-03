@@ -1,42 +1,57 @@
-## Description: <br>
-Operates Griptape Cloud through an OOMOL-connected account using the oo CLI for assistant, run, and organization workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Griptape Cloud through OOMOL's connected Griptape account to read, create, update, and delete data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Griptape connector schemas and manage Griptape Cloud assistants, runs, and organizations through OOMOL's oo CLI. It supports read workflows plus confirmed write and destructive lifecycle actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, cancel, and delete Griptape resources. <br>
-Mitigation: Require confirmation of the exact target, payload, and expected effect before write or destructive actions. <br>
-Risk: Connected account scopes may allow access to or changes in Griptape data. <br>
-Mitigation: Install only for intended Griptape account operations, review connection scopes, and require confirmation before state-changing actions. <br>
+## Use Case:
 
+People and developers who manage Griptape Cloud assistants, runs, events, and organizations can use this skill to perform those tasks through the oo CLI.
 
-## Reference(s): <br>
-- [Griptape homepage](https://www.griptape.ai) <br>
-- [oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-griptape) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The skill's setup instructions run a remote installer without verifying it or obtaining separate installation approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve the CLI installation separately, using a verified release.
+
+Risk: Automatic bundled-skill synchronization and the hosted connector implementation were not verified.
+
+Mitigation: Check or disable automatic bundled-skill synchronization, connect only the Griptape permissions needed, and retain confirmations for changes and deletions.
+
+## Reference(s):
+
+- [Griptape homepage](https://www.griptape.ai)
+- [Griptape Cloud API reference](https://docs.griptape.ai/stable/griptape-cloud/api/api-reference/)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [Griptape skill release on ClawHub](https://clawhub.ai/oomol/skills/oo-griptape)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [Shell commands with JSON payloads and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: SKILL.md frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,38 +1,58 @@
-## Description: <br>
-A documentation-only meta-skill that teaches AI agents how to generate secure, zero-exposure skills using MGC Blackbox for credential management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A documentation-only meta-skill that guides agents in designing, generating, and validating zero-exposure skills for MGC Blackbox 1.5.4.
 
-## Publisher: <br>
-[zkeviny](https://clawhub.ai/user/zkeviny) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zkeviny](https://clawhub.ai/user/zkeviny)
 
-## Use Case: <br>
-Developers and engineers use this skill to design credential-aware agent skills that keep secrets out of model prompts and route sensitive operations through local scripts or sealed runtime components. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The security review says the credential-safety guidance could expose secrets if an AI agent directly calls mgc_get for secret-bearing records or receives actual credentials in mgc_save content. <br>
-Mitigation: Treat MGC identifiers as references only, keep credential retrieval inside local scripts or sealed runtime components, and return only non-sensitive operation results to the agent. <br>
+## Use Case:
 
+Developers and technical users use this skill to design and validate MGC Blackbox skills intended to keep credentials outside agent-visible prompts and outputs. It guides credential, script, workflow package, and sealed delivery design with templates and an acceptance checklist.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zkeviny/skills/key-safe-skill-generator) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with templates, conceptual workflows, and inline code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only output; generated skills should avoid exposing secrets to the agent and return only non-sensitive results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: SKILL.md frontmatter, manifest.json, and server release evidence) <br>
+Risk: Generated scripts may mishandle credentials or perform unintended actions when executed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated scripts before execution, and keep credential values out of prompts and result files.
+
+Risk: A sealed capsule can run with the receiving user's permissions; encryption does not limit its runtime permissions.
+
+Mitigation: Import capsules only from trusted sources and review the generated scripts before execution.
+
+Risk: Installing the documented dependency without quoting its version constraint can be misparsed, or the installed MGC version may be too old.
+
+Mitigation: Quote the dependency requirement during installation and confirm the required MGC version is available.
+
+## Reference(s):
+
+- [Key-Safe Skill Generator on ClawHub](https://clawhub.ai/zkeviny/skills/key-safe-skill-generator)
+- [MGC Blackbox skill specification](mgc/docs/skill_spec.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Configuration, Shell commands]
+
+**Output Format:** [Markdown instructions with code and JSON configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance and templates for user-reviewed skill specifications, scripts, workflow packages, and sealed delivery.]
+
+## Skill Version(s):
+
+2.0.0 (source: SKILL.md frontmatter, manifest)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,58 @@
-## Description: <br>
-K8s Aiops helps agents operate kubeconfig-reachable Kubernetes clusters by listing and inspecting resources, reading logs, running read-only diagnostics, and performing governed write operations such as scaling, rollouts, deletes, namespace changes, and node cordon, uncordon, or drain. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Kubernetes clusters through read-only diagnostics and common workload, rollout, storage, namespace, and node operations.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, platform engineers, and SREs use this skill to inspect Kubernetes state, diagnose unhealthy workloads, review pod logs and events, and execute governed operational changes through CLI or MCP tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact cluster writes using the privileges of the configured kubeconfig. <br>
-Mitigation: Use a dedicated least-privilege kubeconfig, prefer read-only RBAC by default, and grant delete, drain, rollout undo, or namespace mutation verbs only when explicitly needed. <br>
-Risk: MCP write tools can mutate real cluster state without an internal approval gate. <br>
-Mitigation: Review production or shared-cluster use before installation, scope targets and namespaces tightly, use dry-run previews where supported, and rely on Kubernetes RBAC as the enforcement boundary. <br>
-Risk: Insecure kubeconfig TLS settings can weaken the cluster connection. <br>
-Mitigation: Check kubeconfig TLS settings before use and avoid contexts that rely on insecure-skip-tls-verify for production or shared clusters. <br>
+## Use Case:
 
+Developers and platform engineers use this skill to inspect cluster health, diagnose workload issues, and carry out scoped Kubernetes operations.
 
-## Reference(s): <br>
-- [k8s-aiops homepage](https://github.com/AIops-tools/K8s-AIops) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and text with inline shell commands, CLI examples, and MCP tool guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May describe Kubernetes API results, dry-run previews, audit behavior, undo guidance, and RBAC or kubeconfig troubleshooting.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.0 (source: server release metadata) <br>
+Risk: Cluster writes can delete workloads or disrupt nodes when permitted by the connected Kubernetes account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with a dedicated read-only account restricted to the intended cluster and namespaces; grant write access only when needed.
+
+Risk: The MCP interface does not require an approval check before destructive actions, and deletions may be irreversible.
+
+Mitigation: Require approval for destructive calls in the agent client, preview changes, and pin a reviewed package version.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/k8s-aiops)
+- [Project homepage](https://github.com/AIops-tools/K8s-AIops)
+- [Capabilities](artifact/references/capabilities.md)
+- [CLI reference](artifact/references/cli-reference.md)
+- [Setup and security guide](artifact/references/setup-guide.md)
+- [Agent guardrails](artifact/references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Analysis, Guidance]
+
+**Output Format:** [Text summaries with structured Kubernetes resource details]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results reflect the selected cluster and namespace; write operations depend on kubeconfig permissions.]
+
+## Skill Version(s):
+
+0.16.0 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

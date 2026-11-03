@@ -1,42 +1,51 @@
-## Description: <br>
-Unipile helps agents inspect live Unipile connector schemas and run OOMOL oo CLI actions to read Unipile accounts, chats, and messages through a connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Unipile (unipile.com). Use this skill for ANY Unipile request — searching and reading data. Whenever a task involves Unipile, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to retrieve Unipile account, chat, and message data through an OOMOL-connected account. It is intended for read-oriented workflows that need live schema inspection before each connector action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Unipile account, chat, and message data through a connected account. <br>
-Mitigation: Install and run it only when the user trusts OOMOL and intends to grant read access to the connected Unipile data. <br>
-Risk: First-time setup may require a remote oo CLI installer, sign-in, account connection, or billing action. <br>
-Mitigation: Run setup steps only after a matching command failure and only when the user intentionally needs that setup. <br>
+## Use Case:
 
+Developers and users with a connected Unipile account can retrieve account, chat, and message data through the oo CLI. Use it to search and read Unipile data without handling raw credentials.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-unipile) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Unipile Homepage](https://www.unipile.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads Unipile data through OOMOL; action payloads should be based on the live connector schema.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Automatic setup executes downloaded code whose release has not been verified, and its broader installation effects are not explained.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a verified CLI release before enabling the skill, check automatic skill-installation settings, and connect only the Unipile accounts you intend to expose.
+
+## Reference(s):
+
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [Unipile API usage documentation](https://developer.unipile.com/docs/api-usage)
+- [Unipile website](https://www.unipile.com/)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, JSON data, Shell commands, Guidance]
+
+**Output Format:** [Shell command examples and JSON results from Unipile read actions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Retrieves account, chat, and message data; results are returned as JSON.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

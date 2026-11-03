@@ -1,11 +1,11 @@
 ---
 name: oo-circle
-description: "Circle (circle.so). Use this skill for ANY Circle request — reading, creating, and updating data. Whenever a task involves Circle, use this skill instead of calling the API directly."
+description: "Circle (circle.so). Use this skill for ANY Circle request — searching and reading data. Whenever a task involves Circle, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Circle"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.6"
   services: ["circle"]
   icon: "https://static.oomol.com/logo/third-party/circle.svg"
 ---
@@ -39,7 +39,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 - `get_community` — Get details about the Circle community associated with the current API token.
 - `get_community_member` — Get a Circle community member by ID.
-- `get_post` — Get a Circle basic post by ID. [write]
+- `get_post` — Get a Circle basic post by ID.
 - `get_space_group` — Get a Circle space group by ID.
 - `list_community_members` — List Circle community members with optional status and tag filters.
 - `list_posts` — List Circle basic posts with optional space, status, search, and sort filters.
@@ -75,11 +75,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Circle is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=circle
+  https://console.oomol.com/connections/circle
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Circle homepage: https://circle.so
+- API documentation: https://api.circle.so/apis/admin-api/quick-start

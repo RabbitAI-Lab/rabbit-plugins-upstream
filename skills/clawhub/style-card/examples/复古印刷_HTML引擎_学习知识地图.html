@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   html-base.css — style-card HTML 引擎强制底座（全文内联）
+   ============================================================ */
+:root {
+    --card-width: 1170px;   /* 3:4 小红书竖版 */
+    --card-height: 1560px;
+    --bg-page: #F5EFE0;     /* 复古印刷卡底色 */
+    --ink: #1A1A1A;
+    --accent: #F2C230;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+    width: var(--card-width);
+    height: var(--card-height);
+    overflow: hidden;
+    background: var(--bg-page);
+    color: var(--ink);
+    font-family: 'Noto Sans SC', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+.card { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+h1, h2, h3 { font-weight: 900; line-height: 1.25; }
+p, li { line-height: 1.6; }
+p, li, span { overflow-wrap: break-word; }
+.pixelated { image-rendering: pixelated; }
+.pixel-font { font-family: 'ZCOOL QingKe HuangYou', 'Noto Sans SC', sans-serif; letter-spacing: 0.02em; }
+.hand-font  { font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif; }
+::selection { background: transparent; }
+
+/* ============================================================
+   === 复古印刷信息图 · AI 学习知识地图 ===
+   配色严格按风格卡：奶油底 + 黄/蓝通栏 + 色板轮换 + 黑粗描边
+   ============================================================ */
+:root {
+    --yellow: #F2C230; --blue: #9BD4E4;
+    --coral: #F08A7E; --sky: #A8D8EA; --mustard: #F5D547; --mint: #A8E6CF;
+    --paper: #F8F4E8; --border: 4px solid #1A1A1A;
+}
+.card { padding: 36px; gap: 22px; }
+
+/* === 区块1：顶部通栏主标题带（芥末黄底） === */
+.title-band {
+    background: var(--yellow); border: var(--border);
+    text-align: center; padding: 26px 10px 30px;
+}
+.title-band h1 { font-size: 84px; letter-spacing: 0.04em; }
+
+/* === 区块2：通栏副标题带（天蓝底） === */
+.subtitle-band {
+    background: var(--blue); border: var(--border);
+    text-align: center; padding: 14px 10px;
+    font-size: 34px; font-weight: 700;
+}
+
+/* === 区块3：2x2 色块卡片网格（四条支线） === */
+.grid2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.block {
+    border: var(--border); padding: 24px 26px;
+    display: flex; flex-direction: column; gap: 10px;
+}
+.block .b-title { font-size: 33px; font-weight: 900; display: flex; align-items: center; gap: 12px; }
+.block .b-icon { font-size: 38px; }
+.block ul { list-style: none; font-size: 22.5px; font-weight: 700; }
+.block ul li { padding-left: 26px; position: relative; margin-top: 4px; }
+.block ul li::before { content: "★"; position: absolute; left: 0; font-size: 18px; top: 5px; }
+.block .b-tag {
+    display: inline-block; align-self: flex-start;
+    font-size: 19px; font-weight: 900; background: #1A1A1A; color: #fff;
+    padding: 2px 12px; margin-bottom: 2px;
+}
+.b-coral { background: var(--coral); }
+.b-sky   { background: var(--sky); }
+.b-mustard { background: var(--mustard); }
+.b-mint  { background: var(--mint); }
+
+/* === 区块4：横向大区块（核心数据黄金位） === */
+.big-block {
+    background: var(--coral); border: var(--border);
+    display: flex; align-items: center; gap: 34px; padding: 20px 40px;
+}
+.big-num { font-size: 130px; font-weight: 900; line-height: 1; white-space: nowrap; }
+.big-desc { font-size: 27px; font-weight: 700; line-height: 1.5; }
+.big-desc .hl { background: #fff; padding: 0 8px; border: 3px solid #1A1A1A; }
+
+/* === 区块5：底部三列（成果 / 避坑 / 扩展） === */
+.bottom3 { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 22px; flex: 1; }
+.col { border: var(--border); padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; }
+.col .c-title { font-size: 29px; font-weight: 900; display: flex; gap: 10px; align-items: center; }
+.col p, .col li { font-size: 21.5px; font-weight: 700; }
+.col ul { list-style: none; }
+.col .c-icon { font-size: 40px; }
+.c-paper { background: var(--paper); }
+.c-black { background: #1A1A1A; color: #F5EFE0; }
+.c-black .warn { color: #FF5F57; font-size: 20px; font-weight: 900; letter-spacing: 0.06em; border: 2px solid #FF5F57; padding: 1px 8px; align-self: flex-start; white-space: nowrap; }
+.c-black .row { display: flex; gap: 10px; align-items: baseline; }
+.c-black .no { color: #FF6B6B; font-weight: 900; }
+.c-black .yes { color: #3DDC84; font-weight: 900; }
+.quote { font-style: italic; font-size: 20px !important; margin-top: auto; }
+.quote .en { display: block; font-size: 22px; font-weight: 900; font-style: normal; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <!-- === 区块1：主标题带 === -->
+  <div class="title-band"><h1>AI 学习知识地图</h1></div>
+
+  <!-- === 区块2：副标题带 === -->
+  <div class="subtitle-band">4 层知识树 × 5 条并行支线 | 持续更新</div>
+
+  <!-- === 区块3：2x2 支线网格 === -->
+  <div class="grid2x2">
+    <div class="block b-coral">
+      <span class="b-tag">📍 进行中</span>
+      <div class="b-title"><span class="b-icon">🤖</span>模块 A · 机器学习主线</div>
+      <ul>
+        <li>KNN → 决策树 → 神经网络</li>
+        <li>CNN → RNN → CV 实战路</li>
+        <li>已整理 6 篇课程笔记</li>
+      </ul>
+    </div>
+    <div class="block b-sky">
+      <span class="b-tag">⭐ 有里程碑</span>
+      <div class="b-title"><span class="b-icon">⌨️</span>模块 B · AI 编程主线</div>
+      <ul>
+        <li>Vibe Coding 入门 ✓</li>
+        <li>游戏化主题页已上线 ✓</li>
+        <li>OpenClaw / MCP / Workflow</li>
+      </ul>
+    </div>
+    <div class="block b-mustard">
+      <span class="b-tag">🧩 缺啥补啥</span>
+      <div class="b-title"><span class="b-icon">🧮</span>模块 C · 数学 & Python</div>
+      <ul>
+        <li>语法 → 函数 → NumPy</li>
+        <li>Pandas 数据处理</li>
+        <li>概率统计与微积分</li>
+      </ul>
+    </div>
+    <div class="block b-mint">
+      <span class="b-tag">🚀 延伸方向</span>
+      <div class="b-title"><span class="b-icon">🔗</span>模块 D · LLM / Agent</div>
+      <ul>
+        <li>LLM 应用链：Prompt → RAG</li>
+        <li>Transformer 注意力机制</li>
+        <li>微调 / 多模态 / 负责任 AI</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- === 区块4：横向大区块（黄金位数据） === -->
+  <div class="big-block">
+    <div class="big-num">5 条</div>
+    <div class="big-desc">并行支线同时推进：<span class="hl">A 是主干，B 是再就业主线</span>，C 随缺随补，D 是延伸，E 贯穿全程——产出物喂小红书 / IP 站</div>
+  </div>
+
+  <!-- === 区块5：底部三列 === -->
+  <div class="bottom3">
+    <div class="col c-paper">
+      <div class="c-title"><span class="c-icon">🏆</span>已有成果</div>
+      <ul>
+        <li>9 篇课程笔记已整理</li>
+        <li>2 个实战项目上线</li>
+        <li>井字棋 / 麻将游戏上线</li>
+      </ul>
+    </div>
+    <div class="col c-black">
+      <div class="c-title"><span class="c-icon">⚠️</span>避坑提醒</div>
+      <span class="warn">WARNING ZONE</span>
+      <div class="row"><span class="no">✗</span><span>收藏了等于学会了</span></div>
+      <div class="row"><span class="no">✗</span><span>五条线同时猛冲</span></div>
+      <div class="row"><span class="yes">✓</span><span>跟地图标记，每周更新</span></div>
+      <div class="row"><span class="yes">✓</span><span>每天 15 分钟，保持劲头</span></div>
+    </div>
+    <div class="col c-paper">
+      <div class="c-title"><span class="c-icon">😊</span>预留扩展</div>
+      <p>F · 得到 AI 学习圈课程</p>
+      <p>G · 免费课程：Claude Academy、OpenAI Academy、PMI</p>
+      <p class="quote"><span class="en">"Learning in public"</span>地图即笔记索引，想学哪块点哪块</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

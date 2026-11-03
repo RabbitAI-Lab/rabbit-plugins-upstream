@@ -1,45 +1,55 @@
-## Description: <br>
-SheetDB helps agents read, search, create, update, and delete SheetDB spreadsheet rows through an OOMOL-connected SheetDB account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SheetDB (sheetdb.io). Use this skill for ANY SheetDB request — reading, creating, updating, and deleting data. Whenever a task involves SheetDB, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent inspect SheetDB schemas and safely read, search, create, update, or delete spreadsheet rows through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete spreadsheet rows in the connected SheetDB account. <br>
-Mitigation: Confirm the exact payload, matching criteria, and expected effect with the user before any write or destructive action. <br>
-Risk: The skill depends on the oo CLI and an OOMOL-connected SheetDB account. <br>
-Mitigation: Install and use it only when SheetDB access through the connected account is intended, and review the oo CLI installation source before running installer commands. <br>
-Risk: Incorrect action payloads or stale schema assumptions could affect the wrong data. <br>
-Mitigation: Fetch the live action schema with `oo connector schema` before constructing each action payload. <br>
+## Use Case:
 
+Developers and spreadsheet users use the connected SheetDB account to inspect spreadsheet structure and rows, search and count data, and create, update, or delete rows through the oo CLI.
 
-## Reference(s): <br>
-- [SheetDB homepage](https://sheetdb.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub SheetDB skill page](https://clawhub.ai/oomol/skills/oo-sheetdb) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live schema inspection before action payloads and explicit user confirmation for write or destructive actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter metadata) <br>
+Risk: Automatic setup can execute unverified remote code and make broader changes to other agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup behavior before installing, install a verified CLI release, and decide whether to disable startup synchronization with OO_SKILLS_SYNC_DISABLED=1.
+
+Risk: Create, update, and delete actions can change or remove spreadsheet data.
+
+Mitigation: Inspect the live action schema and retain approval for the exact payload and effect before changing data; confirm the target before deleting rows.
+
+## Reference(s):
+
+- [SheetDB](https://sheetdb.io)
+- [SheetDB API documentation](https://docs.sheetdb.io)
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with oo CLI commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action schemas and payloads vary by SheetDB operation.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence, artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

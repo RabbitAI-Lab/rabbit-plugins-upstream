@@ -1,48 +1,55 @@
-## Description: <br>
-Helps agents read Umami analytics through the OOMOL oo CLI, including websites, metrics, pageviews, realtime visitors, and events. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to search and read Umami analytics data through a connected Umami account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and analytics teams use this skill to query Umami website analytics from an OOMOL-connected account. It supports read-oriented workflows such as listing websites, checking aggregate stats, reviewing traffic metrics, inspecting pageviews, and viewing realtime visitors. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Service credentials may grant broader Umami access than the user intends. <br>
-Mitigation: Configure Umami tokens with the minimum permissions needed for the intended analytics workflows. <br>
-Risk: Connector action inputs may drift from the examples or from an agent's assumptions. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing each payload. <br>
-Risk: Authentication, connection, or billing setup commands may create unwanted account-side effects if run proactively. <br>
-Mitigation: Run setup, login, connection, or billing steps only after the matching command failure or user request. <br>
-Risk: Future write or destructive connector actions could change or remove Umami data. <br>
-Mitigation: Confirm the exact payload, target, and effect with the user before running any action tagged `[write]` or `[destructive]`. <br>
+## Use Case:
 
+Developers and analytics users use this skill to retrieve Umami website metrics, pageview trends, realtime activity, events, and website details through their connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-umami) <br>
-- [Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Umami Homepage](https://umami.is) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before payload construction; results include an execution id under meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions can execute downloaded code without a clear user approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path; install oo yourself from a reviewed, version-verified release, then check any automatic agent-skill changes.
+
+Risk: Umami access runs through OOMOL using the connected account.
+
+Mitigation: Connect only the intended Umami account and understand that access runs through OOMOL.
+
+## Reference(s):
+
+- [Umami](https://umami.is)
+- [Umami API documentation](https://docs.umami.is/docs/api)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Text]
+
+**Output Format:** [JSON analytics data with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Umami analytics results]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

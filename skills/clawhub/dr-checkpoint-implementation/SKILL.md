@@ -18,14 +18,14 @@ Do not perform complex implementation as one big change. Break the work into ind
 3. Define acceptance criteria before coding each checkpoint.
 4. Implement only the current checkpoint.
 5. Run focused tests, validation, or dry-run evidence for that checkpoint.
-6. Review the checkpoint using the template below.
+6. Record the checkpoint using the template below. Keep it internal unless user approval is required or the user requested progress updates.
 7. Update the remaining plan if discovery changed anything.
 8. Continue only when the current checkpoint is valid and the approval policy allows it.
 9. Keep live rollout as a separate approval gate.
 
 ## Step Review Template
 
-After every checkpoint, report:
+After every checkpoint, record:
 
 - Implemented:
 - Evidence:
@@ -34,6 +34,8 @@ After every checkpoint, report:
 - Plan changes:
 - Approval decision: self-approved / needs user approval
 - Reason:
+
+For long-running analysis or API work, persist this checkpoint record in task-local state and continue automatically when self-approved. A user-facing reply is reserved for a required approval, a concrete blocker, a requested update, or final completion.
 
 ## Approval Policy
 

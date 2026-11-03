@@ -1,45 +1,54 @@
-## Description: <br>
-Web scraping platform for Twitter/X data, Vinted marketplace data, and general web scraping API access. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ScrapeBadger provides APIs for web scraping, ecommerce and marketplace data, social media, search, real-estate listings, and cited AI answers.
 
-## Publisher: <br>
-[0xghostcasper](https://clawhub.ai/user/0xghostcasper) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[0xghostcasper](https://clawhub.ai/user/0xghostcasper)
 
-## Use Case: <br>
-Developers and agents use this skill to call ScrapeBadger APIs for Twitter/X lookups, Vinted marketplace queries, page scraping, screenshots, anti-bot detection, structured extraction, and batch scraping jobs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a ScrapeBadger API key and API calls can consume credits. <br>
-Mitigation: Use a revocable key, keep it in SCRAPEBADGER_API_KEY, monitor account usage and credits, and rotate the key if exposure is suspected. <br>
-Risk: Scraping requests may send target URLs, page content, prompts, or extraction criteria to an external service. <br>
-Mitigation: Avoid submitting secrets, internal-only URLs, personal data, or regulated content unless authorized to send that data to ScrapeBadger. <br>
-Risk: Using scraping endpoints against third-party sites can create compliance or terms-of-service risk. <br>
-Mitigation: Confirm that the requested targets and data collection are authorized before running scraping, screenshot, extraction, or batch jobs. <br>
+## Use Case:
 
+Developers and researchers use the skill to retrieve web, marketplace, social, search, real-estate, and AI answer data through ScrapeBadger APIs. Requests require a ScrapeBadger API key and may incur service usage costs.
 
-## Reference(s): <br>
-- [ScrapeBadger Documentation](https://docs.scrapebadger.com) <br>
-- [ScrapeBadger Dashboard](https://scrapebadger.com/dashboard) <br>
-- [ScrapeBadger MCP Server](https://mcp.scrapebadger.com/mcp) <br>
-- [ClawHub Skill Page](https://clawhub.ai/0xghostcasper/scrapebadger) <br>
+### Deployment Geography for Use:
 
+Global, subject to the market coverage of each API.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, API calls, shell commands, configuration] <br>
-**Output Format:** [Markdown with HTTP endpoint examples and JSON request bodies] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCRAPEBADGER_API_KEY and sends requests to ScrapeBadger's external APIs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence, SKILL.md frontmatter, package.json) <br>
+Risk: Queries, URLs, images, and prompts are sent to ScrapeBadger; AI prompts may also reach named upstream services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid confidential inputs and URLs containing access tokens. Use supported POST requests for prompts where possible to reduce exposure in URL logs.
+
+Risk: The API key could be exposed, and paid requests can incur usage costs.
+
+Mitigation: Protect SCRAPEBADGER_API_KEY and set a spending limit.
+
+## Reference(s):
+
+- [ScrapeBadger API documentation](https://docs.scrapebadger.com)
+- [ScrapeBadger service](https://scrapebadger.com)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Cited sources]
+
+**Output Format:** [Structured API results, primarily JSON, with text summaries or cited sources when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Coverage varies by API and market; requires SCRAPEBADGER_API_KEY.]
+
+## Skill Version(s):
+
+1.9.0 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

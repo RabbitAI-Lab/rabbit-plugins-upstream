@@ -1,45 +1,50 @@
-## Description: <br>
-DCC-MCP helps agents connect to and operate live DCC applications through structured DCC-MCP tools, with CLI-first marketplace discovery and setup guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate named supported applications through DCC-MCP, discover tools and marketplace skills, and support explicit DCC-MCP or DCC-CUA requests.
 
-## Publisher: <br>
-[loonghao](https://clawhub.ai/user/loonghao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[loonghao](https://clawhub.ai/user/loonghao)
 
-## Use Case: <br>
-Developers, technical artists, and agent operators use this skill to route DCC control requests to live Maya, Blender, Houdini, Photoshop, 3ds Max, Nuke, Unreal, Godot, RenderDoc, Substance 3D, and related DCC tooling. It also guides marketplace search, package inspection, consent-gated installs or updates, and gateway troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to control live DCC applications and change active creative sessions. <br>
-Mitigation: Use the skill only when DCC-MCP control is intended, inspect tool schemas before calls, prefer structured tools, and verify results after actions. <br>
-Risk: CLI installs, marketplace installs or updates, adapter setup, remote gateway profiles, and daemon actions can change local tools or installed skills. <br>
-Mitigation: Require explicit user consent before these actions and follow the artifact's consent-gated setup and marketplace inspection steps. <br>
-Risk: A missing CLI may trigger a binary installation path. <br>
-Mitigation: Use only the documented verified installer path, which checks the official release manifest and SHA-256 digest and fails closed on mismatch. <br>
+## Use Case:
 
+Developers and creative professionals use the skill to discover and operate supported creative and productivity applications through DCC-MCP, then inspect the resulting scene, document, or artifact. It also guides explicit DCC-CUA application UI tasks with observation and readback requirements.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/loonghao/skills/dcc-mcp) <br>
-- [Clawdis Homepage](https://github.com/dcc-mcp/dcc-mcp-core/blob/main/skills/dcc-mcp/SKILL.md) <br>
-- [CLI Cheatsheet](references/CLI_CHEATSHEET.md) <br>
-- [Zero Instances CLI Setup Guide](references/ZERO_INSTANCES_CLI.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include consent-gated setup steps, CLI command sequences, gateway profile guidance, DCC tool-call arguments, and bounded troubleshooting summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.79 (source: frontmatter metadata and server release evidence) <br>
+Risk: A fallback helper may repeat a project edit after a timeout, potentially applying a change twice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a version that stops after an uncertain mutating call instead of retrying through REST. Until then, avoid the Python gateway helper for important edits and keep project backups.
+
+## Reference(s):
+
+- [DCC-MCP skill documentation](https://github.com/dcc-mcp/dcc-mcp-agent-plugins/blob/main/plugins/dcc-mcp/skills/dcc-mcp/SKILL.md)
+- [DCC-MCP production reuse gate](https://github.com/dcc-mcp/dcc-mcp-core/blob/main/crates/dcc-mcp-gateway/src/gateway/native_resources/agent_workflows.md#production-reuse-gate)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, API calls, Shell commands, Files]
+
+**Output Format:** [Structured DCC-MCP tool calls with text or Markdown guidance and application-specific files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Application-specific output depends on the selected app and task.]
+
+## Skill Version(s):
+
+0.19.117 (source: server-resolved release evidence; skill frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

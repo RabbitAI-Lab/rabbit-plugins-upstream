@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Per-agent approved collaboration roster",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "members"],
+  "properties": {
+    "version": { "type": "string" },
+    "members": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["canonicalName", "discordUserId", "active", "approved", "canRequestRelay", "canReceiveRelay"],
+        "properties": {
+          "canonicalName": { "type": "string", "minLength": 1 },
+          "discordUserId": { "type": "string", "pattern": "^[0-9]{5,30}$" },
+          "active": { "type": "boolean" },
+          "approved": { "type": "boolean" },
+          "canRequestRelay": { "type": "boolean" },
+          "canReceiveRelay": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

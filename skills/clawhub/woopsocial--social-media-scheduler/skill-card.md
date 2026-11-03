@@ -1,44 +1,60 @@
-## Description: <br>
-Schedule, publish, cross-post, and manage social media posts with text or media across Facebook, Instagram, Threads, LinkedIn, X/Twitter, TikTok, Pinterest, and YouTube through WoopSocial's remote MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Schedule and publish social media posts to Facebook, Instagram, Threads, LinkedIn, LinkedIn Pages, X/Twitter, TikTok, Pinterest, and YouTube through WoopSocial's remote MCP server.
 
-## Publisher: <br>
-[woopsocial](https://clawhub.ai/user/woopsocial) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[woopsocial](https://clawhub.ai/user/woopsocial)
 
-## Use Case: <br>
-External users, marketing teams, and developers use this skill to connect an agent to WoopSocial, select connected social accounts, prepare platform-specific post details, upload or reuse media, and schedule or publish posts. It is suited for content calendars, cross-posting, bulk scheduling, and checking delivery status after a post is created. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: An agent connected to WoopSocial can schedule or publish public social posts to connected accounts. <br>
-Mitigation: Confirm the target account, platform, post content, media, and timing before creating posts, and distinguish created, scheduled, published, and failed delivery states. <br>
-Risk: OAuth credentials or API keys used for the MCP connection could be exposed through shared logs, command history, or copied setup commands. <br>
-Mitigation: Review authentication setup carefully, avoid sharing secrets in logs or command history, and prefer secure credential handling for WoopSocial access. <br>
-Risk: Delete actions for posts, accounts, projects, media, or webhooks can remove useful or public-facing assets. <br>
-Mitigation: Require explicit user intent before calling delete tools and identify the affected resource before deletion. <br>
+## Use Case:
 
+External users and developers use this skill to configure WoopSocial's MCP server and have an agent schedule, publish, cross-post, draft, or inspect social media posts across connected accounts. It is suited for content-calendar and auto-publishing workflows where target accounts, content, media, and schedule are explicit.
 
-## Reference(s): <br>
-- [WoopSocial homepage](https://woopsocial.com) <br>
-- [WoopSocial documentation](https://docs.woopsocial.com) <br>
-- [ClawHub skill listing](https://clawhub.ai/woopsocial/skills/social-media-scheduler) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, setup steps, and social-post workflow instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include WoopSocial post IDs, requested schedules, and delivery states such as pending, scheduled, published, or failed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The API-key URL setup method can expose credentials for accounts that can publish public posts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth setup, avoid placing API keys in MCP URLs where possible, and rotate any key that may have been exposed.
+
+Risk: The skill can create, schedule, upload media for, and delete social-media resources when explicitly requested.
+
+Mitigation: Review target accounts, content, media, schedule, and deletion intent carefully before public posting or destructive actions.
+
+Risk: Post creation does not by itself prove that content was published successfully.
+
+Mitigation: Check returned delivery state with WoopSocial and distinguish pending, scheduled, published, and failed states.
+
+## Reference(s):
+
+- [WoopSocial homepage](https://woopsocial.com)
+- [WoopSocial documentation](https://docs.woopsocial.com)
+- [WoopSocial dashboard API access](https://app.woopsocial.com/api-access)
+- [ClawHub skill page](https://clawhub.ai/woopsocial/skills/social-media-scheduler)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and status summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include post IDs, requested schedules, delivery states, account-selection guidance, and media-upload instructions returned through the WoopSocial MCP workflow.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

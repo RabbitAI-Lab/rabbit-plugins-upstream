@@ -1,43 +1,60 @@
-## Description: <br>
-Use when you need your agent to see the world through your LENS. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+LENS helps an agent apply a user's facts, decision preferences, and voice to tasks the user explicitly asks it to handle through their LENS.
 
-## Publisher: <br>
-[capachow](https://clawhub.ai/user/capachow) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[capachow](https://clawhub.ai/user/capachow)
 
-## Use Case: <br>
-External users use Lens to personalize an OpenClaw agent with persistent identity, value, and writing-style context. The skill can bootstrap local profile files, schedule recurring refinement jobs, distill recent conversation history, and ask calibration questions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Recurring background jobs read recent local OpenClaw conversations and build persistent identity and style data in .lens. <br>
-Mitigation: Install only when this personalization behavior is intended; review generated cron jobs and .lens files, and remove lens-distillation and lens-interview to stop ongoing processing. <br>
-Risk: Sensitive conversation content may be captured in .lens/TRACE.txt or reflected into profile nodes. <br>
-Mitigation: Mark sensitive messages with #private, consider setting anonymize to true in .lens/SCOPE.json, and review generated .lens files before relying on them. <br>
+## Use Case:
 
+Individuals can explicitly ask an agent to use their saved facts, judgment preferences, and voice when drafting, evaluating, or deciding. They can also use LENS's interview and distillation workflows to update the profile.
 
-## Reference(s): <br>
-- [Lens Skill Page](https://clawhub.ai/capachow/skills/lens) <br>
-- [Alignment Scales](references/alignment-scales.md) <br>
-- [Resolve Protocol](references/resolve-protocol.md) <br>
-- [Trinity Definitions](references/trinity-definitions.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, cron job configuration, and local profile file updates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update .lens profile files and emit scheduled job configuration for recurring personalization.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.3 (source: package.json and server release evidence) <br>
+Risk: Recurring conversation collection can bring sensitive personal information into profile updates, and redaction cannot guarantee its removal.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a release that makes collection sources and integrations separately optional; review collected text and profile updates before sharing them.
+
+Risk: Bootstrap migration can delete conflicting legacy files.
+
+Mitigation: Back up both home and workspace .lens directories before bootstrap or migration.
+
+Risk: Scheduled jobs may be recreated during later use even after they are removed.
+
+Mitigation: Use a release with separately optional background jobs and integrations, and account for job recreation when disabling scheduled collection.
+
+## Reference(s):
+
+- [LENS release on ClawHub](https://clawhub.ai/capachow/skills/lens)
+- [Alignment Scales](artifact/references/alignment-scales.md)
+- [Resolve Protocol](artifact/references/resolve-protocol.md)
+- [Trinity Definitions](artifact/references/trinity-definitions.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, YAML configuration]
+
+**Output Format:** [Personalized prose or updates to the LENS profile files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafting requests return finished first-person text; profile updates use the AXIOM, ETHOS, and MODUS files.]
+
+## Skill Version(s):
+
+2.0.1 (source: package.json, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,11 +1,11 @@
 ---
 name: oo-botsonic
-description: "Botsonic (botsonic.com). Use this skill for ANY Botsonic request — searching and reading data. Whenever a task involves Botsonic, use this skill instead of calling the API directly."
+description: "Botsonic (botsonic.com). Use this skill for ANY Botsonic request — reading, creating, and updating data. Whenever a task involves Botsonic, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Botsonic"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.6"
   services: ["botsonic"]
   icon: "https://static.oomol.com/logo/third-party/botsonic.svg"
 ---
@@ -37,7 +37,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `generate_response` — Generate one synchronous response from the connected Botsonic bot.
+- `generate_response` — Generate one synchronous response from the connected Botsonic bot. [write]
 - `get_conversation` — Get one Botsonic conversation by chat identifier.
 - `list_conversations` — List conversations for the connected Botsonic bot token.
 - `list_faqs` — List FAQs attached to the connected Botsonic bot token.
@@ -71,11 +71,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Botsonic is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=botsonic
+  https://console.oomol.com/connections/botsonic
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Botsonic homepage: https://botsonic.com
+- API documentation: https://docs.botsonic.com/docs/rest-api

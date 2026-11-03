@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/image-skill",
   "slug": "image-skill",
   "ownerHandle": null,
-  "version": "1.0.4",
-  "updatedAt": 1781262337037,
-  "contentHash": "fa2c29d3583128df130ce472728fb6c91564af25724a57ce01d968c672074e58",
-  "fetchedAt": "2026-07-26T18:29:29.372Z"
+  "version": "1.0.5",
+  "updatedAt": 1793662778877,
+  "contentHash": "84d200e3e7cd82a8704e1d0332d3e37c7619d650519983e189778c722fa53da7",
+  "fetchedAt": "2026-11-03T15:27:03.287Z"
 }

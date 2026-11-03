@@ -1,43 +1,56 @@
-## Description: <br>
-Riveter (riveterhq.com) connector for searching and reading Riveter data through the OOMOL oo CLI instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Riveter (riveterhq.com). Use this skill for ANY Riveter request — searching and reading data. Whenever a task involves Riveter, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to run read-oriented Riveter tasks through an OOMOL-connected account, including retrieving connected account and API-key details and scraping public webpages for extracted text. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connector can retrieve Riveter account and API-key details for the connected account. <br>
-Mitigation: Install and use the skill only when the user trusts OOMOL and intends to use the oo CLI with their Riveter account. <br>
-Risk: The skill depends on live OOMOL authentication, a connected Riveter account, and available OOMOL billing credits. <br>
-Mitigation: Run setup or billing steps only after an auth, connection, scope, credential, app readiness, or billing error occurs. <br>
+## Use Case:
 
+Developers and agents use this skill to retrieve Riveter account details and scrape public webpages through the Riveter connector. It checks an action's live input schema before sending a request.
 
-## Reference(s): <br>
-- [ClawHub Riveter Skill Page](https://clawhub.ai/oomol/skills/oo-riveter) <br>
-- [Riveter Homepage](https://riveterhq.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include JSON responses from oo CLI connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Automatic setup may run unverified installers or make broader agent changes without clearly explaining them.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, prefer a verified fixed release, and consider disabling managed-skill synchronization with OO_SKILLS_SYNC_DISABLED.
+
+Risk: OOMOL brokers the connection and requests, and scraping may consume credits.
+
+Mitigation: Account for brokered requests and scraping credit use when running this skill.
+
+## Reference(s):
+
+- [Riveter API documentation](https://docs.riveterhq.com/)
+- [Riveter homepage](https://riveterhq.com)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [API responses, Extracted text, Shell commands]
+
+**Output Format:** [Markdown instructions with inline shell examples; action results are returned as JSON with data and execution metadata.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill checks the live action schema before constructing a request.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

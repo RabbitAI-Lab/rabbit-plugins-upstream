@@ -1,42 +1,52 @@
-## Description: <br>
-Helps agents inspect MongoDB Atlas projects and clusters through the OOMOL MongoDB Atlas Administration connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the connected OOMOL account to list MongoDB Atlas projects and clusters or retrieve details for a specific project or cluster.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to discover MongoDB Atlas projects and inspect clusters visible to their connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad MongoDB Atlas prompts may route to this skill even when the user intended a narrower task. <br>
-Mitigation: Use specific requests and review any proposed command before allowing the agent to run it. <br>
-Risk: The skill operates through connected MongoDB Atlas credentials and can read project and cluster information available to that connection. <br>
-Mitigation: Use least-privilege Atlas credentials and review requested project IDs, cluster names, and returned information before relying on the output. <br>
+## Use Case:
 
+Developers and database operators use this skill to list Atlas projects and clusters or retrieve a specific project or cluster through their connected Atlas account.
 
-## Reference(s): <br>
-- [MongoDB Atlas Administration on ClawHub](https://clawhub.ai/oomol/skills/oo-mongo-db-atlas-administration) <br>
-- [MongoDB Atlas homepage](https://www.mongodb.com/products/platform/atlas-database) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include connector schema checks, read-only Atlas query commands, command output interpretation, and setup guidance after authentication or connection failures.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and skill metadata) <br>
+Risk: The required CLI can persistently change other agents’ skills without this skill clearly explaining that behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI’s wider skill-management behavior, install a reviewed CLI release, and set OO_SKILLS_SYNC_DISABLED=1 before invoking it if you do not want automatic agent-skill changes.
+
+## Reference(s):
+
+- [MongoDB Atlas Administration API documentation](https://www.mongodb.com/docs/api/doc/atlas-admin-api-v2/)
+- [MongoDB Atlas overview](https://www.mongodb.com/products/platform/atlas-database)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [ClawHub release page](https://clawhub.ai/oomol/skills/oo-mongo-db-atlas-administration)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [Structured JSON results with shell-command examples and Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Atlas project and cluster information]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

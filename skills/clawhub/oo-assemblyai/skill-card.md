@@ -1,45 +1,55 @@
-## Description: <br>
-Use AssemblyAI through the OOMOL oo CLI to create, list, retrieve, and delete transcripts without calling the AssemblyAI API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AssemblyAI (assemblyai.com). Use this skill for ANY AssemblyAI request — reading, creating, updating, and deleting data. Whenever a task involves AssemblyAI, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate AssemblyAI transcript workflows from an OOMOL-connected account, including creating transcripts from media URLs and retrieving transcript details, paragraphs, or sentences. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create transcripts and delete transcripts in the connected AssemblyAI account. <br>
-Mitigation: Confirm write payloads and require explicit approval for destructive transcript deletion before running the action. <br>
-Risk: The first-time setup path may run a remote oo CLI installer. <br>
-Mitigation: Run the installer only when the oo command is missing and the user trusts OOMOL's installation path. <br>
-Risk: Connector inputs may drift from documented examples. <br>
-Mitigation: Fetch the live action schema with oo connector schema before constructing each payload. <br>
+## Use Case:
 
+Developers use this skill with an OOMOL-connected AssemblyAI account to create, list, read, and delete transcripts, including retrieving paragraph and sentence views. Creation and deletion actions require confirmation.
 
-## Reference(s): <br>
-- [AssemblyAI homepage](https://www.assemblyai.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub AssemblyAI skill page](https://clawhub.ai/oomol/skills/oo-assemblyai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, JSON, and text blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Fallback setup runs remote installer code whose contents have not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and CLI bundled-skill behavior, check installer integrity, and approve installation separately.
+
+Risk: External credential handling has not been verified.
+
+Mitigation: Review credential handling before connecting an account; use the OOMOL-mediated connection and do not handle raw tokens.
+
+## Reference(s):
+
+- [AssemblyAI](https://www.assemblyai.com/)
+- [AssemblyAI API documentation](https://www.assemblyai.com/docs)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON responses from the oo CLI and Markdown command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action-dependent transcript data; write and destructive actions require confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: server-resolved release, frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

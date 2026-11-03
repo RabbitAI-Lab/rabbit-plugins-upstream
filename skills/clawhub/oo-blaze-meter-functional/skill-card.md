@@ -1,42 +1,56 @@
-## Description: <br>
-BlazeMeter Functional (blazemeter.com). Use this skill for ANY BlazeMeter Functional request - searching and reading data. Whenever a task involves BlazeMeter Functional, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BlazeMeter Functional (blazemeter.com). Use this skill for ANY BlazeMeter Functional request — searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query BlazeMeter Functional data through an OOMOL-connected account. It supports reading active sessions, listing multi-tests in a workspace, and fetching a multi-test by collection ID. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill allows an agent to read BlazeMeter Functional data through the user's OOMOL-connected account. <br>
-Mitigation: Install only when the user intends to grant this read access, and review OOMOL CLI setup and account connection steps before first use. <br>
-Risk: Future connector versions could add write or destructive actions. <br>
-Mitigation: Keep write actions subject to exact payload review and require explicit user confirmation for destructive actions. <br>
+## Use Case:
 
+Developers and teams can use this skill to search BlazeMeter Functional workspaces, list multi-tests, retrieve a multi-test, and view active sessions through their connected account.
 
-## Reference(s): <br>
-- [BlazeMeter Functional homepage](https://www.blazemeter.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-blaze-meter-functional) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Automatic CLI installation may make changes that have not been inspected, including changes to agent skill directories.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve a specific oo CLI release before setup. Check whether it supports OO_SKILLS_SYNC_DISABLED=1 and use that setting to prevent startup writes where available.
+
+Risk: Using the connected account depends on trusting OOMOL to mediate access to its credentials.
+
+Mitigation: Connect an account only after confirming that you trust OOMOL to mediate it.
+
+## Reference(s):
+
+- [BlazeMeter Functional](https://www.blazemeter.com/)
+- [BlazeMeter API documentation](https://help.blazemeter.com/apidocs)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown instructions with inline shell commands and JSON data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns BlazeMeter session and multi-test data as JSON; documented actions are reads.]
+
+## Skill Version(s):
+
+1.0.4 (source: SKILL.md frontmatter, release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

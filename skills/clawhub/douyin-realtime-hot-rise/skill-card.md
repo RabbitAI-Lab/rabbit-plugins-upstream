@@ -1,46 +1,55 @@
-## Description: <br>
-抖音上升热点选题助手适合内容创作者、运营、电商、营销在用户想知道接下来拍什么、写什么更可能有流量时使用，帮助基于输入材料生成上升热点列表、排名和变化趋势视图、可用于内容规划的选题线索。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于查询抖音实时上升热点、飙升话题和热度趋势。当用户想知道哪些话题正在升温、抖音上升榜有哪些热点、某个关键词的排名或热度如何变化，或要按关键词/分类筛选热点时使用。典型请求包括：“最近抖音什么话题在涨”、“查一下这个关键词的抖音上升趋势”、“接下来拍什么选题”。返回热点关键词、分类、当前排名、排名变化、热度值、趋势点和更新时间，为热点跟进与选题判断提供数据。本技能聚焦抖音上升榜及趋势数据；不用于单纯查看总榜、其他平台/全网趋势、达人搜索，或直接生成完整脚本和视频。
 
-## Publisher: <br>
-[allinherog-star](https://clawhub.ai/user/allinherog-star) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[allinherog-star](https://clawhub.ai/user/allinherog-star)
 
-## Use Case: <br>
-External content creators, operations teams, e-commerce teams, and marketers use this skill to identify rising Douyin topics, ranking changes, and trend signals for content planning. It is intended for topic selection, short-video planning, campaign observation, and timely response to fast-moving trends. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The runner sends Douyin trend keywords, tags, ordering choices, and related request metadata to ai-skills.ai. <br>
-Mitigation: Avoid entering secrets, confidential business plans, or sensitive personal data in query parameters, and review requested inputs before execution. <br>
-Risk: The skill requires AISKILLS_API_KEY, a sensitive credential used for API authentication. <br>
-Mitigation: Store the API key outside prompts and source files, pass it through the environment, and rotate it if it is exposed. <br>
-Risk: Trend data may be time-sensitive and can become stale quickly. <br>
-Mitigation: Use results as planning signals and verify important trend decisions against current Douyin context before publishing or investing. <br>
+## Use Case:
 
+内容创作者、运营人员、电商与营销团队可按关键词、分类或排名变化查询抖音上升热点，查看热度与趋势数据，为选题和跟进时机提供参考。
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/allinherog-star/douyin-realtime-hot-rise) <br>
-- [Publisher Profile](https://clawhub.ai/user/allinherog-star) <br>
-- [form-schema.json](references/form-schema.json) <br>
-- [skill.json](references/skill.json) <br>
-- [AI Skills](https://ai-skills.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples and command-line invocation details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runtime responses are JSON from the AI Skills API, including success status, trend data, pagination, and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: A configured endpoint could redirect a request and expose the API key to another origin.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before using a real API key, validate the HTTPS destination and ensure redirects cannot forward credentials across origins.
+
+Risk: Query parameters are sent to AI Skills, and requests may consume account balance; live billing behavior was not tested.
+
+Mitigation: Avoid sending sensitive search terms, and check expected usage and account balance before repeated queries.
+
+## Reference(s):
+
+- [Skill listing](https://clawhub.ai/allinherog-star/skills/douyin-realtime-hot-rise)
+- [AI Skills service](https://ai-skills.ai)
+- [Parameter schema](references/form-schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Analysis]
+
+**Output Format:** [JSON trend data with ranked topics, categories, rank changes, heat scores, trend points, and update times]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Up to 50 topics per request; optionally filtered by keyword or category and ordered by rank or rank change. Results support topic selection but do not guarantee reach or engagement.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

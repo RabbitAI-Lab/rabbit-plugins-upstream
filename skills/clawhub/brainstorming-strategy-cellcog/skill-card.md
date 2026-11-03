@@ -1,44 +1,54 @@
-## Description: <br>
-AI brainstorming and strategy thinking partner powered by CellCog for reasoning, problem-solving, ideation, strategic planning, and follow-on execution across research, documents, visuals, data, and prototypes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI brainstorming and strategy thinking partner powered by CellCog. Reasoning, problem-solving, ideation, strategic planning — then execution across every modality: research, documents, visuals, data, prototypes. Think, build, review, repeat.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers, founders, and other external users use this skill to start and continue CellCog brainstorming sessions for open-ended strategy, architecture, creative direction, debugging, and decision-making work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, business details, code snippets, or files shared in CellCog chats are sent to an external agent provider. <br>
-Mitigation: Share only the context needed for the brainstorming task, redact secrets and sensitive data, and confirm CellCog use fits the applicable data-handling requirements. <br>
-Risk: The broad brainstorming description could lead an agent to invoke the skill for ordinary tasks that do not require CellCog. <br>
-Mitigation: Use targeted prompts and reserve the skill for explicit brainstorming, strategy, or open-ended reasoning sessions. <br>
-Risk: Brainstorming and strategy outputs can be incomplete, incorrect, or misleading if treated as final decisions. <br>
-Mitigation: Review assumptions, verify factual claims, and validate consequential decisions with domain experts or supporting data before execution. <br>
+## Use Case:
 
+Developers, strategists, and other agent users use this skill to explore open-ended problems, compare options, and refine plans through an ongoing conversation with CellCog.
 
-## Reference(s): <br>
-- [CellCog documentation](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/brainstorming-strategy-cellcog) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/nitishgargiitd) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with Python and shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, the cellcog package, and CELLCOG_API_KEY; prompts and any shared files are sent to the external CellCog agent service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: server release evidence) <br>
+Risk: Prompts and follow-up messages are sent to CellCog for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only information approved for external processing, exclude secrets, and review the provider's retention terms.
+
+Risk: OpenClaw notifications and the external SDK can affect how tasks are handled.
+
+Mitigation: Understand the background notifier before enabling notifications, and review and pin dependencies where practical.
+
+## Reference(s):
+
+- [CellCog](https://cellcog.ai)
+- [ClawHub skill release](https://clawhub.ai/cellcog/skills/brainstorming-strategy-cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Conversational text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Iterative responses may include options, tradeoffs, plans, or examples.]
+
+## Skill Version(s):
+
+1.0.18 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

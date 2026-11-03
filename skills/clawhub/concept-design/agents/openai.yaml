@@ -1,0 +1,6 @@
+interface:
+  display_name: Concept Design — Modular, Legible Software, Architecture in Practice
+  short_description: Independent modules, clear rules, architecture put into practice
+  default_prompt: Use $concept-design for the requested task. Start from purpose, test the assumptions, and load only the workflow and references needed.
+policy:
+  allow_implicit_invocation: false

@@ -1,46 +1,61 @@
-## Description: <br>
-Cargo Content helps agents guide users through uploading, organizing, syncing, and removing Cargo workspace files and libraries for retrieval-augmented generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Cargo workspace files and knowledge libraries, including uploads, path-based storage, retrieval, and sharing.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and workspace operators use this skill to manage Cargo knowledge files and libraries, including upload, listing, renaming, moving, removal, and connector-backed library setup for RAG resources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded files may contain sensitive data and may be indexed for retrieval. <br>
-Mitigation: Confirm the workspace, file contents, access permissions, and intended indexing before uploading files or syncing libraries. <br>
-Risk: UUID-targeted updates and remove commands can affect the wrong file or library, and deletion reversibility is not documented in the evidence. <br>
-Mitigation: List and verify file or library UUIDs before updates or removals, and keep backups of source documents. <br>
-Risk: Cargo authentication can use OAuth sessions or API tokens. <br>
-Mitigation: Use approved authentication flows, avoid exposing tokens in shell history or shared transcripts, and rotate tokens if exposed. <br>
+## Use Case:
 
+Developers and workspace operators use this skill to upload and organize documents for agent retrieval, manage knowledge libraries, and store, read, or share files by path.
 
-## Reference(s): <br>
-- [Cargo Content on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-content) <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [File and library examples](references/examples/files.md) <br>
-- [Content response shapes](references/response-shapes.md) <br>
-- [Content troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands target the cargo-ai CLI and typically return JSON; uploads and removals affect Cargo workspace content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Deployment examples may replace an agent's existing tools and capabilities when settings are omitted.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Preserve the agent's existing settings and review the full deployment change before deploying.
+
+Risk: Path writes can overwrite the newest file at that path, and file removal is permanent.
+
+Mitigation: Confirm the active workspace and intended paths before writing or deleting files.
+
+Risk: Signed and public links allow unauthenticated access; uploads may be indexed through OpenAI and mirrored into the context repository.
+
+Mitigation: Share links only when requested, and use put for files that should stay unindexed and unmirrored.
+
+## Reference(s):
+
+- [Cargo Content on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-content)
+- [File and library examples](references/examples/files.md)
+- [Files as storage](references/objects.md)
+- [Content response shapes](references/response-shapes.md)
+- [Content troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API calls, JSON]
+
+**Output Format:** [Markdown with shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include workspace-changing commands and file-sharing instructions; review before running.]
+
+## Skill Version(s):
+
+1.3.0 (source: release metadata, frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

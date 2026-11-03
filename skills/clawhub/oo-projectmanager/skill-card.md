@@ -1,42 +1,52 @@
-## Description: <br>
-ProjectManager helps agents search and read ProjectManager projects and tasks through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and retrieve ProjectManager projects and tasks through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill when they need to retrieve ProjectManager project or task information from a connected account, including project lookups and OData-filtered project or task lists. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The broad ProjectManager trigger may invoke the skill for prompts where the user intended only general discussion. <br>
-Mitigation: Use the skill when ProjectManager data retrieval or workflow help is intended, and confirm intent before running external actions. <br>
-Risk: The skill runs external oo CLI connector commands against a connected ProjectManager account. <br>
-Mitigation: Inspect the live connector schema before constructing payloads and review external actions before allowing them. <br>
+## Use Case:
 
+Project teams and assistants can use this skill to retrieve a project or query projects and tasks in a connected ProjectManager account.
 
-## Reference(s): <br>
-- [ClawHub ProjectManager skill](https://clawhub.ai/oomol/skills/oo-projectmanager) <br>
-- [ProjectManager homepage](https://www.projectmanager.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Text, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON responses from the oo CLI.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only ProjectManager actions retrieve project and task data; connector responses include data and an execution id when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and SKILL.md metadata) <br>
+Risk: Setup may run an unverified installer whose broader effects on agent skills are not explained.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before installing, prefer a verified preinstalled CLI, explicitly approve software installation, and check automatic skill synchronization settings.
+
+## Reference(s):
+
+- [ProjectManager API documentation](https://developer.projectmanager.com/)
+- [ProjectManager](https://www.projectmanager.com)
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+- [ProjectManager skill release on ClawHub](https://clawhub.ai/oomol/skills/oo-projectmanager)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text]
+
+**Output Format:** [Structured ProjectManager results returned as JSON, with usage guidance in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Retrieves project and task data through read actions.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

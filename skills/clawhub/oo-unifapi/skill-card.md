@@ -1,45 +1,56 @@
-## Description: <br>
-UnifAPI (unifapi.com) lets agents handle reading, creating, and updating data through the OOMOL `oo` CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use UnifAPI to read, create, and update data through the user's connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect live UnifAPI action schemas, build matching JSON payloads, and run social, SEO, GEO, page rendering, link extraction, hotel, and ID conversion actions through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate many UnifAPI actions across social, SEO, GEO, rendering, and utility data sources through an OOMOL-connected account. <br>
-Mitigation: Install it only when that account-level access is intended, and review requested actions and payloads before execution. <br>
-Risk: Actions tagged `[write]` or with unclear write labeling may change UnifAPI state or have effects beyond simple reads. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running any tagged write action, and treat ambiguous labels cautiously. <br>
-Risk: First-time setup can install the `oo` CLI and connect UnifAPI credentials through OOMOL. <br>
-Mitigation: Run setup only after an authentication or connection failure requires it, and avoid proactively opening login or connection flows. <br>
+## Use Case:
 
+Developers and analysts can use this skill to retrieve or manage data with UnifAPI through an already connected account. Review the live action schema before sending data, and confirm the intended effect before using actions marked as writes.
 
-## Reference(s): <br>
-- [UnifAPI homepage](https://unifapi.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-unifapi) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses from `oo connector run` are JSON objects with `data` and `meta.executionId` fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: First-time setup directs users to execute a downloaded CLI and installer that were not audited.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the CLI separately before allowing the skill to run. Check the publisher's documented controls for automatic skill synchronization and disable it if unwanted.
+
+Risk: Actions that create or update data can change the connected UnifAPI account.
+
+Mitigation: Review the live action schema and keep the skill's confirmation requirement for write actions.
+
+## Reference(s):
+
+- [UnifAPI documentation](https://docs.unifapi.com/)
+- [UnifAPI homepage](https://unifapi.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-unifapi)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Text]
+
+**Output Format:** [Structured API response data (JSON) with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read and write actions are identified in the skill instructions; review write effects before execution.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

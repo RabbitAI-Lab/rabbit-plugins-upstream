@@ -1,44 +1,56 @@
-## Description: <br>
-ChatPDF lets agents import PDF URLs, ask stateless questions about imported PDFs, and delete ChatPDF sources through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ChatPDF (chatpdf.com). Use this skill for ANY ChatPDF request — reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to operate ChatPDF through an OOMOL-connected account: importing publicly reachable PDF URLs, asking questions against imported PDFs, and deleting sources when explicitly approved. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can add ChatPDF sources through a connected OOMOL account. <br>
-Mitigation: Confirm the exact PDF URL payload and expected effect with the user before running write actions. <br>
-Risk: The skill can delete one or more ChatPDF sources. <br>
-Mitigation: Confirm the target source IDs and obtain explicit user approval before running destructive actions. <br>
-Risk: First-time setup, connection, or billing errors may require account actions. <br>
-Mitigation: Run setup steps only after a matching command failure and use the documented OOMOL setup, connection, or billing paths. <br>
+## Use Case:
 
+External users and developers use this skill to import publicly reachable PDFs into ChatPDF, ask questions about imported sources, and manage sources through their connected OOMOL account.
 
-## Reference(s): <br>
-- [ChatPDF homepage](https://www.chatpdf.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands inspect live connector schemas before action execution; write and destructive actions require explicit approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Setup can automatically execute a remote installer that was unavailable for inspection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a verified CLI release yourself before running the skill, and check any bundled agent-skill changes.
+
+Risk: The skill operates through the connected ChatPDF account, including importing sources and deleting selected sources.
+
+Mitigation: Confirm intended imports and deletion targets before running state-changing actions.
+
+## Reference(s):
+
+- [ChatPDF skill release](https://clawhub.ai/oomol/skills/oo-chatpdf)
+- [ChatPDF](https://www.chatpdf.com)
+- [ChatPDF API documentation](https://www.chatpdf.com/docs/api/backend)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands]
+
+**Output Format:** [JSON action responses and text answers; shell command syntax for actions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions can import or delete ChatPDF sources; the skill documents approval requirements for state-changing actions.]
+
+## Skill Version(s):
+
+1.0.5 (source: skill frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

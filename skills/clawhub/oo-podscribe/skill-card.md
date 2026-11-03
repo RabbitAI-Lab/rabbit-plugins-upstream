@@ -1,43 +1,52 @@
-## Description: <br>
-Guides an agent to search and read Podscribe data through an OOMOL-connected account using the oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Podscribe data and retrieve integration health, show details, and episode information through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to inspect Podscribe integration health, retrieve show information, or search episodes through a connected Podscribe account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be selected broadly for Podscribe-related requests and could prompt account setup steps. <br>
-Mitigation: Only install the oo CLI, sign in, or connect Podscribe when the user intentionally wants that account connected or an action fails for the matching reason. <br>
-Risk: Connector actions depend on account state, scopes, billing, and live action schemas. <br>
-Mitigation: Fetch the current action schema before sending payloads and surface authentication, connection, scope, or billing failures to the user before retrying. <br>
+## Use Case:
 
+External users and developers use the skill to check Podscribe integration health, retrieve show information, and search podcast episodes through their connected OOMOL account.
 
-## Reference(s): <br>
-- [Podscribe homepage](https://podscribe.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-podscribe) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Directs the agent to fetch live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: CLI setup may execute downloaded code without a clear user approval step and can make persistent changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI setup separately, prefer a verified pinned release, and check or disable automatic installation of additional agent skills.
+
+## Reference(s):
+
+- [Podscribe](https://podscribe.com)
+- [Podscribe API Documentation](https://docs.api.podscribe.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub release page](https://clawhub.ai/oomol/skills/oo-podscribe)
+
+## Skill Output:
+
+**Output Type(s):** [API data, JSON, Guidance]
+
+**Output Format:** [JSON responses with concise natural-language summaries and usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returned data depends on the requested Podscribe health, show, or episode query.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

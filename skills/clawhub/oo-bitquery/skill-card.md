@@ -1,43 +1,55 @@
-## Description: <br>
-The Bitquery skill lets agents run Bitquery V2 GraphQL read queries through an OOMOL-connected account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read data from Bitquery.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to run Bitquery V2 GraphQL read queries through an OOMOL-connected account while checking the live connector schema before constructing payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using the skill depends on OOMOL and Bitquery account access and may consume account credits when queries run. <br>
-Mitigation: Install and connect the oo CLI only when the user trusts OOMOL, intends to use Bitquery through the connector, and accepts account credit usage. <br>
-Risk: Bitquery requests depend on the current connector action schema and user-provided GraphQL query intent. <br>
-Mitigation: Inspect the live action schema before constructing payloads and run only user-directed read queries unless the user explicitly approves a state-changing action. <br>
+## Use Case:
 
+External developers and analysts use this skill to search and read Bitquery data with GraphQL queries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-bitquery) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Bitquery homepage](https://bitquery.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON response envelopes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the OOMOL bitquery connector and may return Bitquery GraphQL response data with an execution id.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Setup may run unverified installers or make broader agent changes through automatic skill synchronization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a separately reviewed, version-pinned CLI installation, require confirmation before running installers, and review or disable automatic skill synchronization.
+
+Risk: The connected OOMOL account mediates Bitquery credentials, permissions, and billing.
+
+Mitigation: Review OOMOL account permissions and billing before connecting or querying.
+
+## Reference(s):
+
+- [Bitquery API documentation](https://docs.bitquery.io/docs/start/first-query/)
+- [Bitquery](https://bitquery.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [JSON query results with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter; server release 1.0.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,51 @@
-## Description: <br>
-Crisp enables agents to inspect Crisp websites and conversations through an OOMOL-connected account and send operator text replies when confirmed by the user. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Crisp (crisp.chat). Use this skill for ANY Crisp request — reading, creating, and updating data. Whenever a task involves Crisp, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Support teams, operators, and their agents use this skill to retrieve Crisp website and conversation data, list messages, and send confirmed operator replies through OOMOL-mediated Crisp access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions can expose Crisp customer conversations and messages. <br>
-Mitigation: Install only when OOMOL-mediated Crisp access is intended and limit use to authorized connected accounts. <br>
-Risk: The send_text_message action can post operator replies to live conversations. <br>
-Mitigation: Confirm the target conversation, message payload, and expected effect with the user before running write actions. <br>
+## Use Case:
 
+Customer support teams use this skill to retrieve Crisp website and conversation details, list messages and conversations, and send operator text messages through a connected Crisp account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-crisp) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Crisp Homepage](https://crisp.chat/) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill metadata) <br>
+Risk: The required oo CLI may install persistent agent skills without this skill describing the full installation effect.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review CLI installation separately; set OO_SKILLS_SYNC_DISABLED=1 before invoking the CLI to prevent startup skill writes, and keep confirmation enabled for outgoing messages.
+
+## Reference(s):
+
+- [Crisp API documentation](https://docs.crisp.chat/references/rest-api/v1/)
+- [Crisp](https://crisp.chat/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [oo CLI commands, JSON action responses, and Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions can retrieve conversation and website data or send operator text messages.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,55 @@
-## Description: <br>
-Documenso helps agents search and read Documenso envelopes and templates through OOMOL's oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Documenso (documenso.com). Use this skill for ANY Documenso request — searching and reading data. Whenever a task involves Documenso, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when an agent needs to retrieve individual Documenso envelopes or templates, or list envelopes and templates with filters. It is intended for connected OOMOL accounts with Documenso access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on an OOMOL-connected Documenso account and may expose account-scoped envelope or template data to agent workflows. <br>
-Mitigation: Review OOMOL and Documenso connection scopes during setup, and require explicit confirmation before enabling any future action that writes, deletes, or overwrites data. <br>
+## Use Case:
 
+External users and developers use the skill to search and retrieve Documenso envelopes and templates through their connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-documenso) <br>
-- [Documenso](https://documenso.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns connector responses as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence) <br>
+Risk: If the oo CLI is missing, setup instructions direct the agent to run a downloaded installer without first asking for approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the CLI yourself before use, and require approval for setup changes.
+
+Risk: Connecting Documenso entrusts OOMOL with account credentials and access to requested data; automatic skill synchronization settings also warrant review.
+
+Mitigation: Review the automatic skill synchronization settings and understand the requested data access before connecting Documenso.
+
+## Reference(s):
+
+- [Documenso API documentation](https://docs.documenso.com/docs/developers/api)
+- [Documenso](https://documenso.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON]
+
+**Output Format:** [JSON data returned by the Documenso connector]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only retrieval of envelopes and templates; available data depends on the connected account's permissions.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

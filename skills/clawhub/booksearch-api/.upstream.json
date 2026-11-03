@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/booksearch-api",
   "slug": "booksearch-api",
   "ownerHandle": null,
-  "version": "1.0.9",
-  "updatedAt": 1780487869641,
-  "contentHash": "212c1215d028bcf4d125d986a682274f95c6aebaa22358df3e8d7a1bc7dd6bdd",
-  "fetchedAt": "2026-07-26T18:35:58.639Z"
+  "version": "1.0.10",
+  "updatedAt": 1793612905158,
+  "contentHash": "482de1cdbcc4f0f8b12df5c61b2ca022154f41301a1aceec82d6ae59650a2a07",
+  "fetchedAt": "2026-11-03T15:29:19.249Z"
 }

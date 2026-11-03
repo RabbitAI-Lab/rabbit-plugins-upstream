@@ -1,43 +1,50 @@
-## Description: <br>
-AI data analysis and visualization powered by CellCog. Data cleaning, exploratory analysis, hypothesis testing, statistical reports, ML model evaluation, dataset profiling, charts, dashboards. Upload CSVs and get analysis back with full Python access. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI data analysis and visualization powered by CellCog. Data cleaning, exploratory analysis, hypothesis testing, statistical reports, ML model evaluation, dataset profiling, charts, dashboards. Upload CSVs and get analysis back with full Python access.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers, analysts, and business users use this skill to send uploaded datasets to CellCog for cleaning, exploratory analysis, hypothesis testing, statistical reporting, visualization, dashboard generation, and ML model evaluation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded datasets and prompts are processed by CellCog. <br>
-Mitigation: Use the skill only when CellCog is approved for the dataset, prompt content, and intended use. <br>
-Risk: Users may accidentally upload secrets, regulated personal data, or confidential business data. <br>
-Mitigation: Remove sensitive data before upload unless organizational approval covers that data category. <br>
-Risk: Cleaned or transformed datasets may change source data. <br>
-Mitigation: Keep original datasets and review transformed outputs before downstream use. <br>
+## Use Case:
 
+Data analysts, developers, and business or research teams use this skill to profile, clean, transform, visualize, and statistically analyze datasets, including evaluating machine learning models.
 
-## Reference(s): <br>
-- [CellCog homepage](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/data-analysis-cellcog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files] <br>
-**Output Format:** [Markdown guidance with Python code examples; CellCog results may include HTML dashboards, PDF reports, cleaned CSV/XLSX files, and Markdown summaries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and CELLCOG_API_KEY; supports darwin, linux, and windows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release metadata) <br>
+Risk: Uploaded datasets may contain personal information or secrets, and are sent to CellCog for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Upload only datasets you are authorized to share with CellCog, remove unnecessary personal information and secrets first, and check CellCog's retention and deletion terms. Review the separate CellCog dependency before installation.
+
+## Reference(s):
+
+- [Data Analysis on ClawHub](https://clawhub.ai/cellcog/skills/data-analysis-cellcog)
+- [CellCog](https://cellcog.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Charts and dashboards, Files, Reports]
+
+**Output Format:** [Interactive HTML dashboards, PDF reports, cleaned CSV/XLSX files, charts, and Markdown reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs depend on the requested analysis and supplied dataset.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

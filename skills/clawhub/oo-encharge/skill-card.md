@@ -1,42 +1,55 @@
-## Description: <br>
-Encharge (encharge.io). Use this skill for Encharge requests that read, create, or update data through the OOMOL `oo` CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects to Encharge through OOMOL to send transactional email using the connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect the Encharge connector schema and run Encharge actions through an OOMOL-connected account, including sending transactional email after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send transactional email through the connected Encharge account. <br>
-Mitigation: Review the recipient, subject, body, and complete payload before approving any write action. <br>
-Risk: Broad Encharge routing language could be mistaken for permission to perform automatic writes. <br>
-Mitigation: Treat the routing language as tool-selection guidance and require explicit user confirmation before actions that change Encharge state. <br>
+## Use Case:
 
+Encharge account users and developers use this skill to send transactional email through their connected account. It checks the live action schema and requires confirmation of the exact write payload and effect before sending.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-encharge) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Encharge](https://encharge.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Setup may execute an unverified downloaded CLI release or make changes to other agent skills without separate approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve the CLI release before installation, and approve any proposed changes to other agent skills.
+
+Risk: Email contents pass through OOMOL, and sending an incorrect payload can change account state.
+
+Mitigation: Keep the required confirmation of the exact email payload before each send.
+
+## Reference(s):
+
+- [Encharge](https://encharge.io)
+- [Encharge API documentation](https://docs.encharge.io/api-documentation)
+- [oo CLI project (referenced by the skill)](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON]
+
+**Output Format:** [JSON action payloads and connector response data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The send_email action changes Encharge state and requires confirmation of the exact payload and effect.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

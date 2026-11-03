@@ -1,44 +1,56 @@
-## Description: <br>
-Jam lets agents search, read, and export Jam data through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the OOMOL-connected Jam integration to export one page of training data for reporting or BI workflows.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent inspect Jam connector schemas and export Jam training data for reporting or BI workflows through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can query or export Jam data through the user's connected account. <br>
-Mitigation: Install and use it only when the agent should access Jam data for the intended workflow. <br>
-Risk: First-time setup may require running an oo CLI installer. <br>
-Mitigation: Review the installer before running setup commands. <br>
-Risk: Future connector actions may write, remove, or overwrite Jam data. <br>
-Mitigation: Confirm the exact payload and effect with the user before running write actions, and require explicit approval before destructive actions. <br>
+## Use Case:
 
+Developers and analysts can use the OOMOL-connected account to export one page of Jam training data for reporting or BI workflows.
 
-## Reference(s): <br>
-- [Jam homepage](https://wejam.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-wejam-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; connector responses include data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Setup may run unverified remote CLI code and automatically change agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and preinstall a vetted CLI release, and check automatic skill synchronization settings before use.
+
+Risk: Exported data passes through OOMOL.
+
+Mitigation: Connect Jam with the minimum necessary permissions and consider whether the exported data is appropriate for that workflow.
+
+## Reference(s):
+
+- [Jam data export API documentation](https://docs.wejam.ai/external/coach/help-and-reference/data-export-api)
+- [Jam homepage](https://wejam.ai)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-wejam-ai)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Shell commands, Guidance]
+
+**Output Format:** [Shell commands with JSON action responses and Markdown reporting]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Exports one page of Jam training data per action.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
