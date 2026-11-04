@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/Airtable/skills/tree/main/plugins/airtable/skills/airtable-filters",
+  "identifier": "Airtable/skills/plugins/airtable/skills/airtable-filters",
+  "repo": "Airtable/skills",
+  "path": "plugins/airtable/skills/airtable-filters",
+  "branch": "main",
+  "pushedAt": "2026-07-21T18:20:59Z",
+  "contentHash": "3da6f1092493e9173e060aa15bd90b5c1460e2575bf780765bbbda919c72208d",
+  "fetchedAt": "2026-11-04T15:30:28.749Z"
+}
