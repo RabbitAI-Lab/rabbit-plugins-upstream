@@ -1,11 +1,11 @@
 ---
 name: oo-readwise
-description: "Readwise (readwise.io). Use this skill for ANY Readwise request — reading, creating, and updating data. Whenever a task involves Readwise, use this skill instead of calling the API directly."
+description: "Readwise (readwise.io). Use this skill for ANY Readwise request — reading, creating, updating, and deleting data. Whenever a task involves Readwise, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Readwise"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["readwise"]
   icon: "https://static.oomol.com/logo/third-party/readwise.svg"
 ---
@@ -38,11 +38,11 @@ Each action is listed below with a one-line description; actions that change sta
 ## Available actions
 
 - `create_highlights` — Create one or more highlights in Readwise. [write]
-- `export_highlights` — Export Readwise books and highlights updated after an optional date cursor.
+- `export_highlights` — Export Readwise books and highlights updated after an optional date cursor. [write]
 - `list_books` — List Readwise books or sources with optional category and update filters.
 - `list_documents` — List Readwise Reader documents with optional filters and pagination.
 - `save_document` — Save a URL into Readwise Reader with optional metadata. [write]
-- `update_document` — Update the location, tags, or metadata for a Readwise Reader document. [write]
+- `update_document` — Update the location, tags, or metadata for a Readwise Reader document. [destructive]
 
 ## Safety
 
@@ -73,11 +73,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Readwise is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=readwise
+  https://console.oomol.com/connections/readwise
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Readwise homepage: https://readwise.io
+- API documentation: https://readwise.io/api_deets

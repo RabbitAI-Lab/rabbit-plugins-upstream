@@ -1,41 +1,58 @@
-## Description: <br>
-Guides an agent through maintaining a configured GitLab project by proposing focused improvement merge requests and closing stale self-authored merge requests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A skill for personal growth and self-improvement.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
 
-## Use Case: <br>
-Developers and maintainers use this skill to identify useful improvements for the configured GitLab project, open focused merge requests, and close their own stale merge requests when appropriate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can direct an agent to create or close merge requests on a specific GitLab project using GitLab credentials. <br>
-Mitigation: Use a least-privilege GITLAB_TOKEN, require explicit approval before creating or closing merge requests, and review proposed changes before execution. <br>
-Risk: The skill's public description understates its GitLab repository maintenance behavior. <br>
-Mitigation: Treat it as a GitLab repository maintenance workflow rather than a personal-growth aid and verify the target project before use. <br>
+## Use Case:
 
+Agents use this skill to reflect on prior work and prepare focused improvement merge requests in the xrow-public/helm-openclaw project. It directs the agent to assign new merge requests to itself and close its own merge requests after 10 days without acceptance since recent activity or review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-self-improvement) <br>
-- [Configured GitLab project](https://gitlab.com/xrow-public/helm-openclaw) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with possible GitLab CLI shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires glab and GITLAB_TOKEN as indicated by server-resolved metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.75.3 (source: server release metadata) <br>
+Risk: The skill directs the agent to create and close merge requests in a fixed project without clearly requiring authorization for those actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm helm-openclaw is the intended project, and review proposed content and require approval before posting or closing merge requests.
+
+Risk: The GitLab token may grant more access than the skill needs.
+
+Mitigation: Restrict GITLAB_TOKEN to the permissions needed for this project.
+
+Risk: The referenced gitlab-agent skill and destination project visibility are unverified.
+
+Mitigation: Verify the referenced skill and confirm the project's visibility before use.
+
+## Reference(s):
+
+- [helm-openclaw GitLab project](https://gitlab.com/xrow-public/helm-openclaw)
+- [ClawHub release page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-self-improvement)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, GitLab merge request content]
+
+**Output Format:** [Markdown merge request proposal and review guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Targets the helm-openclaw GitLab project.]
+
+## Skill Version(s):
+
+1.128.0 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

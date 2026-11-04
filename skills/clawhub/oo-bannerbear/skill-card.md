@@ -1,46 +1,56 @@
-## Description: <br>
-Bannerbear (bannerbear.com) helps agents operate Bannerbear through an OOMOL-connected account for reading templates and images, verifying auth, and creating images from templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Bannerbear through a connected account to inspect templates and images, verify project access, and create images.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to work with Bannerbear projects through the OOMOL connector, including template discovery, image lookup, auth checks, and synchronous image creation. It is intended for users who have the oo CLI installed, are signed in to OOMOL, and have connected Bannerbear. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Image creation can change Bannerbear state and may consume connected account resources. <br>
-Mitigation: Confirm the exact create_image_sync payload and expected effect with the user before running the write action. <br>
-Risk: The skill may ask to install or invoke the oo CLI when it is unavailable. <br>
-Mitigation: Review the oo CLI install command before execution and install only when the user intends to operate Bannerbear through OOMOL. <br>
-Risk: Authentication, connection, scope, credential, or billing failures can block connector actions. <br>
-Mitigation: Use first-time setup, connection repair, or billing steps only after a matching command failure instead of proactively opening auth or connection flows. <br>
+## Use Case:
 
+External users and developers can use this skill to read Bannerbear templates and images, check account access, and request image creation through their connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-bannerbear) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Bannerbear Homepage](https://www.bannerbear.com/) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building payloads; write actions require user confirmation of the exact payload and effect.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: Setup may execute unverified installers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a verified CLI release before using the skill.
+
+Risk: Setup or refresh may add agent skills without clearly explaining those effects.
+
+Mitigation: Review the installation and refresh behavior; the CLI command reference documents OO_SKILLS_SYNC_DISABLED=1 to disable startup skill writes.
+
+## Reference(s):
+
+- [Bannerbear API documentation](https://developers.bannerbear.com/)
+- [Bannerbear](https://www.bannerbear.com/)
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Image URLs]
+
+**Output Format:** [Text and JSON results, including generated image URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Image creation changes Bannerbear state and requires confirmation under the skill's instructions.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

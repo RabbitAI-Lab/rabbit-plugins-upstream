@@ -1,0 +1,6 @@
+interface:
+  display_name: 概念设计：模块独立，协作清楚，让架构真正落地
+  short_description: 用统一语言表达业务，以清晰边界组织概念，让业务规则独立、依赖方向明确，从设计到代码保持一致。
+  default_prompt: 使用 $concept-design-cn 处理本次任务。从目的出发，用反例检查前提，只读取所需流程与参考。
+policy:
+  allow_implicit_invocation: false

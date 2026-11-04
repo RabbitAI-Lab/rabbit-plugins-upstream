@@ -1,40 +1,55 @@
-## Description: <br>
-what3words (what3words.com). Use this skill for what3words requests that search, read, convert, or inspect location data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+what3words (what3words.com). Use this skill for ANY what3words request — searching and reading data. Whenever a task involves what3words, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate what3words through an OOMOL-connected account, including address suggestions, coordinate conversion, supported-language lookup, and grid-section retrieval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation language could route casual what3words mentions or sensitive location details to an external connector. <br>
-Mitigation: Invoke the skill only for intentional what3words conversions or lookups, and avoid sensitive location details unless the user accepts external connector processing. <br>
+## Use Case:
 
+Developers and users can use the skill to search for what3words addresses, convert between three-word addresses and coordinates, and retrieve supported languages or grid sections through their connected what3words service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-what3words) <br>
-- [what3words homepage](https://what3words.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and execution metadata when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: First-time setup runs a remote CLI installer whose contents have not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve installation separately using a verified release.
+
+Risk: The CLI may synchronize additional agent skills at startup, and connector requests can share locations with OOMOL and what3words.
+
+Mitigation: Set OO_SKILLS_SYNC_DISABLED=1 to disable startup synchronization, and submit only locations intended to be shared with both services.
+
+## Reference(s):
+
+- [what3words API documentation](https://developer.what3words.com/public-api)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [what3words](https://what3words.com)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON action results and Markdown usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

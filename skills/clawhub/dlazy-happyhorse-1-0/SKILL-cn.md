@@ -1,14 +1,13 @@
 ---
 name: dlazy-happyhorse-1.0
 version: 1.3.4
-description: Happy Horse 1.0 视频模型，一站式覆盖文生视频（t2v）、首帧生视频（i2v）、参考图生视频（r2v）与视频编辑（edit）：根据所选模式自动路由到对应子模型。
-metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy happyhorse-1.0 -h 查看帮助信息。"}}
+description: "Happy Horse 1.0 视频模型，一站式覆盖文生视频（t2v）、首帧生视频（i2v）、参考图生视频（r2v）与视频编辑（edit）：根据所选模式自动路由到对应子模型。"
+metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy happyhorse-1.0 -h 查看帮助信息。"}}
 ---
 
-# dlazy-happyhorse-1.0
+# 视频生成 快马 Happyhorse 1.0
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 Happy Horse 1.0 视频模型，一站式覆盖文生视频（t2v）、首帧生视频（i2v）、参考图生视频（r2v）与视频编辑（edit）：根据所选模式自动路由到对应子模型。
@@ -47,7 +46,7 @@ CLI 会把 key 保存在你的用户配置目录（macOS/Linux 上为 `~/.dlazy/
 
 ## 关于与来源 (Provenance)
 
-- **CLI 源代码**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI 源代码**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **维护者**: dlazyai
 - **npm 包名**: `@dlazy/cli`（本技能 install 字段固定到 `1.2.3` 版本）
 - **官网**: [dlazy.com](https://dlazy.com)
@@ -91,6 +90,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 
@@ -103,7 +103,7 @@ Options:
   "ok": true,
   "result": {
     "tool": "happyhorse-1.0",
-    "modelId": "happyhorse-1.0",
+    "modelId": "happyhorse-1-0",
     "outputs": [
       {
         "type": "image",

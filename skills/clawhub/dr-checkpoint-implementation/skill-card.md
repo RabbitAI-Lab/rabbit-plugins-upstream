@@ -1,41 +1,54 @@
-## Description: <br>
-Guides Codex through complex or production-risk implementation work in small validated checkpoints. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guide Codex through complex or production-risk implementation work in small validated checkpoints, including staged reviews, dry-run rollouts, operational tooling, and tasks whose requirements may evolve during discovery.
 
-## Publisher: <br>
-[daniel-refahi-ikara](https://clawhub.ai/user/daniel-refahi-ikara) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[daniel-refahi-ikara](https://clawhub.ai/user/daniel-refahi-ikara)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to guide agents through staged implementation, validation, plan revision, and approval checkpoints for complex or production-risk work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Applying the optional workspace policy block can make checkpoint reviews persistent for future matching implementation tasks. <br>
-Mitigation: Review and intentionally scope the policy before applying it to workspace or agent instructions. <br>
-Risk: The workflow can pause work before live side effects, production mutations, or uncertain validation. <br>
-Mitigation: Plan approval gates explicitly and keep dry-run validation separate from live rollout. <br>
+## Use Case:
 
+Developers use this skill to guide complex or production-risk implementation through small, reviewable checkpoints, with focused validation and approval before consequential changes or live rollout.
 
-## Reference(s): <br>
-- [Apply dr-checkpoint-implementation](references/APPLY.md) <br>
-- [ClawHub skill page](https://clawhub.ai/daniel-refahi-ikara/skills/dr-checkpoint-implementation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown guidance and checkpoint review text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes checkpoint review fields and an optional workspace policy block.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release metadata) <br>
+Risk: Applying the optional workspace policy makes checkpoint reviews mandatory for future complex tasks until the policy is removed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review references/APPLY.md before applying the policy and remove it when it should no longer govern workspace tasks.
+
+Risk: Approval gates for consequential changes or live rollout can pause implementation while approval is pending.
+
+Mitigation: Identify required review points early and obtain approval before proceeding with consequential changes or live rollout.
+
+## Reference(s):
+
+- [Checkpoint policy application guide](references/APPLY.md)
+- [ClawHub skill release](https://clawhub.ai/daniel-refahi-ikara/skills/dr-checkpoint-implementation)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Files]
+
+**Output Format:** [Markdown guidance with implementation artifacts and checkpoint records as applicable]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Organized into reviewable checkpoints with focused validation evidence and approval decisions.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,58 @@
-## Description: <br>
-Analyzes video or image inputs for gaze direction, head pose, facial landmarks, focus level, distraction, and mind-wandering indicators, then returns a structured concentration report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes gaze direction and facial pose in video to estimate focus, distraction, and mind-wandering for classroom, office, and driving scenarios.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers can use this skill to submit classroom, office, or driving attention media for focus analysis and to retrieve prior cloud-hosted analysis reports. The skill is suited to generating structured attention summaries, trend data, suggestions, and report links for human review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive face or attention media may be uploaded to the publisher's cloud service for analysis. <br>
-Mitigation: Use only media that users are authorized to process, confirm consent for identifiable people, and review the service destination and retention expectations before deployment. <br>
-Risk: Analysis history is linked to an automatically managed account identity with locally stored tokens. <br>
-Mitigation: Review token storage expectations, restrict runtime access to the skill workspace, and clear local account state when the skill is no longer needed. <br>
-Risk: Focus and distraction results can affect decisions about students, employees, drivers, or other identifiable people. <br>
-Mitigation: Treat outputs as decision-support information only and require human review before using results in operational, educational, employment, or safety decisions. <br>
+## Use Case:
 
+Teachers, managers, safety teams, and developers use it to analyze supplied videos and review focus scores, distraction counts, trends, and reports. Treat results as estimates and review them with a person.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-focus-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, files] <br>
-**Output Format:** [Markdown or JSON text with optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include focus scores, trend data, distraction counts, suggestions, historical report records, and report export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release evidence; artifact frontmatter reports 1.0.9) <br>
+Risk: Shared account handling can mix users’ reports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only after account separation is addressed; require explicit enrollment and protect account tokens.
+
+Risk: The “export only” option can still upload videos.
+
+Mitigation: Confirm authorization before uploading footage, check the provider’s retention and deletion practices, and do not rely on --api-url to redirect processing.
+
+Risk: Backend privacy controls and analysis accuracy are unverified.
+
+Mitigation: Avoid sensitive footage until controls are confirmed, and treat scores as estimates that require human review.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/18072937735/skills/smyx-focus-analysis)
+- [Skill introduction](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured focus analysis report with scores, trends, statistics, recommendations, and report links; JSON or Markdown presentation.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Estimates of focus and distraction; results are for reference and do not replace human assessment.]
+
+## Skill Version(s):
+
+1.0.19 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,56 @@
-## Description: <br>
-Torii (toriihq.com). Use this skill for Torii search and read requests through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Torii (toriihq.com). Use this skill for ANY Torii request — searching and reading data. Whenever a task involves Torii, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to retrieve Torii app, contract, organization, user, workflow, and transaction data through OOMOL's Torii connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Torii responses can include sensitive business data such as users, transactions, contracts, and app inventory. <br>
-Mitigation: Install and use the skill only for accounts where the agent is permitted to read Torii data, and treat returned records as sensitive business information. <br>
-Risk: Future connector actions may write or delete Torii data even though this release only documents read and list actions. <br>
-Mitigation: Review any connector action tagged as write or destructive, confirm the exact payload and effect, and require explicit user approval before execution. <br>
+## Use Case:
 
+Developers and operations teams use this skill to search and read Torii organization data, including apps, contracts, users, transactions, workflows, and organization profiles, through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Torii homepage](https://www.toriihq.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-torii) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Torii connector actions return JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill frontmatter) <br>
+Risk: First-time setup can download and execute installer code without a separate review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and install the CLI separately before running it; avoid automatic installation or synchronization of other skills unless explicitly accepted.
+
+Risk: The connector can access Torii data using the connected account's permissions.
+
+Mitigation: Grant only the Torii access needed for the requested read operations and review the action schema before sending a payload.
+
+## Reference(s):
+
+- [Torii homepage](https://www.toriihq.com)
+- [Torii API authentication documentation](https://developers.toriihq.com/reference/api-authentication)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Torii skill release page](https://clawhub.ai/oomol/skills/oo-torii)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [oo CLI commands and JSON responses presented as text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Retrieves Torii records through documented get and list actions.]
+
+## Skill Version(s):
+
+1.0.4 (source: SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

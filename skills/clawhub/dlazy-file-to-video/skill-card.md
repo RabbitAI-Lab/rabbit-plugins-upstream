@@ -1,43 +1,56 @@
-## Description: <br>
-Converts PPT, Word, Excel, PDF, and other documents into explainer, report, courseware, or training videos through dLazy's hosted file-to-video agent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ppt to video, word to video, excel to video, pdf to video, document to video — parse, outline, storyboard, voiceover, build, validate. Use when the user gives a document and wants an explainer, report broadcast, courseware, or training video.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to ask an agent to run dLazy's file-to-video workflow, upload selected documents, and continue project-scoped video generation sessions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, project context, and attached files are sent to dLazy's hosted service. <br>
-Mitigation: Use only with documents approved for that service and avoid uploading confidential files unless the organization has approved dLazy. <br>
-Risk: The dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Protect the local config file and rotate or revoke the API key from the dLazy dashboard when access changes. <br>
+## Use Case:
 
+People who need to communicate information from a PPT, Word, Excel, or PDF use this skill to create an explainer, report, courseware, or training video.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-file-to-video) <br>
-- [dLazy CLI repository](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and streamed CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference dLazy project IDs and user-selected local files uploaded through the dLazy CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Documents and prompts are sent to dLazy's hosted service, and the external CLI distribution and backend were not fully audited.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Upload only documents you are permitted to share, confirm the intended project, and review the service's costs and retention terms.
+
+Risk: Sharing an API key in chat can expose access to the user's dLazy organization.
+
+Mitigation: Use the device login flow or provide the key through an environment variable instead of sharing it in chat.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-file-to-video)
+- [dLazy homepage](https://dlazy.com)
+- [CLI source listed in the skill documentation](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video files, Text, Guidance]
+
+**Output Format:** [Generated video with text responses in the CLI]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The result depends on the uploaded document and selected project.]
+
+## Skill Version(s):
+
+1.3.37 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

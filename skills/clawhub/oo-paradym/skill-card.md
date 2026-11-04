@@ -1,43 +1,55 @@
-## Description: <br>
-Paradym (paradym.id) lets an agent read, create, and update Paradym data through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Paradym to inspect project data and manage credential issuance and verification workflows through a connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and agents connected to an OOMOL account use this skill to inspect Paradym schemas and run Paradym connector actions for OpenID4VC issuance, verification, projects, templates, sessions, and issued credential metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create Paradym credential offers or verification requests. <br>
-Mitigation: Inspect the live action schema first and confirm the exact payload and intended effect with the user before running write actions. <br>
-Risk: The skill operates a user's Paradym account through OOMOL-managed credentials. <br>
-Mitigation: Use it only when the user wants OOMOL-connected Paradym access, and perform one-time oo CLI or app-connection setup only from trusted sources when an auth or connection error requires it. <br>
+## Use Case:
 
+Developers and teams use this skill to read Paradym project, credential, issuance, and verification data, and to create credential offers or verification requests through a connected account.
 
-## Reference(s): <br>
-- [ClawHub Paradym skill listing](https://clawhub.ai/oomol/skills/oo-paradym) <br>
-- [Paradym homepage](https://paradym.id) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The agent should inspect the live connector schema before constructing payloads and should present write payloads for user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release metadata and skill frontmatter) <br>
+Risk: CLI setup may execute unverified downloads and change skills in multiple agent applications.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation before automatic setup; consider setting OO_SKILLS_SYNC_DISABLED=1 to prevent startup synchronization.
+
+Risk: A connected Paradym account can perform write actions that change issuance or verification state.
+
+Mitigation: Use a narrowly scoped Paradym connection and confirm the exact payload and effect before each write.
+
+## Reference(s):
+
+- [Paradym](https://paradym.id)
+- [Paradym API reference](https://paradym.id/reference)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON action results and shell commands, with procedural guidance in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read actions retrieve Paradym data; write actions create credential offers or verification requests and require confirmation of the exact payload and effect.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

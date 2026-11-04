@@ -4,7 +4,7 @@
  * 任务状态机 + Pipeline 管理 + Agent 能力匹配 + 依赖链 + 质量门
  */
 import { randomUUID } from "crypto";
-import { db, type Task, type Pipeline, type PipelineTask } from "./db.js";
+import { db, type Task, type Pipeline, type PipelineTask, findTasksByAgentStatus, findStuckTasks, releaseTaskToInbox } from "./db.js";
 import { pushToAgent } from "./sse.js";
 import { getOnlineAgentIds } from "./identity.js";
 import { auditLog, recalculateTrustScore } from "./security.js";
@@ -125,15 +125,17 @@ export function assignTask(taskId: string, toAgent: string, operatorId: string):
   auditLog("assign_task", operatorId, taskId, `to=${toAgent}`);
 
   pushToAgent(toAgent, {
-    type: "task_assigned",
-    content: JSON.stringify({
-      task_id: taskId,
+    event: "task_assigned",
+    task: {
+      id: task.id,
+      assigned_by: task.assigned_by,
+      assigned_to: task.assigned_to,
       description: task.description,
-      priority: task.priority,
       context: task.context,
-      from: operatorId,
-      hint: "调用 update_task_status(in_progress) 开始执行，完成后调用 update_task_status(completed) 并携带结果。",
-    }),
+      priority: task.priority,
+      status: task.status,
+      instruction: "你有一项待执行的任务，请立即处理。调用 update_task_status(in_progress) 开始执行，完成后调用 update_task_status(completed) 并携带结果。",
+    },
   });
 
   return getOne<Task>(`SELECT * FROM tasks WHERE id=?`, taskId)!;
@@ -280,6 +282,73 @@ export type PipelineCreateInput = {
   creator: string;
   config?: { auto_assign?: boolean; capability_match?: boolean };
 };
+
+// ─── P0 Watchdog: 自治自愈编排 ──────────────────────────────
+// 借鉴 DeepSeek Super-Agent「外部 Watchdog」思想：Hub 作为看门狗，
+// 在 Agent 掉线或任务卡死时主动回收孤儿任务，退回收件箱并通知任务创建者，
+// 由创建者（human-in-loop）决定后续重派，保持安全可逆（契合既有 WORM 审计哲学）。
+
+/**
+ * Agent 离线时，释放其所有 assigned / in_progress 任务回收件箱，并通知创建者。
+ * 通过 server.ts 注入为 startHeartbeatMonitor 的 onAgentOffline 回调。
+ * @returns 实际释放的任务数
+ */
+export function releaseTasksForOfflineAgent(agentId: string): number {
+  const tasks = findTasksByAgentStatus(agentId, ["assigned", "in_progress"]);
+  let released = 0;
+  for (const task of tasks) {
+    if (!releaseTaskToInbox(task.id)) continue;
+    released++;
+    auditLog("task_released_offline", agentId, task.id,
+      `offline_agent=${agentId} prev_status=${task.status} prev_assignee=${task.assigned_to || "none"}`);
+    // 通知任务创建者（避免通知离线 Agent 自身）
+    if (task.assigned_by && task.assigned_by !== agentId) {
+      pushToAgent(task.assigned_by, {
+        event: "task_released",
+        task_id: task.id,
+        reason: "assigned_agent_offline",
+        offline_agent: agentId,
+        description: task.description,
+        message: `任务「${task.description}」的承接 Agent (${agentId}) 已离线，已退回收件箱等待重新分配。`,
+      });
+    }
+  }
+  if (released > 0) {
+    logger.info("watchdog_offline_released", { module: "watchdog", agent_id: agentId, released });
+  }
+  return released;
+}
+
+/**
+ * 卡死任务巡检：扫描长时间无进展或已过期的 assigned / in_progress 任务，
+ * 退回收件箱并通知创建者。由 server.ts 的 watchdog 定时器周期调用。
+ * @returns { scanned, released }
+ */
+export function runWatchdogScan(): { scanned: number; released: number } {
+  const stuckMs = parseInt(process.env.WATCHDOG_STUCK_MS ?? String(30 * 60 * 1000), 10);
+  const tasks = findStuckTasks(stuckMs);
+  let released = 0;
+  for (const task of tasks) {
+    if (!releaseTaskToInbox(task.id)) continue;
+    released++;
+    auditLog("task_released_stuck", task.assigned_to || "system", task.id,
+      `stuck_threshold_ms=${stuckMs} prev_status=${task.status} prev_assignee=${task.assigned_to || "none"}`);
+    if (task.assigned_by) {
+      pushToAgent(task.assigned_by, {
+        event: "task_released",
+        task_id: task.id,
+        reason: "task_stuck",
+        assigned_to: task.assigned_to,
+        description: task.description,
+        message: `任务「${task.description}」长时间无进展（>${Math.round(stuckMs / 60000)} 分钟）或已过期，已退回收件箱等待重新分配。`,
+      });
+    }
+  }
+  if (released > 0) {
+    logger.info("watchdog_stuck_released", { module: "watchdog", scanned: tasks.length, released });
+  }
+  return { scanned: tasks.length, released };
+}
 
 /**
  * 创建 Pipeline
@@ -868,15 +937,17 @@ export function acceptHandoff(
 
   // SSE 通知新负责人（任务已分配给你）
   pushToAgent(operatorId, {
-    type: "task_assigned",
-    content: JSON.stringify({
-      task_id: taskId,
+    event: "task_assigned",
+    task: {
+      id: task.id,
+      assigned_by: task.assigned_by,
+      assigned_to: task.assigned_to,
       description: task.description,
-      priority: task.priority,
       context: task.context,
-      from: oldAssignee,
-      hint: "你已接管此任务。调用 update_task_status(in_progress) 开始执行。",
-    }),
+      priority: task.priority,
+      status: task.status,
+      instruction: "你已接管此任务。调用 update_task_status(in_progress) 开始执行。",
+    },
   });
 
   return { task_id: taskId, new_assignee: operatorId };

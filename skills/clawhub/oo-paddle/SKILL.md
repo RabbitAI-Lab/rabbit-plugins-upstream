@@ -1,11 +1,11 @@
 ---
 name: oo-paddle
-description: "Paddle (paddle.com). Use this skill for ANY Paddle request — reading, creating, and updating data. Whenever a task involves Paddle, use this skill instead of calling the API directly."
+description: "Paddle (paddle.com). Use this skill for ANY Paddle request — reading, creating, updating, and deleting data. Whenever a task involves Paddle, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Paddle"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["paddle"]
   icon: "https://static.oomol.com/logo/third-party/paddle.svg"
 ---
@@ -47,7 +47,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `list_prices` — List Paddle prices with optional product, status, recurring, and billing filters.
 - `list_products` — List Paddle products with optional filtering, pagination, and price inclusion.
 - `update_customer` — Update a Paddle customer, including archiving or reactivating it through status. [write]
-- `update_price` — Update a Paddle price, including archiving or reactivating it through status. [write]
+- `update_price` — Update a Paddle price, including archiving or reactivating it through status. [destructive]
 - `update_product` — Update a Paddle product, including archiving or reactivating it through status. [write]
 
 ## Safety
@@ -79,11 +79,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Paddle is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=paddle
+  https://console.oomol.com/connections/paddle
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Paddle homepage: https://www.paddle.com
+- API documentation: https://developer.paddle.com/api-reference/overview

@@ -1,46 +1,54 @@
-## Description: <br>
-Braze skill for searching and reading Braze campaign and Canvas data through OOMOL's oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Braze (braze.com). Use this skill for ANY Braze request — searching and reading data. Whenever a task involves Braze, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users who operate Braze through OOMOL-connected accounts use this skill to list and inspect campaigns and Canvases without handling raw Braze credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill brokers Braze access through OOMOL, so users rely on OOMOL for credential handling and connector execution. <br>
-Mitigation: Install only when OOMOL is an approved broker for the user's Braze account and intended read workflows. <br>
-Risk: Broad wording could lead an agent to attempt actions beyond the listed read-only campaign and Canvas operations. <br>
-Mitigation: Before approving any unlisted action, require the exact action name, payload, and expected effect. <br>
-Risk: Connector schemas may change after release. <br>
-Mitigation: Inspect the live connector schema before constructing or running each payload. <br>
+## Use Case:
 
+External users use the skill to retrieve campaign and Canvas details and list campaigns and Canvases from a connected Braze account.
 
-## Reference(s): <br>
-- [Braze homepage](https://www.braze.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Braze connection](https://console.oomol.com/app-connections?provider=braze) <br>
-- [ClawHub Braze skill](https://clawhub.ai/oomol/skills/oo-braze) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup directs users to run an online installer that has not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a verified oo CLI release yourself before allowing agent use.
+
+Risk: Braze requests pass through OOMOL, and automatic skill synchronization settings can affect agent use.
+
+Mitigation: Use a read-scoped Braze connection and check the automatic skill synchronization settings.
+
+## Reference(s):
+
+- [Braze API documentation](https://www.braze.com/docs/api/basics)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON Braze data with concise text summaries and inline oo CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

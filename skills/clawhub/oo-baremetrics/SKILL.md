@@ -1,11 +1,11 @@
 ---
 name: oo-baremetrics
-description: "Baremetrics (baremetrics.com). Use this skill for ANY Baremetrics request — reading, creating, and updating data. Whenever a task involves Baremetrics, use this skill instead of calling the API directly."
+description: "Baremetrics (baremetrics.com). Use this skill for ANY Baremetrics request — reading, creating, updating, and deleting data. Whenever a task involves Baremetrics, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Baremetrics"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["baremetrics"]
   icon: "https://static.oomol.com/logo/third-party/baremetrics.png"
 ---
@@ -37,7 +37,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `cancel_subscription` — Cancel a Baremetrics subscription at a documented cancellation timestamp. [write]
+- `cancel_subscription` — Cancel a Baremetrics subscription at a documented cancellation timestamp. [destructive]
 - `create_customer` — Create a customer record in a Baremetrics API source. [write]
 - `create_plan` — Create a plan for use in Baremetrics subscription records. [write]
 - `create_subscription` — Create a subscription in a Baremetrics API source. [write]
@@ -79,11 +79,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Baremetrics is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=baremetrics
+  https://console.oomol.com/connections/baremetrics
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Baremetrics homepage: https://baremetrics.com
+- API documentation: https://developers.baremetrics.com/reference

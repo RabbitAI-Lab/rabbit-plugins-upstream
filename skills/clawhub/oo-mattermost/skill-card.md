@@ -1,44 +1,60 @@
-## Description: <br>
-Mattermost skill for reading Mattermost teams, channels, posts, and user data, and creating posts through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Mattermost through an OOMOL-connected account for reading data and creating posts.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to let an agent retrieve Mattermost team, channel, post, and current-user information, and to draft or create Mattermost posts after confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Mattermost content visible to the connected account. <br>
-Mitigation: Install only for Mattermost accounts whose accessible teams, channels, and posts are appropriate for agent-assisted retrieval. <br>
-Risk: The create_post action can publish content to Mattermost. <br>
-Mitigation: Require exact user confirmation of the target channel and post payload before running create_post. <br>
-Risk: First-time setup may require installing the oo CLI from a remote installer. <br>
-Mitigation: Review the oo CLI installer before running first-time setup. <br>
+## Use Case:
 
+People using Mattermost through an OOMOL-connected account can retrieve channel, team, and user information, list posts and channels, and create posts.
 
-## Reference(s): <br>
-- [Mattermost homepage](https://mattermost.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mattermost) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash and JSON command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads Mattermost data and can create posts through the OOMOL mattermost connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup may execute downloaded code that has not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately before running its installer.
+
+Risk: The required CLI may change other installed agent skills during startup synchronization.
+
+Mitigation: Review any skill changes and use OO_SKILLS_SYNC_DISABLED to disable startup synchronization when appropriate.
+
+Risk: The hosted connector implementation is unverified and OOMOL handles the Mattermost connection and task data.
+
+Mitigation: Confirm OOMOL is an acceptable handler for the connection and task data, and retain the skill's confirmation step before posting.
+
+## Reference(s):
+
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Mattermost API documentation](https://api.mattermost.com/)
+- [Mattermost on ClawHub](https://clawhub.ai/oomol/skills/oo-mattermost)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [oo CLI commands with JSON request and response data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Available results depend on the selected Mattermost action; creating posts changes Mattermost state and requires user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: skill frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,53 @@
-## Description: <br>
-Northbeam (northbeam.io) lets an agent search and read Northbeam data through an OOMOL-connected account instead of calling the Northbeam API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read Northbeam marketing attribution data, including spend, metrics, breakdowns, and attribution models.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query Northbeam account data through the OOMOL oo CLI, including attribution models, metrics, breakdowns, and paginated spend records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose Northbeam spend and attribution data, which may be sensitive business information. <br>
-Mitigation: Install it only for agents that should query the connected Northbeam account, and restrict access to users allowed to view that data. <br>
-Risk: The OOMOL and Northbeam connection scopes determine what account data the agent can access. <br>
-Mitigation: Review the OOMOL and Northbeam access scopes before installation and re-check them when credentials are renewed or reconnected. <br>
-Risk: Future connector actions tagged as write or destructive could change or remove data if run without review. <br>
-Mitigation: Inspect the live connector schema before building payloads and require explicit user approval for any write or destructive action. <br>
+## Use Case:
 
+External users and developers can use the skill to inspect their connected Northbeam account's marketing attribution models, metrics, breakdowns, and daily or hourly spend data.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-northbeam) <br>
-- [Northbeam Homepage](https://www.northbeam.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, Text] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action payloads; returned spend and attribution data should be treated as sensitive business information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and frontmatter) <br>
+Risk: Setup may execute downloaded software without verification or separate approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup and CLI release, approve local changes, connect only the intended Northbeam account, and consider disabling startup skill synchronization with OO_SKILLS_SYNC_DISABLED.
+
+## Reference(s):
+
+- [Northbeam](https://www.northbeam.io)
+- [Northbeam API documentation](https://docs.northbeam.io/docs/authentication)
+- [oo CLI command controls](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Northbeam skill on ClawHub](https://clawhub.ai/oomol/skills/oo-northbeam)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Markdown, Shell commands]
+
+**Output Format:** [Northbeam action results as text or JSON, with Markdown guidance and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only account data; spend results may be paginated.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

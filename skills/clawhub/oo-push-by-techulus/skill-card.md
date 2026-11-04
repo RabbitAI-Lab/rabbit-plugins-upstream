@@ -1,43 +1,59 @@
-## Description: <br>
-Push by Techulus helps an agent send notifications through Push by Techulus using an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Push by Techulus to send notifications to a device group or to all devices targeted by the connected account or team API key.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to send Push by Techulus notifications to all account-targeted devices or to a specific device group. It is useful when an agent needs to perform notification delivery without handling raw Push by Techulus API tokens directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Notification sends are external side effects and may reach all devices targeted by the account or team API key. <br>
-Mitigation: Confirm the exact message body, target group or all-device scope, and account/team API key context before running a send action. <br>
-Risk: A missing, expired, or incorrectly scoped OOMOL connection can prevent actions from running. <br>
-Mitigation: Use the documented first-time setup and connection recovery steps only after an auth or connection error occurs. <br>
+## Use Case:
 
+Developers and users can send notifications through Push by Techulus, choosing a device group or the account and team API key's targets.
 
-## Reference(s): <br>
-- [Push by Techulus homepage](https://push.techulus.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-push-by-techulus) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces action guidance and oo CLI commands; action responses may include JSON data and an execution identifier.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup can run a remote CLI installer and can introduce lasting agent changes through skill installation or refresh.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, verify the release, decide whether OOMOL may install or refresh other agent skills, and disable startup skill synchronization if unwanted.
+
+Risk: Notifications can reach the selected device group or all devices targeted by the connected account or team API key.
+
+Mitigation: Confirm the recipients and notification content; before sending a write action, confirm its exact payload and effect.
+
+Risk: The inspected artifact does not include the external installer or live connector implementation.
+
+Mitigation: Review and verify the release and assess the external installer and connector before relying on them.
+
+## Reference(s):
+
+- [Push by Techulus API documentation](https://docs.push.techulus.com/api-documentation)
+- [Push by Techulus](https://push.techulus.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [Notification text and JSON action results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action results depend on the provider response and selected notification action.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release version and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

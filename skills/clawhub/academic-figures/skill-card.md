@@ -1,44 +1,56 @@
-## Description: <br>
-Academic Figures generates publication-quality charts from JSON or CSV data, including 14 chart types, colorblind-safe themes, CJK support, hatching, multi-panel layouts, flow diagrams, and PNG, SVG, PDF, TIFF, or EPS output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates publication-style scientific figures from research data, with a broad range of chart types and journal formatting options.
 
-## Publisher: <br>
-[docsor1212](https://clawhub.ai/user/docsor1212) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[docsor1212](https://clawhub.ai/user/docsor1212)
 
-## Use Case: <br>
-Developers, researchers, and agents use this skill to turn structured JSON or CSV datasets into journal-ready academic figures, diagrams, and statistical visualizations. It is suited for local figure generation workflows where the user controls the input data and output path. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The plotting workflow reads the user-selected input file and can write or overwrite the requested output file. <br>
-Mitigation: Use intentional input data and explicit output paths, and review the generated figure before sharing or submitting it. <br>
-Risk: Generic chart-generation requests may activate the skill in contexts where another visualization workflow would be more appropriate. <br>
-Mitigation: Confirm the desired output is a publication-style academic figure before running the local generator. <br>
+## Use Case:
 
+Researchers and developers can turn JSON, CSV, or Excel data into static scientific figures for papers and journal submissions, or batch-render figures with consistent styles.
 
-## Reference(s): <br>
-- [Academic Figures Skill Page](https://clawhub.ai/docsor1212/academic-figures) <br>
-- [Data Format Reference](references/data-formats.md) <br>
-- [Academic Figures Pitfalls](references/pitfalls.md) <br>
-- [Reverse-Engineering Chart Colors from Reference Images](references/reverse-engineering-colors.md) <br>
-- [academic-figures v1.5.0 Upgrade Analysis](references/v1.5-upgrade-analysis.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration instructions, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command examples; generated figure files may be PNG, SVG, PDF, TIFF, or EPS.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Local execution with user-selected input and output paths; generated figures use a white background for publication workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.1 (source: server release metadata; artifact frontmatter lists 1.5.0) <br>
+Risk: A --pub-ready .repro bundle can include original research data, and generated charts may remain in temporary storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and de-identify data before sharing bundles, and check temporary storage before cleanup or handoff.
+
+Risk: Runtime behavior and dependency versions were not verified, and generated statistical results or output safeguards may need review.
+
+Mitigation: Independently validate statistical results before publication and use trusted fixtures when checking generated outputs.
+
+## Reference(s):
+
+- [Quickstart](artifact/references/quickstart.md)
+- [Data formats](artifact/references/data-formats.md)
+- [Limits and supported inputs](artifact/references/limits.md)
+- [Python API](artifact/references/python-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Shell commands, Guidance]
+
+**Output Format:** [Static PNG, TIFF, or PDF figures, with command and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Figures are generated locally from supplied data; available chart types and options depend on the input format.]
+
+## Skill Version(s):
+
+7.1.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,52 @@
-## Description: <br>
-IQAir AirVisual helps an agent retrieve current air-quality and weather data, nearest supported city data, and supported location lists through an OOMOL-connected IQAir AirVisual account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves current air-quality and weather data and lists supported IQAir AirVisual locations through the OOMOL-connected service.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to answer IQAir AirVisual requests without calling the API directly, including current city conditions, nearest-city conditions by IP or coordinates, and supported country, state, and city discovery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: IQAir AirVisual queries run through OOMOL as an intermediary and require an IQAir API key connected to the user's OOMOL account. <br>
-Mitigation: Install and use the skill only when that account connection and intermediary access are acceptable for the deployment. <br>
-Risk: Nearest-city lookups can involve location or IP-derived context. <br>
-Mitigation: Use city-specific lookups when possible, and avoid nearest-city requests when location disclosure is not appropriate. <br>
-Risk: First-time setup may require installing the oo CLI with a remote installer. <br>
-Mitigation: Review the oo CLI installer before running it if the CLI is not already installed. <br>
+## Use Case:
 
+People using an OOMOL-connected IQAir AirVisual account can retrieve current air-quality and weather data for a supported city or their nearest supported city. They can also list countries, states, and cities with active stations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-iqair-airvisual) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [IQAir AirVisual homepage](https://www.iqair.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action payloads; actions in this release are read-only air-quality, weather, and supported-location lookups.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence release.version and metadata.version) <br>
+Risk: First-time setup may run a changing remote installer with unclear execution scope, and its contents remain unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI setup separately before installation; prefer a fixed, verified release and review bundled-skill synchronization settings.
+
+## Reference(s):
+
+- [IQAir AirVisual](https://www.iqair.com)
+- [IQAir API documentation](https://api-docs.iqair.com/)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill release](https://clawhub.ai/oomol/skills/oo-iqair-airvisual)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON service responses and concise natural-language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Current air-quality and weather results depend on supported locations and active stations.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

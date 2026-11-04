@@ -1,40 +1,57 @@
-## Description: <br>
-Generate/edit images with Nano Banana Pro (Gemini 3 Pro Image). Use for image create/modify requests incl. edits. Supports text-to-image + image-to-image; 1K/2K/4K; use --input-image. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate or edit images with Nano Banana Pro (Gemini 3 Pro Image), supporting text-to-image and image-to-image workflows at 1K, 2K, and 4K resolutions.
 
-## Publisher: <br>
-[seanford](https://clawhub.ai/user/seanford) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[seanford](https://clawhub.ai/user/seanford)
 
-## Use Case: <br>
-Developers and agents use this skill to generate new images or edit existing images through Google's Gemini image API while saving PNG outputs in the user's current working directory. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Image prompts and selected input images may be sent to Google's Gemini service. <br>
-Mitigation: Avoid private, regulated, or confidential images unless that use is acceptable for the deployment context. <br>
-Risk: API keys passed in chat or command arguments may be exposed through logs or command history. <br>
-Mitigation: Prefer GEMINI_API_KEY over directly pasting a Gemini API key into chat or command arguments. <br>
+## Use Case:
 
+Developers and agents use this skill to generate new PNG images or edit existing images through Google's Gemini image service while preserving the user's creative intent and saving outputs into the active workspace.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/seanford/skills/nano-banana-pro) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [files, shell commands, guidance] <br>
-**Output Format:** [PNG image files with text status and saved-path output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports text-to-image and image-to-image workflows with 1K, 2K, or 4K resolution options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Prompts and input images are sent to Google's Gemini service during generation or editing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for content that can be shared with that service and avoid sending confidential, regulated, or sensitive images unless approved.
+
+Risk: API keys may be exposed if pasted into chat, shell history, or command arguments.
+
+Mitigation: Set GEMINI_API_KEY through a protected environment or secret manager and avoid passing keys inline with --api-key where possible.
+
+Risk: Python dependencies are specified with lower bounds rather than pinned exact versions.
+
+Mitigation: Run the script in an isolated environment and pin or lock dependencies before production use.
+
+## Reference(s):
+
+- [Nano Banana Pro on ClawHub](https://clawhub.ai/seanford/skills/nano-banana-pro)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Shell commands, Guidance]
+
+**Output Format:** [PNG image files with terminal status output and concise usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are saved as PNG files at the requested filename or path; supported resolutions are 1K, 2K, and 4K.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence and target metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

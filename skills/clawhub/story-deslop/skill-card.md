@@ -1,44 +1,58 @@
-## Description: <br>
-Detects and edits Chinese web-fiction prose to reduce AI-flavored, formulaic writing while preserving plot, character details, and author intent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+网文去AI味。从表达、叙事用笔、故事因果三层诊断并修复文本，保留作者文风与已定剧情。触发方式：/story-deslop、/去AI味、「去AI味」「这篇太AI了」「网文去AI味」。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and editors use Story Deslop to scan Chinese web-fiction drafts for formulaic AI-style prose and receive targeted rewrite guidance, reports, or file edits that make the text read more naturally. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: File mode can rewrite provided manuscript files and normalize punctuation after editing. <br>
-Mitigation: Keep backups and request detection-only behavior when review is needed before any edits are applied. <br>
-Risk: Aggressive style cleanup can remove useful plot, character, or pacing detail if applied too broadly. <br>
-Mitigation: Review the change report, preserve story intent, and use the skill's review markers for uncertain edits. <br>
+## Use Case:
 
+网文作者可用此 skill 按指定范围检查并改写小说文本，处理表达、叙事详略和故事因果问题，同时保留作者文风、已定剧情与伏笔。
 
-## Reference(s): <br>
-- [Story Deslop on ClawHub](https://clawhub.ai/worldwonderer/skills/story-deslop) <br>
-- [Publisher profile](https://clawhub.ai/user/worldwonderer) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Anti-AI Writing Guide](references/anti-ai-writing.md) <br>
-- [Banned Words and Patterns](references/banned-words.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance, Files] <br>
-**Output Format:** [Markdown reports with edited prose, inline shell commands, and optional file edits] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [File mode can update user-supplied manuscript files and return short representative excerpts for long inputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.11 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
+Risk: Full cleanup edits manuscript text, including punctuation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Specify the files or passages to process; request detection-only for a read-only review, and make local manuscript backups before full cleanup.
+
+Risk: Optional writing agents supplied by a project are outside this bundle's assessment.
+
+Mitigation: Review those agents and their output before applying changes to manuscript files.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/worldwonderer/skills/story-deslop)
+- [Repository link in package metadata (import provenance unavailable)](https://github.com/zenstory-ai/oh-story-claudecode)
+- [Style resolution guide](references/style-resolution.md)
+- [Expression review guide](references/expression.md)
+- [Narrative focus guide](references/narrative-focus.md)
+- [Story logic guide](references/story-logic.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Files]
+
+**Output Format:** [Chinese prose, Markdown diagnostics, and revised manuscript text or files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Edits are scoped to the author's request and preserve established plot and style where supported by the source material.]
+
+## Skill Version(s):
+
+1.1.40 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

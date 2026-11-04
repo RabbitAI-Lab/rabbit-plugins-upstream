@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Featurebase"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["featurebase"]
   icon: "https://static.oomol.com/logo/third-party/featurebase.svg"
 ---
@@ -42,7 +42,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `delete_post` — Delete one Featurebase post by ID. [destructive]
 - `get_board` — Get one Featurebase board by ID.
 - `get_contact` — Get one Featurebase contact by ID.
-- `get_post` — Get one Featurebase post by ID. [write]
+- `get_post` — Get one Featurebase post by ID.
 - `list_boards` — List all Featurebase boards for the authenticated organization.
 - `list_contacts` — List Featurebase contacts with cursor pagination and contact type filtering.
 - `list_posts` — List Featurebase posts with cursor pagination and optional filters.
@@ -78,11 +78,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Featurebase is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=featurebase
+  https://console.oomol.com/connections/featurebase
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Featurebase homepage: https://www.featurebase.app/
+- API documentation: https://docs.featurebase.app/rest-api.md

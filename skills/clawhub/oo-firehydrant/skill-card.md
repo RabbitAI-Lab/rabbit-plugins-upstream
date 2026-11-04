@@ -1,45 +1,59 @@
-## Description: <br>
-FireHydrant (firehydrant.com). Use this skill for ANY FireHydrant request: reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+FireHydrant (firehydrant.com). Use this skill for ANY FireHydrant request — reading, creating, and updating data. Whenever a task involves FireHydrant, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and incident responders use this skill to let an agent inspect FireHydrant incidents, services, and environments and create incidents through an OOMOL-connected FireHydrant account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create FireHydrant incidents through the connected account. <br>
-Mitigation: Confirm the exact write payload and expected effect with the user before running incident creation. <br>
-Risk: Using the skill grants the agent access to FireHydrant data available through the connected OOMOL account. <br>
-Mitigation: Install and use the skill only when that account access is intended for the task. <br>
-Risk: First-time setup may require running a remote oo CLI installer. <br>
-Mitigation: Run the installer only after verifying that the OOMOL install source is trusted. <br>
+## Use Case:
 
+Developers and incident responders use the skill to read FireHydrant incidents, services, and environments, and to create incidents through a connected FireHydrant account.
 
-## Reference(s): <br>
-- [ClawHub FireHydrant Skill](https://clawhub.ai/oomol/skills/oo-firehydrant) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [FireHydrant Homepage](https://firehydrant.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Agent actions may return JSON data from FireHydrant connector calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release metadata and skill frontmatter) <br>
+Risk: CLI setup can make broader, persistent changes to other agents' skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the CLI installation and its skill synchronization behavior; disable startup skill synchronization if only this integration is needed.
+
+Risk: The remote installers and live connector behavior were not verified, so their exact behavior is uncertain.
+
+Mitigation: Verify the CLI installation separately and review the live action schema before sending a request.
+
+Risk: Creating an incident changes FireHydrant state.
+
+Mitigation: Confirm the exact payload and effect with the user before running the create action.
+
+## Reference(s):
+
+- [FireHydrant API documentation](https://docs.firehydrant.com/reference/firehydrant-api)
+- [FireHydrant](https://firehydrant.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API calls, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use live action schemas; incident creation requires user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

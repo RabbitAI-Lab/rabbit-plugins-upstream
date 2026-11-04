@@ -1,44 +1,59 @@
-## Description: <br>
-McDonald's China helps agents search and read McDonald's China city, store, menu, and product information through the OOMOL mcdonalds_cn connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search McDonald's China restaurants, menus, products, and store business details through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect McDonald's China locations, store business data, menus, and product details through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL's oo CLI and an OOMOL-connected McDonald's China provider account. <br>
-Mitigation: Install or authenticate the oo CLI only when needed, and connect the provider through the OOMOL account flow if an auth or connection error occurs. <br>
-Risk: Using the connector can consume paid OOMOL credits. <br>
-Mitigation: Review commands before running them and resolve HTTP 402 or insufficient-credit errors through OOMOL billing before retrying. <br>
-Risk: Connector schemas and service behavior may change over time. <br>
-Mitigation: Fetch the live action schema before constructing a payload and keep action use to the documented read-oriented lookups unless a future write action is explicitly confirmed. <br>
+## Use Case:
 
+Agents use this skill to find McDonald's China locations and retrieve menu, product, and store business information.
 
-## Reference(s): <br>
-- [ClawHub skill release](https://clawhub.ai/oomol/skills/oo-mcdonalds-cn) <br>
-- [McDonald's China homepage](https://open.mcd.cn) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence release and skill metadata) <br>
+Risk: Setup may execute an installer without clear user approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified CLI release yourself and require approval before running installer commands.
+
+Risk: The CLI may synchronize managed skills.
+
+Mitigation: Review its synchronization behavior; publisher documentation identifies OO_SKILLS_SYNC_DISABLED=1 to disable it.
+
+Risk: Queries and connected-account access are mediated by OOMOL.
+
+Mitigation: Review the data access and connected-account scope before use.
+
+## Reference(s):
+
+- [McDonald's China homepage](https://open.mcd.cn)
+- [McDonald's China API documentation](https://open.mcd.cn/docs/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text]
+
+**Output Format:** [Structured connector response data (JSON) and text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Response fields vary by action.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

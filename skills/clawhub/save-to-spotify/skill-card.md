@@ -1,56 +1,61 @@
-## Description: <br>
-Create polished audio episodes with TTS narration, cover images, Spotify timelines, and show or episode management, then save them to the user's Spotify library. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create polished audio content and save to Spotify. Produces episodes with TTS narration, a rich timeline (chapters plus in-player images, external links, and Spotify entity cards), and a cover image. Also use for raw media saves, show/episode management, and timeline navigation.
 
-## Publisher: <br>
-[spotify](https://clawhub.ai/user/spotify) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[spotify](https://clawhub.ai/user/spotify)
 
-## Use Case: <br>
-External users and developers use this skill to turn authorized source material or user-provided audio into private Spotify episodes with narration, show notes, cover art, and timeline companions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installer and setup steps can modify the local environment and connect the user's Spotify account. <br>
-Mitigation: Ask for explicit approval before installation or setup, and review the installer before running it. <br>
-Risk: Spotify bearer tokens or other credentials could be exposed in logs, prompts, or copied output. <br>
-Mitigation: Keep tokens out of prompts and logs, redact command output when needed, and avoid sharing token-bearing JSON. <br>
-Risk: Uploaded episodes, timelines, and generated metadata use connected personal account data. <br>
-Mitigation: Confirm the target show, upload action, and privacy expectation before saving, and state that saved episodes are private to the user. <br>
-Risk: Cloud TTS or image providers may process episode text, prompts, or source content outside the user's local machine. <br>
-Mitigation: Confirm the selected provider and avoid sensitive, confidential, or regulated content unless the user accepts the provider's processing terms. <br>
-Risk: Generated episodes can infringe third-party rights if the source material is not authorized for this use. <br>
-Mitigation: Use authorized APIs and user-provided or otherwise permitted content, preserve source links, and avoid representing third-party material as sponsored or original when it is not. <br>
+## Use Case:
 
+External users use this skill to turn authorized or user-provided material into narrated audio episodes, then save them to Spotify with cover artwork, chapters, and playback companions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/spotify/skills/save-to-spotify) <br>
-- [CLI Usage](references/cli-usage.md) <br>
-- [Spotify API](references/spotify-api.md) <br>
-- [Audio Providers & Assembly](references/audio-providers.md) <br>
-- [Timeline](references/timeline.md) <br>
-- [Episode Description Format](references/episode-description.md) <br>
-- [Cover Image](references/cover-image.md) <br>
-- [Content Quality](references/content-quality.md) <br>
-- [First-Time Onboarding](references/onboarding.md) <br>
-- [Local Preview](references/local-preview.md) <br>
-- [Recipes](references/recipes.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Markdown, Code, Files] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON examples, code snippets, and generated episode asset files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide the agent to produce MP3 audio, timeline JSON, HTML episode descriptions, cover images, and Spotify upload commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.0 (source: server release metadata) <br>
+Risk: The skill can inspect connected work accounts and send derived content to cloud services without clearly establishing those boundaries first.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Specify which calendars, repositories, and task accounts may be read; confirm which speech and image providers may receive content; prohibit confidential uploads; use a verified, versioned CLI and review installer side effects.
+
+## Reference(s):
+
+- [CLI usage](references/cli-usage.md)
+- [Spotify API reference](references/spotify-api.md)
+- [Audio providers and assembly](references/audio-providers.md)
+- [Timeline format](references/timeline.md)
+- [Cover images](references/cover-image.md)
+- [Episode descriptions](references/episode-description.md)
+- [Content quality](references/content-quality.md)
+- [Onboarding](references/onboarding.md)
+- [Local preview](references/local-preview.md)
+- [Recipes](references/recipes.md)
+- [Spotify Web API documentation](https://developer.spotify.com/documentation/web-api/tutorials/building-with-ai)
+- [Spotify Web API OpenAPI schema](https://developer.spotify.com/reference/web-api/open-api-schema.yaml)
+- [Spotify CLI releases](https://github.com/spotify/save-to-spotify/releases)
+
+## Skill Output:
+
+**Output Type(s):** [Audio files, Images, JSON, HTML, Text]
+
+**Output Format:** [Narrated audio (MP3 by default), cover image, JSON timeline, and HTML episode description]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The resulting episode is saved privately to the user's Spotify library by default.]
+
+## Skill Version(s):
+
+0.2.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

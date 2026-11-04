@@ -1,43 +1,56 @@
-## Description: <br>
-monday (monday.com) lets an agent read, create, update, and delete monday data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+monday (monday.com). Use this skill for ANY monday request — reading, creating, updating, and deleting data. Whenever a task involves monday, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate monday.com workspaces through an OOMOL-connected account, including board, item, document, dashboard, team, audit log, and activity log workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change or delete monday.com data. <br>
-Mitigation: Confirm the exact payload, target, and effect before approving write or destructive actions. <br>
-Risk: The skill can access sensitive monday.com workspace or account data, including audit logs on enterprise accounts. <br>
-Mitigation: Install and use it only for monday accounts and workspaces where the agent is authorized to operate. <br>
+## Use Case:
 
+People using monday.com through an OOMOL-connected account can ask an agent to inspect boards, items, workspaces, users, documents, and activity, or to create and update monday data. The skill directs the agent to inspect an action's schema and confirm state-changing operations before running them.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-monday) <br>
-- [monday homepage](https://monday.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires fetching the connector action schema before constructing payloads; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release and skill metadata) <br>
+Risk: Setup may run downloaded CLI installer code, and the exact local changes from remote installers are unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the CLI installation and automatic skill synchronization before enabling the skill; install only after checking the source and resulting local changes.
+
+Risk: Some actions can modify, archive, or delete monday data.
+
+Mitigation: Inspect the live action schema, confirm the exact target and effect before state-changing actions, and require explicit confirmation for destructive actions.
+
+## Reference(s):
+
+- [monday API documentation](https://developer.monday.com/api-reference/docs)
+- [monday.com](https://monday.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON requests and responses with natural-language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions may read monday data or change account data; destructive actions can archive, remove, or overwrite data.]
+
+## Skill Version(s):
+
+1.0.9 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

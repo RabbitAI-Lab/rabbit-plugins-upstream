@@ -1,45 +1,51 @@
-## Description: <br>
-Guides agents to generate high-contrast, resonant, story-driven short video spoken scripts using a seven-step structure for hooks, narrative, viewpoint, and punchline. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates colloquial, story-driven short-video spoken scripts using a seven-step structure from opening hook to memorable ending.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External creators and agents use this skill to turn a persona, audience pain point, or topic into a short video spoken script with a colloquial rhythm, concrete story details, and a memorable closing line. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes an image-generation workflow that can install or run the dLazy CLI and execute terminal commands. <br>
-Mitigation: Install or run the CLI only when the user intentionally wants dLazy image generation, and require explicit user confirmation before each command. <br>
-Risk: dLazy login or API-key setup may store credentials in the local CLI configuration. <br>
-Mitigation: Use scoped credentials where possible, protect local configuration files, and rotate or revoke API keys when no longer needed. <br>
-Risk: Prompts and media paths used with the CLI may send prompt data or upload local media to dLazy services. <br>
-Mitigation: Avoid sending confidential prompts or files unless the user has approved that data transfer. <br>
+## Use Case:
 
+Content creators and agents use this skill to draft conversational short-video scripts for character stories and personal-brand viewpoints. It guides the script through a contrast hook, relatable story, central viewpoint, practical examples, and a punchline ending.
 
-## Reference(s): <br>
-- [Dlazy Text Spoken Script on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-text-spoken-script) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or plain text script content with optional shell command and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Primary script output follows a seven-step spoken-script structure; bundled dLazy CLI image-generation steps require user confirmation before terminal execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: frontmatter and server release evidence) <br>
+Risk: The skill's mandatory image-generation workflow adds CLI installation, authentication, and cloud data sharing to a scriptwriting task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a scriptwriting-only version where possible. Before separately using dLazy generation, review the external CLI and explicitly approve authentication, data transmission, and possible charges; do not put API keys in command arguments.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-text-spoken-script)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Colloquial spoken-script prose, typically organized as seven paragraphs or steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Story-driven structure; adapt step numbering to the user's request.]
+
+## Skill Version(s):
+
+1.3.38 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

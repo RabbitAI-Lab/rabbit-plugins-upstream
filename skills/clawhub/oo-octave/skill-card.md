@@ -1,45 +1,51 @@
-## Description: <br>
-Octave connector skill for searching and reading Octave data and running supported Octave agent workflows through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for any Octave request, including reading, creating, and updating data, instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Octave connector schemas, list and read Octave workspace data, validate connectivity, and run supported Octave agents for call prep, context, enrichment, and qualification workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup may require installing OOMOL's oo CLI and creating a persistent OOMOL connection to Octave. <br>
-Mitigation: Install only if you trust OOMOL, review the CLI setup steps, and connect only the intended Octave account. <br>
-Risk: Octave agent runs and connector actions may send user or workspace task data to the connected Octave service. <br>
-Mitigation: Send only data appropriate for Octave and the connected workspace. <br>
-Risk: Actions tagged as write or destructive could change, remove, or overwrite Octave data if added or exposed by the connector. <br>
-Mitigation: Confirm the exact payload, target, and expected effect with the user before running any write or destructive action. <br>
+## Use Case:
 
+Users and developers use this skill to read Octave workspace information and run supported Octave agent actions, including updates where appropriate.
 
-## Reference(s): <br>
-- [Octave Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-octave) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Octave Homepage](https://www.octavehq.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before constructing JSON payloads; connector responses are JSON with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence.release.version and artifact metadata.version) <br>
+Risk: Setup can execute remote code and introduce broader agent changes without clear approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and pin the CLI installation, inspect changes to other agent skills, connect only the intended Octave workspace, and retain confirmation for data changes.
+
+## Reference(s):
+
+- [Octave homepage](https://www.octavehq.com/)
+- [Octave API quickstart](https://docs.octavehq.com/quickstart)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [JSON connector results with natural-language summaries and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions marked write can change Octave data.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

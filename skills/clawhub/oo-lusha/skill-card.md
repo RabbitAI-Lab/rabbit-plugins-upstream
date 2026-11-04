@@ -1,45 +1,59 @@
-## Description: <br>
-Lusha helps agents search, read, and enrich Lusha company and contact data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lusha (lusha.com). Use this skill for ANY Lusha request — searching and reading data. Whenever a task involves Lusha, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search Lusha company and contact previews, enrich returned records, and inspect account usage through an OOMOL-connected Lusha account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Contact enrichment can reveal personal contact details. <br>
-Mitigation: Use the skill only for Lusha queries the user is authorized to perform. <br>
-Risk: Search and enrichment actions may consume Lusha or OOMOL account credits. <br>
-Mitigation: Check account usage when cost is relevant and avoid retrying after billing or insufficient-credit errors until the account is recharged. <br>
-Risk: The skill depends on OOMOL as the access path for Lusha. <br>
-Mitigation: Install it only when the user intends to use OOMOL-managed Lusha access and server-side credential handling. <br>
+## Use Case:
 
+Users with an OOMOL-connected Lusha account use this skill to search companies and contacts, enrich previously returned records, and check account usage.
 
-## Reference(s): <br>
-- [Lusha homepage](https://www.lusha.com) <br>
-- [oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-lusha) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence release.version and skill metadata.version) <br>
+Risk: The missing-command fallback can run a downloaded CLI installer, and the installer payload is unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately; do not allow the fallback to execute the downloaded installer automatically.
+
+Risk: The CLI may automatically change agent skills during startup.
+
+Mitigation: Review those changes and set OO_SKILLS_SYNC_DISABLED=1 to disable startup synchronization when appropriate.
+
+Risk: Using the integration gives OOMOL access to the connected Lusha account and submitted queries.
+
+Mitigation: Review the connected account and its permissions, and submit only queries appropriate for that integration.
+
+## Reference(s):
+
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+- [Lusha API documentation](https://docs.lusha.com/apis/openapi)
+- [Lusha](https://www.lusha.com)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Shell commands]
+
+**Output Format:** [JSON connector responses with concise textual summaries; shell commands for invocation]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns search previews, enriched company or contact data, or account usage details.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

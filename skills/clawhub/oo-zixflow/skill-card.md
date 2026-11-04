@@ -1,42 +1,55 @@
-## Description: <br>
-Zixflow (zixflow.com). Use this skill for ANY Zixflow request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Zixflow to read, create, update, and delete workspace data through the connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent read, create, update, query, and delete Zixflow workspace records, lists, and members through the OOMOL oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete Zixflow data. <br>
-Mitigation: Use a least-privilege Zixflow token where possible, and explicitly review prompts and payloads before allowing write or destructive actions. <br>
-Risk: Incorrect query or record payloads could affect the wrong workspace data. <br>
-Mitigation: Inspect the live connector schema before building each payload and confirm the intended target for write or destructive operations. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Zixflow collections, lists, records, and workspace members, and to create, update, or delete collection records and list entries. Confirm the intended payload and target before any write or deletion.
 
-## Reference(s): <br>
-- [Zixflow homepage](https://zixflow.com) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-zixflow) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live Zixflow connector schemas before constructing payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: The required CLI may silently install or refresh other agent skills during startup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI's automatic installation behavior. Set OO_SKILLS_SYNC_DISABLED=1 for every invocation if it applies, and limit the connected Zixflow account's permissions.
+
+Risk: Create, update, and delete actions can change or remove Zixflow data.
+
+Mitigation: Confirm the exact payload and target before writes or deletions, and retain confirmations for changes and deletions.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Zixflow API documentation](https://docs.zixflow.com/api-reference/introduction)
+- [Zixflow](https://zixflow.com)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON payloads and results with Markdown operating guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [State-changing actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

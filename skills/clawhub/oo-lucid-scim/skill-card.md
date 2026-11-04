@@ -1,43 +1,51 @@
-## Description: <br>
-Lucid SCIM helps agents inspect schemas and run read-only OOMOL connector actions for Lucid SCIM users, groups, teams, and service provider configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read Lucid SCIM user, group, and service-provider configuration data through the connected OOMOL account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, administrators, and support agents use this skill to search and read Lucid SCIM directory information through an OOMOL-connected account without handling raw Lucid SCIM tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lucid SCIM user, group, and team lookup results can contain sensitive organization directory data. <br>
-Mitigation: Review the OOMOL Lucid SCIM connection and scopes, and share retrieved directory data only with authorized users. <br>
-Risk: The skill depends on a valid OOMOL connection, account authentication, and sufficient billing or scopes. <br>
-Mitigation: Use the live connector schema before running an action and resolve authentication, scope, connection, or billing errors through the documented OOMOL setup flow. <br>
+## Use Case:
 
+Lucid administrators and developers can use the skill to look up users, groups, and service-provider configuration in a connected Lucid SCIM account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-lucid-scim) <br>
-- [Lucid SCIM homepage](https://lucid.co) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Lucid SCIM connection page](https://console.oomol.com/app-connections?provider=lucid_scim) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, an authenticated OOMOL account, and a connected Lucid SCIM app connection; the available actions in the artifact are read-only.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup instructions can automatically run downloaded, unverified CLI installers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and verify the oo CLI yourself, prevent automatic installer execution, and review its bundled-skill installation behavior and the Lucid account access it receives.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Lucid SCIM](https://lucid.co)
+- [Lucid SCIM API documentation](https://developer.lucid.co/reference/overview-scim)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON responses with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only user, group, and service-provider configuration data; available fields depend on each action's schema.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

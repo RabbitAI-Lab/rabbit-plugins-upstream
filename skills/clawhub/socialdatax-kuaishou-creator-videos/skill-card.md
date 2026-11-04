@@ -1,41 +1,52 @@
-## Description: <br>
-用于快手达人数据、快手达人作品、作品列表、近期发布、内容调研和创作者内容分析，覆盖 Kuaishou / Kwai creator works，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于快手达人数据、快手达人作品、作品列表、近期发布、内容调研和创作者内容分析。覆盖 Kuaishou / Kwai creator works，来自 SocialDataX 社媒数据助手。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Creators, marketers, and analysts use this skill to retrieve Kuaishou creator video lists and review recent posts, content styles, and creator benchmarks.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: API key exposure
+
+Mitigation: Use client-managed secret storage for the environment that runs the CLI, and keep the key out of chat and version control.
+
+Risk: CLI use can consume account credits, and an unreviewed package version may change behavior.
+
+Mitigation: Review and pin a CLI version, and set page or item limits appropriate to the request.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External users, researchers, and marketing analysts use this skill to retrieve and summarize Kuaishou / Kwai creator video lists for content research, recent publishing review, account tracking, and creator benchmarking. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [JSON data, Analysis]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses SOCIALDATAX_API_KEY with the SocialDataX CLI/API. <br>
-Mitigation: Use it only when you intend to provide that API key to SocialDataX, keep the key in the environment, and avoid embedding it in prompts or files. <br>
-Risk: Unbounded pagination can cause large API usage. <br>
-Mitigation: Prefer --max-items, --pages, or --since-days for cost control, and avoid --all unless the user explicitly wants a complete crawl. <br>
+**Output Format:** [JSON]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-kuaishou-creator-videos) <br>
-- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub) <br>
+**Other Properties Related to Output:** [Creator video results may include titles or descriptions, publish times, interaction counts, media links, and content types; paginated results may include page and item counts plus a next-page token.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Kuaishou creator work-list retrieval; pagination can be bounded with --pages, --max-items, or --since-days.] <br>
+0.1.22 (source: server-resolved release metadata)
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

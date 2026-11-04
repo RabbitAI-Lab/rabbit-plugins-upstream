@@ -1,43 +1,55 @@
-## Description: <br>
-Telnyx lets an agent inspect Telnyx connector schemas and run Telnyx messaging actions through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Telnyx (telnyx.com). Use this skill for ANY Telnyx request — reading, creating, and updating data. Whenever a task involves Telnyx, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to list and retrieve Telnyx messaging profiles and messages, and to send SMS or MMS messages from an OOMOL-connected Telnyx account after confirming write payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sending Telnyx messages can affect recipients or incur account costs. <br>
-Mitigation: Confirm the exact recipient, message content, media URLs, and payload with the user before running send_message. <br>
-Risk: Connector commands require an authenticated OOMOL account with an active Telnyx connection. <br>
-Mitigation: Run setup or reconnection steps only after a command fails with an authentication, missing scope, expired credential, app readiness, or billing error. <br>
+## Use Case:
 
+Developers and operators use this skill to read Telnyx messaging profiles and messages, and to send SMS or MMS messages through their connected Telnyx account.
 
-## Reference(s): <br>
-- [ClawHub Telnyx Skill](https://clawhub.ai/oomol/skills/oo-telnyx) <br>
-- [Telnyx Homepage](https://telnyx.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may return JSON from the oo CLI; write actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence.release.version and SKILL.md metadata) <br>
+Risk: The setup fallback runs an unverified remote installer without a separate approval step; the remote installer and hosted connector implementation remain unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation before enabling the skill. Prefer a verified, pinned installation under your control, and check whether it installs or updates other agent skills.
+
+Risk: The connected service intermediary handles credentials and requests.
+
+Mitigation: Approve OOMOL as the intermediary and confirm message recipients and content before sending.
+
+## Reference(s):
+
+- [Telnyx website](https://telnyx.com/)
+- [Telnyx API documentation](https://developers.telnyx.com/api-reference/overview)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON responses with concise guidance and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions that send messages require confirmation of the exact payload and effect.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,52 @@
-## Description: <br>
-Meta (business.meta.com). Use this skill for Meta requests that search or read current user, ad account, campaign, and ads insight data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Meta (business.meta.com). Use this skill for ANY Meta request — searching and reading data. Whenever a task involves Meta, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Meta business data through the oo CLI after confirming the live connector schema for each action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill accesses Meta business data through an OOMOL-connected account. <br>
-Mitigation: Install and use it only when OOMOL is an acceptable intermediary for the connected Meta business account. <br>
-Risk: Connector schemas and action payloads can change over time. <br>
-Mitigation: Review the live connector schema before each action and build payloads from that schema. <br>
-Risk: Future write or destructive Meta actions could alter or remove account data. <br>
-Mitigation: Require explicit user approval before running any action tagged write or destructive. <br>
+## Use Case:
 
+External users, such as business operators and analysts, use the skill to retrieve information from a connected Meta account, including account details, campaigns, and advertising insights.
 
-## Reference(s): <br>
-- [Meta Business](https://business.meta.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-meta) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, OOMOL sign-in, and a connected Meta account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Setup can execute unverified remote installers without a clear approval step, and automatic skill-installation behavior needs review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a verified CLI separately before enabling the skill, including its automatic skill-installation behavior. Connect only the Meta permissions needed and account for OOMOL-mediated access.
+
+## Reference(s):
+
+- [Meta Marketing API documentation](https://developers.facebook.com/docs/marketing-api/)
+- [Meta Business](https://business.meta.com/)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [Meta ClawHub skill page](https://clawhub.ai/oomol/skills/oo-meta)
+
+## Skill Output:
+
+**Output Type(s):** [API data, JSON, Guidance]
+
+**Output Format:** [JSON responses from Meta read actions, with explanatory text as needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the connected Meta account and its permissions.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

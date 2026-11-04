@@ -1,43 +1,55 @@
-## Description: <br>
-Operates Bitly through the OOMOL oo CLI for reading Bitly data, creating shortened links, and updating existing Bitlinks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bitly (bitly.com). Use this skill for ANY Bitly request — reading, creating, and updating data. Whenever a task involves Bitly, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to handle Bitly requests through an OOMOL-connected account, including inspecting user or group data, creating short links, and updating editable Bitlink fields. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or update Bitly resources through the user's connected OOMOL Bitly account. <br>
-Mitigation: Confirm the exact payload and intended effect before running account-changing actions, including Bitlink updates and link creation. <br>
-Risk: The artifact tags update_bitlink as a write action, while security guidance also treats shorten_link as a write because it creates a new link. <br>
-Mitigation: Treat shorten_link and update_bitlink as account-changing actions that require user confirmation before execution. <br>
+## Use Case:
 
+External users and developers use this skill to read Bitly account, group, and link information, create short links, and update editable Bitlink fields through a connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-bitly) <br>
-- [Bitly Homepage](https://bitly.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses OOMOL server-side injected credentials and requires schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: The documented automatic CLI setup runs an unverified installer, and startup synchronization can change other agents' skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and pin the installation, and set OO_SKILLS_SYNC_DISABLED=1 before invoking the CLI if you do not want skill synchronization.
+
+Risk: Creating short links and updating Bitlinks change Bitly data.
+
+Mitigation: Preserve user confirmation for the exact link changes before running write actions.
+
+## Reference(s):
+
+- [Bitly API Reference](https://dev.bitly.com/api-reference/)
+- [Bitly](https://bitly.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [Structured Bitly connector responses and concise natural-language guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Create and update actions change Bitly data and require user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

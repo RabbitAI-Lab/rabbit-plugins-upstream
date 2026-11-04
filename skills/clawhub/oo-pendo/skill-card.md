@@ -1,39 +1,55 @@
-## Description: <br>
-Pendo (pendo.io). Use this skill for Pendo requests that involve searching or reading pages, features, or integration status through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Pendo through an OOMOL-connected account to search and read page and feature data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and product teams use this skill to inspect Pendo pages, features, and integration status without calling the Pendo API directly. It is suited for read-oriented product analytics support where access to Pendo data is already appropriate for the workspace. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [Pendo homepage](https://www.pendo.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-pendo) <br>
+Developers and Pendo users use this skill to inspect page and feature data through their OOMOL-connected account.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to fetch live action schemas before connector calls; Pendo data may be sensitive, so use in workspaces where read access to pages, features, and integration status is appropriate.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Automatic installation can execute unchecked code and skill synchronization can make broader changes to an agent's skills.
+
+Mitigation: Review the CLI setup, prefer a verified fixed release installed under your control, and set OO_SKILLS_SYNC_DISABLED=1 if you do not want automatic synchronization.
+
+Risk: Connecting Pendo gives OOMOL access through the configured integration credentials.
+
+Mitigation: Connect only an account authorized for this use and review the connection before running Pendo actions.
+
+## Reference(s):
+
+- [Pendo API documentation](https://engageapi.pendo.io/)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [Pendo homepage](https://www.pendo.io)
+
+## Skill Output:
+
+**Output Type(s):** [API data, JSON, Guidance]
+
+**Output Format:** [JSON results with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Pendo page and feature lookups, action schemas, and integration status.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

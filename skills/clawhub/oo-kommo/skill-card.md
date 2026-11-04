@@ -1,44 +1,60 @@
-## Description: <br>
-Operates Kommo through an OOMOL-connected account so an agent can search and read CRM data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves account, company, contact, lead, pipeline, task, and user data from a connected Kommo account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect Kommo connector schemas and run get/list actions against a connected Kommo CRM account. It is intended for CRM account, company, contact, lead, pipeline, task, and user lookup or listing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Kommo CRM records may include sensitive business or personal information. <br>
-Mitigation: Install and use the skill only for intended CRM read workflows, and review agent outputs before sharing or storing retrieved records. <br>
-Risk: First-time CLI installation or account connection can grant access to a connected Kommo account. <br>
-Mitigation: Review install and connection steps before running them, and connect only the Kommo account and scopes needed for the task. <br>
+## Use Case:
 
+Sales and operations teams use this skill to look up records and account details in a connected Kommo CRM.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-kommo) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Kommo Homepage](https://www.kommo.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides schema-first execution through the oo CLI and returns connector responses as JSON when commands are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Fallback setup can run a downloaded CLI installer whose contents were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and explicitly authorize installation before running it; prefer a verified, fixed release.
+
+Risk: The CLI may automatically synchronize additional persistent agent skills.
+
+Mitigation: Decide whether to allow synchronization; set OO_SKILLS_SYNC_DISABLED to opt out.
+
+Risk: Connecting Kommo gives OOMOL access to CRM data, while the connector implementation was not verified.
+
+Mitigation: Connect only an account whose data OOMOL is authorized to access, and review the requested connection scopes.
+
+## Reference(s):
+
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [Kommo website](https://www.kommo.com/)
+- [Kommo API documentation](https://developers.kommo.com/docs/long-lived-token)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Shell commands with JSON action payloads; results are returned as JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses read-only get and list actions.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

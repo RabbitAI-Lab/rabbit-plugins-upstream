@@ -1,43 +1,58 @@
-## Description: <br>
-Versatile video generation with Kling v3 Omni, supporting multi-modal image and prompt inputs for dynamic video generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates videos with Kling v3 Omni from prompts and optional image or video references.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to call the dLazy Kling v3 Omni CLI for text-to-video and image or video reference generation workflows, including synchronous generation and asynchronous task polling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local media paths supplied to the CLI can be uploaded to dLazy's hosted service. <br>
-Mitigation: Use the skill only with content approved for dLazy cloud processing and avoid sending sensitive media or confidential prompts unless the user's policy permits it. <br>
-Risk: The dLazy CLI may save an API key in the local user configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-invocation credentials when persistent local storage is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Developers and creators use this skill to generate short videos from text prompts and optional image or video references, with controls for aspect ratio, duration, sound, and generation mode.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-kling-v3-omni) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is returned through dLazy-hosted output URLs or an asynchronous task identifier.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release metadata) <br>
+Risk: Prompt and reference media are sent to dLazy, and local media files may be uploaded for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only prompts and media you are comfortable sharing with dLazy.
+
+Risk: Video generation may incur account charges.
+
+Mitigation: Use --dry-run to preview the request and cost estimate before generating.
+
+Risk: The CLI stores an API key in the user's local configuration, and the external CLI executable and dependencies are outside the reviewed artifact.
+
+Mitigation: Protect the local configuration, install the CLI from a trusted source, and rotate or revoke the API key if exposed.
+
+## Reference(s):
+
+- [dLazy website](https://dlazy.com)
+- [dLazy CLI package on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video, JSON]
+
+**Output Format:** [Hosted video assets with a JSON response containing output URLs or asynchronous task status]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated assets are hosted by dLazy; asynchronous requests can return a task identifier before outputs are ready.]
+
+## Skill Version(s):
+
+1.3.36 (source: server release evidence; artifact frontmatter lists 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

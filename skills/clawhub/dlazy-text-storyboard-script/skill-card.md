@@ -1,45 +1,55 @@
-## Description: <br>
-Generates detailed short-video storyboard scripts from user-provided themes, structured copy, or outlines while preserving supplied spoken copy word for word. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns user themes, structured copy, or outlines into detailed short-video storyboard scripts while preserving the supplied wording.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External creators, marketers, and production teams use this skill to turn structured short-video copy into shot-by-shot storyboard scripts with scene, camera, lighting, and spoken-script guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is framed as text-only storyboard generation but includes instructions to install and run a cloud media-generation CLI. <br>
-Mitigation: Use it only when cloud dLazy generation is intended, review the npm package and CLI behavior before installation, and require explicit confirmation before running any dlazy command. <br>
-Risk: Prompts, copy, and referenced local media paths may be sent to dLazy cloud endpoints during CLI use. <br>
-Mitigation: Avoid sensitive copy and private local media paths unless the user has approved cloud processing for that material. <br>
-Risk: The CLI stores API-key configuration locally. <br>
-Mitigation: Review API-key storage behavior, protect the local configuration file, and rotate or revoke keys when access is no longer needed. <br>
+## Use Case:
 
+External creators and video production teams can turn a theme, outline, or structured script into shot-by-shot visual directions and spoken lines.
 
-## Reference(s): <br>
-- [Dlazy Text Storyboard Script on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-text-storyboard-script) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown storyboard with video parameters and repeated shot sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes aspect ratio, resolution, calculated dimensions, paragraph function, scene, camera movement, notes, shooting technique, and spoken script.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.3 (source: evidence release and frontmatter) <br>
+Risk: The skill promises text-only storyboard writing but also contains directions for image generation, CLI installation, and account setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a text-only storyboard workflow without rendering, installation, or authentication steps.
+
+Risk: Cloud rendering may send prompts or media to dLazy and incur API charges; the external CLI implementation and credential-storage permissions are unverified.
+
+Mitigation: Before cloud rendering, obtain explicit approval for the data shared and any charges; use device login rather than entering an API key in a command.
+
+## Reference(s):
+
+- [CLI repository (linked in skill metadata)](https://github.com/dlazy-ai/cli)
+- [CLI package on npm (linked in skill metadata)](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service homepage (linked in skill metadata)](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with structured shot headings and labeled fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes global video ratio, resolution, and dimensions, plus per-shot scene, camera, notes, and spoken copy.]
+
+## Skill Version(s):
+
+1.2.33 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

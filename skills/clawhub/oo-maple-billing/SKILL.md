@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Measure"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["maple_billing"]
   icon: "https://static.oomol.com/logo/third-party/maple_billing.png"
 ---
@@ -43,7 +43,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `find_product_pricing` — Search Measure product pricing records with official query criteria.
 - `find_products` — Search Measure products with pagination and official query criteria.
 - `find_subscriptions` — Search Measure subscriptions with pagination and official query criteria.
-- `get_checkout_session` — Retrieve a Measure checkout session by ID. [write]
+- `get_checkout_session` — Retrieve a Measure checkout session by ID.
 - `get_customer` — Retrieve a Measure customer by ID or external identifier.
 - `get_product` — Retrieve a Measure product by ID or external identifier.
 - `get_product_pricing` — Retrieve a Measure product pricing record by ID or external identifier.
@@ -79,11 +79,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Measure is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=maple_billing
+  https://console.oomol.com/connections/maple_billing
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Measure homepage: https://getmeasure.com
+- API documentation: https://docs.getmeasure.com/pages/guides/quickstart-with-api

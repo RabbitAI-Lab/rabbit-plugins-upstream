@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "CompanyCam"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["companycam"]
   icon: "https://static.oomol.com/logo/third-party/companycam.png"
 ---
@@ -37,7 +37,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `archive_project` — Archive a CompanyCam project by ID. [write]
+- `archive_project` — Archive a CompanyCam project by ID. [destructive]
 - `create_project` — Create a CompanyCam project with optional address, coordinates, and contact data. [write]
 - `create_tag` — Create a CompanyCam tag. [write]
 - `delete_tag` — Delete a CompanyCam tag by ID. [destructive]
@@ -49,7 +49,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `list_projects` — List CompanyCam projects with optional name, address, and modified-since filters.
 - `list_tags` — List CompanyCam tags visible to the API token.
 - `list_users` — List CompanyCam users visible to the API token.
-- `restore_project` — Restore an archived CompanyCam project by ID.
+- `restore_project` — Restore an archived CompanyCam project by ID. [write]
 - `update_project` — Update a CompanyCam project's name, address, coordinates, or geofence. [write]
 - `update_tag` — Update a CompanyCam tag label. [write]
 
@@ -82,11 +82,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — CompanyCam is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=companycam
+  https://console.oomol.com/connections/companycam
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - CompanyCam homepage: https://companycam.com
+- API documentation: https://companycam.readme.io/docs/getting-started

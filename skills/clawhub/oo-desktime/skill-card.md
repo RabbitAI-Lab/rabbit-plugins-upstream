@@ -1,46 +1,59 @@
-## Description: <br>
-Operate DeskTime through an OOMOL-connected account for reading, creating, and updating DeskTime data instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for any DeskTime request involving reading, creating, or updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, developers, and operations teams use this skill to operate DeskTime through an OOMOL-connected account. It supports reading company, employee, project, task, and tracking information, and creating DeskTime projects with optional tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger wording could cause DeskTime actions to run when the user's intent is unclear. <br>
-Mitigation: Require clear user intent before allowing DeskTime actions, especially operations that create or change records. <br>
-Risk: DeskTime write actions can create or change records. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write or destructive. <br>
-Risk: The integration requires DeskTime-related credentials and account access through OOMOL. <br>
-Mitigation: Before installation, confirm the user is comfortable granting the DeskTime access needed for the integration. <br>
+## Use Case:
 
+External users and employees can use this skill to read company, employee, and project data from a connected DeskTime account, and to create projects or associated tasks.
 
-## Reference(s): <br>
-- [ClawHub DeskTime Skill](https://clawhub.ai/oomol/skills/oo-desktime) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [DeskTime Homepage](https://desktime.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing DeskTime action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: CLI setup instructions can run downloaded code without a separate approval step; the remote installers and exact installed release were not inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified CLI release yourself, review installers before running them, and prevent automatic installer execution.
+
+Risk: DeskTime access may expose employee tracking data.
+
+Mitigation: Review managed-skill synchronization settings and authorize only the DeskTime access needed.
+
+Risk: Creating a project or associated task changes DeskTime data.
+
+Mitigation: Confirm the exact payload and effect with the user before running a write action.
+
+## Reference(s):
+
+- [DeskTime](https://desktime.com/)
+- [DeskTime API documentation](https://help.desktime.com/hc/en-us/articles/25494558790685-Introduction-to-the-DeskTime-API)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Text, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON action payloads and DeskTime response data, with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can read company, employee, and project data; project creation can also create an associated task. Write actions require confirmation of the exact payload and effect.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

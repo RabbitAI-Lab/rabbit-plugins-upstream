@@ -1,39 +1,56 @@
-## Description: <br>
-Enables agents to inspect Botpress workspaces and bots through an OOMOL-connected Botpress account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read Botpress bots and workspaces through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to read Botpress workspace and bot information from a connected Botpress account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill has a broad Botpress trigger and can route Botpress-related requests through a connected account. <br>
-Mitigation: Install it only when Botpress access is intended, mention Botpress clearly only when use is desired, and review connected account scopes before enabling the skill. <br>
+## Use Case:
 
+Developers and Botpress workspace operators use the skill to list accessible workspaces and bots or retrieve details for a specific bot.
 
-## Reference(s): <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Botpress homepage](https://botpress.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, json, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the OOMOL oo CLI and return connector data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup can run downloaded installers whose full effects were not inspected and may make broader changes to installed agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup, install a reviewed and verified oo CLI release separately, and use OO_SKILLS_SYNC_DISABLED to prevent automatic skill synchronization where supported.
+
+Risk: Connecting Botpress gives OOMOL account access and involves handling requested data.
+
+Mitigation: Review the account and data access granted when connecting Botpress, and use an account with access appropriate to the requested work.
+
+## Reference(s):
+
+- [Botpress documentation](https://botpress.com/docs/)
+- [Botpress homepage](https://botpress.com)
+- [oo CLI repository (tool reference)](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON data, Text summaries]
+
+**Output Format:** [Structured Botpress bot or workspace data, with concise text summaries as needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the connected account's access and available Botpress data.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

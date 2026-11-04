@@ -1,44 +1,56 @@
-## Description: <br>
-Amplemarket (amplemarket.com). Use this skill for Amplemarket requests involving reading, creating, and updating data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses an OOMOL-connected account to read Amplemarket account, contact, lead-list, and task data, and to complete or skip tasks.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Amplemarket connector schemas, run read actions for contacts, lead lists, accounts, tasks, statuses, and types, and perform approved task state updates through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Amplemarket task state. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running actions tagged as write or destructive. <br>
-Risk: Connector commands depend on an authenticated OOMOL account, an active Amplemarket connection, and available OOMOL credit. <br>
-Mitigation: Run setup or recovery steps only after command failures indicate missing CLI installation, authentication, connection scope, expired credentials, app readiness, or billing limits. <br>
+## Use Case:
 
+Amplemarket users use the skill to retrieve account, contact, lead-list, and task information, and to complete or skip tasks through their connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-amplemarket) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Amplemarket Homepage](https://www.amplemarket.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require confirmation before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: The CLI dependency may persistently change other agent skills without that effect being explained.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation separately, preferably using a verified release, and set OO_SKILLS_SYNC_DISABLED=1 before invoking oo to disable automatic changes to other agent skills.
+
+Risk: The remote installer and hosted implementation were not verified.
+
+Mitigation: Review the CLI installation separately before use and prefer a verified release.
+
+## Reference(s):
+
+- [Amplemarket API documentation](https://docs.amplemarket.com/api-reference/introduction)
+- [Amplemarket](https://www.amplemarket.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [ClawHub release page](https://clawhub.ai/oomol/skills/oo-amplemarket)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON]
+
+**Output Format:** [JSON connector responses with text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions that change Amplemarket state require user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
