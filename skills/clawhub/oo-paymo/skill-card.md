@@ -1,41 +1,56 @@
-## Description: <br>
-Paymo (paymoapp.com). Use this skill for ANY Paymo request - reading, creating, updating, and deleting data. Whenever a task involves Paymo, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the OOMOL-connected Paymo account to read, create, update, and delete Paymo data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and agents use this skill to read and manage Paymo clients, projects, tasks, and the current authenticated user through an OOMOL-connected Paymo account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: State-changing Paymo actions can create, update, or delete clients, projects, and tasks. <br>
-Mitigation: Review the exact action, target object, JSON payload, and expected effect with the user before running write actions; require explicit approval before destructive actions. <br>
-Risk: The skill relies on OOMOL-brokered Paymo access and the local oo CLI. <br>
-Mitigation: Install only when the user trusts OOMOL to broker Paymo access, connect the Paymo API key intentionally, and install the oo CLI only from the documented official source. <br>
+## Use Case:
 
+External users can operate a Paymo account connected through OOMOL to retrieve clients, projects, tasks, and the current user, or create, update, and delete clients, projects, and tasks.
 
-## Reference(s): <br>
-- [Paymo homepage](https://www.paymoapp.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The missing-software fallback runs remote installers without clearly obtaining permission for broader local changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and automatic agent-skill installation settings before using the fallback setup steps.
+
+Risk: Paymo write and destructive actions can change or remove account data.
+
+Mitigation: Keep approval checks for changes and get explicit confirmation of the target before deletions.
+
+## Reference(s):
+
+- [Paymo skill page](https://clawhub.ai/oomol/skills/oo-paymo)
+- [Paymo](https://www.paymoapp.com)
+- [Paymo API documentation](https://github.com/paymoapp/api)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [Shell commands with JSON payloads and explanatory text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read actions can run directly; changes require approval and deletions require explicit confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

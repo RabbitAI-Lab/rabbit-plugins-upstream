@@ -1,46 +1,60 @@
-## Description: <br>
-Operate WebinarJam through an OOMOL-connected account to read webinar data and register users with the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to read, create, and update WebinarJam data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents and operators use this skill to list WebinarJam webinars, inspect webinar details, list registrants or attendees, and register users through an authenticated OOMOL connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read WebinarJam account data and register users through a connected OOMOL account. <br>
-Mitigation: Use only the intended authenticated account and confirm registration payloads before running write actions. <br>
-Risk: First-time CLI install or login steps establish trust in OOMOL tooling and account access. <br>
-Mitigation: Run setup steps only after an auth, connection, or missing-CLI error and only when the user trusts OOMOL for the task. <br>
-Risk: Connector action contracts can change, making stale payloads incorrect. <br>
-Mitigation: Inspect the live connector schema before constructing each action payload. <br>
+## Use Case:
 
+External users and developers can retrieve webinar details, webinar lists, registrants, and attendee data, and register users for webinars through a connected WebinarJam account. Confirm the target webinar and registrant before running the registration action, which changes account data.
 
-## Reference(s): <br>
-- [WebinarJam homepage](https://webinarjam.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub WebinarJam skill page](https://clawhub.ai/oomol/skills/oo-webinarjam) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON when commands are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup runs remote installers and can synchronize bundled skills without clear approval or disclosure of broader agent changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before running it, use a reviewed fixed oo CLI version, and control bundled-skill synchronization.
+
+Risk: The connected account may expose WebinarJam webinar and registrant data to OOMOL.
+
+Mitigation: Confirm which WebinarJam account is connected and what account and registrant data OOMOL may access.
+
+Risk: Registering a user changes WebinarJam account data.
+
+Mitigation: Keep the required confirmation and verify the exact webinar and registrant before registration.
+
+## Reference(s):
+
+- [WebinarJam homepage](https://webinarjam.com)
+- [WebinarJam API documentation](https://support.webinarjam.com/en/collections/19655423-developer-api)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-webinarjam)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON API responses and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the live action schema; registration is a confirmed write.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,6 +3,7 @@
  * 消息 + 任务 两张表，进程重启数据不丢失
  */
 import Database, { type Database as DatabaseType, type Statement } from "better-sqlite3";
+import { randomUUID } from "crypto";
 import * as fs from "fs";
 import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
@@ -179,6 +180,40 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_consumed_log       ON consumed_log(agent_id, resource);
 `);
 
+// ─── Feature B: 人在环授权队列 ──────────────────────────
+// auth_requests：Agent 执行中遇到的敏感操作授权请求；auth_grants：可选的信任窗口。
+// 幂等建表（CREATE TABLE IF NOT EXISTS），老库自动迁移。
+db.exec(`
+  CREATE TABLE IF NOT EXISTS auth_requests (
+    id              TEXT PRIMARY KEY,                 -- req_<timestamp>_<rand>
+    agent_id        TEXT NOT NULL,                    -- 请求方 Agent
+    task_id         TEXT,                             -- 关联任务（可空）
+    op_type         TEXT NOT NULL,                    -- 见 AUTH_OP_TYPES
+    op_payload      TEXT,                             -- JSON：具体操作参数，供人类判定
+    status          TEXT NOT NULL DEFAULT 'pending',  -- pending|approved|rejected|expired
+    created_at      INTEGER NOT NULL,
+    expires_at      INTEGER NOT NULL,                 -- created_at + AUTH_REQUEST_TTL_MS
+    resolved_by     TEXT,                             -- 决议人（人类操作者 ID / admin）
+    resolved_at     INTEGER,
+    decision_reason TEXT
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_auth_status ON auth_requests(status);
+  CREATE INDEX IF NOT EXISTS idx_auth_agent  ON auth_requests(agent_id);
+
+  -- 可选：信任窗口（时间窗口信任粒度，见设计文档 §9 决策 3）
+  CREATE TABLE IF NOT EXISTS auth_grants (
+    id          TEXT PRIMARY KEY,
+    agent_id    TEXT NOT NULL,
+    op_category TEXT NOT NULL,                        -- 类目级信任（如 'external_api'）
+    granted_by  TEXT NOT NULL,
+    granted_at  INTEGER NOT NULL,
+    expires_at  INTEGER NOT NULL
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_grant_agent_cat ON auth_grants(agent_id, op_category);
+`);
+
 // ─── SSE 事件日志（D1）：全局单调 seq，支持重连精确补发 + 首连补发 ──
 // delivered=0 表示尚未成功投递，用于首连补发；id 即 SSE 的 Last-Event-ID
 db.exec(`
@@ -194,6 +229,107 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_event_log_agent        ON event_log(agent_id, id);
   CREATE INDEX IF NOT EXISTS idx_event_log_undelivered  ON event_log(agent_id, delivered, id);
 `);
+
+// ─── P1: 订阅表（SSE 事件订阅剪枝） ───────────────────
+// 借鉴 DeepSeek Super-Agent「订阅直通」思想：让 Agent 显式声明关心哪些事件，
+// Hub 在 broadcastToAll 时按订阅规则剪枝，未订阅 Agent 维持现状全投（保守零回归）。
+//   - event_type：'*' 或空 = 匹配任意事件类型；具体值（如 'message'/'task_assigned'）须相等
+//   - topic_filter：空 = 不限主题；非空 = 对事件 payload 的 JSON 串做子串 includes
+// 唯一约束 (agent_id, event_type, topic_filter) 保证幂等写入。
+db.exec(`
+  CREATE TABLE IF NOT EXISTS subscriptions (
+    id           TEXT PRIMARY KEY,
+    agent_id     TEXT NOT NULL,
+    event_type   TEXT NOT NULL DEFAULT '*',
+    topic_filter TEXT NOT NULL DEFAULT '',
+    created_at   INTEGER NOT NULL,
+    UNIQUE(agent_id, event_type, topic_filter)
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_subscriptions_agent ON subscriptions(agent_id);
+`);
+
+export interface Subscription {
+  id: string;
+  agent_id: string;
+  event_type: string;
+  topic_filter: string;
+  created_at: number;
+}
+
+export const subscriptionStmt: Record<string, Statement> = {
+  subscribe: db.prepare<Subscription>(
+    `INSERT OR IGNORE INTO subscriptions (id, agent_id, event_type, topic_filter, created_at)
+     VALUES (@id, @agent_id, @event_type, @topic_filter, @created_at)`
+  ),
+  unsubscribe: db.prepare<[string, string, string]>(
+    `DELETE FROM subscriptions WHERE agent_id=? AND event_type=? AND topic_filter=?`
+  ),
+  unsubscribeAll: db.prepare<string>(
+    `DELETE FROM subscriptions WHERE agent_id=?`
+  ),
+  getByAgent: db.prepare<string>(
+    `SELECT * FROM subscriptions WHERE agent_id=? ORDER BY created_at ASC`
+  ),
+  getAll: db.prepare(
+    `SELECT * FROM subscriptions ORDER BY agent_id ASC, created_at ASC`
+  ),
+};
+
+/**
+ * 订阅事件（幂等：基于唯一约束，重复订阅静默忽略）。
+ * @param eventType '*' 或空表示订阅全部事件类型
+ * @param topicFilter 空表示不限主题；非空为对事件 payload JSON 的子串过滤
+ */
+export function subscribeEvent(agentId: string, eventType: string, topicFilter: string): void {
+  subscriptionStmt.subscribe.run({
+    id: randomUUID(),
+    agent_id: agentId,
+    event_type: eventType && eventType.trim() ? eventType : "*",
+    topic_filter: topicFilter && topicFilter.trim() ? topicFilter : "",
+    created_at: Date.now(),
+  });
+}
+
+/**
+ * 退订。
+ * - 若 eventType 与 topicFilter 均为默认（'*'/空），则清空该 Agent 的全部订阅；
+ * - 否则仅删除精确匹配的那一条规则。
+ * @returns 受影响行数
+ */
+export function unsubscribeEvent(agentId: string, eventType?: string, topicFilter?: string): number {
+  if ((eventType ?? "*") === "*" && (topicFilter ?? "") === "") {
+    return subscriptionStmt.unsubscribeAll.run(agentId).changes;
+  }
+  return subscriptionStmt.unsubscribe.run(agentId, eventType ?? "*", topicFilter ?? "").changes;
+}
+
+/** 查询某 Agent 的全部订阅规则 */
+export function getSubscriptions(agentId: string): Subscription[] {
+  return subscriptionStmt.getByAgent.all(agentId) as Subscription[];
+}
+
+/** 查询全量订阅规则（用于启动时构建内存缓存） */
+export function getAllSubscriptions(): Subscription[] {
+  return subscriptionStmt.getAll.all() as Subscription[];
+}
+
+/**
+ * 纯函数：判断某事件是否命中 Agent 的订阅规则集合。
+ * - 任一规则命中即返回 true（应投递）；
+ * - 全部不命中返回 false（剪枝掉）。
+ * 匹配规则：
+ *   - event_type：空或 '*' 匹配任意类型；否则须与事件类型相等；
+ *   - topic_filter：空匹配任意主题；否则事件 payload JSON 串须包含该子串。
+ */
+export function subscriptionMatches(eventType: string, payloadStr: string, subs: Subscription[]): boolean {
+  for (const s of subs) {
+    const typeOk = !s.event_type || s.event_type === "*" || s.event_type === eventType;
+    const topicOk = !s.topic_filter || payloadStr.includes(s.topic_filter);
+    if (typeOk && topicOk) return true;
+  }
+  return false;
+}
 
 // ─── Phase 4a Migration: tasks 表新增字段 ──────────────
 // 必须在 taskStmt.insert 之前执行
@@ -358,6 +494,62 @@ export const taskStmt: Record<string, Statement> = {
     `SELECT t.* FROM tasks t JOIN pipeline_tasks pt ON t.id=pt.task_id WHERE pt.pipeline_id=? ORDER BY pt.order_index ASC`
   ),
 };
+
+// ─── P0 Watchdog: 卡死 / 离线任务自愈（纯 DB 操作） ──────────
+// 借鉴 DeepSeek Super-Agent「外部 Watchdog + 自治自愈」思想：
+// 把「任务卡死 / Agent 掉线后的孤儿任务」检测与回收下沉到 DB 层，
+// 与 orchestrator 的编排逻辑解耦（本文件不引入 auditLog，避免循环依赖），
+// 审计与通知由 orchestrator 层负责。
+
+/**
+ * 查询某 Agent 处于指定状态的任务（用于离线释放）。
+ */
+export function findTasksByAgentStatus(agentId: string, statuses: string[]): Task[] {
+  if (statuses.length === 0) return [];
+  const placeholders = statuses.map(() => "?").join(", ");
+  return db
+    .prepare<[string, ...string[]]>(
+      `SELECT * FROM tasks WHERE assigned_to=? AND status IN (${placeholders}) ORDER BY updated_at ASC`
+    )
+    .all(agentId, ...statuses) as Task[];
+}
+
+/**
+ * 检测卡死任务：assigned / in_progress 但长时间无进展，或已过 due_at 仍未完成。
+ * @param stuckMs 无进展判定阈值（毫秒）
+ */
+export function findStuckTasks(stuckMs: number): Task[] {
+  const now = Date.now();
+  return db
+    .prepare<[number, number]>(
+      `SELECT * FROM tasks
+       WHERE status IN ('assigned','in_progress')
+         AND (updated_at < ? OR (due_at IS NOT NULL AND due_at < ?))
+       ORDER BY updated_at ASC`
+    )
+    .all(now - stuckMs, now) as Task[];
+}
+
+/**
+ * 将卡死 / 离线任务安全退回收件箱（inbox），清空承接人。
+ * 仅当任务仍处于 assigned / in_progress 才生效（已完成/已取消不动），幂等。
+ * 返回是否实际发生了释放。
+ */
+export function releaseTaskToInbox(taskId: string): boolean {
+  const now = Date.now();
+  return transaction(() => {
+    const before = db
+      .prepare(`SELECT assigned_to, status FROM tasks WHERE id=?`)
+      .get(taskId) as { assigned_to: string; status: string } | undefined;
+    if (!before || (before.status !== "assigned" && before.status !== "in_progress")) {
+      return false;
+    }
+    db.prepare(
+      `UPDATE tasks SET status='inbox', assigned_to='', assigned_at=NULL, updated_at=? WHERE id=?`
+    ).run(now, taskId);
+    return true;
+  });
+}
 
 // ─── Pipeline 操作 ─────────────────────────────────────────
 export interface Pipeline {
@@ -939,6 +1131,7 @@ export function getDbStats(): Record<string, number> {
     "task_dependencies", "quality_gates",
     "attachments",
     "event_log",
+    "subscriptions",
     "messages_archive", "audit_log_archive",
   ];
   const stats: Record<string, number> = {};
@@ -1187,4 +1380,34 @@ export function fts5IntegrityCheck(): { ok: boolean; details: string } {
     }
   }
   return { ok: checks.length === 0, details: checks.join("; ") || "OK" };
+}
+
+/**
+ * 数据库整体完整性自检（PRAGMA integrity_check）。
+ *
+ * 用途：早期暴露「磁盘文件损坏」（SQLITE_CORRUPT），避免像 3.0.25 联调那样
+ * 直到回写失败才在 err.log 里成片刷 `database disk image is malformed`。
+ * 注意：进程重启无法修复盘损，必须由运维用 `sqlite3 .recover` 重建。
+ *
+ * - 健康：{ ok: true, details: "ok" }
+ * - 损坏：{ ok: false, details: "<首行损坏描述>" }（最多拼接前 3 行）
+ * - PRAGMA 本身抛错（库彻底打不开）：{ ok: false, details: "integrity_check_error: ..." }
+ */
+export function integrityCheckDb(): { ok: boolean; details: string } {
+  try {
+    const rows = db.prepare("PRAGMA integrity_check").all() as Array<Record<string, string>>;
+    const first = rows[0]?.["integrity_check"] ?? "ok";
+    if (first === "ok") {
+      return { ok: true, details: "ok" };
+    }
+    const details = rows
+      .slice(0, 3)
+      .map((r) => r["integrity_check"] ?? "")
+      .filter(Boolean)
+      .join("; ");
+    return { ok: false, details };
+  } catch (err) {
+    // 连 PRAGMA 本身都抛错，视为盘损
+    return { ok: false, details: `integrity_check_error: ${getErrorMessage(err)}` };
+  }
 }

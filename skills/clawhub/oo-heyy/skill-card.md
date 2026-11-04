@@ -1,45 +1,52 @@
-## Description: <br>
-Heyy lets an agent read, create, and update Heyy data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Heyy (heyy.io). Use this skill for ANY Heyy request — reading, creating, and updating data. Whenever a task involves Heyy, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate a connected Heyy account from an agent, including contact, label, channel, and custom attribute workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Heyy contacts, labels, and contact attributes. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: The skill may require installing the oo CLI from a remote installer when the CLI is missing. <br>
-Mitigation: Use the remote CLI installer only from a trusted environment and only when setup is required. <br>
-Risk: The integration operates a connected Heyy account through OOMOL server-side credentials. <br>
-Mitigation: Install only when the user trusts OOMOL and wants agent access to the connected Heyy account. <br>
+## Use Case:
 
+People using a Heyy account connected through OOMOL can retrieve contacts, labels, channels, and attribute definitions, and create or update contact records. The skill helps an agent inspect each action's schema and prepare the matching request.
 
-## Reference(s): <br>
-- [Heyy homepage](https://heyy.io) <br>
-- [oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-heyy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Setup executes unverified remote code, and the CLI may automatically install or refresh other agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and preinstall a trusted CLI release; set OO_SKILLS_SYNC_DISABLED=1 for every invocation; connect only the intended Heyy account and confirm each write payload. The live installers and exact installed release were not verified.
+
+## Reference(s):
+
+- [Heyy documentation](https://docs.heyy.io/)
+- [Heyy](https://heyy.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI environment settings](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md#environment-variables)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON connector responses with natural-language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read results and proposed changes; write actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

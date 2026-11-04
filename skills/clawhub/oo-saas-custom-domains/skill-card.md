@@ -1,42 +1,56 @@
-## Description: <br>
-SaaS Custom Domains helps agents manage accounts, upstreams, custom domains, DNS verification, and HTTP cache purging through OOMOL's oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage SaaS Custom Domains accounts, upstreams, and custom domains through the OOMOL-connected oo CLI, including listing, retrieval, creation, deletion, DNS verification, and cache purging.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect and administer SaaS Custom Domains resources through OOMOL, including listing accounts, managing upstreams and custom domains, verifying DNS records, and purging cache. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write or destructive connector actions can create, delete, or purge SaaS Custom Domains resources. <br>
-Mitigation: Confirm the exact target, payload, and expected effect with the user before running those actions. <br>
-Risk: First-time setup may require installing or authenticating the OOMOL CLI. <br>
-Mitigation: Verify the OOMOL CLI installer and account connection before setup, and run setup only after an auth or connection failure. <br>
+## Use Case:
 
+External users and developers use the skill to manage upstreams and custom domains in their connected SaaS Custom Domains account. It can retrieve and list resources, create or delete them, trigger DNS verification, and purge a domain's HTTP cache.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-saas-custom-domains) <br>
-- [SaaS Custom Domains homepage](https://saascustomdomains.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The security assessment says the required helper can add and update other agent skills, while this skill does not explain or control those lasting changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the specific CLI release before use, disable automatic skill synchronization for each invocation with OO_SKILLS_SYNC_DISABLED=1, and inspect the command reference.
+
+Risk: The remote CLI installers and deployed connector implementation have not been verified, and OOMOL holds the connected API key server-side.
+
+Mitigation: Review and install a specific CLI release yourself, consider the connected-key custody, and approve exact change or deletion targets before execution.
+
+## Reference(s):
+
+- [SaaS Custom Domains](https://saascustomdomains.com)
+- [SaaS Custom Domains API authentication documentation](https://docs.saascustomdomains.com/authentication)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [oo CLI commands with JSON inputs and connector results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions require the oo CLI and a connected account. The skill identifies state-changing and destructive actions for user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

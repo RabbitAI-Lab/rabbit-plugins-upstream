@@ -1,43 +1,51 @@
-## Description: <br>
-Radar (radar.com) connector skill for reading, creating, and updating Radar data through the OOMOL oo CLI instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Radar (radar.com). Use this skill for ANY Radar request — searching and reading data. Whenever a task involves Radar, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to operate Radar through an OOMOL-connected account for address autocomplete, geocoding, IP geocoding, reverse geocoding, and nearby place search. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The first-time setup path installs the remote oo CLI, which executes an installer from cli.oomol.com. <br>
-Mitigation: Review the remote installer before first-time setup, as recommended by ClawScan guidance. <br>
-Risk: Actions marked write can change Radar state when run with an exact payload. <br>
-Mitigation: Confirm the action payload and expected effect with the user before executing any write action. <br>
-Risk: Connector schemas may change over time, causing stale payloads to be incorrect. <br>
-Mitigation: Inspect the live Radar connector schema before constructing each action payload. <br>
+## Use Case:
 
+Developers and other users use the skill to search Radar and read location data, including autocomplete, geocoding, and nearby place results, through their connected OOMOL account.
 
-## Reference(s): <br>
-- [Radar homepage](https://radar.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before actions; Radar command responses include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup can execute a downloaded CLI installer, and its broader effects on the agent environment are unclear.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a verified oo CLI release separately; set OO_SKILLS_SYNC_DISABLED=1 to prevent startup skill writes.
+
+## Reference(s):
+
+- [Radar API documentation](https://docs.radar.com/api)
+- [Radar](https://radar.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, JSON, Text, Shell commands]
+
+**Output Format:** [JSON command payloads and Radar responses, with textual results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the selected Radar action and its response schema.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

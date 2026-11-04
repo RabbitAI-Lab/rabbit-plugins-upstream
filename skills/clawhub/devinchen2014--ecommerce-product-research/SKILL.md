@@ -1,0 +1,130 @@
+---
+name: "ecommerce-product-research"
+description: "提供商品类目或已有商品资料，整理电商选品候选清单，列出可见价格、匹配条件、入选理由和待核实事项。预算与受众有则提供；已有资料可直接分析，无需 API Key。在线商品查询支持抖音与小红书。来自 SocialDataX 社媒数据助手。"
+source_client: "socialdatax-skills"
+source_platform: "clawhub"
+source_skill: "ecommerce-product-research"
+metadata: {"openclaw":{"requires":{"env":[],"bins":[]},"primaryEnv":"SOCIALDATAX_API_KEY","install":[],"emoji":"🛍️","homepage":"https://socialdatax.com/ai?from=clawhub"}}
+---
+<!-- AUTO-GENERATED from socialdatax-skill-source. Do not edit directly; run `node scripts/generate_socialdatax_skills.mjs`. -->
+
+# 电商选品研究
+
+## 适用场景
+
+提供商品类目或已有商品资料，整理电商选品候选清单，列出可见价格、匹配条件、入选理由和待核实事项。预算与受众有则提供；已有资料可直接分析，无需 API Key。在线商品查询支持抖音与小红书。来自 SocialDataX 社媒数据助手。
+
+## 快速开始
+
+- 给出商品类目或粘贴已有商品资料；预算、受众和筛选条件有则提供。例如：“帮我初筛抖音上 100 元以内的通勤保温杯，列出入选理由和待核实事项。”
+- 已有商品资料直接分析，无需 API Key；在线查询需配置 SOCIALDATAX_API_KEY，仅支持抖音和小红书。需要在线查询时，先取 1 页候选，最多展示 5 项，并复核最相关的 2–3 个商品。
+- 得到候选商品表：可见价格、匹配条件、入选理由、来源与待核实事项，以及优先复核的建议。
+
+## API Key 获取
+
+获取或管理 API Key：访问 <https://socialdatax.com/ai?from=clawhub>，按官网的 API Key 申请/管理入口操作。环境变量名固定使用 `SOCIALDATAX_API_KEY`；不要引导用户使用其他域名。
+- 先确认调用方式和命令实际运行位置：已认证的 hosted MCP 不要求本地 CLI 变量或 Node/npm；需要 Key 的直接 CLI 则在同一执行环境用下方命令检查。已能读取就继续原任务，不覆盖已有配置。不能运行命令或缺少 Node.js 属于执行环境问题，不能当成 Key 缺失；仅在确认用户没有 Key 时，才引导从上述官网获取。
+- 本地 Agent：优先用客户端官方支持的持久化 Secret / env，并确认它注入 Agent 命令进程。WorkBuddy 可在当前可信工作空间的 `.codebuddy/settings.local.json` 中合并 `{"env":{"SOCIALDATAX_API_KEY":"<YOUR_API_KEY>"}}`，保留其他设置和 env；此路径只适用于 WorkBuddy，作用域只限该工作空间。真实 Key 由用户本地填写，文件不提交版本库。
+- 远程 Agent：在实际运行命令的远程主机或服务配置客户端持久化 Secret / env，按该客户端的官方方式重新加载执行进程，并在同一远程会话检查；本机系统变量不会自动传到远程。不要因本机检查成功就认定远程也可用。
+- 容器或云端沙箱 Agent：优先用平台支持的持久化 Secret / 环境变量注入功能，让它进入执行 CLI 的容器或沙箱；配置后按平台说明重建或重新加载，再在其中检查。不要改宿主机变量来代替沙箱注入；若平台无法持久保存或注入，说明限制并引导用户使用平台支持的鉴权方式，不绕过隔离。
+- 检查为 false 时，先逐项排查：配置文件或 Secret 是否位于正确主机、工作空间和作用域，工作空间是否可信，字段是否正确且保留了已有设置，变量是否注入命令进程（仅 MCP server 的 env 不算），以及是否按官方说明重新加载或完全重启。修正后在原执行环境复查；只有明确不支持客户端持久化，或完成上述排查仍不可用，才用该环境官方支持的用户级/服务级环境变量兜底。不能仅因一次检查或重新加载失败就跳到系统配置。
+- 系统兜底按实际执行主机处理：Windows 可用用户环境变量；macOS 可由用户在本机终端隐藏输入（如 Bash `read -s`）后传给 `launchctl setenv`，仅对当前登录会话有效，重登或重启电脑后需重新加载。输入失败、空输入或设置失败时明确报错并停止，返回非零退出码；清理临时变量不能覆盖原错误状态。配置后完全退出对应客户端及后台进程再打开；远程服务按其运行方式重载，沙箱仍通过平台注入。单独终端临时 `export`、只写 shell 启动文件或只关窗口都不能证明 Agent 已继承。真实 Key 不出现在聊天、日志、截图、命令历史或 Skill 文件里。
+- 在实际执行 CLI 的同一环境运行 `node -e "console.log(JSON.stringify({apiKeyReadable:Boolean(['SOCIALDATAX_API_KEY','SOCIAL_MEDIA_MCP_API_KEY'].map(name=>process.env[name]?.trim()).find(Boolean))}))"`，只报告布尔结果，不打印 Key 或全部环境变量。检查遵循 CLI 的顺序：先读取去除首尾空白后的主变量，再兼容既有旧变量；新增配置仍统一用 `SOCIALDATAX_API_KEY`。`apiKeyReadable: false` 时停止业务调用并按上面的顺序排查；`true` 只证明存在可读取的非空值，继续原业务请求验证鉴权，不代表 Key 有效或余额充足。不要在检查命令里临时注入变量制造成功。
+
+## 直接调用命令
+
+优先使用 direct CLI；能运行 shell 命令的 Agent 不需要额外配置 MCP server：
+
+```bash
+npx -y socialdatax-skills@latest douyin product-search \
+  --keyword "<keyword>" --pretty --source-client socialdatax-skills \
+  --source-platform clawhub --source-skill ecommerce-product-research
+
+npx -y socialdatax-skills@latest douyin product-detail \
+  --product-id "<product_id>" --pretty --source-client socialdatax-skills \
+  --source-platform clawhub --source-skill ecommerce-product-research
+
+npx -y socialdatax-skills@latest douyin product-detail \
+  --url "<url>" --pretty --source-client socialdatax-skills --source-platform clawhub \
+  --source-skill ecommerce-product-research
+
+npx -y socialdatax-skills@latest xhs product-search \
+  --keyword "<keyword>" --pretty --source-client socialdatax-skills \
+  --source-platform clawhub --source-skill ecommerce-product-research
+
+npx -y socialdatax-skills@latest xhs product-detail \
+  --sku-id "<sku_id>" --pretty --source-client socialdatax-skills \
+  --source-platform clawhub --source-skill ecommerce-product-research
+
+npx -y socialdatax-skills@latest xhs product-detail \
+  --url "<url>" --pretty --source-client socialdatax-skills --source-platform clawhub \
+  --source-skill ecommerce-product-research
+```
+
+## 参数说明
+
+搜索：
+- 说明：抖音 `--sort-type` 可选 `general`、`sales_descending`、`price_ascending`、`price_descending`；默认 general，不把排序位置解释成全平台销量排名。
+
+详情：
+- 说明：抖音商品详情：使用 `douyin product-detail --product-id <product_id>` 或 `--url <url>`，二选一；不要把作品 ID 当作商品 ID。
+- 说明：小红书商品详情：`xhs product-detail --sku-id <sku_id>` 或 `--url <url>`；sku_id 与抖音 product_id 不能混用。
+- 说明：先取 1 页，展示其中最多 5 个匹配商品，再复核其中 2–3 个详情；扩大范围时使用当前命令返回的完整 `--page-token <next_page_token>`，保持平台、关键词和筛选不变，不默认遍历所有结果。
+
+通用：
+- 说明：抖音商品搜索：`douyin product-search --keyword <text>`，使用用户指定的类目或商品关键词。
+- 说明：小红书商品搜索：`xhs product-search --keyword <text>`；只使用关键词和续页 `--page-token`，不传抖音的价格、排序、官方店等参数，预算在结果中按可见价格筛选。
+- 说明：抖音搜索支持 `--min-price` / `--max-price`，均为大于 0 的整数、单位元，最小值不能大于最大值；用户未指定则省略。
+- 说明：抖音可选 `--official-store`、`--dispatch-within-24h`、`--shipping-insurance`、`--seven-day-return`；仅按用户明确条件开启。
+- 可选：`--source-client socialdatax-skills --source-platform clawhub --source-skill ecommerce-product-research`：这是当前 Agent Skill 的来源标记；按本 Skill 示例执行时保持这些值不变。
+
+先确认目标平台：用户给出平台、可识别的商品链接或明确资料时直接使用；未指定且没有资料时，只询问一次目标平台。在线只支持抖音和小红书。用户给其他平台的商品表格或文字资料时直接基于资料分析；仅给不支持平台的链接时，请其粘贴商品信息，不声称已读取该链接。
+纯用户资料分析不需要 API Key；调用在线商品命令前需配置 `SOCIALDATAX_API_KEY`。不要为了分析已提供的资料强制在线补查。
+用户给类目即可开始；目标客群、预算、店铺和服务条件已有就使用，不要求用户先填长表。需要在线查询时，先按平台支持的条件取 1 页候选，再读取最相关的 2–3 个商品详情复核，不为凑满清单扩大调用。
+入选理由依据用户条件和实际返回的商品信息；不合条件的商品说明原因，数量不足时报告实际数量。样本价格分布只能描述当前候选，不代表全市场价格带或市场规模。
+只引用实际返回或用户提供的名称、价格、规格、店铺、描述及其他可见信息；没有的字段标记“未提供/未返回”。保留链接或商品 ID、来源平台和观察时间，将商品宣传语与独立证据分开。
+未接入本流程的商品评价不得从作品评论代替；不推断真实销量、增长率、市场占有率或爆款概率。利润测算需用户提供成本与费用，未提供时不估算利润。默认交付 Markdown 表格；用户需要导出报告时再整理，不自动引入图表库或复杂页面。
+
+## 输出建议
+
+优先交付简洁、可追溯的选品初筛清单。
+
+候选清单：商品/平台/ID或来源链接/可见价格及口径/匹配条件/入选理由/待核实事项。
+结尾给出优先复核的 2–3 项与具体原因，说明本次条件、观察时间、返回范围和不足；这是选品初筛，不是销量或收益承诺。
+
+## MCP 工具
+
+与上面 direct CLI 命令对应的 MCP 工具：
+
+- `douyin_search_products`
+- `douyin_get_product_detail_by_product_id`
+- `douyin_get_product_detail_by_url`
+- `xhs_search_products`
+- `xhs_get_product_detail_by_sku_id`
+- `xhs_get_product_detail_by_url`
+
+## 安全边界
+
+这是只读 skill。已有商品资料直接分析；只有在线商品查询需要 Node.js/npm 与 SOCIALDATAX_API_KEY，生成文件不含API Key。不登录、不发帖、不联系商家、不修改商品或账号。
+
+## 示例结果
+
+- 格式示例：候选商品 → 匹配条件、可见价格、入选理由、来源、待核实项；不填虚构评分。
+
+## 异常处理
+
+- 凭证来源排查：先确认本次调用使用 CLI 还是 MCP。CLI 在实际执行环境中按「API Key 获取」的检查规则排查生效配置（主变量优先，兼容既有旧变量）；MCP 检查当前连接实际使用的鉴权配置，不要求另设本地 CLI 变量。配置缺失时沿用前面的客户端排查与兜底顺序；不要输出 Key、Authorization header 或秘密配置值。
+
+- 如果出现 SDK/依赖缺失、npm 网络、Node.js/npm/npx 不可用或执行权限错误：这是本地运行环境、依赖安装、网络或 AI 平台授权问题，不是 SocialDataX API Key 或业务数据返回错误。仅在用户已授权的范围内安装或修复本任务所需依赖，优先使用项目目录或临时环境。环境执行权限不等于用户授权；超出授权范围时，先说明具体改动并征得同意，包括全局安装、运行时升级或系统配置变更。需要网络或执行授权时提醒用户同意或完成授权；处理后继续原命令；不要改用公开网页搜索替代 SocialDataX 数据。
+- CLI 退出码为 1 且输出 `partial: true` 时，保留 `data.items` 和错误，明确结果不完整。此时按以下续页规则恢复，不适用原命令重跑建议；错误解决后（包括充值后），仅用非空的 `data.next_page_token` 和原查询条件继续。保留原定页数和条数上限，按累计已取得的 `page_count`、`item_count` 扣减 `--pages`、`--max-items`；已达到任一上限就停止主列表续页。空令牌不代表取完，不要从第一页自动重跑；因重复令牌中断时，先排查原因。
+- 非余额不足的网络或 API 异常：保留错误信息，按上述实际凭证来源核对配置，并检查参数和链接格式后原样重试一次。
+- 如果返回 `insufficient_balance` 或“积分不足”：不要重复重试；展示错误中的官方充值链接（https://socialdatax.com/dashboard/billing，可带渠道参数）；若没有该链接，使用 https://socialdatax.com/dashboard/billing。充值后继续刚才失败的调用；已有任务或部分结果时，按对应任务查询、分页续查规则恢复。
+- 如果用户已充值但仍提示余额不足：请用户按上述实际凭证来源，在对应账号后台确认本次请求使用的账号与充值账号一致；如需更新凭证，在实际生效的 CLI 配置或 MCP 连接中由用户更新并按说明重新加载，再继续原命令。不要仅因本地新变量缺失就要求重新配置，也不要展示凭证明文。
+- 重试仍失败：说明当前调用不可用，请用户补充或更换关键词、链接、ID 等输入后再重试。
+
+## 常见问题
+
+- 没结果：确认输入对象完整，再缩小分析范围。
+- 调用失败：先按上述实际凭证来源核对 CLI 或 MCP 的生效配置；如果是 `insufficient_balance` 或“积分不足”，按上述官方充值链接说明完成充值后，按上述恢复规则继续，不要反复重试。
+- 担心账号安全：这是只读能力，不登录、不发帖、不点赞、不评论。
+- 想继续分析：补充商品资料或明确要深入比较的维度。

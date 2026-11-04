@@ -1,40 +1,55 @@
-## Description: <br>
-TimeCamp (timecamp.com). Use this skill for ANY TimeCamp request - reading, creating, and updating data. Whenever a task involves TimeCamp, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects to TimeCamp to review and manage time entries, timers, tasks, and users.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to read TimeCamp account data, inspect connector schemas, manage time entries, and control TimeCamp timers through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [TimeCamp homepage](https://www.timecamp.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub TimeCamp skill page](https://clawhub.ai/oomol/skills/oo-timecamp) <br>
+TimeCamp account holders use the skill to review time entries, timers, tasks, and users, and to create or update time records after confirming the intended changes.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell command examples and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Inspect the live connector schema before constructing payloads; confirm write actions before execution.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence release version and skill metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Setup may introduce broader agent changes that are not explained by the skill.
+
+Mitigation: Disable startup skill synchronization if unwanted, review and install the CLI separately, and keep approval enabled for edits.
+
+Risk: The remote CLI installer and hosted service remain unverified.
+
+Mitigation: Review the CLI before installation and connect only the intended TimeCamp account.
+
+## Reference(s):
+
+- [TimeCamp](https://www.timecamp.com)
+- [TimeCamp API documentation](https://developer.timecamp.com/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, Guidance]
+
+**Output Format:** [JSON responses and concise text guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Some actions create, update, start, or stop time tracking and require user confirmation.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

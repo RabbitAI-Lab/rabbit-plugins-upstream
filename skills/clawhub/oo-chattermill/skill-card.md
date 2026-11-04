@@ -1,44 +1,57 @@
-## Description: <br>
-Chattermill (chattermill.com). Use this skill for ANY Chattermill request -- reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chattermill (chattermill.com). Use this skill for ANY Chattermill request — reading, creating, updating, and deleting data. Whenever a task involves Chattermill, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to work with Chattermill projects, responses, metrics, tags, themes, attributes, categories, data sources, data types, and custom segments through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or update Chattermill responses through an OOMOL-connected account. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running any write action. <br>
-Risk: The skill can permanently delete Chattermill responses. <br>
-Mitigation: Require explicit approval for the specific target response before running any destructive action. <br>
-Risk: Connected account access may expose Chattermill project and response data. <br>
-Mitigation: Install and use the skill only when the connected OOMOL account is intended to access the relevant Chattermill workspace. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Chattermill projects and feedback data, and to create, update, or delete responses through their connected account.
 
-## Reference(s): <br>
-- [Chattermill homepage](https://chattermill.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-chattermill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Live connector schema inspection is used before action execution; write and destructive actions require confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Initial setup directs users to run a remote CLI installer whose behavior is unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and release integrity before installing the CLI; do not allow automatic installation of additional skills without review.
+
+Risk: The connected account can access Chattermill data and perform response writes or deletions.
+
+Mitigation: Use appropriately limited account access and keep the skill's confirmation requirement for write and destructive actions.
+
+## Reference(s):
+
+- [Chattermill homepage](https://chattermill.com)
+- [Chattermill API documentation](https://apidocs.chattermill.com/)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [Chattermill skill release](https://clawhub.ai/oomol/skills/oo-chattermill)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown instructions with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action schemas guide requests; writes and deletions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

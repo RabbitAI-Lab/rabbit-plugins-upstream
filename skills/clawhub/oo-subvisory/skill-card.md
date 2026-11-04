@@ -1,45 +1,55 @@
-## Description: <br>
-Subvisory helps agents read, create, update, and delete Subvisory data through an OOMOL-connected account using the oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects to Subvisory through an OOMOL-connected account to read, create, update, and delete categories, payment methods, and subscriptions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to manage Subvisory categories, payment methods, and subscriptions from Codex through the OOMOL oo CLI. It is intended for Subvisory read and account-management workflows, with confirmation before write or destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Subvisory categories, payment methods, or subscriptions. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged [write]. <br>
-Risk: Destructive actions can delete Subvisory records. <br>
-Mitigation: Get explicit approval for the target record before running actions tagged [destructive]. <br>
-Risk: The skill depends on the OOMOL oo CLI and a connected Subvisory account. <br>
-Mitigation: Run install, login, or connection steps only after an auth or connection failure and only when the user intends to connect Subvisory. <br>
+## Use Case:
 
+People managing Subvisory data can use the skill to inspect and maintain subscriptions, payment methods, and categories through their connected account. The skill guides agents to check an action's schema before sending a request.
 
-## Reference(s): <br>
-- [Subvisory homepage](https://www.subvisory.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-subvisory) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, text, and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use oo connector schema and oo connector run; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: Installing the oo CLI can execute downloaded code; the installer payload was not independently inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the CLI yourself from a source you trust before using the skill.
+
+Risk: The OOMOL-connected account and automatic agent-skill synchronization may introduce broader changes to the agent environment.
+
+Mitigation: Decide whether synchronization is wanted, review resulting changes, and keep confirmation for writes and deletions.
+
+## Reference(s):
+
+- [Subvisory](https://www.subvisory.com)
+- [Subvisory API documentation](https://www.subvisory.com/api/v1/docs)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON requests and responses with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write and destructive actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,8 +5,9 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "DocuGenerate"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.6"
   services: ["docugenerate"]
+  icon: "https://static.oomol.com/logo/third-party/docugenerate.svg"
 ---
 
 # DocuGenerate
@@ -37,7 +38,7 @@ Each action is listed below with a one-line description; actions that change sta
 ## Available actions
 
 - `delete_document` — Permanently delete one generated DocuGenerate document by document ID. [destructive]
-- `generate_document` — Generate and store a DocuGenerate document from a template and JSON merge data, returning a download URL.
+- `generate_document` — Generate and store a DocuGenerate document from a template and JSON merge data, returning a download URL. [write]
 - `get_document` — Retrieve one generated DocuGenerate document by document ID.
 - `get_template` — Retrieve one DocuGenerate template by template ID.
 - `list_documents` — List all DocuGenerate documents generated from one template.
@@ -73,11 +74,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — DocuGenerate is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=docugenerate
+  https://console.oomol.com/connections/docugenerate
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - DocuGenerate homepage: https://www.docugenerate.com
+- API documentation: https://www.docugenerate.com/developers/quickstart/

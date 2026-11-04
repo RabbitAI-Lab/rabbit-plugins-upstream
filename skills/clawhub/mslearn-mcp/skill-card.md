@@ -1,44 +1,57 @@
-## Description: <br>
-Connects agents to the Microsoft Learn MCP Server to search Microsoft documentation, fetch documentation pages, and find official code samples through mcporter. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Grounds Microsoft product and development answers in current Microsoft Learn documentation and official code samples.
 
-## Publisher: <br>
-[Ricardodpalmeida](https://clawhub.ai/user/Ricardodpalmeida) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ricardodpalmeida](https://clawhub.ai/user/ricardodpalmeida)
 
-## Use Case: <br>
-Developers and engineers use this skill to connect an agent or terminal workflow to Microsoft Learn so they can look up Microsoft documentation, retrieve specific Learn pages, and find official code samples while working on Microsoft technologies. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queries, fetched URLs, and lookup prompts are sent to Microsoft's remote MCP endpoint. <br>
-Mitigation: Avoid including secrets, private code, customer data, or confidential project details in Microsoft Learn lookup prompts. <br>
-Risk: The Microsoft Learn MCP tool interface is dynamic and schemas may change. <br>
-Mitigation: List the current tools and schemas before use, and refresh the schema when calls fail or behavior changes. <br>
+## Use Case:
 
+Developers and engineers use this skill to answer Microsoft product and development questions with current Learn documentation and official code samples. It returns cited guidance, calls out preview status and evidence gaps, and helps verify product-specific details.
 
-## Reference(s): <br>
-- [Microsoft Learn MCP Reference](references/mcp-details.md) <br>
-- [Microsoft Learn MCP endpoint](https://learn.microsoft.com/api/mcp) <br>
-- [Microsoft Learn MCP best practices](https://learn.microsoft.com/en-us/training/support/mcp-best-practices) <br>
-- [Microsoft Learn MCP FAQ](https://learn.microsoft.com/en-us/training/support/mcp-faq) <br>
-- [Microsoft Learn MCP release notes](https://learn.microsoft.com/en-us/training/support/mcp-release-notes) <br>
-- [Official MicrosoftDocs MCP repository](https://github.com/MicrosoftDocs/mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline bash and JSON code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include human-readable or JSON mcporter output depending on command flags.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence release.version) <br>
+Risk: Queries sent to Microsoft could expose secrets, customer identifiers, or proprietary code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep queries generic and exclude secrets, tenant or customer identifiers, and proprietary code.
+
+Risk: The standalone CLI fallback runs downloaded software.
+
+Mitigation: Prefer existing connected tools when available; make persistent setup changes only when requested.
+
+## Reference(s):
+
+- [MCP setup and recovery](references/mcp-details.md)
+- [Microsoft Learn MCP endpoint](https://learn.microsoft.com/api/mcp)
+- [Microsoft Learn MCP repository](https://github.com/MicrosoftDocs/mcp)
+- [Microsoft Learn MCP release notes](https://learn.microsoft.com/en-us/training/support/mcp-release-notes)
+- [Microsoft Learn CLI](https://www.npmjs.com/package/@microsoft/learn-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands]
+
+**Output Format:** [Markdown answers with Learn page links and, when useful, official code samples or CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Identifies preview status and unresolved gaps; fetches at most three pages unless excerpts do not support a cited fact.]
+
+## Skill Version(s):
+
+1.1.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

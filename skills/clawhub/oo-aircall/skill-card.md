@@ -1,42 +1,56 @@
-## Description: <br>
-Aircall helps agents search and read Aircall calls, contacts, numbers, teams, and users through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Aircall (aircall.io). Use this skill for ANY Aircall request — searching and reading data. Whenever a task involves Aircall, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and support operations teams use this skill to retrieve Aircall records from an OOMOL-connected Aircall account without calling the Aircall API directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Aircall call, contact, number, team, and user data is routed through OOMOL's connected workflow when read requests are made. <br>
-Mitigation: Use only authorized Aircall accounts and install the skill only when the organization accepts that OOMOL connector data path. <br>
-Risk: The current release is described as read-only and does not support write or admin Aircall tasks. <br>
-Mitigation: Do not rely on this skill for write or administrative changes unless a future release explicitly lists and scopes those actions. <br>
+## Use Case:
 
+Aircall users and developers use the skill to retrieve and search calls, contacts, phone numbers, teams, and users through a connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub Aircall Skill](https://clawhub.ai/oomol/skills/oo-aircall) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Aircall](https://aircall.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Aircall connector JSON containing data and meta.executionId when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and frontmatter) <br>
+Risk: Setup directs users to run online CLI installers whose exact effects could not be inspected, without a clear approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the CLI separately from a verified release before allowing the skill to run.
+
+Risk: Automatic skill synchronization and the connected Aircall account can expose more access than intended through OOMOL.
+
+Mitigation: Review automatic skill synchronization and connect only the Aircall account intended for use with OOMOL.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Aircall API documentation](https://developer.aircall.io/api-references/)
+- [Aircall homepage](https://aircall.io)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands]
+
+**Output Format:** [oo CLI commands with JSON request payloads and JSON response data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Available actions retrieve Aircall calls, contacts, numbers, teams, and users.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,59 @@
-## Description: <br>
-Docsend2pdf helps an agent convert a DocSend document URL to a PDF through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Convert DocSend document URLs to PDF through Docsend2pdf.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill when a task requires converting a specific DocSend document link into PDF download metadata through the Docsend2pdf connector. Users should confirm the document URL is intended for conversion before running it. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Converting a document sends the DocSend URL to OOMOL/Docsend2pdf for external processing. <br>
-Mitigation: Confirm the exact URL and intended conversion before running the convert action, and avoid sending sensitive links unless the user accepts that processing. <br>
-Risk: First-time setup may require installing the oo CLI from an external installer. <br>
-Mitigation: Use the install command only when the CLI is missing and the user trusts the OOMOL installer source. <br>
+## Use Case:
 
+External users and developers can convert a DocSend document URL into a PDF and receive download metadata.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-docsend-2-pdf) <br>
-- [Docsend2pdf homepage](https://docsend2pdf.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown instructions with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action execution; converted PDF results are returned as JSON-safe download metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and SKILL.md metadata) <br>
+Risk: Automatic setup may make persistent changes to other agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI setup behavior and disable automatic synchronization if only document conversion is needed.
+
+Risk: Conversion requires sharing a document link with OOMOL and Docsend2pdf.
+
+Mitigation: Submit confidential links only when you authorize both services to access them.
+
+Risk: Remote installer contents and hosted processing are unverified.
+
+Mitigation: Review installer contents before running setup and assess the provider's processing practices.
+
+## Reference(s):
+
+- [Docsend2pdf homepage](https://docsend2pdf.com)
+- [Docsend2pdf API documentation](https://docsend2pdf.com/api-docs)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Files, JSON]
+
+**Output Format:** [PDF document with JSON download metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The response includes download metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

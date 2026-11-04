@@ -1,44 +1,59 @@
-## Description: <br>
-VerifiedEmail (verified.email) lets an agent inspect VerifiedEmail schemas and run VerifiedEmail connector actions for searching, reading, entitlement lookup, and synchronous email verification through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+VerifiedEmail (verified.email). Use this skill for ANY VerifiedEmail request — searching and reading data. Whenever a task involves VerifiedEmail, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to operate VerifiedEmail through an OOMOL-connected account, including listing verification resources, checking credit entitlements, retrieving downloads or lists, and verifying one to ten email addresses synchronously. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Email addresses submitted for verification are sent to VerifiedEmail through the OOMOL connector. <br>
-Mitigation: Use the skill only for intended VerifiedEmail workflows and review requests before verifying sensitive contact lists. <br>
-Risk: Credentials or account connections may grant access to VerifiedEmail data and credits. <br>
-Mitigation: Keep API credentials scoped to VerifiedEmail and rely on the OOMOL-connected account flow rather than exposing raw tokens to the agent. <br>
-Risk: Actions that change service state could affect VerifiedEmail resources if added or tagged in future connector schemas. <br>
-Mitigation: Fetch the live action schema before constructing payloads and require explicit user confirmation for actions marked write or destructive. <br>
+## Use Case:
 
+People using a connected OOMOL account can verify email addresses and retrieve VerifiedEmail lists, downloads, and credit entitlements. Developers can use the skill to access these actions through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-verifiedemail) <br>
-- [VerifiedEmail homepage](https://verified.email) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: The CLI installation path and remote behavior have not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the CLI separately from a fixed, verified release before enabling the skill.
+
+Risk: Automatic skill synchronization may write to or change other agent skills.
+
+Mitigation: Review the synchronization behavior and disable startup writes with OO_SKILLS_SYNC_DISABLED=1 if they are not intended.
+
+Risk: Email verification inputs pass through OOMOL, and actions may use account credits.
+
+Mitigation: Connect only the intended account, account for that data flow, and check credit usage.
+
+## Reference(s):
+
+- [VerifiedEmail](https://verified.email)
+- [VerifiedEmail API documentation](https://developer.verified.email/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [JSON action results and Markdown usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action results vary by request; email verification accepts one to ten addresses.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

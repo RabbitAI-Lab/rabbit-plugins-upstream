@@ -1,46 +1,66 @@
-## Description: <br>
-Creates music with Suno by crafting style prompts and structured lyrics, generating through API or browser workflows, and guiding long tracks, covers, personas, stems, exports, and release checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates Suno-focused music-generation guidance that helps agents craft prompts and lyrics, generate through APIs or browser automation, build long tracks, covers, and personas, and troubleshoot output issues.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Developers, creators, and external users use this skill to prepare Suno-ready prompts, lyrics, generation steps, troubleshooting guidance, and release checks for songs, jingles, podcast intros, background tracks, covers, and extended music projects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Music prompts, lyrics, and related creative material may be sent to Suno or selected hosted generation providers. <br>
-Mitigation: Use only providers the user trusts and avoid including secrets, sensitive unpublished material, or private client content in prompts unless that sharing is acceptable. <br>
-Risk: Successful prompts, project notes, and generated-song records may be retained locally under ~/Clawic/data/suno/. <br>
-Mitigation: Periodically review or delete memory.md and project files when they contain private content, and keep API keys in environment variables rather than local skill files. <br>
-Risk: Commercial-use rights depend on the Suno plan and terms active at generation time. <br>
-Mitigation: Confirm the required paid plan before commercial deliverables, record plan tier and generation date in project notes, and verify current Suno terms before release. <br>
+## Use Case:
 
+External users and developers use this skill to guide music creation with Suno, including prompt design, lyric structure, API or browser-based generation, long-song workflows, covers, stems, downloads, and release preparation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/suno) <br>
-- [Clawic Suno skill page](https://clawic.com/skills/suno) <br>
-- [Suno create page](https://suno.com/create) <br>
-- [AI Music API](https://aimusicapi.ai) <br>
-- [EvoLink](https://evolink.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with prompts, lyrics, structured checklists, API examples, browser steps, and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local project notes, configuration guidance, prompt records, and downloaded-audio filing conventions under ~/Clawic/data/suno/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release metadata) <br>
+Risk: Prompts and lyrics may be sent to selected music services for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only trusted providers and avoid prompts containing secrets, private business ideas, or sensitive personal details.
+
+Risk: Local preferences, project records, and successful prompts may be retained under ~/Clawic/data/suno/.
+
+Mitigation: Review stored project and memory files before sharing a workspace or using confidential creative material.
+
+Risk: Commercial release rights can depend on the active paid plan at generation time.
+
+Mitigation: Confirm the plan tier before generating deliverables and record the generation date, plan tier, prompt, and clip URL with the project.
+
+## Reference(s):
+
+- [ClawHub Suno Skill Page](https://clawhub.ai/ivangdavila/skills/suno)
+- [ClawHub Publisher Profile](https://clawhub.ai/user/ivangdavila)
+- [Clawic Suno Skill Listing](https://clawic.com/skills/suno)
+- [Suno Skill Definition](artifact/SKILL.md)
+- [API Integration](artifact/api.md)
+- [Browser Automation](artifact/browser.md)
+- [Release, Downloads, Stems, Rights, Distribution](artifact/release.md)
+- [AI Music API](https://aimusicapi.ai)
+- [EvoLink](https://evolink.ai)
+- [Suno Create](https://suno.com/create)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with optional code snippets, shell commands, API requests, and local project or configuration file recommendations.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce prompt text, structured lyrics, API polling examples, browser steps, and local records under ~/Clawic/data/suno/.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

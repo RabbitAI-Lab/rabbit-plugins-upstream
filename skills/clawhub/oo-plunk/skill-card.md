@@ -1,42 +1,56 @@
-## Description: <br>
-Operates Plunk through an OOMOL-connected account using the oo CLI for contact management, transactional email, event tracking, and email verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Plunk (useplunk.com). Use this skill for ANY Plunk request — reading, creating, updating, and deleting data. Whenever a task involves Plunk, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Plunk connector schemas and run Plunk actions through the oo CLI. It supports contact management, transactional email sending, contact event tracking, and email verification. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive Plunk actions can change or delete real contact data, send transactional email, or record contact events. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running write or destructive commands. <br>
-Risk: The skill depends on a trusted oo CLI session connected to the user's Plunk account. <br>
-Mitigation: Use the oo CLI only for Plunk connector actions, and review payloads carefully before approving commands that affect Plunk data. <br>
+## Use Case:
 
+Developers and operators use this skill to work with Plunk contacts, transactional email, events, and email verification through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Plunk homepage](https://www.useplunk.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include oo CLI commands, connector schema lookups, and JSON payloads for Plunk actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup executes unpinned remote code, and the required CLI may automatically install additional persistent agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the CLI installer before setup; consider disabling startup skill synchronization with OO_SKILLS_SYNC_DISABLED.
+
+Risk: The skill can send email, change contacts, and delete contacts; the CLI installer and hosted service are outside the inspected artifact.
+
+Mitigation: Retain the skill's confirmation requirements for email, contact changes, and deletion, and account for the remote installer and hosted service during review.
+
+## Reference(s):
+
+- [Plunk documentation](https://docs.useplunk.com/)
+- [Plunk homepage](https://www.useplunk.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-plunk)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON data, Shell commands, Guidance]
+
+**Output Format:** [JSON requests and responses with shell commands and usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Plunk actions are performed through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

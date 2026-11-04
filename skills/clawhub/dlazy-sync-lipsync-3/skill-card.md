@@ -1,43 +1,54 @@
-## Description: <br>
-fal.ai sync-lipsync v3 generates a new video whose speaker lip movements match a supplied audio track, for dubbing, localization, and virtual presenter re-syncing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses fal.ai sync-lipsync v3 to generate a video whose speaker lip movements match supplied audio, for dubbing, localization, or virtual presenters.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative production teams use this skill to invoke dLazy's hosted sync-lipsync-3 service from an agent workflow, supplying a video and audio track to generate lip-synced video output. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uploads user-provided video and audio files to dLazy's hosted service for processing. <br>
-Mitigation: Use only media that is approved for processing by dLazy, and avoid submitting sensitive content unless the user has accepted that transfer. <br>
-Risk: Authentication can persist a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable or npx path when less local persistence is preferred, and rotate or revoke the key from dLazy when needed. <br>
+## Use Case:
 
+Developers and media creators use this skill to dub or localize video and sync virtual presenters' lip movements to audio.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-sync-lipsync-3) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Files] <br>
-**Output Format:** [Markdown instructions with bash commands and CLI JSON output containing generated media URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return an asynchronous task identifier when no-wait mode is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Input video and audio are uploaded to dLazy's hosted media storage for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use media you are comfortable uploading to dLazy.
+
+Risk: The CLI saves an API key locally, and generation may incur costs.
+
+Mitigation: Review the pinned CLI before installation, protect the saved API key, and check command help and cost estimates before generating.
+
+## Reference(s):
+
+- [dLazy](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video files, JSON, Shell commands, Configuration instructions]
+
+**Output Format:** [Generated lip-synced video URL or saved video file, with JSON task status from the CLI.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Async mode can return a task status before the output is ready.]
+
+## Skill Version(s):
+
+1.3.37 (source: server-resolved release metadata; bundled artifact frontmatter reports 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

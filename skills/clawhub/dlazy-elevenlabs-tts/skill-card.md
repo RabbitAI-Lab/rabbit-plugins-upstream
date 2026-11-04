@@ -1,45 +1,57 @@
-## Description: <br>
-Generates ElevenLabs eleven_v3 text-to-speech through the dLazy CLI with curated multilingual voices and stability, similarity, and style controls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates ElevenLabs eleven_v3 speech from text through dLazy, with multilingual voices and controls for stability, similarity, and style.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and content creators use this skill to ask an agent to run dLazy's ElevenLabs text-to-speech command, select a supported voice, and receive a generated output URL or asynchronous task result. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompt text and selected parameters are sent to dLazy's hosted API for generation. <br>
-Mitigation: Avoid sending sensitive or regulated content unless the user is comfortable with dLazy handling it. <br>
-Risk: The default login flow stores a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use npx @dlazy/cli@1.2.3 or the DLAZY_API_KEY environment variable when less local persistence is preferred. <br>
-Risk: Generated files are hosted by dLazy and returned as external URLs. <br>
-Mitigation: Review sharing, retention, and access expectations before using generated outputs in sensitive workflows. <br>
+## Use Case:
 
+Developers and agents use this skill to turn text into multilingual speech for dubbing, audiobooks, and character dialogue, selecting a voice and adjusting speech style as needed.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-tts) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; results may include hosted file URLs or asynchronous task IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: release metadata and SKILL.md frontmatter) <br>
+Risk: Text or media sent for generation is transferred to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only text or media you intend to share with dLazy.
+
+Risk: Authentication saves a reusable API key locally, and the pinned CLI implementation and its credential protections were not verified.
+
+Mitigation: Review the pinned CLI before installing, use it only in a trusted environment, and rotate or revoke the key if needed.
+
+## Reference(s):
+
+- [dLazy CLI project](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+- [dLazy API key management](https://dlazy.com/dashboard/organization/api-key)
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-tts)
+
+## Skill Output:
+
+**Output Type(s):** [Audio, API calls, Shell commands]
+
+**Output Format:** [Generated audio result URL or saved audio file, with JSON task and result metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Asynchronous runs can return a task ID and status; --save downloads the result locally.]
+
+## Skill Version(s):
+
+1.3.37 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

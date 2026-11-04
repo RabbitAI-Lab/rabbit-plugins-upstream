@@ -1,44 +1,60 @@
-## Description: <br>
-Nango helps agents read, create, update, and delete Nango data through the OOMOL oo CLI connector instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Nango (nango.dev). Use this skill for ANY Nango request — reading, creating, updating, and deleting data. Whenever a task involves Nango, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Nango connections, integrations, and provider configurations from an OOMOL-connected account. It supports read operations plus confirmed tag, metadata, and deletion workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Requests that retrieve connection details may expose credentials when the connected account permits it. <br>
-Mitigation: Review retrieval requests for need and scope before running them. <br>
-Risk: Write and destructive actions can modify tags, replace metadata, or delete Nango connections. <br>
-Mitigation: Require explicit user confirmation of the exact target, payload, and expected effect before execution. <br>
-Risk: First-time setup commands can install tools, authenticate accounts, or open connection flows. <br>
-Mitigation: Run setup only after a command fails with the matching installation, authentication, connection, or billing error. <br>
+## Use Case:
 
+Developers use the OOMOL-connected Nango account to inspect connections, integrations, and providers, and to manage connection tags, metadata, or deletions through documented actions.
 
-## Reference(s): <br>
-- [Nango homepage](https://nango.dev) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-nango) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration guidance, JSON responses] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill metadata) <br>
+Risk: Installing the oo CLI can affect other installed agent skills, and remote installer behavior was not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI and its effects before installation; do not treat the remote installer as verified.
+
+Risk: Retrieving a Nango connection can return credential details.
+
+Mitigation: Use a narrowly scoped Nango key, exclude credential-reading permissions unless needed, and handle returned connection details as secrets.
+
+Risk: Write and destructive actions can change or remove connection data.
+
+Mitigation: Keep the skill's approval steps for writes and deletions, and confirm the target and payload before execution.
+
+## Reference(s):
+
+- [Nango API authentication documentation](https://nango.dev/docs/reference/backend/http-api/authentication)
+- [Nango homepage](https://nango.dev)
+- [oo CLI on GitHub](https://github.com/oomol-lab/oo-cli)
+- [Nango skill on ClawHub](https://clawhub.ai/oomol/skills/oo-nango)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, API Calls, Guidance]
+
+**Output Format:** [Shell commands with JSON action payloads and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action inputs are checked against the live connector schema before use.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

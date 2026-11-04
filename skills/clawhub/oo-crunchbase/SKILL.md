@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Crunchbase"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["crunchbase"]
   icon: "https://static.oomol.com/logo/third-party/crunchbase.png"
 ---
@@ -38,7 +38,11 @@ Each action is listed below with a one-line description; actions that change sta
 ## Available actions
 
 - `autocomplete_entities` — Suggest Crunchbase entities that match a text query.
+- `get_acquisition` — Look up one Crunchbase acquisition by UUID or permalink.
 - `get_organization` — Look up one Crunchbase organization by UUID or permalink.
+- `get_organization_acquisitions` — List acquisitions where a Crunchbase organization is the acquiree or acquirer.
+- `get_organization_ipos` — List IPO records linked to a Crunchbase organization.
+- `search_acquisitions` — Search Crunchbase acquisitions using the official Search API query structure.
 - `search_organizations` — Search Crunchbase organizations using the official Search API query structure.
 
 ## Safety
@@ -70,11 +74,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Crunchbase is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=crunchbase
+  https://console.oomol.com/connections/crunchbase
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Crunchbase homepage: https://www.crunchbase.com
+- API documentation: https://data.crunchbase.com/docs/using-the-api

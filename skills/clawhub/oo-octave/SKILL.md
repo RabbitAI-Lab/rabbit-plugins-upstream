@@ -1,11 +1,11 @@
 ---
 name: oo-octave
-description: "Octave (octavehq.com). Use this skill for ANY Octave request — searching and reading data. Whenever a task involves Octave, use this skill instead of calling the API directly."
+description: "Octave (octavehq.com). Use this skill for ANY Octave request — reading, creating, and updating data. Whenever a task involves Octave, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Octave"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["octave"]
   icon: "https://static.oomol.com/logo/third-party/octave.png"
 ---
@@ -41,12 +41,12 @@ Each action is listed below with a one-line description; actions that change sta
 - `list_agent_types` — List Octave agent types available to the workspace.
 - `list_agents` — List Octave agents in the current workspace.
 - `list_languages` — List languages supported by Octave agents.
-- `run_call_prep_agent` — Run an Octave call prep agent synchronously.
-- `run_context_agent` — Run an Octave context agent synchronously.
+- `run_call_prep_agent` — Run an Octave call prep agent synchronously. [write]
+- `run_context_agent` — Run an Octave context agent synchronously. [write]
 - `run_enrich_company_agent` — Run an Octave company enrichment agent synchronously.
 - `run_enrich_person_agent` — Run an Octave person enrichment agent synchronously.
-- `run_qualify_company_agent` — Run an Octave company qualification agent synchronously.
-- `run_qualify_person_agent` — Run an Octave person qualification agent synchronously.
+- `run_qualify_company_agent` — Run an Octave company qualification agent synchronously. [write]
+- `run_qualify_person_agent` — Run an Octave person qualification agent synchronously. [write]
 - `validate_api_key` — Validate the Octave API key and return workspace metadata.
 
 ## Safety
@@ -78,11 +78,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Octave is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=octave
+  https://console.oomol.com/connections/octave
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Octave homepage: https://www.octavehq.com/
+- API documentation: https://docs.octavehq.com/quickstart

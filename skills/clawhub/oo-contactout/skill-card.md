@@ -1,43 +1,55 @@
-## Description: <br>
-ContactOut helps agents use an OOMOL-connected ContactOut account to search people and companies, enrich profiles, verify emails, retrieve contact availability, and read usage stats. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search ContactOut and retrieve company, people, profile, and contact details through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and sales or recruiting operators use this skill to run ContactOut people and company search, enrichment, email verification, contact availability checks, and account usage lookups through the OOMOL oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: ContactOut actions may retrieve personal emails, phone availability, LinkedIn profile data, company enrichment data, and account usage stats. <br>
-Mitigation: Run requests only when user-directed, review search and enrichment inputs before execution, and limit retrieved data to the user's stated task. <br>
-Risk: Connector actions consume the user's connected ContactOut service and may affect billing, credits, or usage quotas. <br>
-Mitigation: Use usage stats when relevant, watch for billing or credit errors, and confirm high-volume or broad searches before running them. <br>
-Risk: Authentication or connection troubleshooting could expose unnecessary setup steps or connection flows. <br>
-Mitigation: Use the existing OOMOL-connected account by default and fall back to setup or connection guidance only after an auth, scope, credential, or missing CLI failure. <br>
+## Use Case:
 
+External users and developers can search ContactOut for people and companies, find decision makers, enrich profiles, and check or verify contact details using identifiers such as LinkedIn URLs, email addresses, and company domains.
 
-## Reference(s): <br>
-- [ContactOut homepage](https://contactout.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId fields when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill metadata) <br>
+Risk: Setup runs a remote installer that was unavailable for inspection, and CLI startup synchronization can change other installed agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the CLI separately before use; set OO_SKILLS_SYNC_DISABLED=1 to disable the documented startup synchronization.
+
+Risk: ContactOut lookups send their identifiers to OOMOL and ContactOut and may incur usage charges.
+
+Mitigation: Share only identifiers you intend those services to receive, and consider usage charges before running lookups.
+
+## Reference(s):
+
+- [ContactOut API documentation](https://api.contactout.com/)
+- [ContactOut](https://contactout.com)
+- [OOMOL oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [ContactOut lookup results and operating guidance as text or JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may contain professional contact information returned by ContactOut.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,54 @@
-## Description: <br>
-Provides agent access to the public OpenFootball World Cup JSON dataset through OOMOL's oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenFootball World Cup (github.com). Use this skill for ANY OpenFootball World Cup request — searching and reading data. Whenever a task involves OpenFootball World Cup, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect connector schemas and query World Cup groups, teams, matches, stadiums, squads, and qualification playoff data from the public OpenFootball dataset. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan reports that fallback setup can install and authenticate the oo CLI, which is broader than the read-only dataset use case requires. <br>
-Mitigation: Use an already installed and signed-in oo CLI when possible; require explicit user review before running installer or login commands. <br>
-Risk: World Cup match data comes from a community dataset and is not an official real-time results source. <br>
-Mitigation: Treat returned match data as community-maintained reference data and verify time-sensitive or official results against authoritative sources. <br>
+## Use Case:
 
+People looking up World Cup data can use this skill to retrieve groups, matches, qualification playoffs, squads, stadiums, and teams from the community OpenFootball dataset. It returns connector data for the agent to inspect or summarize; the dataset is not an official or real-time results source.
 
-## Reference(s): <br>
-- [OpenFootball World Cup dataset](https://github.com/openfootball/worldcup.json) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-openfootball-worldcup) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only dataset queries; connector responses include data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup can execute downloaded CLI installers directly, and the remote installers were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately; prefer a verified, fixed release and check whether setup installs or updates other agent skills.
+
+Risk: Use may depend on OOMOL sign-in and may incur OOMOL charges.
+
+Mitigation: Review sign-in and possible charges before setup, and distinguish OOMOL billing errors from third-party account credit errors.
+
+## Reference(s):
+
+- [OpenFootball World Cup dataset](https://github.com/openfootball/worldcup.json)
+- [oo CLI documentation](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text]
+
+**Output Format:** [Structured connector results with natural-language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Dataset coverage depends on the season's published files; results are community data and may not be current or official.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

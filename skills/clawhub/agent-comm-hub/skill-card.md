@@ -1,47 +1,62 @@
-## Description: <br>
-Local multi-agent communication hub over MCP stdio and HTTP-SSE that provides messaging, task orchestration, shared memory, an evolution engine, 58 MCP tools, and a web management panel. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a local MCP and HTTP/SSE hub for agent messaging, task orchestration, shared memory, experience sharing, and web-based administration.
 
-## Publisher: <br>
-[liuboacean](https://clawhub.ai/user/liuboacean) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liuboacean](https://clawhub.ai/user/liuboacean)
 
-## Use Case: <br>
-Developers and agent operators use this skill to connect multiple local AI agents through a hub for message passing, task assignment, shared context retrieval, and operational monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agent messages, tasks, or automation triggers may be exposed without enough identity scoping or user review. <br>
-Mitigation: Install only where the hub operator and participating agents are trusted, bind the service to localhost or a protected network, require Bearer authentication for SSE and REST endpoints, enforce agent_id matching the authenticated identity, and use a policy gate before automatic task execution. <br>
-Risk: Connecting to untrusted hub servers or running maintenance scripts against production data can expose or damage sensitive agent state. <br>
-Mitigation: Do not point HUB_URL at untrusted servers, and back up real databases before running tests, migration scripts, or database repair utilities. <br>
+## Use Case:
 
+Developers and operators use the skill to connect agents to a shared hub, exchange messages and files, assign and track tasks, and retrieve shared context.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liuboacean/skills/agent-comm-hub) <br>
-- [Model Context Protocol specification](https://spec.modelcontextprotocol.io) <br>
-- [API Reference](docs/API_REFERENCE.md) <br>
-- [English README](docs/README_EN.md) <br>
-- [Advanced Orchestration Guide](docs/advanced-orchestration-guide.md) <br>
-- [ADR-0001: SSE Reliable Delivery](docs/adr/0001-sse-reliable-delivery.md) <br>
-- [ADR-0002: Activation State Persistence](docs/adr/0002-activation-state-persistence.md) <br>
-- [Hub DB Split Three-Layer Protection](docs/hub-db-split-three-layer-protection.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON configuration examples, shell commands, API/tool call examples, and status text.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local hub data such as messages, tasks, memories, audit records, and attachments when connected to a running Hub.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.22 (source: frontmatter, package.json, changelog, server release evidence) <br>
+Risk: Verified flaws may expose private agent data or permit access to resources owned by another agent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an isolated, private test instance without sensitive data until event authentication and resource ownership are fixed.
+
+Risk: Approval verification flaws and AppleScript handling may let task text bypass human review or execute commands.
+
+Mitigation: Do not attach powerful executors; disable command-capable integrations or use a sandboxed, least-privilege executor until these issues are fixed.
+
+Risk: Optional LLM execution sends task context to the selected provider.
+
+Mitigation: Avoid sending sensitive context and configure an LLM provider only when its data handling is acceptable.
+
+Risk: Maintenance or token rotation may affect stored hub data.
+
+Mitigation: Back up data before maintenance or token rotation, and run legacy tests only against disposable databases.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/liuboacean/skills/agent-comm-hub)
+- [Model Context Protocol specification](https://spec.modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Text, Files, Configuration instructions]
+
+**Output Format:** [MCP tool calls and structured responses, including plain text or Markdown messages and task results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a running Hub and configured credentials; results depend on Hub state and any configured host executor.]
+
+## Skill Version(s):
+
+3.0.31 (source: SKILL.md frontmatter, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,55 @@
-## Description: <br>
-Tinybird (tinybird.co). Use this skill for Tinybird requests involving searching, reading data, running published Pipe endpoints, or executing synchronous SQL queries through OOMOL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tinybird (tinybird.co). Use this skill for ANY Tinybird request — searching and reading data. Whenever a task involves Tinybird, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to query Tinybird data sources, inspect data-source metadata, and run published Pipe endpoints through an OOMOL-connected Tinybird account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tinybird queries and endpoint payloads may expose business data visible to the connected OOMOL account. <br>
-Mitigation: Review SQL queries and endpoint payloads before execution, and use an OOMOL connection scoped to the minimum Tinybird access needed. <br>
-Risk: First-time setup may run an external oo CLI installer. <br>
-Mitigation: Run the installer only when the oo CLI is missing and after confirming that the user trusts OOMOL's installer. <br>
+## Use Case:
 
+Developers and data teams use this skill to inspect Tinybird data sources, query published Pipe endpoints, and run SQL queries through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Tinybird homepage](https://www.tinybird.co) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Tinybird connection setup](https://console.oomol.com/app-connections?provider=tinybird) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-tinybird) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: First-time setup may run a remote CLI installer whose contents were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, prefer a pinned and verified release, and check whether setup adds or updates other agent skills.
+
+Risk: Requests pass through OOMOL and use the connected Tinybird account.
+
+Mitigation: Connect Tinybird with only the read permissions needed and account for requests passing through OOMOL.
+
+## Reference(s):
+
+- [Tinybird API documentation](https://www.tinybird.co/docs/md/api-reference)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Tinybird ClawHub release](https://clawhub.ai/oomol/skills/oo-tinybird)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Guidance]
+
+**Output Format:** [JSON query results with concise text summaries and usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented data source metadata, Pipe endpoint results, or SQL query results]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

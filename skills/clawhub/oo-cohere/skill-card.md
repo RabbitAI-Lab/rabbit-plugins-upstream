@@ -1,46 +1,55 @@
-## Description: <br>
-Operates Cohere through an OOMOL-connected account using the oo CLI for chat, embeddings, and document reranking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cohere (cohere.com). Use this skill for ANY Cohere request — reading, creating, and updating data. Whenever a task involves Cohere, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to send Cohere chat, embedding, and reranking requests through an OOMOL-connected account without handling raw Cohere credentials directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and documents sent to chat, embed, or rerank are transmitted to external services. <br>
-Mitigation: Review user data before execution and avoid sending sensitive content unless the connected Cohere and OOMOL accounts are approved for that data. <br>
-Risk: First-time setup may require installing or authenticating the oo CLI. <br>
-Mitigation: Review the oo CLI installer before running setup and only install it when the user intends to use OOMOL with a connected Cohere account. <br>
-Risk: Connector actions depend on the current live schema and account connection state. <br>
-Mitigation: Inspect the connector schema before constructing payloads and use first-time setup steps only after matching authentication, connection, or billing errors. <br>
+## Use Case:
 
+Developers and other Cohere users can use this agent skill to request Cohere chat responses, create text embeddings, and rerank documents through an already connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-cohere) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Cohere homepage](https://cohere.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples; connector responses are JSON] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live connector schema before constructing action payloads] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and skill metadata) <br>
+Risk: Setup executes changeable remote code, and its dependency may install persistent skills into other agent applications.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation, use a verified release, inspect any additional skills it installs, and consider disabling startup skill synchronization with OO_SKILLS_SYNC_DISABLED=1.
+
+Risk: Content sent through the connected account is processed by OOMOL and Cohere.
+
+Mitigation: Send only content that the user has authorized OOMOL and Cohere to process.
+
+## Reference(s):
+
+- [Cohere API reference](https://docs.cohere.com/reference/about)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Cohere](https://cohere.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, API Calls, Shell commands, Guidance]
+
+**Output Format:** [Markdown with shell command and JSON examples; connector responses are JSON and may contain generated text, embeddings, or ranked documents.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Output varies by Cohere action.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

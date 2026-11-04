@@ -1,43 +1,57 @@
-## Description: <br>
-Video search tool: queries Pixabay video API by keywords and returns stock video URLs and metadata for footage sourcing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches for stock video by keyword and returns video URLs and metadata.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, creators, and agents use this skill to search for stock video footage by keyword and retrieve video URLs and metadata for media sourcing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries are sent to dLazy and a dLazy API key may be stored locally by the CLI. <br>
-Mitigation: Use DLAZY_API_KEY for per-invocation credentials when local key storage is not desired, and rotate or revoke keys from dLazy if needed. <br>
-Risk: The --save option writes returned assets to a caller-provided local path. <br>
-Mitigation: Use explicit trusted output paths and review downloaded files before reuse. <br>
+## Use Case:
 
+Developers, creators, and agents use this skill to find stock video footage by keyword, with optional type, category, and duration filters.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-search-video) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Files, Guidance] <br>
-**Output Format:** [JSON result envelope with video result metadata and URLs; optional local asset file when --save is used.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Async mode can return a generateId and status for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Search requests are handled by dLazy as an intermediary and may incur credit charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the query and expected cost before running the search, and use --dry-run when appropriate.
+
+Risk: Queries and any local media supplied to the CLI may be sent to dLazy services; login also saves an API key in the local CLI configuration.
+
+Mitigation: Send only information and files you intend to share. Use the DLAZY_API_KEY environment variable if you prefer not to save the key in the local configuration.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-search-video)
+- [dLazy homepage](https://dlazy.com)
+- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [CLI project information (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video URLs, Video metadata, JSON]
+
+**Output Format:** [JSON search results containing video URLs and metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results can be filtered by video type, category, and duration, and paginated.]
+
+## Skill Version(s):
+
+1.3.38 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

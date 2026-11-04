@@ -1,44 +1,55 @@
-## Description: <br>
-BigMailer lets an agent read, create, update, and delete data in a connected BigMailer account through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage BigMailer brands, contacts, and lists through the oo CLI using an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate a connected BigMailer account from an agent, including brand, contact, and contact-list lookup and management. Write and destructive actions require user confirmation before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create or modify BigMailer contacts and contact lists. <br>
-Mitigation: Confirm the exact payload and expected account effect with the user before running create, update, or upsert actions. <br>
-Risk: Destructive actions can delete BigMailer contacts or contact lists. <br>
-Mitigation: Confirm the specific target and obtain explicit approval before running delete actions. <br>
-Risk: The skill operates a connected BigMailer account through OOMOL. <br>
-Mitigation: Install and use it only when the user intends the agent to act on that connected BigMailer account. <br>
+## Use Case:
 
+External users use the skill to read and manage BigMailer brands, contacts, and contact lists through their connected account.
 
-## Reference(s): <br>
-- [BigMailer homepage](https://www.bigmailer.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands inspect live connector schemas and return JSON responses from the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Dependency setup can execute changing remote code and may add agent skills during startup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI and installer deliberately; set OO_SKILLS_SYNC_DISABLED=1 before invoking oo if startup skill synchronization is unwanted.
+
+Risk: BigMailer data passes through OOMOL, and the exact remote installer behavior is unverified.
+
+Mitigation: Confirm OOMOL is suitable for the account's data, inspect installation behavior before use, and retain approval for write and deletion actions.
+
+## Reference(s):
+
+- [BigMailer API documentation](https://docs.bigmailer.io/)
+- [BigMailer](https://www.bigmailer.io/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [oo CLI commands with JSON action payloads and results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action inputs follow the live connector schema.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

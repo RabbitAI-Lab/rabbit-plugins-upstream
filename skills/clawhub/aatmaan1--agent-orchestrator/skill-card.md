@@ -1,43 +1,54 @@
-## Description: <br>
-Meta-agent skill for orchestrating complex tasks through autonomous sub-agents by decomposing work, generating specialized agent instructions, coordinating file-based communication, and consolidating results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Meta-agent skill for orchestrating complex tasks through autonomous sub-agents.
 
-## Publisher: <br>
-[aatmaan1](https://clawhub.ai/user/aatmaan1) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[aatmaan1](https://clawhub.ai/user/aatmaan1)
 
-## Use Case: <br>
-Developers and operators use this skill to break complex work into parallelizable subtasks, create specialized sub-agent workspaces, coordinate inbox/outbox communication, monitor status, and consolidate deliverables. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Sub-agents may receive broad file, shell, and execution authority without enough built-in limits or approval checkpoints. <br>
-Mitigation: Before use, set explicit limits for the number of agents, accessible paths, file edits, shell commands, and approval requirements. <br>
-Risk: Parallel autonomous agents can produce conflicting, incomplete, or low-quality deliverables if progress is only checked at completion. <br>
-Mitigation: Use measurable success criteria, review status.json checkpoints, validate each outbox deliverable, and require human review before consolidation. <br>
-Risk: Generated workspaces may retain sensitive inputs, intermediate files, or stale outputs after the workflow finishes. <br>
-Mitigation: Define workspace archive and deletion rules before dispatch, then clean or archive temporary agent workspaces after consolidation. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [File-Based Communication Protocol](references/communication-protocol.md) <br>
-- [Sub-Agent Templates](references/sub-agent-templates.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/aatmaan1/skills/agent-orchestrator) <br>
+## Use Case:
 
+Developers and engineers use this skill to decompose complex work into coordinated sub-agent tasks, dispatch those agents, monitor file-based status, and consolidate their deliverables.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline code, shell commands, JSON status examples, and generated SKILL.md templates.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces task decomposition plans, sub-agent role definitions, file-based coordination structures, status tracking conventions, and consolidation summaries.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill coordinates autonomous sub-agents with broad authority to copy files, run commands, write outputs, and retain workspaces.
+
+Mitigation: Use a dedicated workspace, limit input files to what each sub-agent needs, require approval before Bash or write-heavy subtasks, and decide in advance whether workspaces should be archived or deleted.
+
+Risk: Sub-agent work can produce conflicting or incomplete deliverables during parallel execution.
+
+Mitigation: Validate each outbox against its success criteria before consolidation and document unresolved conflicts in the final summary.
+
+## Reference(s):
+
+- [Agent Orchestrator skill page](https://clawhub.ai/aatmaan1/skills/agent-orchestrator)
+- [File-Based Communication Protocol](references/communication-protocol.md)
+- [Sub-Agent Templates](references/sub-agent-templates.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown instructions with code snippets, shell commands, generated skill definitions, task files, status JSON, and consolidation summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are organized through sub-agent inbox, outbox, workspace, and status files.]
+
+## Skill Version(s):
+
+0.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

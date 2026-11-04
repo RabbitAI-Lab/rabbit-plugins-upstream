@@ -1,42 +1,51 @@
-## Description: <br>
-Polar (polar.sh). Use this skill for ANY Polar request - reading, creating, and updating data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Polar (polar.sh). Use this skill for ANY Polar request — searching and reading data. Whenever a task involves Polar, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect Polar schemas and operate Polar customer, order, organization, product, and subscription workflows through the OOMOL oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions may expose Polar customer, order, subscription, and organization information to the agent. <br>
-Mitigation: Install only when agent access to Polar account data is intended, and review OOMOL connection scopes when narrower access is required. <br>
-Risk: State-changing Polar actions can affect account data if run with an incorrect payload. <br>
-Mitigation: Inspect the live connector schema before constructing payloads and confirm the exact payload and effect with the user before write or destructive actions. <br>
+## Use Case:
 
+Developers and operators use Polar to look up customer, organization, product, order, and subscription records, including customer state, through their connected Polar account.
 
-## Reference(s): <br>
-- [Polar homepage](https://polar.sh) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include live schema inspection steps and user confirmation guidance for state-changing Polar actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill frontmatter) <br>
+Risk: First-time setup can execute a remote CLI installer whose contents and backend behavior are unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified oo CLI version yourself, review and approve local changes separately, restrict Polar access to necessary data, and check automatic skill synchronization.
+
+## Reference(s):
+
+- [Polar](https://polar.sh)
+- [Polar API documentation](https://polar.sh/docs/api-reference/introduction)
+- [oo CLI project (related tool)](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API data, JSON, Analysis]
+
+**Output Format:** [JSON responses summarized as text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented customer, organization, product, order, and subscription information.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,58 @@
-## Description: <br>
-Access Tempo time-tracking, planning, team, account, and timesheet approval data through an MCP server backed by the Tempo API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connect to Tempo through MCP to read and manage worklogs, resource plans, teams, accounts, and timesheet approvals.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and Tempo/Jira users use this skill to query worklogs, plans, teams, accounts, and timesheet approvals, and to create or update Tempo records through MCP tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose broad Tempo/Jira time, team, account, and organizational data. <br>
-Mitigation: Use a least-privilege Tempo token and require explicit confirmation before cross-user, team, or account queries. <br>
-Risk: Create, update, delete, and approval tools can change Tempo records. <br>
-Mitigation: Require the agent to summarize the target record, action, and parameters and obtain user confirmation before any mutating operation. <br>
-Risk: Tempo API tokens can be exposed if stored in shared project configuration or chat transcripts. <br>
-Mitigation: Keep TEMPO_API_TOKEN out of committed files and shared chats, use local secret storage where available, and rotate the token if exposed. <br>
+## Use Case:
 
+Tempo and Jira users use this connector to review or update worklogs, resource plans, team and account data, and timesheet approvals. It supports reporting and time-tracking workflows through the Tempo API.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/chrischall/skills/tempo-api-mcp) <br>
-- [tempo-api-mcp npm Package](https://www.npmjs.com/package/tempo-api-mcp) <br>
-- [Tempo Terms of Use](https://www.tempo.io/terms-of-use) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance, API calls] <br>
-**Output Format:** [Markdown guidance with JSON configuration snippets, shell commands, and MCP tool calls] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a registered tempo-api-mcp server and a TEMPO_API_TOKEN supplied through MCP configuration or environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.9 (source: server release metadata) <br>
+Risk: The self-only access claim conflicts with documented tools for reading colleagues’ worklogs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the token’s actual permissions and use the narrowest access needed, preferably read-only for reporting.
+
+Risk: The connector can make consequential changes, including hard-deleting worklogs and changing timesheet approvals.
+
+Mitigation: Review each write preview and confirm its target and scope, especially for deletions and approvals.
+
+Risk: The connector requires a Tempo API token, and the supplied documentation does not establish the external server’s runtime behavior.
+
+Mitigation: Keep the token private and use a reviewed, pinned package version.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/chrischall/skills/tempo-api-mcp)
+- [npm package](https://www.npmjs.com/package/tempo-api-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text]
+
+**Output Format:** [Structured Tempo responses and natural-language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read responses can be compact or full; write operations require confirmation.]
+
+## Skill Version(s):
+
+3.2.7 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

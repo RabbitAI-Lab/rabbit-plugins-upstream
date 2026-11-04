@@ -1,45 +1,56 @@
-## Description: <br>
-Fast image generation with Doubao Seedream 5.0 Lite, supporting text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fast image generation with Doubao Seedream 5.0 Lite, supporting text-to-image and image-to-image.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to generate images through the dLazy hosted Seedream 5.0 Lite API from text prompts or reference images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local image inputs are sent to dLazy cloud services for generation. <br>
-Mitigation: Avoid submitting confidential or restricted content unless the user has approved dLazy as a provider for that data. <br>
-Risk: The dLazy CLI may store an API key in a local config file. <br>
-Mitigation: Use the per-invocation DLAZY_API_KEY environment variable or verify config-file permissions on shared machines. <br>
-Risk: Generated assets are hosted by dLazy and returned as external URLs. <br>
-Mitigation: Review generated output links before sharing them outside the intended workflow. <br>
+## Use Case:
 
+External users and developers use the skill to create images from text prompts or generate variations guided by reference images.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-seedream-5-0-lite) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated image results are returned as dLazy-hosted URLs; async runs may return a task identifier for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and selected images are sent to dLazy's hosted service, and generation can consume credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill for explicit image-generation requests, preview the request and estimated cost with --dry-run, and avoid sending sensitive prompts or images.
+
+Risk: The CLI stores the API key in its local configuration when authenticated.
+
+Mitigation: Protect the saved API key and rotate or revoke it if it is exposed.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-seedream-5-0-lite)
+- [dLazy CLI repository (CLI reference)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Images, JSON response]
+
+**Output Format:** [Generated image files with a JSON response containing result details and image URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports text-to-image and image-to-image generation; resolution and aspect ratio can be selected.]
+
+## Skill Version(s):
+
+1.3.37 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

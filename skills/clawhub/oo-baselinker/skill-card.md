@@ -1,44 +1,60 @@
-## Description: <br>
-BaseLinker helps an agent inspect connector schemas and run BaseLinker inventory and order-management actions through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read BaseLinker inventory and order data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to let an agent work with BaseLinker inventory catalogs, products, warehouses, orders, order statuses, and recent order events through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access business-sensitive BaseLinker order and inventory data through the user's connected account. <br>
-Mitigation: Install only when agent access to the OOMOL-connected BaseLinker account is intended, and handle returned order and inventory data as business-sensitive. <br>
-Risk: Actions tagged as write or destructive could change BaseLinker state if executed with an incorrect payload. <br>
-Mitigation: Inspect the live action schema before constructing payloads and require explicit user confirmation for write or destructive actions. <br>
-Risk: Account setup, expired credentials, missing scopes, or billing limits can prevent connector actions from running. <br>
-Mitigation: Use the documented first-time setup and connection recovery steps only after an action fails with the matching authentication, connection, scope, or billing error. <br>
+## Use Case:
 
+BaseLinker users and operators can use the skill to retrieve inventory catalogs, products, warehouses, order events, statuses, and filtered orders from an OOMOL-connected account.
 
-## Reference(s): <br>
-- [BaseLinker skill page](https://clawhub.ai/oomol/skills/oo-baselinker) <br>
-- [BaseLinker homepage](https://baselinker.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an installed, signed-in oo CLI and a connected BaseLinker account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The optional setup fallback executes remote CLI installer code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve the CLI installation separately before using the setup fallback.
+
+Risk: The security guidance identifies cross-agent skill synchronization as a possible unwanted behavior.
+
+Mitigation: Disable the documented cross-agent skill synchronization if it is not wanted.
+
+Risk: Actions can retrieve business data from the connected BaseLinker account.
+
+Mitigation: Connect only the intended BaseLinker account through OOMOL.
+
+## Reference(s):
+
+- [BaseLinker](https://baselinker.com)
+- [BaseLinker API documentation](https://api.baselinker.com/)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API calls, JSON]
+
+**Output Format:** [Markdown guidance, oo CLI commands, and JSON action payloads and responses.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only inventory and order data; the list_orders action returns up to 100 orders.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

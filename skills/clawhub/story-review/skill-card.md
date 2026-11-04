@@ -1,51 +1,56 @@
-## Description: <br>
-Coordinates multi-perspective adversarial review of fiction text, using full, lean, or solo review modes with fallback behavior when reviewer agents or reference files are unavailable. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+多视角对抗式审查。full/lean 模式在已部署 reviewer agents 时并行 spawn；缺失/异常 agents 或 spawn 失败时自动降级 solo，参考文件不可读时使用内置 rubric fallback。触发方式：/story-review、/审查、「审查一下」「帮我审一下」。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and agent users use this skill to review fiction drafts for structure, character, prose, continuity, platform fit, and actionable revision findings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist review discoveries into project tracking files without a separate confirmation step. <br>
-Mitigation: Review proposed tracking-file changes before relying on them, and require an explicit confirmation or diff when using this skill in a shared project. <br>
-Risk: The skill may read local story project materials and use reviewer subagents when available. <br>
-Mitigation: Install and run it only in projects where that local access and subagent use are acceptable, and prefer explicit /story-review commands over broad natural-language triggers. <br>
+## Use Case:
 
+小说作者可用此技能从结构、角色、文字和设定等角度审查章节，并获得带有原文依据的修改建议，帮助发现影响故事连贯性和阅读体验的问题。
 
-## Reference(s): <br>
-- [Story Review skill page](https://clawhub.ai/worldwonderer/skills/story-review) <br>
-- [OpenClaw metadata source](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Quality Checklist](references/quality-checklist.md) <br>
-- [Quality Rubric](references/quality-rubric.md) <br>
-- [Anti-AI Writing Guide](references/anti-ai-writing.md) <br>
-- [Banned Words and Patterns](references/banned-words.md) <br>
-- [Plot Core Methods](references/plot-core-methods.md) <br>
-- [Character Relations](references/character-relations.md) <br>
-- [Dialogue Mastery](references/dialogue-mastery.md) <br>
-- [Fanqie Quality Rubric](references/rubrics/fanqie.md) <br>
-- [Qidian Quality Rubric](references/rubrics/qidian.md) <br>
-- [Zhihu Quality Rubric](references/rubrics/zhihu.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown review report with structured findings and actionable revision guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports requested mode, effective mode, fallback status, rubric, rubric source, severity, category, location, evidence, issue, and fix fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.13 (source: server release evidence; artifact frontmatter reports 1.1.0) <br>
+Risk: Full and lean reviews can change saved continuity records without asking for approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Back up the book and approve proposed tracking changes before full or lean reviews; use solo mode to avoid automatic tracking changes.
+
+Risk: Deployed reviewer agents and companion writing tools can affect review results or make additional changes.
+
+Mitigation: Review the deployed reviewer agents and companion writing tools separately before relying on them.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/worldwonderer/skills/story-review)
+- [Quality rubric](references/quality-rubric.md)
+- [Solo review guidance](references/solo.md)
+- [Project link declared in skill metadata](https://github.com/zenstory-ai/oh-story-claudecode)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown review report with quoted evidence and revision suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings are prioritized by severity; full and lean reviews may save local continuity-tracking progress.]
+
+## Skill Version(s):
+
+1.1.44 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

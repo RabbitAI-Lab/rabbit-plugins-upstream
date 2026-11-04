@@ -1,45 +1,59 @@
-## Description: <br>
-Otter.ai (otter.ai). Use this skill for ANY Otter.ai request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read Otter.ai conversations, channels, workspaces, and audio through a connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to let an agent search, list, and read Otter.ai workspace, channel, conversation, and conversation-audio information through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad Otter.ai prompts may cause the agent to access private meeting or transcript information sooner than the user intended. <br>
-Mitigation: Review prompts involving private meetings, transcript links, or workspace data before allowing the agent to retrieve or summarize Otter.ai content. <br>
-Risk: Conversation audio actions can return temporary download URLs for meeting audio. <br>
-Mitigation: Request audio URLs only when the task requires audio access, and avoid exposing or persisting the URL beyond the current user-approved workflow. <br>
-Risk: Authentication, connection, and billing setup commands can change account state or require user action. <br>
-Mitigation: Use setup steps only after a matching CLI, authentication, connection, or billing failure, and keep normal operation limited to the already connected OOMOL account. <br>
+## Use Case:
 
+Users with an Otter.ai account connected through OOMOL can retrieve meeting conversations, audio links, workspace details, channels, and channel members.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-otter-ai) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Otter.ai Homepage](https://otter.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs the agent to inspect live connector schemas before running Otter.ai read actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions can execute remote CLI installers that have not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the CLI installation separately, and require approval before running a remote installer.
+
+Risk: Connecting Otter.ai lets OOMOL mediate access to private meeting data.
+
+Mitigation: Confirm the connected account and its data access are appropriate before using the skill.
+
+Risk: The CLI may automatically install bundled skills.
+
+Mitigation: Check the CLI's bundled-skill installation behavior before installing it.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Otter.ai Public API documentation](https://help.otter.ai/hc/en-us/articles/36130822688279-Otter-ai-Public-API)
+- [Otter.ai](https://otter.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [Text summaries and structured Otter.ai data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

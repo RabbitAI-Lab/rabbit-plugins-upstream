@@ -1,43 +1,55 @@
-## Description: <br>
-Dlazy Slideshow Video uses the pinned dLazy CLI to turn slides or documents into narrated slideshow-style videos with voiceover and transitions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns slides or documents into narrated slideshow videos with voiceover and transitions.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill to create explainer, report, courseware, or training videos from slides, PDFs, and other documents through dLazy's hosted file-to-video workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and attached files are sent to dLazy as a third-party service. <br>
-Mitigation: Use the skill only when organizational policy allows uploading that content to dLazy, and avoid attaching sensitive files unless approved. <br>
-Risk: The dLazy API key grants access to the user's dLazy organization. <br>
-Mitigation: Store the key through the dLazy CLI, and rotate or revoke it when access is no longer needed. <br>
+## Use Case:
 
+External users can turn slides or documents into narrated explainer, report, courseware, or training videos, and continue work in a project.
 
-## Reference(s): <br>
-- [Dlazy Slideshow Video on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-slideshow-video) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and streamed CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the pinned @dlazy/cli 1.2.3 package and may upload user-selected local files to dLazy for project-scoped video generation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and release evidence) <br>
+Risk: Messages and attached documents are sent to dLazy, and attached files are uploaded to its media storage; retention practices are not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only attach documents you are comfortable sharing with dLazy, and check that you are using the intended project.
+
+Risk: Using the hosted service may consume organization credits, and the CLI saves an API key in its local configuration.
+
+Mitigation: Consider service credit costs before generating videos, protect the local CLI configuration, and rotate or revoke the key if needed.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-slideshow-video)
+- [dLazy homepage](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video, Text, Shell commands]
+
+**Output Format:** [Narrated slideshow video and text responses; usage instructions in Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Video generation runs through the dLazy service; attached files are uploaded for processing.]
+
+## Skill Version(s):
+
+1.0.34 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

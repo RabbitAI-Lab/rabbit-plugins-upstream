@@ -1,44 +1,60 @@
-## Description: <br>
-Smartsheet lets agents read, create, update, and delete Smartsheet data through an OOMOL-connected account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Smartsheet to read, create, update, and delete sheet data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate sheets available to an OOMOL-connected Smartsheet account, including listing sheets, retrieving sheet data, and adding, updating, or deleting rows after confirming write or destructive payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Smartsheet data available to the connected OOMOL account. <br>
-Mitigation: Install and use it only when that account's Smartsheet access is appropriate for the task. <br>
-Risk: Add, update, and delete actions can change or remove sheet data. <br>
-Mitigation: Review the exact payload and expected effect, and get explicit approval before write or destructive actions. <br>
-Risk: First-time setup or login steps can change authentication or connection state. <br>
-Mitigation: Run install, login, or connection steps only when a command fails for the matching setup reason. <br>
+## Use Case:
 
+Agents and users use the skill to list and read Smartsheet sheets, and to add, update, or delete rows through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Smartsheet Skill Page](https://clawhub.ai/oomol/skills/oo-smartsheet) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Smartsheet](https://www.smartsheet.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline oo CLI commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Smartsheet row and column data, execution metadata, and proposed write or delete payloads for review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata, skill metadata) <br>
+Risk: Setup can execute downloaded code whose installers have not been reviewed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review CLI installation separately and use a pinned, verified distribution.
+
+Risk: OOMOL may install or synchronize skills across connected agent tools, broadening changes beyond this Smartsheet task.
+
+Mitigation: Decide whether to allow skill installation or synchronization, and disable it if unwanted.
+
+Risk: Adding or updating rows changes Smartsheet data, and deleting rows removes data.
+
+Mitigation: Confirm the exact payload and effect before writes; confirm the target and obtain explicit approval before deletions.
+
+## Reference(s):
+
+- [Smartsheet](https://www.smartsheet.com)
+- [Smartsheet API documentation](https://developers.smartsheet.com/api/smartsheet/openapi)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [Smartsheet skill release](https://clawhub.ai/oomol/skills/oo-smartsheet)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Text, Guidance]
+
+**Output Format:** [JSON data with concise text summaries and usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

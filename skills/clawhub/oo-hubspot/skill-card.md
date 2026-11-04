@@ -1,46 +1,56 @@
-## Description: <br>
-Operates HubSpot through an OOMOL-connected account for reading, creating, and updating CRM data with the oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supports reading, creating, and updating HubSpot CRM data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and business users use this skill to search HubSpot records, inspect CRM schemas, and create or update companies, contacts, deals, CRM objects, activities, and campaign reporting data through an OOMOL-connected HubSpot account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: HubSpot write actions can change CRM business records. <br>
-Mitigation: Confirm the exact action, target records, payload, and expected effect with the user before running create, update, manage, or feedback actions. <br>
-Risk: The skill depends on an OOMOL account, the oo CLI, OAuth connection state, and account billing. <br>
-Mitigation: Review the one-time installer and OAuth connection steps, and use setup or billing actions only after the matching error occurs. <br>
-Risk: Payloads can be wrong if they are built from stale assumptions about HubSpot connector schemas. <br>
-Mitigation: Fetch the live connector schema for the selected action before constructing JSON payloads. <br>
+## Use Case:
 
+External users and developers can use this skill to inspect HubSpot CRM records and properties, search CRM data, and perform supported create or update actions through their connected account.
 
-## Reference(s): <br>
-- [ClawHub HubSpot skill page](https://clawhub.ai/oomol/skills/oo-hubspot) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [HubSpot](https://www.hubspot.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may perform HubSpot reads or user-confirmed writes through an OOMOL-connected account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup may execute remote software and install additional agent skills; the remote installer and live connector code were not available in the reviewed artifact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and explicitly approve a verified CLI release before setup, including any additional skill installation.
+
+Risk: Connecting HubSpot authorizes OOMOL-mediated account access, and CRM changes can alter business records.
+
+Mitigation: Grant only the permissions needed and retain confirmation for the exact CRM changes.
+
+## Reference(s):
+
+- [HubSpot API documentation](https://developers.hubspot.com/docs/api/overview)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [HubSpot skill listing](https://clawhub.ai/oomol/skills/oo-hubspot)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON]
+
+**Output Format:** [Markdown instructions with shell commands and JSON inputs and responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may read or change CRM records; write actions require confirmation of the exact payload and effect.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

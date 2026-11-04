@@ -1,46 +1,51 @@
-## Description: <br>
-Diagnoses likely plant nutrient deficiencies from leaf images or videos, returning structured findings, confidence scores, fertilization direction guidance, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes plant leaf images or video for visual signs of nutrient deficiency and returns likely nutrient diagnoses with confidence and fertilization direction.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, developers, and gardening or agriculture operators use this skill to analyze plant leaf media for likely nutrient deficiencies and retrieve prior diagnosis reports. It supports smart planters, home gardening, greenhouses, and plant factory workflows where users need diagnostic guidance without exact fertilizer concentration recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uploads plant media and report metadata to the publisher's remote service. <br>
-Mitigation: Use only with media that may be shared with the publisher's service, and avoid sensitive workspace or personal data in inputs. <br>
-Risk: The skill can create or reuse a local account identity and store tokens or report context in the workspace. <br>
-Mitigation: Review token storage and user separation before using it in shared workspaces. <br>
-Risk: Historical report retrieval can be triggered automatically and may expose prior report data. <br>
-Mitigation: Review who can invoke history queries and confirm the workspace is appropriate for report retrieval. <br>
-Risk: Nutrient deficiency symptoms can overlap with plant disease or multiple simultaneous deficiencies. <br>
-Mitigation: Treat results as reference guidance and combine them with plant context, soil testing, and qualified agricultural advice. <br>
+## Use Case:
 
+Home gardeners, greenhouse operators, and plant growers can use the skill to review suspected nutrient deficiencies from leaf images or video and receive likely nutrient causes, confidence, and general fertilization direction.
 
-## Reference(s): <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-nutrient-diagnosis-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON structured diagnosis report with confidence scores, recommendations, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write the returned report to a user-specified output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.5) <br>
+Risk: The security review flags possible credential exposure through profile handling and media uploads even when the no-analysis option is selected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid using sensitive media or credentials until the noted fixes are available. Verify the provider's upload retention, account deletion, local token cleanup, and possible charges; consider rotating an API secret if it may already have been sent as profile data.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-nutrient-diagnosis-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [API documentation](artifact/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured diagnosis report with likely deficiency, confidence, recommendations, and a report link when available]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include confidence scores and links to reports.]
+
+## Skill Version(s):
+
+1.0.15 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

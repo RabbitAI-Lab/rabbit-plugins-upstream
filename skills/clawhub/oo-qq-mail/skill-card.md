@@ -1,42 +1,59 @@
-## Description: <br>
-QQ Mail (mail.qq.com). Use this skill for ANY QQ Mail request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use OOMOL's connected QQ Mail account to read, search, send, update, and delete email.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate a connected QQ Mail account through OOMOL, including reading, searching, sending, replying, forwarding, moving, marking, deleting messages, and downloading attachments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send, move, mark, and delete QQ Mail messages through OOMOL-connected credentials. <br>
-Mitigation: Review write or delete payloads carefully and obtain explicit user approval before mailbox state changes. <br>
-Risk: First-time setup and account connection steps grant an agent-operated workflow access to a QQ Mail account. <br>
-Mitigation: Run installer, login, and connection steps only when the user trusts the OOMOL CLI and needs to connect the account. <br>
+## Use Case:
 
+External users and agents use this skill to find and read QQ Mail messages, manage folders and read status, download attachments, and send or delete mail through a connected account.
 
-## Reference(s): <br>
-- [QQ Mail homepage](https://mail.qq.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [QQ Mail skill page](https://clawhub.ai/oomol/skills/oo-qq-mail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, Text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to inspect live connector schemas and run QQ Mail actions; state-changing and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Setup can run unverified remote software without installation approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve a verified CLI installation separately, including its automatic agent-skill synchronization settings.
+
+Risk: Connecting QQ Mail gives OOMOL-mediated access to the mailbox.
+
+Mitigation: Review the connection and its requested access before connecting the account.
+
+Risk: Mail writes can change mailbox state, and destructive actions can remove or move messages.
+
+Mitigation: Confirm the exact payload and effect before writes, and get explicit approval for destructive actions.
+
+## Reference(s):
+
+- [QQ Mail](https://mail.qq.com/)
+- [QQ Mail API documentation](https://help.mail.qq.com/detail/0/1087)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands]
+
+**Output Format:** [Email content and summaries, connector results, and oo CLI commands with JSON payloads.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions may read mailbox data or change mailbox state; the skill marks writes and destructive actions and requires confirmation before they run.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

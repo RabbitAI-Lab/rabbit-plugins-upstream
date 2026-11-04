@@ -1,43 +1,53 @@
-## Description: <br>
-Luma (lu.ma) helps an agent search and read Luma account data through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read Luma calendar, event, guest, and profile data through the connected OOMOL account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect Luma connector schemas and run read-only Luma actions for calendars, events, guests, and the current user profile through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Luma calendar, event, guest, and profile reads may expose sensitive account data. <br>
-Mitigation: Review the Luma connection scopes in OOMOL and run read actions only for data the user requested. <br>
-Risk: Future connector actions tagged write or destructive could change or remove Luma data. <br>
-Mitigation: Require explicit confirmation of the exact payload, target, and effect before running those actions. <br>
-Risk: Authentication, connection, credential, scope, or billing failures may require account setup steps. <br>
-Mitigation: Run setup, connection, or billing steps only after a matching command failure and clear user intent. <br>
+## Use Case:
 
+External users can use the skill to search and read calendar, event, guest, and profile information from a connected Luma account.
 
-## Reference(s): <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Luma homepage](https://lu.ma) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when returned by the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: skill metadata and release evidence) <br>
+Risk: The Luma workflow is appropriate, but its setup can execute unverified remote code and introduce additional agent skills without clearly explaining those changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI setup separately, preferably using a vetted release. Check which additional agent skills it installs; the CLI command reference documents OO_SKILLS_SYNC_DISABLED for disabling startup skill synchronization. Connect only the intended Luma account and consider the guest/profile data accessible through OOMOL. The remote installers could not be inspected, so their full system changes remain unverified.
+
+## Reference(s):
+
+- [Luma API documentation](https://docs.luma.com/reference/getting-started-with-your-api)
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Luma](https://lu.ma)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-luma)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Text]
+
+**Output Format:** [JSON action results with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Luma calendar, event, guest, and profile data scoped to the connected account.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

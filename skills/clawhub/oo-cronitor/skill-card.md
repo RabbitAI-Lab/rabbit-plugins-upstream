@@ -1,44 +1,56 @@
-## Description: <br>
-Cronitor (cronitor.io). Use this skill for ANY Cronitor request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Cronitor monitors through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Cronitor monitors through an OOMOL-connected account, including listing, fetching, creating, updating, and deleting monitors. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create and update actions can change Cronitor monitor state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write operations. <br>
-Risk: Delete actions can remove Cronitor monitor data. <br>
-Mitigation: Confirm the target monitor and obtain explicit approval before running destructive actions. <br>
-Risk: Connector payloads can drift if schemas change. <br>
-Mitigation: Inspect the live connector schema before constructing each action payload. <br>
+## Use Case:
 
+Developers and operators can use this skill to inspect, create, update, and delete monitors in a connected Cronitor account. It guides users to check each action's input schema and seek confirmation before changes or deletions.
 
-## Reference(s): <br>
-- [Cronitor homepage](https://cronitor.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Cronitor skill](https://clawhub.ai/oomol/skills/oo-cronitor) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and metadata with an execution ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Setup may run unverified remote code and may add agent skills without clearly disclosing those effects.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup first, use a separately approved and verified oo CLI release, and set OO_SKILLS_SYNC_DISABLED=1 before invoking the CLI if startup skill synchronization is unwanted.
+
+Risk: Monitor changes and deletions can affect Cronitor account data.
+
+Mitigation: Retain user approval for monitor changes and deletions, confirming the exact action and target before execution.
+
+## Reference(s):
+
+- [Cronitor API documentation](https://cronitor.io/docs/api)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [Cronitor skill release](https://clawhub.ai/oomol/skills/oo-cronitor)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [CLI commands with JSON request payloads and response data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes action-specific schemas and confirmation guidance for changes and deletions.]
+
+## Skill Version(s):
+
+1.0.4 (source: artifact frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

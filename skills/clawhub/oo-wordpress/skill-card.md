@@ -1,43 +1,56 @@
-## Description: <br>
-Operate a connected WordPress account through OOMOL's wordpress connector to read, create, update, and delete WordPress content. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage WordPress content through a connected OOMOL account, including reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and content operators use this skill to manage WordPress sites from an agent, including listing and reading content and preparing confirmed create, update, or delete actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive WordPress actions can change or delete site content. <br>
-Mitigation: Confirm the exact payload, expected effect, and target IDs before create, update, or delete actions. <br>
-Risk: The skill depends on the third-party oo CLI, an OOMOL account connection, and server-side WordPress credentials. <br>
-Mitigation: Install and use it only when the user intends to trust OOMOL with the connected WordPress account. <br>
+## Use Case:
 
+Users and developers use this skill to inspect and manage WordPress posts, pages, media, users, comments, categories, and tags through a connected WordPress account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-wordpress) <br>
-- [WordPress](https://wordpress.org) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an authenticated OOMOL account, connected WordPress credentials, and live action schemas from the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup may automatically run an unchecked remote installer when the oo CLI is missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, using a verified release where available.
+
+Risk: WordPress changes are performed through the connected account and OOMOL service.
+
+Mitigation: Connect a minimally privileged WordPress account, retain confirmation for changes, and consider disabling automatic skill synchronization with the documented OO_SKILLS_SYNC_DISABLED setting.
+
+## Reference(s):
+
+- [OO CLI project](https://github.com/oomol-lab/oo-cli)
+- [OO CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+- [WordPress REST API documentation](https://developer.wordpress.org/rest-api/)
+- [WordPress](https://wordpress.org)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Text, JSON]
+
+**Output Format:** [JSON connector results with explanatory text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions may read or change WordPress data; write and destructive actions require confirmation.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

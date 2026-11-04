@@ -7,6 +7,8 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const API_ORIGIN = 'https://api.unifyport.ai';
+// 发布版本独立于确认协议版本，升级能力不应使未变请求的 canonical 格式漂移。
+export const SKILL_VERSION = '1.1.0';
 export const REQUEST_TIMEOUT_MS = 15_000;
 export const MAX_REQUEST_BYTES = 256 * 1024;
 export const MAX_RESPONSE_BYTES = 1024 * 1024;
@@ -20,22 +22,32 @@ const ALLOWED_CONFIRMATION_MODES = new Set(['none', 'hmac-sha256']);
 const TRUSTED_DOCS_ORIGIN = 'https://www.unifyport.ai';
 const RESERVED_PATH_SEGMENTS = new Set(['internal']);
 const FORBIDDEN_OBJECT_KEYS = new Set(['__proto__', 'prototype', 'constructor']);
-// 公开请求不能把平台维护的状态或未文档化的顶层 proxy 当作可写字段。
-const FORBIDDEN_PUBLIC_BODY_FIELDS = new Set(['auth_status', 'runtime_status', 'proxy']);
+// 本次部署文档已公开 runtime_status/proxy；授权状态仍由平台维护，不可写入。
+const FORBIDDEN_PUBLIC_BODY_FIELDS = new Set(['auth_status']);
+// 仅这两个已审查的 POST 是读取，不能据 HTTP 方法放开其他写接口。
+const POST_READ_ACTIONS = new Set(['get-post', 'list-post-comments']);
 // 共享 messages 路由必须按公开 action 分离，避免一个 action 借用另一个 action 的扩展字段。
 const EXACT_OPERATION_FIELDS = Object.freeze({
   'create-account': {
-    bodyFields: ['name', 'provider', 'region', 'status', 'auth_mode', 'capabilities', 'metadata', 'provider_account_ref', 'provider_data'],
+    headerFields: ['Idempotency-Key'],
+    bodyFields: ['name', 'provider', 'region', 'status', 'auth_mode', 'capabilities', 'metadata', 'provider_account_ref', 'provider_data', 'runtime_status', 'proxy'],
   },
   'update-account': {
-    bodyFields: ['name', 'provider', 'region', 'status', 'auth_mode', 'capabilities', 'metadata', 'provider_data'],
+    bodyFields: ['name', 'provider', 'region', 'status', 'auth_mode', 'capabilities', 'metadata', 'provider_data', 'runtime_status', 'proxy'],
   },
   'send-text-message': { bodyFields: ['account_id', 'to', 'message', 'provider_data'] },
   'send-media-message': { bodyFields: ['account_id', 'to', 'message'] },
   'send-contact-message': { bodyFields: ['account_id', 'to', 'message'] },
   'send-reply-message': { bodyFields: ['account_id', 'to', 'message', 'reply_to'] },
   'send-mention-message': { bodyFields: ['account_id', 'to', 'message', 'mentions'] },
-  'list-conversations': { queryFields: ['type', 'cursor', 'limit'] },
+  'import-auth-session': { bodyFields: ['session_url', 'pin', 'proxy_config', 'whatsapp-protocol'] },
+  'list-conversations': { queryFields: ['type', 'cursor', 'limit', 'label_id'] },
+  'mark-conversation-read': { bodyFields: ['conversation_id', 'up_to_message_id', 'up_to_message_sender_id'] },
+  ...Object.fromEntries(['list-webhooks', 'get-webhook', 'deactivate-webhook', 'delete-webhook']
+    .map((id) => [id, { queryFields: ['account_id'], bodyFields: [] }])),
+  ...Object.fromEntries(['create-webhook', 'update-webhook'].map((id) => [id, {
+    queryFields: [], bodyFields: ['url', 'status', 'subscribed_events', 'signing_secret', 'retry_policy', 'account_id'],
+  }])),
 });
 const GLOBAL_SENSITIVE_KEYS = new Set([
   'id',
@@ -80,6 +92,27 @@ const GLOBAL_SENSITIVE_KEYS = new Set([
   'code',
   'url',
   'replytoken',
+  'providerprofile',
+  'webauthnresponse',
+  'joinurl',
+  'loginurl',
+  'authurl',
+  'passkey',
+  'staticprikey',
+  'identityprikey',
+  // 凭证整体及散落响应字段都脱敏，避免短密钥绕过通用 token 长度启发式。
+  'whatsappprotocol', 'staticpubkey', 'identitypubkey', 'peerkempublic',
+  'authhexdata', 'hash', 'labelid', 'uptomessageid', 'uptomessagesenderid',
+]);
+
+// 公开契约仅允许在 session 导入的专用对象中提交协议材料，不能借 provider_data 绕过凭证 opt-in。
+const PROTOCOL_CREDENTIAL_KEYS = new Set([
+  'whatsappprotocol', 'staticpubkey', 'staticprikey', 'identitypubkey', 'identityprikey', 'peerkempublic', 'authhexdata',
+]);
+const PROTOCOL_FIELDS = Object.freeze([
+  'phone', 'platform', 'app_version', 'server_address', 'fallback_server_addresses', 'country', 'device',
+  'static_pub_key', 'static_pri_key', 'identity_pub_key', 'identity_pri_key', 'hash', 'peer_kem_public',
+  'auth_hex_data', 'authhexdata', 'pq_handshake_mode', 'use_xxkem_handshake',
 ]);
 
 const normalizeKey = (value) => String(value).toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -134,7 +167,7 @@ const validateCatalog = (value) => {
   }
 
   const expectedCount = value.counts?.documentedActions;
-  if (expectedCount !== 68 || value.counts?.uniqueRoutes !== 64 || value.operations.length !== expectedCount) {
+  if (expectedCount !== 82 || value.counts?.uniqueRoutes !== 78 || value.operations.length !== expectedCount) {
     throw new Error('Operation catalog coverage mismatch');
   }
 
@@ -208,7 +241,7 @@ const validateCatalog = (value) => {
     if (
       operation.confirmation.mode !== expectedConfirmation.mode ||
       operation.confirmation.optIn !== expectedConfirmation.optIn ||
-      (operation.risk === 'read' && operation.method !== 'GET') ||
+      (operation.risk === 'read' && operation.method !== 'GET' && !POST_READ_ACTIONS.has(operation.id)) ||
       (operation.risk === 'write' && operation.method === 'GET') ||
       (operation.risk === 'destructive' && operation.method === 'GET') ||
       (operation.method === 'DELETE' && operation.risk !== 'destructive')
@@ -334,7 +367,7 @@ const assertProxyConfig = (value, path) => {
   }
 };
 
-const assertInputTree = (value, path = '$', depth = 0) => {
+const assertInputTree = (value, path = '$', depth = 0, allowAccountProxyClear = false) => {
   if (depth > 32) throw new Error('Request input is too deeply nested');
   if (value === null || ['string', 'number', 'boolean'].includes(typeof value)) {
     if (typeof value === 'number' && !Number.isFinite(value)) throw new Error(`Invalid number at ${path}`);
@@ -355,7 +388,10 @@ const assertInputTree = (value, path = '$', depth = 0) => {
       throw new Error(`Forbidden request field at ${path}.${key}`);
     }
     if (normalizedKey === 'proxy' || normalizedKey === 'proxyconfig') {
-      assertProxyConfig(item, `${path}.${key}`);
+      // 仅账号 PATCH 的顶层空对象表示恢复默认代理；嵌套或导入配置仍须提供公网 host。
+      const clearsAccountProxy = allowAccountProxyClear && path === '$.body' && key === 'proxy'
+        && isPlainObject(item) && Object.keys(item).length === 0;
+      if (!clearsAccountProxy) assertProxyConfig(item, `${path}.${key}`);
     } else if (normalizedKey === 'url' || normalizedKey.endsWith('url')) {
       assertPublicHttpsUrl(item, `${path}.${key}`);
     }
@@ -378,13 +414,134 @@ const stableStringify = (value) => {
   return `{${keys.map((key) => `${JSON.stringify(key)}:${stableStringify(value[key])}`).join(',')}}`;
 };
 
+const assertProtocolPlacement = (value, allowImport, path = '$.body') => {
+  if (value === null || typeof value !== 'object') return;
+  for (const [key, item] of Object.entries(value)) {
+    if (PROTOCOL_CREDENTIAL_KEYS.has(normalizeKey(key))) {
+      const validLocation = allowImport && (
+        (path === '$.body' && key === 'whatsapp-protocol') ||
+        (path === '$.body.whatsapp-protocol' && PROTOCOL_FIELDS.includes(key))
+      );
+      if (!validLocation) throw new Error('Protocol credentials require the dedicated session import object');
+    }
+    assertProtocolPlacement(item, allowImport, `${path}.${key}`);
+  }
+};
+
+const validateProtocolImport = (value) => {
+  assertAllowedFields(value, PROTOCOL_FIELDS, 'whatsapp-protocol');
+  const required = ['phone', 'static_pub_key', 'static_pri_key', 'identity_pub_key', 'identity_pri_key'];
+  for (const key of required) {
+    if (typeof value[key] !== 'string' || !/\S/.test(value[key])) throw new Error(`Invalid whatsapp-protocol.${key}`);
+  }
+  for (const [key, item] of Object.entries(value)) {
+    if (key === 'platform' || key === 'device') {
+      const minimum = key === 'platform' ? -2147483648 : 0;
+      const maximum = key === 'platform' ? 2147483647 : 4294967295;
+      if (!Number.isInteger(item) || item < minimum || item > maximum) throw new Error(`Invalid whatsapp-protocol.${key}`);
+    } else if (key === 'use_xxkem_handshake') {
+      if (typeof item !== 'boolean') throw new Error(`Invalid whatsapp-protocol.${key}`);
+    } else if (key === 'fallback_server_addresses') {
+      if (!Array.isArray(item) || item.some((address) => typeof address !== 'string')) throw new Error(`Invalid whatsapp-protocol.${key}`);
+    } else if (typeof item !== 'string') {
+      throw new Error(`Invalid whatsapp-protocol.${key}`);
+    }
+  }
+  // 上游服务器地址同样不能指向私网；保留原文与空值，不替调用方选择默认服务器。
+  for (const address of [value.server_address, ...(value.fallback_server_addresses ?? [])]) {
+    if (address === undefined || address === '') continue;
+    let url;
+    // 这里只解析上游地址作安全检查；唯一实际 fetch origin 仍为 API_ORIGIN。
+    try { url = new URL('https:' + '//' + address); } catch { throw new Error('Invalid protocol server address'); }
+    if (url.username || url.password || url.pathname !== '/' || url.search || url.hash || /[\s/\\]/.test(address)) throw new Error('Invalid protocol server address');
+    assertPublicHost(url.hostname, 'protocol server address');
+  }
+};
+
+// 新公开字段使用显式边界，保留 ID、时间和空清除值原文，不用默认值掩盖错误。
+const validateReviewedInput = (id, params, query, body) => {
+  const requiredString = (value, field) => {
+    if (typeof value !== 'string' || !/\S/.test(value)) throw new Error(`Invalid ${field}`);
+  };
+  const account = () => {
+    if (typeof body.account_id !== 'string' || !/^acc_[A-Za-z0-9][A-Za-z0-9_-]*$/.test(body.account_id)) throw new Error('Invalid account_id');
+  };
+  assertProtocolPlacement(body, id === 'import-auth-session');
+  if (id === 'import-auth-session' && Object.hasOwn(body, 'whatsapp-protocol')) validateProtocolImport(body['whatsapp-protocol']);
+  if (id === 'list-conversations' && Object.hasOwn(query, 'label_id') && typeof query.label_id !== 'string') throw new Error('Invalid label_id');
+  if (id === 'mark-conversation-read') {
+    for (const key of ['up_to_message_id', 'up_to_message_sender_id']) {
+      if (Object.hasOwn(body, key) && typeof body[key] !== 'string') throw new Error(`Invalid ${key}`);
+    }
+    // runner 无渠道上下文：保留 Telegram 的单 ID 与 WhatsApp 的双空整会话语义，仅拒绝缺少消息的非空 sender。
+    if (body.up_to_message_sender_id?.trim() && !body.up_to_message_id?.trim()) throw new Error('Message sender requires up_to_message_id');
+  }
+  if (['list-webhooks', 'get-webhook', 'deactivate-webhook', 'delete-webhook', 'create-webhook', 'update-webhook'].includes(id)) {
+    // 归属是否匹配由服务端判断；这里拒绝空值/重复 Query，不能把显式输入偷偷改成省略。
+    const location = ['create-webhook', 'update-webhook'].includes(id) ? body : query;
+    if (Object.hasOwn(location, 'account_id')) requiredString(location.account_id, 'account_id');
+  }
+  if (['list-accounts', 'list-posts'].includes(id)) {
+    if (query.limit !== undefined && (!Number.isInteger(query.limit) || query.limit < 1 || query.limit > (id === 'list-accounts' ? 100 : 50))) throw new Error('Invalid limit');
+    if (query.cursor !== undefined && (typeof query.cursor !== 'string' || (id === 'list-posts' && query.cursor.length === 0))) throw new Error('Invalid cursor');
+  }
+  if (id === 'create-account' && body.provider === 'facebook' && body.auth_mode !== 'session') throw new Error('Facebook requires session authorization');
+  if (id === 'update-account' && 'auth_mode' in body && Object.keys(body).length !== 1) throw new Error('auth_mode must be updated alone');
+  if (id === 'submit-passkey-response') requiredString(body.webauthn_response, 'webauthn_response');
+  if (id === 'add-contact') {
+    if (body.phone_number === undefined && body.username === undefined) throw new Error('phone_number or username is required');
+    if (body.phone_number !== undefined && (typeof body.phone_number !== 'string' || !/^[0-9]+$/.test(body.phone_number))) throw new Error('Invalid phone_number');
+    if (body.username !== undefined) requiredString(body.username, 'username');
+    if (body.whatsapp_options !== undefined) {
+      assertAllowedFields(body.whatsapp_options, ['first_name','full_name','sync_to_device_contacts'], 'whatsapp_options');
+      if (body.whatsapp_options.sync_to_device_contacts !== undefined && typeof body.whatsapp_options.sync_to_device_contacts !== 'boolean') throw new Error('Invalid sync_to_device_contacts');
+    }
+  }
+  if (id === 'get-contact-membership') requiredString(query.contact_id, 'contact_id');
+  if (id === 'request-conversation-history') {
+    if (typeof body.conversation_id !== 'string' || !/^[0-9]+@lid$/.test(body.conversation_id)) throw new Error('Invalid history conversation_id');
+    assertAllowedFields(body.before, ['message_id','sent_at','direction'], 'before');
+    requiredString(body.before.message_id, 'before.message_id');
+    if (/^call_record_[0-9a-f]{64}$/.test(body.before.message_id.trim())) throw new Error('Synthetic call records cannot anchor history');
+    if (typeof body.before.sent_at !== 'string' || !/^\d{4}-\d{2}-\d{2}T.*(?:Z|[+-]\d{2}:\d{2})$/.test(body.before.sent_at) || !(Date.parse(body.before.sent_at) >= 1000)) throw new Error('Invalid before.sent_at');
+    if (!['inbound','outbound'].includes(body.before.direction)) throw new Error('Invalid before.direction');
+    if (body.limit !== undefined && (!Number.isInteger(body.limit) || body.limit < 1 || body.limit > 50)) throw new Error('Invalid history limit');
+  }
+  if (['get-post','list-post-comments','reply-post-comment'].includes(id)) requiredString(body.post_id, 'post_id');
+  if (id === 'list-post-comments') {
+    if (body.cursor !== undefined) requiredString(body.cursor, 'cursor');
+    if (body.limit !== undefined && (!Number.isInteger(body.limit) || body.limit < 1 || body.limit > 50)) throw new Error('Invalid comment limit');
+  }
+  if (id === 'reply-post-comment') {
+    requiredString(body.text, 'text');
+    if (body.comment_id !== undefined) requiredString(body.comment_id, 'comment_id');
+  }
+  if (id === 'create-call') {
+    account(); assertAllowedFields(body.to, ['id','type'], 'to'); requiredString(body.to.id, 'to.id');
+    if (body.to.type !== 'user' || !['voice','video'].includes(body.media_type)) throw new Error('Unsupported call recipient or media type');
+  }
+  if (id === 'hangup-call') {
+    account();
+    if (typeof params.call_id !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$/.test(params.call_id)) throw new Error('Invalid call_id');
+  }
+  if (id === 'get-active-call' && (typeof query.account_id !== 'string' || !/^acc_[A-Za-z0-9][A-Za-z0-9_-]*$/.test(query.account_id))) throw new Error('Invalid account_id');
+};
+
 const normalizeInput = (operation, input) => {
   if (!isPlainObject(input)) throw new Error('Input must be a JSON object');
   const inputKeys = Object.keys(input);
-  if (inputKeys.some((key) => !['params', 'query', 'body'].includes(key))) {
-    throw new Error('Input only accepts params, query, and body');
+  if (inputKeys.some((key) => !['params', 'query', 'body', 'headers'].includes(key))) {
+    throw new Error('Input only accepts params, query, body, and headers');
   }
 
+  // 幂等键属于一次逻辑购买的身份，必须与 body 一起绑定确认，且不能覆盖认证头。
+  const headers = input.headers ?? {};
+  assertAllowedFields(headers, operation.id === 'create-account' ? ['Idempotency-Key'] : [], 'headers');
+  for (const value of Object.values(headers)) {
+    if (typeof value !== 'string' || value.length < 1 || value.length > 128 || /[^\x21-\x7e]/.test(value)) {
+      throw new Error('Invalid Idempotency-Key');
+    }
+  }
   const params = input.params ?? {};
   const query = input.query ?? {};
   const body = input.body ?? {};
@@ -396,7 +553,8 @@ const normalizeInput = (operation, input) => {
   assertAllowedFields(body, operation.bodyFields, 'body');
   assertInputTree(params, '$.params');
   assertInputTree(query, '$.query');
-  assertInputTree(body, '$.body');
+  assertInputTree(body, '$.body', 0, operation.id === 'update-account');
+  validateReviewedInput(operation.id, params, query, body);
 
   let pathname = operation.path;
   for (const name of operation.pathParams) {
@@ -444,9 +602,10 @@ const normalizeInput = (operation, input) => {
     query: [...url.searchParams.entries()].sort(([keyA, valueA], [keyB, valueB]) =>
       keyA.localeCompare(keyB) || valueA.localeCompare(valueB)),
     body: hasBody ? body : null,
+    ...(Object.keys(headers).length > 0 ? { headers } : {}),
   });
 
-  return { operation, params, query, body, hasBody, url, serializedBody, canonical };
+  return { operation, params, query, body, headers, hasBody, url, serializedBody, canonical };
 };
 
 export const prepareOperation = (id, input = {}) => normalizeInput(getOperation(id), input);
@@ -530,6 +689,7 @@ const buildPreview = (prepared, token) => ({
   path: prepared.operation.path,
   risk: prepared.operation.risk,
   params: redactSensitive(prepared.params, prepared.operation.sensitiveFields),
+  ...(Object.keys(prepared.headers).length > 0 ? { headers: redactSensitive(prepared.headers, ['Idempotency-Key']) } : {}),
   query: redactSensitive(prepared.query, prepared.operation.sensitiveFields),
   body: prepared.hasBody
     ? redactSensitive(prepared.body, prepared.operation.sensitiveFields)
@@ -614,8 +774,9 @@ export const runOperation = async (id, input = {}, options = {}) => {
     const headers = {
       Accept: 'application/json',
       'X-Api-Key': apiKey,
-      'User-Agent': 'unifyport-device-api-skill/1',
+      'User-Agent': `unifyport-device-api-skill/${SKILL_VERSION}`,
     };
+    Object.assign(headers, prepared.headers);
     if (prepared.hasBody) headers['Content-Type'] = 'application/json';
 
     const fetchImpl = options.fetchImpl ?? globalThis.fetch;
@@ -653,6 +814,19 @@ const parseJsonArgument = (value, label) => {
   try {
     const parsed = JSON.parse(value);
     if (!isPlainObject(parsed)) throw new Error();
+    // JSON.parse 会覆盖重复键；账号归属必须在丢失原始证据前拒绝，包含 Unicode 转义键名。
+    const tokens = value.match(/"(?:\\.|[^"\\])*"|[{}\[\]:,]/g) ?? [];
+    const stack = [];
+    for (let index = 0; index < tokens.length; index += 1) {
+      const token = tokens[index];
+      if (token === '{' || token === '[') stack.push(token === '{' ? new Set() : null);
+      else if (token === '}' || token === ']') stack.pop();
+      else if (token.startsWith('"') && tokens[index + 1] === ':' && JSON.parse(token) === 'account_id') {
+        const keys = stack.at(-1);
+        if (keys?.has('account_id')) throw new Error();
+        keys?.add('account_id');
+      }
+    }
     return parsed;
   } catch {
     throw new Error(`${label} must be a valid JSON object`);

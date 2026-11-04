@@ -1,43 +1,65 @@
-## Description: <br>
-Video replicate tool: extracts the first frame and audio from the source video, runs video understanding for a prompt, and returns a Seedance 2.0 replicate bundle (first frame + audio + video). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes a source video to produce a Seedance 2.0 replication bundle containing a first frame, audio, and video.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creators use this skill to invoke the dLazy video-replicate workflow from an agent, providing a source video and parameters to generate a Seedance 2.0 replicate bundle. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The dLazy CLI stores an API key locally, and that key may control paid credits or sensitive account access. <br>
-Mitigation: Prefer per-invocation DLAZY_API_KEY where practical, rotate or revoke keys when needed, and verify that the local CLI config file is restricted to the current OS user after login. <br>
-Risk: Local media paths supplied to the skill are uploaded to dLazy-hosted services for processing. <br>
-Mitigation: Only pass media files intended for dLazy processing and review files for sensitive content before invocation. <br>
+## Use Case:
 
+Video creators and editors can use this skill to analyze a reference video and prepare a Seedance 2.0 bundle with a first frame, audio, and video.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-video-replicate) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API calls, JSON] <br>
-**Output Format:** [Markdown with inline bash code blocks and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return generated media URLs or an asynchronous task identifier depending on CLI options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: frontmatter and server release evidence) <br>
+Risk: Source video and prompts are sent to dLazy for processing, and local media files are uploaded to its media storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only media you are comfortable uploading to dLazy.
+
+Risk: Login stores a dLazy API key in the local CLI configuration.
+
+Mitigation: Keep the local configuration protected and rotate or revoke the key if needed.
+
+Risk: The external CLI package and hosted service have not been fully audited.
+
+Mitigation: Review the pinned CLI package and service terms before processing sensitive media.
+
+Risk: Processing consumes credits.
+
+Mitigation: Check credit costs before running a video task.
+
+## Reference(s):
+
+- [dLazy service](https://dlazy.com)
+- [CLI repository listing](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [API key setup](https://dlazy.com/dashboard/organization/api-key)
+- [Credit settings](https://dlazy.com/dashboard/organization/settings?tab=credits)
+
+## Skill Output:
+
+**Output Type(s):** [Images, Audio, Video, JSON metadata]
+
+**Output Format:** [JSON response with generated media URLs and optional saved media files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Media is processed by the hosted dLazy service; local media supplied to the CLI is uploaded for processing.]
+
+## Skill Version(s):
+
+1.3.37 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

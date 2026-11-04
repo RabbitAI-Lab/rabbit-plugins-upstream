@@ -1,44 +1,56 @@
-## Description: <br>
-ntfy lets agents inspect ntfy connector schemas, retrieve account profile and usage details, and publish notification messages through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate ntfy through an OOMOL-connected account to retrieve account details or publish notifications.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate ntfy through an OOMOL-connected account, including account checks and notification publishing. It is suited for workflows that need ntfy messages without directly handling raw API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A publish_message action can send a notification to the wrong topic or with the wrong payload. <br>
-Mitigation: Confirm the exact topic, message, and payload with the user before running publish_message. <br>
-Risk: The skill depends on OOMOL as the credential broker for ntfy access. <br>
-Mitigation: Use the skill only when the user is comfortable with OOMOL-managed credentials and the required ntfy connection. <br>
-Risk: First-time setup may require installing the oo CLI with a platform-specific install command. <br>
-Mitigation: Review the oo CLI install command before running it, and perform setup only after an auth, connection, or missing-command failure. <br>
+## Use Case:
 
+People using ntfy through an OOMOL-connected account can retrieve account profile, limits, and usage, or publish a notification to a topic.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ntfy) <br>
-- [ntfy homepage](https://ntfy.sh) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include oo CLI commands, connector schema guidance, and confirmation prompts for write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: Automatic CLI setup may run downloaded installers and synchronize changes across agents' skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation steps first; use OO_SKILLS_SYNC_DISABLED to disable startup skill synchronization when appropriate.
+
+Risk: Publishing sends a notification to the selected ntfy topic.
+
+Mitigation: Confirm the destination and message before publishing.
+
+## Reference(s):
+
+- [ntfy](https://ntfy.sh)
+- [ntfy publishing documentation](https://docs.ntfy.sh/publish/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON action payloads and shell commands, with connector responses in JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

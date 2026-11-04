@@ -1,42 +1,56 @@
-## Description: <br>
-ConfigCat (configcat.com). Use this skill for ANY ConfigCat request - searching and reading data. Whenever a task involves ConfigCat, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use ConfigCat through an OOMOL-connected account to find and read products, configurations, environments, feature flags, settings, and setting values.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect ConfigCat products, configs, environments, feature flags, settings, and setting values through an OOMOL-connected ConfigCat account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can query ConfigCat data available to the user's OOMOL-connected credentials. <br>
-Mitigation: Use it only with the intended OOMOL account and ConfigCat connection, and avoid sharing returned configuration or flag data beyond the authorized context. <br>
-Risk: One-time CLI installation, login, and connector setup steps depend on trusting OOMOL and the local execution environment. <br>
-Mitigation: Run setup commands only when an action fails with the matching authentication, connection, or missing CLI error. <br>
+## Use Case:
 
+Developers use this skill to inspect ConfigCat products, configurations, environments, feature flags, settings, and setting values through their OOMOL-connected account.
 
-## Reference(s): <br>
-- [ConfigCat homepage](https://configcat.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schema output before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Setup includes installing the oo CLI through a remote installer; the scanner notes that downloaded code may execute without separate approval, though no malicious behavior was established.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Preinstall a vetted CLI version and require approval before downloaded code executes.
+
+Risk: The CLI may automatically synchronize skills, and ConfigCat data passes through OOMOL as disclosed.
+
+Mitigation: Check the CLI's automatic skill synchronization settings and connect ConfigCat with only the access needed.
+
+## Reference(s):
+
+- [ConfigCat](https://configcat.com/)
+- [ConfigCat Public Management API documentation](https://configcat.com/docs/api/reference/configcat-public-management-api/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ConfigCat ClawHub release](https://clawhub.ai/oomol/skills/oo-configcat)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [Text responses and structured data returned as JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only ConfigCat information; responses depend on the connected account's access.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

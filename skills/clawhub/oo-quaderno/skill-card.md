@@ -1,45 +1,60 @@
-## Description: <br>
-Quaderno helps agents operate Quaderno through an OOMOL-connected account to read tax, account, contact, and product data and to create, update, or delete contacts and products. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Quaderno (quaderno.io). Use this skill for ANY Quaderno request — reading, creating, updating, and deleting data. Whenever a task involves Quaderno, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Quaderno tax, account, contact, and product workflows through an OOMOL-connected account. It guides agents to inspect the live connector schema before building payloads and to confirm state-changing actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Quaderno operations may touch business and financial records, including customer, tax, payment, cancellation, and delete operations. <br>
-Mitigation: Treat these operations as sensitive and require explicit user confirmation before changing business or financial records. <br>
-Risk: Write actions can change Quaderno contacts or products, and destructive actions can permanently delete contacts or products. <br>
-Mitigation: Confirm the exact payload, target record, and expected effect with the user before running write or destructive actions. <br>
-Risk: Connector schemas can define required fields and response shapes that are not known until runtime. <br>
-Mitigation: Inspect the live action schema before constructing a payload and use the schema as the authority for inputs. <br>
+## Use Case:
 
+People using Quaderno through an OOMOL-connected account can use this skill to calculate tax rates and read, create, update, or delete Quaderno contacts and products. It guides the agent to inspect each action's schema and seek approval before writes or deletions.
 
-## Reference(s): <br>
-- [Quaderno homepage](https://quaderno.io/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-quaderno) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Quaderno connector commands and JSON payloads; write and destructive actions require explicit confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release metadata and skill metadata) <br>
+Risk: The required oo CLI may silently install persistent skills across other agents.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI setup, use a verified release, and set OO_SKILLS_SYNC_DISABLED=1 before invoking oo to prevent startup skill synchronization.
+
+Risk: Quaderno writes can change account data, and deletions are permanent.
+
+Mitigation: Keep the required user approvals; confirm the exact write payload or deletion target before running the action.
+
+Risk: The exact installer payload and hosted connector implementation are unverified.
+
+Mitigation: Review the CLI setup before installation and use a verified release.
+
+## Reference(s):
+
+- [Quaderno skill on ClawHub](https://clawhub.ai/oomol/skills/oo-quaderno)
+- [Quaderno](https://quaderno.io/)
+- [Quaderno API documentation](https://developers.quaderno.io/api/)
+- [oo CLI source repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes action safety labels and setup guidance.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

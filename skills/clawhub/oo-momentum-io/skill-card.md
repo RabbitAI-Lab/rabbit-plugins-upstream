@@ -1,42 +1,53 @@
-## Description: <br>
-Reads Momentum.io meeting, user, signal prompt, signal definition, and signal execution data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Momentum.io (momentum.io). Use this skill for ANY Momentum.io request — searching and reading data. Whenever a task involves Momentum.io, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, operators, and agents use this skill to read Momentum.io meetings, organization users, AI signal prompts, signal definitions, and signal execution data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Momentum.io meeting, user, signal prompt, definition, and execution data may contain business-sensitive information. <br>
-Mitigation: Use the skill only for user-requested Momentum.io read tasks, apply the narrowest useful filters, and avoid exposing returned data beyond the requested answer. <br>
-Risk: Broad Momentum.io trigger wording may cause the skill to activate for ambiguous Momentum references. <br>
-Mitigation: Confirm the user intends Momentum.io before running connector actions when the request is ambiguous. <br>
+## Use Case:
 
+Employees and developers use this skill to retrieve Momentum meeting, user, and signal data through their connected Momentum account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-momentum-io) <br>
-- [Momentum.io Homepage](https://www.momentum.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Text, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON response summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Momentum.io connector actions return data with a meta.executionId value.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: A simple Momentum data request can trigger downloaded software installation without a clear user approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the CLI separately before allowing the skill to run; consider disabling automatic skill synchronization and connect only the Momentum account intended for this use.
+
+## Reference(s):
+
+- [Momentum.io](https://www.momentum.io)
+- [Momentum API Access Documentation](https://docs.momentum.io/api-access)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Installation Guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill release](https://clawhub.ai/oomol/skills/oo-momentum-io)
+
+## Skill Output:
+
+**Output Type(s):** [JSON data, Guidance]
+
+**Output Format:** [JSON responses with concise explanatory text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read results depend on the connected Momentum account and requested action.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

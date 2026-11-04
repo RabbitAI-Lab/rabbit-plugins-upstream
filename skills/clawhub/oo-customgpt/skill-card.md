@@ -1,45 +1,56 @@
-## Description: <br>
-CustomGPT.ai helps agents read, create, and update CustomGPT.ai data through the OOMOL connector instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CustomGPT.ai (customgpt.ai). Use this skill for ANY CustomGPT.ai request — reading, creating, and updating data. Whenever a task involves CustomGPT.ai, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect CustomGPT.ai agents, conversations, documents, and messages, and to create conversations or send non-streaming prompts after confirming write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create CustomGPT.ai conversations and send messages that change account state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: The skill depends on OOMOL account access and the oo CLI to operate a CustomGPT.ai account. <br>
-Mitigation: Install or authenticate the oo CLI only when the user intends to use this connector and trusts OOMOL for the connection. <br>
-Risk: Connector action schemas may change over time. <br>
-Mitigation: Inspect the live connector schema before constructing every action payload. <br>
+## Use Case:
 
+External users and developers can use the skill to inspect CustomGPT agents, conversations, documents, and messages, and to create conversations or send messages through a connected account.
 
-## Reference(s): <br>
-- [CustomGPT.ai homepage](https://customgpt.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill listing](https://clawhub.ai/oomol/skills/oo-customgpt) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before each action payload.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: Fallback setup runs remote CLI installation code without a separate approval or integrity check; installer behavior is unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve the CLI installation separately before using the skill, including whether it installs other agent skills.
+
+Risk: Requests pass through OOMOL, and write actions can change CustomGPT.ai state.
+
+Mitigation: Understand that requests pass through OOMOL and keep the required confirmations for CustomGPT writes.
+
+## Reference(s):
+
+- [CustomGPT.ai](https://customgpt.ai)
+- [CustomGPT API documentation](https://docs.customgpt.ai/)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [CustomGPT.ai skill release](https://clawhub.ai/oomol/skills/oo-customgpt)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples; connector results are returned as JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions use action names and JSON inputs matching the live connector schema; reads return account data, while write actions create conversations or send messages.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
