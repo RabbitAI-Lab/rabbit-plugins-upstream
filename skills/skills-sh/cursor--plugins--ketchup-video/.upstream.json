@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/ketchup-video",
+  "repo": "cursor/plugins",
+  "skillId": "ketchup-video",
+  "branch": "main",
+  "pushedAt": "2026-11-04T07:20:06Z",
+  "contentHash": "c7a76236bfa1f7cd1b8d87e5c2bb8e08f8ba02e1c2aa4900c4e8cbc57a962bf4",
+  "fetchedAt": "2026-11-04T15:30:38.802Z"
+}
