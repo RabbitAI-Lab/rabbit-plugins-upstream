@@ -1,41 +1,57 @@
-## Description: <br>
-Helps English learners save vocabulary, schedule consent-based spaced repetition reminders, preview upcoming lesson words, and track vocabulary retention. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+英语词汇复习：按间隔重复排到期日，每天把到期的词合并成一张词卡；初中按义教词表，高中按课标词表的三档（义教、必修、选择性必修）。触发语："帮我记单词"、"把这个词存进词汇库"、"我单词背了就忘"、"下周要学新课了"、"启动词汇预热"、"帮我复习词汇"、"我的词汇库里有什么"。核心功能：三种入库方式 + SM-2 间隔重复排到期日 + 每日一张到期词卡（提醒由 IM 提醒统一发送）+ 课前预热雷达 + 个人遗忘速度调整。不处理：句子语法错误的追问（转英语语法突破教练）、整段作文批改（转英语写作进化教练）、发音是否标准（转英语口语陪练）。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning assistants use this skill to capture English vocabulary from photos, conversations, or manual entries, then run consent-based spaced review through flashcards, sentence practice, contextual dialogue, and progress reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores vocabulary history, example sentences, and learning performance in local memory, which may resurface personal details during later reviews or reports. <br>
-Mitigation: Use the skill only with user consent, avoid sensitive personal details in practice sentences, and review local memory behavior before installation. <br>
-Risk: IM reminders may interrupt users or run outside expectations if enabled without clear consent. <br>
-Mitigation: Enable reminders only after explicit consent and use the documented fallback of session-time review or user-initiated practice when timed reminders are unavailable. <br>
+## Use Case:
 
+Students use this skill to save English vocabulary, review due words with spaced repetition, and preview vocabulary for upcoming lessons. It adapts review prompts to the learner's school level and vocabulary progress.
 
-## Reference(s): <br>
-- [Vocabulary radar topic templates](references/vocabulary-radar-topics.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-vocabulary-dna) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown and conversational text with review prompts, vocabulary cards, reports, and setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local memory for vocabulary history and learning performance when available; OCR and timed reminders can fall back to manual input or session-time review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Saved learning records, sharing, or reminders may retain or expose student data when enabled without the intended consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use session-only mode when persistence is unwanted; enable records, sharing, and reminders only when wanted, and follow guardian-consent controls for younger students.
+
+Risk: Reminder delivery and storage depend on separate integrations that were not included in this review, so those features may be unavailable on a given platform.
+
+Mitigation: Check platform capabilities, use session-only review when integrations are unavailable, and avoid promising proactive reminders unless reminder support is enabled.
+
+## Reference(s):
+
+- [English High-School Vocabulary](references/english-hs-vocabulary.md)
+- [Vocabulary Radar Topics](references/vocabulary-radar-topics.md)
+- [Vocabulary Records and Consent Controls](shared/vocab.md)
+- [Platform Capability Fallbacks](shared/platform-conventions.md)
+- [ClawHub Skill Release](https://clawhub.ai/qizhitang/skills/xiaozhi-english-vocabulary-dna)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Conversational text, vocabulary review cards, and learning summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Daily reviews are consolidated into one due-word card; saved records and reminders depend on platform capabilities and user consent.]
+
+## Skill Version(s):
+
+2.12.5 (source: release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

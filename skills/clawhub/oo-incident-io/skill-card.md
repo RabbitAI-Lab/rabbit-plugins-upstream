@@ -1,44 +1,55 @@
-## Description: <br>
-Provides incident.io incident, action, status, and severity lookup through OOMOL's incident_io connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read incident.io incidents, actions, statuses, and severities through a connected OOMOL account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Incident responders and operations teams use this skill to let an agent read incident.io incidents, actions, statuses, and severities from a connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: incident.io data may contain sensitive operational or business information. <br>
-Mitigation: Install only when the connected incident.io account is correct and treat returned incident data as sensitive. <br>
-Risk: Requests are routed through OOMOL's oo connector. <br>
-Mitigation: Use the skill only if that routing model is acceptable for the organization. <br>
-Risk: Future versions may add write or destructive actions that change incident.io state. <br>
-Mitigation: Review the version's listed actions and do not approve write or destructive payloads unless intentionally requested. <br>
+## Use Case:
 
+Incident responders and operations teams use this skill to retrieve incidents and related actions, statuses, or severities from an authorized incident.io workspace.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-incident-io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [incident.io](https://incident.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-oriented connector actions; command responses include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter) <br>
+Risk: Automatic setup instructions can run changing remote code without clearly explaining or confirming local changes; the exact behavior of the remote installers is unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before installing, use a verified CLI release, approve local changes, and review or disable automatic skill synchronization.
+
+Risk: Incident data may be processed through OOMOL when using its connected account.
+
+Mitigation: Use read-only permissions where available and confirm that the workspace's incident data handling requirements allow this connection.
+
+## Reference(s):
+
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [incident.io](https://incident.io)
+- [incident.io API documentation](https://api-docs.incident.io/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [Structured incident.io data returned as JSON, with text summaries where appropriate]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only incident and action data, depending on the selected action]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

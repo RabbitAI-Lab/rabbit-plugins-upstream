@@ -1,42 +1,55 @@
-## Description: <br>
-JazzHR (jazzhr.com). Use this skill for searching and reading JazzHR applicants, jobs, and users through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read JazzHR applicants, jobs, and users through the connected OOMOL account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and recruiting teams use this skill to inspect JazzHR records, list applicants, jobs, and users, and retrieve individual records through the oo CLI without handling raw credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: JazzHR applicant, job, and user records can contain sensitive HR data. <br>
-Mitigation: Review prompts and results before sharing applicant or user information outside the organization. <br>
-Risk: The skill accesses data through the user's OOMOL-connected JazzHR account. <br>
-Mitigation: Install and use it only when JazzHR account access through OOMOL is intended. <br>
+## Use Case:
 
+Recruiting and HR teams use the skill to search and read JazzHR applicants, jobs, and users through an already connected account. It returns requested records for the agent to present or summarize.
 
-## Reference(s): <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [JazzHR homepage](https://www.jazzhr.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only connector actions return JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence release version and skill metadata) <br>
+Risk: CLI setup may execute downloaded code and change installed agent skills through startup synchronization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, use a verified release, and consider disabling startup skill synchronization with OO_SKILLS_SYNC_DISABLED=1.
+
+Risk: Using the connected service exposes recruiting requests and JazzHR account data to OOMOL processing.
+
+Mitigation: Confirm OOMOL is authorized to process recruiting requests and access the connected JazzHR account.
+
+## Reference(s):
+
+- [JazzHR](https://www.jazzhr.com)
+- [JazzHR API documentation](https://www.resumatorapi.com/v1/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands]
+
+**Output Format:** [Natural-language summaries and JSON results from JazzHR queries, using oo CLI shell commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only applicant, job, and user records; queries may be filtered by supported fields.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

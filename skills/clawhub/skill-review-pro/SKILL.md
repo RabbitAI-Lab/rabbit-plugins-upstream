@@ -1,18 +1,28 @@
 ---
 name: skill-review-pro
-version: "2.0.1"
+version: "2.2.9"
 homepage: https://github.com/z-Zihan/awesome-skills
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash(clawhub:*)
 description: >
   AI Skill 质量评审系统。通过静态审查对 Skill 进行评分（100分制），
   输出专业的评审报告和改进建议。模块化架构：主控编排 + 类型策略 + 评分模型 + 修复执行。
   AI Skill QA System. Evaluates Skills via static analysis,
   with 100-point scoring, modular architecture with type-aware policies.
   触发词：评审 skill, 测评 skill, skill 评分, skill 质量检查, 审查 skill,
-  改进 skill, 完善技能, 验证修复意见, 稳定性测试, benchmark,
-  review skill, evaluate skill, improve skill, validate fix, skill quality.
+  改进 skill, 完善技能, 验证修复意见, 稳定性测试, 全库体检, benchmark, 发布核验,
+  发布确认, review skill, evaluate skill, improve skill, validate fix, skill quality,
+  repo audit, publish check, verify publish.
 ---
 
 # skill-review-pro — AI Skill QA System
+
+## 工具权限与安全边界
+
+本 skill 声明的工具能力严格限于:
+- **文件读写**(Read/Write/Edit/Glob/Grep):仅读取被评审 Skill 的 SKILL.md 及其附属文件、写入评审报告和修复内容
+- **Bash**:仅允许执行 `clawhub` CLI 命令(publish_check 模式核对版本/sha 用),不允许其他 shell 命令
+- **无网络外发**:本 skill 不上传任何数据,所有评审均在本地完成;不采集环境变量;不访问用户数据目录以外的路径
+- subprocess 调用仅限 `clawhub inspect` 等只读查询,无任意命令执行
 
 ## 语言规则
 
@@ -80,7 +90,10 @@ skill-review-pro/
 │   └── workflow/               ← 流程域
 │       ├── planner.md
 │       └── reviewer.md
-└── fix/SKILL.md                ← 修复执行器
+├── fix/SKILL.md                ← 修复执行器
+└── scripts/
+    ├── skill_audit.py          ← 全库体检脚本(确定性机械检查)
+    └── publish_check.py        ← ClawHub 发布核验脚本(版本/内容/sha 三项比对)
 ```
 
 ### 模块引用规则
@@ -89,6 +102,8 @@ skill-review-pro/
 - **policies/base/** — 必加载（所有类型共享基础）
 - **policies/<domain>/** — 按类型加载域专属策略
 - **fix** — 修复阶段时读取（仅用户主动触发）
+- **scripts/skill_audit.py** — 全库体检时运行，输出仅作审查输入
+- **scripts/publish_check.py** — 发布核验时运行，输出仅作核验结论；需要网络与 clawhub CLI，不可用时如实报告「无法核验」，不猜测发布状态
 
 读取模块时，读取对应 `SKILL.md` 的完整内容作为当前阶段的补充指令。
 
@@ -139,6 +154,7 @@ skill-review-pro/
    - **文件类型**：以 `.md` 为主，`.json`/`.yaml` 配置文件可选读取
    - **目录深度**：最多 3 层（如 `policies/base/reliability.md`）
 3. **加载评审策略** → 先加载 `policies/base/`（必选），再按路由规则加载 `policies/<domain>/`（可选）
+   - **可选加速**：目标是整库轮检时，可先运行 `python3 scripts/skill_audit.py <仓库根>` 获得机械检查基线（frontmatter 完整性 / 相对路径引用 / 触发词冲突 / README 收录）。脚本报告的问题直接进入第 5 步评审；脚本输出不替代评分，也不构成唯一依据——机械检查通过不代表内容质量合格
 4. **加载评分模型** → 读取 `scoring/SKILL.md`，应用策略中的权重调整
 5. 从 4 个一级维度逐一评审（引用二级观察项作为证据），给出得分、问题（引用原文）、改进建议
    - 主文件和子目录文件统一评审，不分开出报告
@@ -338,6 +354,25 @@ R XX→XX | E XX→XX | UX XX→XX | M XX→XX
 4. 汇总输出区间表和波动判断（±3=稳定，±4-6=轻微波动，>6=波动较大）
 5. 固定提醒：`⚠️ 同一 session 连续评分存在锚定效应，跨 session 波动预计 ±3–4 分。`
 
+### 发布核验模式（用户说「发布核验」/「发布确认」/「verify publish」时触发）
+
+**背景**：本仓库的 publish CI 用「本地版本 > ClawHub 最新版本」判断是否需要发布，且发布循环逐个执行——一个 skill 失败会中断并吞掉后续 skill 的发布。因此「CI 重跑变绿」不等于「所有预期发布的 skill 都发布成功」，合并后必须逐个核验。
+
+**流程**：
+1. 对每个预期发布的 skill 目录运行：`python3 skill-review-pro/scripts/publish_check.py check <skill目录> [--expect-sha <合并 commit sha>]`
+2. 脚本依次核验：本地 frontmatter 版本 = 线上 `latestVersion.version`；线上 `skill.description` 与本地 SKILL.md **逐字节一致**；changelog 内嵌 commit sha 与期望合并 sha 匹配
+3. 结论判读：
+   - ✅ PASS → 发布确认完成
+   - ❌ 「本地 > 线上」→ 本次改动从未发布：检查该 commit 是否真的改了版本号（改 SKILL.md 必须 bump version，否则 CI 校验直接失败）
+   - ❌ 「内容不一致」且发布时间已超过 15 分钟 → 发布了旧内容或半成品：bump 一个新版本号重新触发发布
+   - ⏳ WARN(delay)（发布后 15 分钟内内容短暂不一致）→ 安全扫描/索引延迟，等几分钟重跑，不要误判为发布失败
+   - ❌ 「本地 > 线上」但 publish CI 结论是 success → 先抓 publish 步骤日志再判：若看到「Update submitted for <slug>@<版本>; pending security scans before it becomes public.」→ 提交已被接受、正等待异步安全扫描（本批约 20–24 分钟），纯等待后重跑 publish_check 即可，**不要 bump、不要 rerun**（2026-11-03 实测：2.2.8 首验 FAIL「本地 2.2.8 > 线上 2.2.7」，run 日志见该行，约 20 分钟后 latest 2.2.7→2.2.8、publish_check 全 PASS）。**CI success ≠ 已对外可见**：publish 以「Update submitted…pending security scans」收尾时版本号已排队、内容延迟落库，inspect latest 在扫描完成前停留在旧版本；「CI success + inspect 未更新」的完整处置是等，不是 bump——盲目 bump 会在扫描完成后多发布一个内容相同的新版本
+   - 速率限制报错 → ClawHub 对 inspect 有频控（提示 reset in Ns），等待后重试
+   - CI 校验通过但 publish 步骤报 "Too many writes in a short period of time" → ClawHub 对**发布写入**也有频控（2026-11-01 实测连续两次触发：首次在推送后约 4 分钟，重试在推送后约 2 分钟仍被拒，间隔需拉长到 20 分钟以上）
+   - 同一版本号重试 5 次（间隔最长 65 分钟）仍全部限流 → 疑似该版本行已被首次半成品写坏（限流报错掩盖了部分写入），继续重试无效；正确恢复是 bump 到全新版本号绕开，而不是继续 hammer 同一版本（2026-11-01：2.2.0 六次未发，bump 2.2.1 后首发成功）；CI 显示 failure 时先看 publish 步骤日志区分「校验拒绝」与「写入限流」——后者等几分钟后用真实 SKILL.md 改动重新触发即可，不要 bump 版本
+   - publish 步骤报上传 ticket 超时或 HTTP 5xx → 与写入限流是**两种故障**：这是 ClawHub 服务端上传通道瞬时故障（GitHub Actions 出口网络正常、本机 curl 正常可佐证）；处置是直接 `gh run rerun <run-id> --failed` 重试，**不需要 bump 版本**——超时发生在版本行落库前，inspect 返回 not-found 佐证无孤儿版本，同版本重试安全（2026-11-02 实测：delivery-spec-audit 1.0.0 六次失败跨越 71 分钟后，次日凌晨同版本 rerun 一次成功）；若错误变成 "already exists"，先看是否带 "(reset in Ns)" 频控尾缀：带 → 仍是频控伪装的同一故障，冷却等待后同版本重试，**不要 bump**（2026-11-03 实测：skill-review-pro 2.2.5/2.2.6 连续报 "already exists (reset in Ns)"，两版本号均未 bump，约 30 分钟内 inspect latest 依次出现 2.2.5→2.2.6 且内容与本地逐字节一致——频控态的 already exists 是服务端排队延迟落库的表象，盲目 bump 会制造只有版本号的孤儿版本链）；不带频控尾缀且 inspect 能看到该版本行 → 才是真已存在，需 bump 新版本号
+4. 最终判据是 inspect 内容一致，不是 CI 绿灯或 tags 字段（ClawHub 存在孤儿版本、tag 标签滞后等异常）
+
 ---
 
 ## 支持的 Skill 格式
@@ -360,6 +395,8 @@ R XX→XX | E XX→XX | UX XX→XX | M XX→XX
 - ❌ **风格偏见** — 偏向"像自己一样风格"的 Skill（模块化、双语、长文档），对极简/单语/短文档不公正
 - ❌ **跳过对抗检查** — 不执行 reliability.md 的对抗检查清单
 - ❌ **改变意图** — 修复时改变 Skill 的原有意图或功能，只应修复质量缺陷
+- ❌ **体检脚本误读** — 把 `skill_audit.py` 的输出当作评审结论。脚本只覆盖机械项，误报也可能存在（如边界声明被当作触发词）；脚本报告的每条问题都须经人工确认后再写进评分
+- ❌ **把 CI 绿灯当发布成功** — publish CI 的发布循环会因单个 skill 失败而吞掉后续发布；合并后用 `scripts/publish_check.py` 逐个核验，最终判据是线上内容与本地逐字节一致
 
 ## 运行环境适配
 
@@ -436,7 +473,10 @@ skill-review-pro/
 │   └── workflow/               ← Workflow domain
 │       ├── planner.md
 │       └── reviewer.md
-└── fix/SKILL.md                ← Fix executor
+├── fix/SKILL.md                ← Fix executor
+└── scripts/
+    ├── skill_audit.py          ← Repo-wide audit script (deterministic mechanical checks)
+    └── publish_check.py        ← ClawHub publish verification (version/content/sha)
 ```
 
 ### Module Reference Rules
@@ -445,6 +485,8 @@ skill-review-pro/
 - **policies/base/** — Must load (shared base for all types)
 - **policies/<domain>/** — Load domain-specific policy by type
 - **fix** — Read during fix phase (only when user actively triggers)
+- **scripts/skill_audit.py** — Run for repo-wide audit; its output is review input only
+- **scripts/publish_check.py** — Run for publish verification; requires network access and the clawhub CLI. When unavailable, report "cannot verify" honestly instead of guessing publish status
 
 When reading modules, read the full content of the corresponding `SKILL.md` as supplementary instructions for the current phase.
 
@@ -493,6 +535,7 @@ Domain mapping:
    - Purpose: Subdirectory files are integral parts of the Skill (scoring models, policy files, specialized modes, etc.) and their quality directly affects overall Skill performance
    - Subdirectory files are reviewed under the same 4 dimensions; issues must note the file path (e.g., `scoring/SKILL.md:Section 3`)
 3. **Load review policies** → Load `policies/base/` first (required), then `policies/<domain>/` by routing rules (optional)
+   - **Optional speed-up**: when the target is a whole-repo sweep, run `python3 scripts/skill_audit.py <repo-root>` first to get a mechanical baseline (frontmatter integrity / relative-path references / trigger conflicts / README coverage). Issues found by the script go directly into step 5 review; script output never replaces scoring and is not the sole evidence — passing mechanical checks does not imply content quality
 4. **Load scoring model** → Read `scoring/SKILL.md`, apply weight adjustments from policies
 5. Review across 4 primary dimensions one by one (cite secondary observation items as evidence), give scores, issues (cite original text), improvement suggestions
    - Main file and subdirectory files are reviewed together, not in separate reports
@@ -612,6 +655,25 @@ Judgment conclusion for each suggestion:
 4. Summary output with range table and fluctuation judgment (±3=stable, ±4-6=slight fluctuation, >6=significant fluctuation)
 5. Fixed reminder: `⚠️ Consecutive scoring in the same session has anchoring effects. Cross-session fluctuation is expected at ±3-4 points.`
 
+### Publish Check Mode (triggered by "publish check" / "verify publish")
+
+**Background**: this repo's publish CI decides "needs publishing" by requiring the local version to be greater than the ClawHub latest, and its publish loop runs skills one by one — one failure aborts and swallows the publish of every later skill. So "CI green after retry" does NOT mean "every skill that should have published did publish". Verify each skill after merging.
+
+**Workflow**:
+1. For each expected-to-publish skill directory, run: `python3 skill-review-pro/scripts/publish_check.py check <skill-dir> [--expect-sha <merge commit sha>]`
+2. The script verifies: local frontmatter version == remote `latestVersion.version`; remote `skill.description` is **byte-identical** to the local SKILL.md; the commit sha embedded in the changelog matches the expected merge sha
+3. Reading the verdict:
+   - ✅ PASS → publish confirmed
+   - ❌ "local > remote" → this change never published: check whether the commit actually bumped the version (editing SKILL.md without bumping `version` fails the CI gate outright)
+   - ❌ "content mismatch" more than 15 minutes after publish → stale/partial content went live: bump to a new version and re-trigger publishing
+   - ⏳ WARN(delay) (mismatch within 15 minutes of publish) → security-scan/indexing lag; wait a few minutes and re-run, do not misread it as a failed publish
+   - ❌ "local > remote" while the publish CI run concluded success → read the publish-step log before deciding: if it shows "Update submitted for <slug>@<version>; pending security scans before it becomes public." → the submission was accepted and is awaiting async security scans (~20–24 minutes in the observed batch); just wait and re-run publish_check — **do not bump, do not rerun** (observed 2026-11-03: 2.2.8 first check FAILed with "local 2.2.8 > remote 2.2.7", the run log showed that line, and ~20 minutes later latest moved 2.2.7→2.2.8 with all checks PASS). **CI success ≠ publicly visible**: when the publish step ends with "Update submitted…pending security scans", the version row is queued and content lands later; before the scan completes, inspect latest still shows the old version. The full playbook for "CI success + inspect not updated" is to wait, not bump — bumping would publish a redundant identical version once the scan completes
+   - Rate-limit error → ClawHub throttles inspect ("reset in Ns"); wait and retry
+   - Validation passes but the publish step fails with "Too many writes in a short period of time" → ClawHub also rate-limits **publish writes** (observed 2026-11-01 twice in a row: first ~4 minutes after the trigger push, then a retry ~2 minutes later was also rejected — space retries at least ~20 minutes apart)
+   - The same version throttled on every retry (5 attempts, up to 65 minutes apart) → suspect the version row itself was corrupted by the first partial write; further retries of that version are futile. Recover by bumping to a fresh version number instead of hammering the same one (2026-11-01: 2.2.0 failed six times, a bump to 2.2.1 published on the first try); when CI shows failure, read the publish-step log to distinguish "validation rejected" from "write throttled" — for the latter, wait a few minutes and re-trigger with a real SKILL.md change, do not bump the version
+   - The publish step fails on an upload-ticket timeout or HTTP 5xx → a **different failure mode** from write throttling: a transient outage of ClawHub's server-side upload channel (corroborated by normal GitHub Actions egress and normal local curl to clawhub.ai); the fix is simply `gh run rerun <run-id> --failed` — **no version bump needed**, because the timeout happens before the version row is written (inspect returns not-found, confirming no orphaned version), so same-version retries are safe (observed 2026-11-02: delivery-spec-audit 1.0.0 failed six times over 71 minutes, then a same-version rerun succeeded the next morning); if the error turns into "already exists", check for a "(reset in Ns)" rate-limit suffix first: with the suffix → same transient fault in disguise, cool down and retry the same version, **do not bump** (observed 2026-11-03: skill-review-pro 2.2.5/2.2.6 both reported "already exists (reset in Ns)"; neither version was bumped, and within ~30 minutes inspect latest showed 2.2.5 then 2.2.6, each byte-identical to local content — in a throttled state the already-exists message is an artifact of server-side queueing and delayed persistence; blind bumping would create an orphan version chain of number-only rows); without the suffix and the version row is visible via inspect → the row genuinely exists, bump to a new version
+4. The final criterion is inspect content identity, not a green CI run or the tags field (ClawHub has orphaned versions and lagging tag labels)
+
 ---
 
 ## Supported Skill Formats
@@ -634,6 +696,8 @@ Judgment conclusion for each suggestion:
 - ❌ **Style bias** — Favoring Skills with "your own style" (modular, bilingual, long docs), being unfair to minimalist/monolingual/short-doc Skills
 - ❌ **Skipping adversarial checks** — Not executing the adversarial checklist in reliability.md
 - ❌ **Intent alteration** — Changing the Skill's original intent or functionality during fixes; only quality defects should be fixed
+- ❌ **Trusting the audit script blindly** — Treating `skill_audit.py` output as the review verdict. The script covers mechanical checks only and can produce false positives (e.g., boundary statements misread as triggers); confirm each reported issue manually before it affects scoring
+- ❌ **Treating a green CI run as a successful publish** — The publish loop aborts on the first failing skill and swallows later ones; after merging, verify each skill with `scripts/publish_check.py`. The final criterion is remote content matching local, byte for byte
 
 ## Environment Adaptation
 
@@ -646,3 +710,4 @@ Judgment conclusion for each suggestion:
 
 - **Multi-turn agent environment**: Clean up temporary files, sub-agent sessions, and other byproducts after review
 - **Single-turn conversation environment**: No byproducts to clean up
+

@@ -1,44 +1,59 @@
-## Description: <br>
-Higgsfield AI connects an agent to Higgsfield AI through OOMOL's oo CLI for request status checks, text-to-image generation, image-to-video generation, and queued request cancellation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Higgsfield AI (higgsfield.ai). Use this skill for ANY Higgsfield AI request — reading, creating, updating, and deleting data. Whenever a task involves Higgsfield AI, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate a connected Higgsfield AI account through OOMOL for generation workflows, progress checks, output retrieval, and queued job cancellation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can submit Higgsfield AI generation requests through the user's connected OOMOL account. <br>
-Mitigation: Confirm generation prompts and payloads with the user before running write actions. <br>
-Risk: The skill can cancel queued Higgsfield AI generation requests. <br>
-Mitigation: Confirm the exact request ID and cancellation target before running the cancellation action. <br>
-Risk: First-time setup commands can install the oo CLI or initiate account connection steps. <br>
-Mitigation: Run installer, login, or connection commands only when an action fails because setup is missing or expired. <br>
+## Use Case:
 
+External users can ask an agent to submit image or video generation requests, check their status, or cancel queued requests in Higgsfield AI through a connected OOMOL account. The agent reads the live action schema first and obtains confirmation before generation or cancellation actions.
 
-## Reference(s): <br>
-- [Higgsfield AI homepage](https://higgsfield.ai/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-higgsfield-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live connector schema before submitting action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: CLI setup and automatic synchronization can make persistent changes to other agent skills without clearly explaining them.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI release and synchronization behavior before setup; set OO_SKILLS_SYNC_DISABLED=1 for oo invocations if those changes are unwanted.
+
+Risk: Generation requests may consume credit, and the remote installers and hosted service implementation are unverified.
+
+Mitigation: Prefer a reviewed CLI release, check account credit before submitting generation requests, and review the connection and service behavior before enabling the integration.
+
+Risk: Image and video generation change state, and cancellation affects a queued request.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and effect before submitting generation requests or cancelling a request.
+
+## Reference(s):
+
+- [Higgsfield AI](https://higgsfield.ai/)
+- [Higgsfield API documentation](https://docs.higgsfield.ai/docs/how-to/introduction)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [oo CLI commands with JSON request payloads and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generation and cancellation actions require confirmation of the exact payload and effect.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

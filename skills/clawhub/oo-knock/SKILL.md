@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Knock"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["knock"]
   icon: "https://static.oomol.com/logo/third-party/knock.svg"
 ---
@@ -39,7 +39,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 - `delete_user` — Permanently delete a Knock user and associated data. [destructive]
 - `get_user` — Retrieve a Knock user by user ID.
-- `identify_user` — Create or update a Knock user with identification data.
+- `identify_user` — Create or update a Knock user with identification data. [write]
 - `list_users` — List Knock users with cursor pagination.
 - `trigger_workflow` — Trigger a Knock workflow for one or more recipients and return the workflow run request ID. [write]
 
@@ -72,11 +72,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Knock is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=knock
+  https://console.oomol.com/connections/knock
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Knock homepage: https://knock.app/
+- API documentation: https://docs.knock.app/api-reference/overview

@@ -1,48 +1,59 @@
-## Description: <br>
-xiaoai-bridge connects Xiaomi XiaoAi speaker voice messages to an AI assistant workflow and can return responses through XiaoAi text-to-speech. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bridges Xiaomi XiaoAI speakers with an OpenClaw assistant by filtering speech transcripts, forwarding selected requests, and playing replies through text-to-speech.
 
-## Publisher: <br>
-[Warm-winter](https://clawhub.ai/user/Warm-winter) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[warm-winter](https://clawhub.ai/user/warm-winter)
 
-## Use Case: <br>
-Developers and smart home builders use this skill to route XiaoAi speaker voice commands into OpenClaw or another assistant workflow, then speak assistant responses back through the speaker. It is intended for Xiaomi IoT environments that can provide the required account and device credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release includes a Xiaomi session file and exposed tokens. <br>
-Mitigation: Do not install this version as-is; remove scripts/.mi.json, revoke exposed Xiaomi tokens, and use only your own credentials. <br>
-Risk: Credential requirements are not declared in metadata even though the skill needs Xiaomi account and device credentials. <br>
-Mitigation: Declare required Xiaomi credentials before release and keep secrets in private environment variables or secret storage. <br>
-Risk: The release includes unsafe copy-paste command examples using shell exec strings. <br>
-Mitigation: Replace exec string examples with spawn or execFile calls that pass arguments as arrays. <br>
-Risk: The lockfile uses HTTP package sources. <br>
-Mitigation: Regenerate the lockfile with HTTPS package registry sources before installation. <br>
-Risk: Voice command capture can expose private household speech or logs. <br>
-Mitigation: Use a distinctive trigger phrase, private logs, and local access controls for any listener output. <br>
+## Use Case:
 
+Developers using OpenClaw with Xiaomi XiaoAI speakers can forward selected spoken requests to an assistant and play its replies through the speaker. The skill supports trigger filtering, duplicate suppression, and optional transcript-based forwarding decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/Warm-winter/xiaoai-bridge) <br>
-- [MiGPT-Next API reference](references/migpt-api.md) <br>
-- [MiGPT-Next project](https://github.com/idootop/migpt-next) <br>
-- [passToken setup discussion](https://github.com/idootop/migpt-next/issues/4) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with JavaScript and shell command examples; the listener script emits newline-delimited JSON messages for voice commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Xiaomi account credentials, a XiaoAi device identifier, and Node.js 18 or newer. Runtime behavior depends on Xiaomi cloud access and polling interval configuration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata, SKILL.md frontmatter, package.json) <br>
+Risk: On Windows, cached account credentials may be accessible beyond the intended user because ACL access cannot be verified by the skill.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Independently restrict access to both credential configuration and cached sessions, and use a dedicated unprivileged account.
+
+Risk: When JEV_API_KEY is configured, new speech transcripts are sent to Jev for forwarding decisions.
+
+Mitigation: Leave JEV_API_KEY unset unless transcript sharing is acceptable; removing it returns routing to trigger-word filtering.
+
+Risk: A downstream assistant may interpret forwarded speech as a consequential request.
+
+Mitigation: Require separate confirmation before irreversible or otherwise consequential actions.
+
+## Reference(s):
+
+- [XiaoAI Bridge on ClawHub](https://clawhub.ai/warm-winter/skills/xiaoai-bridge)
+- [MiGPT-Next API reference (bundled)](artifact/references/migpt-api.md)
+- [TokenRhythm Jev service](https://tokenrhythm.studio)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Audio]
+
+**Output Format:** [JSON Lines containing selected speech transcripts, with replies played as text-to-speech audio]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional Jev routing sends speech transcripts for forwarding decisions when configured.]
+
+## Skill Version(s):
+
+1.3.1 (source: frontmatter, CHANGELOG, package.json, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,55 @@
-## Description: <br>
-Shopify Partner (shopify.com). Use this skill for ANY Shopify Partner request - searching and reading data. Whenever a task involves Shopify Partner, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Shopify Partner (shopify.com). Use this skill for ANY Shopify Partner request — reading, creating, and updating data. Whenever a task involves Shopify Partner, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and operators use this skill to inspect Shopify Partner apps, app events, partner events, and earnings transactions, and to run Shopify Partner GraphQL operations through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes a broad Shopify Partner GraphQL interface that can run mutations even though its summary emphasizes searching and reading data. <br>
-Mitigation: Require explicit user confirmation for every mutation, including the exact payload and expected effect, before execution. <br>
-Risk: Broad or sensitive Shopify Partner tasks may have business impact if the query or mutation scope is unclear. <br>
-Mitigation: Inspect the live action schema and review the GraphQL operation before routing sensitive tasks through the connector. <br>
+## Use Case:
 
+Developers and Shopify Partner users use this skill to read organization, app, event, and transaction data, and to run Shopify Partner GraphQL queries or mutations through their connected account.
 
-## Reference(s): <br>
-- [ClawHub Shopify Partner Skill](https://clawhub.ai/oomol/skills/oo-shopify-partner) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Shopify Partner Homepage](https://www.shopify.com/partners) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId; GraphQL mutations require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter, release metadata) <br>
+Risk: The setup instructions direct the agent to run a remote installer that was not included in the reviewed package.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified CLI release; otherwise inspect the installer and explicitly approve its local changes before execution.
+
+Risk: The hosted connector accesses the user's Shopify Partner account, and GraphQL mutations can change account state.
+
+Mitigation: Use only appropriate account permissions and retain confirmation for mutations.
+
+## Reference(s):
+
+- [Shopify Partner](https://www.shopify.com/partners)
+- [Shopify Partner API documentation](https://shopify.dev/docs/api/partner/latest)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [Shell commands with JSON payloads and JSON results, with explanatory text as needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions may read account data or change Shopify Partner state; confirm the exact payload and effect before writes.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

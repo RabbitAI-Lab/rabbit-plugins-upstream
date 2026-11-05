@@ -1,42 +1,55 @@
-## Description: <br>
-Use the Baremetrics connector to read, create, and update Baremetrics data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use your OOMOL-connected Baremetrics account to read, create, update, and cancel records.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Baremetrics connector schemas and run Baremetrics actions through an OOMOL-connected account. It supports reading sources, customers, plans, subscriptions, and charges, and it can create, update, or cancel Baremetrics records after user confirmation for state-changing actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: State-changing Baremetrics actions can create, update, or cancel business records. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running any action tagged write or destructive. <br>
-Risk: The skill depends on the external OOMOL oo CLI and OOMOL-connected account credentials. <br>
-Mitigation: Install and use it only when the OOMOL CLI source is trusted and the Baremetrics account connection is intended for agent operation. <br>
+## Use Case:
 
+Users with an OOMOL-connected Baremetrics account can inspect sources, charges, customers, plans, and subscriptions, and create or update records or cancel subscriptions through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub Baremetrics Skill](https://clawhub.ai/oomol/skills/oo-baremetrics) <br>
-- [Baremetrics Homepage](https://baremetrics.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup may execute a remote installer whose contents were unavailable for review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an integrity-verified oo CLI release, require separate approval before installation, and review its automatic skill-installation behavior.
+
+Risk: Create, update, and cancellation actions can change Baremetrics records.
+
+Mitigation: Confirm the exact target, payload, and effect before writes, and get explicit approval before cancelling a subscription.
+
+## Reference(s):
+
+- [Baremetrics API reference](https://developers.baremetrics.com/reference)
+- [Baremetrics](https://baremetrics.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON data, Text, Guidance]
+
+**Output Format:** [JSON responses with concise natural-language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the connected Baremetrics account and the action's live schema.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

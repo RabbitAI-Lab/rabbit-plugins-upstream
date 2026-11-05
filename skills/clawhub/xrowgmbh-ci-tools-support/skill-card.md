@@ -1,42 +1,50 @@
-## Description: <br>
-Triage and answer support requests for the xrow-public/ci-tools GitLab components catalog. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Triage and answer CI Tools components catalog support issues and help requests in GitLab discussions.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
 
-## Use Case: <br>
-Developers and support maintainers use this skill to triage eligible CI Tools support issues and discussion threads, answer from public documentation or provided context, and hand off unsafe or out-of-scope requests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Support may be provided to an unintended requester if SUPPORT_TRUSTED_DOMAINS is stale or too broad. <br>
-Mitigation: Keep SUPPORT_TRUSTED_DOMAINS current and verify the requester domain before answering. <br>
-Risk: Private customer details, private URLs, private logs, or internal project names could be exposed in public support replies. <br>
-Mitigation: Mark issues confidential when they include sensitive details and do not quote private logs into public places. <br>
-Risk: Incorrect CI Tools guidance could be given if component behavior or inputs are assumed. <br>
-Mitigation: Inspect the relevant public component template, documentation, issue, merge request, or pipeline log before answering. <br>
+## Use Case:
 
+CI Tools catalog users and maintainers use this skill to triage support issues and help discussions in GitLab. It provides evidence-based answers with relevant references and identifies when a focused follow-up or maintainer review is needed.
 
-## Reference(s): <br>
-- [ci-tools-support Support on ClawHub](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-ci-tools-support) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown support replies with citations or concise handoff guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses are constrained to eligible CI Tools support requests and public or explicitly provided information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.165.2 (source: server-resolved release metadata) <br>
+Risk: The skill may automatically unlock existing GitLab discussions without checking the reason or requiring maintainer approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require maintainer authorization before enabling GitLab writes that unlock discussions, and limit access to the intended support projects.
+
+## Reference(s):
+
+- [CI Tools Components](https://ci-tools.xrow.de/Components/)
+- [ClawHub skill release](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-ci-tools-support)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown support replies with links to relevant documentation]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Grounded in available public documentation and request details; asks a focused follow-up when context is missing.]
+
+## Skill Version(s):
+
+4.231.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

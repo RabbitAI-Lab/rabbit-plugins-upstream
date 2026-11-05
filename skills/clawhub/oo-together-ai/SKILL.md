@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Together AI"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["together_ai"]
   icon: "https://static.oomol.com/logo/third-party/together_ai.svg"
 ---
@@ -37,7 +37,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `create_chat_completion` — Create a non-streaming Together AI chat completion. [write]
+- `create_chat_completion` — Create a non-streaming Together AI chat completion.
 - `create_embedding` — Create Together AI embeddings for one or more text inputs. [write]
 - `list_models` — List the Together AI models available to the current API key.
 
@@ -70,11 +70,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Together AI is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=together_ai
+  https://console.oomol.com/connections/together_ai
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Together AI homepage: https://www.together.ai
+- API documentation: https://docs.together.ai/reference/models

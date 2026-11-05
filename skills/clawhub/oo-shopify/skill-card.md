@@ -1,42 +1,55 @@
-## Description: <br>
-Enables an agent to search and read Shopify REST Admin data through the OOMOL Shopify connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Shopify (shopify.com). Use this skill for ANY Shopify request — reading, creating, updating, and deleting data. Whenever a task involves Shopify, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an assistant inspect Shopify REST Admin resources such as shops, blogs, pages, articles, and article tags through documented read-only actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill has a broad Shopify trigger and relies on third-party CLI setup. <br>
-Mitigation: Install it only if you trust OOMOL, review CLI installation and authentication steps before running them, and keep use to the listed read-only actions. <br>
-Risk: Shopify Admin reads may expose shop configuration or content data. <br>
-Mitigation: Run actions only against the intended connected shop and do not treat the broad trigger as approval for write or destructive Shopify operations. <br>
+## Use Case:
 
+Shopify store operators and developers use the skill to read and manage data in a connected Shopify account. It supports catalog, orders, customers, inventory, content, and other Shopify resources.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-shopify) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Shopify REST Admin Homepage](https://www.shopify.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Command results are JSON returned by the oo CLI for read-only Shopify REST Admin actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Fallback setup downloads and runs software without a separate installation approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve the CLI installation separately, preferably using a fixed release whose integrity you can verify.
+
+Risk: OOMOL handles connector requests and manages the Shopify connection; its remote implementation and installer contents were not verified.
+
+Mitigation: Grant only necessary Shopify permissions, require approval for refunds, publishing, updates, and deletions, and review bundled-skill synchronization before allowing persistent agent changes.
+
+## Reference(s):
+
+- [Shopify Admin API documentation](https://shopify.dev/docs/api/admin-rest)
+- [Shopify](https://www.shopify.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [CLI commands with JSON request payloads and concise instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,55 @@
-## Description: <br>
-Certn (certn.co). Use this skill for Certn requests that search and read data through the OOMOL Certn connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an OOMOL account to Certn to search and read background-check cases and related records.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve and list Certn background-check cases, events, groups, packages, questionnaires, tags, and Client Portal users through an OOMOL-connected Certn account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Certn background-check data can contain sensitive personal information. <br>
-Mitigation: Use only the intended OOMOL-connected Certn account, review case and user identifiers before execution, and avoid sharing returned data beyond the authorized task. <br>
-Risk: First-time setup or connection steps can link the agent environment to a Certn account. <br>
-Mitigation: Run authentication or account-connection steps only after an auth or connection failure and only when the user intends to connect that account. <br>
+## Use Case:
 
+Teams and agents use the skill to retrieve Certn cases and related users, groups, events, packages, questionnaires, and tags through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Certn skill page](https://clawhub.ai/oomol/skills/oo-certn) <br>
-- [Certn homepage](https://certn.co) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects returned by the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: First-time setup may run downloaded installer code whose changes have not been inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the CLI installer and any bundled skill changes before installation; use a narrowly scoped Certn connection.
+
+Risk: The skill accesses sensitive Certn records through an OOMOL-connected account.
+
+Mitigation: Use only the access scope needed for the task and review the data returned before sharing it.
+
+## Reference(s):
+
+- [Certn API documentation](https://centric-api-docs.certn.co/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Certn homepage](https://certn.co)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands]
+
+**Output Format:** [Certn connector results in JSON, invoked with oo CLI shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results and pagination fields depend on the selected Certn action.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

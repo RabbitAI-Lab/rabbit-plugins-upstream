@@ -1,42 +1,51 @@
-## Description: <br>
-Kernel operates Kernel browser sessions through the OOMOL `kernel` connector and `oo` CLI for reading, creating, updating, and deleting session data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kernel (kernel.sh). Use this skill for ANY Kernel request — reading, creating, updating, and deleting data. Whenever a task involves Kernel, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Kernel browser sessions from an agent through an OOMOL-connected account, including listing, retrieving, creating, updating, and deleting sessions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete Kernel browser sessions through an OOMOL-connected account. <br>
-Mitigation: Confirm the exact payload and effect with the user before write actions, and require explicit approval before deleting a named or identified session. <br>
-Risk: The skill uses server-side OOMOL credential injection to act on the connected account. <br>
-Mitigation: Install it only when the agent is intended to manage Kernel sessions, and review prompts carefully before approving create, update, or delete actions. <br>
+## Use Case:
 
+Developers use this skill to manage Kernel browser sessions through an OOMOL-connected account. It guides schema-first commands for listing, retrieving, creating, updating, and deleting sessions, with approval safeguards for changes and deletion.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-kernel) <br>
-- [Kernel Homepage](https://kernel.sh) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with `oo` CLI shell commands and JSON connector payloads or responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence metadata and release) <br>
+Risk: Fallback setup runs downloaded CLI installer code, and may include installing additional agent skills; the downloaded installers were unavailable for inspection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve the CLI installation separately before fallback setup, including any installation of additional agent skills.
+
+## Reference(s):
+
+- [Kernel homepage](https://kernel.sh)
+- [Kernel API documentation](https://www.kernel.sh/docs/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses each action's live schema to shape JSON payloads; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

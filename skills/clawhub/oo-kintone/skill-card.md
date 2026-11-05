@@ -1,44 +1,52 @@
-## Description: <br>
-Kintone connector skill for searching and reading Kintone account data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use an OOMOL-connected Kintone account to search and read users, groups, departments, and user services.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Kintone connector schemas and read user, department, group, and service assignments from an OOMOL-connected Kintone account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connecting Kintone through this skill allows OOMOL-mediated read access to Kintone user and organization metadata. <br>
-Mitigation: Use the skill only when that connection is acceptable, and keep routine execution to the listed read actions. <br>
-Risk: First-time setup may require installing the oo CLI from an external installer. <br>
-Mitigation: Verify the oo CLI installer before setup and run auth or connection steps only after the matching command failure. <br>
-Risk: Future connector schemas could expose write or destructive Kintone actions. <br>
-Mitigation: Inspect the live action schema and require explicit user confirmation before any write or destructive action. <br>
+## Use Case:
 
+People with an OOMOL-connected Kintone account can look up users and their assigned departments, groups, and services, or list users, groups, and departments.
 
-## Reference(s): <br>
-- [ClawHub Kintone skill page](https://clawhub.ai/oomol/skills/oo-kintone) <br>
-- [Kintone homepage](https://www.kintone.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown text with oo CLI shell commands and JSON connector payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses read-oriented Kintone connector actions; live schemas should be inspected before payload construction.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence metadata and SKILL.md frontmatter) <br>
+Risk: CLI setup runs downloaded code whose contents have not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately before setup; review bundled skill changes and connect only the Kintone account intended for this use.
+
+## Reference(s):
+
+- [Kintone homepage](https://www.kintone.com/)
+- [Kintone API documentation](https://kintone.dev/en/docs/kintone/)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [JSON responses from Kintone actions with brief usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only lookups and lists; action input fields are determined by the live connector schema.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

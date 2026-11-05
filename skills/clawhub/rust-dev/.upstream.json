@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/rust-dev",
   "slug": "rust-dev",
   "ownerHandle": null,
-  "version": "0.4.1",
-  "updatedAt": 1784746248744,
-  "contentHash": "f96f160781373b7345ed8d5e532f74b08206783696e175ff477e38a173082994",
-  "fetchedAt": "2026-07-26T18:07:46.584Z"
+  "version": "0.9.0",
+  "updatedAt": 1793884818800,
+  "contentHash": "80014e1a9d906f3fcb1dcad09c8b653dbe56e783982dd3b0d6e0359a66c0afc9",
+  "fetchedAt": "2026-11-05T15:38:17.511Z"
 }

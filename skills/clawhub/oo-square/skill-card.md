@@ -1,45 +1,51 @@
-## Description: <br>
-Square (squareup.com). Use this skill for ANY Square request: reading, creating, and updating data through an OOMOL-connected Square account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Square (squareup.com). Use this skill for ANY Square request — reading, creating, and updating data. Whenever a task involves Square, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Square customer and seller-location workflows from an agent through the OOMOL Square connector. It supports reading customer and location data, and creating or updating customer records after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Square customer and seller-location data through the connected OOMOL account. <br>
-Mitigation: Use only trusted OOMOL and Square connections, and limit use to accounts whose customer and location data the user is authorized to access. <br>
-Risk: Write actions can create or update Square customer records. <br>
-Mitigation: Review the exact payload and effect with the user, then require explicit confirmation before running write actions. <br>
-Risk: Connector action schemas can change over time. <br>
-Mitigation: Inspect the live Square connector schema before constructing each payload so inputs match the current action contract. <br>
+## Use Case:
 
+External users and developers use this skill to read and manage Square customer profiles and retrieve seller locations through their connected OOMOL account. It provides guidance for choosing an action, checking its input schema, and reviewing changes before writes.
 
-## Reference(s): <br>
-- [ClawHub Square Skill](https://clawhub.ai/oomol/skills/oo-square) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Square](https://squareup.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration guidance, Markdown guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs agents to inspect live connector schemas before execution and to request confirmation before write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Fallback setup runs downloaded installer code without a clear approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and explicitly approve a pinned, verified oo CLI installation before setup. Confirm the exact payload and effect before running customer creation or update actions.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Square](https://squareup.com)
+- [Square API reference](https://developer.squareup.com/reference/square)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [Shell commands with JSON inputs and Square connector results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results vary by action and may include Square customer or location data.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

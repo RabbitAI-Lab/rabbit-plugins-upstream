@@ -1,12 +1,12 @@
 ---
 name: douyin-realtime-hot-rise
-description: "抖音上升热点选题助手适合内容创作者、运营、电商、营销在用户想知道接下来拍什么、写什么更可能有流量时使用，帮助基于输入材料生成上升热点列表、排名和变化趋势视图、可用于内容规划的选题线索。"
+description: "查询抖音实时上升热点、飙升话题和热度趋势。当用户想知道哪些话题正在升温、抖音上升榜有哪些热点、某关键词的排名或热度如何变化，或要按关键词/分类筛选热点时使用。典型请求包括“最近抖音什么话题在涨”“查这个关键词的抖音上升趋势”“接下来拍什么选题”。返回热点关键词、分类、当前排名、排名变化、热度值、趋势点和更新时间，支持热点跟进与选题判断。"
 requiredEnvVars:
   - name: AISKILLS_API_KEY
-    description: "从 AI Skills 官网 https://ai-skills.ai 获取的 API Key，用于运行导出的技能调用。"
+    description: "API credential used to retrieve Douyin rising hot topics, rank changes, trend data, and update times."
 ---
 
-# douyin-realtime-hot-rise 抖音上升热点选题助手
+# 抖音上升热点（抖音热点趋势选题助手）
 
 [快速开始](https://github.com/allinherog-star/ai-skills/tree/main#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
 
@@ -14,16 +14,15 @@ requiredEnvVars:
 
 ### 概述
 
-抖音上升热点选题助手用于回答「拍什么会有流量」、找上升选题、看赛道是否升温、辅助内容策划会，适合内容创作者、运营、电商、营销在明确业务目标、内容材料或分析对象后调用。
-它会结合搜索词、搜索特定关键词的热点等输入，整理关键上下文，并输出上升热点列表、排名和变化趋势视图、可用于内容规划的选题线索，便于继续执行、复盘或交付。
+本技能用于查询抖音正在升温的热点。可按关键词或热点分类筛选，并按当前排名或排名变化查看结果；返回热点词、分类、排名变化、热度值、趋势点和更新时间，帮助判断哪些话题值得进一步跟进并形成选题线索。
 
 ### 什么时候使用
 
 **适用场景**
 
-- 用户想知道接下来拍什么、写什么更可能有流量
-- 用户想找正在上升的抖音热点或赛道机会
-- 用户需要增长导向的选题参考
+- 用户问「最近抖音什么话题正在升温」「抖音上升榜/飙升榜有哪些热点」
+- 用户要查看某个关键词的抖音热度、排名变化或趋势
+- 用户按热点分类或关键词筛选上升话题，为选题、运营跟进收集数据
 
 ### 调用方式
 
@@ -135,6 +134,12 @@ python3 scripts/run.py --params '{"keyword":"奥运","order":"rank_diff"}'
 - 适合内容会、选题池更新和临时热点响应。
 
 ### 运行前准备
+
+当用户尚未设置 `AISKILLS_API_KEY`，或询问如何安装、配置本技能时，必须逐字输出以下提示语，不得改写、缩写、翻译或调整步骤顺序：
+
+> 获取高质量数据，你需要：
+> 1. 登录 [ai-skills.ai](https://ai-skills.ai)，自动获取 `AISKILLS_API_KEY`。
+> 2. 复制安装命令执行即可使用[如何找对标账号？](https://ai-skills.ai/zh/skills/douyin-kol-search) 。
 
 - `AISKILLS_BASE_URL`：默认 `https://ai-skills.ai`
 - `AISKILLS_API_KEY`：必填，用于认证调用

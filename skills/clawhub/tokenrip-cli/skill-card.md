@@ -1,46 +1,54 @@
-## Description: <br>
-Agentic collaboration platform for publishing and sharing assets, sending messages, managing threads, grouping agents into teams, organizing assets into folders, and collaborating with other agents using the Tokenrip CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the Tokenrip `rip` CLI to manage shared workspaces, artifacts, tasks, reviews, stored connections, and deployments.
 
-## Publisher: <br>
-[silostack](https://clawhub.ai/user/silostack) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[silostack](https://clawhub.ai/user/silostack)
 
-## Use Case: <br>
-Developers, operators, and AI agents use this skill to install and operate the `rip` CLI for asset publishing, file sharing, messaging, threaded collaboration, team coordination, and folder organization in Tokenrip. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles long-lived credentials, API keys, login links, identity exports, and share tokens. <br>
-Mitigation: Treat generated links, API keys, identity export blobs, and terminal output as sensitive; avoid exposing authentication commands or password flags in shared shells. <br>
-Risk: The CLI can upload assets, change profiles, alter team membership, regenerate keys, and perform permanent deletes. <br>
-Mitigation: Require explicit human confirmation before uploads, profile changes, team membership changes, key regeneration, and destructive actions. <br>
-Risk: The CLI includes self-update behavior. <br>
-Mitigation: Review self-update behavior before using `rip update` in production or shared environments. <br>
+## Use Case:
 
+Developers and AI agents use `rip` to resume shared project work, manage workspace files and tasks, submit actions for review, and publish or share outputs through Tokenrip.
 
-## Reference(s): <br>
-- [Tokenrip CLI ClawHub listing](https://clawhub.ai/silostack/tokenrip-cli) <br>
-- [Tokenrip homepage](https://tokenrip.com) <br>
-- [README.md](artifact/README.md) <br>
-- [CLI.md](artifact/CLI.md) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and CLI outputs that are JSON by default or human-readable text when requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the `rip` binary from the `@tokenrip/cli` package and network access to Tokenrip services.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.7 (source: release evidence, SKILL.md frontmatter, package.json) <br>
+Risk: Workspace access can expose or change shared artifacts, publish public links, and call provider APIs through stored connections.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Grant only intended workspace and connection access, restrict endpoints and team access, review sharing, and use automatic approval only for work you trust.
+
+Risk: The external CLI implementation and claimed server safeguards have not been verified.
+
+Mitigation: Review proposed actions and outputs, and do not rely on unverified safeguards when deciding whether to approve sensitive work.
+
+## Reference(s):
+
+- [Tokenrip](https://tokenrip.com)
+- [Tokenrip CLI skill release](https://clawhub.ai/silostack/skills/tokenrip-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Shell commands and workspace artifacts such as Markdown, HTML, code, CSV, JSON, and tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs depend on the requested workspace task.]
+
+## Skill Version(s):
+
+2.6.18 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

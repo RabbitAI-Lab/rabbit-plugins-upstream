@@ -1,11 +1,11 @@
 ---
 name: oo-attention
-description: "Attention (attention.com). Use this skill for ANY Attention request — searching and reading data. Whenever a task involves Attention, use this skill instead of calling the API directly."
+description: "Attention (attention.com). Use this skill for ANY Attention request — reading, creating, and updating data. Whenever a task involves Attention, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Attention"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.6"
   services: ["attention"]
   icon: "https://static.oomol.com/logo/third-party/attention.svg"
 ---
@@ -37,7 +37,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `ask_attention` — Ask Attention to analyze selected conversations or a deal using a natural-language prompt.
+- `ask_attention` — Ask Attention to analyze selected conversations or a deal using a natural-language prompt. [write]
 - `get_conversation` — Retrieve one Attention conversation by internal conversation ID or external import ID.
 - `list_conversations` — Retrieve a paginated list of Attention conversations with optional owner, participant, team, CRM, and status filters.
 - `list_teams` — List teams in the Attention organization.
@@ -72,11 +72,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Attention is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=attention
+  https://console.oomol.com/connections/attention
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Attention homepage: https://attention.com
+- API documentation: https://docs.attention.com

@@ -1,42 +1,55 @@
-## Description: <br>
-Opsgenie helps agents read, create, acknowledge, close, fetch, and list Opsgenie alerts through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Opsgenie alerts through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and incident responders use this skill to inspect Opsgenie action schemas, run valid connector payloads, and manage alert lifecycle tasks from an agent session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, acknowledge, or close Opsgenie alerts, which changes incident-management state. <br>
-Mitigation: Require explicit user confirmation of the exact payload and expected effect before running write actions. <br>
-Risk: The skill depends on an OOMOL-connected Opsgenie account with credentials available to the connector. <br>
-Mitigation: Install only for intended Opsgenie use and keep the connected account scoped to the minimum Opsgenie permissions needed. <br>
+## Use Case:
 
+External users can retrieve alert details and manage Opsgenie alerts through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Opsgenie homepage](https://www.atlassian.com/software/opsgenie) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-opsgenie) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live Opsgenie connector schemas before proposing or running write payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: First-time setup can run a remote installer before the CLI release is verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a fixed, verified oo CLI release yourself and review its automatic skill-synchronization settings before enabling it.
+
+Risk: The remote installers and server-side connector implementation have not been verified.
+
+Mitigation: Review the setup path and confirm the connector behavior meets your security requirements before handling Opsgenie data.
+
+## Reference(s):
+
+- [Opsgenie API documentation](https://docs.opsgenie.com/docs/api-overview)
+- [Opsgenie product page](https://www.atlassian.com/software/opsgenie)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON action payloads, CLI commands, and text responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write actions require confirmation; closing alerts requires explicit approval.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

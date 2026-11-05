@@ -1,43 +1,56 @@
-## Description: <br>
-ElevenLabs scribe_v1 speech-to-text with auto language detection and optional speaker diarization for subtitles, transcription, and meeting notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Transcribes audio with ElevenLabs scribe_v1, with automatic language detection and optional speaker diarization.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to submit audio URLs or local audio files to dLazy's hosted ElevenLabs speech-to-text wrapper and receive transcription-oriented JSON results. It supports common transcription workflows such as subtitles, meeting notes, language detection, and optional speaker diarization. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Audio files, audio URLs, prompts, and parameters are processed through dLazy cloud infrastructure. <br>
-Mitigation: Use the skill only with audio that is appropriate for dLazy processing and review the service terms before submitting sensitive content. <br>
-Risk: The dLazy API key may be stored in the local CLI configuration when the user logs in. <br>
-Mitigation: Use npx for non-persistent CLI execution when preferred, pass DLAZY_API_KEY per invocation when suitable, and rotate or revoke keys that are no longer needed. <br>
+## Use Case:
 
+Developers and content creators can transcribe audio for subtitles, meeting notes, and other text records, with optional speaker separation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-stt) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Async runs may return a generateId for polling with dlazy status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Audio submitted for transcription is uploaded to dLazy storage and processed by its hosted service; its privacy and retention terms were not fully verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review dLazy's privacy and retention terms before submitting confidential recordings, and submit only audio approved for cloud processing.
+
+Risk: Use of the hosted service may incur account charges, and requests require a stored dLazy API key.
+
+Mitigation: Check account costs before running the transcription and protect the API key; rotate or revoke it if exposed.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-stt)
+- [dLazy CLI project (linked in skill metadata; server provenance unavailable)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [JSON transcription response, with optional speaker diarization data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return a task identifier when asynchronous mode is used.]
+
+## Skill Version(s):
+
+1.3.38 (source: server-resolved ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

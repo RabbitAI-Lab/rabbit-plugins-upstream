@@ -1,45 +1,60 @@
-## Description: <br>
-E2B (e2b.dev). Use this skill for ANY E2B request: reading, creating, updating, and deleting data through an OOMOL-connected E2B account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate E2B sandboxes through an OOMOL-connected account with the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect E2B connector schemas, create sandboxes from templates, list or retrieve sandboxes, and delete sandboxes through the OOMOL `oo` CLI. It is intended for E2B account operations where credentials are managed through OOMOL rather than exposed directly to the agent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create E2B sandboxes with unintended templates or parameters. <br>
-Mitigation: Inspect the live connector schema and confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: Destructive actions can delete an E2B sandbox by sandbox identifier. <br>
-Mitigation: Confirm the target sandbox ID and obtain explicit user approval before running destructive actions. <br>
-Risk: Connector operations run through OOMOL rather than directly with a raw E2B API token. <br>
-Mitigation: Ensure the user understands that OOMOL manages the credentialed connection and resolve auth, scope, credential, or billing errors through OOMOL setup paths. <br>
+## Use Case:
 
+Developers use this skill to list and inspect E2B sandboxes, create sandboxes, and delete them through an OOMOL-connected E2B account.
 
-## Reference(s): <br>
-- [E2B homepage](https://e2b.dev) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-e2b) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The security review flags unverified remote setup code and an unverified hosted connector.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a verified oo CLI release before use, and verify the connector before connecting an account.
+
+Risk: CLI startup may automatically change other agent skills.
+
+Mitigation: Set `OO_SKILLS_SYNC_DISABLED=1` to disable startup synchronization.
+
+Risk: Creating or deleting sandboxes changes E2B state, and deletion is destructive.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and effect before create or delete actions.
+
+## Reference(s):
+
+- [E2B documentation](https://e2b.dev/docs)
+- [E2B website](https://e2b.dev)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [Structured JSON responses with concise action guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions use the live connector schema; state-changing actions require approval.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

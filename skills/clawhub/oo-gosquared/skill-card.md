@@ -1,43 +1,55 @@
-## Description: <br>
-GoSquared (gosquared.com) skill for searching and reading analytics data through the OOMOL oo CLI instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GoSquared (gosquared.com). Use this skill for ANY GoSquared request — searching and reading data. Whenever a task involves GoSquared, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect GoSquared project analytics, authorization metadata, realtime visitor activity, and Trends aggregates through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on OOMOL as an intermediary for the connected GoSquared account. <br>
-Mitigation: Install only when the user trusts OOMOL for this connection and understands that analytics and authorization metadata may be read from the connected project. <br>
-Risk: A future version could add write or destructive GoSquared actions. <br>
-Mitigation: Review future releases before deployment and require explicit user confirmation before running any action marked write or destructive. <br>
+## Use Case:
 
+GoSquared users and operators use the skill to retrieve realtime visitor overviews, visitor time series, API key scope information, and aggregate trend metrics for a connected project.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-gosquared) <br>
-- [GoSquared Homepage](https://www.gosquared.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses OOMOL server-side credentials and returns connector data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Automatic setup can execute downloaded code without clear user approval and may have broader effects on the system.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and CLI release before installation, require approval for installation, and disable automatic skill synchronization if it is unwanted.
+
+Risk: A connected GoSquared account may expose more data or permissions than needed for the requested task.
+
+Mitigation: Connect only the GoSquared account and permissions required for the task.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [GoSquared](https://www.gosquared.com/)
+- [GoSquared documentation](https://www.gosquared.com/docs/configuration/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Analysis]
+
+**Output Format:** [Natural-language responses based on GoSquared connector data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only analytics and connected account scope information]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

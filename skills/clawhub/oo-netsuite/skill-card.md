@@ -1,45 +1,55 @@
-## Description: <br>
-This skill lets agents operate NetSuite through an OOMOL-connected account by reading records, running SuiteQL queries, and creating or updating records through the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an OOMOL account to NetSuite to read, create, and update records through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and business operators use this skill to inspect, create, and update NetSuite records through an OOMOL-connected account. It supports record lookup, record listing, SuiteQL queries, and state-changing record operations with confirmation for writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create or update NetSuite records. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running create or update actions. <br>
-Risk: Read actions, including record listing and SuiteQL queries, can expose sensitive business data. <br>
-Mitigation: Run read actions only for the user's stated purpose and avoid broad queries when narrower record access is sufficient. <br>
-Risk: The skill depends on an OOMOL-connected NetSuite account and the oo CLI. <br>
-Mitigation: Install and connect the CLI only when the user intends to let the agent access that NetSuite account. <br>
+## Use Case:
 
+Developers and business operators use this skill to read, create, and update NetSuite records through a connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-netsuite) <br>
-- [NetSuite Homepage](https://www.netsuite.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL NetSuite Connection](https://console.oomol.com/app-connections?provider=netsuite) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill retrieves live connector schemas before constructing action payloads and returns connector results as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Setup can execute unverified software, and the effects of automatic skill synchronization are not disclosed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a verified CLI release; review synchronization behavior and disable it if unwanted.
+
+Risk: NetSuite operations can change records accessible to the connected account.
+
+Mitigation: Limit the account to needed records and review and confirm each exact write payload before execution.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [NetSuite API documentation](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/book_1559132836.html)
+- [NetSuite](https://www.netsuite.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown instructions with oo CLI commands and JSON action payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetches each action schema before use; write actions require confirmation of the exact payload and effect.]
+
+## Skill Version(s):
+
+1.0.5 (source: SKILL.md frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

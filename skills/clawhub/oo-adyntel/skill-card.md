@@ -1,44 +1,56 @@
-## Description: <br>
-Adyntel connector skill for searching ad-library data and reading keyword or ad details through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Adyntel through an OOMOL-connected account to search and read keyword metrics and advertising data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to query Adyntel for competitive ad intelligence across Google, LinkedIn, Meta, and TikTok, and to retrieve domain keyword metrics or TikTok ad details through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Adyntel-related requests can send search terms, company domains, LinkedIn page IDs, or ad IDs to external OOMOL and Adyntel services. <br>
-Mitigation: Confirm vague or sensitive queries with the user before running oo connector commands. <br>
-Risk: First-time setup includes shell installer commands for the oo CLI. <br>
-Mitigation: Review the installer source and run setup only when the oo CLI is missing or authentication or connection errors require it. <br>
+## Use Case:
 
+Developers and agents use this skill to retrieve Adyntel paid and organic keyword metrics and search Google, LinkedIn, Meta, and TikTok advertising data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-adyntel) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Adyntel homepage](https://www.adyntel.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run oo CLI connector commands that return JSON data from Adyntel.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter metadata) <br>
+Risk: Setup directs users to run a remote CLI installer without a clear approval or verification step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately; prefer a pinned release with authenticated integrity verification.
+
+Risk: Adyntel queries and account access pass through OOMOL.
+
+Mitigation: Review the account connection and data path before enabling the skill.
+
+## Reference(s):
+
+- [Adyntel skill release](https://clawhub.ai/oomol/skills/oo-adyntel)
+- [Adyntel homepage](https://www.adyntel.com)
+- [Adyntel API documentation](https://docs.adyntel.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Guidance]
+
+**Output Format:** [JSON results with concise explanatory text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returned data varies by Adyntel action.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

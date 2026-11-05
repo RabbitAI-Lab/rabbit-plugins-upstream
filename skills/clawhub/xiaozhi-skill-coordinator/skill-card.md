@@ -1,42 +1,51 @@
-## Description: <br>
-Coordinates mistake notebooks, Feynman tests, Cornell notes, study plans, and focus data only for explicit learning tasks with user consent and minimal necessary summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+学习系统协调器负责判断一次学习问题该由哪个 SKILL 接手，并在用户请求时汇总全景月报。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners and learning assistants use this skill to decide when to coordinate mistake review, explanation checks, note retrieval, study planning, focus coaching, reminders, and monthly learning-system summaries. It is intended for explicit user-requested coordination rather than automatic broad data collection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill coordinates summaries from multiple learning skills, which can expose more learner context than a single-skill workflow. <br>
-Mitigation: Use it only for explicit coordination, system-check, or monthly-report tasks, and keep inputs limited to the minimum necessary authorized summaries. <br>
-Risk: Study-profile writebacks or reminder synchronization could persist incorrect or unwanted updates if used without consent. <br>
-Mitigation: Require explicit user permission before writebacks or reminder sync, and block malformed handover data with the provided schema before persistence. <br>
+## Use Case:
 
+Students use this skill to route a learning question to the appropriate specialist skill, prevent duplicate work, or request a five-area monthly learning summary. It uses only task-relevant information after the required consent, and elementary students should use it with a parent or teacher present.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-coordinator) <br>
-- [One-week linkage record](references/one-week-linkage-record.md) <br>
-- [Handover protocol schema](schemas/handover-protocol.schema.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with optional structured JSON handover blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses consent-gated summaries and schema-validated handover payloads when coordinating with related learning skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The release evidence notes inconsistent wording about which linked skill saves authorized profile updates; storage and consent enforcement depend on the platform and linked skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable only the profile, sharing, parent-access, and reminder options you want, and confirm the intended recipient skill and its storage and consent behavior before authorizing profile updates.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-coordinator)
+- [One-week linkage record](references/one-week-linkage-record.md)
+- [Handover protocol schema](schemas/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown, JSON]
+
+**Output Format:** [Conversational guidance, Markdown monthly summaries, and structured JSON handoff records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Routes requests and prepares user-requested, consent-scoped summaries; it does not teach lessons, analyze errors itself, create questions, or send reminders.]
+
+## Skill Version(s):
+
+2.12.5 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

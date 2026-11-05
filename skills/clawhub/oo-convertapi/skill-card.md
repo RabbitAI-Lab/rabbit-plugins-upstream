@@ -1,42 +1,55 @@
-## Description: <br>
-ConvertAPI helps agents operate the ConvertAPI PDF-to-DOCX conversion workflow through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the OOMOL-connected ConvertAPI service to convert publicly accessible PDF files to DOCX.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect ConvertAPI connector schemas and run the supported PDF-to-DOCX conversion action through OOMOL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on the OOMOL oo CLI, an OOMOL account connection to ConvertAPI, and available billing credits. <br>
-Mitigation: Install and authenticate the CLI only when required, connect ConvertAPI once, and resolve billing errors before retrying conversion commands. <br>
-Risk: Future expanded actions may write, overwrite, delete, or spend credits. <br>
-Mitigation: Confirm the exact payload and effect with the user before running actions tagged write or destructive, and use the live schema before execution. <br>
+## Use Case:
 
+Developers can use this skill to convert a publicly accessible PDF to DOCX through an OOMOL-connected ConvertAPI account.
 
-## Reference(s): <br>
-- [ConvertAPI homepage](https://www.convertapi.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution; conversion responses include temporary download URLs and an execution id.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Initial CLI setup runs an unverified remote installer, and the CLI may make broader changes than this skill describes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the CLI separately, including its automatic agent-skill synchronization settings, before enabling the skill.
+
+Risk: PDF conversion uses OOMOL and ConvertAPI and may incur service charges.
+
+Mitigation: Use a PDF approved for processing through those services and check applicable charges before conversion.
+
+## Reference(s):
+
+- [ConvertAPI documentation](https://www.convertapi.com/docs/getting-started)
+- [ConvertAPI homepage](https://www.convertapi.com)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Shell commands and JSON connector responses, including temporary DOCX download URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses an external conversion service; returned download URLs are temporary.]
+
+## Skill Version(s):
+
+1.0.5 (source: artifact frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

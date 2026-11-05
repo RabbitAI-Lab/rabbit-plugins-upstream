@@ -1,42 +1,61 @@
-## Description: <br>
-Use this skill to read, create, update, and delete Instatus data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the connected Instatus account to read, create, update, or delete status pages, components, incidents, and incident updates.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to manage Instatus status pages, components, incidents, and incident updates through the oo CLI and an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create, update, and delete actions can change Instatus status pages, incidents, components, or incident updates. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before write actions, and require explicit approval before destructive delete actions. <br>
-Risk: Action payloads can drift from the connector contract if the live schema is not checked. <br>
-Mitigation: Inspect the live oo connector schema before building each action payload. <br>
+## Use Case:
 
+Developers and status page operators use the connected Instatus account to inspect status pages and manage components, incidents, and incident updates.
 
-## Reference(s): <br>
-- [Instatus homepage](https://instatus.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-instatus) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Setup executes remote installers whose contents and exact release behavior are unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, and use a verified, fixed release.
+
+Risk: Broader agent-skill changes from startup synchronization are not disclosed in the artifact.
+
+Mitigation: Review the synchronization behavior; set OO_SKILLS_SYNC_DISABLED=1 to prevent startup skill synchronization.
+
+Risk: Create and update actions change Instatus data, and delete actions remove data.
+
+Mitigation: Confirm the exact payload and effect before write actions, and get explicit approval for destructive actions.
+
+## Reference(s):
+
+- [Instatus API documentation](https://instatus.com/help/api)
+- [Instatus homepage](https://instatus.com)
+- [oo CLI command reference: environment variables](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md#environment-variables)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Instatus release](https://clawhub.ai/oomol/skills/oo-instatus)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Text, Shell commands]
+
+**Output Format:** [JSON connector responses with Markdown guidance and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses depend on the connected Instatus account and the selected action.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

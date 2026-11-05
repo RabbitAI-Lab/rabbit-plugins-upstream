@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "SupportBee"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.6"
   services: ["supportbee"]
   icon: "https://static.oomol.com/logo/third-party/supportbee.png"
 ---
@@ -43,7 +43,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `create_ticket_reply` — Create a SupportBee ticket reply with JSON body content. [write]
 - `create_user` — Create a SupportBee user or customer group. [write]
 - `get_ticket` — Retrieve a SupportBee ticket by ID.
-- `get_ticket_reply` — Retrieve one SupportBee ticket reply by ticket ID and reply ID. [write]
+- `get_ticket_reply` — Retrieve one SupportBee ticket reply by ticket ID and reply ID.
 - `get_user` — Retrieve one SupportBee user or customer group by ID.
 - `list_labels` — List custom SupportBee labels for the connected desk.
 - `list_teams` — List SupportBee teams with optional user expansion filters.
@@ -84,11 +84,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — SupportBee is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=supportbee
+  https://console.oomol.com/connections/supportbee
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - SupportBee homepage: https://supportbee.com
+- API documentation: https://supportbee.com/docs/api/api

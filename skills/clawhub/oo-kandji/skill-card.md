@@ -1,45 +1,59 @@
-## Description: <br>
-Use Iru (Kandji) for requests that search and read data through the Kandji connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches and reads Iru (Kandji) user and blueprint data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect the live Kandji connector schema, then run read-only Kandji blueprint and directory-user lookup or listing actions through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an OOMOL-connected Kandji account to read blueprint and directory-user data. <br>
-Mitigation: Install and run it only when you trust oomol and intend the agent to use the connected Kandji account for read-only lookups. <br>
-Risk: Future versions could add Kandji actions that change or remove data. <br>
-Mitigation: Before any write action, confirm the exact payload and effect with the user; before any destructive action, require explicit approval for the target. <br>
-Risk: Authentication, connection, scope, credential, or billing failures may require setup steps outside the normal read-only action flow. <br>
-Mitigation: Run setup, connection, or billing commands only after a command fails with the matching error. <br>
+## Use Case:
 
+IT administrators and operations teams use this skill to look up Kandji users and blueprints through an existing OOMOL connection.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-kandji) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Iru (Kandji) homepage](https://www.iru.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The agent should inspect the live connector schema before constructing payloads; the listed actions are read-only get and list operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: First-time setup can run an installer whose remote contents have not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and chosen CLI release, then require approval for installation changes.
+
+Risk: Setup may introduce changes to other agent skills.
+
+Mitigation: Set OO_SKILLS_SYNC_DISABLED=1 as documented upstream and review any skill-directory changes.
+
+Risk: The deployed connector behavior is unverified, and its connection may expose more data than needed.
+
+Mitigation: Restrict the OOMOL connection to required data and inspect the live action schema before sending a request.
+
+## Reference(s):
+
+- [Iru (Kandji) homepage](https://www.iru.com/)
+- [Kandji API documentation](https://api-docs.kandji.io/)
+- [oo CLI command documentation](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Guidance]
+
+**Output Format:** [Kandji connector results as JSON, summarized in text or Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only lookups for Kandji users and blueprints.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

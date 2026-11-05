@@ -1,45 +1,59 @@
-## Description: <br>
-Synthesize text into natural and fluent speech using Doubao TTS. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Synthesizes text into natural speech using Doubao text-to-speech.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to authenticate with dLazy and generate Chinese or English text-to-speech audio through the pinned dLazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected parameters are sent to dLazy's hosted API. <br>
-Mitigation: Avoid sensitive prompts unless the dLazy service is trusted for the intended use. <br>
-Risk: A persistent global CLI install may be undesirable on shared or tightly controlled systems. <br>
-Mitigation: Use the documented npx invocation when a non-persistent CLI execution path is preferred. <br>
-Risk: The skill's output example appears to use an image schema instead of an audio schema. <br>
-Mitigation: Verify returned result types before relying on generated outputs in downstream workflows. <br>
+## Use Case:
 
+Developers and content creators can turn text into spoken audio using Chinese or English voices for narration and voice broadcasts.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-doubao-tts) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Files, Guidance] <br>
-**Output Format:** [Markdown instructions with CLI commands and JSON result metadata] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted generated output URLs; async mode can return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Text and any supplied media are sent to dLazy's hosted service for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Send only text and media you are comfortable sharing with dLazy.
+
+Risk: CLI login saves an organization API key locally, and the pinned CLI's credential protections were not verified.
+
+Mitigation: Use the documented DLAZY_API_KEY environment-variable option when you want to avoid saving the key through CLI login, and review the pinned CLI before installation.
+
+Risk: Speech generation may incur service charges.
+
+Mitigation: Consider service charges before generating speech.
+
+## Reference(s):
+
+- [CLI repository listed in skill metadata](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Audio files, JSON]
+
+**Output Format:** [Generated audio asset URL or saved audio file, with JSON task and result details]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Voice language, voice, and speaking speed can be selected.]
+
+## Skill Version(s):
+
+1.3.37 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

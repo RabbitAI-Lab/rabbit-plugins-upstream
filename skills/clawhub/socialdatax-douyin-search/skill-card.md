@@ -1,43 +1,54 @@
-## Description: <br>
-用于抖音数据分析、抖音热榜、抖音作品搜索、图文搜索、关键词检索、内容调研、竞品分析和趋势研究。覆盖 Douyin hot search and work search，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于检索抖音热榜及视频、图文作品，支持关键词发现、内容调研、竞品分析和趋势研究。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External analysts, marketers, researchers, and developers use this skill to fetch Douyin hot-search and keyword-search data for content research, competitor analysis, and trend scanning. It helps agents summarize visible ranking signals and search results while preserving traceable IDs, URLs, authors, counts, and publish times when useful. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Douyin search terms and requests are sent to SocialDataX under the user's API key. <br>
-Mitigation: Use this skill only when the user is comfortable sharing those search terms with SocialDataX, and keep SOCIALDATAX_API_KEY in the runtime environment rather than embedding it in skill files. <br>
-Risk: Using socialdatax-skills@latest can change CLI behavior or supply-chain exposure over time. <br>
-Mitigation: Pin or review the npm package version before installation in stricter environments. <br>
-Risk: Search results are bounded by pagination and filters and may not represent complete Douyin platform coverage. <br>
-Mitigation: State query bounds in summaries and preserve returned IDs, URLs, counts, publish times, content types, and next-page markers when traceability matters. <br>
+## Use Case:
 
+面向进行抖音内容调研的用户，用于查看热榜、搜索视频和图文作品，并发现关键词、竞品及趋势。
 
-## Reference(s): <br>
-- [SocialDataX AI API access](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown summaries with inline shell commands and JSON result excerpts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY at runtime and may include Douyin content IDs, URLs, titles, authors, metrics, publish times, content type, and pagination markers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.15 (source: server evidence) <br>
+Risk: Search queries and usage attribution are sent to SocialDataX and may consume credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid confidential search terms and review expected credit use before querying.
+
+Risk: The API key and external CLI package carry ordinary credential and package-installation risks.
+
+Mitigation: Keep the API key in a protected secret store and use a reviewed, pinned CLI release with only the credentials it needs.
+
+## Reference(s):
+
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill release](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin-search)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Analysis, Text]
+
+**Output Format:** [JSON search results with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search results may be paginated; summaries can include visible ranking, content, author, and engagement details.]
+
+## Skill Version(s):
+
+0.1.22 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

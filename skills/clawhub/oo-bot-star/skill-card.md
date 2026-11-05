@@ -1,41 +1,55 @@
-## Description: <br>
-BotStar helps an agent read, create, update, publish, and delete BotStar bots, bot attributes, CMS content, and audience user attributes through the OOMOL BotStar connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate BotStar through an OOMOL-connected account to read, create, update, delete, and publish bots and related data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and BotStar operators use this skill to inspect and manage BotStar bots, CMS entities, CMS items, bot attributes, and audience user attributes from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change live BotStar bots, CMS content, bot attributes, and audience user attributes. <br>
-Mitigation: Review the exact payload and expected effect with the user before approving write, publish, update, or delete actions. <br>
-Risk: The skill relies on OOMOL to broker the BotStar account connection. <br>
-Mitigation: Install and use it only when the publisher and connected BotStar account are trusted for the intended workspace. <br>
+## Use Case:
 
+Developers and BotStar administrators use this skill with an OOMOL-connected account to inspect bots, users, attributes, and CMS data, or to create, update, delete, and publish BotStar content.
 
-## Reference(s): <br>
-- [BotStar homepage](https://botstar.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live schema inspection before action payloads; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The documented CLI installation runs downloaded code whose full effects were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve installation separately, preferably using a verified fixed release, and check automatic skill synchronization before running it.
+
+Risk: BotStar write, publish, and delete actions can change connected account data.
+
+Mitigation: Use an appropriately limited connected account and confirm the exact target and effect before these actions.
+
+## Reference(s):
+
+- [BotStar homepage](https://botstar.com)
+- [BotStar API documentation](https://apis.botstar.com/docs/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance, Shell commands]
+
+**Output Format:** [BotStar action results and data, with concise Markdown guidance and shell command examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Output depends on the requested BotStar action.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

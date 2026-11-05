@@ -1,47 +1,65 @@
-## Description: <br>
-Generate 3D models, textures, images, rigged characters, animations, and 3D print ready assets through the Meshy AI API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates 3D models, textures, animations, and converted assets, and prepares models for physical 3D printing through Meshy workflows.
 
-## Publisher: <br>
-[arlieeee](https://clawhub.ai/user/arlieeee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[arlieeee](https://clawhub.ai/user/arlieeee)
 
-## Use Case: <br>
-Developers, creators, and 3D printing users use this skill to generate or transform Meshy assets, manage asynchronous API tasks, download model outputs, and prepare files for printing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Meshy API requests can spend paid credits. <br>
-Mitigation: Require a clear cost summary and explicit user confirmation before creating paid Meshy tasks. <br>
-Risk: Prompts, image URLs, or selected local image data may be sent to Meshy. <br>
-Mitigation: Disclose the data transfer and use only user-provided or user-approved inputs for API calls. <br>
-Risk: Console logs may include an API key prefix. <br>
-Mitigation: Treat logs as sensitive and avoid exposing the full API key in output, files, or shared artifacts. <br>
-Risk: The skill can detect or open local slicer applications. <br>
-Mitigation: Ask for explicit approval before probing for slicers or opening local applications. <br>
+## Use Case:
 
+Developers and 3D creators use this skill to generate, texture, rig, animate, convert, and prepare digital models and physical print assets using Meshy workflows.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/arlieeee/skills/meshy-3d-agent) <br>
-- [Meshy API documentation](https://docs.meshy.ai) <br>
-- [Meshy API reference](artifact/reference.md) <br>
-- [Meshy API endpoint](https://api.meshy.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create Meshy API tasks after user confirmation and save generated assets under meshy_output/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.1 (source: server release metadata) <br>
+Risk: Prompts, photos, and models selected for a job are sent to Meshy, and cloud work can consume account credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use inputs suitable for sharing and agree on a credit budget before submitting cloud work.
+
+Risk: Session credentials and signed asset URLs can expose account access or private assets if shared.
+
+Mitigation: Keep tokens, credential files, and signed asset URLs private.
+
+Risk: The separately installed Meshy CLI implementation is outside the security review described in the release evidence.
+
+Mitigation: Review the CLI package and its behavior before using it with sensitive files or account access.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/meshy-dev/meshy-3d-agent)
+- [Meshy pricing documentation](https://docs.meshy.ai/en/api/pricing)
+- [Setup and sign-in](artifact/references/setup.md)
+- [3D asset pipelines](artifact/references/pipelines.md)
+- [Rigging and animation](artifact/references/animation.md)
+- [Physical printing workflows](artifact/references/printing.md)
+- [Creative Lab products](artifact/references/creative-lab.md)
+- [Delivery and costs](artifact/references/delivery.md)
+- [Troubleshooting](artifact/references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Shell commands, Guidance]
+
+**Output Format:** [3D asset and print files (including GLB, OBJ, STL, and 3MF), with workflow guidance and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated asset formats and print preparation steps depend on the requested workflow.]
+
+## Skill Version(s):
+
+0.9.1 (source: server-resolved ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

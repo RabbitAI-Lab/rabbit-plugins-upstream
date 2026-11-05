@@ -6,7 +6,7 @@ last-reviewed: 2026-07-09
 
 # datagma
 
-Contact-info finder: one mid-tier email action and two premium phone actions. `findEmail` (1) is an **alt mid-tier rung** of the find-email chain ([`../references/stage-action-map.md`](../references/stage-action-map.md)) — same price as the `FullEnrich` default, so it earns a slot only as an escalation with a different underlying source. `findPhone` / `findPhoneAndEmail` (8) are the **second-most-expensive phone tier in the catalog** — last resort before `cleon1` (15), never the first stop.
+Contact-info finder: one mid-tier email action, two premium phone actions, and two person-enrich actions. `findEmail` (1) is an **alt mid-tier rung** of the find-email chain ([`../references/stage-action-map.md`](../references/stage-action-map.md)) — same price as the `FullEnrich` default, so it earns a slot only as an escalation with a different underlying source. `findPhone` / `findPhoneAndEmail` (8) are the **second-most-expensive phone tier in the catalog** — last resort before `cleon1` (15), never the first stop.
 
 ## Credits-based actions
 
@@ -15,6 +15,8 @@ Contact-info finder: one mid-tier email action and two premium phone actions. `f
 | `findEmail` | 1 | `firstName, lastName, companyName` (all required) | Escalation rung on the find-email chain when cheaper sources miss. |
 | `findPhone` | 8 | `email`, `personLinkedInUrl` | Phone lookup from an email or LinkedIn URL. **Last-rung pricing.** |
 | `findPhoneAndEmail` | 8 | `firstName, lastName, companyName` (all required) | Phone + email in one call from name + company. |
+| `enrichPerson` | 8 | `linkedInUrl` **or** `email` (professional), optional `countryCode` (two-letter, avoids namesakes) | Full person profile plus `emails[]` and `phones[]`, same price as `findPhoneAndEmail`. Note the key is `linkedInUrl` here, not `personLinkedInUrl`. |
+| `enrichPersonFromPersonalEmail` | 2 | `email` (required, a **personal** address) | Profile (`personalInformation.{displayName, firstName, lastName, headline, companyName, linkedInUrl, …}`, positions, schools) from a personal email; outside the EU only. |
 
 ## What it's for
 
@@ -29,7 +31,7 @@ Contact-info finder: one mid-tier email action and two premium phone actions. `f
 ```bash
 # Only on rows where the earlier rungs returned nothing
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"datagma","actionSlug":"findEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"datagma","actionSlug":"findEmail"}' \
   --records '[
     {"firstName":"Alice","lastName":"Smith","companyName":"Acme"},
     {"firstName":"Bob","lastName":"Jones","companyName":"Globex"}
@@ -44,7 +46,7 @@ All three fields are required — no domain-only or full-name variants. Every hi
 ```bash
 # Qualified, high-value leads only — 8 credits each
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"datagma","actionSlug":"findPhone","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"datagma","actionSlug":"findPhone"}' \
   --records '[{"personLinkedInUrl":"https://linkedin.com/in/alicesmith","email":"alice@acme.com"}]' \
   --wait-until-finished
 ```
@@ -69,6 +71,13 @@ Neither field is marked required in the schema — pass at least one identifier;
 - `findPhone` / `findPhoneAndEmail` — **CONTACT stage, last rung** of the phone chain: `prospeo` (3) → `FullEnrich` (6) → `waterfall` (7) → **datagma (8)** → `cleon1` (15, premium).
 - Every found email flows to **VERIFY** (`waterfall.verifyEmail`, 0.1) before activation.
 
+## Recurring use
+
+No scheduled fit — per-record enrichment only; every datagma action is an escalation rung, never a monitor.
+
+- **In-play gate:** `findEmail` runs only where `email` is still empty *and* the earlier rungs already missed; `findPhone` / `findPhoneAndEmail` (8) additionally gate on an empty phone field **and** the qualified-lead condition — the anti-pattern above ("ungated batch") applies doubly to a play that re-evaluates its segment.
+- **Stability:** a filled email or phone doesn't improve on re-lookup — re-running datagma on enriched rows re-bills last-rung prices for the same data.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"datagma","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"datagma","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**

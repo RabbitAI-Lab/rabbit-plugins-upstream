@@ -1,45 +1,62 @@
-## Description: <br>
-Identifies common abnormal pet behaviors in uploaded or linked pet video, including scratching, biting, destructive chewing, jumping, digging, chasing, and separation anxiety, and returns structured behavior reports and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies common abnormal pet behaviors such as scratching, biting, destructive chewing, jumping, digging, chasing, and separation anxiety to help owners understand their pet's habits.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Pet owners, trainers, and agents assisting them use this skill to submit pet monitoring videos or URLs for behavior recognition and to retrieve cloud-hosted report history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet videos or video URLs are sent to lifeemergence.com cloud services for processing. <br>
-Mitigation: Install and use the skill only where that cloud processing model is acceptable for the video content and workspace. <br>
-Risk: The skill may silently create or reuse an external account identity and store authentication state in a local SQLite database. <br>
-Mitigation: Review the identity linkage and local state behavior before deployment, and use it only where persistent service tokens and report association are acceptable. <br>
-Risk: The scanner verdict is suspicious because the cloud analysis purpose is coherent but account and token handling provide limited user control. <br>
-Mitigation: Review the skill before installing and restrict it to environments where the external account linkage and cloud report history model have been approved. <br>
+## Use Case:
 
+Pet owners use the skill to analyze a pet video for common behaviors and review a structured behavior summary and suggestions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-behavior-detection-analysis) <br>
-- [Pet Behavior Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [Markdown or JSON report text with optional saved output file and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts a pet video file path or video URL, and can list cloud report history linked to the workspace identity.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence; artifact frontmatter says 1.0.9) <br>
+Risk: Private recordings may be sent to a fixed cloud destination even when --api-url is set.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid private recordings until this control is fixed; confirm the destination and privacy terms before uploading.
+
+Risk: The --export-env-only option does not prevent analysis or possible charges.
+
+Mitigation: Do not treat this option as a dry run; confirm billing implications before invoking the skill.
+
+Risk: The skill may automatically register an account and retain profile data and tokens in a shared workspace database.
+
+Mitigation: Use secure credential storage and establish explicit account controls, especially in shared environments.
+
+Risk: Server-side deletion and report authorization were not verified.
+
+Mitigation: Confirm the provider's retention and report-access controls before uploading recordings or querying reports.
+
+## Reference(s):
+
+- [API interface notes](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Markdown]
+
+**Output Format:** [Structured JSON or a Markdown-style behavior report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Behavior summaries, suggestions, history report lists, and report links]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

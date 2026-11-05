@@ -1,42 +1,56 @@
-## Description: <br>
-Operate Drata through an OOMOL-connected account to search and read company metadata, controls, personnel, vendors, and workspaces using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read Drata company, control, personnel, vendor, and workspace data through a connected Drata account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and developers responsible for compliance operations use this skill to read Drata company, control, personnel, vendor, and workspace data through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can read sensitive Drata company, personnel, vendor, control, and workspace records visible to the connected OOMOL account. <br>
-Mitigation: Install and use the skill only for intended Drata access, review Drata connection scopes, and prefer the least-privileged account that can complete the task. <br>
-Risk: Running setup or connection steps unnecessarily could change the user's local CLI session or OOMOL connection state. <br>
-Mitigation: Run setup, login, or connection steps only after an oo CLI, authentication, or Drata connection error requires them. <br>
+## Use Case:
 
+Employees and developers can retrieve Drata workspace data, including company details, controls, personnel, vendors, and workspaces. The skill uses a connected Drata account and returns the requested records for review or follow-up.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-drata) <br>
-- [Drata Homepage](https://drata.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Drata data is returned through oo connector responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The required CLI can make lasting changes to other agents’ installed skills, and the remote installers and live connector implementation remain unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI separately before installing, use a reviewed fixed release, and consider setting OO_SKILLS_SYNC_DISABLED=1 before invoking it.
+
+Risk: Using Drata exposes sensitive workspace records to OOMOL handling.
+
+Mitigation: Connect Drata with read-only access and ensure you accept OOMOL handling sensitive records.
+
+## Reference(s):
+
+- [Drata](https://drata.com)
+- [Drata API reference](https://developers.drata.com/openapi/reference/v2/overview/)
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Guidance, Shell commands]
+
+**Output Format:** [JSON data and concise Markdown summaries, with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Live data depends on the connected Drata account and its permissions.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

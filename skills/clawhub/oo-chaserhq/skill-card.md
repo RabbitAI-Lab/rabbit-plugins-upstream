@@ -1,43 +1,55 @@
-## Description: <br>
-ChaserHQ lets an agent search and read ChaserHQ customer, invoice, invoice history, organisation, and API status data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use ChaserHQ through an OOMOL-connected account to search and read customer, invoice, organization, and invoice-history data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to retrieve ChaserHQ customer, invoice, invoice history, organisation, and status information without calling the ChaserHQ API directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Customer and invoice records may contain sensitive business data. <br>
-Mitigation: Only request the records needed for the task and avoid exposing returned data outside the intended user or workspace. <br>
-Risk: The skill depends on OOMOL authorization to read ChaserHQ data. <br>
-Mitigation: Run sign-in or connection steps only when the user is ready to authorize OOMOL access, and keep credentials managed through the OOMOL connection flow. <br>
+## Use Case:
 
+External users can use the skill to retrieve ChaserHQ customer, invoice, organization, status, and invoice-history information through their connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub ChaserHQ Skill](https://clawhub.ai/oomol/skills/oo-chaserhq) <br>
-- [ChaserHQ Homepage](https://www.chaserhq.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only ChaserHQ connector actions; credentials are handled through the user's OOMOL-connected account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill frontmatter) <br>
+Risk: Setup may execute a remote installer without clear user approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately; prefer a verified fixed release and disable startup skill synchronization when only ChaserHQ access is needed.
+
+Risk: The connected account can expose sensitive customer and invoice information.
+
+Mitigation: Use the connection only for authorized access to the intended ChaserHQ organization and data.
+
+## Reference(s):
+
+- [ChaserHQ](https://www.chaserhq.com/)
+- [ChaserHQ API documentation](https://openapi.chaserhq.com/docs/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON responses and Markdown guidance with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only customer, invoice, organization, status, and invoice-history data.]
+
+## Skill Version(s):
+
+1.0.4 (source: server-resolved release and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
