@@ -1,42 +1,55 @@
-## Description: <br>
-StatusPal routes StatusPal requests through the OOMOL oo CLI connector for searching and reading status page, incident, and service data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read StatusPal status pages, services, and incidents through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to query StatusPal status pages, incidents, and services from an OOMOL-connected account through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad or vague StatusPal requests could cause the agent to query account, status page, incident, or service data the user did not intend to inspect. <br>
-Mitigation: Confirm the intended StatusPal page, incident, service, or query before running connector reads when the request is ambiguous. <br>
-Risk: The skill depends on the oo CLI and a connected StatusPal account, so setup, credential, scope, or billing failures can interrupt use. <br>
-Mitigation: Use the documented setup and recovery steps only after a matching command failure, and do not initiate sign-in or connection flows proactively. <br>
+## Use Case:
 
+External users and developers can use the skill to retrieve current status page information, configured services, and incident details from a connected StatusPal account. An agent can summarize this data to answer StatusPal questions.
 
-## Reference(s): <br>
-- [StatusPal homepage](https://www.statuspal.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [StatusPal skill on ClawHub](https://clawhub.ai/oomol/skills/oo-statuspal) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payload examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON with data and metadata fields when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup instructions can run a remote CLI installer without prior approval; the external installer and connector implementation were unavailable for verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installer and its automatic skill-installation behavior before installing, and approve local changes explicitly.
+
+Risk: Connecting StatusPal entrusts OOMOL with access to that account.
+
+Mitigation: Confirm that you intend to grant OOMOL access to the StatusPal account before connecting it.
+
+## Reference(s):
+
+- [StatusPal homepage](https://www.statuspal.io)
+- [StatusPal API documentation](https://www.statuspal.io/api-docs)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Markdown]
+
+**Output Format:** [StatusPal data returned as JSON and summarized in text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

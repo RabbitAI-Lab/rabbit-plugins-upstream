@@ -1,11 +1,11 @@
 ---
 name: oo-klicktipp
-description: "KlickTipp (klicktipp.com). Use this skill for ANY KlickTipp request — searching and reading data. Whenever a task involves KlickTipp, use this skill instead of calling the API directly."
+description: "KlickTipp (klicktipp.com). Use this skill for ANY KlickTipp request — reading, creating, updating, and deleting data. Whenever a task involves KlickTipp, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "KlickTipp"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.6"
   services: ["klicktipp"]
   icon: "https://static.oomol.com/logo/third-party/klicktipp.svg"
 ---
@@ -37,9 +37,9 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `signin` — Create or update a subscriber and associate the tag linked to the KlickTipp Listbuilding API key.
-- `signoff` — Unsubscribe a contact by email address through the KlickTipp Listbuilding API key.
-- `signout` — Remove the tag linked to the KlickTipp Listbuilding API key from a subscriber by email address.
+- `signin` — Create or update a subscriber and associate the tag linked to the KlickTipp Listbuilding API key. [write]
+- `signoff` — Unsubscribe a contact by email address through the KlickTipp Listbuilding API key. [destructive]
+- `signout` — Remove the tag linked to the KlickTipp Listbuilding API key from a subscriber by email address. [destructive]
 
 ## Safety
 
@@ -70,11 +70,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — KlickTipp is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=klicktipp
+  https://console.oomol.com/connections/klicktipp
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - KlickTipp homepage: https://www.klicktipp.com
+- API documentation: https://developers.klicktipp.com/guides/listbuilding-api

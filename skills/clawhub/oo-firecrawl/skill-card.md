@@ -1,42 +1,57 @@
-## Description: <br>
-Firecrawl (firecrawl.dev) lets an agent operate Firecrawl through OOMOL's oo CLI for scraping, crawling, search, URL mapping, structured extraction, usage visibility, and job management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects to Firecrawl through the OOMOL oo CLI to search, scrape, crawl, and extract web data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Firecrawl from Codex through an OOMOL-connected account, including web scraping, crawling, search, URL mapping, structured extraction, async job status checks, cancellations, and usage inspection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write, cancel, delete, crawl, agent, and deep-research actions can change Firecrawl state or consume account credits. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running those actions. <br>
-Risk: Connector actions depend on the user's OOMOL-connected Firecrawl account and may fail when authentication, connection scopes, credentials, or billing are unavailable. <br>
-Mitigation: Use first-time setup or account remediation steps only after a command fails with the matching authentication, connection, scope, credential, or billing error. <br>
+## Use Case:
 
+Developers use this skill to run Firecrawl web search, scraping, crawling, and extraction tasks through an OOMOL-connected account, and to check the status or results of asynchronous jobs.
 
-## Reference(s): <br>
-- [Firecrawl homepage](https://www.firecrawl.dev) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Firecrawl skill page](https://clawhub.ai/oomol/skills/oo-firecrawl) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Firecrawl connector JSON responses containing data and meta.executionId values.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release metadata) <br>
+Risk: The CLI may install or refresh other agent skills without clearly explaining those changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review automatic skill installation before enabling the integration; install a reviewed release yourself and set OO_SKILLS_SYNC_DISABLED=1 to disable startup skill synchronization if unwanted.
+
+Risk: Some Firecrawl actions start jobs, change state, or cancel jobs.
+
+Mitigation: Confirm the exact action, target, and effect before running write or destructive actions.
+
+## Reference(s):
+
+- [Firecrawl API documentation](https://docs.firecrawl.dev/)
+- [Firecrawl](https://www.firecrawl.dev)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Firecrawl on ClawHub](https://clawhub.ai/oomol/skills/oo-firecrawl)
+- [oomol publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Firecrawl results as text, Markdown, or JSON, with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results and formats depend on the selected Firecrawl action.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

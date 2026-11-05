@@ -1,45 +1,53 @@
-## Description: <br>
-抖音最具商业价值意见领袖（KOL） helps creators, operators, marketers, and brands search for Douyin creators and KOL benchmark accounts using keywords and optional content-category filters. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+根据行业、品类、品牌或账号关键词搜索抖音对标账号，并返回账号资料、粉丝量、内容标签和互动数据。
 
-## Publisher: <br>
-[allinherog-star](https://clawhub.ai/user/allinherog-star) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[allinherog-star](https://clawhub.ai/user/allinherog-star)
 
-## Use Case: <br>
-External creators, marketing teams, operators, and brand teams use this skill to identify Douyin KOL candidates, benchmark accounts, and cooperation or competitor-research leads from a search keyword and optional category filters. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive API key for the external AI Skills service. <br>
-Mitigation: Store AISKILLS_API_KEY in environment variables or a secrets manager, rotate it if exposed, and avoid committing it to source files or prompts. <br>
-Risk: Search terms and strategy context are sent to an external service. <br>
-Mitigation: Avoid using confidential campaign strategy, private personal data, or regulated information as search inputs. <br>
-Risk: AISKILLS_BASE_URL can redirect execution to a configured external endpoint. <br>
-Mitigation: Use the default service URL or another trusted endpoint, and review environment configuration before running the skill. <br>
+## Use Case:
 
+品牌方、营销人员和内容运营人员可按行业、品类或关键词查找抖音创作者，用账号资料、粉丝规模和可用互动指标筛选合作或对标候选。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/allinherog-star/douyin-kol-search) <br>
-- [form-schema.json](references/form-schema.json) <br>
-- [skill.json](references/skill.json) <br>
-- [AI Skills service](https://ai-skills.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [JSON API response with creator candidates, commercial-value signals, benchmark-account references, and execution metadata.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires AISKILLS_API_KEY and calls an external AI Skills API; responses depend on the configured AISKILLS_BASE_URL and available Douyin creator data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Search terms and API credentials are sent to ai-skills.ai, and searches may consume paid credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid confidential query terms, protect AISKILLS_API_KEY, and check account billing before repeated searches.
+
+Risk: The provider's server-side data handling and website-provided installation commands were not verified.
+
+Mitigation: Review the provider's data practices and verify installation commands before using them.
+
+## Reference(s):
+
+- [AI Skills skill page](https://ai-skills.ai/zh/skills/douyin-kol-search)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Analysis]
+
+**Output Format:** [JSON creator search results with account profiles, available metrics, and search metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returned profiles and metrics vary with the search and data available from the service.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

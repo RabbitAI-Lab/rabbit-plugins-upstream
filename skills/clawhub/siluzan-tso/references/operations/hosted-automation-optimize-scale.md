@@ -53,17 +53,15 @@ mkdir -p ./snap-scale && siluzan-tso google-analysis -a <mediaCustomerId> --sect
 ## 最终操作
 
 > **金额单位（关键）**：`ad campaign-edit` / `ad adgroup-edit` 所有金额参数均为 **主币种金额**（如 `100` 表示 ¥100，支持小数 `10.5`）；CLI 内部自动 `Math.round(value × 100)` 写入「分」字段。详见 `references/google-ads/google-ads-write.md`「ad campaign-edit」金额单位说明。
-> **必须先用 `*Display` 字段取主币种当前值，加减后再传回**；不要把 `budget` / `targetCpaAmount` / `maxCPCAmount` 这些"分"字段当作主币种传给 CLI。
+> 系列列表读 `budget`、`targetSpendBidCeilingYuan`、`targetCpaAmountYuan`（已是元）。组列表读 `maxCPCAmountYuan`、`targetCpaAmountYuan`。不要读 `targetSpend_BidCeilingAmount` / `targetCpa_BidingAmount`（分），也不要再 ÷100。
 
 **提高系列日预算**（在原值基础上 +10 元的写法）：
 
 ```bash
-# 1) GET 取主币种当前值
-CUR=$(siluzan-tso ad campaigns -a <mediaCustomerId> --json-out ./snap | node -e '...筛选 budget（元）')
-# 2) 主币种 + 10
-NEW=$(node -e "console.log((${CUR} + 10).toFixed(2))")
-# 3) 主币种金额传回
-siluzan-tso ad campaign-edit -a <mediaCustomerId> --id <campaignId> --budget ${NEW}
+# 1) 落盘后用代码读 budget（元）。不要把 --json-out 管道给 node
+siluzan-tso ad campaigns -a <mediaCustomerId> --json-out ./snap
+# 2) 主币种 + 10，再传回
+siluzan-tso ad campaign-edit -a <mediaCustomerId> --id <campaignId> --budget <新预算元>
 ```
 
 **上调系列目标 CPA**（若策略为 tCPA 等）：
@@ -78,7 +76,7 @@ siluzan-tso ad campaign-edit -a <mediaCustomerId> --id <campaignId> --target-cpa
 siluzan-tso ad adgroup-edit -a <mediaCustomerId> --id <adGroupId> --target-cpa <主币种金额>
 ```
 
-写前务必先 **`ad campaigns --json-out ./snap` / `ad groups --json-out ./snap`** 取当前值，**读取 `*Display` 字段**（主币种）后按配置比例计算，再以主币种金额传回。
+写前务必先 **`ad campaigns --json-out ./snap` / `ad groups --json-out ./snap`** 取当前值。系列用 `budget` / `targetCpaAmountYuan`，组用 `targetCpaAmountYuan`（都是元），按配置比例计算后再传回。
 
 ---
 
@@ -89,7 +87,7 @@ siluzan-tso ad campaigns -a <mediaCustomerId> --start <…> --end <…> --json-o
 mkdir -p ./snap-scale && siluzan-tso google-analysis -a <mediaCustomerId> --sections campaigns --start <…> --end <…> --json-out ./snap-scale
 ```
 
-确认 **`budget`**（元）、**`targetCpa_BidingAmount`**（或组上 **`targetCpaAmount`**）与 **`statusV2`** 符合预期。
+确认 **`budget`**、**`targetCpaAmountYuan`**（组上同名字段）与 **`statusV2`** 符合预期。刚改完的系列/组列表加 `--fresh`；关键词列表没有 `--fresh`。
 
 ---
 

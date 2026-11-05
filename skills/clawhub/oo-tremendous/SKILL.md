@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Tremendous"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["tremendous"]
   icon: "https://static.oomol.com/logo/third-party/tremendous.svg"
 ---
@@ -38,10 +38,10 @@ Each action is listed below with a one-line description; actions that change sta
 ## Available actions
 
 - `create_order` — Create a Tremendous reward order with an optional external ID for idempotent retries. [write]
-- `generate_reward_link` — Generate a redemption link for an existing Tremendous reward.
+- `generate_reward_link` — Generate a redemption link for an existing Tremendous reward. [write]
 - `get_campaign` — Retrieve one Tremendous campaign by ID.
 - `get_funding_source` — Retrieve one Tremendous funding source by ID, including the special BALANCE value.
-- `get_order` — Retrieve one Tremendous order by ID or external ID. [write]
+- `get_order` — Retrieve one Tremendous order by ID or external ID.
 - `get_product` — Retrieve one Tremendous product by ID.
 - `get_reward` — Retrieve one Tremendous reward by ID.
 - `list_campaigns` — List Tremendous campaigns in the current organization.
@@ -80,11 +80,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Tremendous is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=tremendous
+  https://console.oomol.com/connections/tremendous
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Tremendous homepage: https://www.tremendous.com
+- API documentation: https://developers.tremendous.com/

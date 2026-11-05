@@ -1,43 +1,55 @@
-## Description: <br>
-VTEX (vtex.com). Use this skill for ANY VTEX request — searching and reading data. Whenever a task involves VTEX, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read VTEX catalog data, including products, brands, categories, and product/SKU IDs.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect VTEX connector schemas and run read-only VTEX catalog actions through an OOMOL-connected account, including product lookup, brand listing, category tree retrieval, product/SKU ID listing, and storefront product search. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on the OOMOL oo CLI and a connected VTEX account; running setup or connection commands can change local authentication state or account connections. <br>
-Mitigation: Only install the CLI, sign in, or connect VTEX after explicit user approval or when a command fails with the documented setup or authentication error. <br>
-Risk: Future connector actions may include write or destructive operations even though the current disclosed action list is read-only. <br>
-Mitigation: Inspect the live action schema before building payloads and get explicit approval before running any action tagged write or destructive. <br>
+## Use Case:
 
+Developers and commerce operators use this skill to retrieve catalog and storefront data from a VTEX store connected through OOMOL.
 
-## Reference(s): <br>
-- [VTEX homepage](https://vtex.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [VTEX connection setup](https://console.oomol.com/app-connections?provider=vtex) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector run responses are JSON objects with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: Automatic setup can execute changing remote code without a clear user checkpoint, and remote installer behavior is unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a verified CLI release before enabling the skill; require approval for later installation changes and review or disable automatic skill synchronization.
+
+Risk: The integration uses the connected OOMOL account and VTEX connection.
+
+Mitigation: Confirm the intended OOMOL account and VTEX connection before use.
+
+## Reference(s):
+
+- [VTEX API documentation](https://developers.vtex.com/docs/api-reference)
+- [VTEX](https://vtex.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Text]
+
+**Output Format:** [JSON data returned from VTEX product, brand, category, and storefront search reads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only catalog data; query fields depend on the selected VTEX action.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

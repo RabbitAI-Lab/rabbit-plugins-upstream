@@ -1,45 +1,56 @@
-## Description: <br>
-Cal.com (cal.com). Use this skill for ANY Cal.com request: reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cal.com (cal.com). Use this skill for ANY Cal.com request — reading, creating, updating, and deleting data. Whenever a task involves Cal.com, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate a connected Cal.com account through OOMOL, including booking, event type, schedule, attendee, calendar, and profile workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change Cal.com account data, including bookings, schedules, event types, calendars, and profile fields. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write actions. <br>
-Risk: Destructive actions can delete schedules or event types or cancel bookings. <br>
-Mitigation: Require explicit approval of the target object and action before running destructive commands. <br>
-Risk: Connector schemas may change over time, causing stale payloads to fail or affect unintended fields. <br>
-Mitigation: Inspect the live action schema before each action and build payloads from that schema. <br>
+## Use Case:
 
+External users and agents use this skill to read and manage Cal.com bookings, availability, event types, schedules, and profile settings through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-cal) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Cal.com](https://cal.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence and frontmatter) <br>
+Risk: Setup directs users to run a remote installer whose integrity is unverified, and automatic skill synchronization could modify agent configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve installation separately, use a pinned release with independently verified integrity, and check automatic skill synchronization before allowing configuration changes.
+
+Risk: The skill accesses the connected calendar account and includes actions that can create, update, or delete calendar data.
+
+Mitigation: Confirm the exact payload and effect before write actions, and confirm the target before destructive actions.
+
+## Reference(s):
+
+- [Cal.com API documentation](https://cal.com/docs/api-reference/v2/introduction)
+- [Cal.com](https://cal.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON connector responses and concise natural-language guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses can contain connected calendar data; some actions change bookings, schedules, event types, profiles, or calendar settings.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

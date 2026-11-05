@@ -1,42 +1,55 @@
-## Description: <br>
-Cloudflare Browser Run helps agents render URLs or raw HTML through Cloudflare Browser Run and return rendered HTML, Markdown, links, selected elements, or structured JSON. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Cloudflare Browser Run through a connected OOMOL account to render pages and extract HTML, JSON, Markdown, links, or selected elements.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when an agent needs browser-rendered page content from Cloudflare Browser Run, including HTML, Markdown, links, extracted JSON, selected element scraping, or account listing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: URLs, raw HTML, rendered page content, and scrape targets may be processed through the OOMOL and Cloudflare connector. <br>
-Mitigation: Avoid submitting sensitive or regulated content unless the connected services and account configuration are approved for that data. <br>
-Risk: One-time install, login, and connection commands can change the local setup or account connection state. <br>
-Mitigation: Run setup commands only when an action fails because the CLI, authentication, or Cloudflare Browser Run connection is missing or expired. <br>
+## Use Case:
 
+Developers use this skill to render web pages with Cloudflare Browser Run and retrieve page content or selected elements for downstream analysis.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-cloudflare-browser-rendering) <br>
-- [Cloudflare Browser Run Documentation](https://developers.cloudflare.com/browser-run/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on the selected Cloudflare Browser Run action and may include rendered HTML, Markdown, links, selected element data, structured JSON, or account information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup guidance can run an unchecked remote installer and may introduce broader agent changes without clear user control.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a separately reviewed CLI installation, explicitly approve local changes, and review or disable automatic skill synchronization.
+
+Risk: Cloudflare requests and credential handling are mediated by OOMOL, and the hosted connector implementation is unverified.
+
+Mitigation: Understand the access granted to the connected Cloudflare account and review the connector's behavior before relying on it.
+
+## Reference(s):
+
+- [Cloudflare Browser Run documentation](https://developers.cloudflare.com/browser-run/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, HTML, JSON, Markdown, Text]
+
+**Output Format:** [oo CLI commands with connector responses in HTML, JSON, Markdown, or text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Response shape depends on the selected action and its live connector schema.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

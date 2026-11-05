@@ -1,42 +1,52 @@
-## Description: <br>
-Guides ClawHub users through creating, testing, and iterating custom SKILLs using a four-layer structure, privacy boundaries, template examples, and health checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+写一个新 SKILL 时用的编写工具：四层结构（角色/规则/记忆/输出）、安全与隐私边界、五步落地流程、常见问题诊断。面向 SKILL 开发者与有编程/写提示词基础的高中生，在"我要新写一个学习类 SKILL""帮我把这个 SKILL 的规则写清楚""我的 SKILL 行为不稳定怎么排查""这个 SKILL 该记哪些字段"时使用。它不替你写具体学科内容、不做学习辅导、不生成练习题；本仓库的词表与阈值一律以 shared/vocab.md 为准。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External ClawHub users and students use this skill to design personalized learning SKILLs, write and refine prompts, structure memory and output behavior, and test whether a new SKILL is working as intended. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Templates may encourage long-term memory, uploaded learning materials, reminders, or cross-SKILL sharing beyond a user's intent. <br>
-Mitigation: Keep memory, uploads, reminders, and cross-SKILL sharing explicitly opt-in, and scope stored or shared information to the minimum needed for the learning task. <br>
-Risk: Broad activation wording can cause the skill to be invoked for general prompt-writing help outside custom SKILL creation. <br>
-Mitigation: Narrow activation language when installing if the desired use is only SKILL creation, debugging, and iteration. <br>
+## Use Case:
 
+SKILL 开发者和具备编程或提示词基础的高中生可用它来设计、编写或排查学习类 SKILL 的结构、规则、安全边界、记忆字段和输出格式。
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-creator) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [references/skill-templates-library.md](references/skill-templates-library.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration, Text] <br>
-**Output Format:** [Markdown and structured prompt templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes reusable SKILL prompt templates, privacy-boundary guidance, testing steps, iteration advice, and diagnostic checklists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Generated templates may be incomplete for student deployment while the security baseline and profile-field definitions are missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Complete the missing baseline and profile definitions before deploying templates to students, and review each generated skill's permissions separately.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-creator)
+- [SKILL 提示词模板库](artifact/references/skill-templates-library.md)
+- [DNA profile schema](https://xiaozhi-skills.openclaw.dev/schemas/dna-profile.schema.json)
+- [Handover protocol schema](https://xiaozhi-skills.openclaw.dev/schemas/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Markdown guidance, reusable SKILL prompt templates, and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces text specifications and templates; no runtime actions.]
+
+## Skill Version(s):
+
+2.12.5 (source: server-resolved release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

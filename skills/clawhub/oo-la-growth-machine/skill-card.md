@@ -1,45 +1,57 @@
-## Description: <br>
-Enables agents to operate La Growth Machine through OOMOL's la_growth_machine connector for reading, creating, and updating audiences and leads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an agent to La Growth Machine for reading, creating, and updating account data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, employees, and developers with an OOMOL-connected La Growth Machine account use this skill to inspect schemas, run account and lead queries, and perform confirmed audience or lead changes through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change La Growth Machine CRM lead and audience data. <br>
-Mitigation: Review the exact create or update payload with the user and get confirmation before running write actions. <br>
-Risk: First-time CLI installation introduces an additional trust decision when oo is not already installed. <br>
-Mitigation: Treat installation separately from connector use and proceed only when the user intentionally uses OOMOL for the connected La Growth Machine account. <br>
-Risk: Authentication, missing scopes, expired credentials, billing stops, or disconnected app state can block connector execution. <br>
-Mitigation: Use the documented first-time setup and troubleshooting steps only after a command fails with the matching error. <br>
+## Use Case:
 
+People using a connected La Growth Machine account can look up audiences, members, and leads, or create audiences and add or update leads. Write actions require confirmation of the exact payload and effect.
 
-## Reference(s): <br>
-- [La Growth Machine homepage](https://lagrowthmachine.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-la-growth-machine) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload patterns] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the oo CLI and may return JSON responses containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Setup runs downloaded CLI code that could not be inspected, and the CLI may make broader changes to installed agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify a specific CLI release before installing it. Set OO_SKILLS_SYNC_DISABLED=1 before invoking the CLI if you do not want skills installed or refreshed.
+
+Risk: Account actions can expose or change data in the connected La Growth Machine account.
+
+Mitigation: Connect only the intended account and review every write payload and its effect before execution.
+
+## Reference(s):
+
+- [La Growth Machine](https://lagrowthmachine.com)
+- [La Growth Machine API documentation](https://developers.lagrowthmachine.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [La Growth Machine skill release](https://clawhub.ai/oomol/skills/oo-la-growth-machine)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [Structured account data and concise guidance; action inputs use JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the connected account and the selected action.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

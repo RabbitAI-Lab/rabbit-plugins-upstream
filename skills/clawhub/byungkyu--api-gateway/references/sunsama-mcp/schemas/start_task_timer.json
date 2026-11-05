@@ -1,6 +1,6 @@
 {
   "name": "start_task_timer",
-  "description": "Start the timer for a task",
+  "description": "Start Sunsama's timer on one task, so time begins accruing against it. Use this when the user says to start timing a named task; it is not a way to log time after the fact, to schedule a task, or to stop a running timer.",
   "inputSchema": {
     "type": "object",
     "properties": {
@@ -9,6 +9,8 @@
         "description": "The ID of the task"
       }
     },
-    "required": ["taskId"]
+    "required": [
+      "taskId"
+    ]
   }
 }

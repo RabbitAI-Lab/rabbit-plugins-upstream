@@ -1,44 +1,57 @@
-## Description: <br>
-WorkOS (workos.com). Use this skill for ANY WorkOS request: reading, creating, updating, and deleting WorkOS data through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WorkOS (workos.com). Use this skill for ANY WorkOS request — reading, creating, updating, and deleting data. Whenever a task involves WorkOS, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage WorkOS organizations, AuthKit users, and organization memberships from an agent session. It supports read actions for account data and confirmed write actions for creating, updating, reactivating, and deactivating WorkOS resources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill connects WorkOS account data to OOMOL through the oo CLI. <br>
-Mitigation: Install only when OOMOL's oo CLI and credential handling are trusted, and treat read actions as account-data access. <br>
-Risk: Write and destructive actions can create, update, reactivate, or deactivate WorkOS organizations, users, and memberships. <br>
-Mitigation: Review the live action schema and exact JSON payload, then get explicit user confirmation before running state-changing or destructive actions. <br>
-Risk: A missing, expired, or under-scoped WorkOS connection can cause commands to fail or request reconnection. <br>
-Mitigation: Run setup or reconnection steps only after an auth, connection, scope, or credential error indicates they are needed. <br>
+## Use Case:
 
+Developers and operators use the oo CLI to inspect and manage WorkOS organizations, users, and memberships through a connected OOMOL account. The workflow covers reads and state-changing actions, with user confirmation required before write or destructive actions.
 
-## Reference(s): <br>
-- [WorkOS homepage](https://workos.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub WorkOS skill page](https://clawhub.ai/oomol/skills/oo-workos) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance, Configuration] <br>
-**Output Format:** [Markdown with inline bash and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands return JSON responses from the oo CLI, including connector data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Automatic setup may execute unverified installers and make broader agent changes without clear approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before enabling, install a verified CLI release separately, approve local changes, and check or disable automatic skill synchronization using the CLI controls.
+
+Risk: Connecting WorkOS gives OOMOL access to the selected account, and write or destructive actions can change account data or memberships.
+
+Mitigation: Keep explicit approval requirements for account and membership changes, and inspect the live action schema before constructing a payload.
+
+## Reference(s):
+
+- [WorkOS](https://workos.com)
+- [WorkOS API authentication documentation](https://workos.com/docs/reference/api-authentication)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [oo CLI environment controls](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md#environment-variables)
+- [WorkOS skill release on ClawHub](https://clawhub.ai/oomol/skills/oo-workos)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with oo CLI commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action commands use the live connector schema; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

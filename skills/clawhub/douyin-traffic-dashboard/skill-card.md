@@ -1,46 +1,55 @@
-## Description: <br>
-抖音流量分配大盘适合内容创作者、运营、电商、营销在用户想知道抖音流量正在流向哪些方向时使用，帮助基于输入材料生成流量分布、分类层级结构、可用于内容布局的平台方向信号。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+查看抖音平台整体流量及热点在内容分类间的分布。当用户问“抖音流量集中在哪些赛道”“抖音各类内容流量占比”“哪些内容分类更热门”“抖音平台流量大盘/分类热度排行”，或需要平台级赛道观察时使用。返回分类名称、热点数量、热度占比和更新时间，帮助判断内容方向与赛道布局。
 
-## Publisher: <br>
-[allinherog-star](https://clawhub.ai/user/allinherog-star) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[allinherog-star](https://clawhub.ai/user/allinherog-star)
 
-## Use Case: <br>
-Content creators, operations teams, ecommerce teams, and marketers use this skill to inspect Douyin traffic distribution, category hierarchy, hot-count percentages, and platform direction signals for content planning and review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The runner sends requests with AISKILLS_API_KEY to ai-skills.ai by default, or to any configured AISKILLS_BASE_URL. <br>
-Mitigation: Install and run only when that external request path is acceptable, keep the API key in environment variables, and review any custom base URL before execution. <br>
-Risk: Implicit invocation could select the skill in unrelated conversations. <br>
-Mitigation: Prefer explicit invocation for Douyin traffic analysis workflows and avoid enabling it broadly where unrelated prompts may trigger API calls. <br>
-Risk: Traffic distribution outputs are platform direction signals and may be cached or time-sensitive. <br>
-Mitigation: Use the returned update time and metadata when interpreting results, and avoid treating category percentages as a replacement for topic-level validation. <br>
+## Use Case:
 
+内容创作者和运营人员可用它查看抖音各内容分类的热点数量与热度占比，为赛道观察、内容布局和运营复盘提供平台级参考。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/allinherog-star/douyin-traffic-dashboard) <br>
-- [Publisher profile](https://clawhub.ai/user/allinherog-star) <br>
-- [AI Skills API service](https://ai-skills.ai) <br>
-- [references/skill.json](references/skill.json) <br>
-- [references/form-schema.json](references/form-schema.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API responses and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires AISKILLS_API_KEY and sends execution requests to ai-skills.ai by default, or to a configured AISKILLS_BASE_URL.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: The hosted service receives submitted parameters; its data-retention practices were not assessed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Send only necessary, non-sensitive values and review the provider’s data-retention terms before use.
+
+Risk: API calls use a service key and may consume the account’s service balance.
+
+Mitigation: Keep AISKILLS_API_KEY private and check the provider’s billing terms and balance before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/allinherog-star/skills/douyin-traffic-dashboard)
+- [AI Skills service page](https://ai-skills.ai/zh/skills/douyin-traffic-dashboard)
+- [Quick start](https://github.com/allinherog-star/ai-skills/tree/main#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Analysis, Guidance]
+
+**Output Format:** [Structured category statistics with a concise natural-language summary]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes category names, hot-topic counts, heat percentages, and update time; platform-wide data does not predict an individual account or video’s performance.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,55 @@
-## Description: <br>
-This skill lets agents operate Quentn (quentn.com) through an OOMOL-connected account for reading, creating, updating, and deleting CRM data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Quentn (quentn.com). Use this skill for ANY Quentn request — reading, creating, updating, and deleting data. Whenever a task involves Quentn, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to run Quentn CRM read, write, and destructive actions through the OOMOL connector while first checking each action schema and confirming state-changing payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create or modify Quentn CRM records. <br>
-Mitigation: Review the exact action payload and expected effect with the user before approving create, update, or set actions. <br>
-Risk: Destructive actions can delete contacts or terms or remove contact-term assignments. <br>
-Mitigation: Confirm the target record, action name, and payload explicitly before approving delete or remove actions. <br>
+## Use Case:
 
+Developers and Quentn account operators use this skill to find and manage contacts, terms, and users through an OOMOL-connected Quentn account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-quentn) <br>
-- [Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Quentn Homepage](https://quentn.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [State-changing write and destructive actions require user confirmation before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: skill frontmatter and release evidence) <br>
+Risk: CLI setup can make persistent changes to the agent environment, and the remote installer and resulting binary were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation and automatic skill management, use a verified CLI release, and set OO_SKILLS_SYNC_DISABLED=1 before invoking oo to prevent startup skill changes.
+
+Risk: Write actions change Quentn data, and destructive actions can delete data or remove terms.
+
+Mitigation: Confirm the exact payload and effect before writes, and explicitly approve the target before destructive actions.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI environment controls](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md#environment-variables)
+- [Quentn API documentation](https://help.quentn.com/hc/en-150/sections/4517317189009-API-documentation)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON connector responses and shell commands documented in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write and destructive Quentn actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

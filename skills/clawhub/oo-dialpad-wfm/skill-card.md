@@ -1,44 +1,56 @@
-## Description: <br>
-Dialpad WFM helps agents work with Dialpad workforce management data through OOMOL's Dialpad WFM connector, including schedule and activity or agent metric retrieval. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use an OOMOL-connected account to search and read Dialpad WFM schedules, activity metrics, and agent metrics.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Dialpad WFM through OOMOL-connected credentials, inspect live action schemas, and run schedule or metrics retrieval actions from an agent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write-tagged actions may change Dialpad WFM state if run with an unconfirmed payload. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running any write-tagged action. <br>
-Risk: The current documentation is broader than the listed read-oriented actions. <br>
-Mitigation: Fetch the live action schema before constructing payloads and treat any state-changing or destructive behavior as requiring explicit approval. <br>
-Risk: Use requires the oo CLI and a connected Dialpad WFM account through OOMOL. <br>
-Mitigation: Confirm the user is comfortable using OOMOL's oo CLI and connecting Dialpad WFM before installation or first use. <br>
+## Use Case:
 
+Workforce operations teams use this skill to retrieve Dialpad WFM schedules, activity metrics, and agent metrics through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Dialpad WFM homepage](https://www.dialpad.com/features/workforce-management-software/) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-dialpad-wfm) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI JSON responses containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and artifact metadata) <br>
+Risk: The CLI installation path can execute remote code, and the remote installer and backend were not fully verified; the security review did not establish malicious behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation before enabling the skill, explicitly approve host changes, and decide whether automatic installation of other agent skills is acceptable.
+
+Risk: The Dialpad connection and workforce data are handled through OOMOL.
+
+Mitigation: Review OOMOL's connection and data handling for the intended workforce queries before connecting an account.
+
+## Reference(s):
+
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Dialpad WFM API documentation](https://help.dialpad.com/docs/wfm-apis)
+- [Dialpad workforce management](https://www.dialpad.com/features/workforce-management-software/)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON data returned from Dialpad WFM actions, with shell command examples and setup guidance in Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only schedule and workforce metrics retrieved for a requested time interval; results may be paginated.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

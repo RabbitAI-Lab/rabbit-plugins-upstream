@@ -1,42 +1,55 @@
-## Description: <br>
-SERPHouse helps agents search and read SERP data through an OOMOL-connected SERPHouse account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read SERPHouse data through the connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill when an agent needs to inspect SERPHouse connector schemas, look up account or credit status, list supported SERP options, or run synchronous web SERP searches. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search requests and connector responses may include sensitive terms or account-related data processed by OOMOL and SERPHouse. <br>
-Mitigation: Use the skill only when comfortable with OOMOL and SERPHouse processing the submitted search terms and returned data. <br>
-Risk: The skill depends on the local oo CLI, user sign-in state, and an active SERPHouse connection. <br>
-Mitigation: Review the OOMOL CLI install and sign-in flow before running setup commands, and retry setup only after an auth or connection error. <br>
+## Use Case:
 
+Developers and analysts use this skill with an OOMOL-connected SERPHouse account to check account and credit usage, inspect supported search settings and locations, and run web SERP searches that return structured results.
 
-## Reference(s): <br>
-- [SERPHouse homepage](https://www.serphouse.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [SERPHouse skill page](https://clawhub.ai/oomol/skills/oo-serphouse) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured JSON connector results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing SERPHouse action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Setup can execute changing remote installers without clear user approval or verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI and installer yourself before use, and require approval before installer execution or additional agent-skill changes.
+
+Risk: SERPHouse searches may consume credits.
+
+Mitigation: Check account and credit usage before running searches, and monitor usage when making repeated requests.
+
+## Reference(s):
+
+- [SERPHouse](https://www.serphouse.com)
+- [SERPHouse API authentication documentation](https://docs.serphouse.com/introduction/authentication)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, API results, Shell commands]
+
+**Output Format:** [Structured JSON results and inline shell command instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the connected SERPHouse account, request parameters, and available credits.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,60 @@
-## Description: <br>
-从“套公式”到“建模型”：通过识别现象、选择模型、数学表达三步法，训练学生先判断物理模型再列式。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向初高中学生，通过识别现象、选择模型和数学表达，引导学生判断适用的物理规律，并练习将模型迁移到不同情境。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, tutors, and learning agents use this skill to practice physics modeling instead of formula matching. It guides learners to identify physical phenomena, select an appropriate model, write the mathematical relationship, and transfer the same model across problem variants. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Coordination with learning or reminder skills could persist study summaries or create reminders beyond the immediate tutoring exchange. <br>
-Mitigation: Use those related skills only after explicit user consent, matching the inspected skill instructions. <br>
-Risk: Some physics models include high-school extension content that may be inappropriate for an introductory middle-school lesson. <br>
-Mitigation: Respect the skill's grade-level markings and present high-school quantitative formulas only when the learner's level supports them. <br>
+## Use Case:
 
+初中和高中学生可用它识别物理题描述的现象、选择适用模型并表达关键关系，练习把建模方法迁移到新情境。
 
-## Reference(s): <br>
-- [物理建模模式详解](references/physics-modeling-patterns.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-modeling-coach) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-formatted tutoring guidance and Socratic prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May coordinate with related learning or reminder skills when available and only with user consent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Saved profiles, cross-skill sharing, or reminders may involve student learning data; host runtime behavior was not assessed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use “这次不要记忆” for session-only tutoring, and enable profile storage, sharing, or reminders only when wanted.
+
+Risk: Some lessons may provide fuller solutions than the skill description suggests.
+
+Mitigation: Check the learner’s requested level of help and keep guidance focused on model choice and the model’s applicability conditions.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-modeling-coach)
+- [物理建模模式详解](references/physics-modeling-patterns.md)
+- [高中必修第一册模型卡片](references/physics-hs1-models.md)
+- [高中必修第二、三册模型卡片](references/physics-hs2-models.md)
+- [高中选择性必修模型卡片](references/physics-hs3-models.md)
+- [AI 出题自检协议](shared/ai-item-check.md)
+- [危机识别与转介协议](shared/crisis-referral-protocol.md)
+- [平台能力与隐私控制约定](shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Chinese conversational text, optionally structured with Markdown and physics equations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guided model selection, applicability checks, equation setup, and practice prompts.]
+
+## Skill Version(s):
+
+2.12.5 (source: release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

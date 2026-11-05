@@ -1,43 +1,55 @@
-## Description: <br>
-Mocean lets agents operate Mocean account workflows, including balance checks, message status checks, pricing lookups, number lookup, and SMS sending through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Mocean to read account data and manage SMS through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run Mocean messaging and account actions from an agent through an OOMOL-connected Mocean account. It supports read actions for balance, message status, pricing, and number lookup, plus SMS sending after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: SMS sending can contact real recipients and incur account charges. <br>
-Mitigation: Confirm the exact recipient, message body, and expected effect with the user before running the write action. <br>
-Risk: Mocean actions depend on a signed-in OOMOL account, an active Mocean connection, and sufficient billing credit. <br>
-Mitigation: Use the documented setup and billing recovery steps only after a command fails with the matching authentication, connection, or billing error. <br>
+## Use Case:
 
+Developers and operations teams use this skill to check Mocean balances, delivery status, pricing, and number information, and to send SMS through a connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mocean) <br>
-- [Mocean homepage](https://moceanapi.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; SMS sending requires user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup executes remote CLI installers, and the CLI may install additional agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI setup, use a verified and pinned release, and explicitly approve installation. For compatible versions, set OO_SKILLS_SYNC_DISABLED=1 before running oo.
+
+Risk: Sending SMS can incur charges, and OOMOL processes submitted data.
+
+Mitigation: Confirm the exact recipients, message text, and charges before sending, and account for OOMOL processing the submitted data.
+
+## Reference(s):
+
+- [Mocean API documentation](https://moceanapi.com/docs)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Mocean](https://moceanapi.com)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Guidance]
+
+**Output Format:** [JSON connector results and concise text or Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the selected Mocean action and its live input schema.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

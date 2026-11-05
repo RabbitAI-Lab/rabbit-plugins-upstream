@@ -1,43 +1,55 @@
-## Description: <br>
-Tencent Docs helps agents read, create, and update Tencent Docs content through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tencent Docs (docs.qq.com). Use this skill for ANY Tencent Docs request — reading, creating, and updating data. Whenever a task involves Tencent Docs, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and knowledge workers use this skill to operate Tencent Docs from an agent workflow, including reading documents and spreadsheets, creating files, exporting files, renaming files, and updating forms or sheets after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create, rename, export, or update Tencent Docs content through the connected account. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write or destructive. <br>
-Risk: The skill depends on the user's OOMOL account, oo CLI installation, and Tencent Docs connection being available. <br>
-Mitigation: Run setup steps only after a matching command failure and follow the documented connection, authentication, and billing guidance. <br>
+## Use Case:
 
+People managing Tencent Docs use this skill to find and read documents, spreadsheets, and folders, or to create and update documents and forms through their connected account.
 
-## Reference(s): <br>
-- [ClawHub Tencent Docs Skill](https://clawhub.ai/oomol/skills/oo-tencent-docs) <br>
-- [Tencent Docs](https://docs.qq.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: Setup may run downloaded CLI software without a separate approval step, and the external installer behavior is unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before enabling the skill, install a reviewed and integrity-verified CLI version yourself, and check its agent-skill installation settings.
+
+Risk: Document requests use the permissions of the connected Tencent Docs account.
+
+Mitigation: Check the connected account's access and confirm the intended document and effect before creating or changing content.
+
+## Reference(s):
+
+- [Tencent Docs](https://docs.qq.com)
+- [Tencent Docs API documentation](https://docs.qq.com/open/document/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files]
+
+**Output Format:** [Text responses and Tencent Docs documents or spreadsheets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include retrieved document content or requested document changes.]
+
+## Skill Version(s):
+
+1.0.4 (source: artifact/SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

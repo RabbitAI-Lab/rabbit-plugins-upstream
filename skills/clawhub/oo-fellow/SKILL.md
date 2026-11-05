@@ -1,11 +1,11 @@
 ---
 name: oo-fellow
-description: "Fellow (fellow.app). Use this skill for ANY Fellow request — reading, creating, and updating data. Whenever a task involves Fellow, use this skill instead of calling the API directly."
+description: "Fellow (fellow.app). Use this skill for ANY Fellow request — reading, creating, updating, and deleting data. Whenever a task involves Fellow, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Fellow"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["fellow"]
   icon: "https://static.oomol.com/logo/third-party/fellow.svg"
 ---
@@ -37,7 +37,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `archive_action_item` — Archive a Fellow action item by marking it as won't do. [write]
+- `archive_action_item` — Archive a Fellow action item by marking it as won't do. [destructive]
 - `get_action_item` — Retrieve one Fellow action item by ID.
 - `get_current_user` — Get the Fellow user and workspace associated with the current API key.
 - `get_note` — Retrieve one Fellow meeting note by ID.
@@ -74,11 +74,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Fellow is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=fellow
+  https://console.oomol.com/connections/fellow
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Fellow homepage: https://fellow.app
+- API documentation: https://developers.fellow.ai/

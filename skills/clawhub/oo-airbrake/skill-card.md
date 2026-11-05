@@ -1,43 +1,59 @@
-## Description: <br>
-Airbrake helps agents inspect Airbrake projects, deploys, error groups, notices, and notice statuses through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read Airbrake project, deploy, error group, notice, and status data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to inspect Airbrake projects, deploys, error groups, notices, and notice processing status through an OOMOL-connected Airbrake account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates through an OOMOL-connected Airbrake account, so granted Airbrake scopes determine what the agent can access. <br>
-Mitigation: Install it only for intended Airbrake use, review granted scopes, and keep the Airbrake connection limited to the access the workflow requires. <br>
-Risk: Actions marked write or destructive could change Airbrake state if run with an incorrect payload or target. <br>
-Mitigation: Inspect the live connector schema before building payloads and require explicit user confirmation before any action marked write or destructive. <br>
+## Use Case:
 
+Developers and support teams use the skill to inspect Airbrake projects, deploys, error groups, notices, and notice processing status from a connected account.
 
-## Reference(s): <br>
-- [Airbrake homepage](https://airbrake.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-airbrake) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides live schema inspection before connector actions and returns connector results as JSON when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill frontmatter) <br>
+Risk: The documented CLI installers execute downloaded code, and the supplied evidence does not verify those installers or the hosted implementation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve the CLI installation separately and use a verified release.
+
+Risk: Actions use the permissions of the connected Airbrake account through OOMOL-mediated access.
+
+Mitigation: Connect only an appropriately limited Airbrake account and understand that OOMOL mediates access.
+
+Risk: Automatic agent-skill synchronization may bring skill updates into use before they are reviewed.
+
+Mitigation: Consider disabling automatic agent-skill synchronization.
+
+## Reference(s):
+
+- [Airbrake API documentation](https://docs.airbrake.io/docs/devops-tools/api/)
+- [Airbrake](https://airbrake.io)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Guidance]
+
+**Output Format:** [Structured Airbrake data and concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results vary by the selected Airbrake read action.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

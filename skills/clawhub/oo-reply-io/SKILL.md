@@ -1,11 +1,11 @@
 ---
 name: oo-reply-io
-description: "Reply.io (reply.io). Use this skill for ANY Reply.io request — reading, creating, and updating data. Whenever a task involves Reply.io, use this skill instead of calling the API directly."
+description: "Reply.io (reply.io). Use this skill for ANY Reply.io request — reading, creating, updating, and deleting data. Whenever a task involves Reply.io, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Reply.io"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["reply_io"]
   icon: "https://static.oomol.com/logo/third-party/reply_io.svg"
 ---
@@ -43,7 +43,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `get_sequence` — Get a Reply.io sequence by ID.
 - `list_contacts` — List Reply.io contacts with optional pagination.
 - `list_sequences` — List Reply.io sequences with optional pagination and filters.
-- `pause_sequence` — Pause an active Reply.io sequence. [write]
+- `pause_sequence` — Pause an active Reply.io sequence. [destructive]
 - `start_sequence` — Start a paused or new Reply.io sequence. [write]
 - `update_contact` — Update a Reply.io contact by ID. [write]
 
@@ -76,11 +76,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Reply.io is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=reply_io
+  https://console.oomol.com/connections/reply_io
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Reply.io homepage: https://reply.io
+- API documentation: https://docs.reply.io/api-reference/authentication

@@ -1,43 +1,52 @@
-## Description: <br>
-Precoro (precoro.com). Use this skill for Precoro requests that read, create, or update data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read Precoro catalog items, purchase orders, suppliers, users, and warehouses through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to operate Precoro through the OOMOL CLI, including catalog, supplier, purchase order, user, and warehouse lookups. It also guides schema inspection and payload review before connector actions are run. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connector actions can access Precoro data through the user's OOMOL account, and future connector schemas may expose create, update, or delete operations. <br>
-Mitigation: Install only when this access is intended, inspect the live connector schema before each action, and review requested payloads before running state-changing actions. <br>
-Risk: The setup path includes installing and running the oo CLI. <br>
-Mitigation: Use trusted OOMOL CLI installation sources and avoid repeating authentication or connection setup unless a command fails with the matching error. <br>
+## Use Case:
 
+Procurement teams use this skill to look up Precoro catalog, purchase order, supplier, user, and warehouse information through their connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-precoro) <br>
-- [Precoro Homepage](https://precoro.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are expected as JSON containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Automatic CLI setup may execute unverified software, and automatic skill synchronization may make undisclosed changes to other agents.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and explicitly approve CLI setup, preferably installing a verified version yourself. Review or disable automatic synchronization using the documented controls; the downloaded installers were unavailable for inspection.
+
+## Reference(s):
+
+- [Precoro API documentation](https://help.precoro.com/using-api-in-precoro)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI synchronization controls](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+- [Precoro](https://precoro.com/)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Text]
+
+**Output Format:** [JSON data with natural-language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Precoro information available to the connected account.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

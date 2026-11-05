@@ -1,46 +1,56 @@
-## Description: <br>
-Affinda helps an agent read, create, and update Affinda data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Affinda to read, create, and update data through the connected OOMOL account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Affinda connector schemas, list or retrieve Affinda resources, and upload documents from URLs through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create documents in the connected Affinda account. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running document creation actions. <br>
-Risk: The skill depends on OOMOL CLI installation, sign-in, and an Affinda account connection with server-side credential injection. <br>
-Mitigation: Install or connect accounts only when the user trusts OOMOL and intends to let an agent operate the Affinda account. <br>
-Risk: Connector input or output contracts may change over time. <br>
-Mitigation: Inspect the live connector schema before constructing payloads for each action. <br>
+## Use Case:
 
+Agents handling Affinda tasks use this skill to inspect document types, documents, organizations, and workspaces; retrieve a document; or submit a document URL for parsing through a connected account.
 
-## Reference(s): <br>
-- [Affinda ClawHub listing](https://clawhub.ai/oomol/skills/oo-affinda) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Affinda homepage](https://www.affinda.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before action execution; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: Setup directs the agent to run downloaded software automatically; the remote installer behavior remains unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve a specific, verified CLI release before setup, including any skills it adds to other agents.
+
+Risk: The connected Affinda account can be used to submit document URLs for upload and parsing.
+
+Mitigation: Keep permissions limited and retain confirmation for uploads.
+
+## Reference(s):
+
+- [Affinda API documentation](https://docs.affinda.com/)
+- [Affinda homepage](https://www.affinda.com)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [Affinda skill release on ClawHub](https://clawhub.ai/oomol/skills/oo-affinda)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown instructions and oo CLI commands; Affinda connector responses in JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Document uploads change Affinda state and require confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

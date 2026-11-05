@@ -1,43 +1,56 @@
-## Description: <br>
-Operate Honeycomb through an OOMOL-connected account using the oo CLI connector for reading, creating, and updating Honeycomb data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the OOMOL-connected Honeycomb account to inspect datasets, boards, markers, validate access, and create markers.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to inspect Honeycomb schemas and run connector actions for datasets, boards, markers, and authentication status through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Marker creation changes Honeycomb state. <br>
-Mitigation: Confirm the exact marker payload and intended effect with the user before running write actions. <br>
-Risk: First-time setup can install the oo CLI or connect an OOMOL account. <br>
-Mitigation: Run setup commands only after an authentication, connection, or missing-command failure and only when the user trusts OOMOL for this integration. <br>
+## Use Case:
 
+People working with Honeycomb use this skill to inspect datasets and boards, validate account access, review markers, and create markers through their connected account.
 
-## Reference(s): <br>
-- [Honeycomb homepage](https://www.honeycomb.io/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub Honeycomb skill page](https://clawhub.ai/oomol/skills/oo-honeycomb) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, text, and JSON command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses schema-first connector calls and returns oo CLI JSON responses when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions run a downloaded CLI installer whose integrity and additional installation behavior have not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, prefer a verified release, and check what the installer adds before running it.
+
+Risk: Honeycomb requests and results pass through OOMOL, and the connected account uses an API key.
+
+Mitigation: Connect a suitably restricted API key and avoid granting broader access than the requested Honeycomb actions need.
+
+## Reference(s):
+
+- [Honeycomb](https://www.honeycomb.io/)
+- [Honeycomb API documentation](https://docs.honeycomb.io/api/)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands]
+
+**Output Format:** [JSON requests and results with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Marker creation changes Honeycomb data and requires confirmation of the exact action and payload.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

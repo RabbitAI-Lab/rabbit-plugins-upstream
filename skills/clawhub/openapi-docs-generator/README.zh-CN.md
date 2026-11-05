@@ -14,18 +14,18 @@ Validated demand: Backend and platform teams need practical help generating, imp
 
 ## 来源证据
 
-- csdn-search：[OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- csdn-search：[Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- github-issues：[Add OpenAPI Documentation Examples](https://github.com/nensii21/devlink/issues/252)
-- github-issues：[[FEAT] Generate dynamic interactive OpenAPI 3.1 documentation endpoint at /api-docs for REST integration](https://github.com/PRODHOSH/ossfolio/issues/577)
-- segmentfault-search：[HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search：[javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search：[typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search：[ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search：[答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
-- segmentfault-search：[OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
-- segmentfault-search：[答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
-- github-issues：[Make AWS HTTP API throttling configurable and cost-aware](https://github.com/haya-inc/hayasend/issues/44)
+- csdn-search：[OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=532eaf53aafb413595b7ed2ec4eaeb5c&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- github-issues：[S3: Jev/GLiDE synthetic-user comprehension pilot on frozen Stage 8A cards](https://github.com/parthganguly/chatsense/issues/38)
+- github-issues：[Assess why assembled context bytes differ from catalog blob bytes by a fixed overhead](https://github.com/PerishLab/santi/issues/281)
+- github-issues：[Request for publisher guidance after repeated-template rejection of task-specific Skills](https://github.com/openclaw/clawhub/issues/4067)
+- hacker-news-search：[Nvidia – open-source auto-ontology](https://news.ycombinator.com/item?id=50354084)
+- hacker-news-search：[Ask HN: Who wants to be hired? (November 2026)](https://news.ycombinator.com/item?id=50340463)
+- hacker-news-search：[Images 2.6](https://news.ycombinator.com/item?id=50373429)
+- hacker-news-search：[Images 2.6](https://news.ycombinator.com/item?id=50374424)
+- hacker-news-search：[Images 2.6](https://news.ycombinator.com/item?id=50373156)
+- hacker-news-search：[GPT-6.1 Terra](https://news.ycombinator.com/item?id=50250270)
+- hacker-news-search：[OpenAI CLI](https://news.ycombinator.com/item?id=50195637)
+- github-issues：[Crate hygiene B1: the system-model ADR, the IDE on the model's handler kinds, then bynk-model](https://github.com/bynk-lang/bynk/issues/2939)
 
 ## 这个技能如何满足需求
 

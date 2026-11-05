@@ -1,42 +1,60 @@
-## Description: <br>
-This skill lets an agent operate Adafruit IO through an OOMOL-connected account for reading feed/account data and creating feed data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Adafruit IO (io.adafruit.com). Use this skill for ANY Adafruit IO request — reading, creating, and updating data. Whenever a task involves Adafruit IO, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and automation users use this skill to operate Adafruit IO through an OOMOL-connected account, including account lookup, feed discovery, feed inspection, feed data retrieval, and confirmed creation of feed data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create new Adafruit IO feed data through the connected account. <br>
-Mitigation: Confirm the feed, value, and expected effect with the user before approving write actions such as create_feed_data. <br>
-Risk: The skill depends on a signed-in OOMOL account with an active Adafruit IO connection. <br>
-Mitigation: Run setup or reconnection steps only after an action fails with an authentication, missing-scope, expired-credential, app, or billing error. <br>
+## Use Case:
 
+Developers use this skill to read Adafruit IO feeds and account information, and to create feed data through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Adafruit IO](https://io.adafruit.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-adafruit-io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions may return JSON data from Adafruit IO through the OOMOL oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup downloads and executes installer code whose exact contents have not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a verified CLI release before use.
+
+Risk: CLI installation or synchronization can make persistent agent-skill changes.
+
+Mitigation: Decide whether automatic installation and synchronization are acceptable, and disable synchronization if unwanted.
+
+Risk: Feed-data creation changes Adafruit IO state.
+
+Mitigation: Confirm the exact write payload and its effect with the user before running the action.
+
+## Reference(s):
+
+- [Adafruit IO API documentation](https://io.adafruit.com/api/docs/)
+- [Adafruit IO](https://io.adafruit.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub release](https://clawhub.ai/oomol/skills/oo-adafruit-io)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Text, Guidance]
+
+**Output Format:** [JSON action payloads and Adafruit IO results, with Markdown usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill supports read actions and feed-data creation; write actions require confirmation of the exact payload and effect.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

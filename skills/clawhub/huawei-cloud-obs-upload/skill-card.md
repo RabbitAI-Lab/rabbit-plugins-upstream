@@ -1,54 +1,64 @@
-## Description: <br>
-Upload local files or directories to Huawei Cloud OBS buckets, list buckets with capacity and object count, and schedule periodic uploads via crontab. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Upload local files or directories to a specified Huawei Cloud OBS bucket, schedule recurring uploads, and list bucket capacity and object counts.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to manage Huawei Cloud OBS object storage from an agent workflow: listing buckets with storage statistics, uploading local files or directories, and setting up recurring uploads when requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can help create persistent scheduled uploads through crontab or Task Scheduler. <br>
-Mitigation: Review the local path, target bucket, schedule, generated script, and scheduled-task entry before enabling it; back up existing scheduled tasks and remove the entry when it is no longer needed. <br>
-Risk: Huawei Cloud AK/SK credentials could be exposed or over-scoped if configured carelessly. <br>
-Mitigation: Use interactive configuration or protected environment variables, avoid pasting AK/SK into chat, and use least-privilege bucket-scoped permissions without delete access. <br>
-Risk: Incorrect bucket, region, or path choices could upload data to the wrong OBS location. <br>
-Mitigation: Require the user to provide region, bucket, and local path explicitly, then verify the resolved command and upload result before relying on the workflow. <br>
+## Use Case:
 
+Cloud developers and operators use this skill to inspect OBS bucket storage statistics, upload user-selected local content, or configure recurring uploads to a specified bucket.
 
-## Reference(s): <br>
-- [Task 1: List Buckets with Capacity and Object Count](references/task-list-buckets-with-stats.md) <br>
-- [Task 2: Upload File or Directory](references/task-upload-file.md) <br>
-- [Task 3: Scheduled Upload](references/task-scheduled-upload.md) <br>
-- [Related APIs](references/related-apis.md) <br>
-- [IAM Permission Policies](references/iam-policies.md) <br>
-- [OBS CES Monitoring Metrics Reference](references/obs-metrics.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [CLI Installation Guide](references/cli-installation-guide.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
-- [Huawei Cloud OBS API Reference](https://support.huaweicloud.com/api-obs/obs_04_0001.html) <br>
-- [Huawei Cloud obsutil Documentation](https://support.huaweicloud.com/utiltg-obs/obs_11_0001.html) <br>
-- [Huawei Cloud CES ShowMetricData API](https://support.huaweicloud.com/api-ces/ces_03_0059.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local shell commands, OBS CLI commands, crontab entries, and verification steps for review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Scheduled-upload cleanup may remove unrelated scheduled jobs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before enabling recurring uploads, inspect and back up the scheduled-task configuration, remove only the exact approved job, and stop if the configuration cannot be read.
+
+Risk: The documented permissions may be broader than needed and may include deletion despite claims that deletion is disallowed.
+
+Mitigation: Review the IAM policy and scope it to the required bucket and list, read, and upload actions; omit deletion permissions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-obs-upload)
+- [Acceptance criteria](artifact/references/acceptance-criteria.md)
+- [CLI installation guide](artifact/references/cli-installation-guide.md)
+- [IAM policies](artifact/references/iam-policies.md)
+- [OBS metrics](artifact/references/obs-metrics.md)
+- [Related APIs](artifact/references/related-apis.md)
+- [List buckets with stats](artifact/references/task-list-buckets-with-stats.md)
+- [Scheduled uploads](artifact/references/task-scheduled-upload.md)
+- [Upload files](artifact/references/task-upload-file.md)
+- [Troubleshooting](artifact/references/troubleshooting.md)
+- [Verification method](artifact/references/verification-method.md)
+- [Related bucket creation skill (out of scope)](https://skills.huaweicloud.com/detail/huawei-cloud-obs-bucket-create)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with tables and inline shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No fixed token or output-size limits are specified.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

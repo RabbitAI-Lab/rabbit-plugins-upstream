@@ -1,43 +1,54 @@
-## Description: <br>
-Gorgias (gorgias.com). Use this skill for Gorgias searching and read-only data retrieval through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gorgias (gorgias.com). Use this skill for ANY Gorgias request — searching and reading data. Whenever a task involves Gorgias, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Gorgias account, ticket, customer, tag, and user data through OOMOL's Gorgias connector. The skill is intended for read/search workflows and directs agents to inspect live connector schemas before running actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can retrieve sensitive Gorgias ticket, customer, account, tag, and user data from a connected account. <br>
-Mitigation: Treat lookup results as sensitive, confirm ambiguous requests before running them, and install only when the user intends to allow read access through OOMOL. <br>
-Risk: Setup commands and authentication flows can change the user's local CLI state or connect an external account. <br>
-Mitigation: Run the CLI installer, authentication flow, or connection URL only when setup is explicitly chosen or when a matching command failure requires it. <br>
+## Use Case:
 
+Support and operations teams can use this skill to retrieve Gorgias account, ticket, customer, tag, and user information through a connected Gorgias account.
 
-## Reference(s): <br>
-- [ClawHub Gorgias Skill](https://clawhub.ai/oomol/skills/oo-gorgias) <br>
-- [Gorgias Homepage](https://www.gorgias.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server-resolved release metadata and skill frontmatter) <br>
+Risk: First-time setup may run a downloaded CLI installer, and the remote installers were unavailable for inspection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval before running an installer; preferably install a reviewed, version-pinned CLI yourself.
+
+Risk: Connecting Gorgias authorizes OOMOL to mediate access to private helpdesk data.
+
+Mitigation: Connect only the intended Gorgias account and review what data the connected account makes available.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Gorgias API documentation](https://developers.gorgias.com/reference/introduction)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON action results and Markdown guidance with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented Gorgias account and helpdesk data]
+
+## Skill Version(s):
+
+1.0.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

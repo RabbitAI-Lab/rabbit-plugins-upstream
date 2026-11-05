@@ -1,41 +1,56 @@
-## Description: <br>
-Search and read UK Energy Performance Certificate data through OOMOL's energy_performance_certificates connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches and retrieves UK Energy Performance Certificate records through the connected OOMOL account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve full certificate details by certificate number and search domestic, non-domestic, or display Energy Performance Certificates through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queries may include property-related identifiers or filters sent to the OOMOL connector. <br>
-Mitigation: Use the skill only for intended certificate lookups and searches, and confirm sensitive query details with the user before execution. <br>
-Risk: First-time setup may require installing or authenticating the oo CLI. <br>
-Mitigation: Verify the oo CLI install source and run setup or authentication only after a command fails for that reason. <br>
+## Use Case:
 
+Users can search domestic, non-domestic, and public-building certificates, or retrieve a certificate by number, through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Energy Performance Certificates homepage](https://get-energy-performance-data.communities.gov.uk) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only certificate lookup and search actions; connector responses include data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Automatic setup executes downloaded code whose contents and exact installed-release behavior are unverified, without a clear approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup first; prefer an independently verified, version-pinned CLI installation and explicitly approve its system changes.
+
+Risk: Certificate requests pass through OOMOL.
+
+Mitigation: Consider whether the request details are appropriate to send through OOMOL before using the skill.
+
+## Reference(s):
+
+- [Energy Performance Certificates service](https://get-energy-performance-data.communities.gov.uk)
+- [API technical documentation](https://get-energy-performance-data.communities.gov.uk/api-technical-documentation)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI command reference](https://raw.githubusercontent.com/oomol-lab/oo-cli/main/docs/commands.md)
+
+## Skill Output:
+
+**Output Type(s):** [API data, JSON, Text]
+
+**Output Format:** [JSON certificate records with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns certificate search results or details for the requested action.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

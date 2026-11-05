@@ -1,41 +1,53 @@
-## Description: <br>
-This skill helps students create personalized 30-day study plans, execution check-ins, parent-facing dashboards, and exam-prep schedules from their stated goals and authorized learning-profile data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+把学习目标拆成可执行的30天方案（小学高段用周计划版），并在学生开启后跟进执行偏差。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and guardians use this skill to turn learning goals, weak areas, time constraints, and authorized learning-profile summaries into practical study plans, weekly adjustment prompts, printable family dashboards, and exam-prep schedules. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose sensitive student learning-profile, emotional-profile, or progress details in parent-facing outputs. <br>
-Mitigation: Use parent-facing dashboards only with clear student and guardian consent, and avoid emotional or diagnostic summaries unless there is explicit agreement and a real need. <br>
-Risk: Plans based on historical learning data may overstate what a student can complete or create pressure through family monitoring. <br>
-Mitigation: Confirm time limits with the student, preserve the skill's iteration step before execution, and frame family dashboard guidance as supportive actions rather than performance judgment. <br>
+## Use Case:
 
+Students use this skill to turn learning goals, available study time, and (when separately authorized) learning summaries into a practical weekly or 30-day schedule. It can also track progress and prepare a task-only family dashboard when the student consents.
 
-## Reference(s): <br>
-- [Plan Templates](references/plan-templates.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-learning-plan) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and structured text plans] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces study-plan schedules, learning-profile analyses, weekly review prompts, parent dashboard text, and exam-prep guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The planner has conflicting rules about children's learning records and what parents may see, which may lead to inappropriate access or disclosure.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep profile reading and parent dashboards disabled until the publisher reconciles the data-access and emotional-content rules. Build ordinary plans from information provided in the current conversation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-learning-plan)
+- [Plan templates](references/plan-templates.md)
+- [Grade bands and planning limits](shared/grade-bands.md)
+- [Consent and data-sharing terms](shared/vocab.md)
+- [Crisis exception protocol](shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Chinese text with schedules, Markdown tables, and progress summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Personalized weekly or 30-day study tasks; optional progress tracking and consent-gated family dashboard.]
+
+## Skill Version(s):
+
+2.12.5 (source: SKILL.md frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/neon-postgres",
   "slug": "neon-postgres",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778993554050,
-  "contentHash": "a1e94c6a5356dc2909258f350abb906ca625e4175acf4b95a8baf5e9c10f4285",
-  "fetchedAt": "2026-07-26T19:07:38.425Z"
+  "version": "1.0.7",
+  "updatedAt": 1793836705575,
+  "contentHash": "a9d2da65dd67c8a145c80e076908786a0671d1f907e98f50d0151fe8e576b35d",
+  "fetchedAt": "2026-11-05T15:41:29.423Z"
 }

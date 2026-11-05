@@ -1,41 +1,54 @@
-## Description: <br>
-康奈尔笔记 helps students convert classroom notes into Cornell-format cue questions, concise summaries, searchable note records, and consent-based study prompts for review, wrong-answer analysis, and Feynman testing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Organizes classroom notes into Cornell-style cues, notes, and summaries, then archives and retrieves them by subject and topic.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External students and tutoring agents use this skill to organize photographed or pasted classroom notes into Cornell-note study material, store consent-based study memory, retrieve related notes, and generate review prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may remember and reuse uploaded class notes, generated summaries, keywords, links to other notes, and retrieval history. <br>
-Mitigation: Use the skill only when this study-memory behavior is acceptable, and rely on platform controls to disable or delete saved note data when needed. <br>
-Risk: Photo-based note extraction depends on multimodal vision or OCR capability and may be unavailable or inaccurate. <br>
-Mitigation: Ask the student to confirm recognized subject and topic details, and fall back to pasted or manually entered note text when image recognition is not available. <br>
+## Use Case:
 
+Students use the skill to turn class notes into Cornell-style study notes, organize them by subject and topic, and retrieve related notes when reviewing. With the archive enabled and the student's permission, it can also summarize note usage.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cornell-notes) <br>
-- [cornell-format-guide.md](references/cornell-format-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and conversational text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cue questions, short summaries, keyword tags, related-note prompts, and note-health report sections.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server release evidence and frontmatter) <br>
+Risk: The optional archive may retain children's notes and usage counts on the host platform.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the host's storage and deletion behavior before uploading children's information; use “这次不要记忆” for session-only use or “删除我的笔记” to remove saved notes.
+
+Risk: Reference guidance may conflict with the main skill's limits on retaining recall states and creating retest reminders.
+
+Mitigation: Follow the main skill rules: keep recall states within the current session and send reminders only with the student's consent.
+
+## Reference(s):
+
+- [Cornell note format guide](artifact/references/cornell-format-guide.md)
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cornell-notes)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language Cornell-style notes, cue questions, summaries, retrieval results, and usage reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Archive and cross-skill summaries depend on host platform capabilities and user consent; recall status is session-only.]
+
+## Skill Version(s):
+
+2.12.5 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

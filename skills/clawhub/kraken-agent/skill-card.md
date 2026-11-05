@@ -1,44 +1,55 @@
-## Description: <br>
-Guides agents through discovering and using the official Kraken CLI for market data, paper trading, MCP integration, and optional authenticated trading workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover and use the official Kraken CLI — an AI-native trading tool for crypto, stocks, forex, and derivatives. Use when the user explicitly asks about Kraken specifically: setting up a Kraken trading agent, Kraken paper trading, Kraken market data, or connecting to the Kraken API via MCP. Trigger phrases: kraken cli, kraken mcp, kraken paper trading, kraken market data, kraken trading agent. Does NOT cover generic crypto or trading requests that are not Kraken-specific.
 
-## Publisher: <br>
-[djc00p](https://clawhub.ai/user/djc00p) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[djc00p](https://clawhub.ai/user/djc00p)
 
-## Use Case: <br>
-Developers and agents use this skill to set up Kraken CLI workflows for live market data, paper trading, and MCP client configuration. Users can also follow the credential guidance when enabling authenticated Kraken API access for live trading. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Live trading or broad MCP scopes can expose account actions that may have financial impact. <br>
-Mitigation: Start with paper trading or market,paper MCP scope, and enable account or live trading tools only when they are explicitly needed. <br>
-Risk: Kraken API credentials can grant sensitive account access if over-permissioned or exposed. <br>
-Mitigation: Use least-privilege Kraken API keys and prefer the documented setup or environment-variable flows instead of passing secrets directly in shell commands. <br>
-Risk: The skill points users to an external CLI maintained outside this skill artifact. <br>
-Mitigation: Install from the official Kraken CLI documentation and review the CLI behavior before using it in production workflows. <br>
+## Use Case:
 
+Developers and users working with Kraken use this skill to access market data, set up paper trading, and configure Kraken CLI or MCP workflows. Account-connected and live trading workflows require explicit user approval because they can place real orders and lose funds.
 
-## Reference(s): <br>
-- [Kraken CLI repository](https://github.com/krakenfx/kraken-cli) <br>
-- [Kraken CLI installation instructions](https://github.com/krakenfx/kraken-cli#installation) <br>
-- [Kraken](https://www.kraken.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; no bundled executable code.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Authenticated Kraken commands and live order workflows can place real trades and lose real funds.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with credential-free paper trading and market/paper MCP scope. Before account access, restrict API permissions and retain explicit approval for each live trade.
+
+Risk: Trading API credentials grant sensitive access to the account's trading balance.
+
+Mitigation: Prefer the CLI's setup flow, keep credentials out of shell history and committed files, limit key permissions, and rotate any key exposed in logs, chats, or commits.
+
+## Reference(s):
+
+- [Kraken CLI repository](https://github.com/krakenfx/kraken-cli)
+- [Kraken CLI installation instructions](https://github.com/krakenfx/kraken-cli#installation)
+- [Kraken](https://www.kraken.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.4 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

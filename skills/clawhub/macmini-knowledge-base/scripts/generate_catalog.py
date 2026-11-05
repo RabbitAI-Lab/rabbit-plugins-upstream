@@ -6,12 +6,15 @@
 import os
 import json
 import glob
+import sys
 import time
 import pymupdf
 import docx
 import openpyxl
 import pptx
 import re as re_module
+from knowledge_policy import scan_files
+from utils import rel_key
 from utils import (
     load_cache, save_cache,
     load_progress, save_progress,
@@ -79,8 +82,9 @@ def extract_full_text(filepath):
                 finally:
                     try:
                         os.remove(converted)
-                    except:
-                        pass
+                    except OSError as e:
+                        # 临时文件清理失败：记录以便排查残留（不再静默吞掉）
+                        print(f"[临时文件清理失败] {converted}: {e}", file=sys.stderr)
             return ""
 
         elif ext == ".docx":
@@ -95,8 +99,9 @@ def extract_full_text(filepath):
                 finally:
                     try:
                         os.remove(converted)
-                    except:
-                        pass
+                    except OSError as e:
+                        # 临时文件清理失败：记录以便排查残留（不再静默吞掉）
+                        print(f"[临时文件清理失败] {converted}: {e}", file=sys.stderr)
             return ""
 
         elif ext == ".xlsx":
@@ -111,8 +116,9 @@ def extract_full_text(filepath):
                 finally:
                     try:
                         os.remove(converted)
-                    except:
-                        pass
+                    except OSError as e:
+                        # 临时文件清理失败：记录以便排查残留（不再静默吞掉）
+                        print(f"[临时文件清理失败] {converted}: {e}", file=sys.stderr)
             return ""
 
         elif ext == ".pptx":
@@ -152,8 +158,9 @@ def extract_tags(filepath):
                     return extract_pdf_via_ocr(filepath)
                 found = list(set(kw for kw in KEYWORDS if kw in text))
                 return "、".join(found[:3]) if found else "待提取"
-        except:
-            pass
+        except Exception as e:
+            # 记录原始异常与源文件路径后再降级到 OCR（不再静默吞掉）
+            print(f"[PDF 提取失败] {filepath}: {type(e).__name__}: {e}", file=sys.stderr)
         return extract_pdf_via_ocr(filepath)
 
     # .doc: 三级降级处理
@@ -171,8 +178,9 @@ def extract_tags(filepath):
                 found = list(set(kw for kw in KEYWORDS if kw in text))
                 if found:
                     return "、".join(found[:3])
-        except:
-            pass
+        except Exception as e:
+            # 记录原始异常后再降级到 LibreOffice（不再静默吞掉）
+            print(f"[DOC 提取失败] {filepath}: {type(e).__name__}: {e}", file=sys.stderr)
         
         # 第二级：LibreOffice 渐进式转换（对付复杂格式）
         success, converted = convert_old_office(filepath, ext)
@@ -185,8 +193,9 @@ def extract_tags(filepath):
             finally:
                 try:
                     os.remove(converted)
-                except:
-                    pass
+                except OSError as e:
+                    # 临时文件清理失败：记录以便排查残留（不再静默吞掉）
+                    print(f"[临时文件清理失败] {converted}: {e}", file=sys.stderr)
         return "待提取"
 
     if ext == ".docx":
@@ -208,8 +217,9 @@ def extract_tags(filepath):
             finally:
                 try:
                     os.remove(converted)
-                except:
-                    pass
+                except OSError as e:
+                    # 临时文件清理失败：记录以便排查残留（不再静默吞掉）
+                    print(f"[临时文件清理失败] {converted}: {e}", file=sys.stderr)
         return "待提取"
 
     if ext == ".xlsx":
@@ -231,8 +241,9 @@ def extract_tags(filepath):
             finally:
                 try:
                     os.remove(converted)
-                except:
-                    pass
+                except OSError as e:
+                    # 临时文件清理失败：记录以便排查残留（不再静默吞掉）
+                    print(f"[临时文件清理失败] {converted}: {e}", file=sys.stderr)
         return "待提取"
 
     if ext == ".pptx":
@@ -263,18 +274,12 @@ def extract_tags(filepath):
 
 # ============== 文件扫描（独立保留）==============
 def get_all_files():
-    """扫描知识库所有支持的文件"""
-    patterns = [
-        "**/*.pdf", "**/*.doc", "**/*.docx",
-        "**/*.xls", "**/*.xlsx", "**/*.ppt", "**/*.pptx",
-        "**/*.md", "**/*.csv", "**/*.txt"
-    ]
-    files = []
-    for pattern in patterns:
-        for f in glob.glob(os.path.join(KNOWLEDGE_DIR, pattern), recursive=True):
-            if ".analysis" not in f and ".interpret" not in f and ".storage" not in f:
-                files.append(f)
-    return files
+    """扫描知识库中允许进入目录索引的文件。
+
+    扫描范围与 run_analysis.py 共用同一份白名单（knowledge_policy.py），
+    在 glob 层按目录限定 —— 新增文件夹不会进入索引。
+    """
+    return scan_files(KNOWLEDGE_DIR)
 
 
 # ============== 主流程（保持不变）==============
@@ -285,7 +290,10 @@ def main():
     total_start = time.time()
 
     for filepath in all_files:
-        filename = os.path.basename(filepath)
+        # 缓存键用相对路径：basename 会让不同目录下的同名文件互相顶替，
+        # 导致目录索引指向错误的文档（与 analysis_state 同一根因）。
+        filename = rel_key(filepath)
+        display = os.path.basename(filepath)
 
         # 超时检测
         if time.time() - total_start > BATCH_TIMEOUT:
@@ -299,10 +307,10 @@ def main():
             continue
         # 无法提取的文件不再重试
         if tags == "无法提取":
-            print(f"  跳过（无法提取）: {filename}")
+            print(f"  跳过（无法提取）: {display}")
             continue
 
-        print(f"  提取标签: {filename}")
+        print(f"  提取标签: {display}")
         tag = extract_tags(filepath)
         cache[filename] = {
             "tags": tag,

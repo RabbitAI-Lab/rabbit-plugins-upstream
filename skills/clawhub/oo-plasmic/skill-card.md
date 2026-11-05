@@ -1,43 +1,55 @@
-## Description: <br>
-Plasmic (plasmic.app). Use this skill for searching and reading Plasmic CMS data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Plasmic (plasmic.app). Use this skill for ANY Plasmic request — searching and reading data. Whenever a task involves Plasmic, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and content operators use this skill to inspect the live Plasmic connector schema, list Plasmic CMS rows, and count matching CMS rows with filters, draft mode, and locale selection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL's oo CLI and a connected Plasmic account, so commands can fail when the CLI is missing, authentication is stale, connection scope is missing, or billing is blocked. <br>
-Mitigation: Install only when OOMOL oo CLI and Plasmic access are intended; use the setup fallback only after an auth, connection, or billing failure. <br>
-Risk: Broad Plasmic requests could be mistaken for permission to edit or administer Plasmic content beyond the listed read actions. <br>
-Mitigation: Treat the skill as appropriate for listing and counting CMS items; require explicit user confirmation and verify the live action schema before any edit, delete, or broader administration action. <br>
+## Use Case:
 
+Developers and content teams use the skill to count and list Plasmic CMS items through an OOMOL-connected account, with query filters, draft mode, and locale options where supported.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-plasmic) <br>
-- [Plasmic Homepage](https://www.plasmic.app) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live connector schema before constructing payloads; read actions can be run directly, while write or destructive actions require explicit confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: First-time CLI setup can execute downloaded code and may introduce persistent agent changes without a clear approval step; remote installer behavior is unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, use an inspected and verified release, and consider OO_SKILLS_SYNC_DISABLED to prevent automatic skill synchronization.
+
+Risk: The connected Plasmic account may grant broader access than the read-only count and list actions require.
+
+Mitigation: Connect only the Plasmic account and permissions needed for the requested reads.
+
+## Reference(s):
+
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Plasmic CMS API reference](https://docs.plasmic.app/learn/plasmic-cms-api-reference/)
+- [Plasmic](https://www.plasmic.app)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text]
+
+**Output Format:** [Structured Plasmic CMS query results in JSON, with command guidance in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only item counts and lists; results depend on the connected Plasmic account and query inputs.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

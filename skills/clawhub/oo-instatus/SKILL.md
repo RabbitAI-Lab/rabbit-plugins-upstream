@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Instatus"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["instatus"]
   icon: "https://static.oomol.com/logo/third-party/instatus.svg"
 ---
@@ -45,7 +45,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `delete_incident_update` — Delete one Instatus incident update by ID. [destructive]
 - `get_component` — Get one Instatus component by ID.
 - `get_incident` — Get one Instatus incident by ID.
-- `get_incident_update` — Get one Instatus incident update by ID. [write]
+- `get_incident_update` — Get one Instatus incident update by ID.
 - `list_components` — List components on an Instatus status page.
 - `list_incidents` — List incidents on an Instatus status page.
 - `list_status_pages` — List Instatus status pages in the authenticated account.
@@ -82,11 +82,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Instatus is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=instatus
+  https://console.oomol.com/connections/instatus
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Instatus homepage: https://instatus.com
+- API documentation: https://instatus.com/help/api

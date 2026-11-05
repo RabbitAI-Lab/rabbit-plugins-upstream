@@ -1,43 +1,52 @@
-## Description: <br>
-Workiom lets an agent operate a connected Workiom workspace to inspect apps, lists, metadata, fields, views, filters, and records, and to create records with schema-checked payloads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill lets agents inspect Workiom apps, lists, metadata, and records, and create records through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent query Workiom apps, lists, metadata, and records through an OOMOL-connected account. For record creation, the agent should inspect the live connector schema and confirm the exact payload and effect before running the write action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A record-creation command could change Workiom workspace data if the payload is wrong or unintended. <br>
-Mitigation: Fetch the live connector schema, show the exact create_record payload and expected effect, and get user confirmation before running the write action. <br>
-Risk: First-time oo CLI installation or authentication expands local and account trust. <br>
-Mitigation: Treat CLI installation and OOMOL sign-in as separate trust decisions, and only perform setup after a command fails for a matching install, auth, or connection reason. <br>
+## Use Case:
 
+People using Workiom can ask an agent to inspect connected apps, lists, metadata, and records, or create a record. The skill guides the agent to check the action schema first and obtain confirmation before writes.
 
-## Reference(s): <br>
-- [ClawHub Workiom Skill](https://clawhub.ai/oomol/skills/oo-workiom) <br>
-- [Workiom Homepage](https://workiom.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON payloads, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; write actions require confirmation of the exact payload and effect.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The automated setup path can execute downloaded code without separate approval or clearly explaining broader local changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and verify a fixed CLI release separately, review or disable automatic skill synchronization, connect only the Workiom access needed, and retain approval for writes.
+
+## Reference(s):
+
+- [Workiom](https://workiom.com)
+- [Workiom API Guide](https://help.workiom.com/article/workiom-api-guide)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown instructions with shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill checks action schemas before constructing requests; writes require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

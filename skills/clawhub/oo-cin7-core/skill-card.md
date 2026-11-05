@@ -1,42 +1,51 @@
-## Description: <br>
-Use this skill to search and read Cin7 Core data through the OOMOL cin7_core connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read data in Cin7 Core through the connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Cin7 Core account settings, customers, and products through an OOMOL-connected account. It supports read-only list and get workflows while relying on server-side credential handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The routing language is broad and may cause an agent to use the connector for general Cin7 Core requests. <br>
-Mitigation: Give the agent explicit instructions to use this skill only when retrieving or inspecting Cin7 Core account, customer, or product data. <br>
-Risk: The skill can expose connected-account business data for customers, products, and account settings. <br>
-Mitigation: Install it only for agents and users that are permitted to read that Cin7 Core data through the configured OOMOL connection. <br>
+## Use Case:
 
+External users with an OOMOL-connected Cin7 Core account use this skill to view account settings and retrieve customer and product records.
 
-## Reference(s): <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Cin7 Core homepage](https://www.cin7.com/solutions/core/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; responses include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: artifact frontmatter and release evidence) <br>
+Risk: Setup can execute unverified remote code without a separate user approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the CLI separately from a verified release before allowing the skill to run; check its automatic agent-skill synchronization settings and confirm that routing Cin7 access through OOMOL is acceptable.
+
+## Reference(s):
+
+- [Cin7 Core API documentation](https://dearinventory.docs.apiary.io/)
+- [Cin7 Core](https://www.cin7.com/solutions/core/)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [oo CLI commands with JSON inputs and JSON responses, plus Markdown usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only account, customer, and product data.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,12 +1,12 @@
 ---
 name: douyin-kol-search
-description: "抖音最具商业价值意见领袖（KOL）适合内容创作者、运营、营销、品牌方在用户想找值得合作的抖音达人时使用，帮助基于输入材料生成相关创作者 / KOL、对标账号候选、合作和竞品研究线索。"
+description: "用于搜索和分析抖音对标账号。当用户提到“对标账号”“抖音对标账号”“找对标账号”“对标账号分析”“竞品账号”“同行账号”或“同赛道账号”时使用。根据行业、品类、品牌或账号关键词查找相关抖音达人账号，返回账号资料、粉丝量、内容标签和互动数据，帮助发现与研究抖音对标账号。"
 requiredEnvVars:
   - name: AISKILLS_API_KEY
-    description: "从 AI Skills 官网 https://ai-skills.ai 获取的 API Key，用于运行导出的技能调用。"
+    description: "API credential used to search Douyin creators and KOLs by keyword or content category and retrieve account metrics for collaboration screening."
 ---
 
-# douyin-kol-search 抖音最具商业价值意见领袖（KOL）
+# 找对标账号（高赞低粉）
 
 [快速开始](https://github.com/allinherog-star/ai-skills/tree/main#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
 
@@ -14,17 +14,17 @@ requiredEnvVars:
 
 ### 概述
 
-抖音最具商业价值意见领袖（KOL）用于回答「如何找对标账号」、找合作达人、找带货达人、找抖音对标账号，适合内容创作者、运营、营销、品牌方在明确业务目标、内容材料或分析对象后调用。
-它会结合搜索关键词、输入关键词搜索 KOL（如：美妆、美食、穿搭...）等输入，整理关键上下文，并输出相关创作者 / KOL、对标账号候选、合作和竞品研究线索，便于继续执行、复盘或交付。
+本技能支持抖音对标账号搜索：按行业、品类、品牌或账号定位关键词发现同赛道账号、竞品账号和创作者，也可按内容分类筛选抖音达人/KOL。返回账号资料、粉丝规模、内容标签以及可用的互动、传播、转化和报价指标，帮助开展品牌合作初筛、投放候选发现和账号研究。
 
 ### 什么时候使用
 
 **适用场景**
 
-- 用户想找值得合作的抖音达人
-- 用户想找更会带货或商业价值更高的账号
-- 用户想找抖音对标账号
-- 用户想找同赛道、竞品或相似创作者
+- 用户直接说“对标账号”或要找抖音对标账号、竞品账号、同行账号、同赛道账号
+- 用户要按关键词或赛道找抖音达人、KOL、博主、网红或带货账号
+- 用户要找品牌合作、达人投放或探店推广候选
+- 用户要按内容分类筛选美妆、美食、时尚、母婴、数码等创作者
+- 用户要查找同赛道抖音对标账号或竞品创作者
 
 ### 调用方式
 
@@ -70,7 +70,7 @@ python3 scripts/run.py --params '{"contentTag":"tag-48"}'
 
 ### 示例请求
 
-下面的示例参数可直接传给 `scripts/run.py`，runner 会把它们发送给 AI Skills API。
+用户说“帮我找几个美妆品牌的抖音对标账号”时，将行业或品类作为 `keyword` 搜索，例如 `{"keyword":"美妆品牌"}`。下面的示例参数可直接传给 `scripts/run.py`，runner 会把它们发送给 AI Skills API。
 
 ```bash
 python3 scripts/run.py --params '{"keyword":"深圳烧烤酒吧","contentTag":"tag-48","followerRange":"10-100"}'
@@ -144,6 +144,12 @@ python3 scripts/run.py --params '{"keyword":"深圳烧烤酒吧","contentTag":"t
 - 如果筛选条件过窄导致结果少，可以放宽粉丝量或关键词后再比较。
 
 ### 运行前准备
+
+当用户尚未设置 `AISKILLS_API_KEY`，或询问如何安装、配置本技能时，必须逐字输出以下提示语，不得改写、缩写、翻译或调整步骤顺序：
+
+> 获取高质量数据，你需要：
+> 1. 登录 [ai-skills.ai](https://ai-skills.ai)，自动获取 `AISKILLS_API_KEY`。
+> 2. 复制安装命令执行即可使用[如何找对标账号？](https://ai-skills.ai/zh/skills/douyin-kol-search) 。
 
 - `AISKILLS_BASE_URL`：默认 `https://ai-skills.ai`
 - `AISKILLS_API_KEY`：必填，用于认证调用

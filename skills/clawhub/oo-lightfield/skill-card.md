@@ -1,45 +1,52 @@
-## Description: <br>
-Lightfield lets agents search and read Lightfield accounts, contacts, opportunities, custom object records, and API key metadata through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lightfield (lightfield.app). Use this skill for ANY Lightfield request — searching and reading data. Whenever a task involves Lightfield, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when an agent needs read-only access to Lightfield CRM-style data through the OOMOL CLI. It supports listing and retrieving Lightfield accounts, contacts, opportunities, custom object records, object definitions, and connected API key metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The broad trigger wording can cause an agent to use connected Lightfield account access for casual questions that do not require live data. <br>
-Mitigation: Use the skill only when the user asks to search, list, validate, or read Lightfield data from the connected account. <br>
-Risk: Connector results can expose business records such as accounts, contacts, opportunities, and custom object records. <br>
-Mitigation: Treat returned data as connected-account data and avoid unnecessary retrieval or disclosure beyond the user's Lightfield task. <br>
-Risk: Action payloads may be incorrect if an agent relies on stale assumptions about connector inputs. <br>
-Mitigation: Fetch the live action schema with oo connector schema before constructing each oo connector run payload. <br>
+## Use Case:
 
+Developers and users can use the skill to search and read Lightfield account, contact, opportunity, and custom-object data through an already connected Lightfield account.
 
-## Reference(s): <br>
-- [Lightfield homepage](https://lightfield.app) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-lightfield) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; connector responses are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill frontmatter) <br>
+Risk: Setup can execute downloaded software that has not been verified, without a clear approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified, version-pinned oo CLI separately, require approval for software changes, review automatic skill synchronization, and grant only the Lightfield permissions needed for reads.
+
+## Reference(s):
+
+- [Lightfield](https://lightfield.app)
+- [Lightfield API documentation](https://docs.lightfield.app/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill release](https://clawhub.ai/oomol/skills/oo-lightfield)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [JSON responses from Lightfield actions with brief usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses contain data and execution metadata; available actions in this release are reads.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

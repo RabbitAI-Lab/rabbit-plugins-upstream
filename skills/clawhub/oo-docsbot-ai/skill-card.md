@@ -1,41 +1,60 @@
-## Description: <br>
-DocsBot AI lets an agent search and read DocsBot AI data through the OOMOL docsbot_ai connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DocsBot AI (docsbot.ai). Use this skill for ANY DocsBot AI request — searching and reading data. Whenever a task involves DocsBot AI, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and other agent users use this skill to list DocsBot teams and bots, inspect team or bot details, run semantic searches, and fetch reconstructed document text from DocsBot AI through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: DocsBot searches and document fetches may expose DocsBot content to the agent. <br>
-Mitigation: Install and use the skill only for accounts and tasks where the agent is allowed to access the connected DocsBot content. <br>
-Risk: First-time setup may require installing or signing in to the oo CLI before DocsBot actions can run. <br>
-Mitigation: Complete setup only after an auth or connection failure, and avoid repeating one-time login or connection steps during normal use. <br>
+## Use Case:
 
+External users and developers use this agent skill to search DocsBot bots' trained source content and retrieve documents, teams, and bot details through their connected DocsBot account.
 
-## Reference(s): <br>
-- [DocsBot AI homepage](https://docsbot.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are read-oriented DocsBot AI results returned through the oo CLI as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Automatic setup executes unverified remote code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before enabling the skill and provision a reviewed, pinned oo CLI yourself.
+
+Risk: Startup synchronization can install additional agent skills.
+
+Mitigation: Decide whether to allow the additional installation; set OO_SKILLS_SYNC_DISABLED=1 to prevent startup skill synchronization.
+
+Risk: Requests pass through OOMOL and the live connector implementation was not verified.
+
+Mitigation: Connect only the intended DocsBot account and review the data handling path before use.
+
+## Reference(s):
+
+- [DocsBot AI](https://docsbot.ai)
+- [DocsBot developer documentation](https://docsbot.ai/documentation/developer)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI environment variables](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md#environment-variables)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [Natural-language answers and retrieved document text; connector responses are JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses depend on the connected DocsBot account and the data returned by its read and search actions.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter; server release 1.0.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

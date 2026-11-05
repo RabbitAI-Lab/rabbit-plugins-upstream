@@ -1,41 +1,54 @@
-## Description: <br>
-Generates personalized English listening practice materials matched to a learner's vocabulary, interests, and sticking points, with fallback guidance when audio or persistent memory features are unavailable. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+根据学习者的词汇水平和兴趣生成英语听力材料，并通过分步练习帮助定位理解障碍。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and English-learning assistants use this skill to create level-appropriate listening passages, comprehension checks, vocabulary notes, and follow-up coaching based on learner profiles and interests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read or update learner profiles, vocabulary records, listening history, reminders, and reports without clearly documented opt-in controls. <br>
-Mitigation: Review before installation, require explicit learner or guardian consent, and confirm how stored vocabulary, reminders, and progress history can be viewed, disabled, or deleted. <br>
-Risk: The skill's true listening workflow depends on audio generation, speed control, and persistent memory that may not be available in every agent environment. <br>
-Mitigation: Tell learners when audio or memory features are unavailable and use the documented text-based fallback only as a temporary comprehension exercise. <br>
+## Use Case:
 
+English learners use this skill to practice listening with passages matched to their vocabulary level and interests. It guides comprehension practice and helps identify whether difficulty comes from vocabulary, sentence structure, or listening speed.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-listening-trainer) <br>
-- [Listening topic templates and material generation guide](references/listening-topic-templates.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style tutoring responses with listening passages, vocabulary notes, comprehension questions, diagnostics, and progress summaries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May depend on platform TTS, speed control, learner-profile memory, and reminder capabilities.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Saved learning records may be handled differently by the host platform or companion skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check how student records are stored and deleted before enabling saved progress; use “这次不要记忆” for session-only practice.
+
+Risk: Younger students need guardian consent and adult supervision.
+
+Mitigation: For younger students, follow the documented guardian-consent requirement and have a parent or teacher present.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-listening-trainer)
+- [Listening Topic Templates](artifact/references/listening-topic-templates.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Conversational text with English listening passages, comprehension questions, vocabulary notes, and feedback]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Personalized to the learner's level and interests; may include session progress summaries.]
+
+## Skill Version(s):
+
+2.12.5 (source: evidence.json release, SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,60 @@
-## Description: <br>
-Provides Docker-based browser automation with Camoufox and OS-level input for authorized QA, compatibility testing, and defensive security research against systems the user owns or is permitted to test. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Headless-detection-resistant browser automation in Docker for authorized QA, compatibility testing, and defensive security research. Camoufox + OS-level input + persistent fingerprints. Use only with sites you own or have written authorization to test.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers, QA engineers, and defensive security testers use this skill to control a local browser automation service for authorized testing of anti-bot behavior, compatibility issues, and realistic browser workflows. It is intended for owned systems, in-scope security engagements, sanctioned staging environments, and controlled detection-library research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dual-use browser automation could be applied to unauthorized scraping, access-control evasion, or activity outside the approved test scope. <br>
-Mitigation: Use the skill only on systems the operator owns or has written permission to test, and keep test targets, accounts, and workflows explicitly scoped. <br>
-Risk: An exposed unauthenticated API or VNC viewer could give another party full control of the browser session. <br>
-Mitigation: Bind services to localhost, set AUTH_TOKEN, prefer Authorization headers over query-string tokens, and do not expose VNC beyond local debugging. <br>
-Risk: Page capture, screenshots, DOM inspection, cookies, storage, and logs can collect sensitive data from authorized targets. <br>
-Mitigation: Capture only what the approved test requires, use isolated test accounts, avoid persistent real session data, and remove mounted profile data after testing. <br>
-Risk: Automatic dialog acceptance or URL-triggered loaders can approve destructive actions or modify page state without fresh confirmation. <br>
-Mitigation: Disable or tightly scope dialog auto-accept before stateful workflows and mount only loader YAML that has been written or audited by the operator. <br>
+## Use Case:
 
+Developers, QA engineers, and security testers use the skill to check anti-bot and browser compatibility behavior in controlled environments. Use it only on systems they own or have written authorization to test.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/stealthy-auto-browse) <br>
-- [Setup reference](references/setup.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON action examples, YAML script examples, shell commands, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to issue HTTP or MCP browser actions; service responses can include JSON, page text, HTML, screenshots, recordings, cookies, storage, console logs, and network logs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.4 (source: server-resolved release evidence) <br>
+Risk: The recommended setup may require SYS_ADMIN, a broad system privilege.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the requirement, prefer a configuration without it, or use a dedicated disposable VM if it is necessary.
+
+Risk: An unauthenticated browser API or viewer exposed beyond localhost could allow full browser control.
+
+Mitigation: Enable authentication and keep the viewer local or behind an authenticating proxy.
+
+Risk: Browser dialogs and automatically loaded page scripts can change site state during a test.
+
+Mitigation: Use isolated test accounts, audit loaders before mounting them, and disable automatic dialog acceptance before state-changing tests.
+
+## Reference(s):
+
+- [Setup and configuration](references/setup.md)
+- [Project repository and documentation](https://github.com/psyb0t/docker-stealthy-auto-browse)
+- [API reference: humanized input](https://github.com/psyb0t/docker-stealthy-auto-browse/blob/main/docs/api.md#humanized-input)
+- [Script mode control flow](https://github.com/psyb0t/docker-stealthy-auto-browse/blob/main/docs/script-mode.md#control-flow)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Text, HTML, Images]
+
+**Output Format:** [JSON API requests and responses; extracted page text or HTML; screenshots]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The returned content depends on the requested browser action; capture only what the authorized test needs.]
+
+## Skill Version(s):
+
+3.3.1 (source: evidence.json release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

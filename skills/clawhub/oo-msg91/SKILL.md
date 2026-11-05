@@ -5,8 +5,9 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "MSG91"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.6"
   services: ["msg91"]
+  icon: "https://static.oomol.com/logo/third-party/msg91.svg"
 ---
 
 # MSG91
@@ -36,7 +37,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `resend_otp` — Resend an existing MSG91 OTP by text message or voice call.
+- `resend_otp` — Resend an existing MSG91 OTP by text message or voice call. [write]
 - `send_flow_sms` — Send an SMS through an approved MSG91 Flow template. [write]
 - `send_otp` — Generate or send an OTP with an MSG91 OTP template. [write]
 - `verify_otp` — Verify an OTP previously sent through MSG91.
@@ -70,11 +71,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — MSG91 is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=msg91
+  https://console.oomol.com/connections/msg91
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - MSG91 homepage: https://msg91.com
+- API documentation: https://docs.msg91.com/overview

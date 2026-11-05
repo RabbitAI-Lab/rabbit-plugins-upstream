@@ -1,12 +1,12 @@
 ---
 name: douyin-traffic-dashboard
-description: "抖音流量分配大盘适合内容创作者、运营、电商、营销在用户想知道抖音流量正在流向哪些方向时使用，帮助基于输入材料生成流量分布、分类层级结构、可用于内容布局的平台方向信号。"
+description: "查看抖音平台整体流量及热点在内容分类间的分布。当用户问“抖音流量集中在哪些赛道”“抖音各类内容流量占比”“哪些内容分类更热门”“抖音平台流量大盘/分类热度排行”，或需要平台级赛道观察时使用。返回分类名称、热点数量、热度占比和更新时间，帮助判断内容方向与赛道布局。"
 requiredEnvVars:
   - name: AISKILLS_API_KEY
-    description: "从 AI Skills 官网 https://ai-skills.ai 获取的 API Key，用于运行导出的技能调用。"
+    description: "API credential used to retrieve Douyin platform-level content category distribution, hot-topic counts, percentages, and update time."
 ---
 
-# douyin-traffic-dashboard 抖音流量分配大盘
+# 抖音流量分配大盘（拍什么有流量）
 
 [快速开始](https://github.com/allinherog-star/ai-skills/tree/main#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
 
@@ -14,16 +14,15 @@ requiredEnvVars:
 
 ### 概述
 
-抖音流量分配大盘用于回答「抖音平台流量在哪」、看流量分配、看分类占比、做赛道判断，适合内容创作者、运营、电商、营销在明确业务目标、内容材料或分析对象后调用。
-它会结合用户输入的业务背景和目标等输入，整理关键上下文，并输出流量分布、分类层级结构、可用于内容布局的平台方向信号，便于继续执行、复盘或交付。
+本技能查看抖音平台整体内容分类的热点分布，返回各分类名称、热点数量、占比和数据更新时间。适合平台级赛道观察、内容方向初筛与运营复盘；结果反映分类层面的整体数据，不代表某个账号或单条视频的表现。
 
 ### 什么时候使用
 
 **适用场景**
 
-- 用户想知道抖音流量正在流向哪些方向
-- 用户想看哪些内容分类正在获得更多流量
-- 用户需要平台级方向判断
+- 用户问「抖音流量现在集中在哪些内容赛道」「抖音各分类流量占比是多少」
+- 用户要比较抖音美食、体育、娱乐等内容分类的热点数量或热度占比
+- 用户需要查看抖音平台流量大盘、分类热度排行或进行赛道级内容布局
 
 ### 调用方式
 
@@ -116,6 +115,12 @@ python3 scripts/run.py --params '{}'
 - 可把分类结果继续用于筛选上升热点或规划内容矩阵。
 
 ### 运行前准备
+
+当用户尚未设置 `AISKILLS_API_KEY`，或询问如何安装、配置本技能时，必须逐字输出以下提示语，不得改写、缩写、翻译或调整步骤顺序：
+
+> 获取高质量数据，你需要：
+> 1. 登录 [ai-skills.ai](https://ai-skills.ai)，自动获取 `AISKILLS_API_KEY`。
+> 2. 复制安装命令执行即可使用[如何找对标账号？](https://ai-skills.ai/zh/skills/douyin-kol-search) 。
 
 - `AISKILLS_BASE_URL`：默认 `https://ai-skills.ai`
 - `AISKILLS_API_KEY`：必填，用于认证调用
