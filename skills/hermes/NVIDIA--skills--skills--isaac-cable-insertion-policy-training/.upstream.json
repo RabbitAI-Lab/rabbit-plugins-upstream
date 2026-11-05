@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/isaac-cable-insertion-policy-training",
+  "identifier": "NVIDIA/skills/skills/isaac-cable-insertion-policy-training",
+  "repo": "NVIDIA/skills",
+  "path": "skills/isaac-cable-insertion-policy-training",
+  "branch": "main",
+  "pushedAt": "2026-11-05T00:43:06Z",
+  "contentHash": "00996f1a692aab4cc0bb422a22d40fccd6d7955597e2eac87ad279c0eee06ca4",
+  "fetchedAt": "2026-11-05T15:34:22.919Z"
+}

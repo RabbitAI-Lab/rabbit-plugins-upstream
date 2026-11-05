@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/Airtable/skills/tree/main/plugins/airtable/skills/show-airtable-link",
+  "identifier": "Airtable/skills/plugins/airtable/skills/show-airtable-link",
+  "repo": "Airtable/skills",
+  "path": "plugins/airtable/skills/show-airtable-link",
+  "branch": "main",
+  "pushedAt": "2026-07-21T18:20:59Z",
+  "contentHash": "39b83f4cbee19c11325d95cf3042f1b167e24ab3f4c279f3fc25d848fa1efa61",
+  "fetchedAt": "2026-11-05T15:34:17.301Z"
+}
