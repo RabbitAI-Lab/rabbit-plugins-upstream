@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/devops/hermes-s6-container-supervision",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "d95bd275847d734a9d330661a3685cd7d0eaf13afe360c99a09dedd9783ce737",
-  "fetchedAt": "2026-07-26T17:03:56.985Z"
+  "pushedAt": "2026-11-05T15:32:07Z",
+  "contentHash": "d0a4e40ff75cb47aeb8c62339605bb24bae731335c075f5a541620a7fc786f42",
+  "fetchedAt": "2026-11-05T15:34:34.960Z"
 }
