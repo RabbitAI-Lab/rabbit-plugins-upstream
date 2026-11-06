@@ -1,45 +1,59 @@
-## Description: <br>
-Recruitee helps agents operate Recruitee through an OOMOL-connected account for reading offers, searching candidates, and creating candidates with confirmation for write actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recruitee (recruitee.com). Use this skill for ANY Recruitee request — reading, creating, and updating data. Whenever a task involves Recruitee, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Recruiting teams and agents use this skill to retrieve Recruitee offers, search candidate records, and create candidates through an OOMOL-connected Recruitee account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions may expose Recruitee offer and candidate information in the conversation. <br>
-Mitigation: Use the skill only for intended Recruitee work and avoid requesting unnecessary candidate or offer details. <br>
-Risk: The create_candidate action changes Recruitee state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running the write action. <br>
-Risk: First-time setup, authentication, connection, or billing steps may be needed before the connector can run. <br>
-Mitigation: Run setup or connection steps only after the matching command failure and follow the documented OOMOL connection guidance. <br>
+## Use Case:
 
+Recruiters and recruiting operations teams can use the skill to search candidates, read and list offers, and create candidates in Recruitee through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-recruitee) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Recruitee homepage](https://recruitee.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read actions can return Recruitee offer and candidate data; write actions require user confirmation of the exact payload and effect.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: First-time setup runs a downloaded CLI installer whose contents were not verified in the supplied evidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a verified CLI release separately before using this skill.
+
+Risk: Startup skill synchronization may change other installed agent skills without sufficient disclosure.
+
+Mitigation: Consider disabling startup synchronization with OO_SKILLS_SYNC_DISABLED=1, as documented in the CLI reference.
+
+Risk: Recruitment data is processed through OOMOL, and creating a candidate changes Recruitee state.
+
+Mitigation: Confirm that OOMOL may process the data and retain the skill's approval control for the exact candidate payload and effect.
+
+## Reference(s):
+
+- [oo CLI documentation](https://github.com/oomol-lab/oo-cli)
+- [Recruitee API documentation](https://docs.recruitee.com/reference/getting-started)
+- [Recruitee](https://recruitee.com)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Guidance, Shell commands, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions may read Recruitee data or create a candidate; state-changing actions require user confirmation of the exact payload and effect.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,63 @@
-## Description: <br>
-AI reminder system based on the Ebbinghaus forgetting curve that activates only with explicit student or guardian consent and supports pause, cancel, minimal sharing, and do-not-disturb boundaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+在学习者明确同意后，IM智能提醒会为其他技能提供的学习事项排期、合并并发送提醒。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External students, guardians, and education agents use this skill to set consent-based study, task, exploration, and follow-up reminders in IM workflows. It helps schedule spaced review prompts, manage reminder queues, and explain fallback behavior when the host platform cannot wake the agent proactively. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Repeated non-response could still lead to ongoing weekly reminders. <br>
-Mitigation: Require renewed confirmation or pause the reminder series after repeated silence, and make pause and cancel controls visible in every reminder flow. <br>
-Risk: Reminder timing may depend on learning-profile signals from another skill. <br>
-Mitigation: Use learning-profile timing only after explicit sharing consent and limit exchanged data to the minimum timing summary needed. <br>
-Risk: Active push reminders depend on a host platform with scheduled wake-up capability. <br>
-Mitigation: When scheduled wake-up is unavailable, disclose the limitation and fall back to user-triggered checks or catch-up prompts when the user next opens a conversation. <br>
+## Use Case:
 
+供学生或监护人按需管理复习、计划任务和探索活动提醒。用户可确认提醒类型、时间和共享范围，并查看、暂停或调整提醒。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-im-reminder) <br>
-- [Ebbinghaus schedule reference](references/ebbinghaus-schedule.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown and conversational text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces reminder plans, reminder message templates, queue summaries, consent prompts, pause or cancel guidance, and platform fallback guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Reminders or cross-skill sharing could be enabled with unclear consent or preferences.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm reminder type, time, frequency, and sharing preferences before creating reminders; keep pause and cancellation controls available.
+
+Risk: Scheduling, storage, or deletion behavior may vary by platform, and the separate learning-DNA dependency was not assessed.
+
+Mitigation: Explain platform limits and verify the separate dependency before relying on scheduling or data-control behavior.
+
+Risk: Users may not expect generated practice questions or an additional exam-day message.
+
+Mitigation: Set expectations when enabling reminders and make the timing and source of practice content clear.
+
+## Reference(s):
+
+- [间隔复习计划](artifact/references/ebbinghaus-schedule.md)
+- [学段与免打扰时段](artifact/shared/grade-bands.md)
+- [提醒共享与队列协议](artifact/shared/handover-protocol.schema.json)
+- [提醒预算与共享约定](artifact/shared/vocab.md)
+- [危机转介流程](artifact/shared/crisis-exception.md)
+- [ClawHub 技能页面](https://clawhub.ai/qizhitang/skills/xiaozhi-im-reminder)
+- [发布者页面](https://clawhub.ai/user/qizhitang)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese text or Markdown, including reminder messages, merged daily summaries, and queue status]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reminders are created only with consent; scheduling and data controls depend on the host platform.]
+
+## Skill Version(s):
+
+2.12.6 (source: frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

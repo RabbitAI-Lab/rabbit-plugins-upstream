@@ -1,39 +1,64 @@
-## Description: <br>
-A Chinese-language physics experiment coaching skill that helps students reason through experiment design, data analysis, error analysis, and experimental conclusions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助初中和高中学生理解物理实验方法、设计、数据分析与实验评价，并覆盖高中课标要求的 21 个学生必做实验。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-support agents use this skill to practice middle-school physics experiment reasoning, including variable control, measurement design, graph and table analysis, error reasoning, and standard conclusion wording. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may interact with learning-profile or reminder features when those are available in the OpenClaw environment. <br>
-Mitigation: Review configured integrations and student-data handling before enabling profile updates or reminders. <br>
+## Use Case:
 
+初中和高中学生可用它练习实验方案设计、变量控制、数据与误差分析、实验报告表达，并为实验操作考试做准备。
 
-## Reference(s): <br>
-- [物理实验方法深度手册](references/physics-experiment-methods.md) <br>
-- [物理数据分析方法手册](references/physics-data-analysis.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-style tutoring guidance and Socratic question prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; outputs are coaching dialogue and structured physics experiment study guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Student learning profiles or family sharing may expose personal learning information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill's explicit review, correction, deletion, pause-memory, and sharing controls; review host platform storage and sharing behavior before enabling profiles.
+
+Risk: Physical experiments can cause injury if attempted without the stated safety controls.
+
+Mitigation: Follow the bundled lab-safety guidance; do not provide at-home steps for high-risk experiments, and use teacher supervision or a demonstration or simulation where required.
+
+Risk: A student may raise an urgent safety or emotional concern during tutoring.
+
+Mitigation: Stop the tutoring flow and follow the bundled crisis referral protocol, directing the student to a trusted adult and appropriate local support.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-lab-coach)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Physics experiment methods](artifact/references/physics-experiment-methods.md)
+- [Physics data analysis](artifact/references/physics-data-analysis.md)
+- [High school lab guide: first year](artifact/references/physics-hs1-labs.md)
+- [High school lab guide: required courses 2 and 3](artifact/references/physics-hs2-labs.md)
+- [High school lab guide: electives](artifact/references/physics-hs3-labs.md)
+- [Physics lab exam guide](artifact/references/physics-lab-exam-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Text]
+
+**Output Format:** [Chinese conversational text and Markdown, including questions, tables, and experiment explanations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Stepwise prompts adapted to middle or high school level.]
+
+## Skill Version(s):
+
+2.12.6 (source: release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

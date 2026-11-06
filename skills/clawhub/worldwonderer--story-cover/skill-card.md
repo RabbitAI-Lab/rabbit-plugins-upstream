@@ -1,43 +1,55 @@
-## Description: <br>
-Story Cover helps agents create Chinese web-novel covers by selecting genre and platform styling, building GPT-Image prompts, calling an image API, and saving the generated cover assets locally. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助小说作者设计封面提示词，并按需生成和导出适配目标平台的封面图。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Authors, editors, and publishing teams use this skill to generate professional-looking Chinese web-novel cover concepts from a title, author name, target platform, and optional reference image. It guides the agent through prompt construction, image generation, local file output, platform-specific resizing, and quality checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Book titles, author names, prompts, and optional reference images may be sent to the configured image API. <br>
-Mitigation: Use only a trusted GPT_IMAGE_BASE_URL endpoint and avoid submitting sensitive or unlicensed reference material. <br>
-Risk: Generated cover images and prompt text are saved locally in the configured book directory. <br>
-Mitigation: Choose a BOOK_DIR appropriate for storing generated cover assets and review outputs before publication or upload. <br>
+## Use Case:
 
+小说作者可根据书名、笔名和题材制作封面提示词，并在需要时生成、检查和导出平台适配的封面图。
 
-## Reference(s): <br>
-- [Story Cover on ClawHub](https://clawhub.ai/worldwonderer/skills/story-cover) <br>
-- [Publisher profile](https://clawhub.ai/user/worldwonderer) <br>
-- [Source link from metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Cover style reference](references/cover-styles.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance with bash command blocks plus locally saved PNG cover files and prompt text files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires GPT_IMAGE_API_KEY and the curl, jq, and base64 command-line tools; BOOK_DIR controls where generated cover files are saved, with optional GPT_IMAGE_BASE_URL, GPT_IMAGE_MODEL, GPT_IMAGE_SIZE, UPLOAD_SIZE, and REF_IMAGE settings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.5 (source: release evidence) <br>
+Risk: Generating a cover shares the title, pen name, story-derived prompt, and any reference image with the selected provider; provider-side data handling was not assessed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use prompt-only mode for sensitive drafts, share only material suitable for the selected provider, and use a custom API endpoint only when it is trusted.
+
+Risk: The output folder retains prompt and reference records, and API image generation may incur charges.
+
+Mitigation: Review access to the output folder before sharing it, and consider API costs before generating images.
+
+## Reference(s):
+
+- [ClawHub release: story-cover](https://clawhub.ai/worldwonderer/skills/story-cover)
+- [Cover style guide](references/cover-styles.md)
+- [Image API fallback guide](references/api-fallback.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Image files]
+
+**Output Format:** [Image-generation prompts in text or Markdown; generated cover images as PNG files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include platform-sized exports and quality-check notes.]
+
+## Skill Version(s):
+
+1.1.14 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,59 @@
-## Description: <br>
-AI-powered succulent special-state detection from plant images or videos that identifies black rot, melting, and stretching, then reports condition type, severity, confidence, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes succulent photos and videos for black rot, water-soaked tissue, and stretching, and returns a structured report with severity and confidence.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, growers, greenhouse operators, and shop staff use this skill to analyze succulent plant images or videos for special abnormal states and review generated analysis reports. Agents can also query prior cloud-hosted reports for the associated internal user identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded plant images, videos, and report-history queries are processed by LifeEmergence remote services. <br>
-Mitigation: Use the skill only when that remote processing is acceptable for the workspace and avoid submitting sensitive media. <br>
-Risk: The skill can create or reuse internal identity state and store token-bearing account records with limited user control. <br>
-Mitigation: Run it in a dedicated workspace where third-party skill code is allowed to consume only intended identity environment variables and local state. <br>
-Risk: The security verdict is suspicious even though no individual risk findings were listed. <br>
-Mitigation: Review the skill and its remote-service behavior before deployment, and monitor any generated local account or token records. <br>
+## Use Case:
 
+Home succulent growers, greenhouse operators, and flower shops can use the skill to assess plant images or videos for common abnormal states and review previous reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-succulent-special-state-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Succulent special-state API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON-oriented analysis text with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include condition type, severity, confidence, suggested observations, historical report tables, and remote report URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: The service automatically registers accounts and retains login tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm account creation, retention, and token deletion terms before use.
+
+Risk: Analysis sends media to lifeemergence.com, and export-only or endpoint options may not work as intended.
+
+Mitigation: Submit only media you intend to send to that service, and wait for fixes before relying on those options.
+
+Risk: Identity and credential fields may not be separated.
+
+Mitigation: Avoid configuring valuable API secrets until those fields are separated.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-succulent-special-state-detection-analysis)
+- [API reference](artifact/references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured JSON analysis report; Markdown table for history listings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports detected state, severity, confidence, affected area, and report link when available.]
+
+## Skill Version(s):
+
+1.0.16 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

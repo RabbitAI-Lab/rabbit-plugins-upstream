@@ -25,7 +25,7 @@ capability (Hermes's `delegate_task`, etc.):
   limited to single-turn conversation) → use the **Direct path** instead:
 
 ```bash
-~/.claude/skills/invest/scripts/run.sh run_committee <SYMBOL>
+<skill-dir>/scripts/run.sh run_committee <SYMBOL>
 ```
 
 One command gets you the verdict + CIO memo + transcript, but requires `DEEPSEEK_API_KEY`.
@@ -54,7 +54,7 @@ twice for the same answer.
 ## Stage 1: Get the brief
 
 ```bash
-~/.claude/skills/invest/scripts/run.sh prepare_committee <SYMBOL>
+<skill-dir>/scripts/run.sh prepare_committee <SYMBOL>
 ```
 
 Returns JSON containing all the fields you need:
@@ -64,6 +64,7 @@ Returns JSON containing all the fields you need:
 | `asset` | Referenced by all 4 workers |
 | `portfolio_summary` | Risk Officer prompt |
 | `macro_data` | Macro Strategist prompt |
+| `event_brief` | Macro Strategist prompt (news/event layer recalled from `events.db`; empty string when there is none — e.g. no cron feeding events — then skip that section). Same input the Direct path gives Macro; the CIO sees it via Macro's report + the `EVENT_STANCE` lines inside `sentiment_brief` |
 | `market_data` | Quant prompt |
 | `regime_brief` | **Critical** — must go into both the Quant Round 1 + Round 2 prompts (see warning) |
 | `prior_insights` | Risk Officer prompt (empty if Dreaming has never run) |
@@ -87,7 +88,7 @@ run in parallel. Each worker gets its own context window; information is physica
 Agent({
   description: "Macro analysis",
   subagent_type: "general-purpose",
-  prompt: "<paste prompts.macro_strategist verbatim>\n\n# Current macro data:\n<paste macro_data verbatim>"
+  prompt: "<paste prompts.macro_strategist verbatim>\n\n# Current macro data:\n<paste macro_data verbatim>\n\n## Current event context (sorted by time, latest first; may include supersedes markers):\n<paste event_brief verbatim — omit this section if it is an empty string>"
 })
 
 Agent({
@@ -157,7 +158,8 @@ write the full CIO memo in the `prompts.cio` format.
 - `VERDICT`: one of `BUY` / `ACCUMULATE` / `HOLD` / `TRIM` / `SELL`
 - `CONFIDENCE`: 0.0–1.0
 - `DOMINANT_VIEW`: which side persuaded you (`macro` / `quant` / `risk`)
-- `SUGGESTED_ALLOC_CNY`: integer (positive = buy more, negative = reduce position)
+- `SUGGESTED_ALLOC_<BASE>`: integer (positive = buy more, negative = reduce position)
+  (`<BASE>` is the base currency code from the `DRY_POWDER_<BASE>` line in the portfolio summary — `CNY` by default; amounts are in that currency)
 - `EXECUTION_PLAN`: how to actually execute (lump-sum / DCA / grid)
 - `RISK_PLAN`: stop-loss trigger conditions + worst-case PnL estimate
 - `PERSONAL_NOTE`: bullet-point message to the user
@@ -174,7 +176,7 @@ write the full CIO memo in the `prompts.cio` format.
 ## Stage 6: Persist the transcript
 
 ```bash
-cat <<EOF | ~/.claude/skills/invest/scripts/run.sh save_committee <SYMBOL>
+cat <<EOF | <skill-dir>/scripts/run.sh save_committee <SYMBOL> --model <model-name>
 === MACRO ===
 <macro worker output>
 
@@ -198,6 +200,27 @@ EOF
 Lands in `memory/.committee/<date>/<asset>.md`, with exactly the same schema as the
 DeepSeek cron path, just tagged `Provider: claude (skill mode)` so Dreaming can later
 distinguish the transcripts of the two paths.
+
+**No shell? Hand in over MCP instead.** If you ran Stage 1 through the MCP tool
+`prepare_committee` (or cannot run `run.sh`), call `submit_committee(symbol, transcript,
+provider="claude", model=<model-name>)` with the same `=== MACRO === … === CIO ===` transcript
+as the `transcript` string. Pass `provider="claude"` explicitly: the MCP default is `"agent"`,
+while the CLI defaults to `claude`, and the scorecard groups by `provider:model`. It writes the
+same archive and the same Input Health block; the CLI and MCP hand-ins are interchangeable,
+never do both for one run (a second hand-in overwrites the archive and logs an intervention).
+
+**The 6-hour window (CLI and MCP alike)**: facts saved by `prepare_committee` are applied to the
+hand-in for 6 hours (`facts_source: prepare`). A later hand-in is still accepted, it just falls
+back to parsing the facts out of the transcript (`facts_source: transcript`); do not re-run
+`prepare_committee` only because the window passed.
+
+**Always pass `--model <the model that actually plays the 4 roles>`** (over MCP: the `model`
+argument of `submit_committee`) — the name of the model your subagents / you run on, e.g.
+`claude-sonnet-5-5`. The Coordinator path has no global LLM
+config to read, so the host is the only one who knows. It lands in the transcript's Input Health
+block as `model`; the verdict scorecard buckets by `<provider>:<model>` (e.g.
+`claude:claude-sonnet-5-5`), so a model swap never mixes old and new track records. Omitted =
+recorded as `unknown` (never guessed).
 
 ## After the verdict
 

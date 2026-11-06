@@ -1,45 +1,55 @@
-## Description: <br>
-Prospeo lets agents search and enrich people or company data through the OOMOL-managed Prospeo connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Prospeo (prospeo.io). Use this skill for ANY Prospeo request — searching and reading data. Whenever a task involves Prospeo, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run Prospeo company and people search, enrichment, search suggestion, and account information actions through an OOMOL-connected Prospeo account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search and enrichment payloads may include sensitive people or company data and are sent to the Prospeo connector. <br>
-Mitigation: Confirm the lookup is appropriate, minimize submitted fields, and avoid sending sensitive data unless the user has authorization. <br>
-Risk: Prospeo or OOMOL account credits may be consumed by searches and enrichment requests. <br>
-Mitigation: Use targeted queries, check account information when needed, and stop on billing or insufficient-credit errors. <br>
-Risk: The skill runs shell commands through the oo CLI against a connected Prospeo account. <br>
-Mitigation: Fetch the live connector schema before building payloads and confirm any action that is marked write or destructive before execution. <br>
+## Use Case:
 
+Operators use this skill to search Prospeo people and companies, enrich person or company records, inspect account information, and retrieve search suggestions through their connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-prospeo) <br>
-- [Prospeo homepage](https://prospeo.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with bash commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live Prospeo connector schemas before constructing payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The setup fallback may run downloaded code whose exact remote contents are unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and verify oo separately, and require approval before running either setup installer.
+
+Risk: The CLI may have additional skill-installation behavior.
+
+Mitigation: Review that behavior before using the CLI, and send only identifiers needed for the requested action through OOMOL to Prospeo.
+
+## Reference(s):
+
+- [Prospeo](https://prospeo.io)
+- [Prospeo API documentation](https://prospeo.io/api-docs)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown guidance, shell commands, and structured JSON data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the connected Prospeo account; results are returned as structured data.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

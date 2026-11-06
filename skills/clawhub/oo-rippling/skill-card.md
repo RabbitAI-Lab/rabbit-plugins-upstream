@@ -1,40 +1,52 @@
-## Description: <br>
-Rippling helps agents search and read Rippling workers, companies, and departments through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Rippling (rippling.com). Use this skill for ANY Rippling request — searching and reading data. Whenever a task involves Rippling, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and developers use this skill to retrieve Rippling worker, company, and department data from a connected Rippling account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose sensitive Rippling employee and company data through the connected OOMOL account. <br>
-Mitigation: Install only when OOMOL is trusted, review the Rippling API scopes granted to OOMOL, and grant no broader access than needed. <br>
+## Use Case:
 
+Employees and administrators can use the skill to look up workers, companies, and departments in a connected Rippling account.
 
-## Reference(s): <br>
-- [Rippling homepage](https://www.rippling.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-rippling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Rippling actions return data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: A Rippling lookup may trigger an unverified CLI installer without a clear approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately using a verified release before allowing the skill to run. Check or disable automatic agent-skill synchronization, and connect Rippling with narrowly scoped read permissions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-rippling)
+- [Rippling](https://www.rippling.com/)
+- [Rippling REST API quickstart](https://developer.rippling.com/documentation/rest-api/essentials/quickstart)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON]
+
+**Output Format:** [JSON results with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may contain employee and organizational data from the connected Rippling account.]
+
+## Skill Version(s):
+
+1.0.5 (source: metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

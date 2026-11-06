@@ -1,45 +1,56 @@
-## Description: <br>
-Novu (novu.co) helps agents read, create, and update Novu data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill lets agents read, create, and update Novu data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Novu through an OOMOL-connected account, including subscriber lookup, subscriber changes, and workflow event triggering through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create, update, and trigger-event actions can change Novu subscribers or send workflow events. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running any write action. <br>
-Risk: Running setup commands unnecessarily can install software or start authentication flows the user did not need. <br>
-Mitigation: Run setup only after a matching command failure, such as a missing oo CLI, authentication error, expired credential, or missing Novu connection. <br>
-Risk: Payloads built without the live connector schema can be malformed or affect the wrong target. <br>
-Mitigation: Inspect the action schema with the oo CLI before constructing the JSON payload for an action. <br>
+## Use Case:
 
+Developers and agents use this skill to read and update Novu subscriber data and trigger Novu workflows through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Novu Skill](https://clawhub.ai/oomol/skills/oo-novu) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Novu Homepage](https://novu.co) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; state-changing actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: CLI installation instructions can run downloaded installation code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and explicitly approve CLI installation separately; prefer a verified, fixed release.
+
+Risk: The connected Novu account can be used to change subscribers and trigger notifications.
+
+Mitigation: Limit the account's permissions and confirm subscriber changes and notification triggers.
+
+## Reference(s):
+
+- [Novu](https://novu.co)
+- [Novu API documentation](https://docs.novu.co/api-reference)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [Novu action results as JSON, with shell commands and Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions that create or update subscribers or trigger workflows can change Novu data or send notifications.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

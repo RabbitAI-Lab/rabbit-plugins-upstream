@@ -1,11 +1,11 @@
 ---
 name: oo-recharge
-description: "Recharge (getrecharge.com). Use this skill for ANY Recharge request — reading, creating, and updating data. Whenever a task involves Recharge, use this skill instead of calling the API directly."
+description: "Recharge (getrecharge.com). Use this skill for ANY Recharge request — searching and reading data. Whenever a task involves Recharge, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Recharge"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["recharge"]
   icon: "https://static.oomol.com/logo/third-party/recharge.svg"
 ---
@@ -37,9 +37,9 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `get_charge` — Retrieve one Recharge charge by ID. [write]
+- `get_charge` — Retrieve one Recharge charge by ID.
 - `get_customer` — Retrieve one Recharge customer by ID.
-- `get_order` — Retrieve one Recharge order by ID. [write]
+- `get_order` — Retrieve one Recharge order by ID.
 - `get_product` — Retrieve one Recharge product by ID.
 - `get_subscription` — Retrieve one Recharge subscription by ID.
 - `list_charges` — List Recharge charges with cursor pagination and common filters.
@@ -77,11 +77,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Recharge is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=recharge
+  https://console.oomol.com/connections/recharge
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Recharge homepage: https://getrecharge.com/
+- API documentation: https://developer.rechargepayments.com/2021-11

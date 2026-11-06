@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Bitly"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["bitly"]
   icon: "https://static.oomol.com/logo/third-party/bitly.svg"
 ---
@@ -41,7 +41,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `get_group` — Get details for a Bitly group.
 - `get_user` — Get the authenticated Bitly user details.
 - `list_groups` — List Bitly groups available to the authenticated user.
-- `shorten_link` — Create a short Bitly link for a destination URL.
+- `shorten_link` — Create a short Bitly link for a destination URL. [write]
 - `update_bitlink` — Update editable fields on an existing Bitly Bitlink. [write]
 
 ## Safety
@@ -73,11 +73,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Bitly is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=bitly
+  https://console.oomol.com/connections/bitly
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Bitly homepage: https://bitly.com
+- API documentation: https://dev.bitly.com/api-reference/

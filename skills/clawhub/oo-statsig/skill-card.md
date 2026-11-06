@@ -1,42 +1,55 @@
-## Description: <br>
-Statsig (statsig.com). Use this skill for Statsig requests that involve searching or reading project data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read Statsig project data through a connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and product teams use this skill to inspect Statsig projects, feature gates, dynamic configs, and segments from an OOMOL-connected Statsig account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad Statsig read requests may expose project configuration, gates, dynamic configs, or segments visible to the connected account. <br>
-Mitigation: Review the connected Statsig project and OOMOL scopes before installation, and scope user requests to the specific objects needed. <br>
-Risk: The skill routes normal Statsig requests through OOMOL connector commands even though its listed actions are read-only. <br>
-Mitigation: Use the live connector schema before running actions and review command payloads for the intended project, object ID, filters, and pagination. <br>
+## Use Case:
 
+Developers and product teams use the skill to retrieve Statsig project details, feature gates, dynamic configs, and segments.
 
-## Reference(s): <br>
-- [Statsig homepage](https://www.statsig.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-statsig) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-focused Statsig connector actions use live schemas before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions can trigger remote code execution, and the live installers and hosted connector were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before installing, use a reviewed CLI release, and require approval before installing software or additional agent skills.
+
+Risk: Connecting Statsig entrusts its API key and requested data to OOMOL.
+
+Mitigation: Use narrowly scoped credentials.
+
+## Reference(s):
+
+- [Statsig Console API documentation](https://docs.statsig.com/api/content/console-api/introduction)
+- [Statsig](https://www.statsig.com/)
+- [Statsig skill on ClawHub](https://clawhub.ai/oomol/skills/oo-statsig)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Natural-language responses and retrieved Statsig data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,56 @@
-## Description: <br>
-Semrush enables an agent to query domain overview, organic keyword, and organic competitor data through an OOMOL-connected Semrush account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves Semrush domain overview, organic keyword, and competitor data through the user's connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-SEO practitioners, marketing analysts, and agents use this skill to retrieve Semrush domain metrics, organic keywords, and organic competitor data. It is suited for read-only search intelligence workflows that inspect each action schema before running connector calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Semrush access is mediated through OOMOL and the oo CLI. <br>
-Mitigation: Use the skill only when the user is comfortable with that intermediary and has intentionally connected the relevant Semrush account. <br>
-Risk: First-time setup can involve shell installer, login, connection, or billing steps. <br>
-Mitigation: Run setup only after the matching CLI, authentication, connection, credential, or billing error occurs. <br>
-Risk: Future connector actions may be marked write or destructive even though this release lists only read actions. <br>
-Mitigation: Confirm the exact payload and effect before write actions, and get explicit approval before destructive actions. <br>
+## Use Case:
 
+SEO analysts, marketers, and developers use the skill to retrieve domain overview metrics, organic keywords, and competitor data from Semrush through their connected account.
 
-## Reference(s): <br>
-- [Semrush homepage](https://www.semrush.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-semrush) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, OOMOL sign-in, and a connected Semrush account; listed actions are read-only in this release.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Initial setup may run unverified remote code or make broader persistent changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified, version-pinned oo CLI yourself, prevent automatic installer execution, and consider disabling managed-skill synchronization with OO_SKILLS_SYNC_DISABLED=1.
+
+Risk: Semrush requests through OOMOL may consume paid credits.
+
+Mitigation: Consider credit usage before running requests and review billing when needed.
+
+## Reference(s):
+
+- [Semrush skill release on ClawHub](https://clawhub.ai/oomol/skills/oo-semrush)
+- [Semrush API quick start](https://developer.semrush.com/api/get-started/quick-start/)
+- [Semrush homepage](https://www.semrush.com/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API data, JSON, Guidance]
+
+**Output Format:** [JSON responses with concise explanatory text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Semrush domain metrics, organic keyword data, and competitor data.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,51 @@
-## Description: <br>
-Lokalise helps an agent read, create, update, and delete Lokalise projects, languages, keys, and translations through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lokalise (lokalise.com). Use this skill for ANY Lokalise request — reading, creating, updating, and deleting data. Whenever a task involves Lokalise, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and localization operators use this skill to inspect Lokalise projects, languages, keys, and translations, and to create, update, or delete localization records through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Lokalise keys or translations in the connected account. <br>
-Mitigation: Review the project, target record, payload, and intended effect before approving create or update commands. <br>
-Risk: The destructive delete action can remove a Lokalise key. <br>
-Mitigation: Require explicit user approval for the exact key and project before running a destructive command. <br>
-Risk: Account connection or billing issues can prevent connector actions from completing. <br>
-Mitigation: Use the first-time setup and billing guidance only after a command fails with the matching error. <br>
+## Use Case:
 
+Developers and localization teams use the skill to inspect Lokalise projects, translation keys, languages, and translations, and to create or update keys and translations. Deleting a key requires confirmation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-lokalise) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Lokalise homepage](https://lokalise.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and execution metadata when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Lokalise changes require approval, but setup instructs the agent to execute unverified remote installers without a separate approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, including changes to other agent skills. Use narrowly scoped Lokalise credentials and retain the required confirmations for updates and deletions.
+
+## Reference(s):
+
+- [Lokalise homepage](https://lokalise.com)
+- [Lokalise REST API documentation](https://developers.lokalise.com/reference/lokalise-rest-api)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Guidance]
+
+**Output Format:** [JSON payloads and command-line instructions in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are returned as JSON; input schemas are inspected before actions.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

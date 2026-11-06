@@ -1,45 +1,51 @@
-## Description: <br>
-Roam SCIM lets an agent read, create, update, and delete Roam SCIM users and groups through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the OOMOL-connected oo CLI to read, create, update, and archive Roam SCIM users and groups.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to administer Roam SCIM through an OOMOL-connected account, including user lifecycle operations, group management, and service provider configuration lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change or archive Roam SCIM users and groups through the connected OOMOL account. <br>
-Mitigation: Require explicit user approval of the exact target, payload, and expected effect before running write or destructive actions. <br>
-Risk: Full replacement actions can overwrite supported user attributes or group member lists. <br>
-Mitigation: Fetch the live action schema first and review replacement payloads carefully before execution. <br>
-Risk: The skill depends on the user's OOMOL authentication, service connection, scopes, and billing state. <br>
-Mitigation: Only run setup, reconnection, or billing guidance after the oo command reports the corresponding error. <br>
+## Use Case:
 
+Developers and administrators use the skill to inspect Roam SCIM configuration and manage users and groups through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-roam-scim) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Roam SCIM Homepage](https://ro.am) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON payload or response details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: CLI setup may make persistent changes to agent skills through automatic synchronization, and downloaded installers and hosted connector behavior are unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation first; disable startup skill synchronization with the documented OO_SKILLS_SYNC_DISABLED setting if only this connector is needed, use limited account permissions, and require confirmation for writes or destructive actions.
+
+## Reference(s):
+
+- [Roam SCIM API Documentation](https://developer.ro.am/)
+- [Roam SCIM](https://ro.am)
+- [oo CLI Command Reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md#environment-variables)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [oo CLI commands with JSON request and response data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read results and configuration details; writes and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,50 +1,64 @@
-## Description: <br>
-Supports Chinese language teachers with writing task design, guided drafting and revision, three-dimensional feedback rubrics, style DNA tracking, and review-lesson planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向语文教师，支持写作任务设计、写作过程引导、批改标准制定、讲评设计与班级写作记录。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External Chinese language teachers use this skill to design writing assignments, guide student drafting and revision, apply structured feedback rubrics, track writing style development, and prepare review lessons. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student writing profiles may contain sensitive classroom or learner data when shared between related teaching skills. <br>
-Mitigation: Use pseudonyms, obtain consent where required, and remove identifying details before storing, sharing, or reusing writing samples. <br>
-Risk: Writing guidance could be mistaken for direct AI grading or student ghostwriting. <br>
-Mitigation: Keep teachers as final reviewers, use the rubrics and templates as decision support, and do not produce finished student essays. <br>
-Risk: Writing prompts or examples may include copyrighted workbook, classroom, or online materials. <br>
-Mitigation: Track copyrightStatus for prompts and use original, adapted, licensed, or publicly reusable materials only. <br>
+## Use Case:
 
+语文教师用此 skill 设计写作任务、引导学生构思与修改、制定批改标准并准备讲评方案；教师审定后再使用面向学生或家长的内容。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-chinese-writing-guide) <br>
-- [Writing task design template](artifact/references/writing-task-template.md) <br>
-- [Three-dimensional correction rubric](artifact/references/three-dim-rubric.md) <br>
-- [Style DNA record template](artifact/references/style-dna-record.md) <br>
-- [Task design sample card](artifact/references/task-design-sample-card.md) <br>
-- [Three-dimensional scoring items](artifact/references/three-dim-scoring-items.md) <br>
-- [Correction sample template](artifact/references/correction-sample-template.md) <br>
-- [Style DNA profile template](artifact/references/style-dna-profile-template.md) <br>
-- [Review lesson scripts](artifact/references/review-lesson-scripts.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured text templates and rubrics] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; outputs require teacher review and privacy-aware handling of student writing records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Student information may be exposed when records or writing samples are shared.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use aliases and a platform approved for student data; check consent before sharing.
+
+Risk: Proposed changes to class records may be inaccurate or unsuitable.
+
+Mitigation: Review proposed updates before saving.
+
+Risk: Student-profile writeback may rely on handover schemas or companion integrations that were not assessed.
+
+Mitigation: Verify the handover schema and companion integrations before enabling student-profile writeback.
+
+## Reference(s):
+
+- [Writing Task Template](artifact/references/writing-task-template.md)
+- [Three-Dimensional Writing Rubric](artifact/references/three-dim-rubric.md)
+- [High School Writing Teaching Guide](artifact/references/hs-writing-teaching.md)
+- [Style DNA Record](artifact/references/style-dna-record.md)
+- [Crisis Exception Guidance](artifact/shared/crisis-exception.md)
+- [AI-Generated Item Check](artifact/shared/ai-item-check.md)
+- [ClawHub Skill Listing](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-chinese-writing-guide)
+- [Publisher Profile](https://clawhub.ai/user/qizhitang)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Chinese-language teacher-facing text or Markdown, including writing task designs, process prompts, assessment criteria, lesson feedback plans, and structured class writing records.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher-facing drafts and analyses for teacher review; it does not write student essays or perform final grading.]
+
+## Skill Version(s):
+
+2.12.6 (source: artifact frontmatter, server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

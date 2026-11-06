@@ -1,11 +1,11 @@
 ---
 name: oo-waterfall
-description: "Waterfall (waterfall.io). Use this skill for ANY Waterfall request — searching and reading data. Whenever a task involves Waterfall, use this skill instead of calling the API directly."
+description: "Waterfall (waterfall.io). Use this skill for ANY Waterfall request — reading, creating, and updating data. Whenever a task involves Waterfall, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Waterfall"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["waterfall"]
   icon: "https://static.oomol.com/logo/third-party/waterfall.svg"
 ---
@@ -41,8 +41,8 @@ Each action is listed below with a one-line description; actions that change sta
 - `get_account_usage` — Get Waterfall usage metrics for the authenticated API key and full account.
 - `get_company_enrichment` — Retrieve Waterfall company enrichment job state and output by job ID.
 - `get_contact_enrichment` — Retrieve Waterfall contact enrichment job state and output by job ID.
-- `launch_company_enrichment` — Launch a Waterfall company enrichment job and return the job envelope.
-- `launch_contact_enrichment` — Launch a Waterfall contact enrichment job and return the job envelope.
+- `launch_company_enrichment` — Launch a Waterfall company enrichment job and return the job envelope. [write]
+- `launch_contact_enrichment` — Launch a Waterfall contact enrichment job and return the job envelope. [write]
 - `verify_email` — Verify one email address with Waterfall and return deliverability status.
 
 ## Safety
@@ -74,11 +74,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Waterfall is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=waterfall
+  https://console.oomol.com/connections/waterfall
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Waterfall homepage: https://www.waterfall.io
+- API documentation: https://docs.waterfall.io/v1/authentication

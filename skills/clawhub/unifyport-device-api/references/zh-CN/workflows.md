@@ -55,3 +55,22 @@ Authentication code、two-factor password、QR payload 与 imported session 都�
 3. 检查公开 error reference 与 provider capability guide。
 4. 请求缺失的非敏感 input；不能要求用户粘贴 API Key 或 session。
 5. 只在合适时 retry read。不能盲目 retry write、destructive action 或 credential operation。
+
+
+## Published contract update 2026-11-03
+
+账号分页使用 list-accounts 的 query.limit/cursor，保留 data.next_cursor，限制页数；创建的可选 headers.Idempotency-Key 由调用方持有，同一逻辑购买重试时原样使用，键也绑定 HMAC。完整输入通过 --input-stdin 提供；不能传认证头。202 删除仅表示受理，使用 get-account-operation 有界查询；204 没有操作 ID。REVIEW 待核对，SUCCEEDED 不证明退款到账或授权可用。
+
+create-auth-session、submit-passkey-response（webauthn_response 为完整 JSON 字符串）、confirm-passkey 为 credential 操作。对象 proxy 为公开字段但需严格公网出口检查；auth_mode 切换只能单独 PATCH，省略/空对象/空数组清除按契约区分，不将 null 当默认值。
+
+add-contact 与 get-contact-membership 遵循 WhatsApp LID 规则，false 为有效结果；history 的 before 必须来自同一条真实内容消息，保留 sent_at 原文，不能使用合成 call_record ID，202 不保证回调或完成。帖子 ID/评论 ID 保持非空字符串；get-post/list-post-comments 是 POST 读取，不需要写确认，reply-post-comment 需要 HMAC，comment_id 只引用已确认的一级评论。
+
+create-call 为显式写入，hangup-call 需 destructive opt-in 和 HMAC；服务端 private beta/is_beta 资格仍然适用，不自动拨号。join_url、授权 URL、WebAuthn、provider_profile、reply_token 不能进入模型输出；本 runner 脱敏，需展示链接时使用聊天之外的受控 UI。get-active-call 为只读；null 表示无活动通话，挂断可能返回 ended 或 failed，均为终态。
+
+## 协议导入、标签及已读回执
+
+嵌套 whatsapp-protocol 对象使用 import-auth-session，必须遵守必填密钥、stdin、脱敏和 credential/HMAC 规则。旧 X session_url/pin/proxy_config 继续可用。list-conversations 的 query.label_id 原样保留为字符串；WhatsApp 省略它表示特别关注会话。WhatsApp 消息已读成对提供 up_to_message_id 和 up_to_message_sender_id，群消息 sender 取 data.sender.id；Telegram 使用单个已接收消息 ID，不支持非空 sender。runner 不能推断渠道。空值及渠道限制参见[迁移说明](migration.md)。
+
+## 账号独立 Webhook 配置
+
+list/get/deactivate/delete 接受 query.account_id，create/update 接受 body.account_id。list 省略时选 workspace 端点，筛选时只选独立账号端点。create 可绑定账号，update 只校验原绑定。PATCH 是替换操作，保留设置及 signing secret 必须重新提交。account_webhook_already_exists 不自动重试。停用或订阅不匹配不会回退 workspace，参见[迁移说明](migration.md)。

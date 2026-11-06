@@ -1,45 +1,56 @@
-## Description: <br>
-Use this skill to search and read Amplitude analytics data through an OOMOL-connected Amplitude account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Amplitude (amplitude.com). Use this skill for any Amplitude request involving searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to query Amplitude event segmentation, user activity, visible events, and user search through the oo CLI after connecting an Amplitude account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates against an external Amplitude account and can return account analytics data in command output. <br>
-Mitigation: Review the external service access before use and grant only the Amplitude permissions needed for the task. <br>
-Risk: Payloads built without the current connector schema can fail or query unintended data. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing each `oo connector run` payload. <br>
-Risk: Future write or destructive connector actions could change or remove Amplitude data. <br>
-Mitigation: Confirm the exact target, payload, and effect with the user before running any action tagged `[write]` or `[destructive]`. <br>
+## Use Case:
 
+Developers and analytics teams can use this skill to search Amplitude events, review event segmentation, and inspect user activity through their connected Amplitude account.
 
-## Reference(s): <br>
-- [ClawHub Amplitude Skill](https://clawhub.ai/oomol/skills/oo-amplitude) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Amplitude](https://amplitude.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include JSON results from the oo CLI with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The setup instructions include executing a remote CLI installer, and the installer’s exact changes are not established by the bundled instructions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the CLI separately from a verified release, and check which agent skills it installs or updates.
+
+Risk: Connecting Amplitude entrusts OOMOL with credential handling and access to analytics data.
+
+Mitigation: Review the connection and granted access before enabling the skill.
+
+## Reference(s):
+
+- [Amplitude API authentication documentation](https://amplitude.com/docs/apis/authentication)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [Amplitude](https://amplitude.com)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-amplitude)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, JSON data]
+
+**Output Format:** [Structured Amplitude query results with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the connected Amplitude account and the selected query.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

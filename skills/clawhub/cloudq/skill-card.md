@@ -1,49 +1,60 @@
-## Description: <br>
-CloudQ helps agents answer multi-cloud operations questions, manage Tencent Cloud Smart Advisor workflows, inspect architecture health, and provide AIOps, ChatOps, CloudOps, cost, inventory, and compliance guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Multi-cloud management and smart-advisor support for architecture visualization, risk assessment, and AI-powered operations.
 
-## Publisher: <br>
-[1ncludesteven](https://clawhub.ai/user/1ncludesteven) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[1ncludesteven](https://clawhub.ai/user/1ncludesteven)
 
-## Use Case: <br>
-Developers, cloud operators, and site reliability teams use CloudQ to route cloud and multi-cloud operations requests to Tencent Cloud Smart Advisor, retrieve architecture assessments, run advisor setup checks, and return operational guidance or console links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use Tencent Cloud credentials and participate in CloudQ advisor setup. <br>
-Mitigation: Use a least-privilege Tencent Cloud subaccount and review the requested CAM policies before approving setup. <br>
-Risk: Normal checks or chat handling can make privileged Tencent Cloud changes. <br>
-Mitigation: Require explicit user approval before enabling advisor authorization, creating roles, attaching policies, or deleting cloud roles. <br>
-Risk: Generated passwordless Tencent Cloud console links can grant console access for their validity window. <br>
-Mitigation: Do not share generated console links, and treat them as sensitive access material. <br>
-Risk: Cleanup with cloud deletion can remove the CloudQ CAM role. <br>
-Mitigation: Run cloud cleanup only when the user intends to delete the CloudQ role. <br>
+## Use Case:
 
+Cloud and platform engineering teams use CloudQ to ask questions about Tencent Cloud and other cloud resources, review architecture diagrams and assessments, and handle supported AIOps and CloudOps tasks.
 
-## Reference(s): <br>
-- [CloudQ ClawHub release page](https://clawhub.ai/1ncludesteven/skills/cloudq) <br>
-- [1ncludesteven publisher profile](https://clawhub.ai/user/1ncludesteven) <br>
-- [CloudQChatCompletions API reference](references/api/CloudQChatCompletions.md) <br>
-- [Tencent Cloud Smart Advisor console](https://console.cloud.tencent.com/advisor) <br>
-- [Tencent Cloud API key management](https://console.cloud.tencent.com/cam/capi) <br>
-- [Tencent Cloud CloudQ overview article](https://cloud.tencent.com/developer/article/2645159) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-backed command results with inline shell commands and links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [CloudQ may return asynchronous task status, operational guidance, and Tencent Cloud console links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.0 (source: frontmatter and release evidence) <br>
+Risk: Environment checks or setup can change cloud authorization and permissions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with read-only checks; require explicit approval before enabling Advisor authorization or creating roles.
+
+Risk: Cleanup can delete a role the tool did not create.
+
+Mitigation: Check that deletion targets the exact role created by this tool, and avoid --all --cloud on shared accounts.
+
+Risk: Credential or passwordless-link exposure could expose cloud access.
+
+Mitigation: Keep secrets out of forwarded questions and protect passwordless login links.
+
+## Reference(s):
+
+- [CloudQChatCompletions API reference](references/api/CloudQChatCompletions.md)
+- [CloudQ on ClawHub](https://clawhub.ai/1ncludesteven/skills/cloudq)
+- [Tencent Cloud Smart Advisor overview](https://cloud.tencent.com/developer/article/2645159)
+- [Tencent Cloud API documentation](https://cloud.tencent.com/document/product/213/30654)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Cloud operations guidance]
+
+**Output Format:** [Markdown responses with shell-command examples and JSON API results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses depend on the remote CloudQ service and the user's cloud account permissions.]
+
+## Skill Version(s):
+
+1.10.0 (source: server release metadata, SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

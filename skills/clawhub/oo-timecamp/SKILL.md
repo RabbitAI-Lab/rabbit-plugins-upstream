@@ -1,11 +1,11 @@
 ---
 name: oo-timecamp
-description: "TimeCamp (timecamp.com). Use this skill for ANY TimeCamp request — reading, creating, and updating data. Whenever a task involves TimeCamp, use this skill instead of calling the API directly."
+description: "TimeCamp (timecamp.com). Use this skill for ANY TimeCamp request — reading, creating, updating, and deleting data. Whenever a task involves TimeCamp, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "TimeCamp"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.6"
   services: ["timecamp"]
   icon: "https://static.oomol.com/logo/third-party/timecamp.svg"
 ---
@@ -44,7 +44,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `list_time_entries` — List TimeCamp time entries for a date or modification range.
 - `list_users` — List users in the connected TimeCamp account.
 - `start_timer` — Start a TimeCamp timer, optionally attached to a task. [write]
-- `stop_timer` — Stop the current TimeCamp timer and save the tracked time. [write]
+- `stop_timer` — Stop the current TimeCamp timer and save the tracked time. [destructive]
 - `update_time_entry` — Update an existing TimeCamp time entry. [write]
 
 ## Safety
@@ -76,11 +76,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — TimeCamp is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=timecamp
+  https://console.oomol.com/connections/timecamp
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - TimeCamp homepage: https://www.timecamp.com
+- API documentation: https://developer.timecamp.com/

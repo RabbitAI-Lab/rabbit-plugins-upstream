@@ -1,41 +1,63 @@
-## Description: <br>
-Manage AI coding agent sessions via Agent of Empires (aoe). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage AI coding agent sessions via Agent of Empires (aoe)
 
-## Publisher: <br>
-[njbrake](https://clawhub.ai/user/njbrake) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[njbrake](https://clawhub.ai/user/njbrake)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to launch, organize, monitor, and inspect AI coding-agent sessions running through Agent of Empires and tmux. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reduced-oversight launch options can skip normal agent approval prompts. <br>
-Mitigation: Review the skill before installation if agents should operate only with explicit approvals, and use reduced-oversight examples only in disposable or tightly sandboxed workspaces. <br>
-Risk: Forceful worktree deletion can remove local work. <br>
-Mitigation: Check git state and confirm the worktree contains nothing needed before using forceful worktree deletion. <br>
+## Use Case:
 
+Developers use this skill to launch, organize, monitor, and manage coding agent sessions in tmux, including worktree-based workflows.
 
-## Reference(s): <br>
-- [Agent of Empires project homepage](https://github.com/agent-of-empires/agent-of-empires) <br>
-- [ClawHub skill page](https://clawhub.ai/njbrake/skills/aoe) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the aoe and tmux binaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.13.1 (source: server release evidence) <br>
+Risk: YOLO mode skips permission prompts, so a coding agent may take actions within the project without the usual approval checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep permission prompts enabled unless you intentionally need YOLO mode, and choose the project directory carefully.
+
+Risk: Permanent purge options can remove sessions, worktrees, or branches.
+
+Mitigation: Review the target and deletion flags before running permanent-deletion commands.
+
+Risk: The documented sandbox includes agent credentials and does not isolate them from the agent.
+
+Mitigation: Treat credentials available in the sandbox as accessible to the agent and avoid exposing credentials the task does not need.
+
+Risk: aoe, tmux, and coding agent tools are installed separately and are not bundled with this skill.
+
+Mitigation: Install these tools from sources you trust.
+
+## Reference(s):
+
+- [Agent of Empires project homepage](https://github.com/agent-of-empires/agent-of-empires)
+- [Sandbox guide](https://github.com/agent-of-empires/agent-of-empires/blob/main/docs/guides/sandbox.md)
+- [ClawHub skill page](https://clawhub.ai/njbrake/skills/aoe)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON examples, and configuration steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provides command examples and operational guidance for coding agent sessions.]
+
+## Skill Version(s):
+
+1.22.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

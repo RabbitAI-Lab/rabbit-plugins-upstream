@@ -1,45 +1,56 @@
-## Description: <br>
-Helps independent teachers turn schedules, student records, homework, parent communication, and lesson-package status into a seven-section daily dashboard with risk flags and top priorities. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Aggregates a solo teacher’s schedules, student records, assignments, parent communication, and lesson packages into a read-only daily dashboard with evidence-based follow-up priorities.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Independent teachers use this skill to review daily classes, preparation tasks, homework follow-up, parent communication, lesson-package renewal points, and the three most important actions for the day. It is intended as a planning and triage dashboard, not as an automatic messaging or record-writing system. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation phrases may route generic planning requests into a dashboard that reads student workspace data. <br>
-Mitigation: Narrow activation to explicit independent-teacher workspace requests or ask a clarification question before reading student, parent, course-package, or schedule data. <br>
-Risk: The dashboard may expose sensitive student or family information if raw workspace fields are copied directly. <br>
-Mitigation: Use aliases, summarize parent and lesson notes within the stated 500-character limits, and omit real names, contact details, family conflict, medical details, and payment information. <br>
-Risk: Suggested follow-up could be mistaken for an authorized external action or record update. <br>
-Mitigation: Keep messages, lesson-unit consumption, parent communication, renewal suggestions, and cross-skill sharing as teacher-confirmed actions only. <br>
+## Use Case:
 
+Independent teachers use this skill to review classes, preparation, follow-ups, student risk signals, and remaining lesson credits in one daily dashboard. It summarizes authorized workspace records and suggests priorities for the teacher to review.
 
-## Reference(s): <br>
-- [Dashboard template](references/dashboard-template.md) <br>
-- [Daily dashboard block templates](references/daily-dashboard-block-templates.md) <br>
-- [Daily dashboard full sample](references/daily-dashboard-full-sample.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-solo-dashboard) <br>
+### Deployment Geography for Use:
 
+China-focused; the skill documentation frames its training use around China-specific rules.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style daily dashboard with structured text sections and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses student aliases, concise summaries, risk labels with field-based rationale, and teacher-confirmed follow-up actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Student and guardian records may contain sensitive or identifying information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use aliases and authorized records, check consent before sharing, and review the platform’s storage and access settings.
+
+Risk: Dashboard suggestions rely on the records available and need teacher review before action.
+
+Mitigation: Confirm the underlying records and review each suggestion; this skill does not change records or send messages.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-solo-dashboard)
+- [Seven-section dashboard templates](references/daily-dashboard-block-templates.md)
+- [Full dashboard example](references/daily-dashboard-full-sample.md)
+- [Solo teacher workspace schema](shared/solo-teacher-workspace.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Analysis, Guidance]
+
+**Output Format:** [Markdown daily dashboard organized into seven sections]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only summary of available workspace records; missing records are identified, and suggested priorities include supporting evidence for teacher review.]
+
+## Skill Version(s):
+
+2.12.6 (source: ClawHub release metadata, frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

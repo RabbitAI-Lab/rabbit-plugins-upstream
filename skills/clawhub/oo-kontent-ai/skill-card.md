@@ -1,42 +1,55 @@
-## Description: <br>
-Kontent.ai helps agents search and read Kontent.ai content through an OOMOL-connected account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kontent.ai (kontent.ai). Use this skill for ANY Kontent.ai request — searching and reading data. Whenever a task involves Kontent.ai, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect Kontent.ai action schemas and read content items, content types, and languages through an OOMOL-connected Kontent.ai account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The manifest routes broadly for Kontent.ai tasks even though the currently listed actions are read-only. <br>
-Mitigation: Use the live action schema before building each payload, and treat any future write or destructive action tags as requiring explicit user confirmation. <br>
-Risk: The skill depends on oo CLI installation, OOMOL authentication, a connected Kontent.ai account, valid scopes, active credentials, and OOMOL billing status. <br>
-Mitigation: Follow setup or recovery steps only after the corresponding command error appears, and avoid asking users to provide raw Kontent.ai tokens in prompts or scripts. <br>
+## Use Case:
 
+Developers and content teams can use this skill to search and retrieve content items, content types, and languages from a connected Kontent.ai environment.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-kontent-ai) <br>
-- [Kontent.ai Homepage](https://kontent.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions return JSON data with execution metadata through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence release and SKILL.md frontmatter) <br>
+Risk: If the oo CLI is missing, the setup instructions tell the agent to run a remote installer, including piping a downloaded script into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified CLI release before using the skill and require review before any remote installer is run.
+
+Risk: Bundled skill synchronization may change other agent configurations, and Kontent.ai access runs through the connected OOMOL account.
+
+Mitigation: Review synchronization effects and connect only the required Kontent.ai environment with the minimum read permissions needed.
+
+## Reference(s):
+
+- [Kontent.ai](https://kontent.ai)
+- [Kontent.ai Management API documentation](https://kontent.ai/learn/docs/apis/management-api-v2)
+- [ClawHub release page](https://clawhub.ai/oomol/skills/oo-kontent-ai)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Guidance]
+
+**Output Format:** [Structured JSON data returned by Kontent.ai actions, with text responses as needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Retrieval covers content items, content types, and languages.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

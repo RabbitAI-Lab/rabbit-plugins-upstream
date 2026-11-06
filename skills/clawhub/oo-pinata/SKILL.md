@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Pinata"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["pinata"]
   icon: "https://static.oomol.com/logo/third-party/pinata.svg"
 ---
@@ -44,7 +44,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `get_group` — Get one Pinata group by ID from the public or private IPFS network.
 - `list_files` — List Pinata files from the public or private IPFS network with optional filters.
 - `list_groups` — List Pinata file groups from the public or private IPFS network.
-- `pin_by_cid` — Ask Pinata to pin an existing public IPFS CID. [write]
+- `pin_by_cid` — Ask Pinata to pin an existing public IPFS CID.
 - `query_pin_requests` — Query Pinata pin-by-CID requests with optional filters and pagination.
 - `remove_file_from_group` — Remove a Pinata file from a Pinata group. [destructive]
 - `update_file` — Update a Pinata file name or key-value metadata. [write]
@@ -79,11 +79,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Pinata is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=pinata
+  https://console.oomol.com/connections/pinata
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Pinata homepage: https://pinata.cloud
+- API documentation: https://docs.pinata.cloud/api-reference/introduction

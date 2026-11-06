@@ -1,44 +1,52 @@
-## Description: <br>
-Lattice helps agents search and read Lattice users, departments, goals, and tags through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lattice (lattice.com). Use this skill for ANY Lattice request — searching and reading data. Whenever a task involves Lattice, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, operators, and developers use this skill to answer Lattice questions by reading current-user, user, department, goal, and tag data through the configured OOMOL connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lattice may contain private employee and HR data. <br>
-Mitigation: Use the skill only for explicit Lattice tasks and require confirmation before reading sensitive records, listing many users, exporting data, or making changes. <br>
-Risk: Connector payloads can be wrong if built from stale assumptions. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before each action and build JSON payloads from that schema. <br>
-Risk: Setup and connection steps can trigger account authentication, app connection, or billing flows. <br>
-Mitigation: Run setup, login, connection, or billing recovery steps only after the matching command failure. <br>
+## Use Case:
 
+Teams using Lattice can ask an agent to look up users, departments, goals, and tags through their connected Lattice account. The skill retrieves records to support workplace tasks.
 
-## Reference(s): <br>
-- [ClawHub Lattice skill page](https://clawhub.ai/oomol/skills/oo-lattice) <br>
-- [Lattice homepage](https://lattice.com) <br>
-- [oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live action schema inspection before constructing connector payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and frontmatter) <br>
+Risk: The setup fallback runs downloaded CLI installation code without verification or a separate approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve the CLI installation separately, prefer a fixed release with verified integrity, and grant only the Lattice permissions needed for the task.
+
+## Reference(s):
+
+- [Lattice](https://lattice.com)
+- [Lattice API authentication documentation](https://developers.lattice.com/docs/authentication-1)
+- [oo CLI source repository](https://github.com/oomol-lab/oo-cli)
+- [Lattice skill release on ClawHub](https://clawhub.ai/oomol/skills/oo-lattice)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [Natural-language responses with structured Lattice data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the connected account's Lattice access and the requested read action.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

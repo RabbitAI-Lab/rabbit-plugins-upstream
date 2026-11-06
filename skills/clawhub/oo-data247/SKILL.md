@@ -1,11 +1,11 @@
 ---
 name: oo-data247
-description: "Data247 (data247.com). Use this skill for ANY Data247 request — searching and reading data. Whenever a task involves Data247, use this skill instead of calling the API directly."
+description: "Data247 (data247.com). Use this skill for ANY Data247 request — reading, creating, and updating data. Whenever a task involves Data247, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Data247"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.6"
   services: ["data247"]
   icon: "https://static.oomol.com/logo/third-party/data247.png"
 ---
@@ -37,7 +37,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `append_gender` — Infer a probable gender from a first name using Data247.
+- `append_gender` — Infer a probable gender from a first name using Data247. [write]
 - `check_balance` — Check the current Data247 account balance.
 - `check_dnc` — Check a phone number against Data247 Do-Not-Call data.
 - `get_carrier_type` — Determine whether a USA or Canadian phone number is mobile, landline, or VOIP.
@@ -72,11 +72,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Data247 is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=data247
+  https://console.oomol.com/connections/data247
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Data247 homepage: https://www.data247.com/
+- API documentation: https://www.data247.com/api_user_manual

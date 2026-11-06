@@ -1,43 +1,62 @@
-## Description: <br>
-Helps independent teachers turn post-class recollections into structured lesson records, learning-track updates, course-unit ledger entries, and follow-up planning notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns independent teachers’ post-lesson notes into structured learner records, progress summaries, and next-lesson handoffs.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Independent teachers use this skill after lessons to capture what was taught, assess mastery and reactions, update learning trajectories, record course-unit consumption, and prepare next-lesson or parent-summary material. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent lesson records may contain sensitive student information. <br>
-Mitigation: Use aliases, avoid real names and family details, and verify consent settings before creating profiles or sharing data across skills. <br>
-Risk: Course-unit ledger updates can affect lesson balances. <br>
-Mitigation: Treat lesson-unit deductions as pre-deductions, review them within the 24-hour adjustment window, and correct exceptions such as absences, cancellations, trials, or technical disruptions. <br>
-Risk: Parent-summary drafts could be inaccurate, premature, or too negative if sent without review. <br>
-Mitigation: Manually check parent summaries before sending, keep wording behavior-based, and do not let the skill automatically send messages to parents. <br>
+## Use Case:
 
+Independent teachers use it to turn a lesson recap into a structured, pseudonymous teaching record, review learner progress, and prepare the next lesson. It drafts parent summaries for the teacher to review; records and lesson-credit changes require teacher confirmation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-log) <br>
-- [Lesson log template](references/lesson-log-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown-style structured lesson records, learning-trajectory notes, ledger updates, and planning summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes lesson-log fields, mastery evidence, next-lesson focus, course-unit consumption notes, and optional parent-summary drafts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Lesson records may contain sensitive learner information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use aliases, obtain required consent, review each record before saving, and manage access and retention through the host platform; consult SECURITY_BASELINE.md for complete privacy documentation.
+
+Risk: Lesson-credit changes can affect a learner’s remaining entitlement.
+
+Mitigation: Keep entries pending until the teacher reviews and explicitly confirms each adjustment.
+
+Risk: An internal parent summary could be mistaken for a message that has been sent.
+
+Mitigation: Keep summaries as drafts, check communication consent, and leave any decision to send to the teacher.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-log)
+- [Lesson log template](references/lesson-log-template.md)
+- [Shared vocabulary and consent fields](shared/vocab.md)
+- [Crisis exception guidance](shared/crisis-exception.md)
+- [Platform conventions and data controls](shared/platform-conventions.md)
+- [Off-campus training guidance](shared/off-campus-training.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Structured records, Guidance]
+
+**Output Format:** [Markdown lesson summaries and structured lesson-record fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Records are shown for teacher review before saving; lesson-credit entries remain pending until confirmed; parent summaries are internal drafts.]
+
+## Skill Version(s):
+
+2.12.6 (source: server-resolved release, frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

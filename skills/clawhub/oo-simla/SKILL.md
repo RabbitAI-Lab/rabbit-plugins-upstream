@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Simla.com"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.6"
   services: ["simla"]
   icon: "https://static.oomol.com/logo/third-party/simla.svg"
 ---
@@ -42,8 +42,8 @@ Each action is listed below with a one-line description; actions that change sta
 - `edit_customer` — Edit a Simla customer by internal ID or external ID. [write]
 - `edit_order` — Edit a Simla order by internal ID or external ID. [write]
 - `get_customer` — Get full Simla customer information by internal ID or external ID.
-- `get_order` — Get full Simla order information by internal ID or external ID. [write]
-- `get_order_statuses` — Get Simla status information for orders by internal IDs or external IDs. [write]
+- `get_order` — Get full Simla order information by internal ID or external ID.
+- `get_order_statuses` — Get Simla status information for orders by internal IDs or external IDs.
 - `list_customers` — List Simla customers with optional pagination and filter parameters.
 - `list_orders` — List Simla orders with optional pagination and filter parameters.
 
@@ -76,11 +76,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Simla.com is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=simla
+  https://console.oomol.com/connections/simla
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Simla.com homepage: https://www.simla.com/en
+- API documentation: https://docs.simla.com/Developers/API/APIVersions/APIv5

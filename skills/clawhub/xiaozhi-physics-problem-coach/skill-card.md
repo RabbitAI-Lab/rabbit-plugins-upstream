@@ -1,44 +1,60 @@
-## Description: <br>
-A Chinese-language physics problem-solving coach that guides students through diagramming, physical modeling, calculation, and reflection instead of giving full answers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+初中到高中的物理解题教练，按“读题画图、物理建模、列式计算、检验反思”四步陪学生解完当前一道题。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and tutors use this skill to work through physics exercises by first establishing a physical diagram, then selecting a model, writing equations, checking units, and reflecting on errors. It is especially oriented toward mechanics, circuits, optics, and common middle-school physics problem types. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may persist or sync detailed student learning records, including mistakes, answers, weak points, and recovery state. <br>
-Mitigation: Use it only when the platform provides clear consent, local-only storage when promised, deletion and export controls, and a no-storage mode; confirm these controls before using it with students, especially minors. <br>
-Risk: Image-based problem intake depends on multimodal vision or OCR and can misread unclear problem statements. <br>
-Mitigation: When image recognition is unavailable or uncertain, ask the student to type the problem and known conditions, then confirm the interpretation before continuing. <br>
+## Use Case:
 
+初中及高中学生可用它逐步分析一道物理题：先建立图景，再选择模型、列式计算并检查结果。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-problem-coach) <br>
-- [physics-4step-statemachine.md](artifact/references/physics-4step-statemachine.md) <br>
-- [physics-socrates-guide.md](artifact/references/physics-socrates-guide.md) <br>
-- [physics-diagram-guide.md](artifact/references/physics-diagram-guide.md) <br>
-- [claw-templates-physics.md](artifact/references/claw-templates-physics.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Conversational Markdown guidance with prompts, checks, and step-by-step tutoring structure] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask the student to provide text descriptions or drawings when image/OCR support is unavailable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Saved learning records and reminders rely on companion skills and the host platform enforcing consent controls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the default chat-only mode unless the student (and guardian when applicable) explicitly opts in; confirm the host enforces the documented consent controls before enabling optional features.
+
+Risk: Some references cover exam revision or experimental-method coaching beyond the advertised problem-solving scope.
+
+Mitigation: State the scope and hand off conceptual explanations, model selection, experimental analysis, or long-term error tracking to the designated companion skill when those needs arise.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-problem-coach)
+- [Four-step problem-solving method](artifact/references/physics-4step-statemachine.md)
+- [Physics diagram guide](artifact/references/physics-diagram-guide.md)
+- [Socratic tutoring guide](artifact/references/physics-socrates-guide.md)
+- [Hint ladder](artifact/shared/hint-ladder.md)
+- [High school worked examples](artifact/references/physics-hs1-worked-examples.md)
+- [High school worked examples, level 2](artifact/references/physics-hs2-worked-examples.md)
+- [High school worked examples, level 3](artifact/references/physics-hs3-worked-examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Analysis]
+
+**Output Format:** [Conversational Chinese text with step-by-step explanations, equations, and optional Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Works through one current problem; asks the student to describe or draw diagrams and can use text descriptions when images cannot be handled.]
+
+## Skill Version(s):
+
+2.12.6 (source: SKILL.md frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

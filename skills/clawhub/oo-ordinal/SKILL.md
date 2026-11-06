@@ -1,11 +1,11 @@
 ---
 name: oo-ordinal
-description: "Ordinal (tryordinal.com). Use this skill for ANY Ordinal request — reading, creating, and updating data. Whenever a task involves Ordinal, use this skill instead of calling the API directly."
+description: "Ordinal (tryordinal.com). Use this skill for ANY Ordinal request — searching and reading data. Whenever a task involves Ordinal, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Ordinal"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["ordinal"]
   icon: "https://static.oomol.com/logo/third-party/ordinal.png"
 ---
@@ -38,7 +38,7 @@ Each action is listed below with a one-line description; actions that change sta
 ## Available actions
 
 - `get_idea` — Get a specific Ordinal idea by ID.
-- `get_post` — Get a specific Ordinal post by ID. [write]
+- `get_post` — Get a specific Ordinal post by ID.
 - `get_workspace` — Get details about the current Ordinal workspace.
 - `list_engagement_profiles` — List Ordinal engagement-only profiles connected to the workspace.
 - `list_ideas` — List Ordinal ideas with pagination and optional filters.
@@ -76,11 +76,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Ordinal is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=ordinal
+  https://console.oomol.com/connections/ordinal
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Ordinal homepage: https://www.tryordinal.com
+- API documentation: https://docs.tryordinal.com/api/introduction

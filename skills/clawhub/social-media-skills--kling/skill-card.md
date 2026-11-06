@@ -1,45 +1,65 @@
-## Description: <br>
-Kling helps agents brief native 4K, multi-shot, motion-transfer video clips with consented motion or avatar inputs, AI disclosure, human review, separate final audio, and downstream publishing through WoopSocial. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kling helps agents brief 4K, multi-shot, motion-transfer, and image-to-video clips while routing audio, editing, human review, consent, disclosure, and publishing steps appropriately.
 
-## Publisher: <br>
-[social-media-skills](https://clawhub.ai/user/social-media-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[social-media-skills](https://clawhub.ai/user/social-media-skills)
 
-## Use Case: <br>
-External creators, marketers, and social-media operators use this skill to decide when Kling is the right video generator and to produce grounded briefs for 4K, multi-shot, image-to-video, and motion-transfer clips. It keeps consent, disclosure, physics checks, human assembly, final voiceover, captions, and publishing handoffs explicit. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Kling is an external video-generation provider, so source media may expose sensitive brand, product, or personal material outside the user's organization. <br>
-Mitigation: Use only approved material, avoid sensitive uploads unless explicitly cleared, and consider provider data handling and jurisdiction before enterprise or brand work. <br>
-Risk: Motion Control and Avatar workflows can misuse a person's likeness, motion, face, or performance without consent. <br>
-Mitigation: Use owned, licensed, or consented performer material only; refuse non-consensual likeness or motion transfer and offer a consented alternative. <br>
-Risk: Generated videos can be published without clear AI disclosure or with artifacts in hands, crowds, fluids, text, audio, or physics. <br>
-Mitigation: Keep human review before publishing, add AI-generated or AI-assisted disclosure, verify visual artifacts and claims, and route final dialogue through a separate voiceover workflow. <br>
+## Use Case:
 
+Developers, creators, and social media teams use this skill to choose and brief Kling for 4K video, multi-shot storyboards, motion-transfer, and image-to-video work while planning human review, final audio, captions, publishing, consent, and AI disclosure.
 
-## Reference(s): <br>
-- [Kling 2026 capabilities](references/kling-2026-capabilities.md) <br>
-- [Motion, multi-shot + two worked examples](references/motion-and-multishot-recipes.md) <br>
-- [Scope, consent + tools layer](references/scope-and-tools.md) <br>
-- [The CUTS framework](references/the-cuts-framework.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown guidance and structured video brief text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes consent, disclosure, human-review, audio-handoff, and publishing-route checks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter, release metadata, target metadata) <br>
+Risk: Users may upload media, likenesses, or sensitive brand material to Kling or related external video tools.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only owned, licensed, or consented assets and avoid sensitive business material unless the external provider is approved for the use case.
+
+Risk: Motion Control or Avatar workflows can create non-consensual likeness, motion, or performance misuse.
+
+Mitigation: Require consented performers, owned footage, or licensed talent, and refuse requests involving non-consenting real people.
+
+Risk: Generated clips may contain unreliable audio, physics, hands, crowds, or other artifacts.
+
+Mitigation: Treat Kling audio as a guide track, route final dialogue to voiceover, keep crowd scenes limited, and require human review before publishing.
+
+Risk: AI-generated video can require viewer disclosure.
+
+Mitigation: Plan an AI-generated or AI-assisted disclosure in captions, metadata, or on-screen text before publishing.
+
+## Reference(s):
+
+- [Kling 2026 Capabilities](references/kling-2026-capabilities.md)
+- [Motion, Multi-Shot + Two Worked Examples](references/motion-and-multishot-recipes.md)
+- [Scope, Consent + Tools Layer](references/scope-and-tools.md)
+- [The CUTS Framework](references/the-cuts-framework.md)
+- [ClawHub Skill Page](https://clawhub.ai/social-media-skills/skills/kling)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration]
+
+**Output Format:** [Markdown guidance and structured video brief content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include shot lists, routing guidance, consent and disclosure checks, and review notes.]
+
+## Skill Version(s):
+
+1.0.0 (source: skill frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

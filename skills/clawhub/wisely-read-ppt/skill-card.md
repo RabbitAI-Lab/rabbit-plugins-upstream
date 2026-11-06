@@ -1,44 +1,55 @@
-## Description: <br>
-Converts PPTX and PDF files into page-by-page structured DOCX parsing documents with full-page screenshots, editable text organization, and inline image descriptions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+解析 PowerPoint 演示文稿和 PDF，按页整理可编辑内容与图片说明，并生成含页面截图的 Word 文档。
 
-## Publisher: <br>
-[sedey999](https://clawhub.ai/user/sedey999) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Proprietary <br>
+## Publisher:
 
+[sedey999](https://clawhub.ai/user/sedey999)
 
-## Use Case: <br>
-Developers, analysts, and document-review agents use this skill to transform complex PPTX or PDF presentations into reviewable Word documents with extracted text, screenshots, and structured descriptions of embedded visuals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The runtime dependency installer can silently modify the Python environment. <br>
-Mitigation: Run the skill in an isolated virtual environment or container, preinstall dependencies, and use the --no-install option. <br>
-Risk: Input decks and PDFs may be retained as screenshots, extracted images, text JSON, and working DOCX files in the workspace. <br>
-Mitigation: Avoid highly sensitive documents unless retention is acceptable, and manually remove ppt-parse-working, retained assets, and intermediate outputs when processing is complete. <br>
-Risk: The generated parsing document can contain missed text, incorrect ordering, or incomplete image transcription if visual review is skipped. <br>
-Mitigation: Complete the documented full-page visual review and main-agent final review before delivering the final DOCX. <br>
+## Use Case:
 
+Developers and other users can convert slide decks or PDFs into editable, page-by-page Word documents with organized text, image descriptions, and page screenshots for review.
 
-## Reference(s): <br>
-- [Wisely Read PPT ClawHub Skill Page](https://clawhub.ai/sedey999/skills/wisely-read-ppt) <br>
-- [README.md](artifact/README.md) <br>
-- [subagent-workflow.md](artifact/reference/subagent-workflow.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Files, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [DOCX document with page screenshots, structured text, inline image markers, and retained PNG/JSON asset files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a vision-capable model for page review; PPTX rendering requires LibreOffice, and PDF rendering requires poppler or PyMuPDF.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Conversion setup may install software or alter persistent command settings without clear approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a prepared environment and run conversion with --no-install. Require approval before renderer installation, sudo commands, executable-link replacement, or shell configuration edits.
+
+Risk: Conversion output or retained intermediate material may contain errors or sensitive document content.
+
+Mitigation: Keep source documents unchanged, require the text-consistency check to pass, and remove retained screenshots and extracted text when finished.
+
+## Reference(s):
+
+- [Wisely Read PPT on ClawHub](https://clawhub.ai/sedey999/skills/wisely-read-ppt)
+- [macOS LibreOffice installation guide](reference/macos-install.md)
+- [Subagent workflow guide](reference/subagent-workflow.md)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Text]
+
+**Output Format:** [DOCX with per-page editable text, image descriptions, and page screenshots]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Also creates an image-free DOCX that preserves the text and image descriptions.]
+
+## Skill Version(s):
+
+1.4.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

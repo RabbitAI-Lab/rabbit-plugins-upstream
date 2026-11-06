@@ -1,45 +1,53 @@
-## Description: <br>
-A physics study aid that classifies mistakes into five error dimensions, tracks recurring weak areas, and produces physics error maps and weak-area reports while coordinating with a general correction notebook. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向初高中生的物理错题根因分析工具，按图景、概念、公式、过程和数学工具五个维度定位弱项并生成分析报告。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-assistant agents use this skill to diagnose physics mistakes, distinguish diagram, concept, formula, process, and math-tool errors, and turn repeated errors into targeted weak-area tracking and review reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill keeps structured physics mistake records and may share summaries with named learning companion skills. <br>
-Mitigation: Use the skill only when users are comfortable with that recordkeeping and summary sharing, and follow the artifact's consent boundaries for long-term archives, reminders, and companion-skill handoffs. <br>
-Risk: Weak-area labels could overstate a student's long-term difficulty if repeated errors are treated as permanent. <br>
-Mitigation: Combine repeated-error signals with verification or student confirmation before marking a persistent weak area, as described in the artifact behavior. <br>
+## Use Case:
 
+初中和高中学生可用它分析物理错题的根因，识别反复出现的薄弱点，并按需查看错误类型图谱或月报。
 
-## Reference(s): <br>
-- [Physics Error Dimension Table](references/physics-error-dimension-table.md) <br>
-- [Physics Concept Confusion Map](references/physics-concept-confusion-map.md) <br>
-- [Physics Math Tools Checklist](references/physics-math-tools-checklist.md) <br>
-- [Physics Diagram Guide](references/physics-diagram-guide.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-error-dna) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and structured text guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include physics error classifications, weak-area summaries, practice guidance, monthly reports, and handoff summaries for companion learning skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: 学习记录、共享和提醒由授权设置控制；本次审查未覆盖宿主平台的存储、删除行为或配套技能的实现。
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: 使用前检查宿主平台的存储与删除行为及配套技能权限；仅在你选择启用时开放共享或提醒。
+
+## Reference(s):
+
+- [Physics error dimension table](references/physics-error-dimension-table.md)
+- [Physics concept confusion map](references/physics-concept-confusion-map.md)
+- [Physics math tools checklist](references/physics-math-tools-checklist.md)
+- [Physics diagram guide](shared/physics-diagram-guide.md)
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-error-dna)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown]
+
+**Output Format:** [中文自然语言错因分析、分类结果和弱项报告；按需提供 Markdown 图谱或月报]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [依据可用的错题档案数据分析；样本不足时应标明不确定性。]
+
+## Skill Version(s):
+
+2.12.6 (source: server-resolved release, SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,51 @@
-## Description: <br>
-Pylon lets an agent read, create, and update Pylon records through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Access Pylon through an OOMOL-connected account to read, search, create, and update support data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Pylon support and customer records from an agent session, including issue, account, contact, and organization workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or update live Pylon records through a connected OOMOL account. <br>
-Mitigation: Confirm write payloads and expected effects with the user before running write actions. <br>
-Risk: First-time setup may install or authenticate the oo CLI if the tool is missing or disconnected. <br>
-Mitigation: Use setup fallbacks only after a matching command failure and only when the user trusts the OOMOL CLI process. <br>
+## Use Case:
 
+Developers and support teams use this skill to retrieve and manage Pylon accounts, contacts, issues, and issue messages through their connected account.
 
-## Reference(s): <br>
-- [Pylon homepage](https://www.usepylon.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: The CLI dependency may add persistent instructions to other agents without clearly disclosing that effect.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI's broader effects, use a verified release, and set OO_SKILLS_SYNC_DISABLED=1 before first use if Pylon access is all you need. Review OOMOL's access to Pylon data and retain confirmation for write actions.
+
+## Reference(s):
+
+- [Pylon API documentation](https://docs.usepylon.com/pylon-docs/developer/api)
+- [Pylon](https://www.usepylon.com)
+- [oo CLI documentation and source](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands]
+
+**Output Format:** [Text responses and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

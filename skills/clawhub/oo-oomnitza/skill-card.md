@@ -1,42 +1,56 @@
-## Description: <br>
-Oomnitza (oomnitza.com). Use this skill for Oomnitza requests that search and read data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Oomnitza (oomnitza.com). Use this skill for ANY Oomnitza request — searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, operators, and developers use this skill to validate an Oomnitza connection and retrieve Oomnitza asset or user information through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on an installed and authenticated oo CLI plus an active Oomnitza connection. <br>
-Mitigation: Use the documented first-time setup path only after a command fails with an installation, authentication, connection, or billing error. <br>
-Risk: Future connector actions could include write or destructive operations even though this release is read-only. <br>
-Mitigation: Limit use to the listed read-only actions and require explicit user confirmation before any future action tagged write or destructive is run. <br>
+## Use Case:
 
+People and agents connected to an Oomnitza account can validate the connection and retrieve asset or user records. The skill guides callers to inspect each action's schema and submit a matching request through the oo CLI.
 
-## Reference(s): <br>
-- [Oomnitza homepage](https://www.oomnitza.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-oomnitza) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector schema and run commands; connector responses are JSON with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: Setup can execute downloaded software without verification or a separate approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Preinstall a vetted oo CLI release and require approval before installing software or changing agent skills.
+
+Risk: The OOMOL-connected account may expose requested Oomnitza records to the connector.
+
+Mitigation: Confirm that OOMOL should receive access to the records needed for the task.
+
+## Reference(s):
+
+- [Oomnitza](https://www.oomnitza.com)
+- [Oomnitza API documentation](https://oomnitza.zendesk.com/hc/en-us/articles/6515859398807-Creating-asset-workflows-using-the-Oomnitza-API)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [Oomnitza skill release](https://clawhub.ai/oomol/skills/oo-oomnitza)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [JSON action responses and Markdown guidance with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action results vary by selected Oomnitza read operation.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

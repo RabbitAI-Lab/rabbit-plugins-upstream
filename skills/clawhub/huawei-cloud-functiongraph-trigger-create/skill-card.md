@@ -1,47 +1,58 @@
-## Description: <br>
-Create and configure scheduled TIMER triggers for Huawei Cloud FunctionGraph functions using Quartz Cron expressions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates scheduled TIMER and event-driven OBS triggers for Huawei Cloud FunctionGraph functions.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud engineers use this skill to create, validate, and verify scheduled TIMER triggers for Huawei Cloud FunctionGraph functions using Cron or Rate schedules. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires Huawei Cloud credentials that can create or manage FunctionGraph triggers. <br>
-Mitigation: Use a least-privilege test account first, keep credentials in environment variables, and avoid exposing real secrets in logged terminals. <br>
-Risk: The skill can perform real cloud changes against the function URN and schedule provided by the user. <br>
-Mitigation: Verify the function URN, trigger name, schedule, region, and project before execution, and start with a disabled or test trigger when practical. <br>
-Risk: Troubleshooting guidance may weaken TLS if SSL verification is disabled with real credentials. <br>
-Mitigation: Do not disable SSL verification for real credentials or production use. <br>
+## Use Case:
 
+Developers managing Huawei Cloud FunctionGraph functions use this skill to create scheduled TIMER triggers or OBS object event triggers for existing functions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-functiongraph-trigger-create) <br>
-- [SDK Installation Guide](references/sdk-installation-guide.md) <br>
-- [IAM Policies](references/iam-policies.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [Cron Expression Reference](references/cron-reference.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Code, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces commands and scripts that can create real Huawei Cloud FunctionGraph TIMER triggers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Verification steps described as read-only can execute a function or leave an additional recurring trigger active.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the verification procedure first, approve function execution separately, use an isolated test function with synthetic data, and remove temporary triggers.
+
+Risk: Cloud credentials and permissions can affect the target function and its triggers.
+
+Mitigation: Scope credentials to the intended function and avoid optional lifecycle permissions unless they are needed.
+
+## Reference(s):
+
+- [Cron Expression Reference](references/cron-reference.md)
+- [OBS Event Trigger Guide](references/obs-trigger-guide.md)
+- [IAM Policies](references/iam-policies.md)
+- [Verification Method](references/verification-method.md)
+- [CreateFunctionTrigger API](https://support.huaweicloud.com/api-functiongraph/functiongraph_06_0122.html)
+- [FunctionGraph Permissions and Authorization Items](https://support.huaweicloud.com/api-functiongraph/functiongraph_06_1100.html)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [FunctionGraph trigger configuration with a JSON status summary]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates a persistent TIMER schedule or OBS event trigger for an existing function.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

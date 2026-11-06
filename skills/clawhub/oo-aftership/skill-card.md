@@ -1,45 +1,55 @@
-## Description: <br>
-AfterShip lets an agent operate shipment tracking and courier workflows through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use an OOMOL-connected AfterShip account to inspect courier and tracking data and manage tracking records.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and support teams use this skill to inspect and manage AfterShip tracking records and courier data through the oo CLI while relying on live connector schemas. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, complete, retrack, or delete AfterShip tracking records. <br>
-Mitigation: Confirm the exact action, target tracking record, payload, and expected effect with the user before running write or destructive commands. <br>
-Risk: The skill depends on the oo CLI and an OOMOL-connected AfterShip account. <br>
-Mitigation: Run installer, login, or connection setup steps only when needed and only when the user trusts OOMOL for the connector setup. <br>
-Risk: Connector input and output schemas may change. <br>
-Mitigation: Inspect the live connector schema before building each payload. <br>
+## Use Case:
 
+Users can look up couriers and shipment tracking status, and create, update, complete, retrack, or delete tracking records through their connected AfterShip account.
 
-## Reference(s): <br>
-- [AfterShip homepage](https://www.aftership.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-aftership) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands inspect connector schemas and may execute read, write, or destructive AfterShip actions with user confirmation for state changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Setup directs the user to execute an external installer whose release and service implementation were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a trusted CLI release, and require separate approval before running the installer.
+
+Risk: The integration uses connected-account access and may automatically synchronize skills.
+
+Mitigation: Review the connected-account access, disable automatic synchronization if unwanted, and keep approval checks for tracking changes and deletion.
+
+## Reference(s):
+
+- [AfterShip Tracking API documentation](https://www.aftership.com/docs/tracking/fcd9acb5f448a-api-overview)
+- [AfterShip](https://www.aftership.com/)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Guidance]
+
+**Output Format:** [JSON responses with shell command examples and Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tracking changes require user approval; deletion requires approval of the target.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter; server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

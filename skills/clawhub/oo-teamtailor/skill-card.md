@@ -1,44 +1,52 @@
-## Description: <br>
-Provides agent guidance for reading Teamtailor departments, jobs, locations, and job details through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to search and read Teamtailor data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and recruiting teams use this skill to let an agent inspect Teamtailor connector schemas and read departments, jobs, locations, and individual job records through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Teamtailor job, department, and location data through an OOMOL-connected account. <br>
-Mitigation: Install and use it only where that Teamtailor read access is intended, and keep OOMOL and Teamtailor account permissions aligned with the agent's task. <br>
-Risk: Authentication or connection setup could grant account access if approved unexpectedly. <br>
-Mitigation: Approve OOMOL sign-in or Teamtailor connection steps only when intentionally connecting the account for this skill. <br>
-Risk: Future versions could add write or destructive actions. <br>
-Mitigation: Review security evidence, action tags, and live schemas before upgrading, and require explicit user confirmation for any write or destructive action. <br>
+## Use Case:
 
+Recruiting operations teams use this skill to search Teamtailor departments, jobs, and locations and retrieve job details through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Teamtailor skill page](https://clawhub.ai/oomol/skills/oo-teamtailor) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Teamtailor homepage](https://www.teamtailor.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides read-only Teamtailor actions; connector command responses are JSON when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup can execute downloaded code and add other agent skills without clearly explaining those changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, verify the installer and selected release, decide whether to allow additional skills, and use OO_SKILLS_SYNC_DISABLED=1 to disable startup skill synchronization. Limit Teamtailor connection permissions to those needed.
+
+## Reference(s):
+
+- [Teamtailor homepage](https://www.teamtailor.com/)
+- [Teamtailor API documentation](https://docs.teamtailor.com/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Teamtailor ClawHub listing](https://clawhub.ai/oomol/skills/oo-teamtailor)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON data]
+
+**Output Format:** [Structured Teamtailor records with text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only retrieval; results depend on the connected account's permissions.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

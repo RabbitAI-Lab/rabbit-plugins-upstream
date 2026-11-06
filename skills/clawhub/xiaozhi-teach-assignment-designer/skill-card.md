@@ -1,44 +1,65 @@
-## Description: <br>
-Helps teachers design differentiated assignments, scoring rubrics, feedback templates, and follow-up data handoffs from lesson goals and student-learning evidence. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+为教师生成按难度分层、标注预计用时的作业任务卡、评分标准和反馈模板。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Teachers use this skill to turn a knowledge point, lesson emphasis, or student-learning summary into leveled homework task cards, scoring criteria, and concise feedback templates. It is intended for teacher review and classroom use, not automatic grading or independent student placement. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Assignment results sent to student-analysis workflows may contain sensitive student information. <br>
-Mitigation: Confirm organizational permission before sharing de-identified results, and avoid real names, home addresses, parent identities, and individual score comparisons. <br>
-Risk: Leveled assignment output could be mistaken for automatic grading or final placement decisions. <br>
-Mitigation: Use the skill output as teacher-reviewed assignment design and scoring guidance; the artifact states that it outputs rubrics rather than automatic grading. <br>
-Risk: A/B/C differentiated task cards may be unsupported when no student-learning summary is available. <br>
-Mitigation: When student context is unavailable, use the artifact's basic-assignment fallback and label the output as lacking student-learning evidence. <br>
+## Use Case:
 
+教师使用此技能设计有难度梯度、可批改且时长可控的课后作业，并生成评分标准与学生反馈。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-assignment-designer) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [assignment-rubric.md](references/assignment-rubric.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or structured text with assignment plans, leveled task cards, rubrics, and feedback templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include A/B/C differentiation, estimated completion time, scoring criteria, de-identified feedback templates, and student-analyzer handoff fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Generated questions and time estimates may be inaccurate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review questions and timing suggestions before assigning the work to students.
+
+Risk: Homework records may contain student information.
+
+Mitigation: Use aliases and aggregate results, confirm consent before sharing, and use the session opt-out when records should not be accessed or saved.
+
+Risk: Active examination questions or answer keys may be confidential.
+
+Mitigation: Do not provide exam materials before all relevant sessions are complete; use approved source material or teacher-created practice instead.
+
+Risk: Host storage protections and separately installed companion skills were not verified.
+
+Mitigation: Check the host's storage protections and companion-skill safeguards before using student records across tools.
+
+## Reference(s):
+
+- [作业设计师（ClawHub release）](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-assignment-designer)
+- [发布者 qizhitang](https://clawhub.ai/user/qizhitang)
+- [作业评分标准与分层任务卡模板](artifact/references/assignment-rubric.md)
+- [AI 生成题目自检指南](artifact/shared/ai-item-check.md)
+- [危机例外处置指南](artifact/shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language task cards, scoring rubrics, feedback templates, and completion summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include per-task time estimates and tiered versions when class information is available; generated questions require teacher review.]
+
+## Skill Version(s):
+
+2.12.6 (source: SKILL.md frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

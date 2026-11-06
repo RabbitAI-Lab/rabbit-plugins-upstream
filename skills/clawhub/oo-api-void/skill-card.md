@@ -1,42 +1,55 @@
-## Description: <br>
-APIVoid (apivoid.com). Use this skill for ANY APIVoid request: searching and reading data through the OOMOL APIVoid connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides APIVoid domain, IP, and URL reputation checks, email verification, and account usage information through a connected OOMOL account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to query APIVoid reputation, blacklist, risk, verification, and account-usage data through an OOMOL-connected account. It is intended for domain, IP, URL, and email reputation workflows where the agent should inspect the live connector schema before running an action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run APIVoid connector actions through an authenticated OOMOL account, including account usage lookup and reputation checks that may depend on account credit. <br>
-Mitigation: Use an account with appropriately scoped access, review connector schemas before execution, and stop when APIVoid or OOMOL reports insufficient credit or connection problems. <br>
-Risk: APIVoid results may influence security or reputation decisions for domains, IPs, URLs, and email addresses. <br>
-Mitigation: Treat returned reputation and risk signals as decision support and validate high-impact actions with additional context before acting. <br>
+## Use Case:
 
+Developers and security analysts can use the skill to check domain, IP, and URL reputation, verify email addresses, and review APIVoid account usage. It runs lookups through the user's connected OOMOL account and returns structured results.
 
-## Reference(s): <br>
-- [APIVoid homepage](https://www.apivoid.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub APIVoid skill page](https://clawhub.ai/oomol/skills/oo-api-void) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs the agent to fetch the live connector schema before constructing action payloads and to return APIVoid responses from the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: The required CLI may install lasting instructions into other agents without making that behavior clear.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and pin a known CLI release before enabling it. Where supported, set OO_SKILLS_SYNC_DISABLED=1 before starting the CLI to prevent startup skill synchronization.
+
+Risk: Lookup inputs may contain credentials or other sensitive data sent to OOMOL and APIVoid; the external installers and server-side connector were not verified by this artifact review.
+
+Mitigation: Review the CLI and connector setup, and remove URL credentials, tokens, and any lookup data you do not intend to share before making a request.
+
+## Reference(s):
+
+- [APIVoid API documentation](https://docs.apivoid.com/)
+- [APIVoid](https://www.apivoid.com/)
+- [oo CLI source repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API results, JSON, Guidance]
+
+**Output Format:** [Structured JSON results with concise natural-language summaries and Markdown setup guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Lookup results depend on the requested APIVoid action and the connected account.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
