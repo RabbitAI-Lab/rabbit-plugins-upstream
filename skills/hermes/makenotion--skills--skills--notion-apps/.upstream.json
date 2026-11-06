@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/makenotion/skills/tree/main/skills/notion-apps",
+  "identifier": "makenotion/skills/skills/notion-apps",
+  "repo": "makenotion/skills",
+  "path": "skills/notion-apps",
+  "branch": "main",
+  "pushedAt": "2026-09-22T22:14:26Z",
+  "contentHash": "cbec7614ccde7ec279c075df0c9396fdcf7d2504b0ee135aabdd9695126a61d8",
+  "fetchedAt": "2026-11-06T15:08:36.650Z"
+}
