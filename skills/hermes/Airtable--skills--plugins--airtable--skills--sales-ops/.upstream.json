@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/Airtable/skills/tree/main/plugins/airtable/skills/sales-ops",
+  "identifier": "Airtable/skills/plugins/airtable/skills/sales-ops",
+  "repo": "Airtable/skills",
+  "path": "plugins/airtable/skills/sales-ops",
+  "branch": "main",
+  "pushedAt": "2026-07-21T18:20:59Z",
+  "contentHash": "11830656af71a070330ecadbdfddc35c6c2283844ab89cbbcac0a50445e3b329",
+  "fetchedAt": "2026-11-06T15:08:36.995Z"
+}

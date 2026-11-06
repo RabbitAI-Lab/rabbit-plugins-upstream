@@ -5,7 +5,7 @@
   "repo": "NVIDIA/skills",
   "path": "skills/nemo-mbridge-perf-megatron-fsdp",
   "branch": "main",
-  "pushedAt": "2026-07-24T21:26:54Z",
-  "contentHash": "ed20c6f2e1e589b70c0997c0f74cd45ba869566060b72f8f97691c4b041e3a74",
-  "fetchedAt": "2026-07-26T17:03:52.334Z"
+  "pushedAt": "2026-11-06T06:25:30Z",
+  "contentHash": "65744212aa268e0f080c9765c215945615b8ea1b3e921a65f6a3759745a848fe",
+  "fetchedAt": "2026-11-06T15:08:41.304Z"
 }
