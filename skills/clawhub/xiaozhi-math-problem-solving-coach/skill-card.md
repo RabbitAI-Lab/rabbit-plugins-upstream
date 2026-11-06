@@ -1,45 +1,63 @@
-## Description: <br>
-A math tutoring coach that guides students through problem solving with Socratic questions, CLAW prompts, photo-question workflows, error analysis, same-type practice, and exam review without directly giving answers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向初高中学生的中文数学解题教练，通过逐级追问帮助学生厘清思路、订正单题，并提供同类练习与考前梳理。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners and education agents use this skill to work through math questions, identify where a student is stuck, analyze mistakes, generate similar practice problems, and prepare focused exam review while avoiding direct answer-giving. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Student photos may contain personal, school, or location information when the photo-question workflow is used. <br>
-Mitigation: Require clear consent and image-redaction guidance before OCR or multimodal processing, especially in environments with students or minors. <br>
-Risk: Learning-profile and error-history records may be read or written during tutoring workflows. <br>
-Mitigation: Provide controls to inspect, disable, limit access to, and delete learning-profile and error-history records. <br>
-Risk: Tutoring guidance and generated practice problems can be incomplete or misleading for a learner's level or curriculum. <br>
-Mitigation: Use teacher, parent, or administrator review for high-stakes learning contexts and encourage students to verify reasoning rather than rely on final answers. <br>
+## Use Case:
 
+初中和高中学生可用它分析一道数学题、逐步获得提示、订正错误、练习同类题，或在考试前梳理一章内容。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-problem-solving-coach) <br>
-- [CLAW template extensions](references/claw-templates-extended.md) <br>
-- [Math Socratic guide](references/math-socrates-guide.md) <br>
-- [Photo four-step state machine](references/photo-4step-statemachine.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-style conversational tutoring guidance, diagnostic questions, prompt templates, review outlines, and practice problems.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use photo-question interpretation through multimodal or OCR-capable host systems and may read or update learning-profile and error-history records when those companion skills are available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Saved records, reminders, or cross-skill sharing can involve student information when enabled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable these features only when wanted, and review the host and companion skills before sharing student information.
+
+Risk: Companion-skill behavior and host data retention were not verified in the release evidence.
+
+Mitigation: Review the host and companion skills' behavior and data-retention practices before using sharing or saved records.
+
+Risk: The security evidence reports minor instructional inconsistencies that may affect tutoring guidance.
+
+Mitigation: Check worked solutions and generated practice problems against the original question and course materials.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-math-problem-solving-coach)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Skill instructions](SKILL.md)
+- [Hint ladder](shared/hint-ladder.md)
+- [Math Socratic guide](references/math-socrates-guide.md)
+- [Generated item self-check](shared/ai-item-check.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Worked examples]
+
+**Output Format:** [Chinese-language conversational text with mathematical notation, step-by-step hints, worked solutions, and similar practice problems]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Adapts hint depth to the student's progress; primarily supports one problem or one exam-review topic per session.]
+
+## Skill Version(s):
+
+2.12.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

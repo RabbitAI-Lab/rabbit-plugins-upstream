@@ -3,6 +3,7 @@
  * 消息 + 任务 两张表，进程重启数据不丢失
  */
 import Database, { type Database as DatabaseType, type Statement } from "better-sqlite3";
+import { randomUUID } from "crypto";
 import * as fs from "fs";
 import { join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
@@ -179,6 +180,40 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_consumed_log       ON consumed_log(agent_id, resource);
 `);
 
+// ─── Feature B: 人在环授权队列 ──────────────────────────
+// auth_requests：Agent 执行中遇到的敏感操作授权请求；auth_grants：可选的信任窗口。
+// 幂等建表（CREATE TABLE IF NOT EXISTS），老库自动迁移。
+db.exec(`
+  CREATE TABLE IF NOT EXISTS auth_requests (
+    id              TEXT PRIMARY KEY,                 -- req_<timestamp>_<rand>
+    agent_id        TEXT NOT NULL,                    -- 请求方 Agent
+    task_id         TEXT,                             -- 关联任务（可空）
+    op_type         TEXT NOT NULL,                    -- 见 AUTH_OP_TYPES
+    op_payload      TEXT,                             -- JSON：具体操作参数，供人类判定
+    status          TEXT NOT NULL DEFAULT 'pending',  -- pending|approved|rejected|expired
+    created_at      INTEGER NOT NULL,
+    expires_at      INTEGER NOT NULL,                 -- created_at + AUTH_REQUEST_TTL_MS
+    resolved_by     TEXT,                             -- 决议人（人类操作者 ID / admin）
+    resolved_at     INTEGER,
+    decision_reason TEXT
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_auth_status ON auth_requests(status);
+  CREATE INDEX IF NOT EXISTS idx_auth_agent  ON auth_requests(agent_id);
+
+  -- 可选：信任窗口（时间窗口信任粒度，见设计文档 §9 决策 3）
+  CREATE TABLE IF NOT EXISTS auth_grants (
+    id          TEXT PRIMARY KEY,
+    agent_id    TEXT NOT NULL,
+    op_category TEXT NOT NULL,                        -- 类目级信任（如 'external_api'）
+    granted_by  TEXT NOT NULL,
+    granted_at  INTEGER NOT NULL,
+    expires_at  INTEGER NOT NULL
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_grant_agent_cat ON auth_grants(agent_id, op_category);
+`);
+
 // ─── SSE 事件日志（D1）：全局单调 seq，支持重连精确补发 + 首连补发 ──
 // delivered=0 表示尚未成功投递，用于首连补发；id 即 SSE 的 Last-Event-ID
 db.exec(`
@@ -194,6 +229,306 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_event_log_agent        ON event_log(agent_id, id);
   CREATE INDEX IF NOT EXISTS idx_event_log_undelivered  ON event_log(agent_id, delivered, id);
 `);
+
+// ─── P1/P2-B: 订阅表（SSE 事件订阅剪枝 + L2 结构化条件） ───
+// 借鉴 DeepSeek Super-Agent「订阅直通」思想：让 Agent 显式声明关心哪些事件，
+// Hub 在 broadcastToAll 时按订阅规则剪枝，未订阅 Agent 维持现状全投（保守零回归）。
+//   L1: event_type（'*' 或空 = 任意类型）+ topic_filter（空 = 不限；非空 = payload JSON 串 includes）
+//   L2: condition_json（空 = 无附加条件；非空 = 结构化条件数组，全部 AND 命中才投递）
+// 唯一约束含 condition_json，保证「同 L1 规则 + 不同 L2 条件」可并存且幂等。
+db.exec(`
+  CREATE TABLE IF NOT EXISTS subscriptions (
+    id             TEXT PRIMARY KEY,
+    agent_id       TEXT NOT NULL,
+    event_type     TEXT NOT NULL DEFAULT '*',
+    topic_filter   TEXT NOT NULL DEFAULT '',
+    condition_json TEXT NOT NULL DEFAULT '',
+    created_at     INTEGER NOT NULL,
+    UNIQUE(agent_id, event_type, topic_filter, condition_json)
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_subscriptions_agent ON subscriptions(agent_id);
+`);
+
+// 幂等迁移：P1 时代老库没有 condition_json 且唯一约束只含前三列。
+// SQLite 无法用 ALTER TABLE 修改表级唯一约束，故重建表并复制旧数据
+// （旧规则 condition_json='' = 无 L2 条件，语义完全不变）。
+try {
+  const subCols = db.pragma("table_info(subscriptions)") as PragmaColumnInfo[];
+  if (subCols.length > 0 && !subCols.some((c) => c.name === "condition_json")) {
+    transaction(() => {
+      db.exec(`
+        CREATE TABLE subscriptions_v2 (
+          id             TEXT PRIMARY KEY,
+          agent_id       TEXT NOT NULL,
+          event_type     TEXT NOT NULL DEFAULT '*',
+          topic_filter   TEXT NOT NULL DEFAULT '',
+          condition_json TEXT NOT NULL DEFAULT '',
+          created_at     INTEGER NOT NULL,
+          UNIQUE(agent_id, event_type, topic_filter, condition_json)
+        );
+        INSERT INTO subscriptions_v2 (id, agent_id, event_type, topic_filter, condition_json, created_at)
+          SELECT id, agent_id, event_type, topic_filter, '', created_at FROM subscriptions;
+        DROP TABLE subscriptions;
+        ALTER TABLE subscriptions_v2 RENAME TO subscriptions;
+        CREATE INDEX IF NOT EXISTS idx_subscriptions_agent ON subscriptions(agent_id);
+      `);
+    });
+    logger.info("db_migration", {
+      module: "db", table: "subscriptions", phase: "P2-B",
+      detail: "condition_json column + unique constraint rebuilt (old rules keep L1-only semantics)",
+    });
+  }
+} catch (e: unknown) {
+  logger.warn("db_migration_warning", {
+    module: "db", table: "subscriptions", phase: "P2-B", error: getErrorMessage(e),
+  });
+}
+
+export interface Subscription {
+  id: string;
+  agent_id: string;
+  event_type: string;
+  topic_filter: string;
+  condition_json: string;
+  created_at: number;
+}
+
+export const subscriptionStmt: Record<string, Statement> = {
+  subscribe: db.prepare<Subscription>(
+    `INSERT OR IGNORE INTO subscriptions (id, agent_id, event_type, topic_filter, condition_json, created_at)
+     VALUES (@id, @agent_id, @event_type, @topic_filter, @condition_json, @created_at)`
+  ),
+  unsubscribe: db.prepare<[string, string, string]>(
+    `DELETE FROM subscriptions WHERE agent_id=? AND event_type=? AND topic_filter=?`
+  ),
+  unsubscribeExact: db.prepare<[string, string, string, string]>(
+    `DELETE FROM subscriptions WHERE agent_id=? AND event_type=? AND topic_filter=? AND condition_json=?`
+  ),
+  unsubscribeAll: db.prepare<string>(
+    `DELETE FROM subscriptions WHERE agent_id=?`
+  ),
+  getByAgent: db.prepare<string>(
+    `SELECT * FROM subscriptions WHERE agent_id=? ORDER BY created_at ASC`
+  ),
+  getAll: db.prepare(
+    `SELECT * FROM subscriptions ORDER BY agent_id ASC, created_at ASC`
+  ),
+};
+
+// ─── P2-B: L2 结构化条件 DSL（纯数据、确定性、零 LLM、无 eval） ───
+// 条件数组全部 AND；每条 { path, op, value? }。
+// op: eq / ne / in / contains / gt / lt / exists
+// path: dot 路径（字母数字下划线/连字符，最多 5 段），禁止 __proto__/constructor/prototype。
+// value: 仅标量（string/number/boolean/null）；op=in 时须为标量数组。
+export type ConditionOp = "eq" | "ne" | "in" | "contains" | "gt" | "lt" | "exists";
+export interface StructuredCondition {
+  path: string;
+  op: ConditionOp;
+  value?: unknown;
+}
+const CONDITION_OPS = new Set<string>(["eq", "ne", "in", "contains", "gt", "lt", "exists"]);
+const OPS_WITHOUT_VALUE = new Set<string>(["exists"]);
+const MAX_CONDITIONS = 10;
+const MAX_PATH_LENGTH = 100;
+const MAX_PATH_DEPTH = 5;
+const MAX_CONDITION_JSON_LENGTH = 1024;
+const UNSAFE_PATH_SEGMENTS = new Set<string>(["__proto__", "constructor", "prototype"]);
+
+function isScalar(v: unknown): boolean {
+  return v === null || ["string", "number", "boolean"].includes(typeof v);
+}
+
+/** 解析并校验 condition_json。非法一律抛错（fail-closed，绝不静默放宽规则）。 */
+export function parseConditions(raw: string): StructuredCondition[] {
+  const text = (raw ?? "").trim();
+  if (!text) return [];
+  if (text.length > MAX_CONDITION_JSON_LENGTH) {
+    throw new Error(`condition_json 过长（上限 ${MAX_CONDITION_JSON_LENGTH} 字符）`);
+  }
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    throw new Error("condition_json 必须是合法 JSON 数组");
+  }
+  if (!Array.isArray(parsed)) throw new Error("condition_json 必须是条件数组");
+  if (parsed.length > MAX_CONDITIONS) throw new Error(`条件数量超过上限 ${MAX_CONDITIONS}`);
+
+  const out: StructuredCondition[] = [];
+  for (const item of parsed) {
+    if (!item || typeof item !== "object" || Array.isArray(item)) throw new Error("每个条件必须是对象");
+    const rec = item as Record<string, unknown>;
+    if (typeof rec.path !== "string" || !rec.path.trim()) throw new Error("条件 path 必须是非空字符串");
+    const path = rec.path.trim();
+    const parts = path.split(".");
+    if (
+      path.length > MAX_PATH_LENGTH || parts.length > MAX_PATH_DEPTH ||
+      parts.some((p) => !p || !/^[A-Za-z0-9_-]+$/.test(p) || UNSAFE_PATH_SEGMENTS.has(p))
+    ) {
+      throw new Error("条件 path 非法（仅允许字母数字下划线/连字符/点，禁止 __proto__/constructor/prototype）");
+    }
+    if (typeof rec.op !== "string" || !CONDITION_OPS.has(rec.op)) {
+      throw new Error(`条件 op 非法，允许：${[...CONDITION_OPS].join("/")}`);
+    }
+    const op = rec.op as ConditionOp;
+    const value = rec.value;
+    if (!OPS_WITHOUT_VALUE.has(op)) {
+      if (value === undefined) throw new Error(`条件 op=${op} 必须提供 value`);
+      if (op === "in") {
+        if (!Array.isArray(value) || !value.every(isScalar)) throw new Error("op=in 的 value 必须是标量数组");
+      } else if (!isScalar(value)) {
+        throw new Error("条件 value 必须是标量（string/number/boolean/null）");
+      }
+    }
+    const cond: StructuredCondition = { path, op };
+    if (!OPS_WITHOUT_VALUE.has(op)) cond.value = value;
+    out.push(cond);
+  }
+  return out;
+}
+
+/** 规范化：固定键序重序列化，保证语义相同的条件字符串幂等去重。 */
+export function normalizeConditionJson(raw: string): string {
+  const conds = parseConditions(raw);
+  return conds.length === 0 ? "" : JSON.stringify(conds);
+}
+
+function readPath(root: unknown, path: string): unknown {
+  let cur: unknown = root;
+  for (const part of path.split(".")) {
+    if (cur === null || typeof cur !== "object") return undefined;
+    cur = (cur as Record<string, unknown>)[part];
+  }
+  return cur;
+}
+
+function matchesOne(c: StructuredCondition, actual: unknown): boolean {
+  switch (c.op) {
+    case "exists": return actual !== undefined;
+    case "eq": return Object.is(actual, c.value);
+    case "ne": return !Object.is(actual, c.value);
+    case "in": return Array.isArray(c.value) && c.value.some((v) => Object.is(v, actual));
+    case "contains":
+      if (typeof actual === "string") return actual.includes(String(c.value));
+      if (Array.isArray(actual)) return actual.some((v) => Object.is(v, c.value));
+      return false;
+    case "gt":
+      return typeof actual === "number" && typeof c.value === "number" &&
+        Number.isFinite(actual) && Number.isFinite(c.value) && actual > c.value;
+    case "lt":
+      return typeof actual === "number" && typeof c.value === "number" &&
+        Number.isFinite(actual) && Number.isFinite(c.value) && actual < c.value;
+    default: return false;
+  }
+}
+
+/** 纯函数：全部条件 AND 命中才返回 true；无条件返回 true。 */
+export function evaluateConditions(conds: StructuredCondition[], event: Record<string, unknown>): boolean {
+  for (const c of conds) {
+    if (!matchesOne(c, readPath(event, c.path))) return false;
+  }
+  return true;
+}
+
+/** 从订阅规则的 condition_json 求值；非法规则 fail-closed（不投递）。 */
+export function evaluateConditionJson(raw: string, event: Record<string, unknown>): boolean {
+  if (!raw || !raw.trim()) return true;
+  try {
+    return evaluateConditions(parseConditions(raw), event);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * 订阅事件（幂等：基于唯一约束，重复订阅静默忽略）。
+ * @param eventType '*' 或空表示订阅全部事件类型
+ * @param topicFilter 空表示不限主题；非空为对事件 payload JSON 的子串过滤
+ * @param conditionJson L2 结构化条件 JSON 数组字符串（空 = 仅 L1，保持 P1 语义）
+ */
+export function subscribeEvent(
+  agentId: string,
+  eventType: string,
+  topicFilter: string,
+  conditionJson = "",
+): void {
+  subscriptionStmt.subscribe.run({
+    id: randomUUID(),
+    agent_id: agentId,
+    event_type: eventType && eventType.trim() ? eventType : "*",
+    topic_filter: topicFilter && topicFilter.trim() ? topicFilter : "",
+    condition_json: normalizeConditionJson(conditionJson),
+    created_at: Date.now(),
+  });
+}
+
+/**
+ * 退订。
+ * - 若 eventType 与 topicFilter 均为默认（'*'/空）且未指定 conditionJson，则清空该 Agent 全部订阅；
+ * - 指定 conditionJson 时按四元组精确删除（不同 L2 条件可并存）；
+ * - 未指定 conditionJson 时按旧三元组删除（兼容 P1 行为）。
+ * @returns 受影响行数
+ */
+export function unsubscribeEvent(
+  agentId: string,
+  eventType?: string,
+  topicFilter?: string,
+  conditionJson?: string,
+): number {
+  const et = eventType ?? "*";
+  const tf = topicFilter ?? "";
+  if (et === "*" && tf === "" && conditionJson === undefined) {
+    return subscriptionStmt.unsubscribeAll.run(agentId).changes;
+  }
+  if (conditionJson !== undefined) {
+    return subscriptionStmt.unsubscribeExact.run(agentId, et, tf, normalizeConditionJson(conditionJson)).changes;
+  }
+  return subscriptionStmt.unsubscribe.run(agentId, et, tf).changes;
+}
+
+/** 查询某 Agent 的全部订阅规则 */
+export function getSubscriptions(agentId: string): Subscription[] {
+  return subscriptionStmt.getByAgent.all(agentId) as Subscription[];
+}
+
+/** 查询全量订阅规则（用于启动时构建内存缓存） */
+export function getAllSubscriptions(): Subscription[] {
+  return subscriptionStmt.getAll.all() as Subscription[];
+}
+
+/**
+ * 纯函数：判断某事件是否命中 Agent 的订阅规则集合（两级过滤，全部确定性）。
+ * - 任一规则命中即返回 true（应投递）；全部不命中返回 false（剪枝掉）。
+ * L1: event_type（空或 '*' 匹配任意）+ topic_filter（空匹配任意；否则 payload JSON 串 includes）。
+ * L2: condition_json（空 = 无附加条件，L1 命中即投，与 P1 完全一致；非空 = 结构化条件全部 AND）。
+ * 两级都命中该规则才算命中；L2 非法规则 fail-closed（跳过，不误投）。
+ *
+ * @param eventObj 可选事件对象；不传时从 payloadStr 解析。旧的三参调用保持兼容。
+ */
+export function subscriptionMatches(
+  eventType: string,
+  payloadStr: string,
+  subs: Subscription[],
+  eventObj?: Record<string, unknown>,
+): boolean {
+  for (const s of subs) {
+    const typeOk = !s.event_type || s.event_type === "*" || s.event_type === eventType;
+    const topicOk = !s.topic_filter || payloadStr.includes(s.topic_filter);
+    if (!typeOk || !topicOk) continue;
+
+    const raw = s.condition_json ?? "";
+    if (!raw || !raw.trim()) return true; // 旧订阅 / 仅 L1：零回归
+
+    let obj = eventObj;
+    if (!obj) {
+      try { obj = JSON.parse(payloadStr) as Record<string, unknown>; }
+      catch { continue; }
+    }
+    if (evaluateConditionJson(raw, obj)) return true;
+  }
+  return false;
+}
 
 // ─── Phase 4a Migration: tasks 表新增字段 ──────────────
 // 必须在 taskStmt.insert 之前执行
@@ -358,6 +693,62 @@ export const taskStmt: Record<string, Statement> = {
     `SELECT t.* FROM tasks t JOIN pipeline_tasks pt ON t.id=pt.task_id WHERE pt.pipeline_id=? ORDER BY pt.order_index ASC`
   ),
 };
+
+// ─── P0 Watchdog: 卡死 / 离线任务自愈（纯 DB 操作） ──────────
+// 借鉴 DeepSeek Super-Agent「外部 Watchdog + 自治自愈」思想：
+// 把「任务卡死 / Agent 掉线后的孤儿任务」检测与回收下沉到 DB 层，
+// 与 orchestrator 的编排逻辑解耦（本文件不引入 auditLog，避免循环依赖），
+// 审计与通知由 orchestrator 层负责。
+
+/**
+ * 查询某 Agent 处于指定状态的任务（用于离线释放）。
+ */
+export function findTasksByAgentStatus(agentId: string, statuses: string[]): Task[] {
+  if (statuses.length === 0) return [];
+  const placeholders = statuses.map(() => "?").join(", ");
+  return db
+    .prepare<[string, ...string[]]>(
+      `SELECT * FROM tasks WHERE assigned_to=? AND status IN (${placeholders}) ORDER BY updated_at ASC`
+    )
+    .all(agentId, ...statuses) as Task[];
+}
+
+/**
+ * 检测卡死任务：assigned / in_progress 但长时间无进展，或已过 due_at 仍未完成。
+ * @param stuckMs 无进展判定阈值（毫秒）
+ */
+export function findStuckTasks(stuckMs: number): Task[] {
+  const now = Date.now();
+  return db
+    .prepare<[number, number]>(
+      `SELECT * FROM tasks
+       WHERE status IN ('assigned','in_progress')
+         AND (updated_at < ? OR (due_at IS NOT NULL AND due_at < ?))
+       ORDER BY updated_at ASC`
+    )
+    .all(now - stuckMs, now) as Task[];
+}
+
+/**
+ * 将卡死 / 离线任务安全退回收件箱（inbox），清空承接人。
+ * 仅当任务仍处于 assigned / in_progress 才生效（已完成/已取消不动），幂等。
+ * 返回是否实际发生了释放。
+ */
+export function releaseTaskToInbox(taskId: string): boolean {
+  const now = Date.now();
+  return transaction(() => {
+    const before = db
+      .prepare(`SELECT assigned_to, status FROM tasks WHERE id=?`)
+      .get(taskId) as { assigned_to: string; status: string } | undefined;
+    if (!before || (before.status !== "assigned" && before.status !== "in_progress")) {
+      return false;
+    }
+    db.prepare(
+      `UPDATE tasks SET status='inbox', assigned_to='', assigned_at=NULL, updated_at=? WHERE id=?`
+    ).run(now, taskId);
+    return true;
+  });
+}
 
 // ─── Pipeline 操作 ─────────────────────────────────────────
 export interface Pipeline {
@@ -939,6 +1330,7 @@ export function getDbStats(): Record<string, number> {
     "task_dependencies", "quality_gates",
     "attachments",
     "event_log",
+    "subscriptions",
     "messages_archive", "audit_log_archive",
   ];
   const stats: Record<string, number> = {};
@@ -1187,4 +1579,34 @@ export function fts5IntegrityCheck(): { ok: boolean; details: string } {
     }
   }
   return { ok: checks.length === 0, details: checks.join("; ") || "OK" };
+}
+
+/**
+ * 数据库整体完整性自检（PRAGMA integrity_check）。
+ *
+ * 用途：早期暴露「磁盘文件损坏」（SQLITE_CORRUPT），避免像 3.0.25 联调那样
+ * 直到回写失败才在 err.log 里成片刷 `database disk image is malformed`。
+ * 注意：进程重启无法修复盘损，必须由运维用 `sqlite3 .recover` 重建。
+ *
+ * - 健康：{ ok: true, details: "ok" }
+ * - 损坏：{ ok: false, details: "<首行损坏描述>" }（最多拼接前 3 行）
+ * - PRAGMA 本身抛错（库彻底打不开）：{ ok: false, details: "integrity_check_error: ..." }
+ */
+export function integrityCheckDb(): { ok: boolean; details: string } {
+  try {
+    const rows = db.prepare("PRAGMA integrity_check").all() as Array<Record<string, string>>;
+    const first = rows[0]?.["integrity_check"] ?? "ok";
+    if (first === "ok") {
+      return { ok: true, details: "ok" };
+    }
+    const details = rows
+      .slice(0, 3)
+      .map((r) => r["integrity_check"] ?? "")
+      .filter(Boolean)
+      .join("; ");
+    return { ok: false, details };
+  } catch (err) {
+    // 连 PRAGMA 本身都抛错，视为盘损
+    return { ok: false, details: `integrity_check_error: ${getErrorMessage(err)}` };
+  }
 }

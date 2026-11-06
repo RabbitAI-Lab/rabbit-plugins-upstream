@@ -1,40 +1,58 @@
-## Description: <br>
-用“教会小智”的方式，通过讲解、追问、迁移和批判性验证，帮助学生检验自己是否真正理解一个知识点。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Checks a learner’s understanding of a concept by asking them to explain it in their own words, give examples, reason through it, and apply it in a new situation.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and education-focused agents use this skill to run Feynman-style self-checks after learning a topic, after reviewing mistakes, before exams, or before explaining material to others. It helps surface shallow understanding by asking the learner to explain, give examples, justify reasoning, transfer concepts, and perform age-adapted critical validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may store and reuse student learning responses and ratings without clear consent, retention, access, or deletion controls. <br>
-Mitigation: Before using it with children or shared accounts, require clear disclosure of what is saved, where it goes, who can access it, how long it remains, and how a user or parent can delete it. <br>
+## Use Case:
 
+Students use the skill to check whether they understand a concept, find where their explanation gets stuck, and receive a mastery assessment with a suggested next step. Elementary students need an adult present.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning) <br>
-- [费曼测试追问话术参考库](references/feynman-dialogue-patterns.md) <br>
-- [费曼4+1跳验证 · 状态机定义](references/feynman-5jump-statemachine.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown conversation guidance and structured assessment summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce learner-facing prompts, Feynman test evaluations, next-step recommendations, and learning-depth records when the host agent supports shared learner state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Learning records or reminders could expose a student’s learning history.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep memory and sharing disabled for session-only use; save records only after an explicit request with cross-skill sharing enabled, and queue reminders only when requested with reminder consent.
+
+Risk: Elementary learners may need support during learning or when discussing a difficult situation.
+
+Mitigation: Require a parent or teacher to accompany elementary students; stop the learning assessment and follow the crisis referral guidance when safety concerns arise.
+
+## Reference(s):
+
+- [Feynman 4+1 Jump State Machine](artifact/references/feynman-5jump-statemachine.md)
+- [Feynman Dialogue Patterns](artifact/references/feynman-dialogue-patterns.md)
+- [Grade Bands](artifact/shared/grade-bands.md)
+- [Crisis Exception Guidance](artifact/shared/crisis-exception.md)
+- [ClawHub Skill Release](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning)
+- [Publisher Profile](https://clawhub.ai/user/qizhitang)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Conversational prompts followed by a structured mastery assessment in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Identifies the learner’s mastery level, clear points, gaps, and next step; session-only by default, with saved records or reminders only when the learner requests them and the required consent is enabled.]
+
+## Skill Version(s):
+
+2.12.6 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

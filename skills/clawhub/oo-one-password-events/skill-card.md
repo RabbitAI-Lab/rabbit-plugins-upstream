@@ -1,44 +1,56 @@
-## Description: <br>
-Helps agents query 1Password Events API audit events, item usage events, and sign-in attempts through OOMOL's oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+1Password Events API (1password.com). Use this skill for ANY 1Password Events API request — searching and reading data. Whenever a task involves 1Password Events API, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent retrieve read-only 1Password Events API logs for audit review, item usage analysis, and sign-in investigation through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: 1Password event logs may reveal sensitive account activity even when accessed through read-only actions. <br>
-Mitigation: Install and use the skill only with an OOMOL-connected account whose 1Password Events API access is appropriate for the user's audit or investigation task. <br>
-Risk: Connector calls can fail or expose authorization gaps when the oo CLI is not installed, the user is not signed in, the connection is missing, or billing is unavailable. <br>
-Mitigation: Follow the skill's setup and recovery guidance only after a command fails with the matching authentication, connection, scope, credential, or billing error. <br>
+## Use Case:
 
+Developers and administrators use this skill to search 1Password Events API audit events, item usage, and sign-in attempts through their connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-one-password-events) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [1Password Events API homepage](https://1password.com) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides read-only connector calls and returns command output from the oo CLI, typically JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Initial setup executes downloaded CLI code that was not verified, and the CLI may make additional changes to agent skill files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup steps, verify and install a specific CLI release, require approval for installation changes, and set OO_SKILLS_SYNC_DISABLED=1 before invocation if automatic skill-file writes are unwanted.
+
+Risk: The connected service handles security-event data.
+
+Mitigation: Confirm that OOMOL is permitted to handle this data before connecting the service.
+
+## Reference(s):
+
+- [1Password Events API reference](https://www.1password.dev/events-api/reference)
+- [1Password](https://1password.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [JSON event data with concise textual guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only event queries; results depend on the connected account and action schema.]
+
+## Skill Version(s):
+
+1.0.4 (source: server-resolved release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

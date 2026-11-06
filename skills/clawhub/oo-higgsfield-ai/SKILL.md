@@ -1,11 +1,11 @@
 ---
 name: oo-higgsfield-ai
-description: "Higgsfield AI (higgsfield.ai). Use this skill for ANY Higgsfield AI request — reading, creating, and updating data. Whenever a task involves Higgsfield AI, use this skill instead of calling the API directly."
+description: "Higgsfield AI (higgsfield.ai). Use this skill for ANY Higgsfield AI request — reading, creating, updating, and deleting data. Whenever a task involves Higgsfield AI, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Higgsfield AI"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["higgsfield_ai"]
   icon: "https://static.oomol.com/logo/third-party/higgsfield_ai.png"
 ---
@@ -37,7 +37,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `cancel_request` — Cancel a queued Higgsfield generation request. [write]
+- `cancel_request` — Cancel a queued Higgsfield generation request. [destructive]
 - `get_request_status` — Retrieve the current status and outputs for a Higgsfield generation request.
 - `submit_image_generation` — Submit a Higgsfield text-to-image generation request. [write]
 - `submit_video_generation` — Submit a Higgsfield image-to-video generation request. [write]
@@ -71,11 +71,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Higgsfield AI is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=higgsfield_ai
+  https://console.oomol.com/connections/higgsfield_ai
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Higgsfield AI homepage: https://higgsfield.ai/
+- API documentation: https://docs.higgsfield.ai/docs/how-to/introduction

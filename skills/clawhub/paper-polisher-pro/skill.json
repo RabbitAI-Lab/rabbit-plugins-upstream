@@ -1,7 +1,8 @@
 {
   "name": "paper-polisher-pro",
-  "version": "1.1.0",
-  "description": "Academic AI detector fingerprinting Chinese LLMs. 9-layer engine, F1=98.3% on 2026 models.",
-  "author": "docsor1212",
-  "changelog": "v1.1.0: 9-layer detection engine, 1002 patterns, 501 synonyms, 10x 2026 flagship models benchmarked (F1 98.3%)"
+  "version": "7.5.0",
+  "description": "AI writing detector (author self-check) + academic polishing guidance + terminology protection, 100% local. 12-layer recalibrated rule engine (L1-L12, discourse layer included) + token-spectrum layer + length-routed fusion + optional supervised Qwen3-0.6B ONNX layer (AUROC 0.9998 fingerprint-bound held-out) + LLM fingerprint attribution (GLM/DeepSeek/Qwen/Kimi/MiniMax/GPT/Claude/Gemini) + journal precheck + AIGC compliance label check + paragraph attribution + sentence-level rewrite suggestions (guidance, never auto-rewrite). Eval-driven: base-engine numbers reproduce via the bundled held-out evaluation; supervised-layer figures are author-side held-out measurements.",
+  "author": "DoctorQ Lab",
+  "changelog": "v7.5.0: dual-form acceptance parity — verify_forms.py unifies the shipped-form acceptance runners (--form sh: SKILL_ZH.md published AS SKILL.md; --form ch: no SKILL_ZH.md) on one package-copy harness, wired into the release chain so BOTH shipped forms are exercised before every release; archive/README rewritten (the old paragraph still called archived v480/v500 files \"reproducible baselines\" — now points at CURRENT.md as the only caliber authority, with a gate); skill.json layer count aligned to the L12 discourse layer the docs map already ships (11→12). No engine scoring changes. 零新增依赖。",
+  "license": "MIT-0"
 }

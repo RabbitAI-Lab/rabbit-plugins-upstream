@@ -1,42 +1,60 @@
-## Description: <br>
-Coordinates mistake notebooks, Feynman tests, Cornell notes, study plans, and focus data only for explicit learning tasks with user consent and minimal necessary summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Routes learning questions to the appropriate companion skill and, when requested and consented, summarizes authorized learning data in a monthly overview.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners and learning assistants use this skill to decide when to coordinate mistake review, explanation checks, note retrieval, study planning, focus coaching, reminders, and monthly learning-system summaries. It is intended for explicit user-requested coordination rather than automatic broad data collection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill coordinates summaries from multiple learning skills, which can expose more learner context than a single-skill workflow. <br>
-Mitigation: Use it only for explicit coordination, system-check, or monthly-report tasks, and keep inputs limited to the minimum necessary authorized summaries. <br>
-Risk: Study-profile writebacks or reminder synchronization could persist incorrect or unwanted updates if used without consent. <br>
-Mitigation: Require explicit user permission before writebacks or reminder sync, and block malformed handover data with the provided schema before persistence. <br>
+## Use Case:
 
+Students use this skill to route a learning question to the right companion skill, avoid duplicate analysis, and request a monthly learning overview assembled from only the summaries they have authorized. Primary-school students use it with an adult present.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-coordinator) <br>
-- [One-week linkage record](references/one-week-linkage-record.md) <br>
-- [Handover protocol schema](schemas/handover-protocol.schema.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with optional structured JSON handover blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses consent-gated summaries and schema-validated handover payloads when coordinating with related learning skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Parent-visible sharing and reminders may expose learning information beyond what the student intended to share.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable only the sharing and reminders needed, and review parent-visible permissions and consent before producing a summary.
+
+Risk: Crisis guidance includes exceptions to ordinary sharing preferences, and handling depends partly on components outside this bundle.
+
+Mitigation: Follow the disclosed crisis referral protocol, explain relevant sharing exceptions, and do not assume this skill controls storage or permission enforcement.
+
+Risk: Primary-school use requires adult accompaniment.
+
+Mitigation: Use with a parent or teacher present.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-coordinator)
+- [One-week linkage record example](artifact/references/one-week-linkage-record.md)
+- [Handover protocol schema](artifact/schemas/handover-protocol.schema.json)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, JSON]
+
+**Output Format:** [Chinese text or Markdown summaries, with structured JSON handover payloads when needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Routes tasks and summarizes minimum-necessary, authorized data on request; it does not independently teach, analyze errors, or send reminders.]
+
+## Skill Version(s):
+
+2.12.6 (source: release evidence, frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

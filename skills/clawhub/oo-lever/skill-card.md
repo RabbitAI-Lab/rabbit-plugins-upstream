@@ -1,43 +1,56 @@
-## Description: <br>
-Operates Lever through an OOMOL-connected account to read opportunities, postings, and notes, and to create opportunity notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the oo CLI to read Lever postings, opportunities, and notes, and create notes on opportunities.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate Lever recruiting workflows through the OOMOL connector, including reading opportunities and postings and adding notes when confirmed by the user. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Lever opportunity records, such as adding a note. <br>
-Mitigation: Require the agent to preview the exact action and payload and obtain user confirmation before running any write action. <br>
-Risk: The skill has broad routing scope for Lever requests and may be selected whenever a task involves Lever. <br>
-Mitigation: Install it only when the agent is expected to handle Lever tasks, and review proposed candidate, job, offer, or pipeline changes before execution. <br>
+## Use Case:
 
+Recruiting teams and agents use this skill to retrieve Lever postings, opportunities, and notes, and to add notes to opportunities through a connected Lever account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-lever) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Lever Homepage](https://www.lever.co) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include connector action names, schema-inspection commands, and confirmation prompts for write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Setup may execute unverified remote code and introduce broader agent changes without clear approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation separately, approve a specific verified release, and use OO_SKILLS_SYNC_DISABLED to suppress startup synchronization if desired.
+
+Risk: Creating an opportunity note changes Lever data.
+
+Mitigation: Connect only the intended Lever account and confirm the note-writing payload before execution.
+
+## Reference(s):
+
+- [Lever](https://www.lever.co)
+- [Lever API documentation](https://hire.lever.co/developer/documentation)
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md#environment-variables)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [JSON action responses with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Response fields depend on the selected Lever action.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

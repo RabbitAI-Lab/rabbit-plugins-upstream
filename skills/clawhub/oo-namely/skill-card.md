@@ -1,43 +1,56 @@
-## Description: <br>
-Namely (namely.com). Use this skill for ANY Namely request: searching and reading data through an OOMOL-connected Namely account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Namely requests involving searching and reading data, instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and operators use this skill to read Namely employee profiles and company profile-field metadata visible to their connected account. It helps agents inspect the live connector schema before making Namely read requests through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connected Namely account may expose employee profile information visible to that account. <br>
-Mitigation: Use the least-privileged Namely account or scopes that still support the intended read-only profile tasks, and review retrieved employee data before sharing it. <br>
-Risk: First-time setup can require installing or authenticating the oo CLI and connecting Namely credentials through OOMOL. <br>
-Mitigation: Run setup only after an auth, connection, or missing-CLI error, and review installation and authentication steps before executing them. <br>
+## Use Case:
 
+Employees and HR administrators use the skill to search and read Namely profile information and available profile fields through an already connected account.
 
-## Reference(s): <br>
-- [Namely homepage](https://www.namely.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-namely) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector schema and run commands; action responses are JSON objects with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: artifact frontmatter and server release evidence) <br>
+Risk: When the oo CLI is missing, setup directs the agent to execute a downloaded installer whose contents and bundled-skill behavior were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, including its bundled-skill installation behavior, before allowing setup to run.
+
+Risk: The connected Namely account can expose employee profile data, and OOMOL handles authentication and requests.
+
+Mitigation: Connect only an authorized account with the minimum employee-data access needed, and consider OOMOL's role in handling authentication and requests.
+
+## Reference(s):
+
+- [Namely skill release](https://clawhub.ai/oomol/skills/oo-namely)
+- [Namely](https://www.namely.com)
+- [Namely API documentation](https://developers.namely.com/docs/namely-api/72f9086e4f0e7-introduction)
+- [oo CLI repository (CLI reference)](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [Structured JSON results with concise natural-language guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only profile information; results depend on the connected Namely account's permissions.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,55 @@
-## Description: <br>
-Provides GitHub read, write, search, issue, pull request, release, workflow, branch, commit, file, and repository operations through the OOMOL-connected GitHub connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for GitHub requests to read, create, update, or delete data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect, search, create, update, and delete GitHub resources through an OOMOL-connected account while following explicit confirmation rules for state-changing operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connected OOMOL account can access GitHub data available to that account. <br>
-Mitigation: Install only when that access is acceptable, and verify the repository, target, and payload before approving any operation. <br>
-Risk: Write and destructive actions can create, overwrite, remove, or otherwise change GitHub resources. <br>
-Mitigation: Require explicit confirmation for actions tagged write or destructive, especially file changes, branch operations, workflow reruns, label clearing, and repository deletion. <br>
+## Use Case:
 
+Developers and agents use this skill to read and manage GitHub repositories, issues, pull requests, releases, and related data through their connected GitHub account.
 
-## Reference(s): <br>
-- [GitHub](https://github.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-github) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands run through the OOMOL GitHub connector; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The setup fallback can run downloaded installer code without clearly requiring approval for local changes; the downloaded contents and hosted-service behavior were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a verified CLI release yourself, and require approval before any setup changes.
+
+Risk: Automatic skill synchronization and broad GitHub permissions may allow more access or changes than needed.
+
+Mitigation: Check automatic synchronization settings and grant only the GitHub permissions needed.
+
+## Reference(s):
+
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [GitHub REST API documentation](https://docs.github.com/en/rest)
+- [ClawHub GitHub skill release](https://clawhub.ai/oomol/skills/oo-github)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON action payloads and oo CLI commands with explanatory text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Payloads follow the selected action schema; changes to GitHub require confirmation.]
+
+## Skill Version(s):
+
+1.0.12 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

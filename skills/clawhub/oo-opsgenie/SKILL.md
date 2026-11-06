@@ -1,11 +1,11 @@
 ---
 name: oo-opsgenie
-description: "Opsgenie (atlassian.com). Use this skill for ANY Opsgenie request — reading, creating, and updating data. Whenever a task involves Opsgenie, use this skill instead of calling the API directly."
+description: "Opsgenie (atlassian.com). Use this skill for ANY Opsgenie request — reading, creating, updating, and deleting data. Whenever a task involves Opsgenie, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Opsgenie"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["opsgenie"]
   icon: "https://static.oomol.com/logo/third-party/opsgenie.png"
 ---
@@ -37,8 +37,8 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `acknowledge_alert` — Acknowledge an Opsgenie alert and return the asynchronous request ID.
-- `close_alert` — Close an Opsgenie alert and return the asynchronous request ID. [write]
+- `acknowledge_alert` — Acknowledge an Opsgenie alert and return the asynchronous request ID. [write]
+- `close_alert` — Close an Opsgenie alert and return the asynchronous request ID. [destructive]
 - `create_alert` — Create an Opsgenie alert and return the asynchronous request ID. [write]
 - `get_alert` — Get one Opsgenie alert by ID, tiny ID, or alias.
 - `get_current_account` — Validate the Opsgenie API key and return account information for the key.
@@ -74,11 +74,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Opsgenie is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=opsgenie
+  https://console.oomol.com/connections/opsgenie
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Opsgenie homepage: https://www.atlassian.com/software/opsgenie
+- API documentation: https://docs.opsgenie.com/docs/api-overview

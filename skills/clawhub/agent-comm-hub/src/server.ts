@@ -15,9 +15,9 @@ import express, { type Request, type Response, type NextFunction } from "express
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { registerTools } from "./tools.js";
-import { registerClient, removeClient, pushToAgent, onlineAgents, drainAllClients, startZombieCleanup, stopZombieCleanup, broadcastToAll, writeStoredEvent, MAX_SSE_CONNECTIONS, connectedCount } from "./sse.js";
+import { registerClient, removeClient, pushToAgent, deliverToLocalClient, onlineAgents, drainAllClients, startZombieCleanup, stopZombieCleanup, broadcastToAll, writeStoredEvent, MAX_SSE_CONNECTIONS, connectedCount, reloadSubsCache } from "./sse.js";
 import { eventLogRepo } from "./repo/event-log.js";
-import { getDbStats, db, scheduleCleanup, stopCleanup, archiveOldAuditLogs, enforceAuditLogCap } from "./db.js";
+import { getDbStats, db, scheduleCleanup, stopCleanup, archiveOldAuditLogs, enforceAuditLogCap, integrityCheckDb } from "./db.js";
 import { messageRepo, taskRepo, consumedRepo } from "./repo/sqlite-impl.js";
 import {
   authMiddleware,
@@ -47,12 +47,21 @@ import {
   collectHubMetrics,
   getTopLimited,
 } from "./metrics.js";
-import { ActivationOrchestrator } from "./orchestrator.js";
+import { ActivationOrchestrator, releaseTasksForOfflineAgent, runWatchdogScan } from "./orchestrator.js";
 import { RateLimiter } from "./ratelimit.js";
 import { setMessageRateLimiter } from "./tools/message.js";
 import { createDashboardRouter } from "./web/server.js";
 import { startBackupScheduler, stopBackupScheduler } from "./backup.js";
 import { HUB_VERSION } from "./version.js";
+import {
+  startEventDrivenScheduler,
+  stopEventDrivenScheduler,
+  onClientConnected,
+  onClientDisconnected,
+  runEventDrivenScan,
+  isEventDrivenEnabled,
+} from "./event-driven.js";
+import { authorizationService } from "./authorization.js";
 
 // ═══════════════════════════════════════════════════════════════
 // Phase 6: 配置外部化（零依赖，所有配置有默认值）
@@ -74,6 +83,11 @@ const config = {
   tokenExpireDays:           parseInt(process.env.TOKEN_EXPIRE_DAYS ?? "90", 10),
   uploadDir:                 process.env.UPLOAD_DIR || join(process.cwd(), "uploads"),
   maxFileSize:               parseInt(process.env.MAX_FILE_SIZE ?? "10485760", 10),  // 10MB
+  // ─── Feature A/B 配置（与设计文档 §8.5 对齐；SDK 侧读取同名 env 作为默认值）──
+  authRequestTtlMs:          parseInt(process.env.AUTH_REQUEST_TTL_MS ?? "600000", 10),       // 授权 TTL 默认 10min
+  authAutoApprove:           process.env.AUTH_AUTO_APPROVE === "true",                        // 默认关闭（deny-by-default）
+  runtimeMaxConcurrent:      parseInt(process.env.RUNTIME_MAX_CONCURRENT ?? "4", 10),         // AgentRuntime 并发上限
+  runtimeLoopGuardMs:        parseInt(process.env.RUNTIME_LOOP_GUARD_MS ?? "30000", 10),      // 防自杀循环判定窗口
 };
 
 const app = express();
@@ -167,6 +181,7 @@ app.get("/events/:agent_id", optionalAuthMiddleware, (req: Request, res: Respons
   const connId = registerClient(agent_id, res);
   markAgentSseOnline(agent_id); // SSE 已连 = 在线，同步 agents 表
   incrementGauge("active_sse_connections");
+  onClientConnected(agent_id); // P2-A: 取消该 Agent 的断线宽限期（重连不误判离线；关闭时 no-op）
 
   // 检查 Last-Event-ID（断线重连场景）
   // D1 修复：Last-Event-ID 即持久化事件日志的全局单调 seq；
@@ -236,6 +251,7 @@ app.get("/events/:agent_id", optionalAuthMiddleware, (req: Request, res: Respons
     removeClient(agent_id, connId);
     markAgentSseOffline(agent_id); // 心跳也陈旧才标记离线
     decrementGauge("active_sse_connections");
+    onClientDisconnected(agent_id); // P2-A: 启动宽限期，到期仍未重连才释放孤儿任务
   });
 });
 
@@ -247,8 +263,55 @@ app.get("/events/:agent_id", optionalAuthMiddleware, (req: Request, res: Respons
 // ═══════════════════════════════════════════════════════════════
 let maintenanceTimer: ReturnType<typeof setInterval> | null = null;
 
+// ─── Feature B: 授权过期清扫定时器 ─────────────────────
+let authSweepTimer: ReturnType<typeof setInterval> | null = null;
+
+function startAuthSweep(): void {
+  if (authSweepTimer) return;
+  // 每 30s 扫描一次过期授权请求（TTL 默认 10min，30s 粒度足够及时）
+  authSweepTimer = setInterval(() => {
+    try {
+      const n = authorizationService.sweepExpired();
+      if (n > 0) {
+        logger.info("auth_sweep_expired", { module: "authorization", expired: n });
+      }
+    } catch (err) {
+      logError("auth_sweep_failed", err, { module: "authorization" });
+    }
+  }, 30_000);
+  logger.info("auth_sweep_started", { module: "authorization", interval_ms: 30_000 });
+}
+
+function stopAuthSweep(): void {
+  if (authSweepTimer) {
+    clearInterval(authSweepTimer);
+    authSweepTimer = null;
+    logger.info("auth_sweep_stopped", { module: "authorization" });
+  }
+}
+
+function runIntegrityCheck(): void {
+  try {
+    const check = integrityCheckDb();
+    if (check.ok) {
+      logger.info("db_integrity_ok", { module: "server", details: check.details });
+    } else {
+      // 严重：磁盘文件损坏。仅告警，不自动修复（保留原始损坏现场供 .recover 重建）。
+      // 重启进程无法修复盘损，需由运维用 `sqlite3 .recover` 重建。
+      logger.warn("db_integrity_failed", {
+        module: "server",
+        details: check.details,
+        hint: "磁盘文件可能损坏，建议用 sqlite3 .recover 重建；重启进程无法修复盘损",
+      });
+    }
+  } catch (err) {
+    logError("db_integrity_check_error", err, { module: "server" });
+  }
+}
+
 function runMaintenanceOnce(): void {
   try {
+    runIntegrityCheck(); // 每次维护先自检盘损，尽早暴露 SQLITE_CORRUPT
     archiveOldAuditLogs(90);
     const auditMax = parseInt(process.env.AUDIT_LOG_MAX_ROWS ?? "3000", 10);
     enforceAuditLogCap(auditMax);
@@ -269,6 +332,35 @@ function stopMaintenanceScheduler(): void {
     clearInterval(maintenanceTimer);
     maintenanceTimer = null;
     logger.info("maintenance_scheduler_stopped", { module: "server" });
+  }
+}
+
+// ─── P0 Watchdog: 卡死任务巡检定时器 ───────────────────────
+let watchdogTimer: ReturnType<typeof setInterval> | null = null;
+
+function startWatchdogScheduler(): void {
+  if (watchdogTimer) return;
+  // P2-A: 事件驱动启用时 Watchdog 降为低频兜底（30min），主路径由到期 timer 精确触发；
+  // 关闭时维持原 5min 巡检。显式设置 WATCHDOG_INTERVAL_MS 始终优先。
+  const fallbackInterval = isEventDrivenEnabled() ? "1800000" : "300000";
+  const intervalMs = parseInt(process.env.WATCHDOG_INTERVAL_MS ?? fallbackInterval, 10);
+  runWatchdogScan(); // 启动即执行一次
+  watchdogTimer = setInterval(() => {
+    try {
+      const res = runWatchdogScan();
+      logger.info("watchdog_scan_done", { module: "server", ...res });
+    } catch (err) {
+      logError("watchdog_scan_failed", err, { module: "server" });
+    }
+  }, intervalMs);
+  logger.info("watchdog_scheduler_started", { module: "server", interval_ms: intervalMs });
+}
+
+function stopWatchdogScheduler(): void {
+  if (watchdogTimer) {
+    clearInterval(watchdogTimer);
+    watchdogTimer = null;
+    logger.info("watchdog_scheduler_stopped", { module: "server" });
   }
 }
 
@@ -400,9 +492,9 @@ app.get("/api/tasks", authMiddleware, (req: Request, res: Response) => {
   res.json({ tasks, count: tasks.length });
 });
 
-// GET /api/messages?agent_id=workbuddy&status=unread
+// GET /api/messages?agent_id=<id>[&status=<s>][&limit=<n>]
 app.get("/api/messages", authMiddleware, (req: Request, res: Response) => {
-  const { agent_id, status } = req.query;
+  const { agent_id, status, limit } = req.query;
   if (!agent_id) {
     res.status(400).json({ error: "agent_id is required" });
     return;
@@ -412,8 +504,14 @@ app.get("/api/messages", authMiddleware, (req: Request, res: Response) => {
     res.status(400).json({ error: `Invalid status: ${status}. Valid: ${validStatuses.join(", ")}` });
     return;
   }
-  const queryStatus = (status as string) || "unread";
-  const messages = messageRepo.listByStatus(agent_id as string, queryStatus);
+  // 🔴 不传 status ⇒ 返回该 agent **全部状态**消息（`rowid` 倒序，`limit` 默认 50、夹紧 [1,500]）。
+  //    历史缺陷：不传 status 曾缺省为 "unread"，而本系统 unread ＝「尚未经 SSE 投递」
+  //    （见 db.ts pendingFor/markAllDelivered：unread→delivered）⇒ 对活跃 agent 几乎恒空。
+  //    显式传 status ⇒ 行为与历史逐字节一致（走 listByStatus，不设 limit）。
+  const maxRows = Math.min(Math.max(Number.parseInt(limit as string, 10) || 50, 1), 500);
+  const messages = status
+    ? messageRepo.listByStatus(agent_id as string, status as string)
+    : messageRepo.listForAgent(agent_id as string, maxRows);
   res.json({ messages, count: messages.length });
 });
 
@@ -485,6 +583,62 @@ app.get("/api/consumed", authMiddleware, (req: Request, res: Response) => {
 // ═══════════════════════════════════════════════════════════════
 // P1-4: 激活编排层 + P2-8: 限流 — 初始化
 // ═══════════════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════════
+// Feature B: 人在环授权队列 — 仪表盘 REST 端点（登录态鉴权）
+// ═══════════════════════════════════════════════════════════════
+
+// GET /api/auth-requests?status=pending — 仪表盘轮询待授权列表
+app.get("/api/auth-requests", requireAdminApi, (req: Request, res: Response) => {
+  try {
+    const status = req.query.status as string | undefined;
+    const valid = ["pending", "approved", "rejected", "expired"];
+    if (status && !valid.includes(status)) {
+      res.status(400).json({ error: `Invalid status: ${status}` });
+      return;
+    }
+    const requests = authorizationService.list(status as any);
+    res.json({ requests, count: requests.length });
+  } catch (err: unknown) {
+    res.status(500).json({ error: err instanceof Error ? err.message : String(err) });
+  }
+});
+
+// POST /api/auth-requests/:id/resolve — 批准/拒绝（人类操作者主路径）
+app.post("/api/auth-requests/:id/resolve", requireAdminApi, (req: Request, res: Response) => {
+  const { decision, reason, grant_window_ms } = req.body ?? {};
+  if (decision !== "approved" && decision !== "rejected") {
+    res.status(400).json({ error: "decision 必须为 'approved' 或 'rejected'" });
+    return;
+  }
+  if (decision === "approved" && grant_window_ms !== undefined) {
+    const ms = Number(grant_window_ms);
+    if (!Number.isFinite(ms) || ms <= 0) {
+      res.status(400).json({ error: "grant_window_ms 必须为正整数（ms）" });
+      return;
+    }
+  }
+  try {
+    const by = req.auth?.agent?.agentId ?? "admin";
+    const reqRow = authorizationService.resolve(
+      req.params.id,
+      decision,
+      by,
+      reason,
+      grant_window_ms !== undefined ? Number(grant_window_ms) : undefined
+    );
+    res.json({
+      request_id: reqRow.id,
+      status: reqRow.status,
+      decision: reqRow.status === "approved" ? "approved" : "rejected",
+      resolved_by: reqRow.resolved_by,
+    });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    // 已决议的请求返回 409，其余 500
+    res.status(msg.includes("已被决议") ? 409 : 500).json({ error: msg });
+  }
+});
 
 const activationOrch = new ActivationOrchestrator();
 activationOrch.replayFromAudit(); // 从 audit_log 恢复状态
@@ -773,6 +927,42 @@ app.delete("/mcp", optionalAuthMiddleware, async (req: Request, res: Response) =
 });
 
 // ═══════════════════════════════════════════════════════════════
+// 内部桥接端点（方案 B）：跨进程事件转发
+// stdio MCP 进程派单时其 SSE clients Map 为空；通过此端点把事件交给
+// 「持有 SSE 连接」的 HTTP 进程本地投递。token 保护（与 /api/* 同源）。
+//   POST /internal/sse/push
+//   body: { agentId, event, dedupId?, seq? }
+//   → deliverToLocalClient 本地投递；成功且带 seq 则标记 event_log 已投递（防重连 replay 重复）
+// ═══════════════════════════════════════════════════════════════
+app.post("/internal/sse/push", authMiddleware, (req: Request, res: Response) => {
+  const body = (req.body ?? {}) as {
+    agentId?: unknown;
+    event?: unknown;
+    dedupId?: unknown;
+    seq?: unknown;
+  };
+  const { agentId, event, dedupId, seq } = body;
+  if (typeof agentId !== "string" || !event || typeof event !== "object") {
+    res.status(400).json({ delivered: false, error: "agentId(string) and event(object) required" });
+    return;
+  }
+  const delivered = deliverToLocalClient(
+    agentId,
+    event as object,
+    typeof dedupId === "string" ? dedupId : undefined,
+    typeof seq === "number" ? seq : undefined,
+  );
+  if (delivered && typeof seq === "number") {
+    try {
+      eventLogRepo.markDelivered(seq);
+    } catch (err) {
+      logError("sse_bridge_mark_delivered_failed", err, { module: "server", seq });
+    }
+  }
+  res.json({ delivered });
+});
+
+// ═══════════════════════════════════════════════════════════════
 // Phase 5b: 404 处理（在 error handler 之前）
 // ═══════════════════════════════════════════════════════════════
 app.use((req: Request, res: Response) => {
@@ -809,6 +999,10 @@ let httpServer: ReturnType<typeof app.listen> | null = null;
 async function gracefulShutdown(signal: string): Promise<void> {
   logger.info("shutdown_initiated", { signal, module: "server" });
 
+  // P2-A: 必须在 drain SSE 之前停掉事件驱动调度器，否则 close 事件会被当成
+  // 真实断线而启动宽限期 timer，在关机过程中误释放任务。
+  stopEventDrivenScheduler();
+
   // 1. 停止接受新连接（await 关闭回调，确保进行中的请求完成）
   if (httpServer) {
     await new Promise<void>((resolve) => {
@@ -827,6 +1021,8 @@ async function gracefulShutdown(signal: string): Promise<void> {
   stopHeartbeatMonitor();
   stopBackupScheduler();
   stopMaintenanceScheduler();
+  stopAuthSweep();
+  stopWatchdogScheduler();
   stopDedupCleanup();
   stopCleanup();
   stopZombieCleanup();
@@ -937,9 +1133,10 @@ httpServer = app.listen(config.port, () => {
     phase: "5b",
   });
 
-  // 启动心跳超时监控
+  // 启动心跳超时监控；Agent 离线时由 Watchdog 回收其孤儿任务
   startHeartbeatMonitor((agentId) => {
-    logger.info("agent_offline_timeout", { module: "monitor", agent_id: agentId });
+    const released = releaseTasksForOfflineAgent(agentId);
+    logger.info("agent_offline_timeout", { module: "monitor", agent_id: agentId, released_tasks: released });
   });
 
   // 启动数据库定时备份
@@ -947,6 +1144,19 @@ httpServer = app.listen(config.port, () => {
 
   // 启动维护调度（审计日志自动归档 + 行数上限保护）
   startMaintenanceScheduler();
+
+  // Feature B: 启动授权过期清扫
+  startAuthSweep();
+
+  // P0 Watchdog: 启动卡死任务巡检调度（P2-A 启用时降为低频兜底）
+  startWatchdogScheduler();
+
+  // P2-A: 事件驱动调度（默认关闭 opt-in；启用时按任务到期时间精确触发扫描，
+  // SSE 断线宽限期到期释放孤儿任务）。回调注入避免与 orchestrator 循环依赖。
+  startEventDrivenScheduler({
+    onDeadline: runEventDrivenScan,
+    onGraceExpired: releaseTasksForOfflineAgent,
+  });
 
   // 启动去重缓存 TTL 清理（15min）
   startDedupCleanup();
@@ -956,6 +1166,9 @@ httpServer = app.listen(config.port, () => {
 
   // P2-3: SSE 僵尸连接清理（5分钟检测，10分钟超时）
   startZombieCleanup();
+
+  // P1: 加载 SSE 事件订阅缓存（订阅直通剪枝依赖，变更后由 subscribe_events 工具热刷新）
+  reloadSubsCache();
 
   // 重建 FTS 索引
   rebuildFtsIndex();

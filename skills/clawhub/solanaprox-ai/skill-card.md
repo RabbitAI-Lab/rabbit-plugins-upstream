@@ -1,41 +1,50 @@
-## Description: <br>
-Solana wallet-native AI gateway - pay per AI request with USDC on Solana across multiple AI providers without provider API keys or accounts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SolanaProx (solanaprox.com) is temporarily paused while wallet authentication is upgraded. Do not send payments or wallet addresses to it. For pay-per-use AI inference today, use LightningProx (lightningprox.com), paid in Bitcoin Lightning.
 
-## Publisher: <br>
-[yebdmo2](https://clawhub.ai/user/yebdmo2) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yebdmo2](https://clawhub.ai/user/yebdmo2)
 
-## Use Case: <br>
-Developers and agent builders use this skill to access AI inference, orchestration, and related capabilities through SolanaProx using a Solana wallet address and pre-funded USDC balance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends a Solana wallet address to solanaprox.com as the credential for paid AI requests. <br>
-Mitigation: Use a dedicated wallet or low-balance account and only install the skill if sending that wallet address to SolanaProx is acceptable. <br>
-Risk: Automated or unattended orchestration can spend from a pre-deposited USDC balance. <br>
-Mitigation: Monitor spending and avoid unattended use unless explicit cost controls are in place. <br>
+## Use Case:
 
+Agents use this skill to tell users that SolanaProx is paused, avoid requests, deposits, and wallet-address sharing while it is offline, and offer LightningProx only with the user's agreement to its paid Bitcoin Lightning service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yebdmo2/solanaprox-ai) <br>
-- [SolanaProx homepage](https://solanaprox.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, API examples, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include wallet-address configuration and examples for paid SolanaProx API requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server-resolved release metadata) <br>
+Risk: Users may rely on unverified availability or balance-preservation claims, or mistake the paid alternative for an automatic switch.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat SolanaProx as paused; do not call it or send funds or wallet addresses. Verify availability and balance claims, review LightningProx charges, and get the user's agreement before switching.
+
+## Reference(s):
+
+- [SolanaProx skill release](https://clawhub.ai/yebdmo2/skills/solanaprox-ai)
+- [LightningProx](https://lightningprox.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+4.3.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

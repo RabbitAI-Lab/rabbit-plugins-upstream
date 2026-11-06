@@ -1,45 +1,54 @@
-## Description: <br>
-Run complex tasks using multiple AI agents simultaneously, with support for workflows, web search, email, and image generation through AIProx. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Run a multi-step task on AIProx (aiprox.dev), paid in Bitcoin Lightning sats. Use it when the user asks to run a task through the AIProx orchestrator or to buy one of its capabilities. Orchestrate is 50 sats: one task, up to 4 steps on AIProx's own bots, one summarized answer. Single capabilities have their own prices: AI web answer 35, page text extract 20, summarize 40, translate 40. Payment is a LightningProx spend token or L402.
 
-## Publisher: <br>
-[unixlamadev-spec](https://clawhub.ai/user/unixlamadev-spec) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[unixlamadev-spec](https://clawhub.ai/user/unixlamadev-spec)
 
-## Use Case: <br>
-Developers and external users use this skill to orchestrate multi-agent AI tasks through AIProx, including research, scraping, sentiment analysis, market data checks, image generation, email workflows, and multi-step pipelines. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill grants payment-backed orchestration authority through a spend token and can route work to third-party agents. <br>
-Mitigation: Use low budgets, keep the spend token scoped and protected, and review agent receipts and sats spent after each run. <br>
-Risk: Webhook and email workflows can send data or trigger actions outside the local agent session. <br>
-Mitigation: Use only trusted HTTPS callback URLs and avoid email workflows unless recipient controls, previews, and limits have been separately verified. <br>
-Risk: Prompts and outputs may be shared with AIProx or downstream specialist agents. <br>
-Mitigation: Avoid sensitive data unless the user has reviewed and accepted AIProx and downstream data handling. <br>
+## Use Case:
 
+Agents use this skill when a user requests AIProx's paid orchestration or individual capabilities such as web answers, page extraction, summarization, or translation. It returns the requested result as text after the user approves the applicable cost.
 
-## Reference(s): <br>
-- [ClawHub Skill Listing](https://clawhub.ai/unixlamadev-spec/aiprox-orchestrator) <br>
-- [AIProx Homepage](https://aiprox.dev) <br>
-- [AIProx Orchestration Endpoint](https://aiprox.dev/api/orchestrate) <br>
-- [Publisher Profile](https://clawhub.ai/user/unixlamadev-spec) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with curl examples and JSON response shapes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires AIPROX_SPEND_TOKEN and a sats budget; supports callback_url for async webhook delivery and workflow creation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.4.0 (source: server release evidence) <br>
+Risk: Calls incur Lightning charges, and task text and supplied URLs or content are sent to AIProx for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the endpoint price before each paid call and keep secrets and personal information out of tasks.
+
+Risk: The optional spend token is a bearer credential; callback destinations receive task output, and requested messaging can send content externally.
+
+Mitigation: Use a minimally funded token, never expose it in tasks or logs, use only HTTPS callback endpoints you control, and confirm the recipient and message content before sending.
+
+## Reference(s):
+
+- [AIProx](https://aiprox.dev)
+- [AIProx Documentation](https://aiprox.dev/docs.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text]
+
+**Output Format:** [Text response containing a summary, extracted page text, translation, or other requested capability result]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Web answers may include up to five source links; available result types depend on the requested capability.]
+
+## Skill Version(s):
+
+3.0.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

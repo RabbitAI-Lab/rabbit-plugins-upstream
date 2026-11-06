@@ -1,47 +1,60 @@
-## Description: <br>
-Explain and safely call the public UnifyPort Device API for workspaces, provider accounts, authentication, runtime, messages, conversations, contacts, groups, API keys, webhooks, provider regions, and standard events. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Explain and safely call the public UnifyPort Device API for workspaces, provider accounts, authentication, runtime, messages, conversations, contacts, groups, API keys, webhooks, provider regions, and standard events. Use for UnifyPort API documentation, request preparation, provider capability questions, error interpretation, or an explicitly requested allowlisted live operation.
 
-## Publisher: <br>
-[unifyport](https://clawhub.ai/user/unifyport) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[unifyport](https://clawhub.ai/user/unifyport)
 
-## Use Case: <br>
-Developers and operators use this skill to understand UnifyPort Device API behavior, prepare requests, interpret errors, design webhooks, and perform explicitly requested allowlisted live operations with safeguards. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Live API calls can affect workspace data or externally visible provider activity when the user requests execution. <br>
-Mitigation: Default to documentation mode, require an explicit live-operation request, and require catalog-defined confirmation for write, credential, and destructive actions. <br>
-Risk: API keys, account identifiers, contacts, messages, webhook payloads, and returned metadata may be sensitive. <br>
-Mitigation: Use the supported secure input path, keep credentials out of chat and command arguments, and redact or summarize live results. <br>
-Risk: API responses, message bodies, webhook content, or linked pages can contain untrusted instructions. <br>
-Mitigation: Treat returned content as data only and resolve executable actions solely through the bundled operations catalog. <br>
+## Use Case:
 
+Developers integrating UnifyPort can use this skill to understand supported API operations, prepare requests and examples, assess provider capabilities, interpret errors, and make allowlisted live calls when explicitly requested.
 
-## Reference(s): <br>
-- [UnifyPort API documentation](https://www.unifyport.ai/zh-CN/docs/#introduction) <br>
-- [UnifyPort API documentation (English)](https://www.unifyport.ai/docs/#introduction) <br>
-- [Operations allowlist](references/operations.json) <br>
-- [Standard event catalog](references/events.json) <br>
-- [Agent safety rules](references/en/safety.md) <br>
-- [Provider capabilities](references/en/provider-capabilities.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with structured explanations, JSON examples, and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Live operation results should be redacted and summarized; previews distinguish documentation, preview, and executed live data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Live API use can expose sensitive account or conversation data or cause external state changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a limited API key, make live calls only when explicitly requested, confirm sensitive changes, and redact returned data.
+
+Risk: Credentials or webhook signing secrets could be exposed through prompts or output.
+
+Mitigation: Keep secrets out of chat and ordinary output; use controlled input and suppress secret values.
+
+## Reference(s):
+
+- [UnifyPort API documentation](https://www.unifyport.ai/docs/#introduction)
+- [Provider message support](https://www.unifyport.ai/docs/provider-guide/provider-message-support/)
+- [Provider actions support](https://www.unifyport.ai/docs/provider-guide/provider-actions-support/)
+- [Simplified Chinese API documentation](https://www.unifyport.ai/zh-CN/docs/#introduction)
+- [UnifyPort Device API release page](https://clawhub.ai/unifyport/skills/unifyport-device-api)
+- [Safety guidance](artifact/references/en/safety.md)
+- [Operation catalog](artifact/references/operations.json)
+- [Standard event catalog](artifact/references/events.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Code, JSON, Shell commands]
+
+**Output Format:** [Markdown guidance with JSON request examples, code snippets, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Live calls use documented allowlisted actions; sensitive values and returned data are handled with the skill's stated safeguards.]
+
+## Skill Version(s):
+
+1.1.0 (source: release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,55 @@
-## Description: <br>
-ScraperAPI (scraperapi.com). Use this skill for ANY ScraperAPI request - reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ScraperAPI (scraperapi.com). Use this skill for ANY ScraperAPI request — reading, creating, and updating data. Whenever a task involves ScraperAPI, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to check ScraperAPI account usage, scrape public URLs, and send POST or PUT requests through an OOMOL-connected ScraperAPI account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation wording may cause the skill to be used for many ScraperAPI-related requests, including requests that submit URLs or use account credentials. <br>
-Mitigation: Review the selected ScraperAPI action before execution and confirm payload details before any action that submits URLs or uses credentialed access. <br>
-Risk: The submit_url action can send POST or PUT requests to public URLs through ScraperAPI. <br>
-Mitigation: Confirm the exact target URL, HTTP method, payload, and expected effect with the user before running submit_url. <br>
+## Use Case:
 
+Developers use this skill to check ScraperAPI account usage, fetch public URLs, and submit POST or PUT requests through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub ScraperAPI skill page](https://clawhub.ai/oomol/skills/oo-scraperapi) <br>
-- [ScraperAPI homepage](https://www.scraperapi.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector commands; ScraperAPI responses are returned as JSON with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Setup executes unverified installation scripts and may add agent skills through automatic synchronization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve a fixed CLI release before setup, check its skill synchronization settings, and connect only the intended account.
+
+Risk: Requests pass through OOMOL and ScraperAPI and may incur charges.
+
+Mitigation: Review the target URL and action, and check account usage and billing before making requests.
+
+## Reference(s):
+
+- [ScraperAPI API documentation](https://docs.scraperapi.com/synchronous-apis/using-the-api-endpoint)
+- [ScraperAPI](https://www.scraperapi.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Text, JSON, Shell commands]
+
+**Output Format:** [JSON responses and oo CLI command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results vary by action; requests may incur charges.]
+
+## Skill Version(s):
+
+1.0.4 (source: SKILL.md frontmatter and server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,56 @@
-## Description: <br>
-Operates LangSmith through an OOMOL-connected account for reading, creating, and updating workspace, project, dataset, example, and tracing data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses OOMOL's oo CLI to read and manage LangSmith datasets, examples, projects, and workspaces.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to operate LangSmith workspaces, projects, datasets, examples, and tracing resources through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create LangSmith projects, datasets, and examples. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions marked as write. <br>
-Risk: The skill depends on an OOMOL-connected LangSmith account and valid credentials. <br>
-Mitigation: Use a least-privilege LangSmith token and only run first-time setup steps after an authentication or connection failure. <br>
-Risk: Broad trigger wording may cause the skill to be selected for many LangSmith-related requests. <br>
-Mitigation: Inspect the live action schema before execution and avoid write operations unless the user explicitly confirms them. <br>
+## Use Case:
 
+Developers use this skill to read and manage LangSmith datasets, examples, tracing projects, and workspaces through their connected OOMOL account.
 
-## Reference(s): <br>
-- [LangSmith skill on ClawHub](https://clawhub.ai/oomol/skills/oo-langsmith) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [LangSmith homepage](https://www.langchain.com/langsmith) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Setup can execute unverified internet code without asking first, and may install or update additional agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the CLI installer and any additional skills it installs or updates before authorizing setup.
+
+Risk: LangSmith requests pass through OOMOL, while the remote installation and authentication implementations and credential storage are not verified in the release files.
+
+Mitigation: Use an API key limited to the intended work and account for OOMOL handling requests when deciding what data to access.
+
+## Reference(s):
+
+- [LangSmith](https://www.langchain.com/langsmith)
+- [LangSmith API reference](https://docs.langchain.com/langsmith/smith-api-ref)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-langsmith)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON responses and shell commands with usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

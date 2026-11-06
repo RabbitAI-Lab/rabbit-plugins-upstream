@@ -1,47 +1,57 @@
-## Description: <br>
-中国大陆AI保险顾问。为个人和家庭提供全方位的保险咨询、产品对比、方案设计、投保指导。当用户询问保险配置、保险方案、产品对比、重疾险/医疗险/寿险/意外险/储蓄险推荐、保费计算、保障缺口分析、需求分析、核保合规、理赔等问题时使用。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+为中国大陆个人和家庭提供保险需求分析、产品比较、保费估算和保障方案建议。
 
-## Publisher: <br>
-[mnetfairy](https://clawhub.ai/user/mnetfairy) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mnetfairy](https://clawhub.ai/user/mnetfairy)
 
-## Use Case: <br>
-External users in mainland China use this skill to compare insurance products, estimate premiums, analyze coverage gaps, design family protection plans, and receive general underwriting, compliance, and claims guidance. Its outputs are reference guidance and should be checked against official insurer channels before purchase decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China mainland <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be treated as licensed insurance or financial advice. <br>
-Mitigation: Treat outputs as reference guidance, not professional recommendations, and verify suitability with qualified professionals or official insurer channels. <br>
-Risk: Product availability and premium estimates may be outdated or differ from official insurer quotes. <br>
-Mitigation: Verify product availability, policy terms, and premiums through official channels before making purchase decisions. <br>
-Risk: Needs analysis can involve sensitive personal, financial, or health details. <br>
-Mitigation: Share only the minimum information needed for the task and avoid unnecessary personal or health details. <br>
-Risk: The skill may mention one insurance sales company contact in a disclosed purchase-channel context. <br>
-Mitigation: Present that contact only when the user asks about purchase channels and keep the provided disclaimer that it is not a recommendation or endorsement. <br>
+## Use Case:
 
+面向中国大陆有保险需求的个人和家庭，帮助梳理保障需求、比较保险产品，并形成保费估算和方案草案。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/insurance-advisor-china) <br>
-- [Insurance knowledge reference](artifact/references/insurance-knowledge.md) <br>
-- [Compliance reference](artifact/references/compliance.md) <br>
-- [Insurance product data](artifact/references/products.json) <br>
+### Deployment Geography for Use:
 
+中国大陆
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Chinese markdown responses, JSON from helper scripts, and inline shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local reference data and calculator scripts; product and premium outputs require official verification.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.400 (source: server release evidence) <br>
+Risk: 保险方案可能误述保障范围，或推荐与产品数据不一致的产品。
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: 将方案视为未核实的草案；投保前核对产品适配性、保障限制、利益摘要和实际保单条款。
+
+Risk: 产品信息可能过时，且预先推荐的保险渠道由发布者选择。
+
+Mitigation: 联系保险公司核实最新产品条款，并独立确认渠道联系方式、资质及服务地区；需要时比较其他渠道。
+
+## Reference(s):
+
+- [保险知识库](references/insurance-knowledge.md)
+- [监管合规要点](references/compliance.md)
+- [保险产品数据](references/products.json)
+- [ClawHub 发布页面](https://clawhub.ai/mnetfairy/skills/insurance-advisor-china)
+- [国家金融监督管理总局保险中介信息公开查询入口](https://www.nfra.gov.cn/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Tables, Guidance]
+
+**Output Format:** [中文说明和 Markdown 对比表]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [根据用户提供的家庭情况、保障需求和预算生成个性化分析与方案草案。]
+
+## Skill Version(s):
+
+2.3.3 (source: release evidence, skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

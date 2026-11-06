@@ -1,43 +1,55 @@
-## Description: <br>
-Fly.io (fly.io). Use this skill for Fly.io requests covering reading, creating, and updating data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Fly.io apps and Machines through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect and manage Fly.io apps and Machines through an OOMOL-connected account. It supports read operations and confirmed Machine lifecycle changes such as create, start, stop, restart, and wait. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, start, stop, or restart Fly.io Machines, which changes live Fly.io state. <br>
-Mitigation: Review every write action payload and confirm the exact effect with the user before execution. <br>
-Risk: Using the skill depends on OOMOL-connected Fly.io credentials. <br>
-Mitigation: Install it only when the user intends to manage Fly.io through OOMOL and is comfortable with that credential path. <br>
+## Use Case:
 
+Developers use this skill to inspect and manage Fly.io apps and Machines through an already connected OOMOL account. It covers read operations and lifecycle changes, with approval required for changes and destructive actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-fly) <br>
-- [Fly.io homepage](https://fly.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, text, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the OOMOL oo CLI and require live schema inspection before action payloads are constructed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup may run unchecked downloads, and startup skill synchronization may change other agents’ installed skills without clear approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before installing, use a reviewed CLI release, and consider disabling startup synchronization with OO_SKILLS_SYNC_DISABLED=1.
+
+Risk: Hosted credential handling was not independently verified.
+
+Mitigation: Use a narrowly scoped Fly.io connection and retain approval requirements for cloud changes.
+
+## Reference(s):
+
+- [Fly.io Machines API documentation](https://fly.io/docs/machines/api/working-with-machines-api/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Fly.io](https://fly.io/)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, JSON, Shell commands, Operational guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions may read Fly.io state or change machine state; write and destructive actions require user approval.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

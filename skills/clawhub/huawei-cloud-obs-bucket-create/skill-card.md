@@ -1,45 +1,57 @@
-## Description: <br>
-Skill specialized for creating buckets on Huawei Cloud OBS, including bucket property setup, access permission configuration, and guidance for bucket creation workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates Huawei Cloud OBS buckets and provides guidance on bucket properties, access settings, and the creation process.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to create Huawei Cloud OBS buckets, validate bucket names, choose regions and storage classes, configure ACLs, and troubleshoot common creation failures. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can help create Huawei Cloud OBS resources, including buckets with public-read access. <br>
-Mitigation: Review generated commands before execution, prefer private ACLs, and require explicit user approval before creating any public bucket. <br>
-Risk: The installation guidance includes remote KooCLI installer commands. <br>
-Mitigation: Verify the installer source and contents before running downloaded shell scripts. <br>
-Risk: Credential handling mistakes could expose Huawei Cloud AK/SK secrets. <br>
-Mitigation: Do not paste secrets into chat, do not read local credential files into the agent context, and use credential status checks that avoid revealing secret values. <br>
+## Use Case:
 
+Cloud administrators and developers use this skill to create, list, and inspect Huawei Cloud OBS buckets, including setting the region, storage class, and access permissions.
 
-## Reference(s): <br>
-- [KooCLI Installation Guide](references/cli-installation-guide.md) <br>
-- [Common Errors and Solutions](references/trouble-shooting.md) <br>
-- [Huawei Cloud KooCLI Preparation](https://support.huaweicloud.com/qs-hcli/hcli_02_002.html) <br>
-- [Huawei Cloud KooCLI Documentation](https://support.huaweicloud.com/cli-koocli/koocli_01_0001.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance may include Huawei Cloud OBS CLI commands for bucket creation, validation, listing, and property inspection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: The security assessment flags an unverified telemetry tool around credential-related commands; its data handling could not be verified from this release.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the reporting implementation and downloaded tool before use, use narrowly scoped cloud credentials, and configure credentials outside the telemetry wrapper. The documented SKILL_QUALITY_REPORT=0 setting is available, but its effectiveness was not verified.
+
+Risk: Bucket creation can use public access settings, which may expose stored data.
+
+Mitigation: Keep the private ACL by default and require explicit approval before enabling public access.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-obs-bucket-create)
+- [OBS regions and endpoints](https://developer.huaweicloud.com/intl/en-us/endpoint)
+- [KooCLI Installation Guide](https://support.huaweicloud.com/cli-koocli/koocli_01_0001.html)
+- [CLI Installation Guide](artifact/references/cli-installation-guide.md)
+- [Common Errors and Solutions](artifact/references/trouble-shooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance with inline shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands can create one or more OBS buckets and set bucket options.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

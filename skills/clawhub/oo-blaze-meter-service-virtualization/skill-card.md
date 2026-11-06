@@ -1,40 +1,56 @@
-## Description: <br>
-Enables agents to inspect schemas and run OOMOL connector actions for listing, retrieving, and updating BlazeMeter Service Virtualization service mock templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the connected BlazeMeter Service Virtualization account to read and update service mock templates.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and QA engineers use this skill to work with BlazeMeter service mock templates through an OOMOL-connected account, including inspecting live schemas before list, get, or update operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can update BlazeMeter service mock template configuration in the connected workspace. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before execution, and make sure the OOMOL BlazeMeter connection is scoped to the intended workspace. <br>
+## Use Case:
 
+Developers and engineers can use this skill to retrieve, list, and update BlazeMeter Service Virtualization service mock templates through their connected OOMOL account. Read operations return service data, while updates require confirmation of the exact payload and effect.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-blaze-meter-service-virtualization) <br>
-- [BlazeMeter Service Virtualization homepage](https://www.blazemeter.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects returned by the oo CLI when actions are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup instructs users to execute a remote CLI installer that was not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and explicitly approve CLI installation and any bundled skill changes before setup.
+
+Risk: Connecting BlazeMeter through OOMOL entrusts it with credentials and connector requests.
+
+Mitigation: Connect only the intended account and review the requested action and payload; preserve the required confirmation before template updates.
+
+## Reference(s):
+
+- [BlazeMeter Service Virtualization](https://www.blazemeter.com/)
+- [BlazeMeter API Documentation](https://help.blazemeter.com/apidocs)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-blaze-meter-service-virtualization)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Guidance]
+
+**Output Format:** [JSON action results with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the selected action; updates require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

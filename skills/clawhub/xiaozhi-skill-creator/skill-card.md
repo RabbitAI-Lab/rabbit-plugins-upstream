@@ -1,42 +1,52 @@
-## Description: <br>
-Guides ClawHub users through creating, testing, and iterating custom SKILLs using a four-layer structure, privacy boundaries, template examples, and health checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides reusable templates and a five-step guide for writing learning-focused SKILLs with clear roles, rules, memory, outputs, and privacy boundaries.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External ClawHub users and students use this skill to design personalized learning SKILLs, write and refine prompts, structure memory and output behavior, and test whether a new SKILL is working as intended. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Templates may encourage long-term memory, uploaded learning materials, reminders, or cross-SKILL sharing beyond a user's intent. <br>
-Mitigation: Keep memory, uploads, reminders, and cross-SKILL sharing explicitly opt-in, and scope stored or shared information to the minimum needed for the learning task. <br>
-Risk: Broad activation wording can cause the skill to be invoked for general prompt-writing help outside custom SKILL creation. <br>
-Mitigation: Narrow activation language when installing if the desired use is only SKILL creation, debugging, and iteration. <br>
+## Use Case:
 
+SKILL developers and technically experienced high-school students use this skill to design, revise, and troubleshoot learning-oriented SKILL prompts. It guides structure and safety boundaries; it does not write subject lessons, tutor students, or generate practice questions.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-creator) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [references/skill-templates-library.md](references/skill-templates-library.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration, Text] <br>
-**Output Format:** [Markdown and structured prompt templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes reusable SKILL prompt templates, privacy-boundary guidance, testing steps, iteration advice, and diagnostic checklists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Student-facing skills built from these templates may lack complete privacy safeguards or rely on platform controls that are not implemented.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use anonymized examples. Before deployment, obtain the missing SECURITY_BASELINE.md, complete the field definitions, and verify that the platform implements the described consent, deletion, and sharing controls.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-creator)
+- [SKILL prompt template library](artifact/references/skill-templates-library.md)
+- [Privacy controls and platform conventions](artifact/shared/platform-conventions.md)
+- [Shared terminology and authorization rules](artifact/shared/vocab.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration]
+
+**Output Format:** [Structured writing guidance and reusable SKILL.md prompt templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Text-based templates and checklists; no executable output.]
+
+## Skill Version(s):
+
+2.12.6 (source: server-resolved release and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

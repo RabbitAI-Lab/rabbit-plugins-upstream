@@ -1,43 +1,50 @@
-## Description: <br>
-Reply.io lets agents operate a user's OOMOL-connected Reply.io account to read, create, and update contacts and manage sequences. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reply.io (reply.io). Use this skill for ANY Reply.io request — reading, creating, updating, and deleting data. Whenever a task involves Reply.io, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent work with Reply.io contacts and sequences through their connected account. It supports reading user, contact, and sequence data plus confirmed write actions such as creating or updating contacts and starting or pausing sequences. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create or update contacts and start or pause Reply.io sequences, changing business outreach data. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running any action tagged as write. <br>
-Risk: The skill operates through the user's OOMOL-connected Reply.io account. <br>
-Mitigation: Install and use it only when the agent should access that Reply.io account, and review action requests before execution. <br>
+## Use Case:
 
+Reply.io users use the skill to read and manage contacts and sequences through their connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-reply-io) <br>
-- [Reply.io Homepage](https://reply.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Setup runs unchecked downloads, while the linked CLI documents broader changes to installed agent skills; connected account actions can change contacts and sequences.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and preinstall a fixed CLI version, consider disabling managed-skill synchronization before first use, and retain approval for contact and sequence changes. Remote installers and hosted implementation remain unverified.
+
+## Reference(s):
+
+- [Reply.io](https://reply.io)
+- [Reply.io API authentication documentation](https://docs.reply.io/api-reference/authentication)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Text, JSON]
+
+**Output Format:** [Reply.io data summarized in text, with JSON payloads and structured API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Contact and sequence changes require user approval.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

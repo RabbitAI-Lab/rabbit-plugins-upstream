@@ -1,45 +1,63 @@
-## Description: <br>
-教案设计器 helps teachers turn lesson ideas into UbD-aligned, core-competency lesson plans with assessment evidence, Bloom question chains, time matrices, and optional A/B/C differentiation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助教师用 UbD 逆向设计生成可观测目标、评估证据、课堂环节与分层任务的教案草稿。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External teachers use this skill to draft and refine Chinese-language lesson plans, review-class plans, question chains, and differentiated task cards from curriculum goals and optional de-identified learning summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lesson planning may involve student-learning summaries or classroom observations. <br>
-Mitigation: Provide only de-identified or aggregate learning data, and avoid real student names, family identifiers, or individual rankings. <br>
-Risk: Generated lesson plans may be pedagogically incomplete or unsuitable for a specific class. <br>
-Mitigation: Teachers should review and adjust goals, tasks, timing, and questions before using the plan in class. <br>
-Risk: A/B/C differentiated plans depend on an existing learning summary. <br>
-Mitigation: Use the basic lesson-plan mode when no learning summary is available, and do not invent class or student data. <br>
+## Use Case:
 
+面向小学至高中教师，用于按 UbD 逆向设计备课，形成目标、评估证据、课堂时间安排、提问链和可选的 A/B/C 分层任务。输出供教师审阅的教案草稿。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-planner) <br>
-- [Core output templates](references/core-output-templates.md) <br>
-- [Layered lesson example](references/layered-lesson-example.md) <br>
-- [Lesson plan template](references/lesson-plan-template.md) <br>
+### Deployment Geography for Use:
 
+China (mainland); adapt crisis referral resources for other regions.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown lesson plans, task cards, question chains, and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-language output; differentiated plans depend on supplied de-identified learning summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Classroom information or generated lesson content could expose student details or be shared before review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use student aliases and minimal classroom summaries, then review lessons before sharing.
+
+Risk: Memory, deletion, or consent controls may not be supported by the host platform.
+
+Mitigation: Confirm that the platform supports the documented memory, deletion, and consent controls before relying on them.
+
+Risk: Companion skills and host platform data handling are outside this artifact review.
+
+Mitigation: Assess the companion skills and host platform separately before using them with classroom data.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-planner)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Lesson plan template](artifact/references/lesson-plan-template.md)
+- [Layered lesson example](artifact/references/layered-lesson-example.md)
+- [AI-generated item checks](artifact/shared/ai-item-check.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+- [Classroom workspace schema](artifact/shared/class-teaching-workspace.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese Markdown lesson-plan draft]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher-reviewed draft that may include measurable learning goals, assessment evidence, timed activities, question prompts, and tiered tasks when class data is available.]
+
+## Skill Version(s):
+
+2.12.6 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

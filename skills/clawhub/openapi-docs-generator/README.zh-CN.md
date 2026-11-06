@@ -14,18 +14,18 @@ Validated demand: Backend and platform teams need practical help generating, imp
 
 ## 来源证据
 
-- csdn-search：[OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- csdn-search：[Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- github-issues：[Add OpenAPI Documentation Examples](https://github.com/nensii21/devlink/issues/252)
-- github-issues：[[FEAT] Generate dynamic interactive OpenAPI 3.1 documentation endpoint at /api-docs for REST integration](https://github.com/PRODHOSH/ossfolio/issues/577)
-- segmentfault-search：[HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search：[javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search：[typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search：[ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search：[答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
-- segmentfault-search：[OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
-- segmentfault-search：[答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
-- github-issues：[Make AWS HTTP API throttling configurable and cost-aware](https://github.com/haya-inc/hayasend/issues/44)
+- github-issues：[Phase4 Gate5 REQUIRED scientific population audit: source→operating denominator→PRE→webhook in/out→POST](https://github.com/HKcode22/ReplitTranvr/issues/293)
+- csdn-search：[OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=1bb02814fff44f0eb10687b5f3637f47&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-159013081-null-null.142^v102^pc_search_result_base4&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- github-issues：[Service 05 — Asset telemetry service](https://github.com/box1-org/box1-docs/issues/15)
+- github-issues：[Service 08 — Web application / operator console](https://github.com/box1-org/box1-docs/issues/18)
+- hacker-news-search：[Nvidia – open-source auto-ontology](https://news.ycombinator.com/item?id=50354084)
+- hacker-news-search：[Ask HN: Who wants to be hired? (November 2026)](https://news.ycombinator.com/item?id=50340463)
+- hacker-news-search：[Images 2.6](https://news.ycombinator.com/item?id=50373429)
+- hacker-news-search：[Ask HN: Who wants to be hired? (November 2026)](https://news.ycombinator.com/item?id=50378407)
+- hacker-news-search：[Ask HN: What's your current AI agentic setup?](https://news.ycombinator.com/item?id=50377557)
+- hacker-news-search：[Ask HN: What's your current AI agentic setup?](https://news.ycombinator.com/item?id=50376357)
+- github-issues：[Service 07 — Experience / BFF service](https://github.com/box1-org/box1-docs/issues/17)
+- github-issues：[[NS-051] As a developer, I want to find documentation, examples and a place to ask questions so that I can succeed with the API and help others.](https://github.com/mfcollins3/standup/issues/51)
 
 ## 这个技能如何满足需求
 

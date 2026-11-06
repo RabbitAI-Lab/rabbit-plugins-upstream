@@ -1,45 +1,59 @@
-## Description: <br>
-A Chinese-language English speaking coach that guides learners through short warmups, role play, impromptu speaking, pronunciation review, Socratic prompts, and permission-based follow-up from a learner profile. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+为小学高段至高中学习者提供英语口语热身、角色扮演、即兴演讲、发音练习与复盘，并仅在获得同意后保存长期口语记录。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners use this skill as an English speaking practice coach for morning warmups, role-play conversations, short speeches, pronunciation practice, and progress review. It is designed for coached dialogue and feedback, with profile-based continuity only when the user permits tracking. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses broad activation rules and may track pronunciation weaknesses, fluency patterns, vocabulary, milestones, and topic preferences across sessions. <br>
-Mitigation: Use it for explicit coaching requests and enable continuous tracking or reminders only when the platform provides clear controls to view, limit, and delete the stored learner profile. <br>
-Risk: Pronunciation scoring and stuck-silence prompts depend on audio analysis capabilities that may not be available in all channels. <br>
-Mitigation: When only text or ordinary ASR is available, downgrade to vocabulary, grammar, expression, and fluency review, and tell the learner that phoneme-level pronunciation cannot be assessed in that mode. <br>
+## Use Case:
 
+外部英语学习者（小学高段至高中）可用它进行晨间口语热身、角色扮演、即兴演讲和表达复盘，逐步建立开口练习习惯。跨会话档案与提醒仅在取得相应同意并由平台支持时使用。
 
-## Reference(s): <br>
-- [晨间热身5步 · 状态机定义](references/morning-warmup-statemachine.md) <br>
-- [中国学生高频发音弱点与纠正方法](references/pronunciation-issues.md) <br>
-- [5套真实场景完整对话脚本](references/roleplay-scripts.md) <br>
-- [分年级口语话题库](references/topic-bank.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-speaking-coach) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+China (designed for mainland China K–12; localize safety contacts, curriculum, and minor-data consent before use elsewhere)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Conversational coaching text with Markdown-formatted feedback and practice prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May recommend learner-profile updates, reminders, or follow-up practice only when the user permits tracking.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Speaking practice can involve sensitive student speech and learning-profile information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use session-only practice unless the student explicitly agrees to profile access or each profile write; for younger students, follow the guardian-consent and adult-supervision requirements. Review the host platform's speech-data handling before enabling memory or reminders.
+
+Risk: Text transcription alone cannot support reliable phoneme-level pronunciation judgments.
+
+Mitigation: Give pronunciation judgments and store pronunciation weaknesses only when speech-scoring support is available; otherwise provide practice guidance without claiming to have assessed the student's pronunciation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-speaking-coach)
+- [Morning warm-up workflow](artifact/references/morning-warmup-statemachine.md)
+- [Role-play scripts](artifact/references/roleplay-scripts.md)
+- [Pronunciation practice reference](artifact/references/pronunciation-issues.md)
+- [Speaking topic bank](artifact/references/topic-bank.md)
+- [Platform capability limits](artifact/shared/platform-conventions.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Conversational practice prompts, feedback, and short progress summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Long-term profile access and reminders require consent and host-platform support; pronunciation diagnosis requires speech-scoring support.]
+
+## Skill Version(s):
+
+2.12.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

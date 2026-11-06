@@ -1,42 +1,55 @@
-## Description: <br>
-Recruit CRM lets agents search and read candidates, companies, contacts, and jobs through an OOMOL-connected Recruit CRM account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read Recruit CRM candidates, companies, contacts, and jobs through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Recruiting teams and agents use this skill to retrieve individual Recruit CRM records and list candidates, companies, contacts, and jobs from a connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill retrieves recruiting data from a connected Recruit CRM account through OOMOL's CLI and connector. <br>
-Mitigation: Install and use it only when you trust OOMOL with read access to that Recruit CRM data. <br>
-Risk: Future connector action changes could alter expected inputs or effects. <br>
-Mitigation: Inspect the live action schema before execution and require explicit user confirmation for any write or destructive action if such actions are introduced. <br>
+## Use Case:
 
+Recruiting teams can use this skill to look up and review candidate, company, contact, and job records in Recruit CRM.
 
-## Reference(s): <br>
-- [ClawHub Recruit CRM skill page](https://clawhub.ai/oomol/skills/oo-recruitcrm) <br>
-- [Recruit CRM homepage](https://recruitcrm.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces instructions for schema inspection and read-only Recruit CRM get/list actions through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Fallback setup directs the user to execute downloaded installer code whose contents are unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the CLI through a separately approved, verified process before using the skill.
+
+Risk: Setup may automatically synchronize agent skills, and the connector implementation remains unverified.
+
+Mitigation: Review setup, decide whether to disable automatic skill synchronization, and confirm OOMOL is an acceptable intermediary for recruitment data.
+
+## Reference(s):
+
+- [Recruit CRM](https://recruitcrm.io)
+- [Recruit CRM API documentation](https://docs.recruitcrm.io/docs/rcrm-api-reference/ZG9jOjExMDcyMQ-authentication)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON data, Text, Shell commands]
+
+**Output Format:** [Recruit CRM records returned as JSON and summarized in text; CLI commands shown in Markdown code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only candidate, company, contact, and job lookups]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter; release evidence 1.0.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

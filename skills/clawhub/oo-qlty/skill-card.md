@@ -1,44 +1,55 @@
-## Description: <br>
-Qlty helps agents search and read Qlty data through the OOMOL oo CLI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Qlty through an OOMOL-connected account to read workspace, project, issue, metric, and account data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to inspect Qlty users, workspaces, projects, project metrics, issues, and rate-limit status through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill brokers account-specific Qlty access through OOMOL's oo CLI. <br>
-Mitigation: Install it only when that broker is acceptable for the workspace and keep use to the documented read-only Qlty actions. <br>
-Risk: Future connector actions could change or delete Qlty data if write or destructive actions are added. <br>
-Mitigation: Confirm the exact payload and effect with the user before write actions, and require explicit approval before destructive actions. <br>
-Risk: First-time setup may require installing the oo CLI or connecting Qlty credentials. <br>
-Mitigation: Run setup steps only after matching auth or connection failures, and review installer, login, connection, and billing commands before execution. <br>
+## Use Case:
 
+Developers use this skill to query Qlty workspaces, projects, issues, metrics, and account status through their connected OOMOL account.
 
-## Reference(s): <br>
-- [Qlty homepage](https://qlty.sh) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-qlty) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, json] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to inspect live action schemas before sending connector payloads; submitted actions are read-only.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: First-time setup provides online installer commands without a clear approval step, creating a risk of running an unverified installer.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified oo CLI release and require user approval before the agent installs software.
+
+Risk: Connecting Qlty authorizes OOMOL to mediate account access.
+
+Mitigation: Connect only the intended Qlty account and review the connection before use.
+
+## Reference(s):
+
+- [Qlty](https://qlty.sh)
+- [Qlty API documentation](https://docs.qlty.sh/api-reference/user/get-authenticated-user)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Guidance]
+
+**Output Format:** [Structured JSON results and Markdown guidance with inline shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The documented Qlty actions read account and project data; the skill produces no files.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

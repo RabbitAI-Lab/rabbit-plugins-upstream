@@ -1,44 +1,58 @@
-## Description: <br>
-Identifies plant growth stages from images or videos using a cloud analysis service and returns structured results for precision agriculture decision support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes plant images and videos to classify growth stages and produce structured reports for agricultural decision support.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Developers, agents, and agricultural operators use this skill to submit plant imagery or video for growth-stage recognition and retrieve structured analysis reports and history links for farm-management decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends plant images, videos, or submitted URLs to the Lifeemergence cloud service for analysis. <br>
-Mitigation: Use only media and URLs approved for that service, and avoid private farm footage, internal URLs, or regulated business media unless the service's retention and access controls are acceptable. <br>
-Risk: The skill silently creates or reuses an account identity and stores service tokens locally. <br>
-Mitigation: Ask the publisher for permission scoping, opt-out and deletion instructions, and instructions to delete local SQLite data and stored tokens. <br>
-Risk: Historical report listing is tied to the locally resolved account identity. <br>
-Mitigation: Review history access before using shared workspaces and request a way to disable, delete, or opt out of account history if needed. <br>
+## Use Case:
 
+Agricultural practitioners can use plant photos or videos to identify a plant's growth stage, review developmental observations, and consult structured analysis when planning crop management.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-growth-stage-recognition-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Interface Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON text with structured analysis results, report links, history lists, and command examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local file paths or public image/video URLs; supports basic, standard, and json detail modes; can write results to a file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release and frontmatter) <br>
+Risk: The skill sends plant images or videos to LifeEmergence for analysis, including when its no-analysis option is used.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only media you are authorized and comfortable sending to LifeEmergence; do not rely on the no-analysis option to prevent uploads.
+
+Risk: Automatic account handling retains sign-in credentials and may incur charges.
+
+Mitigation: Review the account creation and credential handling behavior before use, protect stored credentials and profile data, and check for possible charges.
+
+Risk: The package does not substantiate its immediate cloud-deletion promise, and its service-address option may be ignored.
+
+Mitigation: Treat uploaded media as potentially retained, and do not use --api-url as a means to redirect sensitive uploads.
+
+## Reference(s):
+
+- [API reference](artifact/skills/smyx_analysis/references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Recommendations, Report links]
+
+**Output Format:** [Structured analysis results, with history reports presented as a Markdown table]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include growth-stage classification, developmental observations, recommendations, and links. Analysis is for agricultural reference.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

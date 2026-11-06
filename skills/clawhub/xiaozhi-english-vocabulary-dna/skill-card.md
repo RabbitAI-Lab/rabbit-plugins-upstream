@@ -1,41 +1,57 @@
-## Description: <br>
-Helps English learners save vocabulary, schedule consent-based spaced repetition reminders, preview upcoming lesson words, and track vocabulary retention. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+按间隔重复安排英语词汇复习，生成每日到期词卡，并支持课前词汇预热和按个人遗忘速度调整复习间隔。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning assistants use this skill to capture English vocabulary from photos, conversations, or manual entries, then run consent-based spaced review through flashcards, sentence practice, contextual dialogue, and progress reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores vocabulary history, example sentences, and learning performance in local memory, which may resurface personal details during later reviews or reports. <br>
-Mitigation: Use the skill only with user consent, avoid sensitive personal details in practice sentences, and review local memory behavior before installation. <br>
-Risk: IM reminders may interrupt users or run outside expectations if enabled without clear consent. <br>
-Mitigation: Enable reminders only after explicit consent and use the documented fallback of session-time review or user-initiated practice when timed reminders are unavailable. <br>
+## Use Case:
 
+面向初中和高中英语学习者，用于收录词汇、按复习间隔生成每日词卡，并为新课词汇安排课前预热；小学高段学生须有家长或教师陪同。
 
-## Reference(s): <br>
-- [Vocabulary radar topic templates](references/vocabulary-radar-topics.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-vocabulary-dna) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown and conversational text with review prompts, vocabulary cards, reports, and setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local memory for vocabulary history and learning performance when available; OCR and timed reminders can fall back to manual input or session-time review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Saved vocabulary and learning weaknesses are student learning records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep record-saving and sharing off unless the student or guardian opts in; use the provided deletion and opt-out controls. Younger students require guardian involvement.
+
+Risk: Companion storage and reminder services are outside this skill bundle.
+
+Mitigation: Review those services separately before enabling their storage or reminder features.
+
+## Reference(s):
+
+- [English high school vocabulary reference](artifact/references/english-hs-vocabulary.md)
+- [Vocabulary radar topics](artifact/references/vocabulary-radar-topics.md)
+- [Spaced-repetition schedule](artifact/shared/ebbinghaus-schedule.md)
+- [Vocabulary records and consent conventions](artifact/shared/vocab.md)
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-vocabulary-dna)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese conversational text and Markdown vocabulary cards]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Personalized review prompts; reminders are consent-controlled and consolidated by the reminder service.]
+
+## Skill Version(s):
+
+2.12.6 (source: server release metadata, artifact/SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

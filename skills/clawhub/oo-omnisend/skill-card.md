@@ -1,42 +1,55 @@
-## Description: <br>
-Omnisend helps agents work with Omnisend contact and segment data through the OOMOL-backed oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the OOMOL-connected Omnisend account to read, create, update, and delete contact and segment data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to read Omnisend contacts and segments, create or update contacts, and manage contact tags through a connected OOMOL account. It is suited for Omnisend support, marketing operations, and workflow automation tasks that need schema-checked connector calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change Omnisend contact data through the connected OOMOL account. <br>
-Mitigation: Install only when the publisher is trusted and the connected Omnisend account is appropriate for the task. <br>
-Risk: Write and destructive actions can update contacts or remove contact tags. <br>
-Mitigation: Review the exact payload and intended effect with the user before approving contact updates, tag changes, or destructive operations. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Omnisend contacts and segments through their OOMOL-connected account, including reading data and making confirmed changes.
 
-## Reference(s): <br>
-- [ClawHub Omnisend skill page](https://clawhub.ai/oomol/skills/oo-omnisend) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Omnisend homepage](https://www.omnisend.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance, Configuration instructions] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md metadata) <br>
+Risk: Fallback setup can execute unverified remote installer code without a separate approval step; the remote installers and hosted connector are not fully verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, using a verified release where possible, and check automatic skill installation and synchronization settings before running it.
+
+Risk: Connecting Omnisend entrusts OOMOL with account access and contact operations.
+
+Mitigation: Keep permissions narrow and retain the documented confirmations before write or destructive actions.
+
+## Reference(s):
+
+- [Omnisend API documentation](https://api-docs.omnisend.com/reference/overview)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [Omnisend skill release](https://clawhub.ai/oomol/skills/oo-omnisend)
+
+## Skill Output:
+
+**Output Type(s):** [JSON data, Text summaries]
+
+**Output Format:** [JSON responses with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Contact and segment data returned by Omnisend; write and destructive actions require confirmation as specified by the skill.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

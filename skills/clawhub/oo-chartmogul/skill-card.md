@@ -1,45 +1,52 @@
-## Description: <br>
-ChartMogul helps agents search and read ChartMogul account, customer, contact, and source data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ChartMogul (chartmogul.com). Use this skill for ANY ChartMogul request — searching and reading data. Whenever a task involves ChartMogul, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to retrieve ChartMogul account settings, customers, contacts, and data sources with OOMOL-managed ChartMogul credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connector can access customer, contact, source, and account data through the user's connected ChartMogul account. <br>
-Mitigation: Use specific lookups or filtered list requests and install the skill only when that account-data access is acceptable. <br>
-Risk: First-time CLI installation or authentication steps may affect the user's local environment or connected OOMOL account. <br>
-Mitigation: Review any first-time oo CLI install or authentication step before running it. <br>
-Risk: Future connector actions could write, overwrite, or delete ChartMogul data. <br>
-Mitigation: Require explicit user confirmation before any action that writes or deletes data. <br>
+## Use Case:
 
+External users with an OOMOL-connected ChartMogul account use this skill to retrieve account settings, customer records, contacts, and data sources through read-only actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-chartmogul) <br>
-- [ChartMogul homepage](https://chartmogul.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action execution; connector responses are JSON objects containing data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: Automatic setup can execute unverified remote code and make broader changes to agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a verified CLI release separately, consider disabling automatic skill synchronization with OO_SKILLS_SYNC_DISABLED=1, and confirm the connected account's access.
+
+## Reference(s):
+
+- [ChartMogul homepage](https://chartmogul.com/)
+- [ChartMogul API authentication documentation](https://dev.chartmogul.com/docs/authentication/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [ChartMogul ClawHub release](https://clawhub.ai/oomol/skills/oo-chartmogul)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON data with Markdown guidance and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only account, customer, contact, and data-source retrieval; results depend on the selected action and filters.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

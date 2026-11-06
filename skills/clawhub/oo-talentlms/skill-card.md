@@ -1,43 +1,56 @@
-## Description: <br>
-TalentLMS lets agents read and manage TalentLMS users and learning platform data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate TalentLMS to read and manage users, courses, groups, categories, and branches through a connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect TalentLMS users, courses, branches, categories, and groups, and to create, update, or delete users through an OOMOL-connected TalentLMS account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read TalentLMS account data through an OOMOL-connected account. <br>
-Mitigation: Install it only for intended TalentLMS workflows and keep the OOMOL TalentLMS connection limited to the access the workflow needs. <br>
-Risk: Write and destructive actions can create, update, or delete TalentLMS users. <br>
-Mitigation: Review every proposed payload, confirm the exact target and intended effect, and require explicit approval before create_user, update_user, or delete_user. <br>
+## Use Case:
 
+TalentLMS administrators and operators can inspect users, courses, groups, categories, and branches, and create, update, or delete user records through a connected account.
 
-## Reference(s): <br>
-- [ClawHub TalentLMS Skill](https://clawhub.ai/oomol/skills/oo-talentlms) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [TalentLMS](https://www.talentlms.com) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, an OOMOL sign-in, and a connected TalentLMS API key; write and destructive actions require explicit confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: Setup directs the agent to execute a downloaded installer without verification or clear user approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI setup separately, including installation and synchronization of other agent skills. Prefer a reviewed, version-pinned installation.
+
+Risk: The connected account can change or delete TalentLMS records.
+
+Mitigation: Retain the skill's required confirmations before changing or deleting records.
+
+## Reference(s):
+
+- [TalentLMS](https://www.talentlms.com)
+- [TalentLMS API documentation](https://developers.talentlms.io/intro)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [JSON requests and responses with concise text guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write actions require confirmation; deletion requires explicit approval.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

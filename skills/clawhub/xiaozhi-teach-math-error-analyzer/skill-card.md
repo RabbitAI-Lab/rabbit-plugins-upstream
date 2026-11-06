@@ -1,49 +1,61 @@
-## Description: <br>
-Helps math teachers turn wrong-answer review into structured class and student error analysis by classifying mistakes, linking them to a knowledge map, and producing teaching intervention suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助数学教师分析初高中作业与测评中的错因、定位相关知识点，并形成班级与个体画像及教学干预建议。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External math teachers use this skill to analyze homework, test, or classroom mistakes across a class and individual students. It produces error categories, knowledge-map links, class and student profiles, and intervention suggestions for teacher review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student performance data or real names could be exposed in reports or downstream profiles. <br>
-Mitigation: Use aliases or student IDs by default, avoid real names unless authorized, and review reports before sharing or writing them to downstream systems. <br>
-Risk: Error analysis and intervention suggestions could be mistaken for grading, ranking, or final teaching decisions. <br>
-Mitigation: Keep outputs as teacher-reviewed analysis and suggestions; do not use the skill to replace teacher grading, rank students, or make unsupervised instructional decisions. <br>
-Risk: Cross-skill handoff fields could fail or lose meaning if the seven teacher-side error categories are not mapped to the supported four-category schema. <br>
-Mitigation: Map teacher-side categories to the documented standard categories before writing data into downstream student-analysis or handoff workflows. <br>
+## Use Case:
 
+供初中和高中数学教师根据匿名化的作答数据归纳共性错因、追踪知识薄弱点，并规划下一步教学干预。教师审阅分析和建议后再决定是否采用。
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-math-error-analyzer) <br>
-- [Error Classification Rubric](references/error-classification-rubric.md) <br>
-- [Knowledge Map Template](references/knowledge-map-template.md) <br>
-- [Intervention Design Template](references/intervention-design.md) <br>
-- [Class Error Report Template](references/class-error-report-template.md) <br>
-- [Student Error Profile Template](references/student-error-profile-template.md) <br>
-- [Error-Knowledge Link Template](references/error-knowledge-link-template.md) <br>
-- [Intervention Report Template](references/intervention-report-template.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Analysis, Guidance, Files] <br>
-**Output Format:** [Markdown reports, structured teaching profiles, and text guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses teacher-provided mistake data and should use aliases or IDs for student records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server evidence) <br>
+Risk: Student work and learning records may contain identifying or sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use student aliases, remove identifying details, and confirm the platform and companion skills honor consent, sharing, and deletion controls before storing records.
+
+Risk: Confidential or not-yet-released exam materials could be exposed through submitted work.
+
+Mitigation: Keep confidential exam materials out of the analysis and wait until all relevant exam sessions and make-up exams have finished.
+
+Risk: AI-generated practice problems may contain errors.
+
+Mitigation: Have a teacher check generated items before adding them to assignments or exams.
+
+## Reference(s):
+
+- [ClawHub release: 班级错因分析](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-math-error-analyzer)
+- [Error classification rubric](artifact/references/error-classification-rubric.md)
+- [Knowledge map template](artifact/references/knowledge-map-template.md)
+- [Intervention design guide](artifact/references/intervention-design.md)
+- [AI-generated item review checklist](artifact/shared/ai-item-check.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance, JSON]
+
+**Output Format:** [Chinese-language error analyses, class and student profiles, knowledge maps, intervention recommendations, and structured record updates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses teacher-provided evidence; proposed record updates require teacher review and applicable consent. AI-generated practice items require teacher verification before use.]
+
+## Skill Version(s):
+
+2.12.6 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

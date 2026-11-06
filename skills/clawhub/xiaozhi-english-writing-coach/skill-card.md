@@ -1,41 +1,52 @@
-## Description: <br>
-Guides English learners through targeted writing feedback, sentence and vocabulary upgrades, scenario-based practice, and consent-gated progress tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language English writing coach that gives paragraph- and essay-level feedback on grammar, vocabulary, and logic, using questions to help learners revise their own work.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and English learners use this skill to improve written English through grammar, vocabulary, and logic feedback that asks them to revise rather than simply receiving rewritten answers. It can also guide practical writing exercises, track progress when the user consents, and produce monthly writing-development summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can remember writing-development patterns when the user allows progress tracking. <br>
-Mitigation: Ask for consent before updating writing profiles, DNA records, reminders, or cross-session progress notes, and let the user decline tracking. <br>
-Risk: Writing feedback may be misleading if treated as authoritative scoring or a complete rewrite. <br>
-Mitigation: Use the skill as coaching guidance, focus on the most important issues, and have the learner review and revise the work themselves. <br>
+## Use Case:
 
+External users, especially upper-elementary students with an adult present, middle-school students, and high-school students, use it to improve English paragraphs and essays. It identifies a few priority issues in grammar, vocabulary, and organization, then guides learners to revise for themselves through questions and practice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-writing-coach) <br>
-- [Low-to-high vocabulary upgrade reference](references/vocabulary-upgrade.md) <br>
+### Deployment Geography for Use:
 
+Global; Chinese-language tutoring with examples and school-stage guidance tailored to Chinese learners.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style coaching feedback, revision prompts, practice scripts, and progress summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include consent-gated progress notes for writing habits, sentence-level development, and monthly summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Optional student profiles and sharing can involve ongoing tracking of a learner’s writing and progress.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep profiles and sharing disabled unless the student or guardian has reviewed consent and the host platform’s storage, retention, sharing, and deletion behavior. Use “这次不要记忆” for session-only tutoring.
+
+## Reference(s):
+
+- [High-school English writing guidance](references/english-hs-writing.md)
+- [Vocabulary upgrade reference](references/vocabulary-upgrade.md)
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-writing-coach)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language writing feedback, revision questions, and practice prompts in conversational Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Focuses on the 2–3 highest-priority issues and supports learner-led revision; does not write a full essay for the learner.]
+
+## Skill Version(s):
+
+2.12.6 (source: skill frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

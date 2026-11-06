@@ -2,7 +2,7 @@
 
 ## Requirement
 
-Validated demand: Founders and builders need a repeatable way to turn rough product ideas into validated plans, prototypes, and user-facing positioning. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
+Validated demand: Founders and builders need a repeatable way to turn rough product ideas into validated plans, prototypes, and user-facing positioning. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.
 
 Audience: solo founders, product managers, makers, and small teams who need to test whether a product idea is worth building before spending heavily
 
@@ -10,12 +10,10 @@ Category: `business-and-operations`
 
 Demand score: 100/100
 
-Evidence coverage: 12 signals across 3 source families.
+Evidence coverage: 12 signals across 4 source families.
 
 ## Evidence
 
-- hacker-news-ask-hn: [Ask HN: How would you harden AI changes to a 1M-line legacy SaaS before review?](https://news.ycombinator.com/item?id=49045271)
-- github-issues: [RFC-0002 Slice 14/17: certify Lotus Idea data-product, trust telemetry, and canonical proof in platform gates](https://github.com/sgajbi/lotus-platform/issues/598)
 - segmentfault-search: [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
 - segmentfault-search: [javascript](https://segmentfault.com/t/javascript)
 - segmentfault-search: [typescript](https://segmentfault.com/t/typescript)
@@ -23,9 +21,11 @@ Evidence coverage: 12 signals across 3 source families.
 - segmentfault-search: [问： 属性或方法“$v”未使用 Vuelidate 定义](https://segmentfault.com/q/1010000042816440)
 - segmentfault-search: [问： 从JDK 1.8切换到JDK 21时遇到NoProviderFoundException如何解决？](https://segmentfault.com/q/1010000047230462)
 - segmentfault-search: [问： laravel validator验证不通过返回The given data was invalid，而不是返回定义的提示信息](https://segmentfault.com/q/1010000018250396)
-- github-issues: [Follow-up: extend meta validation config across the CMS](https://github.com/novaramedia/novaramedia-com/issues/572)
-- github-issues: [Correct Tool Contract startup-validation claim](https://github.com/Nokia-Bell-Labs/declarative-agents/issues/1006)
-- hacker-news-search: [What I learned selling 2,500 MIDI recorders: Hardware is not so hard](https://news.ycombinator.com/item?id=48974605)
+- hacker-news-search: [LLMs are making formal software verification feasible at a much larger scale](https://news.ycombinator.com/item?id=50207685)
+- hacker-news-search: [Intel stock collapse worsens as $3.5T chip rout spreads](https://news.ycombinator.com/item?id=50372343)
+- github-issues: [Product research: compare first integrated planner slice with existing calendar and prayer source](https://github.com/Safeer1877/islamic-life-companion/issues/11)
+- github-issues: [Apply “Don’t Survey Your Players” to indie product feedback](https://github.com/pomodorozhong/rabbit-holes/issues/224)
+- csdn-search: [debugging-and- validation](https://wenku.csdn.net/doc/62or4vx1j7?ops_request_misc=elastic_search_misc&request_id=e4fdf8259dd5444a85839039f1c806ac&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2~all~ElasticSearch~search_v2-2-62or4vx1j7-null-null.142^v102^pc_search_result_base4&utm_term=product%20idea%20validation)
 
 ## How This Skill Meets The Requirement
 

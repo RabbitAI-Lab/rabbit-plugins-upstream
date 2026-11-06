@@ -1,42 +1,56 @@
-## Description: <br>
-Firstbase connector skill for searching and reading Firstbase account data through OOMOL's oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read Firstbase data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators with an OOMOL-connected Firstbase account use this skill to inspect Firstbase catalog SKUs, inventory items, brands, categories, and organization inventory without handling raw Firstbase API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Firstbase account data through an OOMOL-connected account. <br>
-Mitigation: Install and use it only when the OOMOL and Firstbase connection is intentional and appropriate for the requested account data. <br>
-Risk: Future connector actions marked write or destructive could change or remove Firstbase data. <br>
-Mitigation: Require explicit user confirmation of the exact payload, target, and effect before running any write or destructive action. <br>
+## Use Case:
 
+Employees and operations teams use this skill to retrieve catalog, brand, category, and inventory information from their connected Firstbase organization.
 
-## Reference(s): <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Firstbase homepage](https://www.firstbase.com) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and JSON CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before running Firstbase actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: The linked CLI setup or execution may make persistent changes to local agent skill directories.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a verified CLI release before use; consider setting OO_SKILLS_SYNC_DISABLED=1 before invoking the skill.
+
+Risk: The skill accesses data through the connected Firstbase account, and OOMOL intermediates requests.
+
+Mitigation: Connect only the intended Firstbase account with read access.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Firstbase API documentation](https://apipub.firstbasehq.com/swagger-ui/index.html)
+- [Firstbase](https://www.firstbase.com)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Structured data, Text summaries, Guidance]
+
+**Output Format:** [JSON responses with concise text summaries and guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Firstbase catalog and inventory information]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

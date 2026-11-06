@@ -1,48 +1,62 @@
-## Description: <br>
-AI Persona OS helps OpenClaw agents set up and maintain a persistent persona workspace with memory files, operating rules, setup flows, heartbeat routines, proactive patterns, and security guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides OpenClaw agents with persona templates, memory and security conventions, optional briefings, and in-chat commands; requires OpenClaw 2026.8.1 or later.
 
-## Publisher: <br>
-[jeffjhunter](https://clawhub.ai/user/jeffjhunter) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jeffjhunter](https://clawhub.ai/user/jeffjhunter)
 
-## Use Case: <br>
-Developers, operators, and external OpenClaw users use this skill to configure an agent persona workspace, create or select persona files, maintain memory and heartbeat routines, and apply repeatable operating practices. It is intended for normal ClawHub skill use where the user reviews workspace, cron, and OpenClaw configuration changes before approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent workspace memory can store and index personal or work context. <br>
-Mitigation: Review USER.md, MEMORY.md, DREAMS.md, daily logs, and generated persona files; avoid saving secrets or sensitive personal data. <br>
-Risk: Heartbeat, cron, memory maintenance, pruning, and archiving can create or modify workspace files automatically. <br>
-Mitigation: Keep proactive maintenance and cron routines opt-in, and review proposed file changes before approving them. <br>
-Risk: The skill can inspect or propose changes to OpenClaw configuration for routing and workspace behavior. <br>
-Mitigation: Approve only expected OpenClaw config changes and verify that credential values are not displayed, copied, or modified. <br>
+## Use Case:
 
+OpenClaw users and developers use the skill to create a customized agent persona and organize a workspace for memory, workflows, and security practices. Optional features provide pulse checks, scheduled briefings, and Discord routing guidance.
 
-## Reference(s): <br>
-- [ClawHub Skill Listing](https://clawhub.ai/jeffjhunter/skills/ai-persona-os) <br>
-- [AI Persona OS Homepage](https://os.aipersonamethod.com) <br>
-- [heartbeat-automation.md](references/heartbeat-automation.md) <br>
-- [never-forget-protocol.md](references/never-forget-protocol.md) <br>
-- [proactive-playbook.md](references/proactive-playbook.md) <br>
-- [security-patterns.md](references/security-patterns.md) <br>
-- [soul-md-maker.md](references/soul-md-maker.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Files, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and workspace file templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose persistent workspace files, optional cron routines, and OpenClaw configuration changes that should be reviewed before approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter, _meta.json, CHANGELOG, server release evidence) <br>
+Risk: Credential-audit output may expose sensitive matches.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Redact credential-audit output and parse selected configuration fields rather than displaying whole matching lines.
+
+Risk: Scheduled briefings may share private summaries with unintended audiences.
+
+Mitigation: Keep scheduled tasks disabled until permitted source channels and recipients are selected; use --no-deliver for internal processing.
+
+Risk: Automatic cleanup or upgrade steps may remove saved information.
+
+Mitigation: Back up the workspace and require approval before memory removal or persona replacement.
+
+## Reference(s):
+
+- [AI Persona OS on ClawHub](https://clawhub.ai/jeffjhunter/skills/ai-persona-os)
+- [AI Persona OS homepage](https://os.aipersonamethod.com)
+- [Automation guide](artifact/references/automations.md)
+- [Security patterns](artifact/references/security-patterns.md)
+- [Never-Forget Protocol](artifact/references/never-forget-protocol.md)
+- [SOUL.md Maker guide](artifact/references/soul-md-maker.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Configuration files, Shell commands, Guidance]
+
+**Output Format:** [Markdown workspace files, configuration guidance, and optional shell scripts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates or updates files in the configured OpenClaw workspace; optional automations and routing configuration are user-controlled.]
+
+## Skill Version(s):
+
+2.1.0 (source: frontmatter, changelog, released 2026-11-03)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -30,7 +30,7 @@ The connector also accepts your own Dropcontact API key (`apiKey`) — same acti
 ```bash
 # Run on the FR/EU rows (or on FullEnrich misses for those rows)
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"dropcontact","actionSlug":"findEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"dropcontact","actionSlug":"findEmail"}' \
   --records '[
     {"first_name":"Alice","last_name":"Martin","website":"acme.fr"},
     {"full_name":"Bob Durand","company":"Globex","country":"France"}
@@ -48,7 +48,7 @@ No field is schema-required, but a call without at least a name plus a company i
 
 - **`email` is an array.** Interpolate `{{nodes.<slug>.email[0].email}}`, not `{{nodes.<slug>.email}}` — the raw field is a list of candidates with per-candidate `qualification`.
 - **`qualification` is the provider grading its own homework.** Route every returned email through the free pre-cull ([`../references/contact-accuracy.md`](../references/contact-accuracy.md)) then `waterfall.verifyEmail` (0.1) regardless.
-- **Rate-limited to 60 calls/minute** (spread), with up to 10 backoff retries per call — large batches drain slowly by design. Don't re-trigger a batch that looks stalled; poll it.
+- **Rate-limited to 60 calls/minute** (spread), and each call is **asynchronous**: the request is submitted, then the row waits for Dropcontact's webhook (up to 120 minutes) before it completes. Large batches drain slowly by design. Don't re-trigger a batch that looks stalled; poll it.
 
 ## Anti-patterns
 
@@ -59,9 +59,16 @@ No field is schema-required, but a call without at least a name plus a company i
 
 **CONTACT stage, geography-conditional rung.** For FR/EU-heavy lists: swap in at rung 1 alongside/instead of `FullEnrich.findEmail` (1); otherwise use only on FullEnrich misses for EU rows (see [`../references/stage-action-map.md`](../references/stage-action-map.md), Find email). Every hit still flows to VERIFY: free pre-cull → `waterfall.verifyEmail` (0.1).
 
+## Recurring use
+
+No scheduled fit — per-record enrichment only; wire `findEmail` as the FR/EU CONTACT rung inside a play, not on a timer.
+
+- **In-play gate:** run only where the stored email column is still empty (gate on the *written-back* field — the node output `email` is an array, per pitfalls) and, in the escalation variant, only where FullEnrich already missed.
+- **Trigger shape vs the rate limit:** a play fired by segment changes trickles rows naturally under the 60 calls/minute cap (see pitfalls) — a better fit than a scheduled bulk re-pull, which drains slowly and re-bills unchanged rows.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"dropcontact","actionSlug":"findEmail","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"dropcontact","actionSlug":"findEmail"}`. **No `connectorUuid` in `config`.**
 
 ## Pairs with
 

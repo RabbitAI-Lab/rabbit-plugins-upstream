@@ -1,0 +1,15 @@
+{
+  "sourceSha": "05c64c2e13e226369ff0840570aa232dd8f1cd31",
+  "sourceDirty": false,
+  "cli": {
+    "package": "@moltazine/moltazine-cli",
+    "version": "0.1.76",
+    "integrity": "sha512-DD89SyTqxwNPOi5XcjugsgrIf/C73Uad28VyEfs1hga7epFc8O9/kC+A/rcv858iJd1GkHbCJJEUb8QuBliy/g==",
+    "gitHead": "feda6c5ed9881a264b3a4f64b5d6f5713d487273"
+  },
+  "files": {
+    "references/training.md": "4e0962828bcde2ccdd6615d9b40452678d39342d41deccda26dd5324c6ad493f",
+    "skill-cli-release.json": "c48235a7c63046f44064b34db8593b9b247c0e82f7bdc8a8f5099a9447197708",
+    "SKILL.md": "68e548970189b8b3a8beabcb38c9588780b7ec35470668e8e6bfecdac104071e"
+  }
+}

@@ -1,47 +1,67 @@
-## Description: <br>
-帮助英语老师把听力课从放录音和刷题转为围绕目标、材料、听前预测、听中分层、听后任务、微技能训练和学员档案的系统化教学设计。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+英语听力教学设计：把“放一遍录音对答案”变成有目标、有策略、有微技能训练的听力课。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-English teachers use this skill to design listening lessons, choose appropriately licensed materials, create pre-listening and while-listening tasks, plan micro-skill practice, and maintain pseudonymous listening profiles for students. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student listening profiles may contain identifiable or sensitive learning information. <br>
-Mitigation: Use pseudonyms, avoid sensitive student identifiers, and require teacher confirmation before saving profile data to shared records. <br>
-Risk: Listening materials may have copyright or licensing restrictions. <br>
-Mitigation: Confirm copyright status before use and rely on textbook, original, Creative Commons, or authorized materials rather than copying unauthorized audio. <br>
-Risk: Assessment suggestions could be mistaken for automated grading. <br>
-Mitigation: Use the skill's rubrics and frameworks as teacher-reviewed guidance; keep dictation scoring and final listening grades under teacher control. <br>
+## Use Case:
 
+面向小学高段、初中和高中英语教师，帮助规划听力课、选择适合学段且版权状态清楚的材料，并设计听前预测、分层听中任务、听后活动和微技能训练。
 
-## Reference(s): <br>
-- [Listening Material Sources](references/listening-material-sources.md) <br>
-- [Listening Rubric](references/listening-rubric.md) <br>
-- [Micro-Skill Training](references/micro-skill-training.md) <br>
-- [Pre-Listening Prediction Sample](references/pre-listening-prediction-sample.md) <br>
-- [Student Listening Profile Template](references/student-listening-profile-template.md) <br>
-- [While-Listening Task Sample](references/while-listening-task-sample.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown-style teaching plans, task templates, rubrics, and profile guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces teaching design guidance and structured templates; it does not execute code, grade dictation, or assign final listening scores.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: 生成的教学材料或题目可能存在错误。
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: 教师在课堂使用、入库或用于测评前审阅并验算材料。
+
+Risk: 学生资料和录音可能包含个人信息；版权标注不代表已取得隐私授权。
+
+Mitigation: 仅提供获准且去标识化的学生数据；录音或分享音频前取得适当许可，限制访问并设定删除期限，同时确认平台支持相关控制。
+
+Risk: 听力材料可能包含未经授权的音频或文本。
+
+Mitigation: 为每份材料标注版权状态；只按授权范围使用音频，未授权材料仅保留索引，不复制或分发。
+
+Risk: 单独安装的配套技能不在本次包审查范围内。
+
+Mitigation: 启用配套技能前，分别审阅其来源和安全信息。
+
+## Reference(s):
+
+- [ClawHub release: 英语听力材料设计](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-listening-designer)
+- [听力材料来源清单](references/listening-material-sources.md)
+- [听力评估评分细则](references/listening-rubric.md)
+- [微技能训练法](references/micro-skill-training.md)
+- [听前预测样板](references/pre-listening-prediction-sample.md)
+- [学员听力档案模板](references/student-listening-profile-template.md)
+- [听中任务设计样板](references/while-listening-task-sample.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown, Configuration]
+
+**Output Format:** [中文听力课方案、活动与评估建议；可包含结构化班级工作空间记录]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [教师需在课堂使用或入库前审阅并验算 AI 生成材料；不替教师评分或替学生完成听力题。]
+
+## Skill Version(s):
+
+2.12.6 (source: server-resolved release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

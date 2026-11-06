@@ -1,46 +1,62 @@
-## Description: <br>
-Validate and ingest operator-pushed agent-bom inventory JSON to produce local findings, graph, policy, provenance, and auditor-ready exports without direct cloud credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Validate and ingest operator-pushed agent-bom inventory JSON from AWS, Azure, GCP, Snowflake, CMDB, or endpoint collectors. Use when a user has canonical inventory JSON and wants local findings, graph, policy, provenance, or auditor-ready exports without giving agent-bom direct cloud credentials.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers, security engineers, and operators use this skill when they already have canonical inventory JSON from cloud, CMDB, endpoint, or AI-agent collection workflows and need local validation, scanning, graphing, policy checks, provenance review, or exports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Inventory-derived security data may leave the local machine when optional push or vulnerability enrichment is enabled. <br>
-Mitigation: Verify the operator-provided push URL and enrichment endpoints before enabling those optional actions. <br>
-Risk: Untrusted or unintended inventory files could produce misleading local findings. <br>
-Mitigation: Run schema validation first and analyze only inventory files the operator intended to provide. <br>
-Risk: Inventory and configuration may contain sensitive tokens, URL credentials, private keys, or environment values. <br>
-Mitigation: Rely on the skill's redaction guidance and do not display or export raw secrets. <br>
+## Use Case:
 
+Developers and platform or security engineers use this skill to validate operator-generated inventory JSON, run local scans, and produce graph, policy, provenance, or auditor-ready exports without supplying direct cloud credentials.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/msaad00/skills/agent-bom-ingest) <br>
-- [agent-bom repository](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [OSV vulnerability API](https://api.osv.dev/v1) <br>
-- [GitHub Advisory API](https://api.github.com/advisories) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent-bom CLI to create operator-selected JSON, SARIF, HTML, Markdown, CycloneDX, or SPDX export files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: Inventory files and exports may contain sensitive infrastructure details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Protect inventory files and exports, and review them before sharing.
+
+Risk: Optional vulnerability lookups may disclose package identifiers to advisory services.
+
+Mitigation: Confirm network settings before enabling advisory queries.
+
+Risk: An optional control-plane push sends inventory to the configured destination.
+
+Mitigation: Upload only to an explicitly selected control plane and configure its URL and authentication deliberately.
+
+Risk: The external agent-bom executable's validation and redaction guarantees were not verified in this review.
+
+Mitigation: Use a trusted release and protect inventory files and exports.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/koda-ai-studio/agent-bom)
+- [PyPI package](https://pypi.org/project/agent-bom/)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Files, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands; JSON, SARIF, HTML, or Markdown inventory exports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts schema-conforming inventory JSON; output format and destination are operator-selected.]
+
+## Skill Version(s):
+
+0.113.2 (source: artifact frontmatter; server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

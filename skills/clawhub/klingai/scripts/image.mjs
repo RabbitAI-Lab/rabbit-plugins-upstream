@@ -52,7 +52,7 @@ function validateModelAliasInput(rawModel) {
 
 function validateModelForRoute(apiPath, args) {
   validateModelAliasInput(args.model);
-  const model = normalizeModelName(args.model);
+  const model = normalizeModelName(args.model).toLowerCase();
   if (!model) return;
 
   // We only validate what we can be sure about from public enums.
@@ -67,11 +67,11 @@ function validateModelForRoute(apiPath, args) {
       );
     }
   } else {
-    const forbidden = new Set(['kling-v3-omni', 'kling-image-o1', 'kling-video-o1']);
-    if (forbidden.has(model)) {
+    const allowed = new Set(['kling-v3', 'kling-v2-1']);
+    if (!allowed.has(model)) {
       throw new Error(
         `Invalid --model for generations / generations 不支持该模型: ${model}\n`
-        + `Hint / 提示: remove --model or use kling-v3`,
+        + `Allowed / 允许: kling-v3, kling-v2-1`,
       );
     }
   }
@@ -113,29 +113,31 @@ function printHelp() {
 
 Usage:
   node kling.mjs image --prompt <text> [options]           # Text/image-to-image
-  node kling.mjs image --prompt "..." [--resolution 4k]     # 4K / series / subject → Omni
-  node kling.mjs image --model kling-v3-omni --prompt "..."  # explicit Omni model → omni-image (t2i / i2i)
+  node kling.mjs image --prompt "..." [--resolution 4k]     # 4K / series → Omni (kling-v3-omni)
+  node kling.mjs image --model kling-image-o1 --prompt "..."  # official Omni default (t2i / i2i)
   node kling.mjs image --task_id <id> [--download]         # Query/download
 
 Submit (common):
   --prompt          Image description (required). Omni: <<<image_1>>> / <<<element_1>>>
   --resolution      1k / 2k / 4k (4k uses Omni)
-  --aspect_ratio    Aspect ratio (default: 16:9 basic, auto for Omni)
+  --aspect_ratio    Aspect ratio (default: 16:9 basic; Omni t2i 16:9; Omni with --image: auto).
+                    auto is invalid without --image
   --n               Number of images 1-9
   --output_dir      Output dir (default: ./output)
   --no-wait         Submit only, do not wait
   --wait            Wait for completion (default)
 
 Basic API:
-  --negative_prompt Negative prompt
-  --model           Model (default: kling-v3)
+  --negative_prompt Negative prompt (not with --image)
+  --model           kling-v3 (default) / kling-v2-1
+  --element_ids     Subject IDs for kling-v3 element_list
 
-Omni (4K/series/subject):
-  --model           kling-v3-omni / kling-image-o1
+Omni (4K/series/multi-image):
+  --model           kling-image-o1 (official default) / kling-v3-omni (4k / series)
   --result_type     single / series (default: single)
-  --series_amount   Series count 2-9 (when result_type=series)
+  --series_amount   Series count 2-9 or auto (when result_type=series; auto = 智能数量)
   --image           Reference image path or URL, comma-separated for multiple
-  --element_ids     Subject IDs, comma-separated
+  --element_ids     Subject IDs, comma-separated (kling-v3 generations element_list, or Omni)
   (omni refs)       image count + element count <= 10
 
 Query/download:
@@ -143,22 +145,26 @@ Query/download:
   --download        Download if task succeeded
 
 Env:
-  credentials file  ~/.config/kling/.credentials (access_key_id, secret_access_key)
-  KLING_TOKEN       Session-only Bearer (optional override)
+  credentials file  ~/.config/kling/.credentials (api_key)
+  KLING_API_KEY     Session-only Bearer (optional override)
   KLING_MEDIA_ROOTS Comma-separated extra dirs for --image / --output_dir (default: cwd only)
   KLING_ALLOW_ABSOLUTE_PATHS=1  Allow any local path (e.g. WSL downloads)`);
 }
 
 function useOmniApi(args) {
-  // Match video.mjs chooseApiPath: explicit Omni image models → omni-image (incl. plain text-to-image).
   const m = normalizeModelName(args.model).toLowerCase();
   if (m === 'kling-v3-omni' || m === 'kling-image-o1') return true;
-  if (args.element_ids) return true;
   if (args.result_type === 'series') return true;
   if ((args.resolution || '').toLowerCase() === '4k') return true;
   if ((args.aspect_ratio || '').toLowerCase() === 'auto') return true;
   if (args.image && args.image.includes(',')) return true;
   return false;
+}
+
+function defaultOmniImageModel(args) {
+  if ((args.resolution || '').toLowerCase() === '4k') return 'kling-v3-omni';
+  if (args.result_type === 'series') return 'kling-v3-omni';
+  return 'kling-image-o1';
 }
 
 async function queryTaskAnyPath(taskId, token) {
@@ -250,8 +256,24 @@ export async function main() {
     validateModelForRoute(apiPath, args);
 
     if (apiPath === API_GEN) {
+      const modelName = (args.model || 'kling-v3').toLowerCase();
+      if (args.negative_prompt && imageInputs.length > 0) {
+        throw new Error(
+          'Unsupported --negative_prompt with --image / 官网：图生图不支持负向提示词',
+        );
+      }
+      if (elementIds.length && modelName === 'kling-v2-1') {
+        throw new Error(
+          'Unsupported --element_ids for kling-v2-1 / 官网：kling-v2-1 无 element_list，请用 kling-v3 或 Omni',
+        );
+      }
+      if (imageInputs.length + elementIds.length > 10) {
+        throw new Error(
+          `Too many refs for generations / 参考图与主体总数超限: max 10 (current ${imageInputs.length + elementIds.length})`,
+        );
+      }
       const payload = {
-        model_name: args.model || 'kling-v3',
+        model_name: modelName,
         prompt: args.prompt,
         negative_prompt: args.negative_prompt || '',
         n: parseInt(args.n || '1', 10),
@@ -261,6 +283,9 @@ export async function main() {
       };
       if (imageInputs.length > 0) {
         payload.image = await readMediaAsValue(imageInputs[0]);
+      }
+      if (elementIds.length > 0) {
+        payload.element_list = elementIds.map((id) => ({ element_id: id }));
       }
       const result = await submitTask(API_GEN, payload, token);
       console.log(`\nTask ID / 任务 ID: ${result.taskId}`);
@@ -274,21 +299,47 @@ export async function main() {
       return;
     }
 
+    const hasRefImage = imageInputs.length > 0;
+    const requestedAspect = (args.aspect_ratio || '').toLowerCase();
+    if (requestedAspect === 'auto' && !hasRefImage) {
+      throw new Error(
+        'Invalid --aspect_ratio auto / 无参考图时不支持 auto，请指定 16:9 等固定比例，或提供 --image',
+      );
+    }
     const payload = {
-      model_name: args.model || 'kling-v3-omni',
+      model_name: (args.model || defaultOmniImageModel(args)).toLowerCase(),
       prompt: args.prompt,
       resolution: (args.resolution || '1k').toLowerCase(),
-      aspect_ratio: (args.aspect_ratio || 'auto').toLowerCase(),
+      aspect_ratio: requestedAspect || (hasRefImage ? 'auto' : '16:9'),
       result_type: args.result_type || 'single',
       callback_url: '',
     };
+    if ((args.resolution || '').toLowerCase() === '4k' && payload.model_name === 'kling-image-o1') {
+      throw new Error(
+        'Invalid --resolution 4k for kling-image-o1 / 官网能力地图：Image O1 支持 1k/2k，4k 请用 kling-v3-omni',
+      );
+    }
+    if (payload.result_type === 'series' && payload.model_name === 'kling-image-o1') {
+      throw new Error(
+        'Invalid --result_type series for kling-image-o1 / 官网能力地图：Image O1 不支持组图，请用 kling-v3-omni',
+      );
+    }
     if (payload.result_type === 'series') {
       if (imageInputs.length === 0) {
         throw new Error(
           'Invalid --result_type series without --image / 组图仅支持 i2i，请提供 --image（t2i 不支持 series）。',
         );
       }
-      payload.series_amount = parseInt(args.series_amount || '4', 10);
+      const rawSeries = String(args.series_amount || '4').trim().toLowerCase();
+      if (rawSeries === 'auto') {
+        payload.series_amount = 'auto';
+      } else {
+        const n = parseInt(rawSeries, 10);
+        if (!Number.isInteger(n) || n < 2 || n > 9) {
+          throw new Error('Invalid --series_amount / 须为 2-9 或 auto');
+        }
+        payload.series_amount = n;
+      }
     } else {
       payload.n = parseInt(args.n || '1', 10);
     }

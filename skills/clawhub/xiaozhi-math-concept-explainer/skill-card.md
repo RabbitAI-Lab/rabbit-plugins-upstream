@@ -1,42 +1,53 @@
-## Description: <br>
-A Chinese-language tutoring skill that explains math concepts through familiar analogies, visual reasoning, step-by-step decomposition, and understanding checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps middle- and high-school learners understand mathematical concepts through everyday analogies, verbal visualization, and step-by-step explanations.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-support agents use this skill to turn formula-memorization questions into concept explanations, especially for algebra rules, functions, geometry visualization, probability, and statistics. It guides the agent to build intuition first, introduce formal math language second, and verify understanding through examples, counterexamples, transfer tasks, and links to prior knowledge. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate broadly for math-understanding requests. <br>
-Mitigation: Use it for concept explanation and tutoring workflows where Chinese-language math guidance is intended, and confirm that the selected skill matches the learner's request before relying on its output. <br>
-Risk: Connected learning-progress updates or reminder creation could affect a learner's study record or schedule. <br>
-Mitigation: Confirm such updates with the user or apply the connected skills' controls before recording progress or creating reminders. <br>
+## Use Case:
 
+Middle- and high-school students use this skill when a mathematical idea or formula feels memorized but not understood. It builds intuition through analogies, verbal visualization, or stepwise explanations, then asks the learner to restate the idea or apply it to a new example.
 
-## Reference(s): <br>
-- [Analogy Bank](references/analogy-bank.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-concept-explainer) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize curriculum guidance, minor-data practices, and crisis contacts before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or conversational text with structured prompts, analogies, explanations, and checks for understanding] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-language tutoring guidance; no executable code or hidden data access found in the artifact] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Student records, family sharing, reminders, and crisis disclosures can involve sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the host platform and companion skills before enabling records, sharing, or reminders. Use “这次不要记忆” for session-only tutoring, and follow the disclosed crisis exceptions and family-safety protections.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-concept-explainer)
+- [Analogy bank](artifact/references/analogy-bank.md)
+- [Junior high concept guide](artifact/references/math-hs1-concepts.md)
+- [Senior high concept guide (part 1)](artifact/references/math-hs2-concepts.md)
+- [Senior high concept guide (part 2)](artifact/references/math-hs3-concepts.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Conversational Chinese text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Explains one concept at a time; responses are limited to 120 Chinese characters, with up to three follow-up turns.]
+
+## Skill Version(s):
+
+2.12.6 (source: frontmatter, server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

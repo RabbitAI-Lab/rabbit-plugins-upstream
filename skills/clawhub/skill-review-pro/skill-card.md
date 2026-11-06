@@ -1,42 +1,53 @@
-## Description: <br>
-Skill Review Pro evaluates AI skills through static review, scoring, adversarial checks, and improvement guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Evaluates agent skills through static analysis, type-aware policies, and a 100-point scoring model, then provides review reports and improvement suggestions.
 
-## Publisher: <br>
-[z-zihan](https://clawhub.ai/user/z-zihan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[z-zihan](https://clawhub.ai/user/z-zihan)
 
-## Use Case: <br>
-Developers and skill authors use this agent to review skill quality, score skills against documented criteria, identify robustness issues, and prepare concrete improvement plans. When explicitly requested, it can guide a user-confirmed fix workflow for the selected skill. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill can read local skill files and may propose changes that affect another skill's behavior. <br>
-Mitigation: Use it on intended target files only and review proposed findings before acting on them. <br>
-Risk: The optional fix workflow can edit the selected skill after the user chooses to proceed. <br>
-Mitigation: Review proposed diffs before approving fixes, especially for broad improvement requests. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Skill Review Pro on ClawHub](https://clawhub.ai/z-zihan/skill-review-pro) <br>
-- [Publisher Profile](https://clawhub.ai/user/z-zihan) <br>
-- [Project Homepage](https://github.com/z-Zihan/awesome-skills) <br>
+## Use Case:
 
+Developers and skill authors use it to assess skill quality and robustness, receive scored review findings, and plan improvements. Its companion fix flow applies changes only after user confirmation.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown review reports with scores, issue summaries, adversarial-check results, improvement priorities, and fix checklists when applicable] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs follow the user's language and may include user-confirmed skill-edit plans during fix workflows.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Publication checks may automatically run downloaded software.
+
+Mitigation: Before enabling publication checks, remove the automatic package-download fallback or configure a reviewed, installed CLI.
+
+Risk: Publication workflows can initiate CI reruns or version changes and affect release state.
+
+Mitigation: Require explicit approval for CI reruns and version changes, and retain confirmation of local edits.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/z-zihan/skills/skill-review-pro)
+- [Project homepage](https://github.com/z-Zihan/awesome-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance, Files]
+
+**Output Format:** [Markdown review reports and improvement guidance, with optional skill-file edits after user approval.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fixes require user confirmation before changes are applied.]
+
+## Skill Version(s):
+
+2.2.9 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

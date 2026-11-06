@@ -1,53 +1,56 @@
-## Description: <br>
-抖音公开数据智能获取工具。支持抖音关键词搜索、抖人作品抓取、获取作品评论、实时热榜跟踪，适用于短视频营销、竞品分析、舆情分析和热点监控，助力爆款内容策划与流量追踪。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+抖音公开数据只读：支持关键词搜索、博主作品、作品详情、评论和热榜查询。
 
-## Publisher: <br>
-[um-why](https://clawhub.ai/user/um-why) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[um-why](https://clawhub.ai/user/um-why)
 
-## Use Case: <br>
-Content, marketing, and analysis teams use this skill to retrieve public Douyin search results, creator posts, comments, and hot-list data for content planning, competitor analysis, public-opinion analysis, and trend monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Douyin search terms, profile or video URLs, request limits, and GUAIKEI_API_TOKEN are sent to the guaikei.com API. <br>
-Mitigation: Use the skill only for workflows where sending those values to the third-party API is acceptable, and store the token in an environment variable rather than in prompts or files. <br>
-Risk: Collected public comments, account data, and search results are saved as local JSON logs. <br>
-Mitigation: Review, restrict, or delete generated log files when the collected data is sensitive for the workflow. <br>
-Risk: The skill is limited to public Douyin data and does not support private or hidden content. <br>
-Mitigation: Use it only for public-data retrieval tasks and avoid relying on it for private-account monitoring or complete coverage claims. <br>
+## Use Case:
 
+短视频运营、品牌团队、内容分析人员和产品运营人员可用它查询抖音公开内容，跟踪热点与对标账号，并分析单条作品和评论中的受众反馈。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/um-why/douyin-search-keyword) <br>
-- [Publisher profile](https://clawhub.ai/user/um-why) <br>
-- [Options reference](references/options.md) <br>
-- [Changelog](references/changelog.md) <br>
-- [Search input schema](assets/search_cli_req.schema.json) <br>
-- [Search output schema](assets/search_cli_resp.schema.json) <br>
-- [Post input schema](assets/post_cli_req.schema.json) <br>
-- [Post output schema](assets/post_cli_resp.schema.json) <br>
-- [Comment input schema](assets/comment_cli_req.schema.json) <br>
-- [Comment output schema](assets/comment_cli_resp.schema.json) <br>
-- [Hot-list output schema](assets/hot_cli_resp.schema.json) <br>
-- [Token and support site](https://www.guaikei.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with command examples; runtime output is structured JSON saved to local log files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js 16.14.0+ and GUAIKEI_API_TOKEN; command outputs are constrained by the documented request and response schemas.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.5 (source: server release metadata, SKILL.md frontmatter, package.json, changelog released 2026-06-18) <br>
+Risk: Queries are sent to www.guaikei.com, and the remote service's data handling and billing have not been independently verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated provider token, send only queries you are comfortable sharing, and check API charges.
+
+Risk: Query results may be saved in local logs.
+
+Mitigation: Remove saved result logs when they are no longer needed.
+
+## Reference(s):
+
+- [Demand mining guidance](references/demand-mining.md)
+- [Command options](references/options.md)
+- [抖音数据技能官网](https://www.guaikei.com)
+- [ClawHub skill release](https://clawhub.ai/um-why/skills/douyin-search-keyword)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Analysis, Guidance]
+
+**Output Format:** [Structured JSON results with concise analytical summaries in text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A consistent JSON envelope contains command results; result details vary by query type. Results may be saved locally in the skill's logs directory. Summaries should highlight key fields rather than reproduce full records.]
+
+## Skill Version(s):
+
+1.4.2 (source: SKILL.md frontmatter, package.json, server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

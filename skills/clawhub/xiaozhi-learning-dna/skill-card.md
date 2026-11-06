@@ -1,48 +1,56 @@
-## Description: <br>
-学习DNA helps agents maintain an opt-in, minimal student learning profile for personalized tutoring continuity, with controls to view, correct, delete, pause memory, and pause sharing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+With explicit consent, this skill maintains a student's learning profile and supports viewing, correcting, exporting, and deleting it, with separate controls for sensitive records and sharing.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners, guardians, and education agents use this skill to create and update a controlled long-term learning profile only after explicit consent. It supports personalized tutoring continuity, learning-style adaptation, growth milestones, cross-subject connections, and crisis referral handling without treating inferred emotional fields as clinical assessments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill maintains persistent student learning profiles and inferred emotional data. <br>
-Mitigation: Use it only after explicit student or guardian opt-in, and confirm view, correct, delete, pause-memory, and pause-sharing controls are available. <br>
-Risk: Automatic profile updates and cross-skill sharing can expand the amount of retained or shared student data. <br>
-Mitigation: Keep emotion tracking, reminders, and cross-skill sharing disabled unless separately needed and explicitly authorized. <br>
-Risk: Inferred learning-emotion fields could be mistaken for clinical or authoritative assessments. <br>
-Mitigation: Treat emotion fields as learning-state observations only, avoid clinical labels, and follow the crisis referral protocol for safety signals. <br>
+## Use Case:
 
+Students and guardians use this skill to manage a consented long-term learning profile, including learning strengths, preferences, and growth. Connected learning skills can update limited fields with approval; emotional records and sharing require separate consent.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-learning-dna) <br>
-- [学习DNA template](references/dna-template.md) <br>
-- [Crisis referral protocol](references/crisis-referral-protocol.md) <br>
-- [Cross-subject concept connections](references/cross-subject-connections.md) <br>
-- [Growth milestones reference](references/growth-milestones.md) <br>
-- [学习DNA JSON Schema README](schemas/README.md) <br>
-- [Published DNA profile schema](https://xiaozhi-skills.openclaw.dev/schemas/dna-profile.schema.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, JSON, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with JSON schema definitions, reference templates, and validation commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should remain consent-gated, privacy-minimized, and clearly labeled when conclusions are inferred from limited learning data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Conflicting onboarding instructions could lead to long-term storage of a younger student's records without consistently confirmed guardian approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm age and required guardian approval before enabling long-term storage; otherwise keep storage disabled and use only current-session information.
+
+Risk: Sensitive student records could be exposed if the host does not enforce student isolation, field permissions, and deletion.
+
+Mitigation: Use a host that enforces these controls, and enable emotional records or sharing only after separate agreement.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-learning-dna)
+- [Learning profile template](artifact/references/dna-template.md)
+- [Crisis referral protocol](artifact/references/crisis-referral-protocol.md)
+- [Learning profile schema](artifact/schemas/dna-profile.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text]
+
+**Output Format:** [Structured learning-profile JSON and concise text responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Long-term storage and sharing are consent-controlled; emotional records require separate consent.]
+
+## Skill Version(s):
+
+2.12.6 (source: release evidence, artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

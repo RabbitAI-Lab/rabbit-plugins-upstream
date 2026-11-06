@@ -1,42 +1,60 @@
-## Description: <br>
-SureContact connector for reading, creating, updating, and deleting contact, list, and tag data through the OOMOL oo CLI instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SureContact (surecontact.com). Use this skill for ANY SureContact request — reading, creating, updating, and deleting data. Whenever a task involves SureContact, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage SureContact contacts, lists, tags, and memberships from an agent through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive SureContact actions can alter or delete contact, list, tag, or membership data. <br>
-Mitigation: Confirm the exact payload, target identifiers, and expected effect with the user before running actions marked write or destructive. <br>
-Risk: The skill depends on the OOMOL oo CLI and a persistent SureContact account connection. <br>
-Mitigation: Install the CLI or connect an API key only when the user trusts OOMOL and intends to grant the agent SureContact access through that account. <br>
+## Use Case:
 
+SureContact users and their agents use this skill to retrieve and manage contacts, lists, and tags, including creating, updating, and deleting records.
 
-## Reference(s): <br>
-- [SureContact homepage](https://surecontact.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, text, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing JSON payloads; write and destructive actions require confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Setup may execute remote CLI installers whose contents have not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation separately and use a verified release.
+
+Risk: Automatic skill synchronization may introduce broader changes to agent skills.
+
+Mitigation: Decide whether to permit synchronization and use the documented disable setting when appropriate.
+
+Risk: Write and destructive actions can change or remove SureContact data.
+
+Mitigation: Connect only the intended SureContact account and approve the exact changes and deletion targets.
+
+## Reference(s):
+
+- [SureContact homepage](https://surecontact.com/)
+- [SureContact API documentation](https://api.surecontact.com/docs)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI environment variables](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md#environment-variables)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [SureContact connector results as JSON with concise text guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions can read or modify contacts, lists, and tags; write and destructive operations require confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,56 @@
-## Description: <br>
-This skill helps agents operate Booqable through an OOMOL-connected account for reading, creating, and updating Booqable data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Booqable (booqable.com). Use this skill for ANY Booqable request — searching and reading data. Whenever a task involves Booqable, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect Booqable schemas and run Booqable connector actions through the oo CLI for company, customer, order, and product group workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Booqable customer and order data through the connector. <br>
-Mitigation: Install it only for intended Booqable account access and review returned data before sharing or using it elsewhere. <br>
-Risk: Tagged write or destructive actions could change or remove Booqable data if approved with the wrong payload. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running write or destructive operations. <br>
-Risk: Connector input fields may differ from assumptions made before execution. <br>
-Mitigation: Fetch the live action schema with oo connector schema before constructing a payload. <br>
+## Use Case:
 
+People working with a Booqable account can use the skill to find and read company, customer, order, and product group data through their connected account.
 
-## Reference(s): <br>
-- [Booqable ClawHub skill page](https://clawhub.ai/oomol/skills/oo-booqable) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Booqable homepage](https://www.booqable.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Booqable account, customer, order, and product data through the connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: CLI setup may execute downloaded code without a separate approval or integrity check.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before allowing requests, use a pinned independently verified installation, and check which agent skills it installs or updates.
+
+Risk: The connected service mediates access to Booqable business data, while the hosted service implementation has not been independently verified.
+
+Mitigation: Connect only the account and permissions needed for the task.
+
+## Reference(s):
+
+- [Booqable](https://www.booqable.com/)
+- [Booqable API documentation](https://developers.booqable.com/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Text, Guidance]
+
+**Output Format:** [JSON connector requests and returned data, with natural language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only company, customer, order, and product group operations.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
