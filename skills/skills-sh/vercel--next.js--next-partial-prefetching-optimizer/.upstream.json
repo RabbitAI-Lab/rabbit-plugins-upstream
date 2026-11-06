@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/vercel/next.js/next-partial-prefetching-optimizer",
+  "repo": "vercel/next.js",
+  "skillId": "next-partial-prefetching-optimizer",
+  "branch": "canary",
+  "pushedAt": "2026-11-06T15:07:05Z",
+  "contentHash": "90ec82502caa16c1e38469304be715f0cc80806975f85895acd51209cfd272d9",
+  "fetchedAt": "2026-11-06T15:08:40.537Z"
+}
