@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/clickhouse/agent-skills/infra-postgres",
+  "repo": "clickhouse/agent-skills",
+  "skillId": "infra-postgres",
+  "branch": "main",
+  "pushedAt": "2026-11-02T14:42:39Z",
+  "contentHash": "d661a158c1a33a2fb33a440ffaf4d461e2c36c7a247a0d75e52372f19f52d609",
+  "fetchedAt": "2026-11-07T14:07:55.436Z"
+}
