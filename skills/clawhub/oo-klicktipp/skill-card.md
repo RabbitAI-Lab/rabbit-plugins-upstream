@@ -1,46 +1,54 @@
-## Description: <br>
-KlickTipp helps an agent operate a connected KlickTipp account through OOMOL using schema-checked connector actions for subscriber list-building workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage KlickTipp subscribers and tags through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to run KlickTipp subscriber workflows from an agent without handling raw credentials. It supports creating or updating subscribers, unsubscribing contacts, and removing the configured Listbuilding API tag after checking the live action schema. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill description emphasizes searching and reading, while the documented actions can create, update, unsubscribe, and remove subscriber tags. <br>
-Mitigation: Require explicit user confirmation before running signin, signoff, or signout, including the exact email address, payload, and expected subscriber-state change. <br>
-Risk: signoff and signout can remove access or tags from contacts and may have business impact if run on the wrong address. <br>
-Mitigation: Treat signoff and signout as sensitive operations even when action labels are missing, and verify the target contact before execution. <br>
-Risk: Connector action schemas may change independently of the static skill text. <br>
-Mitigation: Fetch the live action schema with oo connector schema before constructing each payload. <br>
+## Use Case:
 
+Agents use this skill to add or update KlickTipp subscribers, unsubscribe contacts, and remove subscriber tags through an already-connected OOMOL account.
 
-## Reference(s): <br>
-- [KlickTipp skill page](https://clawhub.ai/oomol/skills/oo-klicktipp) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [KlickTipp homepage](https://www.klicktipp.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The CLI dependency may persistently install other agent skills without disclosing that behavior in this skill.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI's installation behavior, use a verified CLI release, and consider setting OO_SKILLS_SYNC_DISABLED=1 for every invocation, as the publisher documentation describes.
+
+Risk: Subscriber contact data is processed by OOMOL, and some actions unsubscribe contacts or remove tags.
+
+Mitigation: Confirm the exact contact and the effect of each write or destructive action before running it.
+
+## Reference(s):
+
+- [KlickTipp](https://www.klicktipp.com)
+- [KlickTipp Listbuilding API guide](https://developers.klicktipp.com/guides/listbuilding-api)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with oo CLI commands and JSON payloads; connector results are returned as JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write and destructive actions require user confirmation; contact and tag changes are performed through the connected account.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

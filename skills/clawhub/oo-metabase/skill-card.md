@@ -1,42 +1,55 @@
-## Description: <br>
-Metabase (metabase.com). Use this skill for ANY Metabase request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Work with Metabase by searching and querying data, and creating or updating questions, dashboards, collections, and metrics through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search and read Metabase cards, collections, dashboards, databases, and current-user details through their connected OOMOL Metabase account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Metabase content visible to the connected OOMOL account. <br>
-Mitigation: Install and use it only with an account whose Metabase access is appropriate for the agent's task. <br>
-Risk: A future version could add write or destructive actions. <br>
-Mitigation: Review future releases before installation, especially if new actions are tagged as write or destructive. <br>
+## Use Case:
 
+Metabase users and analysts use this skill to discover data, run queries, and work with saved questions, dashboards, collections, and metrics through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Metabase skill page](https://clawhub.ai/oomol/skills/oo-metabase) <br>
-- [Metabase homepage](https://www.metabase.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns connector responses as JSON when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The setup guidance includes a remote CLI installer that has not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a pinned, verified CLI release before enabling the skill.
+
+Risk: The connected account can perform writes and SQL execution, while the hosted connector has not been verified.
+
+Mitigation: Use a narrowly scoped Metabase API key, assess trust in OOMOL, and retain explicit approval for writes and SQL execution. Decide whether to disable automatic skill synchronization with OO_SKILLS_SYNC_DISABLED=1.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Metabase](https://www.metabase.com)
+- [Metabase API documentation](https://www.metabase.com/docs/latest/api)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Analysis]
+
+**Output Format:** [Markdown guidance with shell commands, JSON payload examples, and Metabase results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action-specific permissions and limits apply.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

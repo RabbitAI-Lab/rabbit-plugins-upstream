@@ -1,48 +1,60 @@
-## Description: <br>
-Tencent Cloud COS helps agents manage Tencent Cloud object storage, Data Intelligence processing, MetaInsight retrieval, and knowledge-base workflows through guided setup and Node.js command execution. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Integrates Tencent Cloud COS and CI for object storage, media processing, search, and knowledge-base workflows.
 
-## Publisher: <br>
-[shawnminh](https://clawhub.ai/user/shawnminh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shawnminh](https://clawhub.ai/user/shawnminh)
 
-## Use Case: <br>
-Developers and operators use this skill to configure Tencent Cloud COS credentials, run storage and CI processing commands, create knowledge bases, and retrieve or process cloud-hosted content. It is intended for workflows where Tencent Cloud COS access is explicitly desired. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact Tencent Cloud storage and CI operations using sensitive cloud credentials. <br>
-Mitigation: Install it only for explicit Tencent Cloud COS workflows and use least-privilege sub-account keys or short-lived STS credentials. <br>
-Risk: Credential handling can expose permanent cloud keys if users choose plaintext persistence. <br>
-Mitigation: Prefer ephemeral environment variables or STS tokens, avoid plaintext .env persistence, and never echo SecretId or SecretKey in chat. <br>
-Risk: Delete operations and generic CI requests may change or remove cloud resources or trigger unexpected costs. <br>
-Mitigation: Review delete, batch delete, bucket policy, and ci-request actions before execution, and confirm Tencent Cloud fees before running processing jobs. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to manage COS objects and buckets and run Tencent CI processing, search, and knowledge-base workflows.
 
-## Reference(s): <br>
-- [Tencent Cloud COS Skill Page](https://clawhub.ai/shawnminh/skills/tencentcloud-cos) <br>
-- [COS Node.js SDK Operation Reference](artifact/references/api_reference.md) <br>
-- [Tencent Cloud COS Node.js SDK](https://cloud.tencent.com/document/product/436/8629) <br>
-- [Tencent Cloud Data Intelligence](https://cloud.tencent.com/document/product/460) <br>
-- [Tencent Cloud COS Fees](https://cloud.tencent.com/document/product/436/16871) <br>
-- [Tencent Cloud CI Fees](https://cloud.tencent.com/document/product/460/6970) <br>
-- [cos-nodejs-sdk-v5 GitHub](https://github.com/tencentyun/cos-nodejs-sdk-v5) <br>
+### Deployment Geography for Use:
 
+Global; Tencent Cloud service and feature availability varies by region.
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Tencent Cloud COS region and bucket configuration plus SecretId/SecretKey or an STS token.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.6 (source: server release evidence) <br>
+Risk: HTML previews may allow code injection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Disable HTML previews during evaluation and prefer a version that fixes preview escaping.
+
+Risk: Saved cloud credentials receive weaker protection than promised.
+
+Mitigation: Use temporary credentials limited to a test bucket and avoid saving keys.
+
+Risk: Generated links and preview files may expose private access.
+
+Mitigation: Treat them as private access tokens; require explicit approval for ACL changes, service shutdowns, and persistent indexing scope.
+
+## Reference(s):
+
+- [Tencent Cloud COS skill page](https://clawhub.ai/shawnminh/skills/tencentcloud-cos)
+- [COS and CI API reference](references/api_reference.md)
+- [Dataset search guide](references/dataset-search.md)
+- [CI service status guide](references/ci-service-status.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API Calls, Shell commands, Configuration instructions]
+
+**Output Format:** [Concise text or Markdown summaries, with structured API results and shell commands when needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the requested COS or CI operation and may include paginated data.]
+
+## Skill Version(s):
+
+1.2.3 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

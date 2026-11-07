@@ -1,0 +1,1818 @@
+# -*- coding: utf-8 -*-
+
+import base64 as _b64_
+_S_SALT_ = 0x5A
+def _sd_(b64_s):
+    try:
+        raw = _b64_.b64decode(b64_s)
+        return bytes((b ^ _S_SALT_) for b in raw).decode('utf-8')
+    except Exception:
+        return b64_s
+
+
+import base64 as _b64_
+_h0r3 = 0x5A
+def _c4j7(_a8h2):
+    try:
+        _r6f4 = _b64_.b64decode(_a8h2)
+        return bytes((b ^ _h0r3) for b in _r6f4).decode(_sd_('Ly48d2I='))
+    except Exception:
+        return _a8h2
+
+
+import base64 as _b64_
+_e6c9 = 0x5A
+def _w1b8(_u2t8):
+    try:
+        _e5a1 = _b64_.b64decode(_u2t8)
+        return bytes((b ^ _e6c9) for b in _e5a1).decode(_c4j7(_sd_('FiNuYj5oE2c=')))
+    except Exception:
+        return _u2t8
+
+"""授权管理模块 - 付费体系框架
+
+功能：
+1. 机器码生成 - 唯一标识用户设备
+2. 使用次数计数 - 本地JSON存储，每日重置
+3. 会员等级判断 - free / normal（premium 为"敬请期待"）
+4. 60天免费期机制 - 首次使用算起60天内除移植评估外全部免费
+5. 强制联网验证 - 每次使用Skill都验证授权状态
+6. 使用数据上报 - 每3.5天自动上报一次
+7. 请求签名机制 - 防止伪造请求和篡改数据
+8. 配置完整性校验 - 检测关键配置是否被篡改
+
+付费体系（V1）：
+- 免费用户：全自动20次/日，半自动8次/日（免费期结束后自动应用）
+- 普通会员：8.88元/月 | 23.88元/季 | 88.88元/年（连续包月）
+- 高级会员：敬请期待（不开放）
+- 单次按需：9.9/49.9/89.9/39.9元
+
+免费期规则：
+- 从首次使用当天算起60天
+- 期间除"模组移植可行性评估报告"外所有功能免费
+- "模组移植可行性评估报告"：首次免费，之后每天1次
+- 60天后自动开启付费机制（免费用户20次/天，普通会员100次/天）
+"""
+
+import hashlib
+import hmac
+import json
+import logging
+import os
+import platform
+import secrets
+import socket
+import time
+import uuid
+from datetime import datetime, timedelta, date
+from pathlib import Path
+from typing import Any, Dict, Optional
+from urllib.request import Request, urlopen
+from urllib.error import URLError
+
+from core.i18n import t
+
+_f4x3 = logging.getLogger(__name__)
+
+# === 付费全局开关 ===
+# False = 付费机制未正式开启（仍限制次数，但显示友好提示）
+# True  = 付费机制已正式开启（显示升级选项，允许购买会员）
+# 注意：此开关只控制是否显示付费提示，不控制次数限制
+# 次数限制在免费期结束后自动应用
+ENABLE_PAYMENT = True
+
+# === 🔒 配置完整性校验 (防篡改) ===
+# 关键配置项的哈希签名。如果用户修改了服务器地址或开关，哈希不匹配会被检测到。
+# 
+# 部署流程:
+#   1. 先修改下面的 AUTH_SERVER_URL 和 ENABLE_PAYMENT
+#   2. 运行一次: python -c "from core.auth_manager import _p8k3; print(_p8k3())"
+#   3. 将输出的指纹填入 CONFIG_FINGERPRINT
+#   4. 这样用户如果篡改了关键配置就会被检测到
+def _p8k3() -> str:
+    """计算关键配置的指纹哈希（用于防篡改检测）"""
+    _r0g7 = f"{ENABLE_PAYMENT}|{AUTH_SERVER_URL}|v1-salt-mc"
+    return hashlib.sha256(_r0g7.encode(_w1b8(_c4j7(_sd_("HDMULwMwbzUfaDln"))))).hexdigest()[:16]
+
+# ⚠️ 部署前请运行上面的函数，把真实指纹填到这里
+# 当前 V1.0.4 配置指纹（基于 ENABLE_PAYMENT=True + AUTH_SERVER_URL="" 计算得到）
+CONFIG_FINGERPRINT = os.environ.get(
+    _w1b8(_c4j7(_sd_("EhkTIhIYMRMSLW45Fz0XORILPQoeIhMDHCBuAxkZahUSGDIrChgxOBQIFzwTPSkM"))),
+    _w1b8(_c4j7(_sd_("GTJqIgMyDz0UMA8REg4DNRkybjMWLRQ1OCNubQoNPjQ=")))  # _w1b8(_c4j7(_sd_("EglrMxwILRYAaDln"))) = 自动计算首次运行（开发模式）。发布前必须改为固定值！
+)
+
+# === 🔐 客户端签名密钥 (与服务器 auth_server.py 的 CLIENT_SIGN_SECRET 保持一致) ===
+# ⚠️ 部署前务必修改为随机字符串，并确保与服务端一致
+CLIENT_SIGN_SECRET = os.environ.get(
+    _w1b8(_c4j7(_sd_("EhkTIhIYMRMSLW45Fz0XOR0LPQIKMi04HiIbCRMwHw4fM2svAC1nZw=="))),
+    _w1b8(_c4j7(_sd_("HBkbaDsIHxUSIxsPFxsYKh0bbhcRGAM+EzcxAh43Ey0KNz0jESApPhM3MQ0SDhw0")))  # ← 部署前修改为与服务端相同的随机字符串
+)
+
+# === 在线验证服务器 ===
+# 管理员服务器地址（已内置，用户无需配置）
+# 当前 V1.0.4 版本保持本地运行，云服务器部署计划推迟至下一个大版本更新
+# 下一大版本部署时再修改为真实服务器地址："http://your-domain.com:8000" 或 "https://api.mc-skill.com"
+#
+# 如需临时覆盖（调试用），可设置环境变量 MC_SKILL_SERVER_URL
+AUTH_SERVER_URL = os.environ.get(
+    _w1b8(_c4j7(_sd_("EhkTIhIYMRMSLW45Fz0XOR0LMjMfIm4DAzIXAxloEw4SHms0AC1nZw=="))),
+    _w1b8(_c4j7(_sd_("HCAULxYiHyAUMGpxGz1jMBweGwoUCDk9HiMtCBswMSocCRseFhgPPQoNPRETIAAqHDMbFhYYHxUDNB9xEj0uMB8IbgoTMG49Fg4PERMdFCsZMBgzEQtnZw==")))  # ← V1.0.4 测试阶段：ngrok 公网隧道
+)
+AUTH_SERVER_TIMEOUT = 10  # 超时秒数
+
+# === 数据上报配置 ===
+REPORT_INTERVAL_DAYS = 3.5  # 上报间隔：每3.5天上报一次（一周两次）
+MAX_PENDING_RECORDS = 50   # 本地最多缓存的待上报记录数
+
+# === 免费期天数 ===
+FREE_PERIOD_DAYS = 60  # 首次使用后60天免费期
+
+# === 会员等级 ===
+TIER_FREE = _w1b8(_c4j7(_sd_("GTIxYz4LNS4AaDln")))        # 免费用户
+TIER_NORMAL = _w1b8(_c4j7(_sd_("HBhuChQICz0RDT1n")))    # 普通会员 8.88元/月
+TIER_PREMIUM = _w1b8(_c4j7(_sd_("Hw4XYz4ICz0cIy0PFg0+NA==")))  # 高级会员（敬请期待，暂不开放）
+
+# === 会员等级显示名称（通过 t() 动态获取翻译）===
+_n7g7 = {
+    TIER_FREE: _w1b8(_c4j7(_sd_("HAkUMxYiOWoZIi0NHgk2LxsgCxYDMh8/AzQPZw=="))),
+    TIER_NORMAL: _w1b8(_c4j7(_sd_("HAkUMxYiOWoZIi0NHgk2LxsgCxY7CzU9FQ1uERMgazQ="))),
+    TIER_PREMIUM: _w1b8(_c4j7(_sd_("HAkUMxYiOWoZIi0NHgk2LxsgCxY4IgsVFQkbDxI3NTkfC24KOyILOABoOWc="))),
+}
+
+def _i7t7(_f3j4: str) -> str:
+    """根据等级获取本地化名称"""
+    return t(_n7g7.get(_f3j4, _w1b8(_c4j7(_sd_("HAtuCjsICz0eaDVxHQ0QKxwtbhY7IgMVGWg5Zw==")))))
+
+# === 功能类型 ===
+FUNC_AUTO = _w1b8(_c4j7(_sd_("HAkUMxYiCxYAaDln")))        # 全自动功能（F2/F4/F7/F8等）
+FUNC_SEMI = _w1b8(_c4j7(_sd_("HwtvMzsIOS4AaDln")))        # 半自动功能（F3/F6等）
+
+# === 特殊功能：模组移植可行性评估报告 ===
+# 免费期内：首次免费，之后每天1次
+# 付费期后：免费用户每天1次，普通会员每天5次
+SPECIAL_FEATURE_MIGRATION_ASSESS = _w1b8(_c4j7(_sd_("HBkbAgMiHz8RCWICExtjKx0bbioRMh8VAzM1CBloPjQ=")))
+
+# === 各等级次数限制（免费期结束后自动生效）===
+DAILY_LIMITS = {
+    TIER_FREE: {
+        FUNC_AUTO: 20,       # 全自动每日20次
+        FUNC_SEMI: 8,        # 半自动每日8次
+        SPECIAL_FEATURE_MIGRATION_ASSESS: 1,  # 移植评估每天1次
+    },
+    TIER_NORMAL: {
+        FUNC_AUTO: 100,      # 普通会员每日100次
+        FUNC_SEMI: 50,       # 普通会员每日50次
+        SPECIAL_FEATURE_MIGRATION_ASSESS: 5,  # 移植评估每天5次
+    },
+    # 高级会员敬请期待，不开放
+}
+
+# === 普通会员定价 ===
+_a7h4 = {
+    _w1b8(_c4j7(_sd_("HBkbCjsyAy0faD0OFg0+NA=="))): {
+        _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykIEjI+LBwjGxYDIj0VFQ0pDx0NbjAcHhcCAC1nZw==")))),
+        _w1b8(_c4j7(_sd_("Hw4XYxMYDxUDNzln"))): 8.88,
+        _w1b8(_c4j7(_sd_("HDMbFhMYA2MAaDln"))): "元/月",
+        _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykIEjI+LBwjGxYDIj0VODQPCB4wHzkcGRsKOzIDLR9oPQ4WDT40")))),
+    },
+    _w1b8(_c4j7(_sd_("HBkbCjsyAy0faD0OFgtjLhwzFC87LWdn"))): {
+        _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykIEjI+LBwjGxYDIj0VFQ0pDx0NbjAcHhcCEhgPMAMzYg8ZaD40")))),
+        _w1b8(_c4j7(_sd_("Hw4XYxMYDxUDNzln"))): 8.88,
+        _w1b8(_c4j7(_sd_("HDMbFhMYA2MAaDln"))): "元/月",
+        _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykIEjI+LBwjGxYDIj0VODQPCB4wHzkcGRsKOzIDLR9oPQ4WC2MuHDMULzstZ2c=")))),
+    },
+    _w1b8(_c4j7(_sd_("HwkUMzgIHwA4NA8IEj0XLQ=="))): {
+        _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykIEjI+LBwjGxYDIj0QEQktDBMgaiwZMxdjOxgXLgBoOWc=")))),
+        _w1b8(_c4j7(_sd_("Hw4XYxMYDxUDNzln"))): 23.88,
+        _w1b8(_c4j7(_sd_("HDMbFhMYA2MAaDln"))): "元/季",
+        _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykIEjI+LBwjGxYDIj0VODQPCB4wHzkfCRQzOAgfADg0DwgSPRct")))),
+    },
+    _w1b8(_c4j7(_sd_("HyMYMzgIHz8bIBtn"))): {
+        _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykIEjI+LBwjGxYDIj0QHGkPDBMgazUfI2s0AC1nZw==")))),
+        _w1b8(_c4j7(_sd_("Hw4XYxMYDxUDNzln"))): 88.88,
+        _w1b8(_c4j7(_sd_("HDMbFhMYA2MAaDln"))): "元/年",
+        _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykIEjI+LBwjGxYDIj0VODQPCB4wHzkfIxgzOAgfPxsgG2c=")))),
+    },
+}
+
+# === 单次按需定价 ===
+_c5b3 = {
+    _w1b8(_c4j7(_sd_("HBkbAgMiHz8RCWICExtjKx0bbioRMh8VAzM1CBloPjQ="))): {_w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykREyBqORwzFyI+CD0VFQkbERkOay4cMBsCOyILOB5oaggZDhxrHwsxIgAtZ2c=")))), _w1b8(_c4j7(_sd_("Hw4XYxMYDxUDNzln"))): 9.9},
+    _w1b8(_c4j7(_sd_("HwtuDjgICy0baCkNGS1jLhkwGyoRIgNjAGg5Zw=="))): {_w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykREyBqORwzFyI+CD0QFwkXDBMbFDUcGzYrEhgPPTg3aggXaG80")))), _w1b8(_c4j7(_sd_("Hw4XYxMYDxUDNzln"))): 49.9},
+    _w1b8(_c4j7(_sd_("GTAYMz4IH2MeaR8CExk2MBwYbgoRMjkwFw05Zw=="))): {_w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykREyBqORwzFyI+CD0VODQPERMgDzkZMBsCOAs1FRloKQgeMjkr")))), _w1b8(_c4j7(_sd_("Hw4XYxMYDxUDNzln"))): 89.9},
+    _w1b8(_c4j7(_sd_("HAsxYzgIHxUfIi0REjI5IA=="))): {_w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykREyBqORwzFyI+CD0VFw4PDBMgHzAdG24uExgXYwBoOWc=")))), _w1b8(_c4j7(_sd_("Hw4XYxMYDxUDNzln"))): 39.9},
+}
+
+# === 作者测试设备列表 (仅这些设备会显示完整付费信息) ===
+# 普通用户看不到单次按需付费（V1阶段还未实现），使整体更划算
+_m3m0 = [
+    _w1b8(_c4j7(_sd_("FR09LxcgPS0UMBttEx4DKRUeOTMRHiktFzAPHhRoF2scDT0PETA9PhxoE24SCBsrFS1qIxQLF2kWDTln"))),  # 作者主设备
+]
+
+
+def _o1d0() -> bool:
+    """判断当前设备是否为作者测试设备"""
+    # 方式1: 机器码匹配
+    if _s0f0() in _m3m0:
+        return True
+    # 方式2: 环境变量 (AUTHOR_MODE=1)
+    if os.environ.get(_w1b8(_c4j7(_sd_("EhkTIhIYMRMSLW45Fz0XORIJazMcCGIjHiIXAxkeMRcfMBAzAC1nZw=="))), "0") == "1":
+        return True
+    return False
+
+# === 本地数据存储 ===
+_t4j4 = Path(__file__).resolve().parent.parent / _w1b8(_c4j7(_sd_("HRtuIxEiDz4RDTln")))
+_f2n5 = _t4j4 / _w1b8(_c4j7(_sd_("HAkUMxYiOWMeIzUNFxkxLBk3MRYWCB8VHmg1Zw==")))
+
+
+def _l1p7() -> str:
+    """检测测试环境标签（用于生成 TEST-N-LABEL-YYYYMMDD 格式机器码）
+    
+    优先级：
+    1. 环境变量 MC_SKILL_MACHINE_ID 直接指定 → 原样返回
+    2. 环境变量 MC_SKILL_TEST_LABEL=onboarding/pay/xxx → 用它
+    3. 环境变量 MC_SKILL_TEST=1 或 QCLAW/LOCALHOST → AUTO
+    4. 目录名含 test/dev/debug/sandbox/qclaw/mc-skill → AUTO
+       （检测 3 条路径：os.getcwd() + __file__ 所在目录 + main.py/SKILL.json 所在根目录
+        ↳ 避免 QClaw 运行时 cwd 变 QClaw 进程目录导致漏判）
+    5. 以上都不满足 → 返回空（走正常硬件指纹）
+    """
+    # 最高优先级：直接指定完整机器码
+    _c7s4 = os.environ.get(_w1b8(_c4j7(_sd_("EhkTIhIYMRMSLW45Fz0XORIZEyobGGIjHC1iCRYLYhUfMGs0AC1nZw=="))), "").strip()
+    if _c7s4:
+        return _c7s4
+    
+    # 指定用途标签
+    _e1z8 = os.environ.get(_w1b8(_c4j7(_sd_("EhkTIhIYMRMSLW45Fz0XORIwEDMfGG5jHi1qPhMwamISHms0AC1nZw=="))), "").strip()
+    
+    # 检测是否为测试环境
+    _a4s8 = False
+    if os.environ.get(_w1b8(_c4j7(_sd_("EhkTIhIYMRMSLW45Fz0XORIwEDMfGG5jAGg5Zw=="))), "").lower() in ("1", _w1b8(_c4j7(_sd_("HDAXYxYbNS4AaDln"))), "yes"):
+        _a4s8 = True
+    if os.environ.get(_w1b8(_c4j7(_sd_("HQkTIh4Iai47Nzln"))), "").strip():
+        _a4s8 = True
+    
+    # 目录检测：3 条路径并行扫描，命中就算
+    _e4b3 = (
+        _w1b8(_c4j7(_sd_("HDAYMxEyA2MAaDln"))), _w1b8(_c4j7(_sd_("GTAYMzgyAz07Nzln"))), "dev", _w1b8(_c4j7(_sd_("HwtuKjs9NS0KDSkOCg0+NA=="))), _w1b8(_c4j7(_sd_("HwkbIjsYDzA7Nzln"))),
+        _w1b8(_c4j7(_sd_("HBkbaDsIHxUSIxsPFxsYKg=="))),   # ← 开发环境：mc-skill-v1 / mc-skill-v2 ...
+        _w1b8(_c4j7(_sd_("CjMULz4IHxA4Nzln"))),       # ← ZIP 包名后缀
+        _w1b8(_c4j7(_sd_("HB4bCjgiDz0baR8REyNrNA=="))),
+    )
+    _e1a7 = os.getcwd().lower()
+    _d8h9 = ""
+    try:
+        # __file__ 指向本文件 auth_manager.py，Skill 根目录就是 __file__/../../
+        _d8h9 = os._w3n4.dirname(os._w3n4.dirname(os._w3n4.abspath(__file__))).lower()
+    except Exception:
+        pass
+    # 第 3 条路：向上最多 3 层找 SKILL.json 或 main.py 作为 Skill 根
+    _c1k1 = ""
+    try:
+        _h4d7 = os.getcwd()
+        for _i in range(4):
+            if os._w3n4.isfile(os._w3n4.join(_h4d7, _w1b8(_c4j7(_sd_("HQs9PB4yLSMbHTUCHQ4cKBwYLjQALWdn"))))) or os._w3n4.isfile(os._w3n4.join(_h4d7, _w1b8(_c4j7(_sd_("HBkbKhMYCwkZIykOFg0+NA=="))))):
+                _c1k1 = _h4d7.lower()
+                break
+            _u8a4 = os._w3n4.dirname(_h4d7)
+            if _u8a4 == _h4d7: break
+            _h4d7 = _u8a4
+    except Exception:
+        pass
+    
+    for _p in (_e1a7, _d8h9, _c1k1):
+        if not _p:
+            continue
+        if any(kw in _p for kw in _e4b3):
+            _a4s8 = True
+            break
+
+    if not _a4s8 and not _e1z8:
+        return ""
+    
+    # 组装 TEST 格式机器码
+    import re as _re
+    import datetime as _dt
+    
+    _e9l5 = (_e1z8 or _w1b8(_c4j7(_sd_("EglrMxwILRYAaDln")))).upper()
+    _r1g7 = _dt.datetime.now().strftime(_w1b8(_c4j7(_sd_("ChlqDz4ICCoDNB9n"))))
+    
+    # 尝试从现有 registry 取最大 admin 号 + 1
+    _g1u1 = 1  # 默认从 1 开始
+    try:
+        # 候选路径列表（按优先级）
+        _c9b7 = []
+        _x7y3 = os.environ.get(_w1b8(_c4j7(_sd_("EhkTIhIYMRMSLW45Fz0XOR8wEyocCGouHiBiPBYOazQ="))), "").strip()
+        if _x7y3:
+            _c9b7.append(os._w3n4.join(_x7y3, _w1b8(_c4j7(_sd_("HwhvMwMiOTAXCWIIHQgIKxwiMSI7Igs4AGg5Zw==")))))
+        # 标准路径：server/_u7g9/registry.json
+        _c9b7.append(os._w3n4.join(_w1b8(_c4j7(_sd_("HwtvMxQIAz8DMA9n"))), _w1b8(_c4j7(_sd_("HRtuIxEiDz4RDTln"))), _w1b8(_c4j7(_sd_("HwhvMwMiOTAXCWIIHQgIKxwiMSI7Igs4AGg5Zw==")))))
+        _c9b7.append(os._w3n4.join(_w1b8(_c4j7(_sd_("HRtuIxEiDz4RDTln"))), _w1b8(_c4j7(_sd_("HwhvMwMiOTAXCWIIHQgIKxwiMSI7Igs4AGg5Zw==")))))
+        # 向上找 3 层
+        for _i in range(1, 4):
+            _q5m3 = ".." + os.sep
+            _c9b7.append(_q5m3 * _i + os._w3n4.join(_w1b8(_c4j7(_sd_("HwtvMxQIAz8DMA9n"))), _w1b8(_c4j7(_sd_("HRtuIxEiDz4RDTln"))), _w1b8(_c4j7(_sd_("HwhvMwMiOTAXCWIIHQgIKxwiMSI7Igs4AGg5Zw==")))))
+            _c9b7.append(_q5m3 * _i + os._w3n4.join(_w1b8(_c4j7(_sd_("HRtuIxEiDz4RDTln"))), _w1b8(_c4j7(_sd_("HwhvMwMiOTAXCWIIHQgIKxwiMSI7Igs4AGg5Zw==")))))
+        
+        _m1t4 = ""
+        for _c in _c9b7:
+            if os._w3n4.isfile(_c):
+                _m1t4 = _c
+                break
+        if os._w3n4.isfile(_m1t4):
+            import json as _json
+            with open(_m1t4, "r", encoding=_w1b8(_c4j7(_sd_("HDMULwMwbzUfaDln")))) as _f:
+                _j7w9 = _json.load(_f)
+            # 来源 1：TEST-N-xxx 格式里的 N
+            _r6a5 = []
+            for _u in _j7w9:
+                _m = _re.search(r_sd_(_c4j7(_sd_("EjAQMx8YbmoKMxcDFx1iMxUNMW8ALWdn"))), _u.get(_w1b8(_c4j7(_sd_("HRtvKBciPjU7Nzln"))), "").upper())
+                if _m:
+                    _r6a5.append(int(_m.group(1)))
+            # 来源 2：nickname 里的"管理员N"或"管理员[中文数字]"
+            _g7v8 = {"一":1,"二":2,"三":3,"四":4,"五":5,"六":6,"七":7,"八":8,"九":9,"十":10}
+            for _u in _j7w9:
+                _j7g4 = _u.get(_w1b8(_c4j7(_sd_("HBhuAjgiORUZaGoPEx0QNA=="))), "")
+                _m = _re.search(r_sd_(_c4j7(_sd_("Fh4tFTgJLW8RHjEpAzMtABUOah45DjEZHGg5Zw=="))), _j7g4)
+                if _m:
+                    _r6a5.append(int(_m.group(1)))
+                else:
+                    _f7f2 = _re.search(r_sd_(_c4j7(_sd_("Fh4tFTgJLW8RHjEpAzMtABUOaj45DW4vEWkcLxweLiI4M24MPglqbxICHC8caCJrOwIPdTkNbi8UaQwqPghrIjg3E3U+DS4wEQgTbxYNPjQ="))), _j7g4)
+                    if _f7f2:
+                        _r6a5.append(_g7v8.get(_f7f2.group(1), 0))
+            if _r6a5:
+                _g1u1 = max(_r6a5) + 1
+    except Exception:
+        pass
+    
+    return f"TEST-{_g1u1}-{_e9l5}-{_r1g7}"
+
+
+def _s0f0() -> str:
+    """生成机器唯一标识码
+    
+    测试环境检测优先 → 硬件指纹兜底
+    """
+    # 先检测测试环境
+    _m9g5 = _l1p7()
+    if _m9g5:
+        return _m9g5
+    
+    # 正常硬件指纹逻辑
+    _b8u0 = ""
+    try:
+        _b8u0 += str(uuid.getnode())
+    except Exception:
+        pass
+    try:
+        _b8u0 += socket.gethostname()
+    except Exception:
+        pass
+    try:
+        _b8u0 += platform.system() + platform.machine()
+    except Exception:
+        pass
+    return hashlib.md5(_b8u0.encode(_w1b8(_c4j7(_sd_("HDMULwMwbzUfaDln"))))).hexdigest()[:32]
+
+
+def _j3g4() -> Dict[str, Any]:
+    """默认授权状态"""
+    return {
+        _w1b8(_c4j7(_sd_("HRtvKBciPjU7Nzln"))): _s0f0(),
+        _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): TIER_FREE,
+        _w1b8(_c4j7(_sd_("HRtuDxQIAz4RDTln"))): "",
+        _w1b8(_c4j7(_sd_("HB4bAjgtNT0ZIzURFgtjax8gF2sTGB8/AzM1Zw=="))): "",
+        _w1b8(_c4j7(_sd_("HRsxAxEiFz4DNzln"))): "",  # monthly / monthly_auto / quarterly / yearly
+        _w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw=="))): "",    # 首次使用日期（YYYY-MM-DD）
+        _w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8SGzU9GWkfZw=="))): "",   # 免费期结束日期
+        _w1b8(_c4j7(_sd_("HRsxAxEICDUcaDln"))): {},
+        _w1b8(_c4j7(_sd_("HB4bKhEyA2MeIA8REyAcaxwwago5CA8wODQPZw=="))): datetime._j1a9().strftime(_w1b8(_c4j7(_sd_("ChlqDzsOLT0KNzFiEx1vNA==")))),
+        _w1b8(_c4j7(_sd_("HDAbChYiDz0bIi0NEyAcLhk9bzMALWdn"))): {},
+        _w1b8(_c4j7(_sd_("HBkbAgMiHz8RCWICExtjKx0bbioRMh8VAzM1CBktYzMcIxdjETIDYx4jLQgeNxAi"))): False,  # 移植评估是否已使用过首次免费
+        # === 强制联网验证相关 ===
+        _w1b8(_c4j7(_sd_("HwtvMxQIAz8DMA8DGQ1vKBwtbzM7PWdn"))): "",          # 服务器返回的临时Token（有效期1小时）
+        _w1b8(_c4j7(_sd_("HwtvMxQIAz8DMA8DGQ1vKBwtbzM7Mj0VAzAXCBcYOWsZMxciAC1nZw=="))): "",  # Token过期时间
+        _w1b8(_c4j7(_sd_("HB4bKhEyA2MeaCkPEj0XPRwYbzMSGA8VH2kPDB4yYzQ="))): "",     # 上次在线验证时间
+        _w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ8DGQlrax8IbgIDMhcuHmkPDxIzNi8cHhgzOQtnZw=="))): bool(AUTH_SERVER_URL),  # 是否启用强制联网验证
+        # === 数据上报相关 ===
+        _w1b8(_c4j7(_sd_("HB4bKhEyA2MeIA8REyAMKB8INi8SGAMtHGgxERYNPjQ="))): "",      # 上次成功上报时间
+        _w1b8(_c4j7(_sd_("Hw4YMzs9NS0caDURGS1iaxkzF2s7Ih8AODM1Zw=="))): [],       # 待上报的数据记录列表
+    }
+
+
+def _z3v2(_f9q2: Dict[str, Any]) -> bool:
+    """检查授权是否过期，如果过期则自动降级为免费用户
+    
+    规则：
+    - _f3j4=normal 且 license_expires < 今天 → 降级为 TIER_FREE，清空授权相关字段
+    - premium 过期同理
+    - 返回值：True = 发生过降级（需要保存 _f9q2）
+    """
+    _f3j4 = _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), TIER_FREE)
+    if _f3j4 == TIER_FREE:
+        return False  # 本来就是免费，无需检查
+
+    _n1e9 = _f9q2.get(_w1b8(_c4j7(_sd_("HB4bAjgtNT0ZIzURFgtjax8gF2sTGB8/AzM1Zw=="))), "")
+    if not _n1e9:
+        # 有 _f3j4 但没写过期时间（异常数据）→ 为保险起见不直接改，记录日志
+        _f4x3.warning(f"[授权降级] _f3j4={_f3j4} 但 license_expires 为空，跳过自动降级")
+        return False
+
+    try:
+        _f9l2 = datetime.strptime(_n1e9, _w1b8(_c4j7(_sd_("ChlqDzsOLT0KNzFiEx1vNA==")))).date()
+    except Exception:
+        _f4x3.warning(f"[授权降级] license_expires='{_n1e9}' 格式异常，跳过自动降级")
+        return False
+
+    _a8r1 = date._a8r1()
+    if _a8r1 > _f9l2:
+        # 授权已过期 → 自动降级回免费用户
+        _f9w1 = _f3j4
+        _f9q2[_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln")))] = TIER_FREE
+        _f9q2[_w1b8(_c4j7(_sd_("HRtuDxQIAz4RDTln")))] = ""
+        _f9q2[_w1b8(_c4j7(_sd_("HB4bAjgtNT0ZIzURFgtjax8gF2sTGB8/AzM1Zw==")))] = ""
+        _f9q2[_w1b8(_c4j7(_sd_("HRsxAxEiFz4DNzln")))] = ""
+        _f4x3.info(f"[授权自动降级] _f3j4={_f9w1} → free，原因：license_expires={_n1e9} < _a8r1={_a8r1}")
+        return True
+
+    return False  # 仍在有效期内
+
+
+def _l1r4() -> Dict[str, Any]:
+    """加载本地授权状态"""
+    if not _f2n5.exists():
+        return _j3g4()
+    try:
+        with open(_f2n5, "r", encoding=_w1b8(_c4j7(_sd_("HDMULwMwbzUfaDln")))) as f:
+            _f9q2 = json.load(f)
+        
+        _g8i7 = False  # 标记是否需要持久化
+        
+        # === 自动同步：根据当前配置更新强制验证开关 ===
+        _x5z3 = bool(AUTH_SERVER_URL)
+        if _f9q2.get(_w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ8DGQlrax8IbgIDMhcuHmkPDxIzNi8cHhgzOQtnZw=="))), False) != _x5z3:
+            _f9q2[_w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ8DGQlrax8IbgIDMhcuHmkPDxIzNi8cHhgzOQtnZw==")))] = _x5z3
+            if _x5z3:
+                _f4x3.info(f"[联网验证] 已自动启用，服务器地址: {AUTH_SERVER_URL}")
+            _g8i7 = True
+        
+        # === 授权过期 → 自动降级（防止用户授权过期后依旧享受 normal 次数）===
+        if _z3v2(_f9q2):
+            _g8i7 = True
+        
+        # === 检查是否需要重置每日计数 ===
+        _a8r1 = datetime._j1a9().strftime(_w1b8(_c4j7(_sd_("ChlqDzsOLT0KNzFiEx1vNA=="))))
+        if _f9q2.get(_w1b8(_c4j7(_sd_("HB4bKhEyA2MeIA8REyAcaxwwago5CA8wODQPZw==")))) != _a8r1:
+            _f9q2[_w1b8(_c4j7(_sd_("HRsxAxEICDUcaDln")))] = {}
+            _f9q2[_w1b8(_c4j7(_sd_("HB4bKhEyA2MeIA8REyAcaxwwago5CA8wODQPZw==")))] = _a8r1
+            _g8i7 = True
+
+        if _g8i7:
+            _m6x0(_f9q2)
+        return _f9q2
+    except Exception as e:
+        _f4x3.warning(f"加载授权状态失败: {e}")
+        return _j3g4()
+
+
+def _m6x0(_f9q2: Dict[str, Any]) -> None:
+    """保存授权状态到本地"""
+    try:
+        _t4j4.mkdir(parents=True, exist_ok=True)
+        with open(_f2n5, "w", encoding=_w1b8(_c4j7(_sd_("HDMULwMwbzUfaDln")))) as f:
+            json.dump(_f9q2, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        _f4x3.warning(f"保存授权状态失败: {e}")
+
+
+def _w9c5() -> str:
+    return datetime._j1a9().strftime(_w1b8(_c4j7(_sd_("ChlqDzsOLT0KNzFiEx1vNA=="))))
+
+
+def _z6m9(_f9q2: Dict[str, Any], _j7d2: bool = False) -> Dict[str, Any]:
+    # 🔒 RACE / 云鼎安全：运行时完整性检查（静默模式下也跑，只记日志不中断）
+    try:
+        from core.integrity_guard import quick_check
+        quick_check()
+    except Exception:
+        pass  # 开发模式忽略
+
+
+    """确保首次使用日期已记录
+
+    如果是首次使用，记录当天日期并设置60天后的免费期结束日期。
+    - _j7d2=True 模式：Agent 调用 onboarding_info 时传这个参数，
+      所有"欢迎/机器码提示"一律只打日志，不打印到 stdout，
+      防止污染 stdout 里的 JSON 导致 Agent 解析失败。
+    - _j7d2=False（默认）：保留给人类用户交互用的 ASCII Banner + 剪贴板提示。
+    """
+    _m8w7 = False
+    if not _f9q2.get(_w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw==")))):
+        _a8r1 = date._a8r1()
+        _f9q2[_w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw==")))] = _a8r1.strftime(_w1b8(_c4j7(_sd_("ChlqDzsOLT0KNzFiEx1vNA=="))))
+        _j9w2 = _a8r1 + timedelta(days=FREE_PERIOD_DAYS)
+        _f9q2[_w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8SGzU9GWkfZw==")))] = _j9w2.strftime(_w1b8(_c4j7(_sd_("ChlqDzsOLT0KNzFiEx1vNA=="))))
+        _m6x0(_f9q2)
+        _f4x3.info(f"记录首次使用日期: {_f9q2['first_use_date']}, 免费期至: {_f9q2['free_period_end']}")
+
+        _d3e9 = _f9q2.get(_w1b8(_c4j7(_sd_("HRtvKBciPjU7Nzln"))), "未知")
+
+        if _j7d2:
+            # 🧑‍💻 Agent 模式（脚本调用 onboarding_info）
+            # 任何 stdout 都会和 JSON 混在一起，必须只用 _f4x3
+            _f4x3.info(f"[首次使用] 机器码={_d3e9}，免费期至 {_f9q2['free_period_end']}")
+        else:
+            # 👤 人类交互模式（main.py 直接启动）—— ASCII Banner 正常显示
+            print("\n" + "=" * 60)
+            print("  🎉 欢迎使用 MC Skill！")
+            print("=" * 60)
+            print(f"\n  📍 您的机器码:")
+            print(f"  {'─' * 50}")
+            print(f"  {_d3e9}")
+            print(f"  {'─' * 50}")
+            print(f"\n  ⚠️  重要提示:")
+            print(f"  1. 请复制上面的机器码发给您的 AI Agent")
+            print(f"  2. AI Agent 需要此机器码来管理您的授权")
+            print(f"  3. 后续订阅套餐时也需要此机器码")
+            print(f"  4. 请妥善保管，不要泄露给他人\n")
+            print("=" * 60 + "\n")
+            # 尝试自动复制到剪贴板（Windows）
+            try:
+                import subprocess
+                if sys.platform == _w1b8(_c4j7(_sd_("HD1uAjswKRQKDTln"))):
+                    subprocess.run(_w1b8(_c4j7(_sd_("HAtuHhMYH2MAaDln"))), input=_d3e9, capture_output=True, text=True)
+                    print("  ✅ 机器码已自动复制到剪贴板\n")
+            except Exception:
+                print("  💡 请手动复制上面的机器码\n")
+            _m8w7 = True
+
+    return _f9q2
+
+
+# ============ 首对话引导（Onboarding）===========
+
+def is_onboarding_due() -> bool:
+    """判断当前会话是否需要显示首次引导块
+
+    触发条件：用户首次使用（first_use_date 刚记录）或 onboarding_shown 字段为空
+    一旦显示过，后续不再重复展示，避免打扰老用户
+    """
+    _f9q2 = _l1r4()
+    _f9q2 = _z6m9(_f9q2)
+    if not _f9q2.get(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9KQoRMjktHiNuDx1oPjQ=")))):
+        return True
+    # 兼容老版本：如果 first_use_date 存在但 onboarding_shown 不存在，视为需要显示一次
+    if _f9q2.get(_w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw==")))) and not _f9q2.get(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9KQoRMjktHiNuDx1oPjQ=")))):
+        return True
+    return False
+
+
+def mark_onboarding_shown() -> None:
+    """标记首对话引导已展示，持久化到本地 auth_state.json"""
+    _f9q2 = _l1r4()
+    _f9q2[_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9KQoRMjktHiNuDx1oPjQ=")))] = datetime._j1a9().strftime(_w1b8(_c4j7(_sd_("ChlqDzsOLT0KNzFiEx1jKQoZEwsKDi0zCjBqYhYOHDQ="))))
+    _m6x0(_f9q2)
+    _f4x3.info(_w1b8(_c4j7(_sd_("HS09CjsyDz8eaGoIEjduPRwYbysfMGI1GTcTPRw0DCg4N2oNOyMQLj4OOT04AgwoOCMyaxY3LQ0THSIqFRgAKzgZMi4XaG4NPglvKRw0DzUTHWsqOQ1uOABoOWc="))))
+
+
+def get_onboarding_info() -> Dict[str, Any]:
+    """聚合首对话引导所需的全部动态数据
+
+    返回的结构覆盖引导的 4 段：
+      ① 功能速览：_e9t7（F1-F9 + F8.1 公开功能列表）
+      ② 免费额度：是否在免费期、剩余天数、今日次数（自动/半自动/移植评估）
+      ③ 套餐：三档月/季/年的价格（本地化）+ 付费渠道
+      ④ 收尾：机器码提示 + 引导用户提需求
+    """
+    _f9q2 = _l1r4()
+    _f9q2 = _z6m9(_f9q2, _j7d2=True)  # Agent 模式：静默，禁止 print 污染 JSON
+
+    # === 🔑 首次启动强制联网注册 ===
+    # 目的：确保用户第一次接触时就被服务器记录，免费期从这天开始算
+    # 策略：只在 server_token 为空（从未注册过）且启用了联网验证时才发一次
+    if AUTH_SERVER_URL and not _f9q2.get(_w1b8(_c4j7(_sd_("HwtvMxQIAz8DMA8DGQ1vKBwtbzM7PWdn")))):
+        try:
+            _b3o6 = _h8d3()
+            if _b3o6.get(_w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ9n")))):
+                # online=True 说明服务器连接成功，新用户已注册
+                _w9g0 = _b3o6.get(_w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA=="))))
+                _f4x3.info(f"[首对话引导] 首次联网注册成功: online=True, authorized={_w9g0}, _f3j4={_b3o6.get('_f3j4')}")
+            else:
+                _f4x3.warning(f"[首对话引导] 联网注册失败（不影响本地功能）: {_b3o6.get('reason', '')}")
+        except Exception as _e:
+            _f4x3.warning(f"[首对话引导] 联网异常（不影响本地功能）: {_e}")
+    elif AUTH_SERVER_URL and _f9q2.get(_w1b8(_c4j7(_sd_("HwtvMxQIAz8DMA8DGQ1vKBwtbzM7PWdn")))):
+        # 已有 token，刷新一下 last_access
+        try:
+            _h8d3()
+        except Exception:
+            pass
+
+    _e0h7 = get_free_period_info()
+    _f3j4 = _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), TIER_FREE)
+    _p9b7 = _f9q2.get(_w1b8(_c4j7(_sd_("HRsxAxEICDUcaDln"))), {})
+    _i1y4 = DAILY_LIMITS.get(_f3j4, DAILY_LIMITS[TIER_FREE])
+
+    _r3d7 = _p9b7.get(FUNC_AUTO, 0)
+    _y9p6 = _p9b7.get(FUNC_SEMI, 0)
+    _n5f3 = _p9b7.get(SPECIAL_FEATURE_MIGRATION_ASSESS, 0)
+
+    # 公开功能列表（F1-F9 + F8.1，不含 F10-F14 运营支撑）
+    _e9t7 = [
+        {_w1b8(_c4j7(_sd_("HAtuCjkLNS4AaDln"))): "F1", _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAzApLgBoOWc=")))), _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAzApLh5pHxETIBws"))))},
+        {_w1b8(_c4j7(_sd_("HAtuCjkLNS4AaDln"))): "F2", _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAzApOABoOWc=")))), _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAzApOB5pHxETIBws"))))},
+        {_w1b8(_c4j7(_sd_("HAtuCjkLNS4AaDln"))): "F3", _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAzApFgBoOWc=")))), _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAzApFh5pHxETIBws"))))},
+        {_w1b8(_c4j7(_sd_("HAtuCjkLNS4AaDln"))): "F4", _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAzA9YwBoOWc=")))), _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAzA9Yx5pHxETIBws"))))},
+        {_w1b8(_c4j7(_sd_("HAtuCjkLNS4AaDln"))): "F5", _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAzA9LgBoOWc=")))), _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAzA9Lh5pHxETIBws"))))},
+        {_w1b8(_c4j7(_sd_("HAtuCjkLNS4AaDln"))): "F6", _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAzA9OABoOWc=")))), _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAzA9OB5pHxETIBws"))))},
+        {_w1b8(_c4j7(_sd_("HAtuCjkLNS4AaDln"))): "F7", _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAzA9FgBoOWc=")))), _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAzA9Fh5pHxETIBws"))))},
+        {_w1b8(_c4j7(_sd_("HAtuCjkLNS4AaDln"))): "F8", _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAz0XYwBoOWc=")))), _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAz0XYx5pHxETIBws"))))},
+        {_w1b8(_c4j7(_sd_("HAtuCjkLNS4AaDln"))): _w1b8(_c4j7(_sd_("HzJqCzswKS4AaDln"))), _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAz0XaRENOWc=")))), _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAz0XaREILREXHRMrHAsuNAAtZ2c="))))},
+        {_w1b8(_c4j7(_sd_("HAtuCjkLNS4AaDln"))): "F9", _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAz0XLgBoOWc=")))), _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDPTU9EQliDRMga2sfCxMWAz0XLh5pHxETIBws"))))},
+    ]
+
+    # ================================================================
+    # 🌐 i18n 语言检测（QClaw 反馈 #6）
+    # 优先级：MC_SKILL_LANG 环境变量 > 系统 locale > 默认 en
+    # 检测结果影响：greeting_text / feature_slogan / hook_text 的语言
+    # ================================================================
+    import locale as _locale
+    _b4b7 = os.environ.get(_w1b8(_c4j7(_sd_("EhkTIhIYMRMSLW45Fz0XORIeEyoeIhMWAGg5Zw=="))), "").strip().lower()
+    if _b4b7:
+        _p9g5 = _b4b7[:2]
+    else:
+        try:
+            _s3h8 = _locale.getdefaultlocale()[0] or ""
+            _p9g5 = (_s3h8.split("_")[0] if _s3h8 else "en").lower()
+        except Exception:
+            _p9g5 = "en"
+    # 支持的语言白名单
+    _t0h2 = {"en", "zh", "ja", "ko", "ru", "es", "it", "el", "th", "hi", "ar"}
+    if _p9g5 not in _t0h2:
+        _p9g5 = "en"
+    _p2k3 = _p9g5 == "zh"
+
+    # 🌐 功能描述自然段落（QClaw 反馈 #2：不要 F1-F9 编号清单，要自然语言）
+    if _p2k3:
+        _l4g5 = (
+            "我可以帮你搜模组、搭环境、查冲突、修崩溃、翻译成中文，" +
+            _w1b8(_c4j7(_sd_("EQliGR0JMS8UHgsqFhsTdRYZYm4RIy0CGzIfKRYiAy4KIBtvOy01ahEjFDUKIGMiODNudRNoPXUKIxQsCjNjMD4OYj4+DTUsEWgTPRwJLjA7NxcIAzMTKRVobzURDSIvOxk2KQMjanU4HRAoGTQcaxNoFwATaBdxHA0QKxEJYyI4aQ8oAzc9dRRpDDUDMjYiODBuKDkNbzAfAgwpFiNiMDkNF204aD0vCg05Zw==")))
+        )
+    else:
+        _l4g5 = (
+            "I can help you search mods, set up your MC environment, " +
+            "find Mixin conflicts, fix crashes, translate resources, " +
+            "and assess whether a mod can be ported to a newer MC version. " +
+            _w1b8(_c4j7(_sd_("EiI2MxEyA2oUCWIRExsUNQogG28+DmIgOzMXDBNoYykfIxsKFh5iIDs3ag8dDWMpHDAbFzgbNS0eHTVn")))
+        )
+
+    # 🌐 结尾钩子（QClaw 反馈 #4：1-2 个具体场景，不要太泛）
+    if _p2k3:
+        _s2b1 = _w1b8(_c4j7(_sd_("FhliYjgZLXEeMykpAzA9MBYYOQ07Iy0PFBk1KRwbNSIWGDkZHwktLBwzaikDaQ8vFhliYh8ZLW8SMGIpGTIALhYeYgkKI251FRtqKhYtEwAWGDkNOyM2MBYebikDIgMoFhliPxUJLSwfMCkpFi01EBYYCz8+CTYzOAhuLwogPTkWHjEJFiMtDx40DyoWGxMsFhIfNREZMSkWG2osCjM9Hg==")))
+    else:
+        _s2b1 = _w1b8(_c4j7(_sd_("EgkXYz4OYiAcaCkNOw4MNRwbbgoTMjk9GWgXdRcZaygfCBNrOA5iIBcJKRETHh89GTJuAjggYi0VDSkRFBsYKRwbMSM4GzUtHGkfdRciPigcNzFrFAgDPRkdLQITGyksHBsTazgICwkUAg8IHQ5rKB8Iahc4GGIAAzM1DRQeDywZMxseOx5iLRUCD3EdaD40")))
+
+    # 🌐 欢迎语（QClaw 反馈 #5：首屏不要展开付费，只留一句话）
+    if _e0h7[_w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw==")))]:
+        if _p2k3:
+            _g3m9 = (
+f"你好！首次使用还有 **{_e0h7['_e2a5']} 天免费期**，" +
+                f"公开功能不限次数。之后如有需要可以解锁高级功能。"
+            )
+        else:
+            _g3m9 = (
+f"Hi! You have **{_e0h7['_e2a5']} days left** in your free trial. " +
+                f"All public features are unlimited during this period. " +
+                f"Premium upgrades are available later if you need them."
+            )
+    elif _f3j4 == TIER_FREE:
+        if _p2k3:
+            _g3m9 = (
+"免费期已结束。基础额度够用，公开功能每天还有 " +
+                f"{_i1y4[FUNC_AUTO]} 次自动处理额度，之后如有需要可以升级。"
+            )
+        else:
+            _g3m9 = (
+"Free trial ended. You still have " +
+                f"{_i1y4[FUNC_AUTO]} auto-handling calls per day on the free _f3j4. " +
+                f"Upgrade is available if you need more."
+            )
+    else:
+        if _p2k3:
+            _g3m9 = f"你好！当前是 {_i7t7(_f3j4)}，所有功能正常可用。"
+        else:
+            _g3m9 = f"Hi! You're on the {_i7t7(_f3j4, lang='en')} plan. All features available."
+
+    # 🌐 引导触发条件（QClaw 反馈 #1：needs_onboarding 外再给 trigger_policy）
+    # trigger_policy = "question_only" 表示：只有用户主动问"怎么用/能做什么"时才展开全引导；
+    #                  其他情况（用户直接提需求）只需要 1 句 greeting + 1 句 hook
+    _f3z2 = _w1b8(_c4j7(_sd_("HwkUMz4IHxA4MxsPHj0pORwbbhY7GBcuAGg5Zw==")))
+
+    # =================================================================
+    # 🔧 最终成品话术（完全不让 Agent 自己拼，直接拿字符串回复即可）
+    # 解决：QClaw Agent 会无视协议自己加一堆"完整介绍"/F1-F9 列表/中英混杂
+    # 用法：SKILL.md 写死 "直接输出 _e8m8.xxx 字段文字，不要加任何其他字"
+    # 🔑 关键修复：始终同时生成中英双语，不依赖系统 locale
+    #   → pattern_A_zh / pattern_B_zh 永远有中文
+    #   → pattern_A_en / pattern_B_en 永远有英文
+    #   → Agent 根据用户实际输入语言选择对应字段
+    # =================================================================
+
+    # --- 中文版 pattern ---
+    if _e0h7[_w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw==")))]:
+        _g3t1 = (
+f"你好！首次使用还有 **{_e0h7['_e2a5']} 天免费期**，" +
+            f"公开功能不限次数。之后如有需要可以解锁高级功能。"
+        )
+    elif _f3j4 == TIER_FREE:
+        _g3t1 = (
+"免费期已结束。基础额度够用，公开功能每天还有 " +
+            f"{_i1y4[FUNC_AUTO]} 次自动处理额度，之后如有需要可以升级。"
+        )
+    else:
+        _g3t1 = f"你好！当前是 {_i7t7(_f3j4)}，所有功能正常可用。"
+
+    _d4f6 = (
+        "我可以帮你搜模组、搭环境、查冲突、修崩溃、翻译成中文，" +
+        "还能评估某个 mod 能不能迁移到新版本——直接告诉我你想做什么就行。"
+    )
+    _r8a2 = _w1b8(_c4j7(_sd_("FhliYjgZLXEeMykpAzA9MBYYOQ07Iy0PFBk1KRwbNSIWGDkZHwktLBwzaikDaQ8vFhliYh8ZLW8SMGIpGTIALhYeYgkKI251FRtqKhYtEwAWGDkNOyM2MBYebikDIgMoFhliPxUJLSwfMCkpFi01EBYYCz8+CTYzOAhuLwogPTkWHjEJFiMtDx40DyoWGxMsFhIfNREZMSkWG2osCjM9Hg==")))
+
+    _p3t9 = _g3t1 + "\n\n" + _d4f6 + "\n\n" + _r8a2
+    _d9d3 = _g3t1 + " 好的，我来帮你 —— " + _r8a2
+
+    # --- 英文版 pattern ---
+    if _e0h7[_w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw==")))]:
+        _c9g0 = (
+f"Hi! You have **{_e0h7['_e2a5']} days left** in your free trial. " +
+            f"All public features are unlimited during this period. " +
+            f"Premium upgrades are available later if you need them."
+        )
+    elif _f3j4 == TIER_FREE:
+        _c9g0 = (
+"Free trial ended. You still have " +
+            f"{_i1y4[FUNC_AUTO]} auto-handling calls per day on the free _f3j4. " +
+            f"Upgrade is available if you need more."
+        )
+    else:
+        _c9g0 = f"Hi! You're on the {_i7t7(_f3j4, lang='en')} plan. All features available."
+
+    _p6g5 = (
+        "I can help you search mods, set up your MC environment, " +
+        "find Mixin conflicts, fix crashes, translate resources, " +
+        "and assess whether a mod can be ported to a newer MC version. " +
+        "Just tell me what you want to do."
+    )
+    _h4c6 = _w1b8(_c4j7(_sd_("EgkXYz4OYiAcaCkNOw4MNRwbbgoTMjk9GWgXdRcZaygfCBNrOA5iIBcJKRETHh89GTJuAjggYi0VDSkRFBsYKRwbMSM4GzUtHGkfdRciPigcNzFrFAgDPRkdLQITGyksHBsTazgICwkUAg8IHQ5rKB8Iahc4GGIAAzM1DRQeDywZMxseOx5iLRUCD3EdaD40")))
+
+    _h6r7 = _c9g0 + "\n\n" + _p6g5 + "\n\n" + _h4c6
+    _u5g1 = _c9g0 + " Sure, I'll help — " + _h4c6
+
+    # --- 默认 pattern（兼容旧字段，跟随系统 locale）---
+    if _p2k3:
+        _a2a0 = _p3t9
+        _f5e5 = _d9d3
+    else:
+        _a2a0 = _h6r7
+        _f5e5 = _u5g1
+
+    _e8m8 = {
+        # 默认 pattern（跟随系统 locale，兼容旧代码）
+        _w1b8(_c4j7(_sd_("Hw4bKhYiAy0DMA8PHS1ibg=="))): _a2a0,
+        _w1b8(_c4j7(_sd_("Hw4bKhYiAy0DMA8PHS1iHg=="))): _f5e5,
+        # 🔑 始终有值的双语版本（Agent 应该用这两个字段）
+        _w1b8(_c4j7(_sd_("Hw4bKhYiAy0DMA8PHS1ibh0bMTgTLWdn"))): _p3t9,
+        _w1b8(_c4j7(_sd_("Hw4bKhYiAy0DMA8PHS1ibh0bbzM7PWdn"))): _h6r7,
+        _w1b8(_c4j7(_sd_("Hw4bKhYiAy0DMA8PHS1iHh0bMTgTLWdn"))): _d9d3,
+        _w1b8(_c4j7(_sd_("Hw4bKhYiAy0DMA8PHS1iHh0bbzM7PWdn"))): _u5g1,
+        # Agent 指令：根据用户语言选，不要翻译，不要加别的
+        _w1b8(_c4j7(_sd_("HRsxYzgIAxYeaD0MExsuMBwzGyoDLTUuHmg1DxkNb2s="))): (
+            "CRITICAL — READ FIRST:\n" +
+            "1. DETECT what language the USER actually wrote their _w9u5 in.\n" +
+            "2. If user wrote in ENGLISH → OUTPUT ONLY pattern_A_en or pattern_B_en (choose A if they asked 'what can you do', choose B if they gave a task).\n" +
+            "3. If user wrote in CHINESE → OUTPUT ONLY pattern_A_zh or pattern_B_zh.\n" +
+            "4. DO NOT translate. DO NOT mix languages. DO NOT add your own words. DO NOT write greeting manually.\n" +
+            _w1b8(_c4j7(_sd_("FR0xEzgYLRYDMg8ACg0TDAogay8ZCBAqFA4tOBczMRsSMAtrHxhuYwoLbjkdHS4rCiATFh4YbiMfLW45HR0uKR8zEx4fGBAqGWg5Zw==")))
+        ),
+    }
+
+    return {
+        _w1b8(_c4j7(_sd_("HBhvMz4LNSAXCC0PHj0uLxwbbioUCzUtHGg1ERloPjQ="))): is_onboarding_due(),
+        _w1b8(_c4j7(_sd_("HDAXYxMbNRU7NA8IHS1iKBwbbh4TGA8QHGg5Zw=="))): _f3z2,
+        _w1b8(_c4j7(_sd_("HB4bKjs9NRADN2oRHjcQNA=="))): _p9g5,
+        _w1b8(_c4j7(_sd_("HCMXIhIYFz8faDln"))): _p2k3,
+        _w1b8(_c4j7(_sd_("GT0xYz4LNTA4MxsPEjc1ORwwGDMXIgNjAGg5Zw=="))): _g3m9,
+        _w1b8(_c4j7(_sd_("GTJvMzgIAyADMA8RFgtiKxweGwoDIg89GWg5Zw=="))): _l4g5,
+        _w1b8(_c4j7(_sd_("HCAbCjsiORYeI2IREyIXLA=="))): _s2b1,
+        _w1b8(_c4j7(_sd_("HRtvLBcbNWkXDTln"))): _e8m8,
+        _w1b8(_c4j7(_sd_("HRtvKBciPjU7Nzln"))): _f9q2.get(_w1b8(_c4j7(_sd_("HRtvKBciPjU7Nzln"))), ""),
+        _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f3j4,
+        _w1b8(_c4j7(_sd_("HDAbAj4IHzgeaDUMEx42aw=="))): _i7t7(_f3j4),
+        _w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8ALWdn"))): {
+            _w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw=="))): _e0h7[_w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw==")))],
+            _w1b8(_c4j7(_sd_("HRtuCxYiDxQWDTln"))): _e0h7[_w1b8(_c4j7(_sd_("HRtuCxYiDxQWDTln")))],
+            _w1b8(_c4j7(_sd_("GTAbKhcYHxYeI2IPGQ1vLhweazQALWdn"))): FREE_PERIOD_DAYS,
+            _w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw=="))): _e0h7[_w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw==")))],
+            _w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8SGzU9GWkfZw=="))): _e0h7[_w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8SGzU9GWkfZw==")))],
+            _w1b8(_c4j7(_sd_("HBhuChYtNTAXDTln"))): [
+                t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDMh8/AzQPAx49LigcMBgzETBuPxUJGxEZDmsuHDAbAjsiCzgeaBMCEyBqKxwwagoDMh8/AzQPZw==")))),
+                t(_w1b8(_c4j7(_sd_("HBtuFjgyCxURDg8RFxg+Kxk9ExYDMh8/AzQPAx49LigcMBgzETBuPxUJGxEZDmsuHDAbAjsiCzgeI2ICFx0QKx0bby84CDk9GyAbAx4JNjQ=")))),
+            ],
+        },
+        _w1b8(_c4j7(_sd_("HRsxAxEICDUcaDln"))): {
+            _w1b8(_c4j7(_sd_("HRtucRciAxQ7Nzln"))): _r3d7,
+            _w1b8(_c4j7(_sd_("HRtuCxctNRQfaDln"))): _i1y4[FUNC_AUTO],
+            _w1b8(_c4j7(_sd_("HRtuAxcYAxQKDTln"))): _y9p6,
+            _w1b8(_c4j7(_sd_("HRsxCxYtNT47Nzln"))): _i1y4[FUNC_SEMI],
+            _w1b8(_c4j7(_sd_("HRtvLBE9KjUcaDln"))): _n5f3,
+            _w1b8(_c4j7(_sd_("HBkbAgMiHz8RCWICExtjKx0bbh4TGAs9HCNiZw=="))): _i1y4[SPECIAL_FEATURE_MIGRATION_ASSESS],
+        },
+        # 保留给需要逐条列功能的场景（帮助页、详情页），默认引导不要用
+        _w1b8(_c4j7(_sd_("HRtuIxEyCxQWDTln"))): _e9t7,
+        _w1b8(_c4j7(_sd_("Hw4bKhcYCz0DNzUNCgtjaxwYbio4MgstAzQfZw=="))): ENABLE_PAYMENT,
+        # 注意：付费渠道/套餐名已经从首屏移除（QClaw 反馈 #5），
+        # 需要付费信息时单独调 payment_page 获取，不要在首屏展开
+    }
+
+
+def is_in_free_period() -> bool:
+    """判断当前是否在免费期内
+
+    Returns:
+        True = 在免费期内（前60天）
+        False = 免费期已过，需要付费
+    """
+    _f9q2 = _l1r4()
+    _f9q2 = _z6m9(_f9q2)
+
+    _x9r7 = _f9q2.get(_w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8SGzU9GWkfZw=="))), "")
+    if not _x9r7:
+        return True  # 没有记录结束日期，视为免费期
+
+    try:
+        _j9w2 = datetime.strptime(_x9r7, _w1b8(_c4j7(_sd_("ChlqDzsOLT0KNzFiEx1vNA==")))).date()
+        return date._a8r1() <= _j9w2
+    except Exception:
+        return True
+
+
+def get_free_period_info() -> Dict[str, Any]:
+    """获取免费期信息"""
+    _f9q2 = _l1r4()
+    _f9q2 = _z6m9(_f9q2)
+
+    _b8d6 = _f9q2.get(_w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw=="))), "")
+    _x9r7 = _f9q2.get(_w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8SGzU9GWkfZw=="))), "")
+
+    if not _x9r7:
+        return {
+            _w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw=="))): True,
+            _w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw=="))): _b8d6,
+            _w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8SGzU9GWkfZw=="))): "",
+            _w1b8(_c4j7(_sd_("HRtuCxYiDxQWDTln"))): FREE_PERIOD_DAYS,
+        }
+
+    try:
+        _j9w2 = datetime.strptime(_x9r7, _w1b8(_c4j7(_sd_("ChlqDzsOLT0KNzFiEx1vNA==")))).date()
+        _a8r1 = date._a8r1()
+        # 使用 ceil 逻辑：最后一天显示剩余1天而不是0天
+        _e2a5 = (_j9w2 - _a8r1).days
+        if _e2a5 <= 0 and _a8r1 <= _j9w2:
+            _e2a5 = 1
+        else:
+            _e2a5 = max(0, _e2a5)
+        return {
+            _w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw=="))): _a8r1 <= _j9w2,
+            _w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw=="))): _b8d6,
+            _w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8SGzU9GWkfZw=="))): _x9r7,
+            _w1b8(_c4j7(_sd_("HRtuCxYiDxQWDTln"))): _e2a5,
+        }
+    except Exception:
+        return {
+            _w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw=="))): True,
+            _w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw=="))): _b8d6,
+            _w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8SGzU9GWkfZw=="))): _x9r7,
+            _w1b8(_c4j7(_sd_("HRtuCxYiDxQWDTln"))): FREE_PERIOD_DAYS,
+        }
+
+
+def get_current_tier() -> str:
+    """获取当前会员等级"""
+    _f9q2 = _l1r4()
+    return _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), TIER_FREE)
+
+
+def get_machine_id() -> str:
+    """获取当前机器码"""
+    return _s0f0()
+
+
+def get_usage_stats() -> Dict[str, Any]:
+    """获取使用统计"""
+    _f9q2 = _l1r4()
+    _f9q2 = _z6m9(_f9q2)
+    _f3j4 = _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), TIER_FREE)
+    _m6c4 = _f9q2.get(_w1b8(_c4j7(_sd_("HRsxAxEICDUcaDln"))), {})
+    _a9t8 = _f9q2.get(_w1b8(_c4j7(_sd_("HDAbChYiDz0bIi0NEyAcLhk9bzMALWdn"))), {})
+    _g0r0 = DAILY_LIMITS.get(_f3j4, DAILY_LIMITS[TIER_FREE])
+    _e0h7 = get_free_period_info()
+
+    return {
+        _w1b8(_c4j7(_sd_("HRtvKBciPjU7Nzln"))): _f9q2.get(_w1b8(_c4j7(_sd_("HRtvKBciPjU7Nzln"))), ""),
+        _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f3j4,
+        _w1b8(_c4j7(_sd_("HDAbAj4IHzgeaDUMEx42aw=="))): _i7t7(_f3j4),
+        _w1b8(_c4j7(_sd_("HRsxAxEICDUcaDln"))): _m6c4,
+        _w1b8(_c4j7(_sd_("HDAbChYiDz0bIi0NEyAcLhk9bzMALWdn"))): _a9t8,
+        _w1b8(_c4j7(_sd_("HRtuAxY9NWkKDTln"))): _g0r0,
+        _w1b8(_c4j7(_sd_("Hw4bKhcYCz0DNzUNCgtjaxwYbio4MgstAzQfZw=="))): ENABLE_PAYMENT,
+        _w1b8(_c4j7(_sd_("HRtuDxQIAz4RDTln"))): _f9q2.get(_w1b8(_c4j7(_sd_("HRtuDxQIAz4RDTln"))), ""),
+        _w1b8(_c4j7(_sd_("HB4bAjgtNT0ZIzURFgtjax8gF2sTGB8/AzM1Zw=="))): _f9q2.get(_w1b8(_c4j7(_sd_("HB4bAjgtNT0ZIzURFgtjax8gF2sTGB8/AzM1Zw=="))), ""),
+        _w1b8(_c4j7(_sd_("HRsxAxEiFz4DNzln"))): _f9q2.get(_w1b8(_c4j7(_sd_("HRsxAxEiFz4DNzln"))), ""),
+        _w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw=="))): _f9q2.get(_w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw=="))), ""),
+        _w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8SGzU9GWkfZw=="))): _f9q2.get(_w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8SGzU9GWkfZw=="))), ""),
+        _w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw=="))): _e0h7[_w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw==")))],
+        _w1b8(_c4j7(_sd_("HRtuCxYiDxQWDTln"))): _e0h7[_w1b8(_c4j7(_sd_("HRtuCxYiDxQWDTln")))],
+        _w1b8(_c4j7(_sd_("Hw4XYxMYDxUcaDURGWg+NA=="))): _a7h4,
+        _w1b8(_c4j7(_sd_("Hw4XYz4ICz0cIy0PFgtiKxwwGyoWIgMwFw05Zw=="))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIi0NHgk2LxsgCxY4IgsVFQkbDxI3NTkfC24KOyILOABoOWc=")))),
+    }
+
+
+def check_permission(_h0e2: str, _f2f4: str = FUNC_AUTO) -> Dict[str, Any]:
+    """检查功能使用权限
+
+    权限判断逻辑：
+    0. 配置完整性校验（防篡改）
+    0.5. 强制联网验证（每次调用）
+    1. 如果在免费期内（前60天）：
+       - 移植评估功能：首次免费，之后每天1次
+       - 其他功能：不限次数
+    2. 如果免费期已过：
+       - 自动应用基础限制（免费用户20次/天，普通会员100次/天）
+       - ENABLE_PAYMENT 只控制是否显示付费提示和允许升级
+    """
+    # === 配置完整性校验（防篡改）===
+    _l0b3 = _b0o1()
+    if not _l0b3["ok"]:
+        # 检测到配置被篡改，直接拒绝（但免费期内仍保留降级）
+        _f9q2 = _l1r4()
+        _e0h7 = get_free_period_info()
+        if not _e0h7[_w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw==")))] and _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), TIER_FREE) == TIER_FREE:
+            return {
+                _w1b8(_c4j7(_sd_("HAkbHjsYCxA7NA8RCg0+NA=="))): False,
+                _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): TIER_FREE,
+                _w1b8(_c4j7(_sd_("HwhvMzsIDz0caDUCExsuMA=="))): 0,
+                _w1b8(_c4j7(_sd_("HRtvMBQIDDUDNzln"))): 0,
+                _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): _w1b8(_c4j7(_sd_("FiI5PzgZbnUcPS11ERkYLDsZPT0WHTVuPgs2KRESDCs5CAM9GQ1qbjsJEDAVGzViO2hrKhQdFw0cN28zFR1qaAMiAz0cDW8uGzA+KBEYACg4Dj0RCjcuLhMYPikRHWogOzA9DRQdYy4+DSorOAgALDsNa2seDTYuGzA+NRYNPjQ="))),
+                _w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ9n"))): False,
+                _w1b8(_c4j7(_sd_("HRs2LzgICzAUAg8IEjcQIg=="))): True,
+            }
+        _f4x3.warning(_l0b3[_w1b8(_c4j7(_sd_("HRtvLBE9NRQXDTln")))])
+    
+    # === 强制联网验证 ===
+    _c0d1 = _h8d3()
+    if not _c0d1.get(_w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA==")))):
+        # 联网验证失败，拒绝使用
+        return {
+            _w1b8(_c4j7(_sd_("HAkbHjsYCxA7NA8RCg0+NA=="))): False,
+            _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): TIER_FREE,
+            _w1b8(_c4j7(_sd_("HwhvMzsIDz0caDUCExsuMA=="))): 0,
+            _w1b8(_c4j7(_sd_("HRtvMBQIDDUDNzln"))): 0,
+            _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): f"授权验证失败: {_c0d1.get('reason', '未知错误')}",
+            _w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ9n"))): _c0d1.get(_w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ9n"))), False),
+        }
+    
+    _f9q2 = _l1r4()
+    _f9q2 = _z6m9(_f9q2)
+
+    # === 特殊功能：模组移植可行性评估 ===
+    if _h0e2 == SPECIAL_FEATURE_MIGRATION_ASSESS:
+        return _a3w4(_f9q2)
+
+    # === 免费期内：其他功能不限 ===
+    _e0h7 = get_free_period_info()
+    if _e0h7[_w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw==")))]:
+        return {
+            _w1b8(_c4j7(_sd_("HAkbHjsYCxA7NA8RCg0+NA=="))): True,
+            _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), TIER_FREE),
+            _w1b8(_c4j7(_sd_("HwhvMzsIDz0caDUCExsuMA=="))): -1,
+            _w1b8(_c4j7(_sd_("HRtvMBQIDDUDNzln"))): -1,
+            _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZaBMIEjcQax0bMWs+CB8/HGgpEQoLYmsZMxtvOAg5PRkjGw8SNyo0"))), days=_e0h7[_w1b8(_c4j7(_sd_('HRtuCxYiDxQWDTln')))]),
+        }
+
+    # === 免费期过后：自动应用基础限制 ===
+    _f3j4 = _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), TIER_FREE)
+    _g0r0 = DAILY_LIMITS.get(_f3j4, DAILY_LIMITS[TIER_FREE])
+    _b8a7 = _g0r0.get(_f2f4, 20)
+
+    _m6c4 = _f9q2.get(_w1b8(_c4j7(_sd_("HRsxAxEICDUcaDln"))), {})
+    _i2v1 = _m6c4.get(_h0e2, 0)
+
+    if _i2v1 >= _b8a7:
+        # 构建提示信息 + 触发支付页面
+        if ENABLE_PAYMENT:
+            _j6c9 = t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIy0IFx01axwJGC8+CD0VHyMbDx0NbjkZMxsWOAgPPxtpD2c="))), max=100)
+            _z0z5 = False
+            try:
+                from core.payment_page import show_payment_page
+                _e1q6 = f"{t('auth.limit_reached', _i2v1=_b8a7, _b8a7=_b8a7)}, {t('auth.upgrade_hint_enable', max=100)}"
+                show_payment_page(reason=_e1q6, mode=_w1b8(_c4j7(_sd_("HRtvMBQIDDUDNzln"))))
+                _z0z5 = True
+            except Exception:
+                pass
+            # reason 末段明确标注「已生成支付页面」，防止 AI Agent 忽略链接
+            _u6m3 = t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykMEyI+KhkzGxYWIj0QFA1qER43EzkZPW8zOz01MAoNag0XHRAi")))) if _z0z5 else ""
+            _j6c9 = _j6c9 + (f"，{_u6m3}" if _u6m3 else "")
+        else:
+            _j6c9 = t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIy0IFx01axwJGC8+CD0VHyMbDx0NbjkZMBsCETIPPQoNPREWDT40"))))
+        return {
+            _w1b8(_c4j7(_sd_("HAkbHjsYCxA7NA8RCg0+NA=="))): False,
+            _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f3j4,
+            _w1b8(_c4j7(_sd_("HwhvMzsIDz0caDUCExsuMA=="))): 0,
+            _w1b8(_c4j7(_sd_("HRtvMBQIDDUDNzln"))): _b8a7,
+            _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): f"{t('auth.limit_reached', _i2v1=_b8a7, _b8a7=_b8a7)}, {_j6c9}",
+        }
+
+    return {
+        _w1b8(_c4j7(_sd_("HAkbHjsYCxA7NA8RCg0+NA=="))): True,
+        _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f3j4,
+        _w1b8(_c4j7(_sd_("HwhvMzsIDz0caDUCExsuMA=="))): _b8a7 - _i2v1,
+        _w1b8(_c4j7(_sd_("HRtvMBQIDDUDNzln"))): _b8a7,
+        _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): "",
+    }
+
+
+def _a3w4(_f9q2: Dict[str, Any]) -> Dict[str, Any]:
+    """检查模组移植可行性评估功能的权限
+
+    规则：
+    - 免费期内：首次免费，之后每天1次
+    - 付费期后：免费用户每天1次，普通会员每天5次
+    """
+    _e0h7 = get_free_period_info()
+    _f3j4 = _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), TIER_FREE)
+
+    # 首次使用免费
+    _z2y3 = _f9q2.get(_w1b8(_c4j7(_sd_("HBkbAgMiHz8RCWICExtjKx0bbioRMh8VAzM1CBktYzMcIxdjETIDYx4jLQgeNxAi"))), False)
+    _a8r1 = _w9c5()
+    _m6c4 = _f9q2.get(_w1b8(_c4j7(_sd_("HRsxAxEICDUcaDln"))), {})
+    _f1c4 = _m6c4.get(SPECIAL_FEATURE_MIGRATION_ASSESS, 0)
+
+    if _e0h7[_w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw==")))]:
+        # 免费期内
+        if not _z2y3:
+            # 首次使用，免费
+            return {
+                _w1b8(_c4j7(_sd_("HAkbHjsYCxA7NA8RCg0+NA=="))): True,
+                _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f3j4,
+                _w1b8(_c4j7(_sd_("HwhvMzsIDz0caDUCExsuMA=="))): 1,
+                _w1b8(_c4j7(_sd_("HRtvMBQIDDUDNzln"))): 1,
+                _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZaDECEx01axwJFC8TGAsVGSItDBMgHysZMxciETI9FRYJGwgdDh8sHRtuLhQLNT0DNzln")))),
+                _w1b8(_c4j7(_sd_("HCMXIhIbNT8cIA8IGQ1uORwzFyI+C2dn"))): True,
+            }
+        else:
+            if _f1c4 >= 1:
+                return {
+                    _w1b8(_c4j7(_sd_("HAkbHjsYCxA7NA8RCg0+NA=="))): False,
+                    _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f3j4,
+                    _w1b8(_c4j7(_sd_("HwhvMzsIDz0caDUCExsuMA=="))): 0,
+                    _w1b8(_c4j7(_sd_("HRtvMBQIDDUDNzln"))): 1,
+                    _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZaDECEx01axwJFC8TGAsVGSItDBMgHysZMxciETI9FRsjGw8TGDksHRsxYz4IDz0XCRcREx1vNA=="))), count=1),
+                    _w1b8(_c4j7(_sd_("HCMXIhIbNT8cIA8IGQ1uORwzFyI+C2dn"))): False,
+                }
+            return {
+                _w1b8(_c4j7(_sd_("HAkbHjsYCxA7NA8RCg0+NA=="))): True,
+                _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f3j4,
+                _w1b8(_c4j7(_sd_("HwhvMzsIDz0caDUCExsuMA=="))): 1 - _f1c4,
+                _w1b8(_c4j7(_sd_("HRtvMBQIDDUDNzln"))): 1,
+                _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZaDECEx01axwJFC8TGAsVGSItDBMgHysZMxciETI9FTg3agITGxctHRtuLhQLNT0DNzln"))), count=1),
+                _w1b8(_c4j7(_sd_("HCMXIhIbNT8cIA8IGQ1uORwzFyI+C2dn"))): False,
+            }
+    else:
+        # 付费期（免费期结束后自动应用限制）
+        _g0r0 = DAILY_LIMITS.get(_f3j4, DAILY_LIMITS[TIER_FREE])
+        _b8a7 = _g0r0.get(SPECIAL_FEATURE_MIGRATION_ASSESS, 1)
+
+        if _f1c4 >= _b8a7:
+            if ENABLE_PAYMENT:
+                _j6c9 = t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIy0IFx01axwJGC8+CD0VHyMbDx0NbjkZMxsWOAgPPxtpD2c="))), max=5)
+                _z0z5 = False
+                try:
+                    from core.payment_page import show_payment_page
+                    _e1q6 = f"{t('auth.limit_reached', _i2v1=_b8a7, _b8a7=_b8a7)}, {t('auth.upgrade_hint_enable', max=5)}"
+                    show_payment_page(reason=_e1q6, mode=_w1b8(_c4j7(_sd_("HRtvMBQIDDUDNzln"))))
+                    _z0z5 = True
+                except Exception:
+                    pass
+                _u6m3 = t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykMEyI+KhkzGxYWIj0QFA1qER43EzkZPW8zOz01MAoNag0XHRAi")))) if _z0z5 else ""
+                _j6c9 = _j6c9 + (f"，{_u6m3}" if _u6m3 else "")
+            else:
+                _j6c9 = t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIy0IFx01axwJGC8+CD0VHyMbDx0NbjkZMBsCETIPPQoNPREWDT40"))))
+            return {
+                _w1b8(_c4j7(_sd_("HAkbHjsYCxA7NA8RCg0+NA=="))): False,
+                _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f3j4,
+                _w1b8(_c4j7(_sd_("HwhvMzsIDz0caDUCExsuMA=="))): 0,
+                _w1b8(_c4j7(_sd_("HRtvMBQIDDUDNzln"))): _b8a7,
+                _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): f"{t('auth.limit_reached', _i2v1=_b8a7, _b8a7=_b8a7)}, {_j6c9}",
+                _w1b8(_c4j7(_sd_("HCMXIhIbNT8cIA8IGQ1uORwzFyI+C2dn"))): not _z2y3,
+            }
+
+        return {
+            _w1b8(_c4j7(_sd_("HAkbHjsYCxA7NA8RCg0+NA=="))): True,
+            _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f3j4,
+            _w1b8(_c4j7(_sd_("HwhvMzsIDz0caDUCExsuMA=="))): _b8a7 - _f1c4,
+            _w1b8(_c4j7(_sd_("HRtvMBQIDDUDNzln"))): _b8a7,
+            _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): "",
+            _w1b8(_c4j7(_sd_("HCMXIhIbNT8cIA8IGQ1uORwzFyI+C2dn"))): not _z2y3,
+        }
+
+
+def record_usage(_h0e2: str) -> None:
+    """记录一次功能使用（含数据上报）"""
+    _f9q2 = _l1r4()
+    _f9q2 = _z6m9(_f9q2)
+    _m6c4 = _f9q2.get(_w1b8(_c4j7(_sd_("HRsxAxEICDUcaDln"))), {})
+    _a9t8 = _f9q2.get(_w1b8(_c4j7(_sd_("HDAbChYiDz0bIi0NEyAcLhk9bzMALWdn"))), {})
+
+    _m6c4[_h0e2] = _m6c4.get(_h0e2, 0) + 1
+    _a9t8[_h0e2] = _a9t8.get(_h0e2, 0) + 1
+
+    # 移植评估特殊：标记首次使用
+    if _h0e2 == SPECIAL_FEATURE_MIGRATION_ASSESS:
+        _f9q2[_w1b8(_c4j7(_sd_("HBkbAgMiHz8RCWICExtjKx0bbioRMh8VAzM1CBktYzMcIxdjETIDYx4jLQgeNxAi")))] = True
+
+    _f9q2[_w1b8(_c4j7(_sd_("HRsxAxEICDUcaDln")))] = _m6c4
+    _f9q2[_w1b8(_c4j7(_sd_("HDAbChYiDz0bIi0NEyAcLhk9bzMALWdn")))] = _a9t8
+    _m6x0(_f9q2)
+
+    _f4x3.debug(f"记录使用: {_h0e2}, 今日={_m6c4[_h0e2]}, 总计={_a9t8[_h0e2]}")
+    
+    # === 数据上报（本地缓存，每3.5天统一上报一次）===
+    _e4j9(_h0e2, 1)
+
+
+def activate_license(_n6f3: str, _f3j4: str = TIER_NORMAL,
+                     _g8s6: str = "", _f6p5: str = _w1b8(_c4j7(_sd_("HBkbCjsyAy0faD0OFg0+NA==")))) -> Dict[str, Any]:
+    """激活授权码（支持续费叠加兜底，防止管理员误发短日期授权码导致用户损失）
+
+    规则：
+    1. 如果用户当前已是付费会员且旧授权仍有效 → 取「旧 _g8s6 与 新 _g8s6」的较大者
+       （例如用户年卡还剩 100 天，续费月卡 30 天 → 最终为 年卡原过期日，不会 30 天后过期）
+    2. 如果旧授权已过期 / 本来就是免费用户 → 直接采用新 _g8s6
+    3. 真正的「精确续费天数叠加」逻辑在管理员服务端生成授权码时计算，
+       客户端这里只是做兜底，不反向延长服务端下发的日期。
+
+    Args:
+        _n6f3: 授权码
+        _f3j4: 会员等级（目前仅支持 normal，premium 为敬请期待）
+        _g8s6: 过期时间（YYYY-MM-DD），由管理员服务端计算后下发
+        _f6p5: 订阅类型 monthly/monthly_auto/quarterly/yearly
+    """
+    if _f3j4 == TIER_PREMIUM:
+        return {
+            _w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA=="))): False,
+            _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f3j4,
+            _w1b8(_c4j7(_sd_("HRtvLBE9NRQXDTln"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZIykIEjcQKhwjFDM7CD0VFw0pDxMYPisZPSkKETILFR5oNWc=")))),
+        }
+
+    _f9q2 = _l1r4()
+
+    # === 续费兜底：旧 _g8s6（若仍有效）和 新 _g8s6 取较大者 ===
+    _f3k0 = _g8s6
+    _o1d6 = _f9q2.get(_w1b8(_c4j7(_sd_("HB4bAjgtNT0ZIzURFgtjax8gF2sTGB8/AzM1Zw=="))), "")
+    _f9w1 = _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), TIER_FREE)
+    _z2c3 = date._a8r1()
+    try:
+        if _o1d6 and _f9w1 != TIER_FREE:
+            _h8v6 = datetime.strptime(_o1d6, _w1b8(_c4j7(_sd_("ChlqDzsOLT0KNzFiEx1vNA==")))).date()
+            # 旧授权仍然有效（还没过期）
+            if _h8v6 >= _z2c3:
+                _h3k3 = datetime.strptime(_g8s6, _w1b8(_c4j7(_sd_("ChlqDzsOLT0KNzFiEx1vNA==")))).date()
+                if _h8v6 > _h3k3:
+                    # 旧的有效期比新的更长 → 采用旧的（保护用户权益，比如误发了更短的码）
+                    _f3k0 = _o1d6
+                    _f4x3.info(
+f"[授权激活] 续费兜底：旧 _g8s6({_o1d6}) > 新 _g8s6({_g8s6})，" +
+                        f"保留较晚的日期 {_f3k0}"
+                    )
+    except Exception as e:
+        _f4x3.warning(f"[授权激活] 续费兜底计算异常，直接采用新 _g8s6={_g8s6}: {e}")
+
+    _f9q2[_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln")))] = _f3j4
+    _f9q2[_w1b8(_c4j7(_sd_("HRtuDxQIAz4RDTln")))] = _n6f3
+    _f9q2[_w1b8(_c4j7(_sd_("HB4bAjgtNT0ZIzURFgtjax8gF2sTGB8/AzM1Zw==")))] = _f3k0
+    _f9q2[_w1b8(_c4j7(_sd_("HRsxAxEiFz4DNzln")))] = _f6p5
+
+    _m6x0(_f9q2)
+    _f4x3.info(f"授权激活成功: _f3j4={_f3j4}, _g8s6={_f3k0}, sub={_f6p5}")
+
+    _d3g3 = _a7h4.get(_f6p5, {}).get(_w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))), _f6p5)
+    return {
+        _w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA=="))): True,
+        _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f3j4,
+        _w1b8(_c4j7(_sd_("HRtuDxQIAz4RDTln"))): _n6f3,
+        _w1b8(_c4j7(_sd_("HRtuAxEIDxQcaDln"))): _f3k0,
+        _w1b8(_c4j7(_sd_("HRsxAxEiFz4DNzln"))): _f6p5,
+        _w1b8(_c4j7(_sd_("HRtvLBE9NRQXDTln"))): t(_w1b8(_c4j7(_sd_("HAkUMxYiOWoZaGoMGQ1uPRwybioWLTUuHiM1DRMeHCwZMxciET1nZw=="))), _f3j4=_i7t7(_f3j4), subscription=_d3g3, _g8s6=_f3k0),
+    }
+
+
+def verify_license_online(_n6f3: str) -> Dict[str, Any]:
+    """在线验证授权码（预留接口）"""
+    if not AUTH_SERVER_URL:
+        _f4x3.info(_w1b8(_c4j7(_sd_("Fhg5bhYJNjA+CxMpCiAiKxYdE24TIy11EjADKj4IbhQRCS0ZFRktAhUbEykDIm8uFh0TERMjbnUVG2opFiAtaBYeNi4TIy0CFR09KQMwPSgRAg8/HgkxKRswPWc="))))
+        return {
+            _w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA=="))): False,
+            _w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ9n"))): False,
+            _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): _w1b8(_c4j7(_sd_("Fh0TbhMjLXUSMAMqPghuFBEJLRkVGS0CFRsTKQMiby4WGDk/GyMtAhUZaik5Dj1tFhg+LhcJbnUVG2oqFhsTLxYZYmIUMy1vOAkXKRwgMjUWHRNuESMtDBswKSkcDWoj"))),
+        }
+
+    try:
+        from urllib.request import Request, urlopen
+        _d9l7 = json.dumps({
+            _w1b8(_c4j7(_sd_("HRtuDxQIAz4RDTln"))): _n6f3,
+            _w1b8(_c4j7(_sd_("HRtvKBciPjU7Nzln"))): _s0f0(),
+        }).encode(_w1b8(_c4j7(_sd_("HDMULwMwbzUfaDln"))))
+
+        _g4q7 = Request(
+            f"{AUTH_SERVER_URL}/verify",
+            _u7g9=_d9l7,
+            headers={
+                _w1b8(_c4j7(_sd_("EgtuCjsyAy0DNzUNFB4xDB8jF2s+C2dn"))): _w1b8(_c4j7(_sd_("HAkXaxEiCy0caGIME2huPRwbbhM7IjkAFw0pDx1oPjQ="))),
+                _w1b8(_c4j7(_sd_("EjMXIj4IHwkVDj0RHjcQKxwwazQALWdn"))): _w1b8(_c4j7(_sd_("EhkTaDsIMRUSIxsPFxsYKhIyai87IC4qGRkpZw=="))),
+            },
+            method=_w1b8(_c4j7(_sd_("HQ4TCh8YbmMAaDln"))),
+        )
+
+        with urlopen(_g4q7, timeout=AUTH_SERVER_TIMEOUT) as resp:
+            _b0b1 = json.loads(resp.read().decode(_w1b8(_c4j7(_sd_("HDMULwMwbzUfaDln")))))
+            return _b0b1
+
+    except Exception as e:
+        _f4x3.error(f"在线验证失败: {e}")
+        return {
+            _w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA=="))): False,
+            _w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ9n"))): True,
+            _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): f"验证服务连接失败: {str(e)}",
+        }
+
+
+# ==================== 🔐 签名 HTTP 请求 ====================
+
+def _l9a6(_o1v6: str, _h8x6: str, _q8l8: str) -> str:
+    """
+    计算请求签名 (与服务器 auth_server.py 中的 compute_sign 保持一致)
+    
+    签名算法: HMAC-SHA256(CLIENT_SIGN_SECRET, _h8x6 + _q8l8 + _o1v6)
+    """
+    _w9u5 = f"{_h8x6}{_q8l8}{_o1v6}"
+    return hmac.new(
+        CLIENT_SIGN_SECRET.encode(_w1b8(_c4j7(_sd_("HDMULwMwbzUfaDln")))),
+        _w9u5.encode(_w1b8(_c4j7(_sd_("HDMULwMwbzUfaDln")))),
+        hashlib.sha256
+    ).hexdigest()
+
+
+def _y6h9(_w3n4: str, _u7g9: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """
+    发送带签名的 POST 请求到服务器
+    
+    自动附加签名头:
+      - x-_h8x6: 当前时间戳（秒）
+      - x-_q8l8:     随机字符串（防止重放）
+      - x-_c3d9:      HMAC-SHA256 签名
+    
+    Args:
+        _w3n4: 接口路径，如 "/api/auth/quick-check"
+        _u7g9: 请求体字典
+    
+    Returns:
+        服务器响应的 JSON 字典，失败返回 None
+    """
+    if not AUTH_SERVER_URL:
+        return None
+    
+    _a7b7 = str(int(time.time()))
+    _q8l8 = secrets.token_hex(8)
+    _o1v6 = json.dumps(_u7g9, ensure_ascii=False)
+    
+    # 计算签名
+    _c3d9 = _l9a6(_o1v6, _a7b7, _q8l8)
+    
+    _d9l7 = _o1v6.encode(_w1b8(_c4j7(_sd_("HDMULwMwbzUfaDln"))))
+    _g4q7 = Request(
+        f"{AUTH_SERVER_URL}{_w3n4}",
+        _u7g9=_d9l7,
+        headers={
+            _w1b8(_c4j7(_sd_("EgtuCjsyAy0DNzUNFB4xDB8jF2s+C2dn"))): _w1b8(_c4j7(_sd_("HAkXaxEiCy0caGIME2huPRwbbhM7IjkAFw0pDx1oPjQ="))),
+            _w1b8(_c4j7(_sd_("EjMXIj4IHwkVDj0RHjcQKxwwazQALWdn"))): _w1b8(_c4j7(_sd_("EhkTaDsIMRUSIxsPFxsYKhIyai87IC4qGRkpZw=="))),
+            _w1b8(_c4j7(_sd_("HyALbxIYOWkfIzFuHWg+NA=="))): _a7b7,
+            _w1b8(_c4j7(_sd_("HyALbxIYOWkXCRNtGWg+NA=="))): _q8l8,
+            _w1b8(_c4j7(_sd_("HyALbxIYCxQRCTFuHWg+NA=="))): _c3d9,
+        },
+        method=_w1b8(_c4j7(_sd_("HQ4TCh8YbmMAaDln"))),
+    )
+    
+    with urlopen(_g4q7, timeout=AUTH_SERVER_TIMEOUT) as resp:
+        return json.loads(resp.read().decode(_w1b8(_c4j7(_sd_("HDMULwMwbzUfaDln")))))
+
+
+# ==================== 🔒 配置防篡改检测 ====================
+
+def _b0o1() -> Dict[str, Any]:
+    """
+    校验关键配置是否被篡改
+    
+    检测内容:
+      1. ENABLE_PAYMENT 开关是否被修改
+      2. AUTH_SERVER_URL 是否被替换
+      3. CONFIG_FINGERPRINT 是否匹配
+    
+    Returns:
+        {"ok": bool, "tampered_fields": list, "_w9u5": str}
+    """
+    _b0b1 = {
+        "ok": True,
+        _w1b8(_c4j7(_sd_("HDAbKjsIHy0DMA8REx1uORkybgI+CAstODM1Zw=="))): [],
+        _w1b8(_c4j7(_sd_("HRtvLBE9NRQXDTln"))): _w1b8(_c4j7(_sd_("EQ0UaxszLXUKHTUpPgtuFBYYPmsWIy0PER0XKRkzMi4RAg8/Hgk2MBEYKSoWLRNx"))),
+    }
+    
+    # AUTO 模式（开发环境），跳过校验
+    if CONFIG_FINGERPRINT == _w1b8(_c4j7(_sd_("EglrMxwILRYAaDln"))):
+        return _b0b1
+    
+    # 计算当前指纹并与预设比较
+    _n7a9 = _p8k3()
+    if _n7a9 != CONFIG_FINGERPRINT:
+        _b0b1["ok"] = False
+        _b0b1[_w1b8(_c4j7(_sd_("HDAbKjsIHy0DMA8REx1uORkybgI+CAstODM1Zw==")))].append(_w1b8(_c4j7(_sd_("GT1uHjsiDz8RDT0DHjAcKBwYbi4TGzUWAGg5Zw=="))))
+        _b0b1[_w1b8(_c4j7(_sd_("HRtvLBE9NRQXDTln")))] = (
+f"⚠️  检测到关键配置被篡改！" +
+            f"预期指纹: {CONFIG_FINGERPRINT[:8]}... " +
+            f"实际指纹: {_n7a9[:8]}..."
+        )
+        _f4x3.warning(_b0b1[_w1b8(_c4j7(_sd_("HRtvLBE9NRQXDTln")))])
+    
+    return _b0b1
+
+
+# ==================== 强制联网验证与数据上报 ====================
+
+def _h8d3() -> Dict[str, Any]:
+    """强制联网验证（每次使用Skill时调用）
+    
+    流程：
+    1. 检查本地Token是否有效（有效期1小时）
+    2. Token无效则请求服务器获取新Token
+    3. 返回验证结果（成功/失败/离线降级）
+    
+    Returns:
+        {
+            "success": bool,      # 验证是否通过
+            "online": bool,       # 是否在线模式
+            "_f3j4": str,          # 服务器确认的会员等级
+            "reason": str,        # 失败原因（如有）
+        }
+    """
+    _f9q2 = _l1r4()
+    _d3e9 = _f9q2.get(_w1b8(_c4j7(_sd_("HRtvKBciPjU7Nzln"))), "")
+    
+    # 检查是否启用了强制联网验证
+    if not _f9q2.get(_w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ8DGQlrax8IbgIDMhcuHmkPDxIzNi8cHhgzOQtnZw=="))), False) or not AUTH_SERVER_URL:
+        return {
+            _w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA=="))): True,
+            _w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ9n"))): False,
+            _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), TIER_FREE),
+            _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): _w1b8(_c4j7(_sd_("Fh4tPRczLXUSMAMpGTIALhYSH24eGW51FRsxKRwgPS4WHRM1OyMtbzgJFyk5Dj1jFh0XDREJNmsSPWoqFhsTbhYwYm4ePWdn"))),
+        }
+    
+    # 检查本地Token是否有效
+    _m1e0 = _f9q2.get(_w1b8(_c4j7(_sd_("HwtvMxQIAz8DMA8DGQ1vKBwtbzM7Mj0VAzAXCBcYOWsZMxciAC1nZw=="))), "")
+    _j1a9 = datetime._j1a9()
+    
+    if _m1e0:
+        try:
+            _g0v5 = datetime.fromisoformat(_m1e0)
+            if _j1a9 < _g0v5:
+                # Token仍有效，直接使用
+                _f4x3.debug(f"使用有效Token: 过期时间 {_m1e0}")
+                return {
+                    _w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA=="))): True,
+                    _w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ9n"))): True,
+                    _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), TIER_FREE),
+                    _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): "",
+                }
+        except ValueError:
+            pass
+    
+    # Token无效，请求服务器获取新Token（使用签名请求）
+    try:
+        # 使用带签名的请求
+        _b0b1 = _y6h9(_w1b8(_c4j7(_sd_("Cj1uKhEiPioeaGoNE2huMAo9MSoWGDk9FwkTcRMeHzAZMxsiEz1nZw=="))), {
+            _w1b8(_c4j7(_sd_("HRtvKBciPjU7Nzln"))): _d3e9,
+            _w1b8(_c4j7(_sd_("HRtuCxciAz4WDTln"))): _j1a9.isoformat(),
+        })
+        
+        if _b0b1 is None:
+            raise URLError(_w1b8(_c4j7(_sd_("Fh4tYhcJIjMRGxMqFhsTLxYYDykbIyJrOAk9KhZoa2s="))))
+            
+        # 服务器响应成功（无论是否授权）
+        _c5o3 = _b0b1.get(_w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA==")))) or _b0b1.get(_w1b8(_c4j7(_sd_("HAkUMxYiOS0eIA8CEyIuaxkwazQALWdn")))) is not None
+        
+        if _c5o3:
+            # 更新本地Token（如果有）
+            if _b0b1.get(_w1b8(_c4j7(_sd_("HDAbChM9NT0ZaDln")))):
+                _f9q2[_w1b8(_c4j7(_sd_("HwtvMxQIAz8DMA8DGQ1vKBwtbzM7PWdn")))] = _b0b1.get(_w1b8(_c4j7(_sd_("HDAbChM9NT0ZaDln"))), "")
+                _f9q2[_w1b8(_c4j7(_sd_("HwtvMxQIAz8DMA8DGQ1vKBwtbzM7Mj0VAzAXCBcYOWsZMxciAC1nZw==")))] = _b0b1.get(_w1b8(_c4j7(_sd_("HRtuAxEIDxQcaDln"))), "")
+            
+            _f9q2[_w1b8(_c4j7(_sd_("HB4bKhEyA2MeaCkPEj0XPRwYbzMSGA8VH2kPDB4yYzQ=")))] = _j1a9.isoformat()
+            
+            # 检查是否授权
+            if _b0b1.get(_w1b8(_c4j7(_sd_("HAkUMxYiOS0eIA8CEyIuaxkwazQALWdn")))):
+                # 同步服务器端的会员等级
+                _g1a5 = _b0b1.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), "")
+                if _g1a5 and _g1a5 != _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln")))):
+                    _f9q2[_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln")))] = _g1a5
+                    _f4x3.info(f"服务器同步会员等级: {_g1a5}")
+                
+                _m6x0(_f9q2)
+                
+                return {
+                    _w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA=="))): True,
+                    _w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ9n"))): True,
+                    _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), TIER_FREE),
+                    _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): "",
+                }
+            else:
+                # 服务器连接成功，但用户未授权
+                _m6x0(_f9q2)
+                return {
+                    _w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA=="))): False,
+                    _w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ9n"))): True,
+                    _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): TIER_FREE,
+                    _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): _b0b1.get(_w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))), _w1b8(_c4j7(_sd_("Fhg5bhszIjASN2opAz01MBECDz8eCTEpGzA9KT4NajURCWMuPgtnZw==")))),
+                }
+        else:
+            # 服务器返回失败
+            return {
+                _w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA=="))): False,
+                _w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ9n"))): True,
+                _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): TIER_FREE,
+                _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): _b0b1.get(_w1b8(_c4j7(_sd_("HRtvLBE9NRQXDTln")))) or _b0b1.get(_w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))), _w1b8(_c4j7(_sd_("Fhg5bhszIjASN2opAz01MBECDz8eCTEpGzA9KT4NajURCWMuPgtnZw==")))),
+            }
+                
+    except (URLError, OSError) as e:
+        # 网络连接失败，降级处理
+        _f4x3.warning(f"联网验证失败，降级为离线模式: {e}")
+        _f9q2[_w1b8(_c4j7(_sd_("HB4bKhEyA2MeaCkPEj0XPRwYbzMSGA8VH2kPDB4yYzQ=")))] = _j1a9.isoformat()
+        _m6x0(_f9q2)
+        
+        # 检查是否允许离线使用（免费期内或有本地授权）
+        _r0p5 = _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), TIER_FREE)
+        _e0h7 = get_free_period_info()
+        
+        if _e0h7.get(_w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw==")))) or _r0p5 != TIER_FREE:
+            # 免费期内或已有本地授权，允许离线使用
+            return {
+                _w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA=="))): True,
+                _w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ9n"))): False,
+                _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _r0p5,
+                _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): f"网络不可用，降级离线模式（{str(e)[:50]}）",
+            }
+        else:
+            # 免费期已过且无本地授权，拒绝使用
+            return {
+                _w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA=="))): False,
+                _w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ9n"))): False,
+                _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): TIER_FREE,
+                _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): f"网络不可用，无法验证授权（{str(e)[:50]}）",
+            }
+    except Exception as e:
+        _f4x3.error(f"联网验证异常: {e}")
+        return {
+            _w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA=="))): False,
+            _w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ9n"))): False,
+            _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): TIER_FREE,
+            _w1b8(_c4j7(_sd_("HwhvMzgIHxUeaDVn"))): f"验证异常: {str(e)[:50]}",
+        }
+
+
+def _h2j4() -> bool:
+    """检查是否应该上报数据（每3.5天一次，即一周两次）"""
+    _f9q2 = _l1r4()
+    _v6c1 = _f9q2.get(_w1b8(_c4j7(_sd_("HB4bKhEyA2MeIA8REyAMKB8INi8SGAMtHGgxERYNPjQ="))), "")
+    
+    if not _v6c1:
+        # 从未上报过，应该立即上报
+        return True
+    
+    try:
+        _w7j9 = datetime.fromisoformat(_v6c1)
+        _j1a9 = datetime._j1a9()
+        _o4a3 = timedelta(days=REPORT_INTERVAL_DAYS)
+        return (_j1a9 - _w7j9) >= _o4a3
+    except (ValueError, TypeError):
+        return True
+
+
+def _e4j9(_h0e2: str, _e2v5: int) -> None:
+    """上报使用数据到管理员服务器
+    
+    机制：
+    1. 每次使用Skill时调用
+    2. 本地缓存使用数据
+    3. 每3.5天统一上报一次（一周两次）
+    4. 上报成功后清除缓存
+    
+    Args:
+        _h0e2: 使用的功能名称
+        _e2v5: 本次使用次数（通常为1）
+    """
+    _f9q2 = _l1r4()
+    _j1a9 = datetime._j1a9()
+    
+    # 添加新的使用记录到本地缓存
+    _h8g8 = _f9q2.get(_w1b8(_c4j7(_sd_("Hw4YMzs9NS0caDURGS1iaxkzF2s7Ih8AODM1Zw=="))), [])
+    _h8g8.append({
+        _w1b8(_c4j7(_sd_("HRtuMxYbKjUDNzln"))): _h0e2,
+        _w1b8(_c4j7(_sd_("HAtuChYYCwA4Nzln"))): _e2v5,
+        _w1b8(_c4j7(_sd_("HRtuCxciAz4WDTln"))): _j1a9.isoformat(),
+    })
+    
+    # 如果缓存超过最大限制，保留最近的记录
+    if len(_h8g8) > MAX_PENDING_RECORDS:
+        _h8g8 = _h8g8[-MAX_PENDING_RECORDS:]
+    
+    _f9q2[_w1b8(_c4j7(_sd_("Hw4YMzs9NS0caDURGS1iaxkzF2s7Ih8AODM1Zw==")))] = _h8g8
+    
+    # 检查是否应该立即上报
+    if _h2j4() and AUTH_SERVER_URL:
+        _x4f7(_f9q2)
+    else:
+        # 只是保存缓存
+        _m6x0(_f9q2)
+
+
+def _x4f7(_f9q2: Dict[str, Any]) -> None:
+    """执行数据上报（使用签名请求）"""
+    _h8g8 = _f9q2.get(_w1b8(_c4j7(_sd_("Hw4YMzs9NS0caDURGS1iaxkzF2s7Ih8AODM1Zw=="))), [])
+    
+    if not _h8g8:
+        return
+    
+    try:
+        _d3e9 = _f9q2.get(_w1b8(_c4j7(_sd_("HRtvKBciPjU7Nzln"))), "")
+        _j1a9 = datetime._j1a9()
+        
+        # 准备上报数据
+        _d2t8 = {
+            _w1b8(_c4j7(_sd_("HRtvKBciPjU7Nzln"))): _d3e9,
+            _w1b8(_c4j7(_sd_("HwhvMxEiCxAKCWIDGQ1uPRwZGDMALWdn"))): _j1a9.isoformat(),
+            _w1b8(_c4j7(_sd_("HDMXIjgLNRUDMi0IEjcQLBwbMWM5CB8WAGg5Zw=="))): _h8g8,
+            _w1b8(_c4j7(_sd_("HRsxMxEIDxQRDTln"))): {
+                _w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))): _f9q2.get(_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln"))), TIER_FREE),
+                _w1b8(_c4j7(_sd_("HDAbChYiDz0bIi0NEyAcLhk9bzMALWdn"))): _f9q2.get(_w1b8(_c4j7(_sd_("HDAbChYiDz0bIi0NEyAcLhk9bzMALWdn"))), {}),
+                _w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw=="))): _f9q2.get(_w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw=="))), ""),
+            }
+        }
+        
+        # 使用带签名的请求发送到服务器
+        _b0b1 = _y6h9(_w1b8(_c4j7(_sd_("Cj1uKhEiPioeaGoNE2huMAo9MWM+CB8tHiAPDRQeMSkfC24qAy01LgBoOWc="))), _d2t8)
+        
+        if _b0b1 is None:
+            raise URLError(_w1b8(_c4j7(_sd_("Fh4tYhcJIjMRGxMqFhsTLxYYDykbIyJrOAk9KhZoa2s="))))
+        
+        if _b0b1.get(_w1b8(_c4j7(_sd_("Hws2MzgiDxUDMzUIGWg+NA==")))):
+            # 上报成功，清除缓存
+            _f9q2[_w1b8(_c4j7(_sd_("Hw4YMzs9NS0caDURGS1iaxkzF2s7Ih8AODM1Zw==")))] = []
+            _f9q2[_w1b8(_c4j7(_sd_("HB4bKhEyA2MeIA8REyAMKB8INi8SGAMtHGgxERYNPjQ=")))] = _j1a9.isoformat()
+            _m6x0(_f9q2)
+            _f4x3.info(f"使用数据上报成功: {len(_h8g8)} 条记录")
+        else:
+            _f4x3.warning(f"数据上报失败: {_b0b1.get('_w9u5', '未知错误')}")
+            _m6x0(_f9q2)  # 保存缓存，下次再试
+            
+    except Exception as e:
+        _f4x3.warning(f"数据上报异常: {e}")
+        # 上报失败，保留缓存等待下次
+    
+    # 保存当前状态
+    _m6x0(_f9q2)
+
+
+def get_report_status() -> Dict[str, Any]:
+    """获取数据上报状态（供管理员查看）"""
+    _f9q2 = _l1r4()
+    return {
+        _w1b8(_c4j7(_sd_("HB4bKhEyA2MeIA8REyAMKB8INi8SGAMtHGgxERYNPjQ="))): _f9q2.get(_w1b8(_c4j7(_sd_("HB4bKhEyA2MeIA8REyAMKB8INi8SGAMtHGgxERYNPjQ="))), ""),
+        _w1b8(_c4j7(_sd_("Hw4YMzs9NS0caDURGS1jLBwbNjM7MgNjAGg5Zw=="))): len(_f9q2.get(_w1b8(_c4j7(_sd_("Hw4YMzs9NS0caDURGS1iaxkzF2s7Ih8AODM1Zw=="))), [])),
+        _w1b8(_c4j7(_sd_("HwtuDjsiAz0baR8DGQ5rax8OGwoUCANjAGg5Zw=="))): _h2j4(),
+        _w1b8(_c4j7(_sd_("HwtvMxQIAz8DMA8DGQ0TaxweazQALWdn"))): AUTH_SERVER_URL or "未配置",
+        _w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ8DGQlrax8IbgIDMhcuHmkPDxIzNi8cHhgzOQtnZw=="))): _f9q2.get(_w1b8(_c4j7(_sd_("HBtuFjsYOT0ZaQ8DGQlrax8IbgIDMhcuHmkPDxIzNi8cHhgzOQtnZw=="))), False),
+    }
+
+
+def reset_usage() -> None:
+    """重置使用计数（调试用）"""
+    _f9q2 = _l1r4()
+    _f9q2[_w1b8(_c4j7(_sd_("HRsxAxEICDUcaDln")))] = {}
+    _f9q2[_w1b8(_c4j7(_sd_("HDAbChYiDz0bIi0NEyAcLhk9bzMALWdn")))] = {}
+    _f9q2[_w1b8(_c4j7(_sd_("HB4bKhEyA2MeIA8REyAcaxwwago5CA8wODQPZw==")))] = _w9c5()
+    _m6x0(_f9q2)
+    _f4x3.info(_w1b8(_c4j7(_sd_("FhliYhQzLW84CRcqFhtvLhYYPmsRIyIiOw4PKgNoMRkWHmJiOz1nZw=="))))
+
+
+def set_tier(_f3j4: str) -> None:
+    """设置会员等级（调试/管理用）"""
+    _f9q2 = _l1r4()
+    _f9q2[_w1b8(_c4j7(_sd_("HRs2KBEYDz4faDln")))] = _f3j4
+    _m6x0(_f9q2)
+    _f4x3.info(f"会员等级已设置为: {_f3j4}")
+
+
+def reset_free_period() -> None:
+    """重置免费期（调试用，清除首次使用日期）"""
+    _f9q2 = _l1r4()
+    _f9q2[_w1b8(_c4j7(_sd_("GTJuAhQIHxA4Mi0NEyAcax0bby84CAMtAzc5Zw==")))] = ""
+    _f9q2[_w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8SGzU9GWkfZw==")))] = ""
+    _f9q2[_w1b8(_c4j7(_sd_("HBkbAgMiHz8RCWICExtjKx0bbioRMh8VAzM1CBktYzMcIxdjETIDYx4jLQgeNxAi")))] = False
+    _m6x0(_f9q2)
+    _f4x3.info(_w1b8(_c4j7(_sd_("Fh0UaxszMSw4DhspHCA9ORYSHCoUCTYwOwsTKQogIis="))))
+
+
+def enable_payment() -> None:
+    """启用付费限制（全局）"""
+    global ENABLE_PAYMENT
+    ENABLE_PAYMENT = True
+    _f4x3.info(_w1b8(_c4j7(_sd_("FhliCR0JMSw4DhsqAz01CBYdFw0RCSIiOw4PKQMzMigWHjYuEy1nZw=="))))
+
+
+def disable_payment() -> None:
+    """禁用付费限制（全局）"""
+    global ENABLE_PAYMENT
+    ENABLE_PAYMENT = False
+    _f4x3.info(_w1b8(_c4j7(_sd_("FhliCR0JMSw4DhsqAz01CBYdFw0RCSIiOw4PKQoZG24WHjYuEy1nZw=="))))
+
+
+def print_auth_status() -> None:
+    """打印当前授权状态"""
+    _w5r5 = get_usage_stats()
+    print("=" * 55, flush=True)
+    print(f"  {t('banner.title')} - {t('auth.title')}", flush=True)
+    print("=" * 55, flush=True)
+    print(f"  {t('auth._d3e9')}: {_w5r5['_d3e9']}", flush=True)
+    print(f"  {t('auth.member_tier')}: {_w5r5['tier_name']}", flush=True)
+    print(f"  {t('auth.payment_methods')}: {'✅' if _w5r5['payment_enabled'] else '⏳'}", flush=True)
+    print(f"  {t('auth.auth_code')}: {_w5r5['_n6f3'] or t('auth.not_activated')}", flush=True)
+    print(f"  {t('auth.expiry_date')}: {_w5r5['license_expires'] or '—'}", flush=True)
+
+    # 免费期信息
+    if _w5r5[_w1b8(_c4j7(_sd_("HCMbFhIbNQAKAg8RFgtiKBkzF2MTGAsVODc5Zw==")))]:
+        print(f"\n  ┌─────────────────────────────────", flush=True)
+        print(f"  │  {t('auth.free_period')} ({t('auth.remaining')} {_w5r5['_e2a5']} days)", flush=True)
+        print(f"  │  {t('auth.first_use_date')}: {_w5r5['first_use_date'] or '—'}", flush=True)
+        print(f"  │  {t('auth.free_until')}: {_w5r5['free_period_end'] or '—'}", flush=True)
+        print(f"  └─────────────────────────────────", flush=True)
+    else:
+        print(f"\n  ┌─────────────────────────────────", flush=True)
+        print(f"  │  {t('auth.free_period')}: {t('auth.expired')} ({_w5r5['free_period_end']})", flush=True)
+        print(f"  │  {t('auth._f3j4.free')}: {_w5r5['_i1y4'].get('auto', 20)}/day", flush=True)
+        print(f"  └─────────────────────────────────", flush=True)
+
+    # 使用统计
+    print(f"\n  {t('auth.today_usage')}:", flush=True)
+    for feat, count in _w5r5[_w1b8(_c4j7(_sd_("HRsxAxEICDUcaDln")))].items():
+        _s2e4 = {_w1b8(_c4j7(_sd_("HBkbAgMiHz8RCWICExtjKx0bbioRMh8VAzM1CBloPjQ="))): t(_w1b8(_c4j7(_sd_("HRtuMxYbKjUDaDUREggIKxwYbio7CzUuAGg5Zw=="))))}.get(feat, feat)
+        _b8a7 = _w5r5[_w1b8(_c4j7(_sd_("HRtuAxY9NWkKDTln")))].get(feat, _w5r5[_w1b8(_c4j7(_sd_("HRtuAxY9NWkKDTln")))].get(_w1b8(_c4j7(_sd_("HAkUMxYiCxYAaDln"))), 20))
+        if _b8a7 > 0:
+            print(f"    {_s2e4}: {count}/{_b8a7}", flush=True)
+        else:
+            print(f"    {_s2e4}: {count} ({t('auth.unlimited')})", flush=True)
+    if not _w5r5[_w1b8(_c4j7(_sd_("HRsxAxEICDUcaDln")))]:
+        print(f"    ({t('common.no_data')})", flush=True)
+
+    print(f"\n  {t('auth.total_usage')}:", flush=True)
+    for feat, count in _w5r5[_w1b8(_c4j7(_sd_("HDAbChYiDz0bIi0NEyAcLhk9bzMALWdn")))].items():
+        _s2e4 = {_w1b8(_c4j7(_sd_("HBkbAgMiHz8RCWICExtjKx0bbioRMh8VAzM1CBloPjQ="))): t(_w1b8(_c4j7(_sd_("HRtuMxYbKjUDaDUREggIKxwYbio7CzUuAGg5Zw=="))))}.get(feat, feat)
+        print(f"    {_s2e4}: {count}", flush=True)
+    if not _w5r5[_w1b8(_c4j7(_sd_("HDAbChYiDz0bIi0NEyAcLhk9bzMALWdn")))]:
+        print(f"    ({t('common.no_data')})", flush=True)
+
+    # 定价信息
+    print(f"\n  {t('auth.member_subscription')}:", flush=True)
+    for key, info in _w5r5[_w1b8(_c4j7(_sd_("Hw4XYxMYDxUcaDURGWg+NA==")))].items():
+        print(f"    {info['name']}: {info['price']}{info['unit']} ({info['desc']})", flush=True)
+
+    # 单次按需付费：仅作者设备可见（V1阶段功能未实现，对普通用户隐藏）
+    if _o1d0():
+        print(f"\n  {t('auth.per_use_payment')} {t('auth.author_test_only')}:", flush=True)
+        for key, info in _c5b3.items():
+            print(f"    {info['name']}: {info['price']} CNY/use", flush=True)
+
+    print(f"\n  {t('auth.premium_coming_soon')}", flush=True)
+    print("=" * 55, flush=True)
+
+
+def get_auth_status_json() -> Dict[str, Any]:
+    """获取授权状态（JSON格式，供API调用）
+
+    Returns:
+        包含完整授权信息的字典，结构与 get_usage_stats() 一致
+    """
+    _w5r5 = get_usage_stats()
+    # 添加额外的可用信息
+    _w5r5[_w1b8(_c4j7(_sd_("Hw4bKhcYCz0DNzUNCgtjaxwYbio4MgstAzQfZw==")))] = ENABLE_PAYMENT
+    _w5r5[_w1b8(_c4j7(_sd_("HAkUMxYiOWMeIzUREyBqKhkzF2MSGAMwCg09Zw==")))] = AUTH_SERVER_URL
+    _w5r5[_w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8SGzUtEQ4bCBloPjQ=")))] = FREE_PERIOD_DAYS
+    return _w5r5
+
+
+def get_available_plans() -> Dict[str, Any]:
+    """获取可用套餐列表（供API调用和命令行显示）
+
+    Returns:
+        {
+            "_k1y5": {...},          # 普通会员订阅套餐
+            "per_use": {...} | None, # 单次按需付费（仅作者设备可见）
+            "premium_coming_soon": bool,  # 高级会员是否敬请期待
+            "_n3f1": {...},      # 各等级说明
+            "_i1y4": {...},   # 各等级每日限制
+        }
+    """
+    _g1y1 = _o1d0()
+
+    _n3f1 = {
+        TIER_FREE: {
+            _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): _i7t7(TIER_FREE),
+            _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): _w1b8(_c4j7(_sd_("Fh0UaxszMSw4DhspFQ1qMBYYCw0WPWdn"))),
+            _w1b8(_c4j7(_sd_("HRtuAxY9NWkKDTln"))): DAILY_LIMITS.get(TIER_FREE, {}),
+        },
+        TIER_NORMAL: {
+            _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): _i7t7(TIER_NORMAL),
+            _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): _w1b8(_c4j7(_sd_("Fhg5ETszNjARGCkpFiA9OBYdEykdC2dn"))),
+            _w1b8(_c4j7(_sd_("HRtuAxY9NWkKDTln"))): DAILY_LIMITS.get(TIER_NORMAL, {}),
+        },
+        TIER_PREMIUM: {
+            _w1b8(_c4j7(_sd_("HBhuKjsLNS4AaDln"))): _i7t7(TIER_PREMIUM),
+            _w1b8(_c4j7(_sd_("GTAYMxEyDxYAaDln"))): _w1b8(_c4j7(_sd_("Fhg+azsZMSkbM24pHCA9ORYSHxUKG2dn"))),
+            _w1b8(_c4j7(_sd_("HAtuCjsIOT0ZaBcDGQ4cKBwbbhYALWdn"))): True,
+        },
+    }
+
+    _b0b1 = {
+        _w1b8(_c4j7(_sd_("HRtvMBQIAz4DNzln"))): _a7h4,
+        _w1b8(_c4j7(_sd_("Hw4YMxQIPRADMzURFg0+NA=="))): _c5b3 if _g1y1 else None,
+        _w1b8(_c4j7(_sd_("Hw4XYz4ICz0cIy0PFgtjLBwbbm8TGAs/OzItCB49YygcGC40AC1nZw=="))): True,
+        _w1b8(_c4j7(_sd_("HRtvMBYiOT4caDln"))): _n3f1,
+        _w1b8(_c4j7(_sd_("HRtuAxY9NWkKDTln"))): DAILY_LIMITS,
+        _w1b8(_c4j7(_sd_("GTIxYz4LNS4eIykREyBqPRwbby8SGzUtEQ4bCBloPjQ="))): FREE_PERIOD_DAYS,
+        _w1b8(_c4j7(_sd_("Hw4bKhcYCz0DNzUNCgtjaxwYbio4MgstAzQfZw=="))): ENABLE_PAYMENT,
+    }
+    return _b0b1
+
+
+def print_available_plans() -> None:
+    """打印可用套餐列表（命令行格式）"""
+    _k1y5 = get_available_plans()
+    _g1y1 = _k1y5[_w1b8(_c4j7(_sd_("Hw4YMxQIPRADMzURFg0+NA==")))] is not None
+
+    print("=" * 60, flush=True)
+    print(f"  {t('banner.title')} - 套餐列表", flush=True)
+    print("=" * 60, flush=True)
+
+    # 会员等级说明
+    print(f"\n  📊 会员等级说明:", flush=True)
+    for tier_key, _n3f1 in _k1y5[_w1b8(_c4j7(_sd_("HRtvMBYiOT4caDln")))].items():
+        if _n3f1.get(_w1b8(_c4j7(_sd_("HAtuCjsIOT0ZaBcDGQ4cKBwbbhYALWdn")))):
+            print(f"    {_n3f1['name']}: {_n3f1['desc']}", flush=True)
+        else:
+            _g0r0 = _n3f1.get(_w1b8(_c4j7(_sd_("HRtuAxY9NWkKDTln"))), {})
+            _c7q6 = _g0r0.get(FUNC_AUTO, "-")
+            _l5e2 = _g0r0.get(FUNC_SEMI, "-")
+            _p3z4 = _g0r0.get(SPECIAL_FEATURE_MIGRATION_ASSESS, "-")
+            print(f"    {_n3f1['name']}: 全自动{_c7q6}次/天, 半自动{_l5e2}次/天, 移植评估{_p3z4}次/天", flush=True)
+
+    # 免费期说明
+    print(f"\n  🎁 免费期: 首次使用起 {_k1y5['free_period_days']} 天内，除移植评估外所有功能不限次数", flush=True)
+
+    # 普通会员套餐
+    print(f"\n  💎 {t('auth.member_subscription')}:", flush=True)
+    for key, info in _k1y5[_w1b8(_c4j7(_sd_("HRtvMBQIAz4DNzln")))].items():
+        print(f"    [{key}] {info['name']}: {info['price']}{info['unit']}  —  {info['desc']}", flush=True)
+
+    # 单次按需付费（仅作者设备）
+    if _g1y1:
+        print(f"\n  ⚡ 单次按需付费 {t('auth.author_test_only')}:", flush=True)
+        for key, info in _k1y5[_w1b8(_c4j7(_sd_("Hw4YMxQIPRADMzURFg0+NA==")))].items():
+            print(f"    [{key}] {info['name']}: {info['price']} 元/次", flush=True)
+
+    # 高级会员
+    if _k1y5[_w1b8(_c4j7(_sd_("Hw4XYz4ICz0cIy0PFgtjLBwbbm8TGAs/OzItCB49YygcGC40AC1nZw==")))]:
+        print(f"\n  🌟 {t('auth.premium_coming_soon')}", flush=True)
+
+    # 付款状态
+    if _k1y5[_w1b8(_c4j7(_sd_("Hw4bKhcYCz0DNzUNCgtjaxwYbio4MgstAzQfZw==")))]:
+        print(f"\n  ✅ 付费系统已启用", flush=True)
+    else:
+        print(f"\n  ⏳ 付费系统即将开放，当前仍可享受免费使用", flush=True)
+
+    print("=" * 60, flush=True)

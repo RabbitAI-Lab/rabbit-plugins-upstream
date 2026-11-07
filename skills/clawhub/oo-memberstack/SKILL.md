@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Memberstack"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.6"
   services: ["memberstack"]
   icon: "https://static.oomol.com/logo/third-party/memberstack.svg"
 ---
@@ -43,7 +43,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `get_member` — Retrieve one Memberstack member by member ID or email address, optionally embedding team memberships.
 - `list_members` — List Memberstack members with cursor pagination and optional JSON-field inclusion.
 - `remove_free_plan` — Remove a free Memberstack plan from an existing member. [destructive]
-- `update_member` — Partially update a Memberstack member's email, custom fields, metadata, JSON data, login redirect, verified status, or profile image. [write]
+- `update_member` — Partially update a Memberstack member's email, custom fields, metadata, JSON data, login redirect, verified status, or profile image. [destructive]
 - `verify_member_token` — Verify a Memberstack member JWT and return the decoded token payload.
 
 ## Safety
@@ -75,11 +75,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Memberstack is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=memberstack
+  https://console.oomol.com/connections/memberstack
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Memberstack homepage: https://www.memberstack.com/
+- API documentation: https://developers.memberstack.com/admin-rest-api/quick-start

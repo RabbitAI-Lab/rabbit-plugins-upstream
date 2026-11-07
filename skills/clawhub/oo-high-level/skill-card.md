@@ -1,43 +1,57 @@
-## Description: <br>
-HighLevel (gohighlevel.com). Use this skill for ANY HighLevel request: reading, creating, updating, and deleting data through the OOMOL high_level connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use an OOMOL-connected HighLevel account to read, create, update, and delete contact records.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate HighLevel CRM contact workflows through an OOMOL-connected account, including searching, reading, creating, updating, and deleting contacts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete HighLevel CRM contacts through an OOMOL-connected account. <br>
-Mitigation: Review create and update payloads before approval, and require explicit confirmation of the target contact before delete actions. <br>
-Risk: First-time CLI installation and account login affect the user's OOMOL account setup. <br>
-Mitigation: Run setup steps only when a command fails for an auth, connection, scope, or billing reason and only when OOMOL is trusted for the account. <br>
+## Use Case:
 
+Users and agents use this skill to search and manage HighLevel contacts through a connected OOMOL account.
 
-## Reference(s): <br>
-- [HighLevel homepage](https://www.gohighlevel.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-high-level) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns connector responses as JSON when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill metadata) <br>
+Risk: Setup may execute unchecked remote code and install additional persistent agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review CLI installation separately, use a verified release, and set OO_SKILLS_SYNC_DISABLED=1 before invoking the CLI.
+
+Risk: Creating, updating, or deleting contacts changes HighLevel account data.
+
+Mitigation: Keep the skill's approval requirements and confirm the exact action and payload before contact changes or deletions.
+
+## Reference(s):
+
+- [HighLevel API documentation](https://marketplace.gohighlevel.com/docs/Authorization/PrivateIntegrationsToken)
+- [HighLevel homepage](https://www.gohighlevel.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI controls](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md#environment-variables)
+- [HighLevel ClawHub release](https://clawhub.ai/oomol/skills/oo-high-level)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON action responses and shell command snippets with Markdown usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Contact changes and deletions require user approval.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

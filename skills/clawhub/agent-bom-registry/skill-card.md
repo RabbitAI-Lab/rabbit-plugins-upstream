@@ -1,43 +1,56 @@
-## Description: <br>
-MCP server security registry and trust assessment - look up servers in the 1013-entry server security metadata registry, run pre-install marketplace checks, batch fleet risk scoring, assess skill file trust, and run SAST code scans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MCP server security registry and trust assessment — look up servers in the 1295-entry server security metadata registry, run pre-install marketplace checks, batch fleet risk scoring, assess skill file trust, and run SAST code scans.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers and security reviewers use this skill to evaluate MCP server trust, run pre-install marketplace checks, assess skill files, and perform SAST-oriented code scans before adopting agent tooling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run security lookups and scans over MCP servers, skill files, or code, so results may depend on the exact targets selected for analysis. <br>
-Mitigation: Keep scans pointed at directories, skill files, and server inventories that the operator intends to analyze, and review findings before using them for deployment decisions. <br>
-Risk: Optional Snyk enrichment may contact a third-party vulnerability service when SNYK_TOKEN is provided. <br>
-Mitigation: Provide SNYK_TOKEN only when third-party enrichment is desired, and keep the token in the operator environment rather than embedding it in skill output. <br>
+## Use Case:
 
+Developers and security teams use the registry to review MCP servers before installation, assess skill-file trust, score server inventories, and run code security scans.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-registry) <br>
-- [Project homepage](https://github.com/msaad00/agent-bom) <br>
-- [PyPI project](https://pypi.org/project/agent-bom/) <br>
-- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and plain text with inline shell commands and structured security findings] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May report local registry lookup results, skill trust findings, fleet risk scores, and optional Semgrep or Snyk-enriched scan guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Optional Snyk enrichment sends vulnerability scan requests to an external service and uses SNYK_TOKEN.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable enrichment only when intended and keep the token in the operator environment.
+
+Risk: The separately downloaded runtime package was not audited with the supplied skill instructions.
+
+Mitigation: Use pipx with a verified, pinned package version and select the intended scan directory.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/msaad00/skills/agent-bom-registry)
+- [Agent-BOM project homepage](https://github.com/koda-ai-studio/agent-bom)
+- [Agent-BOM on PyPI](https://pypi.org/project/agent-bom/)
+- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/koda-ai-studio/agent-bom)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Text, Markdown]
+
+**Output Format:** [Text or Markdown summaries of registry matches, trust assessments, risk scores, and scan findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the selected registry or assessment tool.]
+
+## Skill Version(s):
+
+0.113.2 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

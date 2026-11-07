@@ -1,43 +1,59 @@
-## Description: <br>
-Privacy-first agent infrastructure for forecasting markets, credential verification, multi-rail settlement, and cross-rail transfers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BlindOracle provides privacy-focused forecasting, credential verification, balance management, settlement, and cross-rail transfer capabilities for AI agents.
 
-## Publisher: <br>
-[craigmbrown](https://clawhub.ai/user/craigmbrown) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Proprietary <br>
+## Publisher:
 
+[craigmbrown](https://clawhub.ai/user/craigmbrown)
 
-## Use Case: <br>
-Developers and agent operators use BlindOracle to let agents create forecasts, verify credentials, check balances, request settlement, and initiate cross-rail transfers through x402-paid services. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Proprietary
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can trigger paid x402/USDC, settlement, swap, withdrawal, and credential-minting workflows. <br>
-Mitigation: Use scoped payment credentials, low transaction limits, and manual approval for every paid or value-moving action. <br>
-Risk: The security evidence says generic rail terminology is used for crypto and USDC payment activity. <br>
-Mitigation: Treat settlement, transfer, and rail actions as crypto payment operations during review and user consent. <br>
-Risk: Financial actions are delegated to external handler modules that were not included in the reviewed artifact. <br>
-Mitigation: Inspect and approve those modules before installing or trusting the skill with funds. <br>
+## Use Case:
 
+Developers and agent operators use this skill to add paid forecasting, credential checks, account balance queries, settlement requests, and cross-rail transfer workflows to OpenClaw-compatible agents. Because the skill can initiate financial settlement, conversion, swap, and withdrawal workflows, it is best used where each transaction can be reviewed and confirmed explicitly.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/craigmbrown/blindoracle) <br>
-- [BlindOracle Homepage](https://craigmbrown.com/blindoracle) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API responses, Payment requests, Settlement and transfer results, Credential verification results] <br>
-**Output Format:** [JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include x402 payment requirements, security details, balances, forecasts, credential results, quotes, or transfer outcomes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can initiate settlement, conversion, swap, and withdrawal workflows involving funds.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit per-transaction user confirmation, payment-proof validation, and strict tool/domain scoping before enabling paid or fund-moving capabilities.
+
+Risk: The security scan reports that the wrapper obscures underlying crypto rails in user-facing terminology.
+
+Mitigation: Require truthful rail and asset names in operator-facing output and documentation before using the skill with real funds.
+
+Risk: The security scan reports unsafe, unaudited runtime imports and dependency concerns.
+
+Mitigation: Package or pin dependencies and review imported handler modules before deployment in autonomous or production settings.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/craigmbrown/skills/blindoracle)
+- [Publisher profile](https://clawhub.ai/user/craigmbrown)
+- [BlindOracle homepage](https://craigmbrown.com/blindoracle)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, API calls, Configuration, Guidance]
+
+**Output Format:** [JSON-like request and response examples, Markdown instructions, and Python handler responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include payment-required responses, transaction details, security check details, account or quote data, and error messages.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release evidence and artifact/SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,55 @@
-## Description: <br>
-Salesmate (salesmate.io) enables an agent to read, create, update, and delete Salesmate CRM data through the OOMOL Salesmate connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill uses an OOMOL-connected Salesmate account to inspect records and perform supported CRM actions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to operate Salesmate CRM through an OOMOL-connected account, including listing modules and active users, fetching companies, and creating or deleting supported CRM records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad Salesmate trigger wording may cause an agent to access CRM data when a request only vaguely mentions Salesmate. <br>
-Mitigation: Install only when the agent is intended to access Salesmate, and avoid invoking the skill for vague mentions unless CRM data access is intended. <br>
-Risk: Write and destructive actions can create CRM records or delete Salesmate products. <br>
-Mitigation: Use least-privilege API credentials where possible, review proposed payloads, and require explicit approval for create, update, or delete actions before execution. <br>
+## Use Case:
 
+External users and developers can use this skill to retrieve Salesmate information and carry out supported CRM actions through an OOMOL-connected account. It requires confirmation before actions that write or delete data.
 
-## Reference(s): <br>
-- [Salesmate Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-salesmate) <br>
-- [Salesmate Homepage](https://www.salesmate.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; write and destructive actions require confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The first-time setup fallback can run remote installer code whose contents have not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup first and use a reviewed, pinned oo CLI release; get approval before installing it or changing other agents' skills.
+
+Risk: The connected account can expose CRM data or carry out writes and deletions.
+
+Mitigation: Limit the Salesmate account's permissions and keep the skill's confirmation requirement for write and delete actions.
+
+## Reference(s):
+
+- [Salesmate API documentation](https://apidocs.salesmate.io/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Salesmate](https://www.salesmate.io)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions that write or delete data require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

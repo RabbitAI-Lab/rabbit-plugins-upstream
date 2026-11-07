@@ -1,43 +1,58 @@
-## Description: <br>
-Guided first-run demo for the Cargo CLI that takes a fresh workspace to about 25 buyer-persona-matched leads with a cost receipt in under two minutes, then offers to save the search as a recurring play. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Runs a two-minute guided Cargo demo for new users: one question about who they sell to, then 25 real leads with a cost receipt, saved as a recurring play. Works on a fresh account (100 free credits, no card). Triggers: "show me what Cargo can do", "give me a demo", "take me on a tour", "quickstart", "getting started with Cargo", "I just installed Cargo", "my workspace is empty", "does this actually work". Skip when: the user has a real job to run (build a list, enrich a CSV, find emails), use cargo-gtm; when they want CLI reference or routing, use the cargo router skill.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers, sales operators, and GTM teams use this skill to demonstrate Cargo from a new workspace by sourcing buyer-persona-matched leads, showing a spend receipt, and optionally saving the search as a weekly play. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use connected lead providers and spend credits while retrieving prospect data. <br>
-Mitigation: Keep the quickstart on the capped low-cost path and require explicit user approval before any higher-cost fallback runs. <br>
-Risk: Demo lead output is temporarily written under /tmp. <br>
-Mitigation: Treat the temporary files as prospect data and remove or protect them when the demo is complete. <br>
-Risk: Saving the search as a weekly play can continue using provider data and credits. <br>
-Mitigation: Create the recurring play only after explicit user consent, and review or disable the schedule when it is no longer needed. <br>
+## Use Case:
 
+New Cargo users use this guided workflow to try a small lead search, review its cost and results, and optionally save the search as a weekly recurring play. It is intended for onboarding and a first look at Cargo; users with a concrete GTM task should use the dedicated GTM workflow.
 
-## Reference(s): <br>
-- [Cargo Quickstart on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-quickstart) <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands, lead tables, receipts, and next-step guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the Cargo CLI and a Cargo account; may use connected lead providers and credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Optional weekly runs have unclear ongoing credit costs, storage changes, and cancellation controls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before enabling weekly runs, obtain the scheduling recipe, confirm recurring costs and storage changes, and establish spending and cancellation controls.
+
+Risk: The external CLI version and scheduling implementation were not verified.
+
+Mitigation: Use a reviewed CLI version and obtain and review the scheduling recipe before enabling automation.
+
+Risk: Temporary lead exports may remain after the demo.
+
+Mitigation: Remove temporary lead exports after use.
+
+## Reference(s):
+
+- [Cargo Quickstart on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-quickstart)
+- [Cargo skills project homepage](https://github.com/getcargohq/cargo-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Markdown]
+
+**Output Format:** [Conversational instructions with shell command examples, a lead summary table, and a cost receipt]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the user's buyer persona; the documented fast path searches up to 25 leads with an approximately 5-credit budget.]
+
+## Skill Version(s):
+
+1.1.2 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

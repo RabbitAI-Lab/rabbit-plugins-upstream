@@ -1,44 +1,55 @@
-## Description: <br>
-The Weaviate skill guides agents to search and read Weaviate data through the OOMOL `oo` CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Weaviate (weaviate.io). Use this skill for ANY Weaviate request — searching and reading data. Whenever a task involves Weaviate, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect Weaviate instance metadata, collection schemas, and objects through an OOMOL-connected Weaviate account. It is suited for read-only data discovery and retrieval workflows where the agent should use the `oo` connector instead of handling raw Weaviate credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions can expose Weaviate schemas, metadata, and object contents to the agent through the OOMOL connector. <br>
-Mitigation: Use the skill only with accounts and collections the agent is permitted to inspect, and scope collection, object, tenant, and include options to the user's request. <br>
-Risk: The skill relies on OOMOL as an intermediary for Weaviate access. <br>
-Mitigation: Install and use it only when OOMOL-mediated access is intended, and review CLI installation, sign-in, and app-connection steps before use. <br>
-Risk: Incorrect connector payloads can query the wrong collection, tenant, or object. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing each `oo connector run` payload. <br>
+## Use Case:
 
+Developers and data teams use the skill to inspect Weaviate collections, instance metadata, and objects, and to list or retrieve stored objects through a connected Weaviate account.
 
-## Reference(s): <br>
-- [Weaviate homepage](https://weaviate.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON payload instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include connector responses shaped as JSON objects containing `data` and `meta.executionId`.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Setup uses remote installers and a CLI binary that the available evidence does not verify.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install a specific CLI release before enabling the skill.
+
+Risk: The required CLI can have broader effects on installed agent skills, and the connected account exposes Weaviate data to the integration.
+
+Mitigation: Consider disabling automatic skill synchronization with OO_SKILLS_SYNC_DISABLED=1 and connect only the Weaviate account intended for this use.
+
+## Reference(s):
+
+- [Weaviate API documentation](https://docs.weaviate.io/weaviate/api)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [Weaviate homepage](https://weaviate.io)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [oo CLI commands with JSON payloads and structured JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read and retrieval actions; requires an installed, signed-in oo CLI and a connected Weaviate account.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

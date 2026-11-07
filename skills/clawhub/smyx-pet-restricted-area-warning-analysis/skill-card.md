@@ -1,45 +1,58 @@
-## Description: <br>
-Monitors pet media for restricted-area entry, dining-table climbing, and trash-rummaging behavior, then returns alerts and structured analysis reports for home pet monitoring. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Monitors restricted area intrusions, climbing on dining tables, and rummaging through trash cans, and issues real-time alerts, suitable for home pet monitoring scenarios.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Pet owners and home-monitoring agents use this skill to analyze uploaded or URL-based pet media for restricted-area and nuisance behavior, receive structured warning results, and query cloud-stored historical reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet-monitoring media or media URLs are sent to external lifeemergence.com/open.lifeemergence.com services for analysis. <br>
-Mitigation: Use only media that is appropriate to share with the service provider, and review the provider's retention, access, and privacy controls before processing private household footage. <br>
-Risk: The skill can silently create or reuse a cloud-linked identity for report association. <br>
-Mitigation: Install and run it only in workspaces where automatic identity creation is acceptable, and review the generated identity before sharing the workspace. <br>
-Risk: Service tokens and user history may be stored in the workspace data directory. <br>
-Mitigation: Protect the workspace data directory, avoid committing it, and remove stored tokens or history when decommissioning the skill. <br>
+## Use Case:
 
+Pet owners use it to review home monitoring videos for restricted-area entry, climbing on dining tables, and rummaging through trash, and to receive structured alerts and reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-restricted-area-warning-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON text with optional report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a user-specified file path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
+Risk: Using private home footage may expose sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before using private home footage, have the publisher fix export-only mode and confirm the service's privacy, retention, and account-deletion policies.
+
+Risk: Account credentials or local tokens may be exposed.
+
+Mitigation: Keep API secrets separate from account identifiers, restrict credential-bearing requests to approved HTTPS destinations, and protect the local token database.
+
+Risk: The bundle may not provide continuous live alerts.
+
+Mitigation: Do not rely on it for continuous live monitoring; confirm reported alerts by checking the scene.
+
+## Reference(s):
+
+- [Skill overview and demo](https://lifeemergence.com/sample.html)
+- [ClawHub release page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-restricted-area-warning-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured JSON results or Markdown analysis summaries and alerts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports summarize detected behaviors, alert thresholds, and recommendations when provided by the service.]
+
+## Skill Version(s):
+
+1.0.19 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

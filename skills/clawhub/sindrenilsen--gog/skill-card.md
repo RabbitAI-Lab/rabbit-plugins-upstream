@@ -1,39 +1,59 @@
-## Description: <br>
-Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.
 
-## Publisher: <br>
-[sindrenilsen](https://clawhub.ai/user/sindrenilsen) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sindrenilsen](https://clawhub.ai/user/sindrenilsen)
 
-## Use Case: <br>
-Developers, operators, and automation agents use this skill to run Google Workspace CLI commands for Gmail, Calendar, Drive, Contacts, Sheets, and Docs after OAuth setup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access or change sensitive Google Workspace data when broad OAuth permissions are granted. <br>
-Mitigation: Install only when the gog CLI is trusted, grant only the services needed, and require explicit confirmation before sending email, exporting documents, listing contacts, or modifying Sheets data. <br>
+## Use Case:
 
+Developers and Google Workspace users use Gog to have an agent prepare setup steps and CLI commands for Gmail, Calendar, Drive, Contacts, Sheets, and Docs workflows. The skill is most useful for account automation tasks where commands should be reviewed before execution.
 
-## Reference(s): <br>
-- [Gog homepage](https://gogcli.sh) <br>
-- [ClawHub skill page](https://clawhub.ai/sindrenilsen/skills/gog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may return JSON when gog is used with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server-resolved release metadata and artifact _meta.json) <br>
+Risk: OAuth authorization can grant broad access across Gmail, Calendar, Drive, Contacts, Sheets, and Docs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Authorize only the Google services required for the current task and review account selection before running commands.
+
+Risk: Some generated commands can change account data, including sending Gmail messages, creating calendar events, and updating, appending, or clearing Sheets data.
+
+Mitigation: Confirm commands before execution, especially write operations, and use non-interactive scripting only after reviewing the exact command and target account.
+
+Risk: The workflow depends on a third-party CLI and Homebrew tap.
+
+Mitigation: Install only when the gog CLI and the referenced Homebrew tap are trusted for the environment.
+
+## Reference(s):
+
+- [Gog homepage](https://gogcli.sh)
+- [ClawHub skill page](https://clawhub.ai/sindrenilsen/skills/gog)
+- [ClawHub publisher profile](https://clawhub.ai/user/sindrenilsen)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and CLI examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May recommend JSON-oriented gog CLI usage for scripting; produced commands can read or modify Google Workspace account data depending on the selected service and command.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

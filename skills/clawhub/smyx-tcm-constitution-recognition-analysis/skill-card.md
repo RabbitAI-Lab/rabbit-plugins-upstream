@@ -1,45 +1,63 @@
-## Description: <br>
-Determines nine TCM constitution types including Yin deficiency, Yang deficiency, Qi deficiency, phlegm-dampness, and blood stasis through facial features and physical signs, and provides personalized health preservation and conditioning suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Determines nine TCM constitution types including Yin deficiency, Yang deficiency, Qi deficiency, phlegm-dampness, and blood stasis through facial features and physical signs, and provides personalized health preservation and conditioning suggestions.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to submit face photos, videos, or media URLs for Traditional Chinese Medicine constitution analysis and to retrieve prior report records. It returns structured constitution categories, scores, health-risk notes, and wellness suggestions for reference, not medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Face images, videos, and health-related analysis data are sent to cloud services. <br>
-Mitigation: Use only with informed consent, avoid sensitive or private signed URLs, and confirm retention, deletion, and processing terms before deployment. <br>
-Risk: The skill can silently create or reuse account identity state and retrieve cloud report history. <br>
-Mitigation: Run it under an intended workspace identity, isolate test and production workspaces, and review report-history access expectations with users. <br>
-Risk: Service tokens and account state may be stored locally in the workspace. <br>
-Mitigation: Restrict workspace file access, avoid sharing the workspace with untrusted users, and remove or rotate tokens when access is no longer needed. <br>
+## Use Case:
 
+People seeking a traditional Chinese medicine constitution assessment can provide a face image or video to receive a report with constitution tendencies and general wellness suggestions. They can also request a list of their previous reports.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-tcm-constitution-recognition-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Markdown or JSON text, with an optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Output detail can be selected as basic, standard, or json; history queries return structured report lists from the cloud API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.8) <br>
+Risk: Different users may share a health-report account, which can associate users with the same report account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Defer use with shared-user agents until sender isolation is fixed; require clear account-registration and upload controls.
+
+Risk: The no-analysis option does not prevent facial media from being uploaded.
+
+Mitigation: Defer use with real facial media until this is fixed, and make upload behavior clear before media is provided.
+
+Risk: Backend authorization and provider retention or deletion practices are unverified; token storage also needs protection.
+
+Mitigation: Confirm authorization and retention/deletion practices, and protect tokens before use with personal media.
+
+Risk: Changing --api-url does not change the media recipient.
+
+Mitigation: Do not rely on --api-url to redirect uploads; verify the recipient before sending media.
+
+## Reference(s):
+
+- [API interface documentation](references/api_doc.md)
+- [Skill introduction](https://lifeemergence.com/sample.html)
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-tcm-constitution-recognition-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Text, Markdown]
+
+**Output Format:** [JSON or text analysis report; Markdown table for report lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include constitution types, tendencies, scores, health-risk notes, and personalized wellness suggestions.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
