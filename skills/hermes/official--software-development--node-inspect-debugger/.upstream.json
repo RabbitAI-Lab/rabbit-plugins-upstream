@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/software-development/node-inspect-debugger",
+  "identifier": "official/software-development/node-inspect-debugger",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/software-development/node-inspect-debugger",
+  "branch": "main",
+  "pushedAt": "2026-11-07T13:43:47Z",
+  "contentHash": "25202f4aea7217926482463cf90a1f3c7fe780be57bb0fbd4f0167c071711f28",
+  "fetchedAt": "2026-11-07T14:07:51.879Z"
+}
