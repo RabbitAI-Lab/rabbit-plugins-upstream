@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/Airtable/skills/tree/main/plugins/airtable/skills/agent-activity-log",
+  "identifier": "Airtable/skills/plugins/airtable/skills/agent-activity-log",
+  "repo": "Airtable/skills",
+  "path": "plugins/airtable/skills/agent-activity-log",
+  "branch": "main",
+  "pushedAt": "2026-07-21T18:20:59Z",
+  "contentHash": "0127e478b3eddb933575e7f8d070769540185a97bf65346b7af75eff80fad848",
+  "fetchedAt": "2026-11-07T14:07:41.041Z"
+}

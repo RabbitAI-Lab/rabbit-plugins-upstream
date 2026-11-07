@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/wandb/skills/tree/main/skills/weave-instrument",
+  "identifier": "wandb/skills/skills/weave-instrument",
+  "repo": "wandb/skills",
+  "path": "skills/weave-instrument",
+  "branch": "main",
+  "pushedAt": "2026-11-06T18:05:03Z",
+  "contentHash": "f9d2f6425e5dfc07df9b5e0b5aa0f14e0ec2ea80e2f9f44c4a47748e2c465082",
+  "fetchedAt": "2026-11-07T14:07:41.091Z"
+}

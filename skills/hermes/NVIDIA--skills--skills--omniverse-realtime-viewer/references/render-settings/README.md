@@ -7,13 +7,17 @@ Use this skill for render settings, quality controls, samples, denoiser, tone ma
 Use this skill for user-facing controls that affect rendered output or per-frame buffers.
 
 Read `viewer-control-patterns` when exposing these settings in React, `ovui`,
-`ovwidgets`, or Dear ImGui. It owns the client-agnostic guidance for sliders,
+`ovui_widgets`, or Dear ImGui. It owns the client-agnostic guidance for sliders,
 numeric inputs, toggles, labels, disabled states, and confirmations.
 
 For ovrtx render setting, RenderProduct, RenderVar, AOV, or release behavior
 not covered here, read `references/dependencies/ovrtx.md`, then use the ovrtx
 supplemental repository `skills/`, samples, and release notes referenced there.
 Do not guess `omni:rtx:*` attributes, `write_attribute` names, or renderer APIs.
+
+For spectral transport, renderer startup profiles, and lighting-contribution
+views, use the sections below. For clipping, capped cross-sections, or a plane
+gizmo, read [section views](../section-views/README.md).
 
 ## Capability-Driven Settings
 
@@ -26,7 +30,7 @@ class RenderSettingCapability:
     key: str
     label: str
     control: str
-    applies_at: str  # immediate | reload_required | next_scene_load | unsupported
+    applies_at: str  # immediate | reload_required | process_restart | next_scene_load | unsupported
     apply_path: str
     validated: bool
     validation_evidence: str
@@ -39,7 +43,11 @@ the live render settings panel, not shown as hopeful sliders or toggles.
 Persisted JSON is only saved preference state. It is not proof that a setting was
 applied to the active render. A successful setting change must either change the
 active viewer state immediately or be part of an explicit non-live workflow such
-as "Apply and reload stage" or "Use for newly opened scenes."
+as "Apply and reload stage," "Restart with this profile," or "Use for newly opened scenes." Do not send
+`renderSettingsChanged.result = "success"` for a client form update unless the
+payload also reports whether the active render changed through `applied`,
+`applies_at`, `requires_reload`, and `requires_restart` when a process change is
+needed.
 
 Keep effective render settings outside the USD asset. The viewer can restore
 validated settings across scene changes without modifying user files.
@@ -48,8 +56,9 @@ validated settings across scene changes without modifying user files.
 
 | `applies_at` | Use when | User-facing behavior |
 |---|---|---|
-| `immediate` | The render thread can apply the setting through a verified renderer API, `renderer.write_attribute(...)`, or frame-conversion path. | Live control is enabled and `renderSettingsChanged.applied` is true after success. |
+| `immediate` | The render thread can apply the setting through a verified renderer API, OVStage/runtime data-plane write, standalone compatibility `renderer.write_attribute(...)` path, or frame-conversion path. | Live control is enabled and `renderSettingsChanged.applied` is true after success. |
 | `reload_required` | The setting only works by rebuilding viewer-owned session/composite data. | Do not hide the reload behind a live control; expose an explicit apply/reload command. |
+| `process_restart` | Availability is fixed by the first renderer in a process. | Use an explicit process/profile restart workflow; report `applied:false` and `requires_restart:true` until the replacement renderer produces a valid frame. A stage reload is insufficient. |
 | `next_scene_load` | The setting is only a default for future stage loads. | Put it in a profile/defaults workflow, not the live render panel. |
 | `unsupported` | No verified backend path exists for the active runtime. | Omit from active controls and reject direct requests. |
 
@@ -79,17 +88,35 @@ whether the active render changed:
 }
 ```
 
+## Startup profiles and spectral controls
+
+Separate resource preparation from per-RenderProduct settings. Follow the
+selected OVRTX release's [renderer configuration](https://github.com/NVIDIA-Omniverse/ovrtx/blob/main/docs/core/renderer_configuration.rst)
+and [spectral rendering guidance](https://github.com/NVIDIA-Omniverse/ovrtx/blob/main/docs/sensors/cameras/render_modes/spectral_rendering.rst)
+for process-lifetime choices, supported modes, controls, and physical illuminants.
+A mode selector does not release resources initialized for other modes.
+
+Expose live spectral controls only after startup support and the active product
+mode are verified. Validate wavelength bounds and observer choices against that
+release; acknowledge effective runtime state after publication. Disabling tracing
+on a prepared renderer does not recreate an RGB-only process. Use separate
+processes for controlled RGB/spectral comparisons and follow upstream's
+scene-wide restrictions on mixing products. Preserve camera, scene, exposure,
+and sampling policy when comparing; distinguish a visible result from measured
+spectral accuracy. RGB-authored materials do not establish measured spectral
+material responses.
+
 ## Render Vars
 
 Request render vars in the inline root/session `RenderProduct.orderedVars`.
 
-| Render var | Source name | Format | Use |
+| Render var path | Source name | Format | Use |
 |---|---|---|---|
-| `LdrColor` | `LdrColor` | RGBA uint8 | final frame |
-| `InstanceSegmentationSD` | `InstanceSegmentationSD` | uint32 | debug segmentation display |
-| `SemanticSegmentationSD` | `SemanticSegmentationSD` | uint32 | debug segmentation display |
-| `DepthSD` | `DepthSD` | float32 | depth effects, hit testing |
-| `NormalSD` | `NormalSD` | float32x3 | inspection/debug |
+| `/Render/Vars/LdrColor` | `LdrColor` | RGBA uint8 | final frame |
+| `/Render/Vars/InstanceSegmentation` | `InstanceSegmentationSD` | uint32 | debug segmentation display |
+| `/Render/Vars/SemanticSegmentation` | `SemanticSegmentationSD` | uint32 | debug segmentation display |
+| `/Render/Vars/DistanceToImagePlane` | `DistanceToImagePlaneSD` | verify installed output | depth/distance visualization |
+| `/Render/Vars/Normal` | `NormalSD` | float32 [H,W,4] | world-space surface normals (XYZA) |
 
 ```usda
 def "Vars" {
@@ -105,7 +132,12 @@ def RenderProduct "ViewportTexture0" {
 }
 ```
 
-In `fout.render_vars`, names match `sourceName`, not the RenderVar prim name. Extra render vars increase VRAM use, around 8 MB per 1080p uint32 buffer. Picking uses native pick queries in ovrtx 0.3, so do not request segmentation render vars just for object selection.
+In `fout.render_vars`, keys are full RenderVar prim paths (for example,
+`/Render/Vars/LdrColor`), not `sourceName` or the short prim name. Preserve
+`sourceName` only for an AOV's user-facing category and conversion policy.
+Extra render vars increase VRAM use, around 8 MB per 1080p uint32 buffer.
+Picking uses native OVRTX pick queries and the renderer path dictionary, so do
+not request segmentation render vars just for object selection.
 
 Use the multi-line `RenderVar` form above. Some ovrtx parser builds reject inline one-line `RenderVar` definitions.
 
@@ -135,9 +167,10 @@ backend and echo the effective value if the backend adjusts it.
 Default rule: do not add session fallback lights. Stages own their lighting, and injected lights make local and streaming samples diverge.
 
 If the user asks for viewer-controlled lighting, expose live lighting controls
-only when the app owns the light and has verified a live attribute-write path. If
-lighting can only be changed by rebuilding session data, classify it as a
-reload-required render profile option.
+only when the app owns the light and has verified an OVStage/runtime data-plane
+write path or standalone compatibility attribute-write path. If lighting can
+only be changed by rebuilding session data, classify it as a reload-required
+render profile option.
 
 Viewer-owned lights can be authored in the session layer so they can be
 recreated on reload without editing the asset:
@@ -164,7 +197,14 @@ inline root/session data and before the first user-visible frame:
 ```python
 settings = ViewerRenderSettings.load(settings_path)
 inline_root = make_inline_root_stage(scene_url, settings.width, settings.height, settings)
-renderer.open_usd_from_string(inline_root)
+ordinal += 1
+population.open_usd_from_string(
+    stage,
+    inline_root,
+    ordinal=ordinal,
+    domains=PopulationDomain.RENDERING,
+)
+stage.advance_write_floor(ordinal).wait()
 settings.save(settings_path)
 ```
 
@@ -195,9 +235,11 @@ value or echoing client form state is not validation evidence.
 
 - `LdrColor` casing matters.
 - Do not put lights in the generic session layer unless the feature is explicitly enabled and represented as a validated capability.
-- Render-var names in output are source names.
-- CPU mapping render vars causes device-to-host transfer; use CUDA mapping for streaming.
-- Add render vars only when a feature needs them.
+- Render-var output keys are full authored prim paths; use `sourceName` only to
+  label or classify an AOV.
+- Prefer supported CUDA mappings for streaming. Some outputs may require a host copy and upload; discover per-output device support and report that cost through `aov-switching`.
+- Add render vars only when a feature needs them. Basic streamed viewers start
+  with `LdrColor` only.
 - Save validated settings before switching scenes if the UI allows immediate scene changes, but do not treat persistence as active-render application.
 - `renderSettingsChanged` must describe effective state, including whether the requested setting was applied.
 
@@ -207,7 +249,7 @@ See also: `viewer-control-patterns`, `stage-loading`, `stage-management`, `objec
 
 - Add `server/render_settings.py` with a supported-settings capability list and a small JSON-backed store for validated settings and non-live defaults.
 - Keep server state for active settings, fixed stream profile, required render vars, and any validated viewer lighting state.
-- Modify `scene_loader.py` so inline session RenderProduct, RenderVars, and optional lighting reflect only validated profile/default settings.
+- Modify `scene_loader.py` or the OVStage population adapter so inline session RenderProduct, RenderVars, and optional lighting reflect only validated profile/default settings.
 - Add messages such as `getRenderSettingsRequest`, `setRenderSettingRequest`, and `renderSettingsChanged`.
 - Keep existing `toggleSegView` only if the app already exposes a segmentation/debug view.
 - Frontend wires `RenderSettingsPanel` from the server capability list. It must not render unsupported controls.

@@ -129,6 +129,12 @@ React/Vite frontend
 
 ## Decision Rule
 
+When the user does not name a UI framework, default to a React-based shell.
+Choose streaming/WebRTC when browser access, remote GPU execution, embedding,
+or web deployment is plausible. Choose Tauri when the user clearly wants a
+packaged local desktop binary. Choose the lightweight `ovui` path only when
+Python, `omni.ui`, native local UI, or an in-process viewer is explicit.
+
 Start streaming if the GPU is remote, the user must stay in a browser, or the Omniverse Realtime Viewer must integrate with a web product.
 
 Start Tauri if the app runs on the GPU workstation, needs a web-tech UI (React), wants to share components with the streaming path, and should ship as a native binary without Python.
@@ -146,8 +152,8 @@ Choose the renderer topology deliberately. A Tauri app should not bring in ovstr
 
 ## Input Path Contract
 
-- WebRTC: use NVST's native input channel. Browser mouse, keyboard, wheel, and touch input reaches `server.on_input` as binary `InputEvent` structs; do not encode camera control as JSON.
-- SHM: use `ovstream.ShmClient.send_input_event()` from Python, or `ovstream_shm_client_send_input_event()` from C, to send `InputEvent` structs. Do not use JSON `mouseInput` for SHM camera control.
+- WebRTC: use NVST's native input channel by default. Browser mouse, keyboard, wheel, and touch input reaches `server.on_input` as binary `InputEvent` structs. A browser JSON fallback is allowed only after `viewer-input-routing` verifies that native callbacks are absent while the data channel works; it must replace, not duplicate, native camera input.
+- SHM: use `ovstream.Client(ovstream.ClientType.SHM, stream_name="...").send_input_event(event)` from Python, or `ovstream_client_send_input_event(client, event)` from C, to send `InputEvent` structs. Do not use JSON `mouseInput` for SHM camera control.
 - In-process: call the Python/C++ camera, selection, and settings APIs directly from the local UI/event loop.
 
 Read `viewer-input-routing` before implementing any path that handles camera
@@ -156,22 +162,36 @@ gestures, click picking, viewport input ownership, or transport button ids.
 ## Streaming Loop Skeleton
 
 ```python
+import os
+os.environ.setdefault("OVRTX_SKIP_USD_CHECK", "1")
+import ovrtx
+ovrtx.register_schema_paths()
+import ovstage
+from ovstage import PopulationDomain, population
+
+stage = ovstage.Stage("viewer")
+# Populate the viewer-owned composite, wait, then publish ordinal 1.
+population.open_usd_from_string(stage, composite_usda, ordinal=1, domains=PopulationDomain.RENDERING)
+stage.advance_write_floor(1).wait()
 renderer = ovrtx.Renderer(...)
+renderer.attach_ovstage(stage)
 server = ovstream.Server()
 server.on_message = handle_message
 server.on_input = handle_input
 server.start(config)
 while running:
-    products = renderer.step(render_products={render_product}, delta_time=dt)
-    with products as ctx:
-        stream_ldr_color(ctx[render_product])
+    products = renderer.step(render_products={render_product}, delta_time=dt, ordinal=runtime.current_committed_ordinal)
+    stream_ldr_color(products[render_product])  # helper maps/copies before returning
 ```
 
 Keep shared code below the shell boundary: stage resolution, storage sync, USD metadata queries, camera math, and renderer setup. Keep UI state, input routing, and lifecycle in the chosen shell.
 
 ## Gotchas
 
-- Local import order: set `OVRTX_SKIP_USD_CHECK=1`, import `pxr`, then import ovrtx/ovui as the selected local skill describes.
+- Local import order: set `OVRTX_SKIP_USD_CHECK=1`, import `ovrtx`, call
+  `ovrtx.register_schema_paths()`, then create/populate OVStage. Keep `pxr`
+  behind the selected isolation boundary; do not let another OpenUSD consumer
+  initialize before schema registration.
 - Streaming import order can differ, especially when `pxr` is isolated in a worker.
 - `LdrColor` casing is required in all paths.
 - Browser media ports are negotiated by WebRTC; do not manually invent frontend media-port settings.
