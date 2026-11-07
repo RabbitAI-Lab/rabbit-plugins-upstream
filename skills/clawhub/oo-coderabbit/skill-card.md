@@ -1,42 +1,51 @@
-## Description: <br>
-CodeRabbit lets an agent read, create, update, and delete CodeRabbit organization data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use CodeRabbit through an OOMOL-connected account to retrieve review metrics, users, roles, and audit logs, and to manage roles and seats.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to manage CodeRabbit organization users, roles, seats, audit logs, and review metrics from an agent workflow. It supports read workflows and confirmed write or destructive actions for organization administration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Role, seat, and deletion actions can change organization access or billing-related state. <br>
-Mitigation: Review the exact target, payload, and expected effect before approving write or destructive actions. <br>
-Risk: The skill can read organization data through the connected CodeRabbit account. <br>
-Mitigation: Install and use it only with accounts and organizations where agent access to CodeRabbit data is intended. <br>
+## Use Case:
 
+Developers and CodeRabbit organization administrators use this skill to retrieve review metrics, users, roles, and audit logs, and to manage roles and seats through their connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-coderabbit) <br>
-- [CodeRabbit homepage](https://www.coderabbit.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The setup fallback directs the agent to run a remote installer without a separate approval check.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a reviewed oo CLI version yourself and require approval before any downloaded installer runs.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [CodeRabbit](https://www.coderabbit.ai)
+- [CodeRabbit API documentation](https://docs.coderabbit.ai/api-reference)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Shell commands, Guidance]
+
+**Output Format:** [Shell commands with JSON inputs and JSON action results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action results depend on the selected CodeRabbit connector action.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

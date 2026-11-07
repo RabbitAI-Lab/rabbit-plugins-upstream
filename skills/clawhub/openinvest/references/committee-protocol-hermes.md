@@ -74,7 +74,7 @@ complete before returning; separate calls actually lose the parallelism:
 ```
 delegate_task(tasks=[
   {
-    "goal": "<paste prompts.macro_strategist verbatim>\n\n# Current macro data:\n<paste macro_data verbatim>\n\nYour entire final reply must be, and be nothing but, the structured format the committee requires (SIGNAL/STRENGTH/etc. fields — see the format notes in the prompt above). Do not output a 'what I did / which tools I used' style summary — that is not what this task wants; hand over the structured result as-is."
+    "goal": "<paste prompts.macro_strategist verbatim>\n\n# Current macro data:\n<paste macro_data verbatim>\n\n## Current event context (sorted by time, latest first; may include supersedes markers):\n<paste event_brief verbatim — omit this section if it is an empty string>\n\nYour entire final reply must be, and be nothing but, the structured format the committee requires (SIGNAL/STRENGTH/etc. fields — see the format notes in the prompt above). Do not output a 'what I did / which tools I used' style summary — that is not what this task wants; hand over the structured result as-is."
   },
   {
     "goal": "<paste prompts.quant_round1 verbatim>\n\n# Market Regime (deterministically computed, must be followed):\n<paste regime_brief verbatim>\n\n# Market data:\n<paste market_data verbatim>\n\n(Same as above: the entire reply must be the structured format only; do not summarize what you did.)"
@@ -134,7 +134,7 @@ synthesize directly.
 
 After reading Macro + Quant R1/R2 + Risk R1/R2 + `portfolio_summary`, write the full
 CIO memo in the `prompts.cio` format, including the required fields (`VERDICT`/`CONFIDENCE`/
-`DOMINANT_VIEW`/`SUGGESTED_ALLOC_CNY`/`EXECUTION_PLAN`/`RISK_PLAN`/
+`DOMINANT_VIEW`/`SUGGESTED_ALLOC_<BASE>`/`EXECUTION_PLAN`/`RISK_PLAN`/
 `PERSONAL_NOTE`) + the sanity self-check (full rules in committee-protocol.md Stage 5 —
 this step is identical across the two paths: confidence ≥ 0.95 lowered to 0.85,
 alloc > 100k clamped, crash regime forces HOLD/TRIM, and if workers seriously diverge
@@ -143,7 +143,7 @@ give an honestly low confidence).
 ## Stage 6: Persist the transcript
 
 ```bash
-cat <<EOF | run.sh save_committee <SYMBOL> --provider hermes
+cat <<EOF | run.sh save_committee <SYMBOL> --provider hermes --model <model-name>
 === MACRO ===
 <macro role output>
 
@@ -164,9 +164,23 @@ cat <<EOF | run.sh save_committee <SYMBOL> --provider hermes
 EOF
 ```
 
+`--model` = the model the `delegate_task` subagents actually run on (e.g. `claude-haiku-5-5`) —
+the 4 roles are played by that model, not by Direct's configured LLM. It is written into the
+transcript's Input Health as `model`; the scorecard buckets by `hermes:<model>`, so swapping the
+subagent model never mixes old and new track records. Omitted = recorded as `unknown`.
+
 **`--provider hermes` MUST be included** — the persisted transcript will then be
 accurately tagged as run by Hermes (not hardcoded to claude); Dreaming's per-provider
 bucketed pattern mining and after-the-fact troubleshooting both depend on this field.
+
+**Over MCP instead of the shell**: if the roles were briefed from the MCP tool
+`prepare_committee`, hand in with `submit_committee(symbol, transcript, provider="hermes",
+model=<model-name>)` — same `=== … ===` transcript as the `transcript` string. Same archive,
+same Input Health. CLI and MCP hand-ins are interchangeable; never do both for one run (a second
+hand-in overwrites the archive and logs an intervention). Facts saved by `prepare_committee`
+are applied for 6 hours (`facts_source: prepare`); a later hand-in is still accepted and falls
+back to parsing facts from the transcript (`facts_source: transcript`) — this window applies to
+the CLI hand-in too.
 
 Lands in `memory/.committee/<date>/<asset>.md` with exactly the same schema as the
 other two paths; downstream tools such as `explain_decision` / `decisions` can read

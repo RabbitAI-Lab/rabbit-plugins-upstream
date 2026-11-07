@@ -1,43 +1,53 @@
-## Description: <br>
-Search Untappd beers, breweries, and venues; read user profiles, check-ins, wishlists, distinct beers, badges, friends, and your friend activity feed; and post check-ins, toasts, and comments to your own Untappd account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Untappd beers, breweries, and venues; read user profiles, check-ins, wishlists, distinct beers, badges, friends, and your friend activity feed; and post check-ins, toasts, and comments to your own Untappd account. Use when the user asks about beer ratings, what a beer or brewery is like on Untappd, someone's Untappd check-ins or wishlist, or wants to log/toast/comment on a beer.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and agents use this skill to answer Untappd questions about beers, breweries, venues, users, check-ins, wishlists, badges, friends, and venue menus. With explicit confirmation, it can also help post check-ins, toasts, and comments to the configured Untappd account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an Untappd username and password plus mobile-app client credentials obtained outside a normal OAuth flow. <br>
-Mitigation: Install only after reviewing the underlying MCP server's credential storage and token transmission behavior, and keep secrets out of logs. <br>
-Risk: Posting tools can affect the user's public Untappd account. <br>
-Mitigation: Use the built-in dry-run preview behavior and require confirm: true before making posting calls. <br>
-Risk: The local or remote cache may contain account activity data and incomplete history coverage. <br>
-Mitigation: Treat cache contents as account activity data, protect the cache location, and rely on freshness and coverage caveats when interpreting not-found results. <br>
+## Use Case:
 
+Untappd account holders use the skill to look up beers, breweries, venues, profiles, and activity, and to manage check-ins and related account actions through an agent.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/untappd-mcp) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/chrischall) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown or plain text guidance with tool names, configuration details, and account-action previews] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Write actions are confirm-gated and cache-backed queries report freshness and coverage caveats.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.0 (source: server release evidence) <br>
+Risk: The skill includes account actions involving deletion, wishlists, and friend management.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Consider whether these actions fit your needs, and review the requested action and target before confirming changes.
+
+Risk: The security review had partial coverage because three local references could not be resolved.
+
+Mitigation: Treat the benign verdict as incomplete until the unresolved references are reviewed and security coverage is rerun.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/chrischall/skills/untappd-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Natural-language responses with concise lists where useful]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May summarize lookup results or confirmed account actions.]
+
+## Skill Version(s):
+
+2.7.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

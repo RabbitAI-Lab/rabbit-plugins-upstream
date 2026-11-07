@@ -1,38 +1,54 @@
-## Description: <br>
-Create or revise document, PDF, web, or review images with the requested format, sharp raster output, and artifact validation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create or revise document, PDF, web, or review images with the requested format, sharp raster output, and artifact validation.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
 
-## Use Case: <br>
-Developers and documentation maintainers use this skill to create, revise, and validate images for Markdown, PDF, DOCX, web pages, merge requests, and release artifacts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated or revised images and downstream documents may be incorrect, stale, or unsuitable for the requested format. <br>
-Mitigation: Review generated images and rebuilt artifacts before accepting changes, and run the generated image checker when *.image.genai prompt files are present. <br>
+## Use Case:
 
+Developers and engineers use the skill to create or revise images for documents, web content, reviews, and release artifacts while preserving requested formats and validating the final output.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-image-generation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands] <br>
-**Output Format:** [Markdown guidance with inline file paths and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update image prompt files and generated SVG, PNG, and WebP assets when used by an agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.75.3 (source: server release evidence) <br>
+Risk: The checker verifies image presence and timestamps but does not establish visual quality or actual file formats.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect the generated images and validate their MIME format, dimensions, and DPI against the intended use.
+
+Risk: Image-generation tools and downstream build pipelines are outside the supplied skill and require separate assessment.
+
+Mitigation: Assess the selected image-generation tool and build pipeline independently before relying on their outputs.
+
+## Reference(s):
+
+- [Image Generation skill release](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-image-generation)
+- [Publisher profile: xrowgmbh](https://clawhub.ai/user/xrowgmbh)
+
+## Skill Output:
+
+**Output Type(s):** [Image files, Guidance, Shell commands]
+
+**Output Format:** [PNG, SVG, and WebP image files; Markdown guidance and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Preserves requested format and source resolution; image dimensions and DPI depend on the requested use.]
+
+## Skill Version(s):
+
+1.130.1 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,60 @@
-## Description: <br>
-Operate Segment through an OOMOL-connected account to send analytics events and update identity or group associations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Segment through an OOMOL-connected account to send alias, batch, group, identify, page, screen, and track events.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to run Segment connector actions through an OOMOL-connected account, including analytics event calls and identity or group association updates. Because the available actions can write Segment data, users should confirm exact payloads before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send Segment analytics and identity data even though its summary emphasizes searching and reading. <br>
-Mitigation: Review before installation and require explicit confirmation of the exact payload before running any Segment action. <br>
-Risk: The skill is not suitable for read-only Segment lookup, search, or reporting tasks as written. <br>
-Mitigation: Use it only when the user intends to send events or update Segment identity or group associations. <br>
+## Use Case:
 
+Developers and product teams use this skill to send Segment identity, group, page, screen, and event data through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-segment) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Segment](https://segment.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return connector responses that include data and a meta.executionId value.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The release security assessment says helper software can execute unverified online code and install persistent instructions in other agent applications.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation separately; set OO_SKILLS_SYNC_DISABLED=1 before invoking oo if you do not want skill synchronization, and review any installed instructions.
+
+Risk: Segment write actions change account data.
+
+Mitigation: Fetch the live action schema, review the exact payload and effect, and obtain user confirmation before running each write action.
+
+Risk: Segment payloads pass through OOMOL.
+
+Mitigation: Understand and approve this data path before sending Segment payloads.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/oomol/skills/oo-segment)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [Segment HTTP API documentation](https://www.twilio.com/docs/segment/connections/sources/catalog/libraries/server/http-api)
+- [oo CLI command reference: environment variables](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md#environment-variables)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetch the live action schema before building payloads; require user confirmation before write actions.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

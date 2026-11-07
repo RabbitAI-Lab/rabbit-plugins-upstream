@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cargo-cdk",
   "slug": "cargo-cdk",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1783561335941,
-  "contentHash": "8496c9f2dcd15ec96cdcd43665c8e55a37c0f9b3e9c650191b66c9409f5d0a91",
-  "fetchedAt": "2026-07-26T18:17:53.759Z"
+  "version": "2.0.1",
+  "updatedAt": 1793821745023,
+  "contentHash": "c2d37ee914d2a14f7481c17aeeb85d41c83c78ef3cc390b07cf77e3c86d4c91d",
+  "fetchedAt": "2026-11-07T14:20:48.544Z"
 }

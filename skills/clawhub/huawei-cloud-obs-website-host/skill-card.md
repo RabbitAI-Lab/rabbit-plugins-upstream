@@ -1,47 +1,66 @@
-## Description: <br>
-Configure Huawei Cloud OBS static website hosting with Python SDK and a custom domain. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Configure Huawei Cloud OBS static website hosting with Python SDK and a custom domain. Use when the user needs to enable or repair OBS website hosting, set index or error pages, expose an existing bucket for public website access through a custom domain, or connect that domain through Huawei Cloud DNS when Huawei manages the zone. Triggers include OBS static website hosting, website endpoint, index page, error page, public-read bucket website access, custom domain CNAME, Huawei Cloud DNS, setBucketWebsite. 中文触发词包括：OBS 静态网站托管、网站托管、自定义域名解析。
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud engineers use this skill to enable, repair, and verify static website hosting for an existing Huawei Cloud OBS bucket. It guides custom-domain registration, optional Huawei Cloud DNS CNAME setup, IAM remediation, and endpoint verification. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change Huawei Cloud OBS website settings and DNS records. <br>
-Mitigation: Use least-privilege Huawei Cloud credentials scoped to the intended bucket and DNS zone where possible. <br>
-Risk: The artifact includes a remote hcloud CLI installer path. <br>
-Mitigation: Prefer a signed or package-manager hcloud installation, or verify Huawei's installer before running it. <br>
-Risk: Huawei Cloud AK/SK credentials or tokens could be exposed through chat, logs, or copied configuration output. <br>
-Mitigation: Report only credential presence or absence, and never print or paste AK/SK/token values. <br>
+## Use Case:
 
+Cloud developers and site operators use this skill to configure an existing Huawei Cloud OBS bucket for static website hosting, bind a custom domain, optionally update Huawei Cloud DNS, and verify reachability or troubleshoot common 403 and 404 responses.
 
-## Reference(s): <br>
-- [CLI Installation and Configuration Guide](references/cli-installation-guide.md) <br>
-- [Huawei Cloud DNS Configuration for OBS Static Website](references/hcloud-dns-obs-website.md) <br>
-- [IAM Policy - Huawei Cloud OBS Website Host](references/iam-policies.md) <br>
-- [OBS Python SDK Website Configuration Notes](references/obs-python-sdk-website.md) <br>
-- [Validation Rules](references/verification-method.md) <br>
-- [Huawei Cloud Domain Registration Service](https://www.huaweicloud.com/product/domain.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured verification summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include JSON verification output when the bundled verifier is run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The security review says the suggested permissions may be too broad, and bucket or DNS writes can affect live traffic.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Scope permissions to the intended bucket, grant DNS access only when requested, and confirm the bucket, domain, and DNS zone before making changes.
+
+Risk: Cloud credentials or certificate private keys could be exposed through recorded setup commands.
+
+Mitigation: Keep access keys and private keys out of recorded commands; use protected credential sources and certificate IDs where possible.
+
+Risk: Website setup can make bucket content publicly reachable, while DNS changes can redirect a live hostname.
+
+Mitigation: Publish only intended website files, confirm the target bucket and hostname before writes, and verify the resulting site and DNS behavior.
+
+Risk: Static review cannot establish the live account's permissions or the safety of downloaded third-party code.
+
+Mitigation: Check the effective permissions and inspect and verify downloaded installers before running them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-obs-website-host)
+- [OBS Python SDK website configuration notes](references/obs-python-sdk-website.md)
+- [Huawei Cloud DNS configuration for OBS static websites](references/hcloud-dns-obs-website.md)
+- [Huawei Cloud OBS website host IAM policy](references/iam-policies.md)
+- [Website endpoint validation rules](references/verification-method.md)
+- [CLI installation and configuration guide](references/cli-installation-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Configuration, Guidance, Shell commands]
+
+**Output Format:** [Markdown report with verification results, remediation guidance, and shell commands where needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Configures only the user-specified bucket; DNS records are changed only when requested. Does not upload or modify bucket objects.]
+
+## Skill Version(s):
+
+1.0.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

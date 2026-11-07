@@ -1,43 +1,60 @@
-## Description: <br>
-This skill helps agents use OOMOL's Check connector to inspect schemas and run supported Check actions for reading tax agency data and validating US addresses. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the connected Check account to search and read data, including tax agencies and US address validation.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators working with Check use this skill to retrieve or list tax agencies and validate US addresses through an OOMOL-connected Check account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL's oo CLI and an OOMOL-connected Check account. <br>
-Mitigation: Install only if OOMOL's CLI is trusted, review install commands before running them, and connect Check intentionally. <br>
-Risk: Address validation may send address data through OOMOL to Check. <br>
-Mitigation: Use address validation only when appropriate for the user's Check workflow and avoid sending unnecessary address data. <br>
+## Use Case:
 
+External users and developers use this skill to query Check through their connected OOMOL account, retrieve tax-agency data, and validate US addresses.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-check) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Check homepage](https://www.checkhq.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing payloads; command responses include data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Initial CLI setup can execute a downloaded installer whose exact local effects were not inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve the CLI installation separately before automatic setup.
+
+Risk: OOMOL mediates Check requests and receives the submitted inputs.
+
+Mitigation: Send only information appropriate to share with OOMOL for this integration.
+
+Risk: The CLI's skill synchronization can make broader persistent changes to agent skills.
+
+Mitigation: Review or disable broader synchronization with OO_SKILLS_SYNC_DISABLED when only the Check integration is needed.
+
+## Reference(s):
+
+- [OO CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+- [OO CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Check homepage](https://www.checkhq.com)
+- [Check API quickstart](https://docs.checkhq.com/docs/quickstart)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON request payloads and action responses, with Markdown guidance and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Inputs follow the selected action's schema.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

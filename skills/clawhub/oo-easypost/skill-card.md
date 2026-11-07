@@ -1,43 +1,55 @@
-## Description: <br>
-Operates EasyPost through an OOMOL-connected account to create and retrieve shipping addresses, shipment trackers, carrier types, and tracker lists. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for any EasyPost request, including reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to manage EasyPost shipping resources through the OOMOL oo CLI. It supports reading EasyPost account data and creating immutable shipping addresses or standalone shipment trackers after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Address and tracker creation change EasyPost account state. <br>
-Mitigation: Inspect the live connector schema before constructing payloads and confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: Using the skill requires EasyPost access through an OOMOL-connected account. <br>
-Mitigation: Only install or connect the oo CLI when the user intends to manage EasyPost through OOMOL and trusts that connected-account access path. <br>
+## Use Case:
 
+People managing shipping workflows use this skill to retrieve EasyPost addresses and trackers, list carrier types and trackers, and create addresses or standalone trackers through their connected account.
 
-## Reference(s): <br>
-- [ClawHub EasyPost skill page](https://clawhub.ai/oomol/skills/oo-easypost) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [EasyPost homepage](https://www.easypost.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before actions; write actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup can execute unchecked downloads and introduce broader agent changes without clear approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a reviewed CLI distribution, require approval for local installation, and decide whether to disable automatic skill synchronization.
+
+Risk: Connecting EasyPost entrusts OOMOL with service credentials and shipping information.
+
+Mitigation: Review the connection before use and limit the shipping information shared to what the requested action requires.
+
+## Reference(s):
+
+- [EasyPost API documentation](https://docs.easypost.com/docs/authentication)
+- [EasyPost](https://www.easypost.com/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API data, JSON, Guidance]
+
+**Output Format:** [Structured JSON data with explanatory text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

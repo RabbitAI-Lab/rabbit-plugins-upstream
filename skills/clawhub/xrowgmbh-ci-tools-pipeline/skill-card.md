@@ -1,41 +1,60 @@
-## Description: <br>
-Build and maintain GitLab CI/CD pipelines with the CI Tools Components Catalog at ci-tools.xrow.de. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build and maintain GitLab CI/CD pipelines with the CI Tools Components Catalog at ci-tools.xrow.de. Use when creating or fixing .gitlab-ci.yml files, choosing CI Tools components, validating component inputs, or designing continuous delivery pipelines for applications, Helm charts, containers, packages, documentation, infrastructure, and GitOps.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
 
-## Use Case: <br>
-Developers and engineers use this skill to create, repair, and validate GitLab CI/CD pipelines, select CI Tools catalog components, and design delivery flows for applications, charts, containers, packages, documentation, infrastructure, and GitOps projects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may inspect CI configuration, use a GitLab token, fetch live catalog documentation, lint pipelines, push merge request branches, or trigger CI. <br>
-Mitigation: Use a GitLab token scoped only to the target project and review proposed pipeline changes before execution. <br>
+## Use Case:
 
+Developers and platform engineers use this skill to select CI Tools catalog components, create or repair GitLab CI/CD configuration, and plan validation and delivery workflows for their repositories.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-ci-tools-pipeline) <br>
-- [CI Tools Components Catalog](https://ci-tools.xrow.de/) <br>
-- [CI Tools Components Index](https://ci-tools.xrow.de/Components/) <br>
-- [CI Tools GitLab Source](https://gitlab.com/xrow-public/ci-tools) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with YAML and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require glab, curl, jq, and a GitLab token scoped appropriately for the target project.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.75.3 (source: server-resolved release metadata) <br>
+Risk: A GitLab token with broad permissions could expose more project access than pipeline work requires.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a project-scoped GitLab token.
+
+Risk: Generated pipeline changes can affect validation, registries, clusters, or deployment actions.
+
+Mitigation: Review generated changes before pushing or running them, and ensure deployment actions follow the project's existing permissions and gates.
+
+Risk: External CI components can change or include code outside the supplied project files reviewed by the scanners.
+
+Mitigation: Pin external components to reviewed immutable revisions where practical.
+
+## Reference(s):
+
+- [CI Tools Catalog](https://ci-tools.xrow.de/)
+- [CI Tools Components Index](https://ci-tools.xrow.de/Components/)
+- [CI Tools Source Project](https://gitlab.com/xrow-public/ci-tools)
+- [ClawHub Skill Release](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-ci-tools-pipeline)
+
+## Skill Output:
+
+**Output Type(s):** [Configuration, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with GitLab CI YAML snippets and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Adapted to the repository layout, pipeline needs, and selected component inputs.]
+
+## Skill Version(s):
+
+1.130.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

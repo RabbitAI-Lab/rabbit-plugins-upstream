@@ -1,44 +1,55 @@
-## Description: <br>
-Analyzes fixed aquarium camera video to detect fish flashing and scraping behavior, count abnormal friction events, and produce ectoparasite risk warnings without diagnosing a specific disease. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes aquarium camera footage to count fish flashing and scraping behavior and flag patterns that may warrant an ectoparasite risk review.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze aquarium, quarantine tank, or aquaculture video for flashing and scraping events, warning levels, and structured follow-up guidance. It is intended for behavior-based risk screening and report retrieval, not veterinary diagnosis or treatment selection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends aquarium videos or camera URLs to a cloud service and can query cloud report history. <br>
-Mitigation: Use only media and URLs that are acceptable for cloud processing, and review cloud upload, retention, and account-linking expectations before installation. <br>
-Risk: The skill silently creates or reuses local identity state and stores authentication tokens in workspace data. <br>
-Mitigation: Install and run it only in workspaces where local identity and token storage are acceptable, and review stored workspace data as part of operational controls. <br>
-Risk: Behavioral signals can be mistaken for parasitic disease or treatment advice. <br>
-Mitigation: Treat outputs as behavior-based risk warnings only; require close observation and professional veterinary microscopy for diagnosis and treatment decisions. <br>
+## Use Case:
 
+Aquarium keepers, aquarium operators, and aquaculture teams use fixed-camera footage to review fish flashing and scraping frequency and retrieve warning reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fish-flashing-scraping-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown and JSON structured reports with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save analysis output to a file and can return cloud report history when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Faulty account isolation and upload controls could expose private footage, reports, or credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Wait for fixes; until then, evaluate only in an isolated single-user workspace with test videos and dedicated credentials.
+
+Risk: Service charges and provider retention or deletion practices are not verified by the client.
+
+Mitigation: Confirm charges and retention and deletion practices before sharing footage; avoid private footage pending the recommended fixes.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub release](https://clawhub.ai/18072937735/skills/smyx-fish-flashing-scraping-detection-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured analysis reports and Markdown history summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports include behavior counts, warning levels, suggested actions, and report links when available.]
+
+## Skill Version(s):
+
+1.0.16 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

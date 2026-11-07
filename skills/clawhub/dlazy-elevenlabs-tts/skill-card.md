@@ -1,45 +1,58 @@
-## Description: <br>
-Generates ElevenLabs eleven_v3 text-to-speech through the dLazy CLI with curated multilingual voices and stability, similarity, and style controls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates multilingual ElevenLabs eleven_v3 speech with selectable voices and controls for stability, similarity, and style.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and content creators use this skill to ask an agent to run dLazy's ElevenLabs text-to-speech command, select a supported voice, and receive a generated output URL or asynchronous task result. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompt text and selected parameters are sent to dLazy's hosted API for generation. <br>
-Mitigation: Avoid sending sensitive or regulated content unless the user is comfortable with dLazy handling it. <br>
-Risk: The default login flow stores a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use npx @dlazy/cli@1.2.3 or the DLAZY_API_KEY environment variable when less local persistence is preferred. <br>
-Risk: Generated files are hosted by dLazy and returned as external URLs. <br>
-Mitigation: Review sharing, retention, and access expectations before using generated outputs in sensitive workflows. <br>
+## Use Case:
 
+Creators and developers use the skill to turn text into multilingual speech for dubbing, audiobooks, and character dialogue, with controls for voice selection, stability, similarity, and style.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-tts) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; results may include hosted file URLs or asynchronous task IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: release metadata and SKILL.md frontmatter) <br>
+Risk: Submitted text and supplied media are sent to dLazy for cloud processing, and generation may consume account credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only content you are comfortable sending to dLazy, and consider credit use before requesting generation.
+
+Risk: The dLazy API key is stored in the local CLI configuration.
+
+Mitigation: Protect the stored key and rotate or revoke it if exposed.
+
+Risk: The pinned CLI implementation was not audited as part of this release review.
+
+Mitigation: Review the pinned CLI before installing it.
+
+## Reference(s):
+
+- [dLazy](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Audio files]
+
+**Output Format:** [Generated audio asset, returned as a URL or saved to a local path]
+
+**Output Parameters:** [1D (text to speech)]
+
+**Other Properties Related to Output:** [Voice selection and stability, similarity, and style controls; generation can return asynchronously.]
+
+## Skill Version(s):
+
+1.3.38 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

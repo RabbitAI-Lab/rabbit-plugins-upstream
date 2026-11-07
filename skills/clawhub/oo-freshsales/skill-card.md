@@ -1,44 +1,55 @@
-## Description: <br>
-Freshsales helps agents operate Freshsales CRM contacts through the OOMOL connector and oo CLI, including reading, creating, updating, and deleting contact records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Freshsales through a connected account to read and manage contacts.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, operators, and agents working with Freshsales use this skill to inspect connector schemas and run Freshsales contact workflows through an OOMOL-connected account. It supports contact lookup, listing, creation, updates, deletion, and contact filter discovery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Approved write or delete actions can modify or remove Freshsales CRM contact data. <br>
-Mitigation: Confirm the exact payload, target contact, and expected effect with the user before running write or destructive actions. <br>
-Risk: Requests built from stale assumptions can fail or affect unintended fields. <br>
-Mitigation: Inspect the live Freshsales action schema immediately before constructing each connector payload. <br>
+## Use Case:
 
+Sales teams use this skill to read Freshsales contacts and to create, update, or delete contacts through their connected account. The skill requires approval for changes and deletions.
 
-## Reference(s): <br>
-- [Freshsales ClawHub Listing](https://clawhub.ai/oomol/skills/oo-freshsales) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Freshsales Homepage](https://www.freshworks.com/crm/sales/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live Freshsales connector schemas to shape command payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The first-time setup instructions run a downloaded CLI installer without a separate approval step, and the installer and CLI were not verified in the supplied security review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve the CLI installation separately, including any changes it makes to other installed agent skills.
+
+Risk: Connecting Freshsales authorizes OOMOL to mediate access to CRM data, while create, update, and delete actions can change records.
+
+Mitigation: Review the requested access and keep the skill's user approval requirement for every write or deletion.
+
+## Reference(s):
+
+- [Freshsales CRM](https://www.freshworks.com/crm/sales/)
+- [Freshworks CRM API documentation](https://developers.freshworks.com/crm/api/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [oo CLI commands with JSON payloads and connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Changes and deletions require user approval.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

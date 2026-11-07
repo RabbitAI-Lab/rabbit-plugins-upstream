@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Plunk"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["plunk"]
   icon: "https://static.oomol.com/logo/third-party/plunk.svg"
 ---
@@ -42,7 +42,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `get_contact` — Get a single Plunk contact by ID.
 - `list_contacts` — List Plunk contacts with cursor pagination.
 - `send_email` — Send a transactional email through Plunk. [write]
-- `track_event` — Track an event for a Plunk contact.
+- `track_event` — Track an event for a Plunk contact. [write]
 - `update_contact` — Update a Plunk contact by ID. [write]
 - `verify_email` — Verify an email address with Plunk.
 
@@ -75,11 +75,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Plunk is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=plunk
+  https://console.oomol.com/connections/plunk
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Plunk homepage: https://www.useplunk.com
+- API documentation: https://docs.useplunk.com/

@@ -1,44 +1,55 @@
-## Description: <br>
-Tushare (tushare.pro) helps agents search and read Tushare market data through OOMOL's oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Tushare through an OOMOL-connected account to search and read market data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and analysts use this skill to query Tushare A-share stock basics, daily quotes, valuation indicators, adjustment factors, trade calendars, and generic Tushare data APIs through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on an OOMOL account, connected Tushare credentials, and possible billing availability before data requests can complete. <br>
-Mitigation: Confirm account sign-in, Tushare connection status, and billing expectations before relying on the skill for data access. <br>
-Risk: First-time setup may require installing the oo CLI from an external installer. <br>
-Mitigation: Review the oo CLI installer and install guide before running setup commands. <br>
+## Use Case:
 
+Developers and analysts use this skill to search Tushare and retrieve market data, including A-share quotes, stock information, trading calendars, and valuation indicators.
 
-## Reference(s): <br>
-- [Tushare homepage](https://tushare.pro) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-tushare) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces read-focused connector guidance and normalized table-oriented data responses from Tushare actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter) <br>
+Risk: The suggested remote CLI installers and server implementation have not been independently verified; setup may execute downloaded code and affect agent configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup before installing, use a separately reviewed CLI installation, and control automatic skill synchronization.
+
+Risk: Connecting Tushare shares the API key and queries with OOMOL and may incur charges.
+
+Mitigation: Review the account and service terms before connecting, limit queries to the intended use, and monitor usage and costs.
+
+## Reference(s):
+
+- [Tushare](https://tushare.pro)
+- [Tushare API documentation](https://tushare.pro/document/1?doc_id=130)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Analysis]
+
+**Output Format:** [Normalized JSON data with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the selected Tushare action and the connected account's access.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

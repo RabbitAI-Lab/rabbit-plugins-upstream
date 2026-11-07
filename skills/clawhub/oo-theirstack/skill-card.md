@@ -1,45 +1,56 @@
-## Description: <br>
-TheirStack (theirstack.com) helps agents search and read TheirStack data through the OOMOL-connected `oo` CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read TheirStack company, job, and technographic data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to query TheirStack through an OOMOL-connected account for credit balance checks, company search, job search, and company technographics. It helps agents inspect live connector schemas and run read-only TheirStack actions with structured JSON payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use the connected TheirStack account for broad search and credit-balance read requests. <br>
-Mitigation: Review the requested connector action and payload before execution, and re-check permissions if future connector actions are marked write or destructive. <br>
-Risk: Connector schemas may change over time. <br>
-Mitigation: Inspect the live TheirStack connector schema before constructing each payload. <br>
-Risk: Authentication, connection, credential, or billing failures can block execution. <br>
-Mitigation: Use the documented first-time setup and billing guidance only after a command fails with the matching error. <br>
+## Use Case:
 
+Analysts and developers use the skill to search TheirStack company and job data, inspect technographics, and check the connected team's credit balance.
 
-## Reference(s): <br>
-- [TheirStack homepage](https://theirstack.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [TheirStack skill on ClawHub](https://clawhub.ai/oomol/skills/oo-theirstack) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only connector actions use live schema inspection before execution; OOMOL handles TheirStack credentials server-side.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Setup executes downloaded CLI code, and broader changes to other agent skills are unexplained.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the CLI separately before allowing automated use; consult the command reference about OO_SKILLS_SYNC_DISABLED.
+
+Risk: Queries pass through OOMOL, while remote installers and hosted credential handling have not been verified.
+
+Mitigation: Connect only the intended TheirStack account and review the CLI separately before use.
+
+## Reference(s):
+
+- [TheirStack API documentation](https://theirstack.com/en/docs/api-reference)
+- [TheirStack](https://theirstack.com)
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API data, JSON, Shell commands, Configuration guidance]
+
+**Output Format:** [JSON results with shell command examples and Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returned data depends on the selected TheirStack action and query.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

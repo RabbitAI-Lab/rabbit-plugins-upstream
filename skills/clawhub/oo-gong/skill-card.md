@@ -1,45 +1,53 @@
-## Description: <br>
-Gong support for searching and reading Gong data through OOMOL's oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gong (gong.io). Use this skill for ANY Gong request — searching and reading data. Whenever a task involves Gong, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and teams with OOMOL-connected Gong accounts use this skill to inspect live connector schemas and read Gong calls, transcripts, users, and call outcomes via the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Gong queries and returned call or transcript data are routed through OOMOL's CLI-backed connector service. <br>
-Mitigation: Install and use the skill only if OOMOL is trusted as a connector provider for the Gong account and the user is comfortable with that routing. <br>
-Risk: The fallback CLI installation path downloads and runs a remote installer. <br>
-Mitigation: Review the remote oo CLI installer source before using the fallback install command. <br>
-Risk: Future or schema-discovered actions tagged write or destructive could change, remove, or overwrite Gong data. <br>
-Mitigation: Fetch the authoritative action schema before constructing payloads and get explicit user confirmation for any write or destructive action. <br>
+## Use Case:
 
+Gong-connected users use this skill to search and read company call records, transcripts, users, and call outcomes through the Gong connector.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gong) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Gong homepage](https://www.gong.io/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-oriented Gong connector actions; live schemas are fetched before payload construction.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Fallback setup directs the agent to execute an unverified remote installer without separate user approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer first; install a verified CLI release yourself or require explicit approval before agent installation. Confirm that your organization permits OOMOL to access Gong data.
+
+## Reference(s):
+
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [Connect Gong in OOMOL](https://console.oomol.com/connections/gong)
+- [Gong](https://www.gong.io/)
+- [Gong API access documentation](https://help.gong.io/docs/receive-access-to-the-api)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Gong data]
+
+**Output Format:** [JSON responses from Gong connector actions, with textual setup and usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented call, transcript, user, and call-outcome data; results depend on the connected Gong account and requested action.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,55 @@
-## Description: <br>
-Autotask lets an agent search and read Autotask Companies, Contacts, Tickets, entity metadata, and zone information through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Autotask (datto.com). Use this skill for ANY Autotask request — searching and reading data. Whenever a task involves Autotask, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and support teams use this skill to let an agent retrieve and query Autotask PSA company, contact, ticket, metadata, and zone information through OOMOL-connected credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Autotask Companies, Contacts, and Tickets through the user's OOMOL-connected account. <br>
-Mitigation: Install it only when that access is intended, and review requested record IDs, filters, selected fields, and limits before execution. <br>
-Risk: First-time setup may require installing or authenticating the OOMOL CLI when commands fail because the CLI or connection is missing. <br>
-Mitigation: Review the OOMOL CLI install and connection steps before setup, and avoid running authentication or connection commands proactively. <br>
+## Use Case:
 
+Autotask users with an OOMOL-connected account use this skill to inspect entity metadata and retrieve or query Companies, Contacts, and Tickets.
 
-## Reference(s): <br>
-- [ClawHub Autotask listing](https://clawhub.ai/oomol/skills/oo-autotask) <br>
-- [Autotask PSA](https://www.datto.com/products/autotask-psa/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads; runtime responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Autotask actions are described; credentials are handled through the user's OOMOL-connected account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: Setup can execute remote code that has not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before installing and use a separately verified oo CLI release.
+
+Risk: Startup may write to agent skill directories, and the connector accesses the connected Autotask account through OOMOL.
+
+Mitigation: Set OO_SKILLS_SYNC_DISABLED=1 when startup writes are not wanted, and connect only the Autotask account and permissions needed.
+
+## Reference(s):
+
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+- [Autotask REST API authentication documentation](https://www.autotask.net/help/developerhelp/Content/APIs/REST/General_Topics/REST_Security_Auth.htm)
+- [Autotask PSA](https://www.datto.com/products/autotask-psa/)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON data and text guidance with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-focused queries for Companies, Contacts, Tickets, and Autotask metadata]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

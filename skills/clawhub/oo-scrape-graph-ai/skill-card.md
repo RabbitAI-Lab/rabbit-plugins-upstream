@@ -1,43 +1,56 @@
-## Description: <br>
-ScrapeGraphAI helps agents search, scrape, and extract structured data through an OOMOL-connected ScrapeGraphAI account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ScrapeGraphAI (scrapegraphai.com). Use this skill for ANY ScrapeGraphAI request — searching and reading data. Whenever a task involves ScrapeGraphAI, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run ScrapeGraphAI extraction, scraping, search, quota, and history actions through the oo CLI after connecting their OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Searches, scraping targets, prompts, and extraction inputs may be sent to the connector service. <br>
-Mitigation: Avoid submitting sensitive private pages or data unless that transfer is intended and authorized. <br>
-Risk: The skill depends on a signed-in OOMOL account, a connected ScrapeGraphAI app, and available billing credits. <br>
-Mitigation: Run setup or billing steps only after the corresponding auth, connection, or credit error appears. <br>
+## Use Case:
 
+Developers and agents use this skill to search the web and fetch or extract structured information with ScrapeGraphAI through an already connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub ScrapeGraphAI Skill](https://clawhub.ai/oomol/skills/oo-scrape-graph-ai) <br>
-- [ScrapeGraphAI Homepage](https://scrapegraphai.com) <br>
-- [oo CLI Repository](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector command responses are expected as JSON containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and SKILL.md metadata) <br>
+Risk: The setup instructions run an unverified remote installer and may also synchronize other agent skills at startup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the CLI installer and any additional skills it installs before approving installation; use OO_SKILLS_SYNC_DISABLED=1 to disable startup skill synchronization when appropriate.
+
+Risk: Content sent through the integration may be processed by OOMOL and ScrapeGraphAI.
+
+Mitigation: Submit only content you intend both services to process.
+
+## Reference(s):
+
+- [ScrapeGraphAI API documentation](https://docs.scrapegraphai.com/api-reference/introduction)
+- [ScrapeGraphAI](https://scrapegraphai.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Action results in JSON or requested content formats, with Markdown guidance and inline shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returned content and structure depend on the selected ScrapeGraphAI action.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

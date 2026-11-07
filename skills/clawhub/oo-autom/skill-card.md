@@ -1,43 +1,56 @@
-## Description: <br>
-Autom (autom.dev). Use this skill for ANY Autom request - searching and reading data. Whenever a task involves Autom, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Autom to search and read Autom data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to run read-only Autom lookup and usage actions through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The get_usage action can return Autom usage, quota, rate limit, account, and API key metadata. <br>
-Mitigation: Run it only for the intended OOMOL-connected Autom account and avoid sharing outputs that contain account or API key metadata. <br>
-Risk: Installing the oo CLI or starting OOMOL login connects local agent activity to an OOMOL account. <br>
-Mitigation: Use installer, login, and Autom connection steps only when the user intentionally wants to set up OOMOL and Autom access. <br>
+## Use Case:
 
+Developers and agents use this skill to search Autom's supported Google countries, languages, and locations, and inspect account usage through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Autom homepage](https://www.autom.dev) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-autom) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance, Configuration instructions] <br>
-**Output Format:** [Markdown with inline bash code blocks and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live Autom connector schema before sending action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Setup executes unverified remote code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified oo CLI release, review the installation, and explicitly approve local changes.
+
+Risk: The dependency may make persistent changes to other agents' skills.
+
+Mitigation: Set OO_SKILLS_SYNC_DISABLED=1 before invoking oo when only Autom access is needed.
+
+## Reference(s):
+
+- [Autom release on ClawHub](https://clawhub.ai/oomol/skills/oo-autom)
+- [Autom API documentation](https://docs.autom.dev/usage)
+- [Autom homepage](https://www.autom.dev)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown instructions with shell commands and JSON payloads and responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Autom action inputs and outputs depend on the action schema.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

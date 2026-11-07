@@ -1,44 +1,59 @@
-## Description: <br>
-Discover Snowflake Cortex, Snowpark, notebook, Streamlit, MCP, and AI-observability assets from the operator's environment, emit canonical agent-bom inventory JSON, and scan it without giving agent-bom long-lived Snowflake credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover Snowflake Cortex, Snowpark, notebook, Streamlit, MCP, and AI-observability assets from the operator's environment, emit canonical agent-bom inventory JSON, and scan it without giving agent-bom long-lived Snowflake credentials.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers and platform engineers use this skill to inventory Snowflake AI and Cortex infrastructure into schema-valid agent-bom JSON, then optionally scan that inventory for findings when requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent may use the operator's existing Snowflake authentication context to query inventory. <br>
-Mitigation: Use a least-privilege, read-only Snowflake role and only operator-approved accounts, warehouses, databases, and schemas. <br>
-Risk: Snowflake passwords, private keys, passphrases, or OAuth tokens could be exposed if pasted into chat. <br>
-Mitigation: Use SSO, OAuth, or key-pair authentication from the local environment and do not paste credential material into chat. <br>
-Risk: Generated inventory files may contain sensitive infrastructure details. <br>
-Mitigation: Write inventory only to an operator-selected path and review the local JSON before sharing or scanning it. <br>
+## Use Case:
 
+Developers and platform engineers use this skill to inventory Snowflake Cortex and related AI and workload assets as canonical agent-bom JSON, then optionally scan the saved inventory when requested.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-discover-snowflake) <br>
-- [agent-bom project homepage](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON file outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operator-selected local inventory JSON and optional agent-bom findings JSON; credential-like values are redacted before persistence or export.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: release metadata and skill frontmatter) <br>
+Risk: The documented inventory workflow depends on an adapter that is missing from this package.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain and review the missing adapter from a trusted, fixed release before running it.
+
+Risk: Snowflake inventory output may include sensitive information.
+
+Mitigation: Use a narrowly scoped read-only Snowflake role, write to a protected operator-selected path, and check the inventory for sensitive information before sharing it.
+
+Risk: Credential protection and redaction are documented promises that could not be verified from this package.
+
+Mitigation: Use operator-managed authentication and review the generated inventory for credential material before sharing it.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/msaad00/skills/agent-bom-discover-snowflake)
+- [Project homepage (declared metadata)](https://github.com/koda-ai-studio/agent-bom)
+- [agent-bom on PyPI](https://pypi.org/project/agent-bom/)
+
+## Skill Output:
+
+**Output Type(s):** [Files, JSON, Shell commands, Guidance]
+
+**Output Format:** [Canonical inventory JSON; optional scan findings JSON; Markdown instructions with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Inventory is written to an operator-selected path; scanning is optional and should occur only when requested.]
+
+## Skill Version(s):
+
+0.113.2 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
