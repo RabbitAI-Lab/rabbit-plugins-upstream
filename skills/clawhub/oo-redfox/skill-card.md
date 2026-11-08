@@ -1,46 +1,52 @@
-## Description: <br>
-RedFoxHub helps an agent search and read RedFoxHub data through the OOMOL redfox connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+RedFoxHub (redfox.hk). Use this skill for ANY RedFoxHub request — reading, creating, and updating data. Whenever a task involves RedFoxHub, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to search and retrieve Douyin, WeChat Official Accounts, TikTok, and Xiaohongshu account, work, article, and AI-creation data through an OOMOL-connected RedFoxHub account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use the user's OOMOL-connected RedFoxHub account for lookups. <br>
-Mitigation: Install and enable it only when that account-scoped RedFoxHub access is intended. <br>
-Risk: First-time setup may require installing or authenticating the OOMOL oo CLI. <br>
-Mitigation: Run installer, login, or connection steps only after relevant command failures and only when the OOMOL CLI installation path is trusted. <br>
-Risk: Future connector actions could be marked write or destructive. <br>
-Mitigation: Fetch the live action schema, review the payload and effect, and require explicit user confirmation before any write or destructive action. <br>
+## Use Case:
 
+Developers and analysts use this skill to search and retrieve social and media content, inspect account and usage information, and submit supported transcription, AI search, comment collection, or media generation tasks through RedFoxHub. Available actions depend on the connected account and service.
 
-## Reference(s): <br>
-- [ClawHub RedFoxHub skill page](https://clawhub.ai/oomol/skills/oo-redfox) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [RedFoxHub homepage](https://redfox.hk) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; command responses are JSON objects with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Automatic setup can execute changing remote code and add persistent agent skills; remote installers and service implementations have not been audited.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the oo CLI separately before use. Disable managed-skill synchronization if you do not want additional skills installed, and check the connected account, task payloads, and charges.
+
+## Reference(s):
+
+- [RedFoxHub API documentation](https://redfox.hk/story/web/api/doc/platforms)
+- [RedFoxHub](https://redfox.hk)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Text, JSON, Markdown]
+
+**Output Format:** [Structured connector responses and retrieved content, commonly returned as JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include content metadata, task IDs and statuses, transcripts, or media links, depending on the action.]
+
+## Skill Version(s):
+
+1.0.8 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

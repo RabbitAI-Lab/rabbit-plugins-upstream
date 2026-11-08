@@ -1,43 +1,59 @@
-## Description: <br>
-Sender lets an agent read and manage Sender campaigns, subscribers, groups, custom fields, and workflows through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sender (sender.net). Use this skill for ANY Sender request — reading, creating, updating, and deleting data. Whenever a task involves Sender, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use Sender to inspect live connector schemas and then read or modify Sender account data such as subscribers, groups, campaigns, fields, and workflows through approved oo CLI actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create or update subscribers, fields, or group memberships in the connected Sender account. <br>
-Mitigation: Require the agent to show the exact payload and expected effect before approving any write action. <br>
-Risk: The destructive group removal action can remove subscribers from Sender groups. <br>
-Mitigation: Confirm the target subscribers, selection criteria, and group before running destructive actions. <br>
+## Use Case:
 
+External users can use this skill to read Sender campaigns, groups, subscribers, fields, and workflows, and to create or update subscriber data and group membership through a connected Sender account.
 
-## Reference(s): <br>
-- [Sender homepage](https://www.sender.net) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-sender) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the oo CLI; connector responses are JSON with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup can execute downloaded installer code, and the installer contents and exact installed CLI version were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and use a reviewed, fixed CLI version before installation.
+
+Risk: The CLI may synchronize changes to installed agent skills at startup.
+
+Mitigation: Set OO_SKILLS_SYNC_DISABLED=1 to disable the documented startup synchronization.
+
+Risk: Sender subscriber data is processed through OOMOL, and account changes can affect live records.
+
+Mitigation: Assess OOMOL's data handling and retain the required approvals before making account changes.
+
+## Reference(s):
+
+- [Sender API documentation](https://api.sender.net/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Sender](https://www.sender.net)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action schemas are checked before calls; write and destructive actions require user approval.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

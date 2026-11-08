@@ -1,42 +1,51 @@
-## Description: <br>
-This skill supports searching and reading data through the Turbot Pipes connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use an OOMOL-connected Turbot Pipes account to run read-only SQL queries and retrieve rows with query metadata.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect the Turbot Pipes connector schema and run SQL queries through an OOMOL-connected account. It is intended for read/query workflows that return Turbot Pipes rows and query metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agents may run SQL queries against sensitive Turbot Pipes datasets. <br>
-Mitigation: Review SQL queries before execution and approve access to sensitive datasets deliberately. <br>
-Risk: Setup, authentication, or account-connection commands can affect the user's OOMOL account state. <br>
-Mitigation: Run CLI installation, login, and Turbot Pipes connection steps only after an auth or connection failure and with explicit user approval. <br>
+## Use Case:
 
+Developers and analysts use this skill to query and read Turbot Pipes data through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-turbot-pipes) <br>
-- [Turbot Pipes Homepage](https://turbot.com/pipes) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses may include JSON data and execution metadata from the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Automatic setup may execute downloaded CLI code without a clear user checkpoint; the external installers and live connector were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, verify a specific release, and check whether automatic skill synchronization is acceptable.
+
+## Reference(s):
+
+- [Turbot Pipes API documentation](https://turbot.com/pipes/docs/reference/api)
+- [Turbot Pipes](https://turbot.com/pipes)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Guidance]
+
+**Output Format:** [JSON rows and query metadata, with any necessary text explanation]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Query inputs follow the live action schema; results include rows and query metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: artifact frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

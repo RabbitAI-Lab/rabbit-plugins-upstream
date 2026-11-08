@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Turbot Pipes"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.4"
   services: ["turbot_pipes"]
   icon: "https://static.oomol.com/logo/third-party/turbot_pipes.svg"
 ---
@@ -68,11 +68,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Turbot Pipes is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=turbot_pipes
+  https://console.oomol.com/connections/turbot_pipes
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Turbot Pipes homepage: https://turbot.com/pipes
+- API documentation: https://turbot.com/pipes/docs/reference/api

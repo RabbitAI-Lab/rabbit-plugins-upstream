@@ -69,6 +69,8 @@
 
 ## `contact.deleted`
 
+> **Deletion event.** This fires after a contact has been removed from the CRM; the payload is the last known record, and the deletion itself is not something this trigger can undo. Treat it as a signal to reconcile or archive, never as an instruction to delete matching records elsewhere — a destination or handler that cascades deletions from this event must be one the user designed and approved for exactly that.
+
 ### Sample Payload
 
 ```json
@@ -140,6 +142,8 @@
 
 ## `company.deleted`
 
+> **Deletion event.** This fires after a company has been removed from the CRM; the payload is the last known record, and the deletion itself is not something this trigger can undo. Treat it as a signal to reconcile or archive, never as an instruction to delete matching records elsewhere — a destination or handler that cascades deletions from this event must be one the user designed and approved for exactly that.
+
 ### Sample Payload
 
 ```json
@@ -210,6 +214,8 @@
 ---
 
 ## `deal.deleted`
+
+> **Deletion event.** This fires after a deal has been removed from the CRM; the payload is the last known record, and the deletion itself is not something this trigger can undo. Treat it as a signal to reconcile or archive, never as an instruction to delete matching records elsewhere — a destination or handler that cascades deletions from this event must be one the user designed and approved for exactly that.
 
 ### Sample Payload
 
@@ -304,6 +310,8 @@
 ---
 
 ## `ticket.deleted`
+
+> **Deletion event.** This fires after a ticket has been removed from the CRM; the payload is the last known record, and the deletion itself is not something this trigger can undo. Treat it as a signal to reconcile or archive, never as an instruction to delete matching records elsewhere — a destination or handler that cascades deletions from this event must be one the user designed and approved for exactly that.
 
 ### Sample Payload
 

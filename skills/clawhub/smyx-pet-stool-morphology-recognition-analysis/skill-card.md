@@ -1,43 +1,59 @@
-## Description: <br>
-Analyzes dog-toilet or outdoor dog-walking image or video inputs with cloud APIs to identify pet stool color, shape, and visible blood or mucus, returning structured observations and report links without diagnosing disease. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes submitted pet stool images or videos and returns structured observations about color, shape, blood, or mucus without diagnosing disease.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and pet-health workflow developers use this skill to route dog stool images, videos, or URLs to a hosted analysis service for standardized morphology observations, abnormal-feature prompts, report links, and historical report lookup. Results are intended for monitoring support and do not provide disease diagnosis or treatment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends pet images, videos, or URLs to Life Emergence services for analysis. <br>
-Mitigation: Use it only with media you are permitted to upload, and ask the publisher for retention, deletion, and downstream-use documentation before handling sensitive footage. <br>
-Risk: The skill may create or reuse a persistent local identity, store token-like values, and retrieve historical reports. <br>
-Mitigation: Run it in an isolated workspace, review local data storage before and after use, and confirm how account linkage and report history can be deleted or reset. <br>
-Risk: The output can be mistaken for medical advice even though the skill only describes stool appearance. <br>
-Mitigation: Present results as non-diagnostic observations and route health concerns to a veterinarian or qualified professional. <br>
+## Use Case:
 
+Pet owners and caretakers can submit an image, video, or media URL from a pet's toileting area to get structured stool appearance observations and review past reports. The results are an observation aid and do not provide a veterinary diagnosis or treatment plan.
 
-## Reference(s): <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON analysis reports, with optional saved text output.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured stool-feature observations, abnormal-feature prompts, report links, and historical report tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter says 1.0.5) <br>
+Risk: Submitted images, videos, or media URLs may be processed by a remote service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only media and URLs you are comfortable sharing with that service.
+
+Risk: The security review reports account and credential handling and access to historical records.
+
+Mitigation: Review the service's account and credential practices, keep credentials private, and use only an account you trust.
+
+Risk: The export-only option's behavior was not fully verified and may still submit media for remote analysis.
+
+Mitigation: Do not rely on export-only to prevent remote submission; verify its behavior before using it with sensitive media.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-stool-morphology-recognition-analysis)
+- [API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Markdown]
+
+**Output Format:** [Structured analysis observations in JSON or text, with Markdown-formatted history lists and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Observations cover stool color, shape, and visible blood or mucus; results are not a diagnosis.]
+
+## Skill Version(s):
+
+1.0.10 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

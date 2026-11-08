@@ -1,41 +1,60 @@
-## Description: <br>
-Generates personalized English listening practice materials matched to a learner's vocabulary, interests, and sticking points, with fallback guidance when audio or persistent memory features are unavailable. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Personalizes English listening practice to a learner’s vocabulary and interests, then helps identify whether comprehension difficulties come from vocabulary, sentence structure, or listening speed.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and English-learning assistants use this skill to create level-appropriate listening passages, comprehension checks, vocabulary notes, and follow-up coaching based on learner profiles and interests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read or update learner profiles, vocabulary records, listening history, reminders, and reports without clearly documented opt-in controls. <br>
-Mitigation: Review before installation, require explicit learner or guardian consent, and confirm how stored vocabulary, reminders, and progress history can be viewed, disabled, or deleted. <br>
-Risk: The skill's true listening workflow depends on audio generation, speed control, and persistent memory that may not be available in every agent environment. <br>
-Mitigation: Tell learners when audio or memory features are unavailable and use the documented text-based fallback only as a temporary comprehension exercise. <br>
+## Use Case:
 
+Upper-primary, middle-school, and high-school English learners use the skill to practice with level-matched passages, comprehension questions, vocabulary notes, and targeted follow-up. Upper-primary learners are expected to use it with a parent or teacher present.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-listening-trainer) <br>
-- [Listening topic templates and material generation guide](references/listening-topic-templates.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style tutoring responses with listening passages, vocabulary notes, comprehension questions, diagnostics, and progress summaries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May depend on platform TTS, speed control, learner-profile memory, and reminder capabilities.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: The security verdict is benign with no listed findings, but the analysis was partial because two SKILL.md references did not match bundled artifacts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the referenced source materials before relying on the skill; treat the benign scan as incomplete evidence.
+
+Risk: Without speech synthesis or a reader, the fallback is a reading-based exercise rather than actual listening practice.
+
+Mitigation: Clearly label the fallback as a transition activity and explain that it is not listening training.
+
+Risk: The skill supports upper-primary learners and may encounter disclosures outside ordinary learning support.
+
+Mitigation: Use with a parent or teacher present; when crisis signals arise, stop the learning flow and follow the documented referral guidance.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-english-listening-trainer)
+- [Listening topic templates](artifact/references/listening-topic-templates.md)
+- [Question quality checklist](artifact/shared/ai-item-check.md)
+- [Crisis referral guidance](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Conversational text with English listening passages, comprehension questions, vocabulary notes, and learner feedback]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Passage difficulty and topics are personalized; without audio support, the skill labels read-aloud or timed-reading alternatives as a transition rather than listening practice.]
+
+## Skill Version(s):
+
+2.12.7 (source: release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

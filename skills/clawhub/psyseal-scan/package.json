@@ -1,0 +1,16 @@
+{
+  "name": "psyseal-scan",
+  "version": "0.3.2",
+  "description": "Offline, read-only scan of your AI agent: cost of heartbeats and scheduled tasks, plaintext secrets, planted or bloated memory. No dependencies, no network.",
+  "type": "module",
+  "private": true,
+  "license": "MIT-0",
+  "bin": {
+    "psyseal-scan": "scripts/psyseal-scan.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "homepage": "https://psyseal.com",
+  "repository": "https://github.com/psyseal/scanner"
+}

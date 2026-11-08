@@ -1,44 +1,54 @@
-## Description: <br>
-Detects and edits Chinese web-fiction prose to reduce AI-flavored, formulaic writing while preserving plot, character details, and author intent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+网文去AI味。从表达、叙事用笔、故事因果三层诊断并修复文本，保留作者文风与已定剧情。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and editors use Story Deslop to scan Chinese web-fiction drafts for formulaic AI-style prose and receive targeted rewrite guidance, reports, or file edits that make the text read more naturally. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: File mode can rewrite provided manuscript files and normalize punctuation after editing. <br>
-Mitigation: Keep backups and request detection-only behavior when review is needed before any edits are applied. <br>
-Risk: Aggressive style cleanup can remove useful plot, character, or pacing detail if applied too broadly. <br>
-Mitigation: Review the change report, preserve story intent, and use the skill's review markers for uncertain edits. <br>
+## Use Case:
 
+Chinese web fiction authors and editors use this skill to diagnose formulaic language, narrative emphasis, and story logic, then revise wording while preserving the author's voice and established plot.
 
-## Reference(s): <br>
-- [Story Deslop on ClawHub](https://clawhub.ai/worldwonderer/skills/story-deslop) <br>
-- [Publisher profile](https://clawhub.ai/user/worldwonderer) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Anti-AI Writing Guide](references/anti-ai-writing.md) <br>
-- [Banned Words and Patterns](references/banned-words.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance, Files] <br>
-**Output Format:** [Markdown reports with edited prose, inline shell commands, and optional file edits] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [File mode can update user-supplied manuscript files and return short representative excerpts for long inputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.11 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
+Risk: Four components were only partially inspected, so some behavior remains uncertain.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the remaining components before installation and keep any text edits within the author's requested scope.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/worldwonderer/skills/story-deslop)
+- [Expression guidance](references/expression.md)
+- [Narrative focus guidance](references/narrative-focus.md)
+- [Story logic guidance](references/story-logic.md)
+- [Style resolution guidance](references/style-resolution.md)
+- [Skill metadata link (server provenance unavailable)](https://github.com/zenstory-ai/oh-story-claudecode)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Chinese-language diagnostics, Markdown reports, and revised prose when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Follows the requested scope and preserves established plot facts and author style.]
+
+## Skill Version(s):
+
+1.1.47 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

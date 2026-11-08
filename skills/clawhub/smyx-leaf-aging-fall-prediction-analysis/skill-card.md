@@ -1,44 +1,63 @@
-## Description: <br>
-Analyzes indoor houseplant image or video sequences to detect leaf aging indicators and predict likely leaf-fall risk windows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes houseplant image sequences for leaf aging and estimates leaf-fall risk over the next 3–7 days, with care guidance.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, plant-care operators, and developers can use this skill to analyze fixed-angle indoor plant media, identify senescence signs, produce structured reports, and query prior cloud-generated reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review says the skill uploads plant images, videos, or URLs to the lifeemergence cloud service. <br>
-Mitigation: Use only media that is appropriate to send to that service, and avoid sensitive home-camera footage unless retention, account, and deletion practices are acceptable. <br>
-Risk: The security review says the skill can create or reuse a local identity and store access tokens in the workspace. <br>
-Mitigation: Review the generated local identity and token storage before installation, and install only in workspaces where that credential behavior is acceptable. <br>
-Risk: The security verdict is suspicious and calls for review before installation. <br>
-Mitigation: Review the skill and its scan results before deployment, especially cloud upload and credential-handling behavior. <br>
+## Use Case:
 
+Houseplant owners, plant-care teams, and greenhouse staff use daily images or video to monitor leaf aging, anticipate leaf fall, and adjust plant care.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-leaf-aging-fall-prediction-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis text with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a local file when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter lists 1.0.5) <br>
+Risk: Account handling may mix users’ reports in a shared agent workspace.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Wait for sender-isolation fixes before using the skill in a shared workspace.
+
+Risk: Credential forwarding destinations are unrestricted.
+
+Mitigation: Wait for destination restrictions before using credentials in a shared agent workspace.
+
+Risk: The export-only option still runs analysis.
+
+Mitigation: Wait for this behavior to be fixed; do not rely on export-only to prevent analysis.
+
+Risk: Media is uploaded to the configured Life Emergence service; remote retention and forecast accuracy are unverified.
+
+Mitigation: Confirm privacy and charging terms before supplying private recordings, and treat predictions as unverified.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/18072937735/skills/smyx-leaf-aging-fall-prediction-analysis)
+- [API interface reference](artifact/references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured analysis report in JSON or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include aging indicators, a predicted fall window, at-risk leaf identifiers, cause hints, care suggestions, and report links.]
+
+## Skill Version(s):
+
+1.0.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

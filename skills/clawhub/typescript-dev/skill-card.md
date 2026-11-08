@@ -1,56 +1,64 @@
-## Description: <br>
-Build full-stack TypeScript apps with Vite 8, React 19, Tailwind CSS v4, shadcn/ui, Biome, Vitest, and Hono, including frontend build, testing, styling, and Hono backend/API guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Full-stack TypeScript with Vite 8, React 19, Tailwind v4, shadcn/ui, Biome, Vitest, and Hono 4. Use when setting up or working in a TypeScript project - components, styling, build and HMR, tests, lint/CI, or a Hono API with type-safe RPC.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill when setting up or maintaining TypeScript projects across Vite, React, Tailwind, shadcn/ui, Biome, Vitest, and Hono. It provides stack guidance, configuration examples, code patterns, command examples, and cross-tool compatibility notes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can activate for many React or TypeScript tasks and may provide broad project guidance. <br>
-Mitigation: Confirm the current project stack and intended task before applying configuration, code, or command suggestions. <br>
-Risk: Suggested commands may write to a project, apply unsafe fixes, overwrite files, install registry components, configure MCP, or deploy code. <br>
-Mitigation: Review each command and its flags before execution, inspect generated diffs, and run deployment commands only in the intended environment. <br>
+## Use Case:
 
+Developers use this guide when setting up or maintaining full-stack TypeScript projects. It provides patterns and working examples for React components, styling, builds, type checking, tests, linting, and Hono APIs with type-safe RPC.
 
-## Reference(s): <br>
-- [OpenClaw homepage](https://github.com/tenequm/skills/tree/main/skills/typescript-dev) <br>
-- [Vite reference](references/vite.md) <br>
-- [React reference](references/react.md) <br>
-- [TypeScript reference](references/typescript.md) <br>
-- [Tailwind CSS reference](references/tailwind.md) <br>
-- [shadcn/ui reference](references/shadcn.md) <br>
-- [Biome reference](references/biome.md) <br>
-- [Vitest reference](references/vitest.md) <br>
-- [Hono reference](references/hono.md) <br>
-- [Vite documentation](https://vite.dev/guide/) <br>
-- [React Compiler documentation](https://react.dev/learn/react-compiler) <br>
-- [TypeScript 6.0 announcement](https://devblogs.microsoft.com/typescript/announcing-typescript-6-0/) <br>
-- [Tailwind CSS documentation](https://tailwindcss.com/docs) <br>
-- [shadcn/ui documentation](https://ui.shadcn.com/docs) <br>
-- [Biome documentation](https://biomejs.dev/) <br>
-- [Vitest documentation](https://vitest.dev/guide/) <br>
-- [Hono documentation](https://hono.dev/docs/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline code blocks and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include project configuration snippets, TypeScript/React/Hono code, and commands that should be reviewed before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.2 (source: frontmatter, changelog, release evidence) <br>
+Risk: Remotely downloaded packages and installer contents were outside this review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer version-locked project tools over the download-to-Bash installer, and review downloaded contents before running them.
+
+Risk: A Tailwind migration may discard existing configuration if it is removed before its settings are migrated.
+
+Mitigation: Back up Tailwind configuration and test the migration before deleting the existing file.
+
+Risk: Deployment and optional skill or MCP setup steps may change the target environment.
+
+Mitigation: Run those steps only when you intend to make those changes.
+
+## Reference(s):
+
+- [Vite reference](references/vite.md)
+- [React reference](references/react.md)
+- [TypeScript reference](references/typescript.md)
+- [Tailwind CSS reference](references/tailwind.md)
+- [shadcn/ui reference](references/shadcn.md)
+- [Biome reference](references/biome.md)
+- [Vitest reference](references/vitest.md)
+- [Hono reference](references/hono.md)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with TypeScript/TSX examples, shell commands, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Version-specific examples for the documented stack; check commands and migration steps against the target project's installed tool versions.]
+
+## Skill Version(s):
+
+0.5.0 (source: frontmatter, released 2026-11-05)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

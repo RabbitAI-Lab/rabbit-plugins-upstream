@@ -1,11 +1,11 @@
 ---
 name: oo-minimax
-description: "MiniMax (minimax.io). Use this skill for ANY MiniMax request — reading, creating, and updating data. Whenever a task involves MiniMax, use this skill instead of calling the API directly."
+description: "MiniMax (minimax.io). Use this skill for ANY MiniMax request — reading, creating, updating, and deleting data. Whenever a task involves MiniMax, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "MiniMax"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.7"
   services: ["minimax"]
   icon: "https://static.oomol.com/logo/third-party/minimax.svg"
 ---
@@ -38,9 +38,18 @@ Each action is listed below with a one-line description; actions that change sta
 ## Available actions
 
 - `create_response` — Create a non-streaming MiniMax response using the OpenAI Responses API shape. [write]
+- `create_video_generation_v2` — Create a MiniMax H3 video generation task with text, image, video, or audio content. [write]
+- `delete_video_generation_v2` — Delete a MiniMax H3 video generation task. [destructive]
+- `download_video` — Download a generated MiniMax video and store it in connector transit storage.
 - `estimate_input_tokens` — Estimate MiniMax response input tokens without invoking the model.
+- `image_to_video` — Create a MiniMax asynchronous image-to-video task from a public URL or data URI first frame. [write]
 - `list_models` — List OpenAI-compatible MiniMax models available to the API key.
+- `list_video_generation_v2` — List MiniMax H3 video generation tasks.
+- `query_video_generation` — Query a MiniMax video generation task and return its status and file identifier.
+- `query_video_generation_v2` — Query a MiniMax H3 video generation task.
 - `retrieve_model` — Retrieve OpenAI-compatible metadata for one MiniMax model.
+- `text_to_audio` — Synthesize text into audio with the MiniMax T2A v2 API. [write]
+- `text_to_video` — Create a MiniMax asynchronous text-to-video generation task. [write]
 
 ## Safety
 
@@ -71,11 +80,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — MiniMax is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=minimax
+  https://console.oomol.com/connections/minimax
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - MiniMax homepage: https://www.minimax.io
+- API documentation: https://platform.minimax.io/docs/api-reference/api-overview

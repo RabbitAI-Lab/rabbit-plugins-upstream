@@ -129,9 +129,9 @@ Always ask: "Your text is long. Do you want me to set it all, summarize it, or p
 Choose the route from the user's priority:
 
 - **Local, no cloud, exact source-length experiment:** use ACE-Step audio-conditioned generation in [`acestep-generation.md`](acestep-generation.md). Confirm the user accepts slower queue-bound behavior and hardware/timeout constraints.
-- **Fast cloud cover, advanced analysis, emotion extraction, or mashup:** switch to `music-craft-minimax`.
+- **MiniMax cloud cover or mashup:** switch to `music-craft-minimax` only if the user's MiniMax account still has music API access (closed to new users on 2026-08-20). Otherwise use the local ACE-Step route above.
 
-**MiniMax redirect message:** "That needs fast cloud cover / style transfer or advanced audio analysis, which is in `music-craft-minimax`. Switch to that skill and I will run the same pre-flight with the extended checks."
+**MiniMax redirect message (legacy accounts only):** "MiniMax cloud cover is only available to accounts that kept MiniMax music access. If yours did, switch to `music-craft-minimax`; otherwise I can try the local ACE-Step cover."
 
 **Local ACE-Step message:** "I can try this locally with ACE-Step cover/repaint. It is slower and experimental; I will trim long sources or raise the server timeout before starting."
 
@@ -346,7 +346,7 @@ Most providers do not respond well to raw chord notation; phrase the chords musi
 
 ### The user provides a melody (audio or MIDI)
 
-This is Input Type 3. Redirect to music-craft-minimax — covers are the only way to use a specific melody.
+This is Input Type 3. Use the local ACE-Step cover route (or `music-craft-minimax` only for an account that still has MiniMax music access) — covers are the only way to use a specific melody.
 
 ### The user provides only a mood or vibe
 

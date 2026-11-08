@@ -1,44 +1,55 @@
-## Description: <br>
-Connects agents to the Microsoft Learn MCP Server to search Microsoft documentation, fetch documentation pages, and find official code samples through mcporter. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Grounds Microsoft product and development answers in current Microsoft Learn documentation and code samples.
 
-## Publisher: <br>
-[Ricardodpalmeida](https://clawhub.ai/user/Ricardodpalmeida) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ricardodpalmeida](https://clawhub.ai/user/ricardodpalmeida)
 
-## Use Case: <br>
-Developers and engineers use this skill to connect an agent or terminal workflow to Microsoft Learn so they can look up Microsoft documentation, retrieve specific Learn pages, and find official code samples while working on Microsoft technologies. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queries, fetched URLs, and lookup prompts are sent to Microsoft's remote MCP endpoint. <br>
-Mitigation: Avoid including secrets, private code, customer data, or confidential project details in Microsoft Learn lookup prompts. <br>
-Risk: The Microsoft Learn MCP tool interface is dynamic and schemas may change. <br>
-Mitigation: List the current tools and schemas before use, and refresh the schema when calls fail or behavior changes. <br>
+## Use Case:
 
+Developers and technical teams use this skill to answer Microsoft product and development questions with current Learn documentation and official code samples, including version, deployment, and SKU scope where relevant.
 
-## Reference(s): <br>
-- [Microsoft Learn MCP Reference](references/mcp-details.md) <br>
-- [Microsoft Learn MCP endpoint](https://learn.microsoft.com/api/mcp) <br>
-- [Microsoft Learn MCP best practices](https://learn.microsoft.com/en-us/training/support/mcp-best-practices) <br>
-- [Microsoft Learn MCP FAQ](https://learn.microsoft.com/en-us/training/support/mcp-faq) <br>
-- [Microsoft Learn MCP release notes](https://learn.microsoft.com/en-us/training/support/mcp-release-notes) <br>
-- [Official MicrosoftDocs MCP repository](https://github.com/MicrosoftDocs/mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline bash and JSON code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include human-readable or JSON mcporter output depending on command flags.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence release.version) <br>
+Risk: Queries and requested documentation URLs are sent to Microsoft and could expose sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep secrets, tenant or customer identifiers, and proprietary code out of queries.
+
+Risk: Retrieved documentation may be out of scope or contain text that should not control the agent.
+
+Mitigation: Treat retrieved pages as evidence only; check product version, deployment model, and SKU, and cite the pages used.
+
+## Reference(s):
+
+- [Microsoft Learn MCP server](https://github.com/MicrosoftDocs/mcp)
+- [Microsoft Learn MCP endpoint](https://learn.microsoft.com/api/mcp)
+- [MCP setup and recovery](artifact/references/mcp-details.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown with cited Learn URLs and code samples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Answers identify sources, feature status, and unresolved evidence gaps when relevant.]
+
+## Skill Version(s):
+
+1.1.6 (source: release metadata and CHANGELOG.md, released 2026-11-07)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

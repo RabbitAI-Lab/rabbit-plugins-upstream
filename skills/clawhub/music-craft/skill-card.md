@@ -1,51 +1,63 @@
-## Description: <br>
-Generate music through a disciplined OpenClaw-native workflow for songs, instrumentals, and lyrics-driven tracks with structured prompts, quality checks, and backend-aware routing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through generating songs, instrumentals, and lyrics-driven tracks with structured prompts and quality checks across available music backends.
 
-## Publisher: <br>
-[luischarro](https://clawhub.ai/user/luischarro) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[luischarro](https://clawhub.ai/user/luischarro)
 
-## Use Case: <br>
-Developers and agent users use this skill to turn music requests, lyrics, poems, or briefs into structured generation prompts, select an appropriate local or cloud backend, run the generation workflow, and verify delivered audio quality. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cloud music backends may receive prompts, lyrics, reference URLs, and generation instructions. <br>
-Mitigation: Use cloud backends only when the user is comfortable sending that material, and avoid private lyrics or proprietary content unless the user explicitly intends that upload. <br>
-Risk: Local backends may download large models and write generated audio, cache, or temporary files. <br>
-Mitigation: Ask for explicit approval before installs, model downloads, uploads, or overwriting user-visible outputs. <br>
-Risk: Generated audio can miss duration, lyrics alignment, loudness, or completeness targets. <br>
-Mitigation: Verify duration, loudness, file size, audible completeness, lyrics alignment, and structure before delivery, then revise the prompt rather than retrying the same failing payload. <br>
+## Use Case:
 
+Music creators and developers use the skill to turn a brief, lyrics, or reference audio into structured generation prompts and songs or instrumentals, then review the results for completeness, duration, and lyric alignment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/luischarro/music-craft) <br>
-- [Publisher profile](https://clawhub.ai/user/luischarro) <br>
-- [Homepage from skill metadata](https://github.com/LuisCharro/skills/tree/main/publish/music-craft) <br>
-- [README.md](README.md) <br>
-- [SKILL.md](SKILL.md) <br>
-- [references/changelog.md](references/changelog.md) <br>
-- [references/setup-and-preflight.md](references/setup-and-preflight.md) <br>
-- [references/acestep-generation.md](references/acestep-generation.md) <br>
-- [references/other-backends.md](references/other-backends.md) <br>
-- [references/examples.md](references/examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with prompts, checklists, shell commands, and file-delivery notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or route generation of local audio files through approved local or cloud backends.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.0 (source: frontmatter, release evidence, changelog) <br>
+Risk: The security review reports an unsafe installer pattern in setup guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup and preflight commands and confirm their effects before executing them.
+
+Risk: Some memory-limit advice could cause system-wide memory pressure.
+
+Mitigation: Check available memory, use a model tier that fits the machine, and avoid changing system-wide memory limits without understanding the impact.
+
+Risk: The bundle includes audio-extraction behavior beyond music generation.
+
+Mitigation: Use extraction helpers only when extraction is intended, and limit them to audio the user has provided and is authorized to process.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/luischarro/skills/music-craft)
+- [Project homepage](https://github.com/LuisCharro/skills/tree/main/publish/music-craft)
+- [ACE-Step generation guide](references/acestep-generation.md)
+- [Setup and preflight guide](references/setup-and-preflight.md)
+- [Other music backends](references/other-backends.md)
+- [Quality and revision guide](references/quality-and-revision.md)
+- [Audio format selection](references/audio-format-selection.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Audio files]
+
+**Output Format:** [Structured music prompts and lyrics, backend requests or shell commands, and generated audio files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Audio format and duration depend on the selected backend and user request; results may be local or cloud-generated.]
+
+## Skill Version(s):
+
+1.7.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,61 @@
-## Description: <br>
-Manage Cargo connectors and integrations from the Cargo CLI, including listing, creating, updating, removing, and inspecting connector actions for workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Cargo connectors and integrations, including discovery, authentication, and connection maintenance.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and operators use this skill to manage authenticated Cargo connectors and discover integration actions needed to configure workflow nodes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connector configuration values, API keys, OAuth tokens, and command output may contain secrets. <br>
-Mitigation: Treat connector configs and CLI output as sensitive; avoid putting production keys in shell history or shared logs. <br>
-Risk: Connector create, update, and remove commands can mutate authenticated Cargo connector instances. <br>
-Mitigation: Verify the active Cargo session, connector UUIDs, and connector usage counts before changing or removing connectors. <br>
+## Use Case:
 
+Developers and operators use this skill to discover integrations, inspect available actions, and manage authenticated Cargo connections for their workspaces.
 
-## Reference(s): <br>
-- [Cargo Skill Page](https://clawhub.ai/cargo-ai/skills/cargo-connection) <br>
-- [Cargo Skills Homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Cargo CLI - Connections](SKILL.md) <br>
-- [Connector examples](references/examples/connectors.md) <br>
-- [Integration examples](references/examples/integrations.md) <br>
-- [Response shapes](references/response-shapes.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Cargo CLI command examples and JSON response shapes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires @cargo-ai/cli and a Cargo account authenticated by browser sign-in or API token.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: SKILL.md frontmatter, skill-metadata.json, release metadata) <br>
+Risk: Removing a connector may affect dependent workflows, tools, or models.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review an impact list and get approval before deletion; prefer moving dependent connections where suitable.
+
+Risk: Connector configuration and CLI output may expose credentials.
+
+Mitigation: Use narrowly scoped credentials and protect CLI output that contains connector configuration.
+
+Risk: The external CLI and companion safety documentation were not verified.
+
+Mitigation: Review the CLI version and relevant safety documentation before use, and pin a reviewed CLI version.
+
+## Reference(s):
+
+- [Connector examples](artifact/references/examples/connectors.md)
+- [Integration examples](artifact/references/examples/integrations.md)
+- [Response shapes](artifact/references/response-shapes.md)
+- [Troubleshooting](artifact/references/troubleshooting.md)
+- [Cargo skills repository homepage](https://github.com/getcargohq/cargo-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, JSON response examples, Operational guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.7.2 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

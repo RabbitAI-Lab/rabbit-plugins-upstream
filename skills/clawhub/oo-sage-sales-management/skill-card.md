@@ -1,42 +1,56 @@
-## Description: <br>
-Sage Sales Management helps agents read, create, update, and delete Sage Sales Management CRM data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sage Sales Management (forcemanager.com). Use this skill for ANY Sage Sales Management request — reading, creating, updating, and deleting data. Whenever a task involves Sage Sales Management, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Sage Sales Management CRM records from an agent, including account, contact, and opportunity lookup, listing, creation, update, and deletion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete CRM records in the connected Sage Sales Management account. <br>
-Mitigation: Review write and delete requests carefully and require explicit confirmation of the exact payload, target, and expected effect before execution. <br>
-Risk: The skill depends on an authenticated OOMOL connection to Sage Sales Management. <br>
-Mitigation: Use setup and recovery steps only after authentication, connection, scope, expiration, app readiness, or billing errors occur. <br>
+## Use Case:
 
+Sales teams use this skill to read Sage Sales Management accounts, contacts, and opportunities, and to create, update, or delete those records through a connected OOMOL account.
 
-## Reference(s): <br>
-- [Sage Sales Management homepage](https://www.forcemanager.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-sage-sales-management) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing payloads; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup uses remote installer scripts whose release integrity is unverified, and automatic skill synchronization may change installed agent skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified CLI release yourself, review its setup and synchronization behavior, and decide whether to allow automatic skill synchronization.
+
+Risk: The connected service can expose CRM records and permit creates, updates, and deletions, while the backend permission scope is unverified.
+
+Mitigation: Review the OOMOL connection scopes before use, retain approval for changes, and confirm the target and effect before deleting records.
+
+## Reference(s):
+
+- [Sage Sales Management](https://www.forcemanager.com/)
+- [Sage Sales Management API documentation](https://developer.forcemanager.com/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [ClawHub release](https://clawhub.ai/oomol/skills/oo-sage-sales-management)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON request payloads and Sage Sales Management records, with concise action guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions can read, create, update, or delete CRM records; writes and deletions require user approval.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

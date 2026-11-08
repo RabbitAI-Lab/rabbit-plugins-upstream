@@ -1,11 +1,11 @@
 ---
 name: oo-tanium
-description: "Tanium (tanium.com). Use this skill for ANY Tanium request — searching and reading data. Whenever a task involves Tanium, use this skill instead of calling the API directly."
+description: "Tanium (tanium.com). Use this skill for ANY Tanium request — reading, creating, and updating data. Whenever a task involves Tanium, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Tanium"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.6"
   services: ["tanium"]
   icon: "https://static.oomol.com/logo/third-party/tanium.svg"
 ---
@@ -37,7 +37,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `execute_graphql` — Execute a GraphQL document against the connected Tanium Gateway endpoint.
+- `execute_graphql` — Execute a GraphQL document against the connected Tanium Gateway endpoint. [write]
 
 ## Safety
 
@@ -68,11 +68,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Tanium is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=tanium
+  https://console.oomol.com/connections/tanium
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Tanium homepage: https://www.tanium.com
+- API documentation: https://developer.tanium.com/

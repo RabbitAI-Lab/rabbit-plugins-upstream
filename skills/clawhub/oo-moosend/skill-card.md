@@ -1,44 +1,59 @@
-## Description: <br>
-Moosend lets agents read, create, and update Moosend data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Moosend (moosend.com). Use this skill for ANY Moosend request — reading, creating, and updating data. Whenever a task involves Moosend, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect mailing lists and subscribers, fetch subscribers by email, and add or update Moosend subscribers through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review marked the submitted workspace suspicious because it appears to be a full application repository rather than a single scoped skill. <br>
-Mitigation: Review the embedded operational skills and scripts before installing, especially admin actions, production deploys, external service credentials, and local config files. <br>
-Risk: The skill can change Moosend state by adding or updating subscribers. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running tagged write actions. <br>
+## Use Case:
 
+External users can use this skill to read Moosend mailing lists and subscriber records, or add and update a subscriber through their connected Moosend account.
 
-## Reference(s): <br>
-- [ClawHub Moosend skill page](https://clawhub.ai/oomol/skills/oo-moosend) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Moosend homepage](https://www.moosend.com/) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs oo connector commands that return JSON responses with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: The setup instructions allow remote CLI installation, and the CLI may install skills automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, prefer a pinned and verified release, and review automatic skill installation; the vendor documents OO_SKILLS_SYNC_DISABLED as an opt-out.
+
+Risk: The OOMOL service intermediates subscriber requests and manages connected Moosend credentials.
+
+Mitigation: Use the skill only with an account connected through a trusted OOMOL account, and avoid handling raw credentials in agent commands.
+
+Risk: Adding or updating a subscriber changes mailing-list data.
+
+Mitigation: Confirm the exact subscriber payload and its effect with the user before running the write action.
+
+## Reference(s):
+
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [Moosend API authentication documentation](https://docs.moosend.com/api-documentation/articles/KnowledgeBase/54552-Authenticate-a-Moosend-API-request)
+- [Moosend](https://www.moosend.com/)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance, Shell commands]
+
+**Output Format:** [JSON responses and Markdown guidance with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read actions return Moosend account data; add_subscriber changes subscriber data after user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

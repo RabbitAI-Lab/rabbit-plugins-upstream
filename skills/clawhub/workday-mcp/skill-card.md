@@ -1,42 +1,54 @@
-## Description: <br>
-Read-only MCP skill for retrieving Workday HR tasks, pay, benefits, and compensation data through the user's signed-in browser session. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read Workday HR data, including org charts, worker profiles, pay, benefits, compensation, and performance, through an MCP server using the user's signed-in session.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Employees and authorized Workday users use this skill to inspect their own Workday tasks and HR data, including pay, benefits, compensation, and related task details, from an agent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose private HR, pay, benefits, and compensation data available in the user's signed-in Workday browser session. <br>
-Mitigation: Install only when acceptable under employer policy, keep prompts explicit when requesting Workday data, and disable or remove the MCP and extension pairing when it is no longer needed. <br>
-Risk: The browser extension bridge depends on the user's live Workday session and approved local pairing. <br>
-Mitigation: Use the health check to confirm the bridge and session state, approve pairing only for the intended MCP server, and re-authenticate or disconnect when the session is no longer intended for agent access. <br>
+## Use Case:
 
+Employees and managers use the skill to retrieve Workday people, compensation, benefits, and performance information through their signed-in session, and to handle supported HR requests and benefit elections. Access should be approved by the employer, and write previews should be reviewed before submission.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/workday-mcp) <br>
-- [workday-mcp npm package](https://www.npmjs.com/package/workday-mcp) <br>
-- [fetchproxy extension setup](https://github.com/chrischall/fetchproxy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, configuration, guidance] <br>
-**Output Format:** [Structured JSON from MCP tools with Markdown setup and usage guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Workday access; requires workday-mcp, the fetchproxy browser extension, tenant configuration, and an active signed-in Workday browser session.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.1 (source: server-resolved release metadata) <br>
+Risk: This skill claims to be read-only but also documents tools that submit HR requests and electronically sign benefit elections authorizing payroll deductions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Have the employer approve access to sensitive employee data, disable write tools when only reading is needed, and review every submission preview, especially benefit signatures and payroll deductions.
+
+Risk: The bundled files do not establish that the external server and extension enforce their claimed safeguards.
+
+Mitigation: Use reviewed, pinned versions.
+
+## Reference(s):
+
+- [workday-mcp npm package](https://www.npmjs.com/package/workday-mcp)
+- [ContextMint Bridge releases](https://github.com/nullnet-app/contextmint-bridge/releases)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Configuration instructions, Guidance]
+
+**Output Format:** [Structured JSON and Markdown setup guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Workday information is returned as structured JSON; setup guidance includes MCP configuration and installation commands.]
+
+## Skill Version(s):
+
+1.4.0 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
