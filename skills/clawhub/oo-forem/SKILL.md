@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Forem"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["forem"]
   icon: "https://static.oomol.com/logo/third-party/forem.svg"
 ---
@@ -40,7 +40,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `create_article` — Create a Forem article for the authenticated user. [write]
 - `get_article` — Retrieve one published Forem article by numeric ID.
 - `get_article_by_path` — Retrieve one published Forem article by username and slug.
-- `get_comment` — Retrieve one Forem comment thread by numeric ID. [write]
+- `get_comment` — Retrieve one Forem comment thread by numeric ID.
 - `get_current_user` — Retrieve the Forem user associated with the connected API key.
 - `list_articles` — List published Forem articles with optional filters.
 - `list_comments` — List Forem comments for an article or podcast episode as threaded conversations.
@@ -77,11 +77,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Forem is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=forem
+  https://console.oomol.com/connections/forem
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Forem homepage: https://www.forem.com
+- API documentation: https://developers.forem.com/api/v1

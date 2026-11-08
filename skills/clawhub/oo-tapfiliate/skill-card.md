@@ -1,43 +1,54 @@
-## Description: <br>
-Tapfiliate (tapfiliate.com). Use this skill for ANY Tapfiliate request: reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tapfiliate (tapfiliate.com). Use this skill for ANY Tapfiliate request — reading, creating, and updating data. Whenever a task involves Tapfiliate, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Tapfiliate through an OOMOL-connected account, including affiliate, affiliate group, click, conversion, program, commission, and reporting workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Confirmed write actions can modify Tapfiliate affiliate, click, or conversion records. <br>
-Mitigation: Review the exact proposed payload and expected account effect before approving create or conversion actions. <br>
-Risk: The skill depends on an OOMOL-connected Tapfiliate account and the oo CLI being installed, authenticated, and connected. <br>
-Mitigation: Install it only when the agent should use that connected account, and use first-time setup or connection recovery only after an auth or connection failure. <br>
+## Use Case:
 
+Developers and affiliate program operators use this skill to read and manage Tapfiliate affiliates, groups, clicks, conversions, commissions, and programs through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Tapfiliate homepage](https://tapfiliate.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-tapfiliate) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands are intended for the oo CLI and may return JSON responses from Tapfiliate connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup may execute downloaded code that could not be inspected and may install or synchronize other agent skills without clear approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, including any broader skill installation or synchronization, before proceeding.
+
+Risk: Tapfiliate actions can change account data, and the connector uses the connected account's access.
+
+Mitigation: Check the OOMOL connection's Tapfiliate access and confirm the exact payload and effect before each write action.
+
+## Reference(s):
+
+- [Tapfiliate REST API documentation](https://tapfiliate.com/docs/rest/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON action responses and shell commands with concise explanatory text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write actions require user confirmation; read actions return Tapfiliate data.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

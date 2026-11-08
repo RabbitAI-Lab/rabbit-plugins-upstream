@@ -1,45 +1,56 @@
-## Description: <br>
-Search, buy, register, and list on SpawnXchange using the Coinbase Developer Platform (CDP) CLI for cryptographic signing when the agent's wallet is managed by the CDP CLI instead of a local private key file. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Buy and sell AI-generated code artifacts on SpawnXchange using a wallet managed by the Coinbase Developer Platform (CDP) CLI. Complete walkthrough — searching, buying, taking delivery, listing and removing listings, payouts, account settings and feedback — signing each payment explicitly, which is also what lets it upload an archive up to the marketplace's 10 MB limit rather than only what fits in a command-line argument.
 
-## Publisher: <br>
-[spawnxchange](https://clawhub.ai/user/spawnxchange) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[spawnxchange](https://clawhub.ai/user/spawnxchange)
 
-## Use Case: <br>
-External developers and agent operators use this skill to search SpawnXchange listings, buy items with x402 CDP CLI signing, register via SIWE for an API key, and upload seller listings without exposing a local private key file. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can sign and submit real wallet payment authorizations with limited built-in confirmation or validation. <br>
-Mitigation: Require manual approval before running direct-buy.sh or any CDP signing command, and verify the item UUID, price, chain, currency, recipient or domain, and license terms before signing. <br>
-Risk: Returned API keys, signed payment headers, purchase records, cached artifacts, and download URLs can expose private purchase or seller data. <br>
-Mitigation: Store API keys and purchase records as private secrets, keep local state owner-only, avoid committing or sharing sensitive records, and treat signed download URLs as short-lived bearer credentials. <br>
+## Use Case:
 
+Developers and agents use this skill to search, buy, list, and manage code artifacts on SpawnXchange with a wallet already configured in the CDP CLI. It provides signed-payment steps, account operations, and handling guidance for marketplace transactions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/spawnxchange/spawnxchange-cdp-cli) <br>
-- [Publisher homepage](https://github.com/avlk/spawnxchange-skills) <br>
-- [Purchase persistence notes](references/purchase-store.md) <br>
-- [Coinbase Developer Platform CLI skill documentation](https://docs.cdp.coinbase.com/cdp-cli/skill.md) <br>
-- [SpawnXchange agent usage spec](https://spawnxchange.com/agent-usage) <br>
-- [SpawnXchange machine manifest](https://spawnxchange.com/api/v1/skills) <br>
+### Deployment Geography for Use:
 
+Global, subject to marketplace availability in the user's region
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash, curl, jq, and CDP CLI command examples; includes a shell script.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands can sign payment and SIWE data and should be approved manually before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release and frontmatter) <br>
+Risk: ClawScan rates the skill suspicious with medium confidence, citing instruction-scope and installation/persistence concerns; scanning was incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill instructions and each external request before use, especially requests involving other skills or information sent to the marketplace. Treat the scan as incomplete rather than as a safety determination.
+
+Risk: Marketplace operations can authorize USDC payments, and removing a listing is irreversible.
+
+Mitigation: Check the payment challenge, asset, chain, and operator-chosen spend ceiling before signing; use the matching item ID for deletion confirmation. If settlement is pending, reconcile the transaction before retrying.
+
+## Reference(s):
+
+- [GitHub homepage listed in Clawdis metadata (not verified provenance)](https://github.com/avlk/spawnxchange-skills)
+- [CDP CLI skill and wallet setup](https://docs.cdp.coinbase.com/cdp-cli/skill.md)
+- [SpawnXchange agent usage specification](https://spawnxchange.com/agent-usage)
+- [SpawnXchange API skill reference](https://spawnxchange.com/api/v1/skills)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown guidance, Shell commands, HTTP API calls, Configuration instructions]
+
+**Output Format:** [Markdown instructions with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses operator-supplied wallet, item IDs, chain, spend limit, and listing files.]
+
+## Skill Version(s):
+
+0.5.7 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Amplemarket"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["amplemarket"]
   icon: "https://static.oomol.com/logo/third-party/amplemarket.svg"
 ---
@@ -47,7 +47,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `list_task_statuses` — List task statuses supported by Amplemarket.
 - `list_task_types` — List task types supported by Amplemarket.
 - `list_tasks` — List Amplemarket tasks with cursor pagination and status, type, or user filters.
-- `skip_task` — Skip an Amplemarket task.
+- `skip_task` — Skip an Amplemarket task. [write]
 
 ## Safety
 
@@ -78,11 +78,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Amplemarket is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=amplemarket
+  https://console.oomol.com/connections/amplemarket
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Amplemarket homepage: https://www.amplemarket.com
+- API documentation: https://docs.amplemarket.com/api-reference/introduction

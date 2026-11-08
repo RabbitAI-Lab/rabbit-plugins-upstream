@@ -1,42 +1,55 @@
-## Description: <br>
-Operate Statamic through an OOMOL-connected account to read, create, update, and delete Statamic site license data using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Statamic sites through an OOMOL-connected account, including listing, creating, updating, and deleting site licenses.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and site operators use this skill to list and manage Statamic site licenses through an OOMOL-connected Statamic account, including create, update, and delete actions after inspecting the live action schema. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete Statamic site licenses through OOMOL. <br>
-Mitigation: Review proposed create, update, or delete payloads carefully and confirm state-changing actions before execution. <br>
-Risk: First-time setup may install or authenticate the oo CLI. <br>
-Mitigation: Run the installer or login flow only when the CLI or authentication is missing and only if OOMOL is trusted for the environment. <br>
+## Use Case:
 
+Developers and site administrators use this skill to inspect and manage Statamic site licenses through their connected Statamic account. They can list sites or create, update, and delete licenses using the documented connector actions.
 
-## Reference(s): <br>
-- [Statamic homepage](https://statamic.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Fallback setup runs a remote CLI installer without prior review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the CLI installation separately before allowing it to run.
+
+Risk: The CLI's broader skill-synchronization behavior and hosted connector implementation have not been verified.
+
+Mitigation: Review the CLI's synchronization behavior and retain approval for site creation, updates, and deletion.
+
+## Reference(s):
+
+- [Statamic Sites API documentation](https://statamic.dev/advanced-topics/sites-api)
+- [Statamic](https://statamic.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the connected Statamic account; site creation, updates, and deletion require user confirmation.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

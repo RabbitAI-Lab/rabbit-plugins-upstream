@@ -1,11 +1,11 @@
 ---
 name: oo-segment
-description: "Segment (segment.com). Use this skill for ANY Segment request — searching and reading data. Whenever a task involves Segment, use this skill instead of calling the API directly."
+description: "Segment (segment.com). Use this skill for ANY Segment request — reading, creating, and updating data. Whenever a task involves Segment, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Segment"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.6"
   services: ["segment"]
   icon: "https://static.oomol.com/logo/third-party/segment.svg"
 ---
@@ -37,13 +37,13 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `alias` — Send a Segment Alias call to associate one user identity with another.
-- `batch` — Send a Segment Batch call containing Identify, Group, Track, Page, or Screen items.
-- `group` — Send a Segment Group call to associate a user with a group.
-- `identify` — Send a Segment Identify call to record user traits.
-- `page` — Send a Segment Page call to record a website page view.
-- `screen` — Send a Segment Screen call to record a mobile app screen view.
-- `track` — Send a Segment Track call to record one user event.
+- `alias` — Send a Segment Alias call to associate one user identity with another. [write]
+- `batch` — Send a Segment Batch call containing Identify, Group, Track, Page, or Screen items. [write]
+- `group` — Send a Segment Group call to associate a user with a group. [write]
+- `identify` — Send a Segment Identify call to record user traits. [write]
+- `page` — Send a Segment Page call to record a website page view. [write]
+- `screen` — Send a Segment Screen call to record a mobile app screen view. [write]
+- `track` — Send a Segment Track call to record one user event. [write]
 
 ## Safety
 
@@ -74,11 +74,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Segment is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=segment
+  https://console.oomol.com/connections/segment
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Segment homepage: https://segment.com
+- API documentation: https://www.twilio.com/docs/segment/connections/sources/catalog/libraries/server/http-api

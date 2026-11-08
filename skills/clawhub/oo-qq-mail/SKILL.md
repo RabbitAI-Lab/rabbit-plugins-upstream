@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "QQ Mail"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["qq_mail"]
   icon: "https://static.oomol.com/logo/third-party/qq_mail.png"
 ---
@@ -45,7 +45,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `list_folders` — List folders visible to the connected QQ Mail account.
 - `mark_email_read` — Mark one QQ Mail message as read. [write]
 - `mark_email_unread` — Mark one QQ Mail message as unread. [write]
-- `move_email` — Move one QQ Mail message to another folder. [write]
+- `move_email` — Move one QQ Mail message to another folder. [destructive]
 - `reply_email` — Reply to one QQ Mail email using SMTP reply headers and quoted content. [write]
 - `search_emails` — Search one QQ Mail folder and return lightweight email summaries.
 - `send_email` — Send an email through QQ Mail SMTP. [write]
@@ -79,11 +79,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — QQ Mail is not connected, or the connection expired or lacks a scope. Connect once (auth type: custom credential) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=qq_mail
+  https://console.oomol.com/connections/qq_mail
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - QQ Mail homepage: https://mail.qq.com/
+- API documentation: https://help.mail.qq.com/detail/0/1087

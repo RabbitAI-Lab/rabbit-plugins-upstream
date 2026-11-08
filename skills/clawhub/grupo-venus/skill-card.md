@@ -1,40 +1,55 @@
-## Description: <br>
-Astrological charts, transit forecasts, and compatibility reports via grupovenus.com. Manage multiple people and compare charts conversationally. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Natal charts and transit forecasts from the third-party site grupovenus.com, with a saved people list. Use for Grupo Venus or carta astral readings.
 
-## Publisher: <br>
-[apresmoi](https://clawhub.ai/user/apresmoi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[apresmoi](https://clawhub.ai/user/apresmoi)
 
-## Use Case: <br>
-Astrology-focused users and agents use this skill to create and compare natal charts, transit forecasts, and compatibility readings from Grupo Venus public endpoints. It is useful for conversational chart analysis while keeping reusable birth profiles in local memory. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores names and exact birth details locally and sends those details to the unofficial third-party site grupovenus.com. <br>
-Mitigation: Use only birth data the person has agreed to share, avoid unnecessary real identifiers, and delete saved profiles when they are no longer needed. <br>
+## Use Case:
 
+People seeking natal charts or transit forecasts can use the skill to request chart images, review forecast data, and discuss astrological interpretations. It can keep a people list for later readings when the user consents to saving it.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/apresmoi/grupo-venus) <br>
-- [Grupo Venus](https://grupovenus.com) <br>
-- [Project homepage](https://github.com/apresmoi/grupo-venus) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples, local JSON profile data, and optional generated chart files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No API key is required; curl is used for public web requests, and python3 is used for URL decoding.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Birth details are sent to grupovenus.com, and city queries are sent to photon.komoot.io; third-party retention and live service behavior were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Explain these disclosures before the first request, suggest an alias, and obtain consent before saving a person.
+
+Risk: Local deletion cannot retract information already sent to third parties, and temporary charts or exports outside managed storage may remain after forgetting a person.
+
+Mitigation: Delete temporary charts after use and review saved charts and exports separately when removing personal data.
+
+## Reference(s):
+
+- [Grupo Venus](https://grupovenus.com)
+- [Photon geocoding service](https://photon.komoot.io/api/)
+- [Project homepage](https://github.com/apresmoi/grupo-venus)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Images]
+
+**Output Format:** [Conversational readings, transit forecast JSON, and natal chart PNG images]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Birth details are used to request reports; saved people and chart data are stored locally only when the user opts in.]
+
+## Skill Version(s):
+
+0.2.2 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

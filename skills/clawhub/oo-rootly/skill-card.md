@@ -1,46 +1,57 @@
-## Description: <br>
-Rootly (rootly.com). Use this skill for ANY Rootly request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Rootly (rootly.com). Use this skill for ANY Rootly request — searching and reading data. Whenever a task involves Rootly, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and incident-response operators use this skill to search and read Rootly users, incidents, services, and teams through an OOMOL-connected Rootly account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Rootly incident and account data may be sensitive. <br>
-Mitigation: Use the skill only for explicit Rootly tasks and treat returned incident, user, service, and team data as sensitive. <br>
-Risk: Live connector schemas may differ from assumed payload shapes. <br>
-Mitigation: Inspect the action schema with the oo CLI before constructing payloads. <br>
-Risk: Authentication, connection, scope, credential, or billing errors can block Rootly access. <br>
-Mitigation: Use the documented setup and recovery steps only after a command fails for the matching reason. <br>
+## Use Case:
 
+People who manage incidents use this skill to search and read Rootly users, incidents, services, and teams through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Rootly skill page](https://clawhub.ai/oomol/skills/oo-rootly) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Rootly homepage](https://rootly.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Rootly connector responses are returned by the oo CLI as JSON when commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release version and skill metadata) <br>
+Risk: Setup can run a remote installer whose contents were unavailable for inspection, without a clear approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup first; install a reviewed, version-pinned CLI yourself and require approval before software installation or changes to other agent skills.
+
+Risk: Rootly access is mediated through OOMOL, and connected account permissions affect what the skill can access.
+
+Mitigation: Use read-only Rootly access where available and understand that OOMOL mediates account access.
+
+## Reference(s):
+
+- [Rootly](https://rootly.com)
+- [Rootly API documentation](https://docs.rootly.com/api-reference/overview)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub release page](https://clawhub.ai/oomol/skills/oo-rootly)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, JSON, Text, Guidance]
+
+**Output Format:** [Shell commands with JSON input; connector results as JSON summarized in text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented Rootly information and setup guidance.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

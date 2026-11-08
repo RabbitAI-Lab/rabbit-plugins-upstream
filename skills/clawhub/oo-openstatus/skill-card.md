@@ -1,43 +1,55 @@
-## Description: <br>
-Operate OpenStatus through an OOMOL-connected account for reading, creating, updating, triggering, and deleting monitors via the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenStatus (openstatus.dev). Use this skill for ANY OpenStatus request — reading, creating, updating, and deleting data. Whenever a task involves OpenStatus, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage OpenStatus monitors and inspect monitor status, summaries, and HTTP response logs from an OOMOL-connected OpenStatus account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, trigger, and delete OpenStatus monitors in the connected account. <br>
-Mitigation: Review exact write or destructive payloads with the user and require explicit approval before executing state-changing actions. <br>
-Risk: The connected OpenStatus API key determines what account data and actions the agent can access. <br>
-Mitigation: Connect only an OpenStatus API key with the access level the user is comfortable granting. <br>
+## Use Case:
 
+Developers and service operators use the skill to inspect OpenStatus monitors, statuses, response logs, and metrics, and to create, update, trigger, or delete monitors through their connected account. The skill requires confirmation before state-changing actions and explicit approval before deletion.
 
-## Reference(s): <br>
-- [OpenStatus homepage](https://www.openstatus.dev) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub OpenStatus skill](https://clawhub.ai/oomol/skills/oo-openstatus) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [CLI action results are JSON responses containing data and meta.executionId; state-changing actions require user confirmation before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill metadata) <br>
+Risk: CLI setup may execute unverified code or install persistent agent skills beyond the requested task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installer and its additional skill-installation behavior before setup, and use the publisher's documented startup synchronization controls.
+
+Risk: Monitor changes and deletions affect the connected OpenStatus workspace.
+
+Mitigation: Confirm the exact effect before write actions and obtain explicit approval for deletions, as the skill's safety guidance requires.
+
+## Reference(s):
+
+- [OpenStatus](https://www.openstatus.dev)
+- [OpenStatus API documentation](https://www.openstatus.dev/tooling/api)
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON data, Guidance]
+
+**Output Format:** [JSON connector responses with natural-language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Live monitor and check data; state-changing operations require confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

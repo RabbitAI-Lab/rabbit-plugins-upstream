@@ -1,12 +1,23 @@
 # Other Backends
 
-Backend guides for everything that is not ACE-Step: MusicGen (local, free),
+Backend guides for everything that is not ACE-Step: MusicGen (local,
+non-commercial weights),
 the mmx CLI (MiniMax), Stable Audio (Stability AI REST API), and generic
 CLI backends. Load this when the selected backend is one of these.
 
-## MusicGen (local — free, no API key, no quota)
+## MusicGen (local — non-commercial weights, no API key, no quota)
 
-**Best for:** fully offline generation, no API dependency, unlimited use. **Trade-off:** quality is lower than MiniMax/ACE-Step, especially for vocals. Use as a fallback or for instrumentals.
+**License gate:** AudioCraft code is MIT, but MusicGen model weights are
+CC-BY-NC 4.0. Use this backend only for personal, research, or other
+non-commercial work permitted by that license. Do not use its output for
+commercial releases, monetized channels, client work, paid products, or
+advertising. For commercial local generation, use a backend whose exact model
+checkpoint terms permit it, such as the currently documented ACE-Step 1.5
+route, after verifying the current license.
+
+**Best for:** fully offline non-commercial generation, no API dependency, and
+no quota. **Trade-off:** quality is lower than MiniMax/ACE-Step, especially
+for vocals. Use it for sketches or non-commercial instrumentals.
 
 MusicGen takes a single text description. It does NOT have a separate lyrics parameter — the text description IS the entire input. MusicGen was trained on short natural-language descriptions, NOT structured production sheets like MiniMax. The skill must reformat the prompt before passing it.
 
@@ -177,13 +188,15 @@ Each segment takes 2-5 min on MPS, so a 3-minute song = 6-15 min total. Acceptab
 | Audio polish | ⚠️ Lo-fi by default | ✅ Production-quality |
 | Speed (CPU, 30s) | ~7 min | ~30s (cloud) |
 
-Use MusicGen for instrumentals, sketches, or when cloud is unavailable. Use MiniMax/ACE-Step when you need actual sung lyrics.
+Use MusicGen for instrumentals, sketches, or when cloud is unavailable. Use ACE-Step when you need actual sung lyrics.
 
 Install details: see **MusicGen Installation Details** in [`setup-and-preflight.md`](setup-and-preflight.md).
 
-## mmx CLI (MiniMax)
+## mmx CLI (MiniMax) — legacy
 
-**Best for:** highest quality with per-flag control, cloud-based.
+**Status (checked 2026-11-08):** MiniMax closed its paid music and lyrics APIs to new users on 2026-08-20 and is discontinuing the free music models (`music-2.6-free`, `music-3.0-free`, `music-cover-free`). `mmx` 1.0.28 no longer has a `music` command, so the example below only works with an older `mmx` release and an account that kept music access. Do not offer this backend unless the user confirms both.
+
+**Was best for:** per-flag control, cloud-based.
 
 ```bash
 mmx music generate \

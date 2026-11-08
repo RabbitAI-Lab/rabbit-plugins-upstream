@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/openclaw-docker-linux",
   "slug": "openclaw-docker-linux",
   "ownerHandle": null,
-  "version": "1.0.7",
-  "updatedAt": 1778492283432,
-  "contentHash": "8588befffd6c23024cbd83d2441efcbae000b6b7fd62d519c862261ca81970ff",
-  "fetchedAt": "2026-07-26T19:43:13.987Z"
+  "version": "1.0.16",
+  "updatedAt": 1793839226648,
+  "contentHash": "0c71c4816d6d6fa06d6f78fc9001b416ea00be3166da3d7e504664b8a6fb8c64",
+  "fetchedAt": "2026-11-08T14:37:32.278Z"
 }

@@ -1,40 +1,55 @@
-## Description: <br>
-Operate Flagsmith through an OOMOL-connected account to inspect feature flags, evaluate identity flags and traits, and identify users through connector actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Flagsmith (flagsmith.com). Use this skill for ANY Flagsmith request — reading, creating, and updating data. Whenever a task involves Flagsmith, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and operators use this skill to access a connected Flagsmith environment from an agent, including listing flags, retrieving flag values, and evaluating or identifying identities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review says the identity action can change Flagsmith traits even though it is not tagged as a write action. <br>
-Mitigation: Require explicit user confirmation before running identify_identity with trait-setting data. <br>
+## Use Case:
 
+Developers use this skill to list feature flags, retrieve flag evaluations for an identity, and identify users or update their traits in a connected Flagsmith environment.
 
-## Reference(s): <br>
-- [Flagsmith homepage](https://www.flagsmith.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Flagsmith skill](https://clawhub.ai/oomol/skills/oo-flagsmith) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to inspect live connector schemas before running Flagsmith actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and frontmatter) <br>
+Risk: Automatic setup runs unverified remote code without clearly controlling lasting changes to the host.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a reviewed CLI version yourself and disable unwanted automatic skill synchronization.
+
+Risk: OOMOL processes requests and holds connector credentials.
+
+Mitigation: Connect only the intended Flagsmith environment and account for OOMOL handling connector credentials.
+
+## Reference(s):
+
+- [Flagsmith API documentation](https://docs.flagsmith.com/sdk-api/flagsmith-api)
+- [Flagsmith](https://www.flagsmith.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON connector responses with natural-language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Response content depends on the selected Flagsmith action.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

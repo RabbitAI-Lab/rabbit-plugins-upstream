@@ -1,46 +1,66 @@
-## Description: <br>
-Cargo Content helps agents guide users through uploading, organizing, syncing, and removing Cargo workspace files and libraries for retrieval-augmented generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages files in a Cargo workspace by uploading and organizing documents, building searchable libraries, and storing files at paths with shareable links.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and workspace operators use this skill to manage Cargo knowledge files and libraries, including upload, listing, renaming, moving, removal, and connector-backed library setup for RAG resources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded files may contain sensitive data and may be indexed for retrieval. <br>
-Mitigation: Confirm the workspace, file contents, access permissions, and intended indexing before uploading files or syncing libraries. <br>
-Risk: UUID-targeted updates and remove commands can affect the wrong file or library, and deletion reversibility is not documented in the evidence. <br>
-Mitigation: List and verify file or library UUIDs before updates or removals, and keep backups of source documents. <br>
-Risk: Cargo authentication can use OAuth sessions or API tokens. <br>
-Mitigation: Use approved authentication flows, avoid exposing tokens in shell history or shared transcripts, and rotate tokens if exposed. <br>
+## Use Case:
 
+External users and developers use this skill to upload, organize, search, and store workspace files, then retrieve or share them by path.
 
-## Reference(s): <br>
-- [Cargo Content on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-content) <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [File and library examples](references/examples/files.md) <br>
-- [Content response shapes](references/response-shapes.md) <br>
-- [Content troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands target the cargo-ai CLI and typically return JSON; uploads and removals affect Cargo workspace content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The deployment example could replace existing agent settings without adequate review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Preserve current settings, inspect the proposed changes, and explicitly authorize deployment.
+
+Risk: Uploads may send documents to OpenAI and commit copies to the context repository.
+
+Mitigation: When those copies are unwanted, use a new private path with indexing and context mirroring disabled.
+
+Risk: Anyone holding a signed or public sharing link can access its file.
+
+Mitigation: Create or share links only when requested, and do not use them for files containing record-level personal data.
+
+Risk: The installation guidance uses the latest CLI package, and external CLI code is outside this inspection.
+
+Mitigation: Pin a reviewed CLI version.
+
+## Reference(s):
+
+- [File and library examples](references/examples/files.md)
+- [Files as storage: paths and links](references/objects.md)
+- [Content response shapes](references/response-shapes.md)
+- [Content troubleshooting](references/troubleshooting.md)
+- [Cargo skills project homepage (listed in skill metadata)](https://github.com/getcargohq/cargo-skills)
+- [ClawHub release page](https://clawhub.ai/cargo-ai/skills/cargo-content)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with shell command examples and JSON response shapes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Examples cover CLI, HTTP, worker, workflow node, and agent usage.]
+
+## Skill Version(s):
+
+1.3.1 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

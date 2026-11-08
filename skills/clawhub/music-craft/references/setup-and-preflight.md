@@ -207,9 +207,9 @@ Before starting, detect **any** available music backend. Check in this priority 
 | 1 | Native tool | Inspect runtime's tool list for `music_generate` or similar | None — built into runtime |
 | 2 | ACE-Step local (free, best quality) | `curl -s http://127.0.0.1:8001/health 2>/dev/null` returns `{"status":"ok"}` | `git clone` + `uv sync` + `uv run acestep-api` (REST API on port 8001) |
 | 3 | MusicGen local (free, instrumental only) | `python3 -c "import audiocraft" 2>/dev/null && echo OK` | Conda or pip env with audiocraft + torch + xformers |
-| 4 | mmx CLI (MiniMax) | `which mmx 2>/dev/null` | MiniMax API key in environment |
+| 4 | mmx CLI (MiniMax, legacy) | `mmx music --help 2>/dev/null` succeeds (absent in `mmx` 1.0.28+) | Account with MiniMax music access from before 2026-08-20 |
 | 5 | Stable Audio REST | `[ -n "$STABILITY_API_KEY" ] && echo OK` | `STABILITY_API_KEY` env var |
-| 6 | Any other CLI | `which mmx 2>/dev/null`, etc. | Provider-specific setup |
+| 6 | Any other CLI | `which <cli> 2>/dev/null` | Provider-specific setup |
 
 Run all detection checks. You only need **one** working backend. The skill adapts to whatever it finds.
 
@@ -217,7 +217,7 @@ If **no** backend is found after checking all paths, **branch on detected hardwa
 
 ### Apple Silicon (`IS_APPLE_SILICON = true`)
 
-> No music generation backend detected. The quickest free path is ACE-Step local — it supports vocals, lyrics, and up to 10-minute songs with no API key and no quota limits.
+> No music generation backend detected. The quickest local path is ACE-Step — it supports vocals, lyrics, and up to 10-minute songs with no API key and no quota limits. Check the model license before commercial use.
 >
 > **Install ACE-Step (Apple Silicon, MLX native):**
 > ```bash
@@ -362,7 +362,7 @@ This skill does not require any optional tool, but the user may benefit from any
 | `ffmpeg` | Audio format conversion, trimming, re-encoding | `apt install ffmpeg` (Debian/Ubuntu) · `dnf install ffmpeg` (Fedora) · `pacman -S ffmpeg` (Arch) · `apk add ffmpeg` (Alpine) | `brew install ffmpeg` | `winget install Gyan.FFmpeg` (or `choco install ffmpeg`) | — |
 | `yt-dlp` | YouTube download for cover or mashup inputs | `apt install yt-dlp` (or pip) | `brew install yt-dlp` (or pip) | `winget install yt-dlp` (or `choco install yt-dlp` or pip) | `pip install -U yt-dlp` |
 | `demucs` | Local stem separation for arranger experiments via `scripts/extract_stems.py` | pip | pip | pip | `pip install demucs` |
-| `audiocraft` | **MusicGen local generation (free, no API key, no quota)** | conda (preferred) or pip | **conda (preferred):** `brew install miniforge` then `conda create -n musicgen -c conda-forge python=3.11 audiocraft torch torchaudio xformers` | Same as Linux | — | `pip install audiocraft torch` (may fail on macOS without conda — xformers build issue) |
+| `audiocraft` | **MusicGen local generation (non-commercial weights; no API key or quota)** | conda (preferred) or pip | **conda (preferred):** `brew install miniforge` then `conda create -n musicgen -c conda-forge python=3.11 audiocraft torch torchaudio xformers` | Same as Linux | — | `pip install audiocraft torch` (may fail on macOS without conda — xformers build issue) |
 | `librosa` | Audio analysis (BPM, key, energy, structure) | pip | pip | pip | `pip install librosa numpy scipy` |
 | `parselmouth` | Better pitch tracking (optional, Praat under the hood) | pip | pip | pip | `pip install praat-parselmouth` |
 | `mmx` CLI | Per-flag control (`--avoid`, `--bpm`, `--key`, `--structure`) with MiniMax | follow the MiniMax install guide for Linux | follow the MiniMax install guide for macOS | follow the MiniMax install guide for Windows (PowerShell) | — |

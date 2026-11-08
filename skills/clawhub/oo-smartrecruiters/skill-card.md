@@ -1,42 +1,55 @@
-## Description: <br>
-SmartRecruiters helps agents search and read SmartRecruiters jobs and candidates through the OOMOL-connected oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read SmartRecruiters data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and recruiting operations teams use this skill to retrieve SmartRecruiters job and candidate information through OOMOL. It supports read-only workflows such as listing jobs, getting job details, searching candidates, and getting candidate details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Candidate records may contain sensitive recruiting data. <br>
-Mitigation: Install and use this skill only in workspaces where SmartRecruiters access is appropriate, and avoid broad or ambiguous requests when candidate data should not be queried. <br>
-Risk: The skill depends on OOMOL-managed CLI access and server-side credentials. <br>
-Mitigation: Use the documented setup and recovery steps when authentication, connection, scope, credential, or billing errors occur. <br>
+## Use Case:
 
+Recruiting teams and agents use this skill to search jobs and candidates and retrieve individual job or candidate records through a connected SmartRecruiters account.
 
-## Reference(s): <br>
-- [SmartRecruiters skill page](https://clawhub.ai/oomol/skills/oo-smartrecruiters) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [SmartRecruiters homepage](https://www.smartrecruiters.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses from the connector include data and an executionId under meta.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill frontmatter) <br>
+Risk: Setup can run unchecked remote installers and introduce broader agent changes without clear user control.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a reviewed, pinned oo CLI release; require approval for software installation or changes to other agent skills; consider disabling automatic skill synchronization.
+
+Risk: OOMOL mediates access to recruitment data, while the hosted connector implementation was not verified.
+
+Mitigation: Review the setup and data access implications before connecting the account.
+
+## Reference(s):
+
+- [SmartRecruiters API documentation](https://developers.smartrecruiters.com/)
+- [SmartRecruiters](https://www.smartrecruiters.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON data, Text]
+
+**Output Format:** [JSON connector responses with agent-readable summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only job and candidate search and retrieval; searches may be paginated.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

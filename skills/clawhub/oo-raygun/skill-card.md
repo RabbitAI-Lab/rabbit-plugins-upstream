@@ -1,44 +1,55 @@
-## Description: <br>
-Raygun lets agents operate a Raygun account through OOMOL's connector for reading applications, deployments, and crash reporting data and managing deployments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Raygun (raygun.com). Use this skill for ANY Raygun request — reading, creating, updating, and deleting data. Whenever a task involves Raygun, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Raygun applications, deployments, and crash reporting error groups, and to create, update, or delete deployment records after explicit confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connector can create, update, or delete Raygun deployment records. <br>
-Mitigation: Confirm the exact target, payload, and expected effect with the user before running any write or destructive action. <br>
-Risk: The OOMOL connector acts on the user's connected Raygun account. <br>
-Mitigation: Review the Raygun scopes on the OOMOL connection and install the skill only when that account access is intended. <br>
-Risk: Raygun connector action schemas may change over time. <br>
-Mitigation: Inspect the live action schema before constructing payloads so requests match the current contract. <br>
+## Use Case:
 
+Developers and operations teams use this skill to inspect Raygun applications, deployments, and error groups, and to create, update, or delete deployments through a connected account.
 
-## Reference(s): <br>
-- [Raygun Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-raygun) <br>
-- [Raygun Homepage](https://raygun.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads; connector responses are JSON when --json is used.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live schema inspection before each action; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md metadata) <br>
+Risk: First-time setup directs the agent to execute a downloaded oo CLI installer; the downloaded installer and installed CLI were not verified in this review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve a verified oo CLI installation separately before using the skill.
+
+Risk: Creating, updating, or deleting a deployment can change or remove Raygun data.
+
+Mitigation: Confirm the exact payload and effect before write actions, and confirm the target with explicit approval before destructive actions.
+
+## Reference(s):
+
+- [Raygun](https://raygun.com)
+- [Raygun API documentation](https://raygun.com/documentation/product-guides/raygun-api/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [Structured Raygun data and operational guidance returned as JSON through oo CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses vary by action and connected account permissions.]
+
+## Skill Version(s):
+
+1.0.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,55 @@
-## Description: <br>
-Kaleido helps agents search and read Kaleido account data through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the connected Kaleido account to list and inspect consortia, environments, nodes, and services.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Kaleido consortia, memberships, environments, nodes, and services from an OOMOL-connected Kaleido account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The oo CLI can access data in the user's connected Kaleido account. <br>
-Mitigation: Install and use the skill only for an intended OOMOL-connected Kaleido account. <br>
-Risk: Future write or destructive connector actions could modify or remove Kaleido resources. <br>
-Mitigation: Review the action target and payload explicitly before approving any write or destructive action. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect the Kaleido consortia and infrastructure available to their connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-kaleido) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Kaleido homepage](https://www.kaleido.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, API calls] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs agents to inspect the live connector schema before running Kaleido actions and to return JSON responses from the oo CLI when actions are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup can execute remote installer code that has not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup and use a verified, pinned oo CLI installation.
+
+Risk: Setup can introduce broader agent changes without clear user control.
+
+Mitigation: Disable unwanted agent-skill synchronization and connect Kaleido with read-only permissions.
+
+## Reference(s):
+
+- [Kaleido](https://www.kaleido.io)
+- [Kaleido API documentation](https://api.kaleido.io/platform.html)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON responses with shell commands and concise Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only account and resource data; shape depends on the selected action]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, server metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

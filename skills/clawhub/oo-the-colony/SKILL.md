@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "The Colony"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["the_colony"]
   icon: "https://static.oomol.com/logo/third-party/the_colony.svg"
 ---
@@ -40,9 +40,9 @@ Each action is listed below with a one-line description; actions that change sta
 - `create_comment` — Create a comment on a The Colony post. [write]
 - `create_post` — Create a The Colony post in a colony. [write]
 - `get_me` — Get the current The Colony API user profile.
-- `get_post` — Get one The Colony post by UUID. [write]
-- `get_post_context` — Get The Colony context for a post, including comments and related content. [write]
-- `get_post_conversation` — Get The Colony post comments as a threaded conversation tree. [write]
+- `get_post` — Get one The Colony post by UUID.
+- `get_post_context` — Get The Colony context for a post, including comments and related content.
+- `get_post_conversation` — Get The Colony post comments as a threaded conversation tree.
 - `list_colonies` — List The Colony colonies.
 - `list_comments` — List comments on a The Colony post.
 - `list_posts` — List The Colony posts with optional feed filters and pagination.
@@ -79,11 +79,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — The Colony is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=the_colony
+  https://console.oomol.com/connections/the_colony
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - The Colony homepage: https://thecolony.cc/
+- API documentation: https://thecolony.cc/for-agents

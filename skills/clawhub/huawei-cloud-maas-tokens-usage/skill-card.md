@@ -1,45 +1,53 @@
-## Description: <br>
-Query Huawei Cloud MaaS tokens usage statistics, including total tokens, prompt tokens, completion tokens, total requests, and total errors for preset service, my service, or custom endpoints over configured time ranges. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries Huawei Cloud MaaS token, request, and error statistics for a selected time range.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to query Huawei Cloud MaaS token consumption, request counts, and error rates for usage monitoring and troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release security summary reports that the bundled script disables TLS certificate verification while handling Huawei Cloud credentials. <br>
-Mitigation: Review before installing, use least-privilege Huawei Cloud credentials, avoid sharing AK/SK values in chat, and do not run the bundled script unless TLS verification is restored or replaced with a secure CA-bundle option. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to review Huawei Cloud MaaS token consumption, request volume, and error rates. It queries aggregate statistics for preset service, My Service, or a custom endpoint.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-maas-tokens-usage) <br>
-- [MaaS ShowStatistics API](https://support.huaweicloud.com/api-maas/ShowStatistics.html) <br>
-- [Task Query Tokens Usage](references/task-query-tokens-usage.md) <br>
-- [Related APIs](references/related-apis.md) <br>
-- [IAM Permission Policy](references/iam-policies.md) <br>
-- [MaaS Monitoring Metrics Reference](references/maas-metrics.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Troubleshooting and Practical Experience](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Huawei Cloud cn-southwest-2 (Southwest-Guiyang-1) only
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with shell commands and optional tabular command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May invoke a bundled Python script that calls Huawei Cloud APIs and can print raw JSON responses when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Optional notifications could forward usage statistics to an unapproved recipient through redirects.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use query-only mode until webhook redirects are blocked or every redirect destination is validated. If enabling notifications, approve the exact recipient and the data shared.
+
+## Reference(s):
+
+- [Huawei Cloud MaaS ShowStatistics API](https://support.huaweicloud.com/api-maas/ShowStatistics.html)
+- [MaaS tokens usage query guide](references/task-query-tokens-usage.md)
+- [Security guide](references/security-guide.md)
+- [Security design](references/security-design.md)
+- [ClawHub release page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-maas-tokens-usage)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Shell commands]
+
+**Output Format:** [Plain-text metrics table with the queried period and optional query or setup guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Aggregate statistics for a selected time range; optional raw JSON response.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

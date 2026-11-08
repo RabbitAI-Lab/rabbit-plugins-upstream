@@ -1,44 +1,54 @@
-## Description: <br>
-Calendar Extractor reads recent HiJavis audio and keyboard transcripts, extracts likely calendar events, writes them as pending calendar rows, and sends per-event markdown cards to iOS chat. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Finds calendar events in recent audio and typed transcripts and sends one reviewable event card per plan to HiJavis chat.
 
-## Publisher: <br>
-[samuel-wei](https://clawhub.ai/user/samuel-wei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samuel-wei](https://clawhub.ai/user/samuel-wei)
 
-## Use Case: <br>
-External HiJavis users use this skill to turn recent conversation and keyboard transcript references to meetings, appointments, and plans into pending calendar entries and chat cards they can confirm, discard, or edit. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill automatically analyzes completed voice and keyboard transcript units, which may include private content. <br>
-Mitigation: Enable it only when the user accepts this transcript access, and provide controls to disable auto-runs or limit transcript windows. <br>
-Risk: Extracted event details can be surfaced without explicit approval for each run. <br>
-Mitigation: Keep extracted events pending until the user confirms them, and allow users to discard or edit events before treating them as confirmed. <br>
-Risk: Relative or ambiguous time language can produce inaccurate calendar details. <br>
-Mitigation: Resolve dates from the fetched local reference date and timezone, and leave unresolved fields null or ask for clarification when the transcript is ambiguous. <br>
+## Use Case:
 
+HiJavis users can find meetings and appointments mentioned in recent recordings or typed notes, either on demand or through automatic processing of completed units. Extracted events appear for review in the calendar.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/samuel-wei/skills/calendar-extractor) <br>
-- [Route Contract](references/route-contract.md) <br>
-- [HiJavis iPhone App](https://apps.apple.com/us/app/hijavis/id6745134765) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, API calls, configuration] <br>
-**Output Format:** [JSON transcript and anchor payloads, JSON event or update input, per-event Markdown chat cards, and local JSON dedup state.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a 24-hour default transcript window, event-level deduplication, and pending event status until user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.1 (source: server release metadata and package.json) <br>
+Risk: When enabled, the skill automatically analyzes completed recordings and typed inputs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it within HiJavis and review each new event with Confirm or Discard; correcting a card in chat also confirms it.
+
+Risk: The separate HiJavis app and server controls were not verified in the security review.
+
+Mitigation: Validate those controls in the deployment; review the skill's resulting events before confirming them.
+
+## Reference(s):
+
+- [Calendar Extractor on ClawHub](https://clawhub.ai/samuel-wei/skills/calendar-extractor)
+- [HiJavis on the App Store](https://apps.apple.com/us/app/hijavis/id6745134765)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Calendar event data]
+
+**Output Format:** [Markdown event cards and calendar entries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [One event per card; new entries remain pending until confirmed. On-demand runs also return a brief chat summary.]
+
+## Skill Version(s):
+
+0.7.4 (source: server release evidence, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

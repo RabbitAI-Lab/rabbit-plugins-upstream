@@ -1,0 +1,177 @@
+# Private Mature-Theme Video Reference
+
+Use this reference for lawful adult mature-theme video requests.
+
+## Routing
+
+Prefer `ltx23-22b-10eros-v1.4-fp8mixed_i2v` (`10eros`) for this use case. It
+is a fast LTX image-to-video model with generated audio. It accepts a first
+frame, a last frame, or both, and requires `--no-filter`.
+
+Use `dr34ml4y-v3` at strength 1 with 10Eros by default. It improves mature-theme
+prompt adherence, motion, and physical behavior even when no action token is
+needed. Omit it only when the creator requests the base 10Eros model alone or
+when comparing/troubleshooting the model and LoRA separately.
+
+The LoRA supports:
+
+- `ltx23-22b-fp8_i2v`
+- `ltx23-22b-fp8_i2v_dev`
+- `ltx23-22b-10eros-v1.4-fp8mixed_i2v` (preferred)
+
+Sogni installs the LT3X v3 LoRA, not the separately trained WAN release. Do not
+use this LoRA ID with WAN models.
+
+## Seedance 2.5 Uncensored
+
+For explicit scenes at film quality, prefer `seedance-2-5-uncensored` over
+10Eros: it is a premium loose-reference model that can start from a clothed,
+world-consistent frame and go explicit at the story beat you choose. It
+requires `--no-filter` for the workflow described here. The author reported
+"Sensitive content detected" errors or more restricted results when that
+flag was omitted. The prompting notes below describe those reported renders;
+results vary with the prompt and references.
+
+The account must also accept the one-time likeness and consent agreement in
+a Sogni app before its first render. Follow the
+[model requirements](./models.md#seedance-25-uncensored) using the same account
+as the CLI/API key. This model requires Premium Spark; price estimates remain
+available before accepting the agreement.
+
+Command shape:
+
+```bash
+sogni-agent --video -m seedance-2-5-uncensored --no-filter \
+  --seedance-task-type reference --target-resolution 720 --duration 10 \
+  -c ./identity-woman.png -c ./identity-man.png \
+  -c ./ref-vulva.png -c ./ref-penetration-front.png -c ./ref-penetration-rear.png \
+  -o ./scene.mp4 "<beat-by-beat prompt>"
+```
+
+Prompt construction:
+
+1. Pass one identity reference per character, then one reference for EVERY
+   genital appearance the scene will show — the model will not introduce
+   genitals that no reference contains. Give each a job in the prompt
+   ("@Image3 is the exact reference for her bare vulva when it is exposed";
+   "@Image4 is the exact reference for the penetration when it is visible face
+   to face") and match each reference's pose to where the camera will see it.
+2. Write the scene as chronological story beats and bind each explicit beat to
+   its reference ("he pushes her slip up, exposing her bare vulva exactly as in
+   @Image3. … the camera low behind them as in @Image5"). This starts the film
+   clothed and goes explicit at the chosen beat.
+3. Direct the camera explicitly — "the camera held close and low on their hips
+   where he thrusts" — or Seedance frames tastefully above the waist no matter
+   how explicit the prompt is.
+4. If the tail drifts back to a tame shot, put the explicit beat last; the
+   model weights its closing frames.
+
+When the scene already exists as an explicit still, draw that still with
+`dark_beast_krea2_fp8 --no-filter` (identity by written description works; the
+identity-edit variant sanitizes explicit prompts) and pass it as the single
+reference with "Recreate and animate the exact scene from @Image1".
+
+`--duration` is 4–30 whole seconds and `--target-resolution` is `480`, `720`,
+or `1080`. Seedance bills premium per-second rates from Premium Spark, which
+no Unlimited plan covers. Use `--estimate-video-cost` with the intended
+settings before rendering.
+
+## Specialized prompt vocabulary
+
+The LoRA is one multi-concept adapter. Each token selects an action concept:
+
+| User intent | Token |
+|-------------|-------|
+| Missionary position | `m15510n4ry` |
+| Oral action | `bl0wj0b` |
+| Two-person oral action | `d0ubl3_bj` |
+| Rear-entry position | `d0gg1e` |
+| Partner-on-top position | `c0wg1rl` |
+| Reverse partner-on-top position | `r3v3rs3_c0wg1rl` |
+
+Use one matching token for a clip focused on one action. Multiple tokens can be
+used for sequential actions, but results may blend the concepts. For more
+reliable output, offer to render one action per clip and stitch the clips.
+When a single continuous transition is preferred, keep the sequence short,
+describe it chronologically, and place each token beside its corresponding
+action.
+
+## Prompt construction for 10Eros + DR34ML4Y
+
+Write the prompt solely to produce the result the creator requested. Use one
+unbroken, chronological LTX paragraph of 4-8 present-tense sentences. Do not
+emit section labels such as `Performance:` or `Dialogue:` into the model
+prompt; fold those details into cinematic prose instead.
+
+1. Use the supplied start image exactly as the first frame by passing it through
+   `--ref`; do not merely mention it in prose. The frame already shows its
+   composition, so name only the starting pose and placement the motion begins
+   from, without re-describing the frame or inventing conflicting details.
+2. Name the camera move and any change in lighting, environment, or background
+   motion; leave what the frame already shows.
+3. State the action concretely. Include a LoRA token when the requested action
+   matches one of its trained concepts.
+4. Describe what happens step by step in chronological order: who moves, which
+   body parts move, their direction, changes in position or contact, and the
+   resulting pose.
+5. Direct the performance through observable behavior: posture, breathing,
+   gaze, facial expression, micro-expressions, small pauses, and emotional
+   changes that flow naturally from the starting pose.
+6. Integrate the audio design with the action: voice delivery, dialogue, foley,
+   environmental sound, and music only when the creator asks for it.
+
+Be specific and literal. Do not substitute euphemisms or generalizations for
+the requested visible action. Fit every action the creator names into the
+clip, in order; if they cannot all finish on screen, say so and suggest a
+longer clip or one clip per action rather than dropping one. Avoid
+contradictory positions, unrelated cuts, generic quality tags, and repeating
+the same action in several different ways. Give the motion one logical,
+physically continuous evolution. Play the action at the intensity and pace the
+creator asked for, natural and cinematic, with realistic weight and physically
+coherent motion; add slapstick or comic exaggeration only when asked.
+Do not introduce extra characters unless they are clearly visible in the
+supplied image or explicitly requested.
+
+When an image is attached and the creator says "one for this image", "make one
+for this", or similar, treat the image as the start-frame authority and build
+the complete purpose-written prompt from what is visibly present plus the
+creator's stated intent. Do not answer with generic prompting advice, and do
+not invent a different scene merely to fill out the paragraph.
+
+Write every spoken line verbatim in double quotes and identify who says it and
+how. Never imply dialogue with a summary such as "they talk" or "she says
+something." Keep dialogue concise enough to fit the clip and coordinate sounds
+with the motion that produces them.
+
+For first+last keyframes, describe the exact continuous change that connects
+the supplied boundaries rather than reimagining either endpoint. For
+last-frame-only generation, describe the preceding motion and composition that
+must resolve naturally into the supplied final frame. For a same-frame loop,
+describe motion that departs from and settles back into that boundary pose.
+
+Action tokens are optional: attach the LoRA for its broader domain improvement
+even when none of its specialized concepts apply. Generate multiple seeds for
+difficult poses, transitions, or multi-action clips.
+
+## Frame modes and loops
+
+- First-frame animation: `--ref ./first.png`
+- Last-frame-directed animation: `--ref-end ./last.png`
+- First-to-last interpolation: use both `--ref ./first.png` and
+  `--ref-end ./last.png`
+- Single-render anchored loop: use the same image as both the first and last
+  frame, or use deliberately matching boundary frames. Do not add `--looping`
+  to this form.
+- Automatic two-clip loop: use `--looping --ref ./first.png`. The CLI generates
+  A→B and B→A and joins them; this mode creates its own return endpoint and
+  therefore does not accept `--ref-end`.
+
+The optional DR34ML4Y LoRA works with each compatible 10Eros frame mode.
+
+Command shape:
+
+```bash
+sogni-agent --video --ref ./start.png -m 10eros \
+  --lora dr34ml4y-v3 --lora-strength 1 --no-filter \
+  "<purpose-built LTX prompt matching the creator's intended result>"
+```

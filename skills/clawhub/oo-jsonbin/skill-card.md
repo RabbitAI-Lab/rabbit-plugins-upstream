@@ -1,42 +1,58 @@
-## Description: <br>
-Provides agent guidance for reading, creating, updating, and deleting JSONBin.io data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use JSONBin.io to read, create, update, and delete JSON data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to read, create, update, and delete JSONBin.io bins through an OOMOL-connected account without handling raw API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete JSONBin.io records through the connected account. <br>
-Mitigation: Review the exact payload and target bin before approving write actions, and require explicit approval before delete operations. <br>
-Risk: Installing the skill allows the agent to operate the user's JSONBin.io account through OOMOL. <br>
-Mitigation: Install it only for environments where that account access is intended, and keep the JSONBin.io connection scoped and reviewed. <br>
+## Use Case:
 
+Developers and agents use this skill to read and manage JSONBin.io records through a connected OOMOL account. It supports creating bins, reading records, replacing stored data, and deleting bins.
 
-## Reference(s): <br>
-- [JSONBin.io homepage](https://jsonbin.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-jsonbin) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions include a remote CLI installer that could run unverified code without separate approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before use, install a verified CLI version yourself, and check its automatic skill synchronization before allowing agent use.
+
+Risk: The connected OOMOL service mediates JSONBin requests and holds access to the connected API key.
+
+Mitigation: Use the connection only if you trust OOMOL with that access.
+
+Risk: Creating, replacing, or deleting stored data can change or remove JSONBin content.
+
+Mitigation: Keep explicit user approval for write and deletion actions, including review of the exact payload or target.
+
+## Reference(s):
+
+- [JSONBin.io API documentation](https://jsonbin.io/api-reference)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON data, Guidance]
+
+**Output Format:** [Shell commands and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the selected action and may include records or action metadata.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

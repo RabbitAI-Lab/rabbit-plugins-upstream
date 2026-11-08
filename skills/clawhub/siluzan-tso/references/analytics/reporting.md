@@ -186,7 +186,7 @@ siluzan-tso report push receive-emails -m Google [--json-out ./snap]
 
 ### 查看报告（引导打开网页）
 
-报告生成后，在网页查看。先用 `siluzan-tso config show` 获取 `webUrl`，再按以下规则拼接链接：
+报告生成后，在网页查看。先用 `siluzan-tso config show` 获取 `webUrl`，再按以下规则拼接链接（**禁止**凭记忆编造查看地址；`entityId` 须来自当次 `report list`）：
 
 | 媒体   | 报告类型         | URL 模板                                                    |
 | ------ | ---------------- | ----------------------------------------------------------- |

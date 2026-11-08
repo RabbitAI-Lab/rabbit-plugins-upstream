@@ -1,44 +1,56 @@
-## Description: <br>
-Operate Ashby through an OOMOL-connected account to read and search candidates, jobs, and API key information with the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Ashby (ashbyhq.com). Use this skill for ANY Ashby request — searching and reading data. Whenever a task involves Ashby, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and recruiting operations users use this skill to let an agent inspect live Ashby connector schemas and run read/search actions against Ashby data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can query Ashby through the user's OOMOL account. <br>
-Mitigation: Install and use the skill only when the user is comfortable with agent-mediated Ashby queries, and review the oo CLI setup and Ashby connection before use. <br>
-Risk: Future write, delete, or overwrite actions could change Ashby data if enabled. <br>
-Mitigation: Require explicit user confirmation before enabling or running any future action that writes, deletes, or overwrites Ashby data. <br>
+## Use Case:
 
+Recruiting and operations teams use this skill to retrieve Ashby candidate and job information, search candidates, and inspect the connected API key information through their OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Ashby skill page](https://clawhub.ai/oomol/skills/oo-ashby) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Ashby homepage](https://www.ashbyhq.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns oo CLI execution metadata when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Setup may execute downloaded code and introduce broader agent changes without clear user control.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and explicitly approve CLI installation. Configure OO_SKILLS_SYNC_DISABLED=1 before invoking oo if automatic skill writes are unwanted.
+
+Risk: Candidate information may be accessible through the OOMOL connection.
+
+Mitigation: Limit the Ashby connection to the read permissions needed for the task.
+
+## Reference(s):
+
+- [oo CLI documentation and source](https://github.com/oomol-lab/oo-cli)
+- [Ashby](https://www.ashbyhq.com)
+- [Ashby API documentation](https://developers.ashbyhq.com/)
+- [OOMOL CLI controls](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action-specific JSON input; results returned as JSON.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

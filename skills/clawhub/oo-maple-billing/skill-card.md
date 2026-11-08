@@ -1,44 +1,51 @@
-## Description: <br>
-Measure helps agents read, create, and update Measure billing data through the OOMOL maple_billing connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the connected OOMOL Measure account to read, create, and update Measure data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Measure billing workflows from an agent, including customer, product, pricing, subscription, and checkout-session lookup plus selected customer and checkout creation or update actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Measure billing data through OOMOL. <br>
-Mitigation: Install and use it only when the user intends to grant agent access through OOMOL and trusts that integration. <br>
-Risk: Write actions can create or update Measure customers and checkout sessions. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running any action tagged as write. <br>
-Risk: First-time setup may install the oo CLI or connect an OOMOL account. <br>
-Mitigation: Run installer, authentication, or account-connection steps only after a matching command failure and only with user approval. <br>
+## Use Case:
 
+People working with a connected Measure account use this skill to find and retrieve customer, product, pricing, subscription, and checkout data, and to create checkout sessions, create customers, or update customers.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-maple-billing) <br>
-- [Measure Homepage](https://getmeasure.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, Text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and skill frontmatter) <br>
+Risk: First-time setup directs the agent to execute downloaded installer code that has not been verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the CLI separately using a verified release, check its effects on other installed agent skills, and preserve confirmation for every write.
+
+## Reference(s):
+
+- [Measure API Quickstart](https://docs.getmeasure.com/pages/guides/quickstart-with-api)
+- [Measure](https://getmeasure.com)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write actions require confirmation of the exact payload and effect.]
+
+## Skill Version(s):
+
+1.0.5 (source: SKILL.md frontmatter; server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

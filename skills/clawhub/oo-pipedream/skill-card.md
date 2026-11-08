@@ -1,43 +1,51 @@
-## Description: <br>
-Routes Pipedream requests through the OOMOL oo CLI to search and read Pipedream user, workspace, workflow, event, and app-catalog data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Pipedream through an OOMOL-connected account to search and read data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Pipedream account, workspace, workflow, event, and app-catalog data through an OOMOL-connected Pipedream account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read sensitive Pipedream account, workspace, workflow, and emitted-event data through connected credentials. <br>
-Mitigation: Confirm the target Pipedream account, workspace, connected app, and action before allowing reads involving sensitive workflows. <br>
-Risk: Authentication, connection, scope, or billing failures can block connector execution. <br>
-Mitigation: Use the first-time setup and troubleshooting guidance only after a matching command failure. <br>
+## Use Case:
 
+Developers and agents use this skill to search Pipedream apps and read account, workspace, workflow, and workflow event data through a connected Pipedream account.
 
-## Reference(s): <br>
-- [Pipedream homepage](https://pipedream.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-pipedream) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup can run remote installers and may introduce broader agent changes through automatic skill synchronization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the CLI installation, check its skill synchronization settings, and connect only the intended Pipedream account through OOMOL.
+
+## Reference(s):
+
+- [Pipedream REST API documentation](https://pipedream.com/docs/rest-api/overview)
+- [Pipedream](https://pipedream.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance, Markdown]
+
+**Output Format:** [JSON data and concise text or Markdown summaries, with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Inputs vary by Pipedream action; inspect the action schema before constructing a request.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

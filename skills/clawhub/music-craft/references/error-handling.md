@@ -32,7 +32,7 @@ Music generation can fail in many ways. This is a reference for the common ones,
 | MusicGen: CUDA out of memory | "GPU memory full. Try model `small` instead of `medium`/`large`, or reduce duration to 60 seconds." |
 | MusicGen: output is only ~30 seconds | "MusicGen's default chunk is ~30s. For longer tracks, accept shorter output or use a cloud backend (Stable Audio API) or install ACE-Step locally." |
 | MiniMax quota exhausted | "MiniMax quota hit. Switching to next available backend." Then re-run detection, skip MiniMax, try MusicGen or Stable Audio. |
-| The user asks for a fast cover or mashup | "That needs fast cloud cover / style transfer. Switch to `music-craft-minimax` and I will run the pre-flight with the extended checks." |
+| The user asks for a fast cover or mashup | "MiniMax's cloud cover is closed to new accounts. I can try a local ACE-Step cover (slower, experimental); mashup is not available." If the user's MiniMax account still has music access, `music-craft-minimax` is the legacy path. |
 | The user asks for a local cover/repaint experiment | "I can try this locally with ACE-Step, but it is slower, queue-bound, and source-length sensitive. I will use the ACE-Step cover/repaint workflow and wait helper." |
 | The user asks for emotion analysis | Same redirect to Skill 2 |
 | The user provides audio without a clear goal | Ask: cover? Sample? Style reference? |
