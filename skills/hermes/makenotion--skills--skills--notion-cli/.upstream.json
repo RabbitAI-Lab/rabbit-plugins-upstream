@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/makenotion/skills/tree/main/skills/notion-cli",
+  "identifier": "makenotion/skills/skills/notion-cli",
+  "repo": "makenotion/skills",
+  "path": "skills/notion-cli",
+  "branch": "main",
+  "pushedAt": "2026-09-22T22:14:26Z",
+  "contentHash": "cde415ed43eb704052d1557bc26a66589c81a8cf982195707060fa1a11443f54",
+  "fetchedAt": "2026-11-08T14:21:50.382Z"
+}

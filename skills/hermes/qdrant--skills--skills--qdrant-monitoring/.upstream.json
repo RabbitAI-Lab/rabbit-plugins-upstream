@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/qdrant/skills/tree/main/skills/qdrant-monitoring",
+  "identifier": "qdrant/skills/skills/qdrant-monitoring",
+  "repo": "qdrant/skills",
+  "path": "skills/qdrant-monitoring",
+  "branch": "main",
+  "pushedAt": "2026-11-07T03:05:10Z",
+  "contentHash": "a56b24850a81957aa87f408a76ee64054f4b59547847f000668e768fe1b4dbd4",
+  "fetchedAt": "2026-11-08T14:21:51.130Z"
+}
