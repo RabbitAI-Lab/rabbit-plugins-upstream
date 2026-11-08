@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/stripe/link-cli/create-payment-credential",
+  "repo": "stripe/link-cli",
+  "skillId": "create-payment-credential",
+  "branch": "main",
+  "pushedAt": "2026-11-07T00:03:23Z",
+  "contentHash": "d0b499495b7f8ab7d71b69ff56f2d9a1f278fccffd0570bd52e5145dd3b8d5ba",
+  "fetchedAt": "2026-11-08T14:22:05.355Z"
+}
