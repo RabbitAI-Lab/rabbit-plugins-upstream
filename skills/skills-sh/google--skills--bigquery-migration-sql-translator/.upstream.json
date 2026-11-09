@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/bigquery-migration-sql-translator",
+  "repo": "google/skills",
+  "skillId": "bigquery-migration-sql-translator",
+  "branch": "main",
+  "pushedAt": "2026-11-09T17:13:28Z",
+  "contentHash": "d6533adcd228524300ed8d40e54054424cff81f64efd56fcdc119255272237e0",
+  "fetchedAt": "2026-11-09T17:39:06.483Z"
+}
