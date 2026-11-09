@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Agora"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["agora"]
   icon: "https://static.oomol.com/logo/third-party/agora.svg"
 ---
@@ -42,8 +42,8 @@ Each action is listed below with a one-line description; actions that change sta
 - `get_project_usage` — Retrieve usage data for one Agora Console project and business type.
 - `list_projects` — List Agora Console projects for the connected account.
 - `reset_primary_certificate` — Reset the primary App Certificate for an Agora Console project. [destructive]
-- `set_primary_certificate` — Enable or disable the primary App Certificate for an Agora Console project. [write]
-- `update_project_status` — Enable or disable an Agora Console project. [write]
+- `set_primary_certificate` — Enable or disable the primary App Certificate for an Agora Console project. [destructive]
+- `update_project_status` — Enable or disable an Agora Console project. [destructive]
 
 ## Safety
 
@@ -74,11 +74,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Agora is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=agora
+  https://console.oomol.com/connections/agora
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Agora homepage: https://www.agora.io
+- API documentation: https://docs.agora.io/en/signaling/rest-api/restful-authentication

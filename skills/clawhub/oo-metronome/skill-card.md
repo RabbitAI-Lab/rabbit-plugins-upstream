@@ -1,43 +1,55 @@
-## Description: <br>
-Metronome helps an agent search and read Metronome customers, invoices, and billable metrics through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read Metronome data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect Metronome customers, invoices, and billable metrics through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The trigger wording is broad and could cause Metronome account lookups to be considered in contexts where that access was not intended. <br>
-Mitigation: Use the skill only in contexts where Metronome customer, invoice, or billable metric lookups are intended. <br>
-Risk: First-time setup may require installing the oo CLI or connecting an OOMOL account. <br>
-Mitigation: Review any first-time oo CLI install or account-connection step before proceeding, and run setup only after an auth or connection failure. <br>
+## Use Case:
 
+Developers and billing teams can retrieve Metronome customer, invoice, and billable metric data through their connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub Metronome skill page](https://clawhub.ai/oomol/skills/oo-metronome) <br>
-- [Metronome homepage](https://metronome.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Metronome get and list operations; connector responses include data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and frontmatter) <br>
+Risk: The fallback setup executes unverified software downloaded from the internet, and its exact local effects are uncertain.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before installing; prefer a reviewed, version-pinned CLI installation and require approval for local installation or agent-skill changes.
+
+Risk: Connecting Metronome gives OOMOL access to sensitive billing information.
+
+Mitigation: Connect only an account authorized to share the relevant billing data, and review the setup before connecting.
+
+## Reference(s):
+
+- [Metronome API documentation](https://docs.metronome.com/)
+- [Metronome](https://metronome.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Text, JSON data]
+
+**Output Format:** [JSON data and concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only customer, invoice, and billable metric results.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

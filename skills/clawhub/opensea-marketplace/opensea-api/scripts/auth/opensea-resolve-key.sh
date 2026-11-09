@@ -14,7 +14,7 @@ set -euo pipefail
 #      invocation reuses it), then print it.
 #
 # Prints ONLY the resolved key to stdout. Typical use:
-#   export OPENSEA_API_KEY=$(packages/skill/opensea-api/scripts/auth/opensea-resolve-key.sh)
+#   export OPENSEA_API_KEY=$(scripts/auth/opensea-resolve-key.sh)
 #
 # --force  Ignore any cached key on disk and fetch a fresh instant key, then
 #          overwrite the cache. Use this when a cached instant key is rejected
@@ -63,7 +63,7 @@ http_code=$(curl -sS --connect-timeout 10 --max-time 30 -X POST \
 
 if [[ ! "$http_code" =~ ^2 ]]; then
   if [ "$http_code" = "429" ]; then
-    echo "opensea-resolve-key.sh: HTTP 429 rate limited (instant key creation is rate limited per IP). Reuse the cached key if you have one, try again later, or create a key at https://opensea.io/settings/developer" >&2
+    echo "opensea-resolve-key.sh: HTTP 429 rate limited. Reuse the cached key if you have one, try again later, or create a key at https://opensea.io/settings/developer" >&2
   else
     echo "opensea-resolve-key.sh: HTTP $http_code error while requesting an instant key" >&2
   fi

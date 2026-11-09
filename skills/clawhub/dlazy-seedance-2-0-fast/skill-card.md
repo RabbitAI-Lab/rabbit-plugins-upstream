@@ -1,45 +1,56 @@
-## Description: <br>
-Fast version of ByteDance's Seedance 2.0 for generating videos from text prompts, reference media, or first and last frame inputs through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates videos with Seedance 2.0 Fast from text prompts, multimodal references, or first and last frames.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to generate short videos with Seedance 2.0 Fast through the dLazy CLI. It supports text-to-video, multimodal reference inputs, first/last frame workflows, selectable aspect ratios, durations, and asynchronous polling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local media paths provided to the CLI may be uploaded to dLazy for processing. <br>
-Mitigation: Avoid submitting sensitive or unauthorized content, and review dLazy service terms before use. <br>
-Risk: The dLazy API key can be stored locally in the CLI configuration. <br>
-Mitigation: Use OS account protections, prefer per-invocation credentials when appropriate, and rotate or revoke the organization API key if exposure is suspected. <br>
-Risk: Generated outputs are hosted by dLazy. <br>
-Mitigation: Review generated media URLs and sharing practices before distributing outputs. <br>
+## Use Case:
 
+Developers and creators use the skill to generate short videos from text prompts, image, video, or audio references, or first and last frames, then retrieve the generated result.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-seedance-2-0-fast) <br>
-- [dLazy publisher profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, Files] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON responses containing generated media URLs or asynchronous task status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is hosted by dLazy; local media paths supplied to the CLI may be uploaded for processing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: server release metadata and skill frontmatter) <br>
+Risk: The security scan was partial and noted a mismatch between the advertised video-generation purpose and the visible login command.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing or authenticating, check the expected login flow and CLI behavior against the publisher’s current documentation; treat the benign scan verdict as limited to the scanned content.
+
+Risk: The skill documentation says prompts and local media inputs are sent to dLazy hosted services, and local media is uploaded for processing.
+
+Mitigation: Use only prompts and media suitable for hosted processing, and review the service’s data terms before submitting sensitive material.
+
+## Reference(s):
+
+- [dLazy service](https://dlazy.com)
+- [dLazy API key setup](https://dlazy.com/dashboard/organization/api-key)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-seedance-2-0-fast)
+
+## Skill Output:
+
+**Output Type(s):** [Video asset, JSON]
+
+**Output Format:** [Hosted video result URL with JSON generation status and metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts text prompts, multimodal references, or first and last frames; supports 4–12 second clips at 480p or 720p.]
+
+## Skill Version(s):
+
+1.3.37 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

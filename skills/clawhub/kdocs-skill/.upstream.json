@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/kdocs-skill",
   "slug": "kdocs-skill",
   "ownerHandle": null,
-  "version": "2.5.13",
-  "updatedAt": 1782456510117,
-  "contentHash": "4f7b6c8c7edc91ee75cca9f3385edbd3fd457994e9bc8e17f3986c855b88b590",
-  "fetchedAt": "2026-07-26T18:23:25.436Z"
+  "version": "2.9.0",
+  "updatedAt": 1793776167585,
+  "contentHash": "e535ead817f18c2334a8641dcaa2f9ed4905b1fdab4dcfb4f12e7ddd05dd75a4",
+  "fetchedAt": "2026-11-09T18:53:44.831Z"
 }

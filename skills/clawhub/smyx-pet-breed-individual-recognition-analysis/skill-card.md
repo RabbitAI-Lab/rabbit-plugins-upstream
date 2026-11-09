@@ -1,45 +1,63 @@
-## Description: <br>
-Accurately identifies cat and dog breeds and supports distinguishing between different individuals in multi-pet households; an essential assistant for intelligent pet butlers. | 宠物品种个体识别技能，精准识别猫狗宠物品种，支持多宠家庭区分不同独立个体，智能宠物管家好帮手 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes cat and dog images or videos to estimate breeds and distinguish individual pets in multi-pet households.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and agents use this skill to analyze pet images or videos, identify cat and dog breeds, distinguish individual pets in multi-pet households, and retrieve prior recognition reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Media and URL inputs are sent to a cloud pet-recognition service. <br>
-Mitigation: Use only media acceptable for external cloud processing, and avoid private household footage or identifying content unless the account linkage and provider retention model are acceptable. <br>
-Risk: The skill silently creates or reuses an account identity and stores authentication tokens/profile data in the workspace. <br>
-Mitigation: Review the workspace data and account-linkage behavior before installation; use an isolated workspace or account when privacy boundaries matter. <br>
-Risk: History and report APIs can retrieve prior recognition reports tied to the managed identity. <br>
-Mitigation: Limit access to the workspace and provider account, and avoid shared identities for sensitive media. <br>
+## Use Case:
 
+Pet owners can submit pet images or videos for breed and individual-pet analysis, then view associated historical reports. The skill is intended for pet-interest use; its documentation says professional organizations should be used for purebred certification.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-breed-individual-recognition-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API 接口文档](artifact/references/api_doc.md) <br>
-- [smyx_analysis API接口文档](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, files] <br>
-**Output Format:** [Markdown or JSON analysis report text, with optional file output when requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports may include pet count, breed and individual labels, confidence values, remarks, history entries, and report/export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: SKILL.md frontmatter and ClawHub release evidence) <br>
+Risk: Pet report histories may be mixed across users if sender isolation is not fixed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Wait for sender-isolation fixes and review report ownership before relying on or sharing history results.
+
+Risk: The --export-env-only option may not reliably limit execution to environment setup.
+
+Mitigation: Do not rely on that option until its behavior is fixed; avoid using it in shared workspaces.
+
+Risk: Credentials may be retained with insufficient protection.
+
+Mitigation: Avoid supplying unrelated secrets and request clear credential-storage controls before use.
+
+Risk: Household media is sent to LifeEmergence cloud analysis, service charges may apply, and server-side deletion and access controls are unconfirmed.
+
+Mitigation: Only submit media intended for this analysis, confirm registration and deletion controls with the provider, and account for possible service charges.
+
+## Reference(s):
+
+- [API interface reference](references/api_doc.md)
+- [LifeEmergence skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-pet-breed-individual-recognition-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Report links]
+
+**Output Format:** [JSON analysis results; Markdown tables for historical report lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include pet count, breed and individual-pet findings, confidence, notes, and report links; detail can be basic, standard, or JSON.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved ClawHub release; artifact SKILL.md frontmatter lists 1.0.23)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,55 @@
-## Description: <br>
-Analyzes pet grooming images or videos through server-side APIs to assess coat matting, shed-hair volume, grooming effectiveness, and hairball risk, with optional history lookup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet grooming-area images or videos to estimate coat matting and shed-hair volume, assess grooming effectiveness, and summarize hairball risk.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External pet-care users and developers use this skill to submit pet grooming media and receive structured grooming-effectiveness, matting, shed-hair, and hairball-risk results for care guidance. The outputs are for pet-care reference and are not a medical diagnosis or treatment plan. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet images, videos, URLs, generated identity values, and report history may be handled by lifeemergence.com services. <br>
-Mitigation: Use the skill only where cloud processing and account-linked history are acceptable, and avoid submitting sensitive media unless retention and deletion expectations are clear. <br>
-Risk: The skill may silently create or reuse a local identity and store account tokens locally. <br>
-Mitigation: Run it in an isolated workspace or account, review local state before and after use, and prefer releases that document token storage, revocation, and deletion. <br>
-Risk: The server-side analysis is a pet-care aid and may not be reliable enough for medical decisions. <br>
-Mitigation: Treat results as grooming guidance only and consult a veterinary professional for health concerns, severe matting, abnormal shedding, or suspected hairball complications. <br>
+## Use Case:
 
+Pet owners and smart-grooming tool operators can use grooming-area photos or videos to review estimated matting and shed-hair measures, see a hairball-risk summary, and check historical reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-grooming-effectiveness-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown text with embedded JSON-style structured analysis and report links; optional file output when --output is used.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include a server-generated report export URL and historical report JSON when listing prior reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: The security summary reports account registration and credential storage or transmission.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the reported identity and credential handling; avoid installation unless you are comfortable with it.
+
+Risk: The security summary reports broader user-data capabilities and possible unintended requests or file changes.
+
+Mitigation: Review the data access and side effects, and monitor network requests and file changes if you use the skill.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-grooming-effectiveness-analysis)
+- [API reference](references/api_doc.md)
+- [Skill usage introduction](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Structured grooming analysis with Markdown or JSON detail and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Visual estimates for care reference; not a medical diagnosis or precise weighing.]
+
+## Skill Version(s):
+
+1.0.15 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

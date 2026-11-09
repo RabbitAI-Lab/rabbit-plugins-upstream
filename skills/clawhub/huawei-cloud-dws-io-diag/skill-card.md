@@ -1,52 +1,69 @@
-## Description: <br>
-DWS cluster I/O overload root cause diagnosis skill based on KooCLI v3.2.0+ and DWS Autopilot MCP Server that collects I/O metrics, analyzes customer-side or system-side root causes with a three-stage decision tree, and outputs a standardized diagnosis report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Diagnoses Huawei Cloud DWS cluster I/O overload by collecting metrics, analyzing root causes, and producing a standardized report.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operations engineers use this skill to investigate Huawei Cloud DWS cluster I/O alarms, high I/O usage, and disk I/O load anomalies. It guides metric collection through KooCLI or the DWS Autopilot MCP Server and produces a diagnosis summary and report grounded in returned monitoring data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may run local hcloud and Python commands and use tools beyond the declared list. <br>
-Mitigation: Review the skill before installation, run it in a scoped environment, and allow only the commands and DWS tools needed for the diagnostic workflow. <br>
-Risk: The workflow handles cloud credential configuration in ways that can expose AK/SK values if used carelessly. <br>
-Mitigation: Use interactive credential setup or a secret manager, avoid putting AK/SK values in command lines or committed YAML files, and restrict configuration file permissions. <br>
-Risk: DWS monitoring data, active-query data, and generated HTML reports can contain sensitive operational information. <br>
-Mitigation: Run the skill only for authorized clusters and treat generated reports as sensitive files with appropriate access controls and retention. <br>
+## Use Case:
 
+Huawei Cloud DWS operators and database engineers use this read-only skill to investigate cluster I/O alarms and disk I/O anomalies. It gathers available metrics and reports likely causes for review.
 
-## Reference(s): <br>
-- [Skill Page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-dws-io-diag) <br>
-- [CLI Installation Guide - Huawei Cloud DWS I/O Diagnosis](references/cli-installation-guide.md) <br>
-- [DWS Autopilot MCP Server](references/dws-mcp-installation-guide.md) <br>
-- [IAM Policies - DWS I/O Overload Diagnosis](references/iam-policies.md) <br>
-- [Metric Reference - DWS I/O Overload Diagnosis](references/metric-reference.md) <br>
-- [I/O Background Knowledge - DWS I/O Overload Diagnosis](references/io-background.md) <br>
-- [Output Format - DWS I/O Overload Diagnosis](references/output-format.md) <br>
-- [diagnosis_json Output Format Reference](references/diagnosis-json-format.md) <br>
-- [DWS I/O Diagnosis - Scenario Routing and Full Investigation Direction Reference](references/IO_DIAGNOSIS_REF.md) <br>
-- [hcloud Installation Guide](https://support.huaweicloud.com/cli/cli_hcloud_install.html) <br>
-- [DWS API Reference](https://support.huaweicloud.com/api-dws/dws_02_0023.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Structured diagnosis summary plus HTML diagnosis report, with supporting command and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill requires conclusions to come from actual tool results and marks failed or empty metric queries as unavailable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Diagnosis reports may contain SQL literals and usernames.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep reports in a private workspace, redact them before sharing, and delete them when no longer needed.
+
+Risk: Cloud credentials could be exposed through chat or command history.
+
+Mitigation: Use a dedicated read-only cloud identity and keep keys out of chat and command lines.
+
+Risk: The bundled security review does not establish the runtime safety of external dependencies.
+
+Mitigation: Verify KooCLI and MCP dependencies separately and follow Huawei's current installation instructions.
+
+Risk: Suggestions involving audit settings or index removal could have operational impact.
+
+Mitigation: Require separate operational review before acting on such suggestions.
+
+## Reference(s):
+
+- [I/O Diagnosis Reference](references/IO_DIAGNOSIS_REF.md)
+- [I/O Background Knowledge](references/io-background.md)
+- [Metric Reference](references/metric-reference.md)
+- [Diagnosis JSON Format](references/diagnosis-json-format.md)
+- [Report Output Format](references/output-format.md)
+- [KooCLI Installation Guide](references/cli-installation-guide.md)
+- [DWS Autopilot MCP Installation Guide](references/dws-mcp-installation-guide.md)
+- [IAM Policy Requirements](references/iam-policies.md)
+- [Huawei Cloud KooCLI installation instructions](https://support.huaweicloud.com/intl/en-us/qs-hcli/hcli_02_003_02.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, HTML]
+
+**Output Format:** [Diagnosis summary and complete HTML report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

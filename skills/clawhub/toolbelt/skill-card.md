@@ -1,46 +1,55 @@
-## Description: <br>
-Toolbelt helps agents set up and use a shared MCP workspace for ingesting documents, querying structured and unstructured data, recording findings, and sharing state across sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Toolbelt helps agents ingest documents, query structured and unstructured data through MCP, and share persistent workspaces across sessions.
 
-## Publisher: <br>
-[toolbeltai](https://clawhub.ai/user/toolbeltai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[toolbeltai](https://clawhub.ai/user/toolbeltai)
 
-## Use Case: <br>
-Developers and agent users use this skill when they need persistent, shared access to uploaded documents, structured data, knowledge graph relationships, saved findings, or collaboration state through Toolbelt's MCP server. It also guides first-time setup for account provisioning and MCP client configuration with explicit user consent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create a Toolbelt account and store a bearer token in an MCP client configuration. <br>
-Mitigation: Require explicit user approval before provisioning an account or writing MCP configuration, and disclose the target config path and token purpose before storage. <br>
-Risk: Uploaded content and recorded findings can persist in a Toolbelt namespace and become available to future connected agents or teammates. <br>
-Mitigation: Upload or record only user-approved, task-relevant data, avoid sensitive material by default, and direct users to Toolbelt controls for deletion or revocation. <br>
-Risk: A share URL can grant access to a namespace when paired with its token-bound invitation flow. <br>
-Mitigation: Confirm the user's sharing intent and recipient before creating a share link, and share it only through channels the user controls. <br>
+## Use Case:
 
+Developers using MCP-compatible agents can set up Toolbelt to ingest approved documents, ask questions across structured and unstructured data, and share persistent findings with other agents and sessions.
 
-## Reference(s): <br>
-- [Toolbelt skill page](https://clawhub.ai/toolbeltai/skills/toolbelt) <br>
-- [Toolbelt website and pricing](https://toolbelt.ai) <br>
-- [Toolbelt documentation](https://toolbelt.ai/docs) <br>
-- [Agent-readable Toolbelt docs](https://toolbelt.ai/llms-full.txt) <br>
-- [Toolbelt web app](https://app.toolbelt.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP examples, shell commands, JSON configuration snippets, and YAML status output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent to use Toolbelt MCP tools after setup; user consent is required before account provisioning, config writes, uploads, saved findings, or share links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.14 (source: server release evidence and artifact frontmatter) <br>
+Risk: The security scan flags account-claiming instructions that send account details to Toolbelt's web application, despite a stated MCP-only boundary.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the account-claiming request and proceed only if comfortable sending the email address and verification code to the web application.
+
+Risk: The security scan was partial and does not establish that all referenced material was inspected.
+
+Mitigation: Review unresolved local path-like references and related material before installing or following the skill.
+
+## Reference(s):
+
+- [Toolbelt documentation](https://toolbelt.ai/docs)
+- [Toolbelt complete documentation](https://toolbelt.ai/llms-full.txt)
+- [Toolbelt skill release](https://clawhub.ai/toolbeltai/skills/toolbelt)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Configuration, Shell commands, Guidance]
+
+**Output Format:** [Text and Markdown, including MCP configuration examples and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Varies with the requested setup and data task.]
+
+## Skill Version(s):
+
+1.1.2 (source: server-resolved release and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

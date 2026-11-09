@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/adaptlypost",
   "slug": "adaptlypost",
   "ownerHandle": null,
-  "version": "1.0.10",
-  "updatedAt": 1784590166034,
-  "contentHash": "d85aa3da33756e1348cf494b594757575c84d05c3795d769dc5d93b2a6fde634",
-  "fetchedAt": "2026-07-26T18:09:41.687Z"
+  "version": "1.31.0",
+  "updatedAt": 1794216910582,
+  "contentHash": "dfc7ee7a1eb1a0557dd59ef9925cb47a6b29b27192323bd722923ee82891b0c1",
+  "fetchedAt": "2026-11-09T18:36:43.201Z"
 }

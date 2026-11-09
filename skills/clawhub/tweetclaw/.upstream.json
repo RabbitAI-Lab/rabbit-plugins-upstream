@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/tweetclaw",
   "slug": "tweetclaw",
   "ownerHandle": null,
-  "version": "1.1.11",
-  "updatedAt": 1783991333196,
-  "contentHash": "d14e6fde5cda4f4dee6f9b7d50a474608d757cd4ea5b45869e1878f08d9f8f26",
-  "fetchedAt": "2026-07-26T18:14:58.779Z"
+  "version": "1.10.0",
+  "updatedAt": 1794200538159,
+  "contentHash": "62f2192f58a2e95043591d86ac02b29115ac0350bfc5d189f86d931b0c3cce9a",
+  "fetchedAt": "2026-11-09T18:37:43.607Z"
 }

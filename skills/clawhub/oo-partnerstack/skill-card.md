@@ -1,46 +1,58 @@
-## Description: <br>
-Helps agents operate PartnerStack through an OOMOL-connected account by inspecting live connector schemas and running read/list or customer-creation actions with the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use a connected PartnerStack account to retrieve customer, deal, lead, and partnership data or create customers.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve PartnerStack customers, partnerships, deals, and leads, and to create PartnerStack customers after confirming the payload. It is intended for agents operating through an already connected OOMOL account rather than direct PartnerStack API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: State-changing customer creation can modify PartnerStack data when a payload is wrong or unintended. <br>
-Mitigation: Confirm the exact create_customer payload and expected effect with the user before running the write action. <br>
-Risk: The skill depends on an OOMOL-brokered PartnerStack connection and the oo CLI installation/authentication path. <br>
-Mitigation: Install and authenticate only after trusting OOMOL, and treat CLI installation and account connection as separate trust decisions. <br>
-Risk: Expired credentials, missing scopes, unavailable app connections, or billing stops can block connector execution. <br>
-Mitigation: Resolve connection, scope, credential, and billing failures through the documented OOMOL console paths before retrying. <br>
+## Use Case:
 
+PartnerStack users can retrieve customer, deal, lead, and partnership records, and create customers through their connected account.
 
-## Reference(s): <br>
-- [PartnerStack homepage](https://partnerstack.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [OOMOL PartnerStack connection](https://console.oomol.com/app-connections?provider=partnerstack) <br>
-- [ClawHub PartnerStack skill page](https://clawhub.ai/oomol/skills/oo-partnerstack) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill frontmatter) <br>
+Risk: The required CLI can change other agents’ installed skills without this skill explaining those effects.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI separately before enabling the skill and limit automatic cross-agent skill changes; the publisher documents OO_SKILLS_SYNC_DISABLED=1 to disable startup synchronization.
+
+Risk: An incorrect customer-creation payload could create unintended PartnerStack data.
+
+Mitigation: Verify the exact customer-creation payload before approving the action.
+
+Risk: The remote installers and hosted connector have not been audited.
+
+Mitigation: Review the CLI separately before installation and consider the connector behavior unverified.
+
+## Reference(s):
+
+- [PartnerStack](https://partnerstack.com)
+- [PartnerStack API documentation](https://docs.partnerstack.com/reference/auth)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Guidance]
+
+**Output Format:** [Text responses and JSON data produced through shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read actions and customer creation; customer creation requires confirmation of the exact payload and effect.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

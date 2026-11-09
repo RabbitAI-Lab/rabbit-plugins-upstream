@@ -1,43 +1,56 @@
-## Description: <br>
-Operate Memberstack through an OOMOL-connected account for reading, creating, updating, deleting, and verifying member data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the oo CLI to read and manage Memberstack member records and plans through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Memberstack member records through the OOMOL memberstack connector, including member lookup, listing, creation, update, plan changes, deletion, and JWT verification. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create, update, plan-change, and delete actions can change or permanently remove Memberstack member data. <br>
-Mitigation: Review the exact action payload and intended effect with the user before approving state-changing or destructive operations. <br>
-Risk: The skill operates through the user's OOMOL-connected Memberstack account. <br>
-Mitigation: Install and use it only when the user wants Codex to manage Memberstack through that connected account. <br>
+## Use Case:
 
+Developers and site operators use this skill to retrieve Memberstack member information, verify tokens, and manage member accounts and free plans through an existing OOMOL connection.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-memberstack) <br>
-- [Memberstack homepage](https://www.memberstack.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Memberstack connection](https://console.oomol.com/app-connections?provider=memberstack) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; connector responses are JSON with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup may run unverified downloads, and the CLI may make broader changes to agents than this skill documents.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation before allowing automatic setup. To prevent startup skill synchronization, set OO_SKILLS_SYNC_DISABLED=1 as described in the oo CLI environment variable reference.
+
+Risk: Memberstack data passes through OOMOL, and account changes can include deletion and Stripe cleanup.
+
+Mitigation: Confirm the exact member, payload, and requested changes before writes; review deletion and Stripe cleanup flags carefully.
+
+## Reference(s):
+
+- [Memberstack](https://www.memberstack.com/)
+- [Memberstack Admin REST API quick start](https://developers.memberstack.com/admin-rest-api/quick-start)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI environment variables](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md#environment-variables)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON command payloads and Memberstack action results, with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions include reads, writes, and destructive operations; write and destructive actions require confirmation as described in the skill.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

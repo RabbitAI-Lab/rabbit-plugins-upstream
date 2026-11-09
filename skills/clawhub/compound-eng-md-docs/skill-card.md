@@ -1,47 +1,60 @@
-## Description: <br>
-Manages project documentation: CLAUDE.md, AGENTS.md, README.md, CONTRIBUTING.md, DOCS.md. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages project documentation files including CLAUDE.md, AGENTS.md, README.md, CONTRIBUTING.md, and DOCS.md.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering teams use this workflow skill to create or maintain project documentation and agent context files from the current repository state. It focuses on AGENTS.md, CLAUDE.md, README.md, CONTRIBUTING.md, and DOCS.md rather than general markdown editing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Documentation or context-file edits could introduce stale, incorrect, or misleading instructions for future agents and developers. <br>
-Mitigation: Use the skill's verification workflow to check paths, commands, and repository structure against the current codebase before accepting changes. <br>
-Risk: Existing AGENTS.md or CLAUDE.md files may be changed, renamed, or linked during context initialization workflows. <br>
-Mitigation: Use --dry-run or review planned changes before writing, and confirm before migrating CLAUDE.md to AGENTS.md. <br>
-Risk: README or CONTRIBUTING updates could overwrite intentional project-specific prose or governance policy. <br>
-Mitigation: Use preserve behavior where appropriate, update CONTRIBUTING.md with targeted replacements, and keep maintainer policy sections intact. <br>
+## Use Case:
 
+Developers use this skill to create or update project context and documentation files based on the repository's actual structure, commands, and conventions. It can also update an existing CONTRIBUTING.md or DOCS.md when asked.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-md-docs) <br>
-- [Initialize Context Workflow](references/init-agents.md) <br>
-- [Monorepo Handling](references/monorepo.md) <br>
-- [Update Context Files Workflow](references/update-agents.md) <br>
-- [Update CONTRIBUTING Workflow](references/update-contributing.md) <br>
-- [Update README Workflow](references/update-readme.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown documentation updates, concise reports, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update AGENTS.md, CLAUDE.md symlinks, README.md, CONTRIBUTING.md, and DOCS.md according to the selected workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: The release evidence says evaluation and diagnostic commands are described, but their implementation was not supplied.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect those commands in the target repository and run only workflows that fit your intended use.
+
+Risk: The release evidence reports one referenced path as missing.
+
+Mitigation: Check referenced files in the target repository before following a workflow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-md-docs)
+- [Context content and writing](references/context-content-and-writing.md)
+- [Documentation workflows](references/documentation-workflows.md)
+- [Initialize context files](references/init-agents.md)
+- [Monorepo guidance](references/monorepo.md)
+- [Update AGENTS.md](references/update-agents.md)
+- [Update CONTRIBUTING.md](references/update-contributing.md)
+- [Update README.md](references/update-readme.md)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Markdown, Guidance]
+
+**Output Format:** [Markdown documentation files and concise change summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+5.1.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
