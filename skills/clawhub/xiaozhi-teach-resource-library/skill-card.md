@@ -1,45 +1,58 @@
-## Description: <br>
-Helps independent teachers organize, tag, retrieve, adapt, and maintain reusable teaching resources while applying copyright and student-privacy safeguards. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助独立教师为讲义、题目、讲评话术和错因案例建立带标签与版权状态的可检索资源库，并支持教师审阅后的检索、改编和复用。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Independent teachers use this skill to build a searchable resource library for handouts, question banks, review language, error cases, and lesson plans, then adapt those assets for new students and lessons. It supports resource indexing, tagging, reuse records, copyright annotation, and de-identified case handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The resource library may accumulate identifiable student history or be shared across teaching skills without appropriate consent. <br>
-Mitigation: Use de-identified learning patterns, confirm consent settings before cross-skill sharing, avoid real names and contact details, and periodically delete or archive stale records. <br>
-Risk: Teaching materials may include copyrighted source content or unauthorized copies of workbook questions and scans. <br>
-Mitigation: Require copyrightStatus annotations, store only indexes for restricted third-party materials, record sources for adapted or publicly reusable items, and avoid storing unauthorized originals or scans. <br>
+## Use Case:
 
+面向独立教师，用于整理既有教学资源，并按学科、知识点、难度和学段检索候选；教师可记录改编来源与使用效果，供后续复用。面向学生或家长的材料应由教师审阅后再使用。
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-resource-library) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Resource categorization and copyright template](references/resource-categorization.md) <br>
-- [Resource entry examples](references/resource-entry-examples.md) <br>
-- [Copyright annotation template](references/copyright-annotation-template.md) <br>
-- [Reuse record template](references/reuse-record-template.md) <br>
+### Deployment Geography for Use:
 
+China (mainland-specific guidance; confirm applicable local requirements)
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown guidance with structured text templates for resource entries, reuse records, and copyright annotations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Designed for reusable teaching assets, de-identified learning patterns, resource indexes, tagging metadata, and consent-aware cross-skill sharing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Some guidance may extend into tutoring or question generation beyond the stated resource-library role.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review that broader guidance before use, keep student-facing material under teacher review, and verify AI-generated questions before adding them for reuse.
+
+Risk: Stored student cases, assessment material, or third-party teaching resources may contain sensitive or restricted content.
+
+Mitigation: Remove identifying student details, avoid storing unpublished exam content, and record copyright status before adding resources.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-resource-library)
+- [Resource categorization](references/resource-categorization.md)
+- [Resource entry examples](references/resource-entry-examples.md)
+- [Copyright annotation template](references/copyright-annotation-template.md)
+- [AI-generated item check](shared/ai-item-check.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Chinese text or Markdown; structured JSON resource records when applicable]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Resource records can include classification, copyright status, teaching level, difficulty, source, and reuse notes; student-facing material requires teacher review.]
+
+## Skill Version(s):
+
+2.12.7 (source: SKILL.md frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

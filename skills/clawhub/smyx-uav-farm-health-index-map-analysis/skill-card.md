@@ -1,45 +1,58 @@
-## Description: <br>
-Submits UAV farm imagery for vegetation-index analysis and returns a structured farm health-index report with heatmap output, abnormal-zone details, coverage metrics, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes UAV farmland imagery to calculate vegetation indices and produce crop health heatmaps and structured reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External agricultural users, drone service providers, and developers can use this skill to analyze UAV orthophotos, mosaics, or supported videos for crop vigor monitoring. It helps identify low-health field zones and produce structured reports for precision-agriculture review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Farm imagery or remote media URLs may be sent to an external analysis service. <br>
-Mitigation: Use only approved imagery and URLs, confirm that remote processing is acceptable for the data owner, and avoid submitting sensitive geospatial or operational data unless the service terms and retention policy are acceptable. <br>
-Risk: The skill may automatically create or reuse an internal account identity and query cloud report history. <br>
-Mitigation: Run it in a controlled workspace, review identity and history-query behavior before deployment, and restrict use to contexts where automatic account association is permitted. <br>
-Risk: Service tokens or profile data may be stored locally. <br>
-Mitigation: Limit filesystem access to trusted users, rotate any exposed credentials, and clear local state after use when persistent identity or token storage is not desired. <br>
+## Use Case:
 
+Farm operators, agricultural cooperatives, crop monitoring services, and agricultural researchers use the skill to assess UAV imagery, locate low vegetation health areas, and review crop coverage and health statistics.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-uav-farm-health-index-map-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, files] <br>
-**Output Format:** [Markdown report text or JSON, with optional local output file when an output path is supplied.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include health-index heatmap links, vegetation-index summaries, abnormal-zone coordinates or areas, cloud history listings, and report export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter states 1.0.6) <br>
+Risk: The security assessment reports that the skill silently registers service accounts and retains credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm account creation, credential storage, retention, and revocation practices with the publisher before use; avoid providing sensitive account identifiers.
+
+Risk: The security assessment reports that media may be uploaded even when analysis is instructed to be skipped, and remote processing and retention are unverified.
+
+Mitigation: Submit imagery only after confirming Lifeemergence's upload, retention, account, and billing practices. Do not rely on --export-env-only to prevent uploads.
+
+Risk: The security guidance identifies credential destinations and secret handling as needing publisher fixes.
+
+Mitigation: Ask the publisher to restrict credential destinations and provide protected token storage and revocation controls.
+
+## Reference(s):
+
+- [Farm health analysis API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Files]
+
+**Output Format:** [Structured analysis text or JSON with heatmap and report links; historical reports can be shown as a Markdown table.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include vegetation index values, health-zone coordinates and area estimates, crop coverage statistics, and report links.]
+
+## Skill Version(s):
+
+1.0.16 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

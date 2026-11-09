@@ -1,45 +1,57 @@
-## Description: <br>
-Converts PDFs and other documents into explainer, report, courseware, or training videos by using the dLazy hosted sandbox agent to parse, outline, storyboard, voice, build, and validate the result. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates explainer, report, courseware, or training videos from PDFs by preparing an outline and storyboard, adding voiceover, and building and validating the video.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, content teams, educators, and business users can use this skill to start or continue dLazy file-to-video projects from PDFs and other documents. It is intended for document explainer videos, report broadcasts, courseware, and training video workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and attached documents are sent to dLazy API and media storage endpoints. <br>
-Mitigation: Confirm the user is comfortable sending the content to dLazy before use, and avoid attaching sensitive documents unless that transfer is approved. <br>
-Risk: The dLazy API key can be saved in the local CLI configuration. <br>
-Mitigation: Use per-run DLAZY_API_KEY when persistent local storage is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: The skill installs or runs a pinned third-party npm CLI package. <br>
-Mitigation: Review the pinned @dlazy/cli package and declared source before installing it in sensitive environments. <br>
+## Use Case:
 
+People who need to explain a PDF can use this skill to create an explainer, report, courseware, or training video. It guides the work through outlining, storyboarding, voiceover, video creation, and validation.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-pdf-to-video) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown instructions with bash command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses project-scoped chat sessions and may attach local files through the dLazy CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: frontmatter and server release evidence) <br>
+Risk: Attached PDFs and reference files are uploaded to dLazy media storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Attach only files you are permitted to share with the service.
+
+Risk: The security review had medium confidence and did not review the CLI package; it also flagged a mismatch between the skill description and some setup or project-listing steps.
+
+Mitigation: Review the pinned CLI package and check that login and project-listing steps fit your workflow before installing or running it.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/dlazyai/skills/dlazy-pdf-to-video)
+- [Publisher profile](https://clawhub.ai/user/dlazyai)
+- [CLI repository listed in skill metadata (release provenance unavailable)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Video, Text, Guidance]
+
+**Output Format:** [Generated video with conversational text and project guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Video creation and file attachments use dLazy hosted services; attached files are uploaded to its media storage.]
+
+## Skill Version(s):
+
+1.0.36 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,55 @@
-## Description: <br>
-Anrok (anrok.com). Use this skill for ANY Anrok request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use an OOMOL-connected account to search and read Anrok customer, product, filing, mapping, tax-category, and transaction data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search and read Anrok customer, product, filing, transaction, product mapping, and tax category data through an OOMOL-connected Anrok account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Returned Anrok customer, transaction, filing, and tax data may contain sensitive business or customer information. <br>
-Mitigation: Limit responses to the user's requested data and treat connector results as sensitive. <br>
-Risk: Future versions could add write or destructive Anrok actions. <br>
-Mitigation: Review updated security evidence before upgrade and require explicit user confirmation before any write or destructive action. <br>
-Risk: Using an incorrect payload schema can cause failed or unintended connector requests. <br>
-Mitigation: Inspect the live `oo connector schema` for the selected action before constructing each payload. <br>
+## Use Case:
 
+Finance and tax operations teams use this skill to retrieve customer, product, filing, product-mapping, tax-category, and transaction data from their connected Anrok account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-anrok) <br>
-- [Anrok homepage](https://www.anrok.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only connector actions return Anrok data and an execution ID in response metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and ClawHub release evidence) <br>
+Risk: The setup instructions offer remote installer scripts whose contents and installation effects were unavailable for verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI and installer separately, and require approval before running a fallback installer.
+
+Risk: Connecting Anrok allows OOMOL to mediate access to sensitive business data.
+
+Mitigation: Connect only the intended Anrok account and follow the organization’s controls for access to its business data.
+
+## Reference(s):
+
+- [Anrok API documentation](https://apidocs.anrok.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Guidance]
+
+**Output Format:** [Text and structured JSON action results, with shell command examples in Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only lookups; some list actions support cursor pagination.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

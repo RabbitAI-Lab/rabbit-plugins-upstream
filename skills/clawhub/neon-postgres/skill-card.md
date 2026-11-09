@@ -1,58 +1,70 @@
-## Description: <br>
-Guides developers through working with Neon Serverless Postgres, including setup, local development, connection choices, Neon features, authentication, APIs, CLI, and SDKs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers working with Neon Postgres on connections, schema changes, database branches, performance, and Lakebase Search.
 
-## Publisher: <br>
-[andrelandgraf](https://clawhub.ai/user/andrelandgraf) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[andrelandgraf](https://clawhub.ai/user/andrelandgraf)
 
-## Use Case: <br>
-Developers and engineers use this skill to answer Neon Serverless Postgres questions and choose appropriate setup, connection, authentication, CLI, API, SDK, and operational workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Suggested CLI, MCP, SDK, Admin API, or auth workflows could create, modify, or delete Neon database resources. <br>
-Mitigation: Confirm actions against official Neon docs, use least-privilege credentials, and manually review commands before execution. <br>
-Risk: Neon features and APIs evolve, so stale guidance could lead to incorrect implementation choices. <br>
-Mitigation: Verify claims against current official Neon documentation before applying the guidance. <br>
+## Use Case:
 
+Developers managing an existing Neon Postgres database use this skill to choose connection methods, plan migrations and branches, troubleshoot performance and egress, and implement vector, full-text, or hybrid search.
 
-## Reference(s): <br>
-- [Neon Docs Index](https://neon.com/docs/llms.txt) <br>
-- [What Is Neon](https://neon.com/docs/ai/skills/neon-postgres/references/what-is-neon.md) <br>
-- [Getting Started](https://neon.com/docs/ai/skills/neon-postgres/references/getting-started.md) <br>
-- [Connection Methods](https://neon.com/docs/ai/skills/neon-postgres/references/connection-methods.md) <br>
-- [Neon Serverless Driver](https://neon.com/docs/ai/skills/neon-postgres/references/neon-serverless.md) <br>
-- [Neon JS SDK](https://neon.com/docs/ai/skills/neon-postgres/references/neon-js.md) <br>
-- [Developer Tools](https://neon.com/docs/ai/skills/neon-postgres/references/devtools.md) <br>
-- [Neon CLI](https://neon.com/docs/ai/skills/neon-postgres/references/neon-cli.md) <br>
-- [Neon REST API](https://neon.com/docs/ai/skills/neon-postgres/references/neon-rest-api.md) <br>
-- [Neon TypeScript SDK](https://neon.com/docs/ai/skills/neon-postgres/references/neon-typescript-sdk.md) <br>
-- [Neon Python SDK](https://neon.com/docs/ai/skills/neon-postgres/references/neon-python-sdk.md) <br>
-- [Neon Auth](https://neon.com/docs/ai/skills/neon-postgres/references/neon-auth.md) <br>
-- [Branching](https://neon.com/docs/ai/skills/neon-postgres/references/branching.md) <br>
-- [Autoscaling](https://neon.com/docs/introduction/autoscaling.md) <br>
-- [Scale to Zero](https://neon.com/docs/introduction/scale-to-zero.md) <br>
-- [Instant Restore](https://neon.com/docs/introduction/branch-restore.md) <br>
-- [Read Replicas](https://neon.com/docs/introduction/read-replicas.md) <br>
-- [Connection Pooling](https://neon.com/docs/connect/connection-pooling.md) <br>
-- [IP Allow Lists](https://neon.com/docs/introduction/ip-allow.md) <br>
-- [Logical Replication](https://neon.com/docs/guides/logical-replication-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline code and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-driven guidance that should be checked against current official Neon docs before acting.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Schema migrations and branch operations can affect existing databases and workloads.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Test migrations on a production-like branch and verify branch protection and expiration settings before changing existing branches.
+
+Risk: Connection strings and private document content may be exposed through local configuration or external embedding, reranking, and cache services.
+
+Mitigation: Limit access to the intended project, protect connection strings in .env, and approve external services for the data before use.
+
+Risk: The behavior of remotely fetched skills and external providers' data retention was not assessed.
+
+Mitigation: Review remotely fetched skill content and confirm provider data handling before using sensitive material.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/andrelandgraf/skills/neon-postgres)
+- [Parent Neon skill](https://neon.com/docs/ai/skills/neon/SKILL.md)
+- [Branching workflows](artifact/references/branching.md)
+- [Egress optimization](artifact/references/egress-optimization.md)
+- [Vector search](artifact/references/vector-search.md)
+- [Full-text search with BM25](artifact/references/full-text-search.md)
+- [Hybrid search](artifact/references/hybrid-search.md)
+- [Lakebase Search with Drizzle](artifact/references/lakebase-search-drizzle.md)
+- [Neon connection methods](https://neon.com/docs/connect/choose-connection.md)
+- [Neon database branching](https://neon.com/docs/introduction/branching.md)
+- [Neon database inspection CLI](https://neon.com/docs/cli/inspect.md)
+- [Lakebase Search guide](https://neon.com/docs/ai/lakebase-search-get-started)
+- [Lakebase vector extension](https://neon.com/docs/extensions/lakebase-vector)
+- [Lakebase text extension](https://neon.com/docs/extensions/lakebase-text)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance with SQL, shell commands, and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Decision guidance and examples; no fixed output schema]
+
+## Skill Version(s):
+
+1.0.8 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

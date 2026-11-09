@@ -1,47 +1,61 @@
-## Description: <br>
-docker-mailbox lets agents and scripts read, search, send, mark seen, and delete messages across one or more configured IMAP/SMTP mailboxes through a REST API and streamable HTTP MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate a running docker-mailbox service over REST or MCP to read, search, organize, draft, reply and send mail using scoped bearer access. Use for mailbox tasks against a configured instance.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and operators use this skill to connect an agent to a running mailboxd service so it can inspect, search, send, and manage mail across configured accounts. It is suited to real mailbox workflows where the user can configure authentication and confirm destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate real mailboxes, including reading and sending messages. <br>
-Mitigation: Install only for mailboxes the user intends an agent or script to control, and point MAILBOX_URL only at a trusted mailboxd instance. <br>
-Risk: If auth.tokens is empty, reachable HTTP and MCP endpoints have full mailbox access without authentication. <br>
-Mitigation: Configure long random bearer tokens, keep the service bound locally or behind an authenticating proxy, and avoid public exposure unless remote access is required. <br>
-Risk: Message deletion is permanent because deleted messages are expunged immediately. <br>
-Mitigation: Require explicit user confirmation of the exact mailbox and UID before deletion, and avoid bulk deletion directly from broad search results. <br>
-Risk: The configuration file and tunnel credentials contain sensitive mailbox passwords, bearer tokens, and remote access credentials. <br>
-Mitigation: Protect config.yaml and tunnel credential files, keep them out of version control and chats, use restrictive permissions, and mount configuration read-only where possible. <br>
+## Use Case:
 
+Developers and operators use this skill to work with a configured mailbox service: search and read email, organize messages, prepare drafts, and send or reply to mail through scoped REST or MCP access.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/docker-mailbox) <br>
-- [Publisher profile](https://clawhub.ai/user/psyb0t) <br>
-- [Setup reference](references/setup.md) <br>
-- [Project homepage](https://github.com/psyb0t/docker-mailbox) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, REST examples, MCP configuration snippets, and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include mailbox search, read, send, mark-seen, and delete instructions that require a running mailboxd service and configured credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.2 (source: server release evidence) <br>
+Risk: Setting up a Cloudflare Tunnel can expose the mailbox service beyond local access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a tunnel only when remote access is intended; configure bearer authentication and narrow mailbox and operation scopes first, and protect tunnel credentials.
+
+Risk: Mailbox configuration contains plaintext account passwords and bearer tokens.
+
+Mitigation: Restrict file permissions, keep configuration and secrets out of source control and chat, and mount configuration read-only.
+
+Risk: Deployment relies on trusting the Docker image source and release being used.
+
+Mitigation: Verify the image source and release you intend to run before deployment.
+
+## Reference(s):
+
+- [Mailbox operations API reference](references/api.md)
+- [Setup and deployment guide](references/setup.md)
+- [Project homepage](https://github.com/psyb0t/docker-mailbox)
+- [Upgrade notes](https://psyb0t.github.io/docker-mailbox/operations/#upgrade-notes)
+- [Cloudflare Tunnel installation](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API calls, Shell commands, Configuration]
+
+**Output Format:** [Text and Markdown guidance, including API requests, shell commands, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include mailbox summaries, search results, draft content, and operation status]
+
+## Skill Version(s):
+
+1.2.10 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

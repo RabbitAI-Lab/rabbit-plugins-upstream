@@ -1,49 +1,64 @@
-## Description: <br>
-Diagnoses high memory usage, memory alarms, and OOM scenarios in Huawei Cloud DWS clusters by collecting metrics through KooCLI or the DWS Autopilot MCP Server and producing a diagnosis report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Diagnoses high-memory conditions in Huawei Cloud DWS clusters by collecting memory metrics, analyzing likely causes, and producing a standardized report.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operations engineers use this skill to investigate Huawei Cloud DWS memory alarms, OOM conditions, and high memory usage by collecting cluster, host, metric, active session, database user, and SQL evidence. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill needs read-only Huawei Cloud DWS access and inspects cluster metrics, hosts, users, active sessions, and SQL text. <br>
-Mitigation: Use least-privilege or temporary credentials and grant only the documented DWS read permissions needed for diagnosis. <br>
-Risk: Huawei Cloud AK/SK credentials or IAM tokens could be exposed if entered into chat, command lines, or unprotected configuration files. <br>
-Mitigation: Configure credentials outside the conversation, avoid putting AK/SK values on command lines, and protect local configuration files. <br>
-Risk: Generated HTML diagnosis reports may contain sensitive operational data, database user names, and SQL text. <br>
-Mitigation: Review generated reports before sharing, store them according to internal data handling rules, and delete them when no longer needed. <br>
+## Use Case:
 
+Huawei Cloud DWS operators and engineers use this skill to investigate memory alarms, high memory use, or OOM events. It analyzes returned cluster metrics and produces a Chinese-language HTML diagnosis report without performing remediation.
 
-## Reference(s): <br>
-- [CLI Installation Guide](artifact/references/cli-installation-guide.md) <br>
-- [DWS Autopilot MCP Server Installation Guide](artifact/references/dws-mcp-installation-guide.md) <br>
-- [IAM Policies](artifact/references/iam-policies.md) <br>
-- [Memory Background Knowledge](artifact/references/memory-background.md) <br>
-- [Metric Reference](artifact/references/metric-reference.md) <br>
-- [Output Format](artifact/references/output-format.md) <br>
-- [Huawei Cloud KooCLI Installation Guide](https://support.huaweicloud.com/cli/cli_hcloud_install.html) <br>
-- [Huawei Cloud DWS API Reference](https://support.huaweicloud.com/api-dws/dws_02_0023.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, HTML, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and a generated HTML diagnosis report.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The generated report may include cluster metrics, database users, active session details, and SQL text.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.1 (source: server release evidence) <br>
+Risk: Cloud credentials could be exposed through chat, shell commands, or command history.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated read-only identity, configure secrets interactively, and never paste credentials into chat or commands.
+
+Risk: Generated reports may contain sensitive cluster and query details.
+
+Mitigation: Keep reports private, exclude them from version control, and delete them when no longer needed.
+
+Risk: The external CLI and MCP implementations have not been audited, and the documented MCP clone example needs correction.
+
+Mitigation: Verify downloads and follow Huawei's installation guidance; check the documented repository's installation instructions before installing.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-dws-dymem-diag)
+- [Memory Background Knowledge](artifact/references/memory-background.md)
+- [Metric Reference](artifact/references/metric-reference.md)
+- [KooCLI Installation Guide](artifact/references/cli-installation-guide.md)
+- [DWS Autopilot MCP Server Installation Guide](artifact/references/dws-mcp-installation-guide.md)
+- [IAM Policies](artifact/references/iam-policies.md)
+- [Huawei Cloud KooCLI Installation Guide](https://support.huaweicloud.com/intl/en-us/qs-hcli/hcli_02_003.html)
+- [Documented DWS Autopilot MCP Server Repository](https://github.com/huaweicloud/dws_ai_native/tree/dws_autopilot_mcp_server/hwcloud_dws_mcp_mag)
+
+## Skill Output:
+
+**Output Type(s):** [Text, HTML]
+
+**Output Format:** [Diagnosis summary and Chinese-language HTML report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses returned DWS metrics; report times are shown in UTC+8. Diagnosis only; no remediation actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

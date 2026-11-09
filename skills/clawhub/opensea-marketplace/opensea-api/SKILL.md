@@ -35,6 +35,7 @@ Use `opensea-api` for:
 - Events and activity monitoring (including real-time WebSocket streams)
 - Drops and mint eligibility
 - Account lookups and ENS resolution
+- Reading public OpenSea signals about a currency, NFT, or collection, and posting or deleting your own
 - Authenticated profile, collection settings, watchlist, drop, order-cancellation, and wallet-linking operations described in `references/authentication.md`
 - Headless SIWE, scoped PAT creation, short-lived JWT exchange, and wallet-authenticated REST or MCP
 
@@ -82,8 +83,8 @@ opensea tokens trending --limit 5
 Every OpenSea request needs `OPENSEA_API_KEY`. If you don't already have a key,
 you can fetch an **instant** free-tier key with no signup. The one rule that
 matters: **once you fetch an instant key, save it to disk and reuse it.** Do not
-re-fetch on every request — instant key creation is rate limited per IP, so a
-second fetch can fail and leave you with no key. The previous successful request
+re-fetch on every request. A second fetch can fail and leave you with no key.
+The previous successful request
 will not have persisted the key for you.
 
 ### The flow (follow these steps in order, every time)
@@ -123,15 +124,15 @@ else
   api_key=$(curl -s -X POST https://api.opensea.io/api/v2/auth/keys | jq -r '.api_key')  # 3. fetch
   mkdir -p "$(dirname "$KEY_FILE")"
   (umask 077; printf '%s\n' "$api_key" > "$KEY_FILE")  # 4. SAVE before using it
-  export OPENSEA_API_KEY="$api_key"
+  export OPENSEA_API_KEY="${api_key}"
 fi
 ```
 
 ### Edge cases
 
 - **Key already exists (env var or cached file):** reuse it; do not fetch a new
-  one. Re-fetching wastes the per-IP rate limit and can fail.
-- **Key invalid or expired** (instant keys expire after 30 days; a request
+  one. Re-fetching wastes the rate limit and can fail.
+- **Key invalid or expired** (instant keys expire after 7 days; a request
   returns HTTP `401`/`403`): the cached key is stale. Re-fetch and overwrite the
   cache with `scripts/auth/opensea-resolve-key.sh --force` (or delete
   `~/.opensea/api_key` and re-run the flow). `--force` never overrides a key
@@ -158,7 +159,7 @@ you use those, you must save the key yourself per step 4 above.
 | Get collection stats | `opensea collections stats <slug>` | `collections/opensea-collection-stats.sh <slug>` |
 | Get trending collections | `opensea collections trending [--timeframe <tf>] [--chains <chains>]` | `collections/opensea-collections-trending.sh [timeframe] [limit] [chains] [category]` |
 | Get top collections | `opensea collections top [--sort-by <field>] [--chains <chains>]` | `collections/opensea-collections-top.sh [sort_by] [limit] [chains] [category]` |
-| List NFTs in collection | `opensea nfts list-by-collection <slug> [--limit <n>] [--traits <json>]` | `collections/opensea-collection-nfts.sh <slug> [limit] [next]` |
+| List NFTs in collection | `opensea nfts list-by-collection <slug> [--limit <n>] [--traits <json>] [--has-agent-binding <true\|false>]` | `collections/opensea-collection-nfts.sh <slug> [limit] [next]` |
 | Get single NFT | `opensea nfts get <chain> <contract> <token_id>` | `nfts/opensea-nft.sh <chain> <contract> <token_id>` |
 | List NFTs by wallet | `opensea nfts list-by-account <chain> <address> [--limit <n>]` | `accounts/opensea-account-nfts.sh <chain> <address> [limit]` |
 | List NFTs by contract | `opensea nfts list-by-contract <chain> <contract> [--limit <n>]` | |
@@ -170,8 +171,8 @@ you use those, you must save the key yourself per step 4 above.
 
 | Task | CLI Command | Alternative |
 |------|------------|-------------|
-| Get trending tokens | `opensea tokens trending [--chains <chains>] [--limit <n>]` | `get_trending_tokens` (MCP) |
-| Get top tokens by volume | `opensea tokens top [--chains <chains>] [--limit <n>]` | `get_top_tokens` (MCP) |
+| Get trending tokens | `opensea tokens trending [--chains <chains>] [--sort-by <field>] [--sort-direction <asc\|desc>] [--limit <n>]` | `get_trending_tokens` (MCP) |
+| Get top tokens by volume | `opensea tokens top [--chains <chains>] [--sort-by <field>] [--sort-direction <asc\|desc>] [--limit <n>]` | `get_top_tokens` (MCP) |
 | Get token details | `opensea tokens get <chain> <address>` | `get_tokens` (MCP) |
 | Get token swap activity | `opensea tokens activity <chain> <address> [--limit <n>] [--next <cursor>]` | `tokens/opensea-token-activity.sh` |
 | Get account token activity | `opensea tokens account-activity <address> [--chains <chains>] [--tokens <tokens>] [--type <types>] [--limit <n>] [--next <cursor>]` | |
@@ -188,13 +189,13 @@ Read the [`wallet authentication` reference](references/authentication.md) befor
 
 | Task | CLI Command | Alternative |
 |------|------------|-------------|
-| Get best listings for collection | `opensea listings best <slug> [--limit <n>] [--traits <json>]` | `listings/opensea-best-listing.sh <slug> <token_id>` |
-| Get best listing for specific NFT | `opensea listings best-for-nft <slug> <token_id>` | `listings/opensea-best-listing.sh <slug> <token_id>` |
+| Get best listings for collection | `opensea listings best <slug> [--limit <n>] [--traits <json>] [--include-private-listings]` | `listings/opensea-best-listing.sh <slug> <token_id>` |
+| Get best listing for specific NFT | `opensea listings best-for-nft <slug> <token_id> [--include-private-listings]` | `listings/opensea-best-listing.sh <slug> <token_id>` |
 | Get best offer for NFT | `opensea offers best-for-nft <slug> <token_id>` | `offers/opensea-best-offer.sh <slug> <token_id>` |
-| List all collection listings | `opensea listings all <slug> [--limit <n>]` | `listings/opensea-listings-collection.sh <slug> [limit]` |
+| List all collection listings | `opensea listings all <slug> [--limit <n>] [--maker <address>] [--include-private-listings]` | `listings/opensea-listings-collection.sh <slug> [limit]` |
 | List all collection offers | `opensea offers all <slug> [--limit <n>]` | `offers/opensea-offers-collection.sh <slug> [limit]` |
 | Get collection offers | `opensea offers collection <slug> [--limit <n>]` | `offers/opensea-offers-collection.sh <slug> [limit]` |
-| Get trait offers | `opensea offers traits <slug> --type <type> --value <value>` | |
+| Get trait offers | `opensea offers traits <slug> --type <type> --value <value>` (numeric: `--type <type> --min-value <n> --max-value <n>`; multi-trait: `--traits <json>`) | |
 | Get order by hash | | `orders/opensea-order.sh <chain> <order_hash>` |
 
 ### Server-side trait filtering
@@ -245,10 +246,67 @@ Event types: `sale`, `transfer`, `mint`, `listing`, `offer`, `trait_offer`, `col
 |------|------------|-------------|
 | List drops (featured/upcoming/recent) | `opensea drops list [--type <type>] [--chains <chains>]` | `drops/opensea-drops.sh [type] [limit] [chains]` |
 | Get drop details and stages | `opensea drops get <slug>` | `drops/opensea-drop.sh <slug>` |
+| List a drop's saved items, a draft's included (`write:drops`) | `opensea drops items <slug> [--limit <n>] [--next <cursor>]` | |
 | Build mint transaction | `opensea drops mint <slug> --minter <address> [--quantity <n>]` | `drops/opensea-drop-mint.sh <slug> <minter> [quantity]` |
 | Build cross-chain mint transactions | `opensea drops cross-chain-mint <slug> --payer <address> --minter <address> --payment-chain <chain> --payment-token <address> [--quantity <n>]` | `drops/opensea-drop-cross-chain-mint.sh <slug> <payer> <minter> <payment_chain> <payment_token> [quantity]` |
+| Build or send the publish transaction (owner wallet, `write:drops`) | `opensea drops publish <slug> [--send] [--wallet-provider <provider>]` | |
+| Build or send the unpublish transaction | `opensea drops unpublish <slug> [--send] [--wallet-provider <provider>]` | |
+| Upload drop media and metadata to IPFS | `opensea drops upload-metadata-ipfs <slug> [--wait] [--interval <s>] [--wait-timeout <s>]` | |
+| Check IPFS upload progress | `opensea drops metadata-ipfs-status <slug> <workflow-execution-id>` | |
+| Request a metadata manifest CSV upload | `opensea drops create-manifest-upload <slug>` | |
+| Upload a file to an upload context | `opensea drops upload-file --context <path\|-> --file <path> [--index <n>]` | |
+| Upload a folder of item media and save it as the drop's items | `opensea drops upload-items <slug> <dir> [--manifest <path>] [--concurrency <n>]` | |
+| Save an upload batch by filename | `opensea drops save-item-media-batch <slug> (--body <path> \| --upload-batch-id <uuid> --dir <path>)` | |
 | Deploy a new SeaDrop contract | | `deploy_seadrop_contract` (MCP) |
 | Check deployment status | | `get_deploy_receipt` (MCP) |
+
+`publish --send` signs with the configured EVM wallet and refuses one that is
+not the transaction's `from` (the contract's onchain owner), since a
+transaction from any other address reverts. `upload-file` takes a single upload
+context; for the array `create-item-media-upload` returns, pass `--index <n>` or
+pipe one element with `jq '.[0]'`. `upload-metadata-ipfs --wait` exits 1 when
+the upload fails, is not found, or outlasts `--wait-timeout`. `upload-items`
+replaces the drop's items: it uploads the folder under one upload batch id, 50
+files per request, then saves the batch by filename (natural filename order
+without a manifest).
+
+### Collection pages
+
+These need a wallet token with `write:collections` from a collection editor,
+except `creator-fee-enforcement`, which needs only the API key.
+
+| Task | CLI Command |
+|------|------------|
+| Read the saved page (hero, about, overview) and its preview URL | `opensea collections get-metadata <slug>` |
+| Update the page | `opensea collections update-metadata <slug> --body <path>` |
+| Upload a page image or MP4 video and get its token | `opensea collections upload-page-media <slug> <placement> --content-type <mime> [--file <path>]` |
+| Price secondary sales in USDG or the native currency | `opensea collections set-pricing-currency <slug> --stablecoin <true\|false>` |
+| Check creator fee enforcement | `opensea collections creator-fee-enforcement <slug>` |
+| Turn creator fee enforcement on or off (owner wallet) | `opensea collections set-creator-fee-enforcement <slug> --enabled <true\|false> [--send]` |
+| Refresh collection metadata from the contract | `opensea collections refresh <slug>` |
+
+`get-metadata` returns the page in the `update-metadata` body shape. To keep a
+saved image or video, send its url back as the token; a `mux_video` has no url,
+so leave out the field that holds it. A field you leave out keeps what is saved.
+To clear, send it empty:
+
+| Clear | Send |
+|-------|------|
+| Preview media | `"about": {"preview_media": []}` |
+| All about sections | `"about": {"sections": []}` |
+| One about section's image | the section with its `id` and `"media": []` (leaving `media` out keeps it) |
+| A hero slot | `"hero": {"desktop_hero_media": {}}` |
+| Every overview module | `"overview": {"modules": {}}` (sending `overview` replaces every module) |
+| Description, website, Telegram, banner, logo | `""` in `opensea collections modify` |
+
+A cleared logo falls back to the contract's image. `GET /collections/{slug}`
+can trail a `modify` by a minute or more, so read page content back with
+`get-metadata`, which is fresh. Placements are `hero_desktop`,
+`hero_mobile`, `about_preview`, `about_section`, `overview`,
+`overview_background` and `team`. Pass an upload token as
+`{ "image": { "token": ... } }` or `{ "video": { "token": ... } }`, matching the
+file. `set-creator-fee-enforcement --send` signs every returned transaction in
+order and refuses a wallet that is not the contract owner.
 
 For a cross-chain mint, submit every returned transaction in order. Save the
 returned `receipt_request` object exactly as received, then poll it until the
@@ -268,14 +326,38 @@ opensea transactions receipt --request receipt-request.json
 | Get closed (realized) positions | `opensea accounts closed-positions <address> [--limit <n>] [--sort-by <field>] [--next <cursor>]` | `accounts/opensea-account-closed-positions.sh <address>` |
 | Get position token transfers | `opensea accounts token-transfers <address> --contract-address <addr> --chain <chain>` | `accounts/opensea-account-token-transfers.sh <address> <contract_address> <chain>` |
 
+### Signals
+
+Signals are public posts on OpenSea about one subject: a currency (`--chain` and `--contract`), an NFT (add `--token-id`, a decimal on EVM chains and the mint address on Solana), or a collection (`--collection` alone). Reading needs only the API key. Posting and deleting need a wallet JWT with the `write:posts` scope, which is in preview: `opensea auth scopes` does not list it yet and browser OAuth login rejects it, so sign in with `--private-key`.
+
+| Task | CLI Command | Alternative |
+|---|---|---|
+| Get a signal | `opensea signals get <signal_id>` | `opensea-get.sh "/api/v2/signals/<signal_id>"` |
+| List signals about a subject | `opensea signals list (--chain <chain> --contract <address> [--token-id <id>] \| --collection <slug>) [--limit <n>] [--next <cursor>]` | `opensea-get.sh "/api/v2/signals" "collection=<slug>&limit=50"` |
+| Post a signal | `opensea signals create --text <text> (--chain <chain> --contract <address> [--token-id <id>] \| --collection <slug>) [--author-address <address>]` | `opensea api request POST /api/v2/signals --body signal.json` |
+| Delete your signal | `opensea signals delete <signal_id>` | `opensea api request DELETE /api/v2/signals/<signal_id>` |
+
+```bash
+# Read: newest first. A page can be empty while next is set, so keep paging until next is null.
+opensea signals list --collection doodles-official --limit 50
+opensea signals list --chain base --contract 0x4200000000000000000000000000000000000006
+
+# Post and delete
+opensea auth login --private-key --scopes write:posts
+opensea signals create --text "Floor looks thin" --collection doodles-official
+opensea signals delete sig_v1_...
+```
+
+Signal IDs are opaque `sig_v1_...` strings; pass them back unchanged. `create` is not idempotent: retrying after an unknown outcome can post twice once the per-subject cooldown passes, and a post inside the cooldown returns 422. Signals cannot be edited.
+
 ### Tool discovery [Beta]
 
 Search for verified registered AI agent tools (ERC-8257) by name, tags, creator, or other criteria.
 
 | Task | CLI Command | Alternative |
 |------|------------|-------------|
-| List registered tools | `opensea tools list [--sort-by <sort>] [--type <type>]` | `opensea-get.sh "/api/v2/tools" "sort_by=newest&limit=10"` |
-| Search registered tools | `opensea tools search [--query <text>] [--tags <tags>]` | `opensea-get.sh "/api/v2/tools/search" "query=<text>"` |
+| List registered tools | `opensea tools list [--sort-by <sort>] [--type <type>] [--source <source>]` | `opensea-get.sh "/api/v2/tools" "sort_by=newest&limit=10"` |
+| Search registered tools | `opensea tools search [--query <text>] [--tags <tags>] [--source <source>] [--collection <slug>] [--include-details <true\|false>]` | `opensea-get.sh "/api/v2/tools/search" "query=<text>"` |
 | Get a registered tool | `opensea tools get <chain> <registry_addr> <tool_id>` | `opensea-get.sh "/api/v2/tools/<chain>/<registry_address>/<tool_id>"` |
 | Get tool activity | `opensea tools activity <registry_chain> <registry_addr> <tool_id> [--include-creator-payments] [--limit <n>] [--offset <offset>]` | |
 
@@ -363,6 +445,43 @@ opensea tools saved save 8453 0x265BB2DBFC0A8165C9A1941Eb1372F349baD2cf1 42
 opensea tools saved remove 8453 0x265BB2DBFC0A8165C9A1941Eb1372F349baD2cf1 42
 ```
 
+### Agent accounts
+
+Declare yourself an agent and record who owns you. An agent is an account, not a flag on a wallet, and ownership is a relationship between two accounts that both sides confirm.
+
+Three things this is not. It is not sub-accounts: no new account type is created. It is not delegation: naming an account as your agent grants it no ability to act for you, so this is a declaration rather than an authorization. It is not verification: it is self-reported and OpenSea does not check it.
+
+An agent can have no owner at all, so a self-launched agent nobody declared is valid. An agent has at most one confirmed owner. Either side may withdraw or revoke at any time, which deletes the relationship. Only confirmed relationships are public; a pending proposal is visible to the two parties alone.
+
+| Task | CLI Command | Alternative |
+|---|---|---|
+| Declare self an agent | `opensea agent declare` | `opensea api request PUT /api/v2/accounts/agent` |
+| Withdraw the declaration | `opensea agent withdraw` | `opensea api request DELETE /api/v2/accounts/agent` |
+| Propose a relationship | `opensea agent propose <address> --role AGENT\|OWNER` | `opensea api request POST /api/v2/accounts/agent-relationships --body propose.json` |
+| Confirm a proposal | `opensea agent confirm <address> --role AGENT\|OWNER` | `opensea api request POST /api/v2/accounts/agent-relationships/confirm --body confirm.json` |
+| Withdraw or revoke | `opensea agent revoke <address> --role AGENT\|OWNER` | `opensea api request DELETE /api/v2/accounts/agent-relationships --params '{"counterparty_address":"0x...","caller_role":"AGENT"}'` |
+| List your own relationships | `opensea agent list` | `opensea api request GET /api/v2/accounts/agent-relationships` |
+| Read a public profile | `opensea agent profile <address_or_username>` | `opensea-agent-relationships.sh <address_or_username>` |
+
+The writes require `write:wallets` but `agent list` requires `read:wallets`. Authenticate with both or the list call returns 403 "Insufficient permissions". Reading another profile is public and needs only the API key.
+
+`--role` is the side you are on, so `--role AGENT` means "I am an agent and the counterparty owns me". Your own account is never in the request; it comes from the token.
+
+```bash
+# On the agent.
+opensea auth login --private-key --scopes read:wallets,write:wallets
+opensea agent declare
+opensea agent propose 0xOWNER --role AGENT
+opensea agent list   # status PENDING_OWNER until the owner confirms
+
+# On the owner. Either call lands the same confirmed relationship, because
+# proposing something already awaiting you confirms it.
+opensea agent confirm 0xAGENT --role OWNER
+opensea agent propose 0xAGENT --role OWNER
+```
+
+`declare` and `withdraw` return `changed`, and `propose` and `confirm` return `created`. Both are false when the call was a no-op, so a retry is distinguishable from a real change. `revoke` returns `removed`, false when no such relationship existed.
+
 ### Generic requests
 
 | Task | Script |
@@ -393,7 +512,7 @@ opensea collections get mfers
 
 | Command | Description |
 |---|---|
-| `collections` | Get, list, stats, and traits for NFT collections |
+| `collections` | Get, list, stats, and traits for NFT collections; manage a collection page, its pricing currency and creator fee enforcement |
 | `nfts` | Get, list, refresh metadata, and contract details for NFTs |
 | `listings` | Get all, best, or best-for-nft listings |
 | `offers` | Get all, collection, best-for-nft, and trait offers |
@@ -402,6 +521,7 @@ opensea collections get mfers
 | `tokens` | Get trending tokens, top tokens, token details, token activity, and account token activity |
 | `tools` | Search, list, and inspect registered AI agent tools (ERC-8257); view tool activity; manage saved tools with `tools saved` |
 | `accounts` | Get account details |
+| `agent` | Declare an agent account and run the two-sided ownership handshake |
 
 Global options: `--api-key`, `--chain` (default: ethereum), `--format` (json/table/toon), `--base-url`, `--timeout`, `--verbose`
 
@@ -413,7 +533,8 @@ Global options: `--api-key`, `--chain` (default: ethereum), `--format` (json/tab
 
 ### Pagination
 
-All list commands support cursor-based pagination with `--limit` and `--next`:
+Cursor-paginated commands such as `collections list` use `--limit` and `--next`.
+`tools activity` uses `--limit` and `--offset` instead. Check each command's `--help` for its pagination options:
 
 ```bash
 opensea collections list --limit 5
@@ -521,6 +642,7 @@ These tools derive the wallet from the JWT and enforce the listed scope. Do not 
 | `read:favorites` | `get_favorites` |
 | `read:social` | `view_social_graph` |
 | `read:tools` | `list_saved_tools`, `list_toolkits`, `get_toolkit` |
+| `read:wallets` | none yet; REST only, for `GET /api/v2/accounts/agent-relationships` |
 | `write:favorites` | `manage_watchlist` |
 | `write:social` | `manage_social_graph` |
 | `write:tools` | `save_tool`, `unsave_tool`, `create_toolkit`, `save_toolkit`, `unsave_toolkit` |
@@ -647,6 +769,7 @@ The `scripts/` directory contains shell scripts that wrap the OpenSea REST API d
 | `accounts/opensea-account-pnl.sh` | Aggregated trading P&L (realized + unrealized) for a wallet |
 | `accounts/opensea-account-closed-positions.sh` | Closed (realized) trading positions for a wallet |
 | `accounts/opensea-account-token-transfers.sh` | Token transfers contributing to a wallet's position in a currency |
+| `accounts/opensea-agent-relationships.sh` | Public agent ownership relationships for a profile |
 
 ### Marketplace Query Scripts
 
@@ -697,7 +820,7 @@ The `scripts/` directory contains shell scripts that wrap the OpenSea REST API d
 
 | Script | Purpose |
 |--------|---------|
-| `auth/opensea-auth-request-key.sh` | Request a free-tier API key (3/hour per IP) |
+| `auth/opensea-auth-request-key.sh` | Request a free-tier API key |
 
 ## Error handling
 
@@ -768,7 +891,11 @@ Credentials must only be set via environment variables. Never log, print, or inc
 
 ## Supported chains
 
-`ethereum`, `matic`, `arbitrum`, `optimism`, `base`, `avalanche`, `klaytn`, `zora`, `blast`, `sepolia`
+The set of supported chains changes as new chains launch. Fetch the current list of chain identifiers from `GET /api/v2/chains`:
+
+```bash
+scripts/opensea-get.sh "/api/v2/chains"
+```
 
 ## References
 

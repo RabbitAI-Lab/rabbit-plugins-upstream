@@ -1,42 +1,56 @@
-## Description: <br>
-PhantomBuster helps an agent read and operate PhantomBuster resources through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the OOMOL-connected PhantomBuster integration to inspect agents, containers, and organizations, or launch and stop agents.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect PhantomBuster action schemas and run supported read, launch, and stop operations through an OOMOL-connected PhantomBuster account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be invoked too broadly for PhantomBuster-adjacent requests. <br>
-Mitigation: Use it only for PhantomBuster workflows and inspect the live action schema before constructing a payload. <br>
-Risk: Launch, stop, or other account-changing operations can affect PhantomBuster resources. <br>
-Mitigation: Ask for explicit user confirmation of the target, payload, and expected effect before running write actions, and keep connector permissions scoped to the intended account and work. <br>
+## Use Case:
 
+Developers use this skill to inspect a connected PhantomBuster organization and its agents or containers, and to launch or stop agents through OOMOL.
 
-## Reference(s): <br>
-- [PhantomBuster homepage](https://phantombuster.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-phantombuster) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live schema inspection before execution and returns connector responses as JSON when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: artifact metadata and release evidence) <br>
+Risk: Automatic setup can execute unverified third-party code, and the remote installers' exact system changes are unknown.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before enabling the skill, and approve and verify a specific oo CLI release instead of allowing automatic script execution.
+
+Risk: PhantomBuster requests pass through OOMOL, and agent launch or stop operations can affect account state.
+
+Mitigation: Review managed-skill synchronization settings and confirm launch or stop operations.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/oomol/skills/oo-phantombuster)
+- [PhantomBuster](https://phantombuster.com)
+- [PhantomBuster API documentation](https://hub.phantombuster.com/reference/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [JSON action results and concise usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the selected action; launching or stopping an agent changes its state.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

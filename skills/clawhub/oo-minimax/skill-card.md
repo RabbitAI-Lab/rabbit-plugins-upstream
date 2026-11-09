@@ -1,44 +1,64 @@
-## Description: <br>
-MiniMax lets an agent operate MiniMax through an OOMOL-connected account for model discovery, token estimation, and non-streaming response creation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use MiniMax through a connected OOMOL account to inspect models and video tasks and create text, audio, and video outputs.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect MiniMax connector schemas, list or retrieve OpenAI-compatible MiniMax model metadata, estimate input tokens, and create non-streaming MiniMax responses through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL as the credential-handling connector for MiniMax. <br>
-Mitigation: Install only if that connector model is acceptable, and avoid handling raw MiniMax credentials outside the OOMOL connection flow. <br>
-Risk: The first-time setup path includes remote oo CLI installer commands. <br>
-Mitigation: Treat the installer like any third-party installer and review it before running it; use setup commands only when oo is missing or authentication fails. <br>
-Risk: The create_response action changes MiniMax state by creating a non-streaming response. <br>
-Mitigation: Fetch the live connector schema, review the exact JSON payload and expected effect, and get user confirmation before running the write action. <br>
+## Use Case:
 
+Agents use this skill through a connected OOMOL account to access MiniMax models and manage text, audio, and video generation tasks.
 
-## Reference(s): <br>
-- [MiniMax homepage](https://www.minimax.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [MiniMax ClawHub listing](https://clawhub.ai/oomol/skills/oo-minimax) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo connector schemas and JSON payloads; create_response is a write action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: artifact frontmatter and server release metadata) <br>
+Risk: Setup can execute unchecked remote code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified oo CLI release yourself before using the skill.
+
+Risk: The setup helper documents additional agent-skill installation.
+
+Mitigation: Consider disabling managed-skill synchronization using the publisher's command-reference guidance.
+
+Risk: Requests and media pass through OOMOL, and generation may incur charges.
+
+Mitigation: Review the content sent through OOMOL and expected billing before creating media.
+
+Risk: Write actions change MiniMax state, and video deletion is destructive.
+
+Mitigation: Review the exact payload and effect before write actions, and confirm the deletion target.
+
+## Reference(s):
+
+- [MiniMax API documentation](https://platform.minimax.io/docs/api-reference/api-overview)
+- [MiniMax](https://www.minimax.io)
+- [oo CLI command reference](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md)
+- [MiniMax skill release](https://clawhub.ai/oomol/skills/oo-minimax)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, text, audio, video]
+
+**Output Format:** [JSON connector responses; text, audio, or video content depending on the action.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Some video actions are asynchronous and return task identifiers or file references. Available actions include state-changing and destructive operations.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

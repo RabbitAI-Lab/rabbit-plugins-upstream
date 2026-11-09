@@ -1,45 +1,61 @@
-## Description: <br>
-Render Markdown as a shareable browser page by uploading selected .md files to a user-configured S3-compatible bucket where Docsify serves the public page. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Publishes Markdown through the user's S3-compatible bucket as a public Docsify page and returns a shareable link.
 
-## Publisher: <br>
-[rockbenben](https://clawhub.ai/user/rockbenben) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rockbenben](https://clawhub.ai/user/rockbenben)
 
-## Use Case: <br>
-External users, developers, and documentation authors use this skill when they want an agent to publish selected Markdown as a public, shareable web page instead of returning long Markdown directly in chat. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded Markdown is publicly accessible at the returned URL. <br>
-Mitigation: Use the skill only for content intended for public sharing, and avoid secrets, credentials, PII, confidential material, or untrusted Markdown. <br>
-Risk: S3-compatible storage credentials are stored in plaintext in ~/.md-web/config.json. <br>
-Mitigation: Protect the config file, avoid committing or sharing it, and restrict the storage token to the dedicated bucket where possible. <br>
-Risk: Setting expire_days to 0 can clear the bucket lifecycle configuration. <br>
-Mitigation: Use a dedicated bucket for this skill and review lifecycle settings before disabling automatic expiration. <br>
+## Use Case:
 
+Developers and other users can publish a Markdown document to their own S3-compatible bucket as a public web page and share the generated link.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/rockbenben/md-web) <br>
-- [Skill homepage](https://github.com/rockbenben/aishort-skills/tree/main/skills/md-web) <br>
-- [README.md](README.md) <br>
-- [Docsify server README](docsify-server/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown response with a filename and clickable URL, plus setup guidance or shell commands when configuration or upload execution is needed.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Publishes selected Markdown to a public S3-compatible bucket and returns a Docsify-rendered URL; falls back to direct chat text if upload fails.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Bucket credentials are stored in plaintext in the local config file, and the security scan flags credential handling.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep credentials out of chat and version control; use the documented environment variables or a dedicated, bucket-scoped Object Read & Write token.
+
+Risk: Published Markdown is public and its inline HTML can affect the rendered page; the security scan also flags possible content injection.
+
+Mitigation: Review the document and its embedded markup before publishing, and publish only content from trusted sources.
+
+Risk: Viewer setup overwrites shared files at the bucket root, and optional expiration changes the bucket lifecycle configuration.
+
+Mitigation: Get explicit approval before setup or lifecycle changes, and confirm the bucket and retention scope before proceeding.
+
+Risk: The security scan inspected only part of the listed components, so unreported components are not cleared by the scan.
+
+Mitigation: Review the complete skill and its components before installation or use.
+
+## Reference(s):
+
+- [md-web project page](https://github.com/rockbenben/aishort-skills/tree/main/skills/md-web)
+
+## Skill Output:
+
+**Output Type(s):** [Text, URL]
+
+**Output Format:** [Shareable URL to a public Docsify-rendered Markdown page]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The uploaded page is public; uploads remain available unless optional expiration is configured.]
+
+## Skill Version(s):
+
+1.3.2 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

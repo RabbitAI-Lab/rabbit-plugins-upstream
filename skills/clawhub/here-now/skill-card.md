@@ -1,44 +1,54 @@
-## Description: <br>
-here.now lets agents publish websites and files to live URLs in seconds. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Publishes websites and files to live here.now URLs and helps manage site access, workspaces, and domains.
 
-## Publisher: <br>
-[adamludwin](https://clawhub.ai/user/adamludwin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[adamludwin](https://clawhub.ai/user/adamludwin)
 
-## Use Case: <br>
-Developers, agents, and teams use here.now to publish selected files or folders as websites, raw file viewers, workspace-owned sites, or private Drive storage. It helps create live URLs, manage access controls, update existing publishes, and share persistent private files through shell workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can upload selected local files and create public links. <br>
-Mitigation: Confirm the intended files and access mode before publishing; use password, restricted access, workspace access, or private Drive storage when content should not be public. <br>
-Risk: Account credentials and claim tokens may persist across sessions. <br>
-Mitigation: Treat ~/.herenow/credentials and .herenow/state.json as sensitive, avoid passing API keys as command-line flags in interactive use, and do not commit credential or state files. <br>
-Risk: Anonymous published sites expire unless claimed or updated with an authenticated account. <br>
-Mitigation: Share the current site URL and claim URL only from the latest script output, and tell users when an anonymous site expires in 24 hours. <br>
+## Use Case:
 
+Agents use this skill to publish user-provided websites or files to live URLs and manage access, team workspaces, and domains.
 
-## Reference(s): <br>
-- [here.now Documentation](https://here.now/docs) <br>
-- [here.now Access Control Documentation](https://here.now/docs#access-control) <br>
-- [here.now Workspace Documentation](https://here.now/docs#workspaces) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands, URLs, and JSON/API output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Publishing workflows return live site URLs and publish result details; Drive workflows return JSON metadata or file content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.18.0 (source: evidence release version and artifact SKILL.md) <br>
+Risk: A path-handling bug may expose saved site-control tokens, and some credential safeguards are incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a corrected version that normalizes paths and excludes private state. Until then, publish only a clean output directory without credentials, .herenow state, or other private files.
+
+Risk: Publishing, API access, and Drive sharing can expose files or grant broader access than intended.
+
+Mitigation: Choose publication and access settings explicitly, restrict API destinations to the documented service, and give Drive shares narrow paths, minimal permissions, and short expirations. Pin installation versions where possible.
+
+## Reference(s):
+
+- [here.now documentation](https://here.now/docs)
+- [here.now API specification](https://here.now/openapi.json)
+
+## Skill Output:
+
+**Output Type(s):** [Files, URLs, Guidance]
+
+**Output Format:** [Published website or file URLs with Markdown status guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Site access settings depend on the user's publication choices.]
+
+## Skill Version(s):
+
+1.35.1 (source: artifact SKILL.md and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

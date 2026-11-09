@@ -1,45 +1,55 @@
-## Description: <br>
-Turns a user's idea into a video-generation workflow plan covering story, characters, scenes, shots, keyframes, shot videos, and final concatenation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns a creative idea into a reviewable video-production plan, expands it into canvas shapes, and applies them to a canvas.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative users use this skill to turn a video idea into a staged production plan, canvas-ready workflow shapes, and dLazy CLI generation steps. It is intended for agent-assisted media planning and generation with explicit user confirmation before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill combines canvas-planning guidance with mandatory terminal-based generation, which may exceed what a user expects from a planning workflow. <br>
-Mitigation: Require explicit confirmation before running generation commands and keep each proposed command visible for review. <br>
-Risk: Prompts and referenced media may be sent to dLazy API services and uploaded to dLazy media storage. <br>
-Mitigation: Use the skill only with inputs suitable for dLazy services, avoid sensitive media, and review uploaded inputs before approving commands. <br>
-Risk: Using a globally installed CLI may persist tooling and API configuration on the local system. <br>
-Mitigation: Prefer the pinned npx invocation when a global install is not desired, and rotate or revoke dLazy API keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Creators and video-production teams use the skill to turn an idea into a story and shot plan, then organize the planned workflow on a canvas for review and generation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-idea2video) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries with inline shell commands, workflow configuration details, and generated media URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create canvas workflow shapes and propose or run dLazy CLI commands after user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.9 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The security review was partial and noted differing workflow instructions for canvas planning and direct image generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill instructions before installation and clarify whether direct image generation is intended alongside canvas planning.
+
+Risk: The skill sends prompts to hosted services and uploads supplied local media for model processing.
+
+Mitigation: Avoid supplying sensitive prompts or media unless their use with dLazy hosted services is appropriate.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-idea2video)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Configuration, Guidance]
+
+**Output Format:** [Markdown plans and structured canvas workflow shapes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prompts and supplied media may be sent to dLazy hosted APIs; local media paths are uploaded for model processing.]
+
+## Skill Version(s):
+
+1.3.41 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

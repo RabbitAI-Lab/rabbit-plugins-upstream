@@ -1,42 +1,53 @@
-## Description: <br>
-Smartlead helps agents search and read Smartlead campaign, lead, and email-account data through an OOMOL-connected Smartlead account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use an OOMOL-connected account to search and read Smartlead campaign, lead, and email-account data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers with a connected Smartlead account use this skill to inspect campaigns, campaign leads, and email accounts without calling the Smartlead API directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read-only Smartlead actions can expose campaign, lead, and email-account data from the connected account. <br>
-Mitigation: Review command output before sharing it outside the authorized workflow. <br>
-Risk: The skill depends on trust in OOMOL and a connected Smartlead account. <br>
-Mitigation: Install only when the user trusts OOMOL and is comfortable connecting Smartlead to the OOMOL connector. <br>
+## Use Case:
 
+People managing Smartlead campaigns use this skill to retrieve campaign, lead, and email-account information through their OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Smartlead skill](https://clawhub.ai/oomol/skills/oo-smartlead-ai) <br>
-- [Smartlead homepage](https://www.smartlead.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Smartlead campaign, lead, and email-account data may be returned from the connected account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Setup directs the agent to run remote installation scripts without verification or explicit approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified CLI version yourself, or require explicit approval before setup; review any additional skills installed during setup.
+
+## Reference(s):
+
+- [Smartlead release on ClawHub](https://clawhub.ai/oomol/skills/oo-smartlead-ai)
+- [Smartlead homepage](https://www.smartlead.ai)
+- [Smartlead API documentation](https://api.smartlead.ai/)
+- [oo CLI source and documentation](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, API Calls]
+
+**Output Format:** [Structured Smartlead data returned as JSON, with concise text summaries when useful.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The listed actions retrieve campaign, lead, and email-account data.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

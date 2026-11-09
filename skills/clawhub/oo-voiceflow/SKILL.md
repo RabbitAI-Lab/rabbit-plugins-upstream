@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Voiceflow"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.5"
   services: ["voiceflow"]
   icon: "https://static.oomol.com/logo/third-party/voiceflow.png"
 ---
@@ -37,7 +37,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `interact` — Send one non-streaming action to a Voiceflow conversation session.
+- `interact` — Send one non-streaming action to a Voiceflow conversation session. [write]
 - `list_environments` — List environments for the connected Voiceflow project.
 - `query_knowledge_base` — Query the Voiceflow knowledge base and return the synthesized answer and chunks.
 - `start_session` — Start a Voiceflow conversation session for one user and return the session key used by non-streaming interact calls. [write]
@@ -71,11 +71,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Voiceflow is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=voiceflow
+  https://console.oomol.com/connections/voiceflow
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Voiceflow homepage: https://www.voiceflow.com
+- API documentation: https://docs.voiceflow.com/api-reference/authentication

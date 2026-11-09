@@ -1,47 +1,55 @@
-## Description: <br>
-Estimates livestock body length and weight from side-view images, videos, or URLs and returns structured measurements, fattening-stage assessment, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Estimates livestock body length and body weight from side-view videos or frames, tracking fattening progress in a contactless manner. | 通过视频视觉估测体长、体重，追踪育肥进度。
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External farmers, livestock operators, and agents use this skill to submit side-view livestock media for contactless body-size and weight estimates and to retrieve account-bound history reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uploads livestock media to a remote cloud service for processing. <br>
-Mitigation: Use only media and URLs intended for that service, and avoid private farm footage or internal/private URLs unless sharing them with the service is approved. <br>
-Risk: The skill silently creates or reuses an internal cloud identity and account-bound report history. <br>
-Mitigation: Run it only in workspaces where account-bound history is expected, and review access controls before use in shared environments. <br>
-Risk: The security evidence notes local storage of service tokens in the workspace data area. <br>
-Mitigation: Limit workspace access, clean stored tokens when decommissioning the skill, and avoid running it in untrusted shared workspaces. <br>
-Risk: Body size, weight, and fattening-stage outputs are estimates and may be affected by pose, occlusion, reference-object quality, lighting, and video quality. <br>
-Mitigation: Use outputs as monitoring references and verify operational decisions with established weighing equipment and farm management procedures. <br>
+## Use Case:
 
+External livestock producers and farm operators can estimate body measurements, weight, and fattening stage from side-view images or video to track growth. Results are reference estimates and should be considered alongside established weighing and farm-management procedures.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-body-size-weight-estimation-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON text, with optional saved text output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include estimated body measurements, weight, fattening stage, confidence or usability notes, report links, and account-bound history listings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; SKILL.md frontmatter reports 1.0.3) <br>
+Risk: ClawScan marks the release suspicious, citing reported credential handling, automatic account-related behavior, and network or analysis actions that may exceed its stated purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review credential and account flows and outbound requests before use; avoid providing sensitive credentials until those behaviors are understood.
+
+Risk: The security scan was partial because a local reference was missing.
+
+Mitigation: Obtain and review the missing referenced material, then reassess the skill before deployment.
+
+## Reference(s):
+
+- [API reference](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub release page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-body-size-weight-estimation-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Markdown]
+
+**Output Format:** [Structured analysis results with estimated body measurements, weight, fattening stage, confidence or usability notes, and report links; history listings use Markdown tables.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Estimates are for growth-tracking reference.]
+
+## Skill Version(s):
+
+1.0.15 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -18,7 +18,7 @@ A production-ready Twilio + OpenAI Realtime SIP bridge that enables voice conver
 
 ### 1. Prerequisites
 
-- Node.js 18+ (24+ recommended)
+- Node.js 20+ (24+ recommended)
 - Twilio account with a phone number
 - OpenAI account with Realtime API access
 - (Optional) OpenClaw gateway running locally
@@ -163,6 +163,9 @@ When configured, the assistant can delegate complex queries (calendar lookups, c
 | `DEFAULT_CALENDAR` | Default calendar for bookings | (empty) |
 | `OPENAI_VOICE` | OpenAI TTS voice (alloy, echo, fable, onyx, nova, shimmer) | `alloy` |
 | `AMBER_REALTIME_MODEL` | Default Realtime model for calls without a per-call override (`gpt-realtime` or `gpt-realtime-mini`) | `gpt-realtime` |
+| `AMBER_REALTIME_VAD_THRESHOLD` | Realtime server VAD speech sensitivity. Lower is more sensitive to quiet speech. | `0.5` |
+| `AMBER_REALTIME_VAD_PREFIX_PADDING_MS` | Audio padding kept before detected speech starts. | `500` |
+| `AMBER_REALTIME_VAD_SILENCE_DURATION_MS` | Silence length used to commit a caller turn. | `650` |
 | `AMBER_CRM_ENABLED` | Enable local CRM lookup/logging. Enable only with caller notice/consent and retention policy. | `false` |
 | `AMBER_CRM_TRANSCRIPT_ENRICHMENT` | Enable post-call transcript extraction into local CRM through OpenAI Chat Completions. | `false` |
 
@@ -187,7 +190,8 @@ When configured, the assistant can delegate complex queries (calendar lookups, c
 
 ### Outbound Calls
 
-- **POST /call/outbound** - Initiate an outbound call
+- **POST /call/preview** - Validate destination, objective, optional call plan, and model; return a five-minute single-use `approvalToken`.
+- **POST /call/outbound** - After explicit operator approval, submit the exact previewed plan with `confirmed=true` and its `approvalToken`. A changed plan, missing/expired token or replay is rejected before dialing. Direct browser calls are denied; use the same-origin dashboard proxy. Tokens enforce sequencing, not proof of human approval.
   - Body: `{ "to": "+15555551234", "objective": "...", "callPlan": {...}, "model": "gpt-realtime-mini" }`
   - `model` is optional; when omitted, Amber uses `AMBER_REALTIME_MODEL`.
 
@@ -246,3 +250,7 @@ See the main ClawHub repository for license information.
 ## Support
 
 For issues, questions, or contributions, see the main [ClawHub repository](https://github.com/yourusername/clawhub).
+
+## Security upgrade compatibility
+
+OpenAI events must carry valid Standard Webhooks `webhook-id`, `webhook-timestamp` and `webhook-signature` headers; unsigned development-mode events are no longer accepted. Runtime dependencies now include the patched OpenAI 6.49 SDK and MCP 1.32 SDK; run `npm ci && npm run build && npm run test:security` after upgrading. Tests use fake credentials and a local mock; no calls are placed.

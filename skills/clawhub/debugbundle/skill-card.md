@@ -1,46 +1,60 @@
-## Description: <br>
-Use DebugBundle for runtime error reporting, crash reporting, incident reporting, incident response, live app monitoring, and production monitoring focused on runtime failures, customer-facing incidents, and endpoint health. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through DebugBundle runtime incident investigation, health monitoring, product analytics, and evidence-based debugging using the CLI primarily and MCP when needed.
 
-## Publisher: <br>
-[debugbundle](https://clawhub.ai/user/debugbundle) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[debugbundle](https://clawhub.ai/user/debugbundle)
 
-## Use Case: <br>
-Developers, SREs, and support engineers use DebugBundle to investigate production incidents, runtime errors, endpoint health, product analytics, and debug bundles, then guide evidence-based fixes through MCP and CLI workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT No Attribution
 
-## Known Risks and Mitigations: <br>
-Risk: Agent access can expose incident, analytics, health-check, and management surfaces. <br>
-Mitigation: Confirm the intended access before installation, use a scoped member token where possible, and avoid broad organization-wide queries unless the user explicitly requests them. <br>
-Risk: Management operations may change monitoring, analytics, project, token, member, alert, webhook, billing, capture-policy, or improvement settings. <br>
-Mitigation: Read existing settings first, explain the intended change, and perform mutations only when the user explicitly asks. <br>
-Risk: Runtime evidence collection, probes, bundles, and analytics samples may include sensitive operational context. <br>
-Mitigation: Use bounded queries, short-lived scoped probes, existing redaction and retention controls, and never print credential values or raw sensitive payloads. <br>
+## Use Case:
 
+Developers and incident responders use this skill to investigate production runtime failures, customer-facing incidents, endpoint health, and product usage, then organize captured evidence into focused debugging guidance.
 
-## Reference(s): <br>
-- [DebugBundle MCP documentation](https://debugbundle.com/docs/mcp) <br>
-- [DebugBundle analytics documentation](https://debugbundle.com/docs/analytics) <br>
-- [DebugBundle CLI analytics documentation](https://debugbundle.com/docs/cli/analytics) <br>
-- [DebugBundle MCP tools documentation](https://debugbundle.com/docs/mcp/tools) <br>
-- [ClawHub DebugBundle skill page](https://clawhub.ai/debugbundle/skills/debugbundle) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, Markdown] <br>
-**Output Format:** [Markdown with inline shell commands, JSON configuration snippets, and MCP or CLI action guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide read and mutation workflows across incidents, health checks, analytics, project settings, and management surfaces; credential values and sensitive payloads should not be printed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.7.0 (source: server release metadata) <br>
+Risk: The security scan could not resolve one local reference, so the available scan evidence does not cover that reference.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect the unresolved reference and review the skill before relying on its guidance.
+
+Risk: Debugging workflows may involve member credentials and sensitive captured evidence.
+
+Mitigation: Do not expose credential values or raw sensitive payloads; keep project tokens limited to SDK ingestion.
+
+Risk: Some monitoring and incident-management operations can change hosted state or send external requests.
+
+Mitigation: Use scoped reads first, target only appropriate public endpoints, and make changes only when the user explicitly requests them.
+
+## Reference(s):
+
+- [DebugBundle MCP documentation](https://debugbundle.com/docs/mcp)
+- [DebugBundle analytics documentation](https://debugbundle.com/docs/analytics)
+- [DebugBundle CLI analytics documentation](https://debugbundle.com/docs/cli/analytics)
+- [DebugBundle MCP tools documentation](https://debugbundle.com/docs/mcp/tools)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands, Configuration, Markdown]
+
+**Output Format:** [Markdown text with shell commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Varies with the incident, health check, or analytics question being investigated.]
+
+## Skill Version(s):
+
+1.21.0 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
