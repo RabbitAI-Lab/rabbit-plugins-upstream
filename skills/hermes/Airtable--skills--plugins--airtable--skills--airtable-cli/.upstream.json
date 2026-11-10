@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/Airtable/skills/tree/main/plugins/airtable/skills/airtable-cli",
+  "identifier": "Airtable/skills/plugins/airtable/skills/airtable-cli",
+  "repo": "Airtable/skills",
+  "path": "plugins/airtable/skills/airtable-cli",
+  "branch": "main",
+  "pushedAt": "2026-07-21T18:20:59Z",
+  "contentHash": "e45e4a96abdc69ce1a457db84c3d54206d1d9ee15222c6f420a000101e9474b2",
+  "fetchedAt": "2026-11-10T15:40:02.575Z"
+}
