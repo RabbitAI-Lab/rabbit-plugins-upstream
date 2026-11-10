@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/fastgen-validate",
+  "identifier": "NVIDIA/skills/skills/fastgen-validate",
+  "repo": "NVIDIA/skills",
+  "path": "skills/fastgen-validate",
+  "branch": "main",
+  "pushedAt": "2026-11-10T15:09:48Z",
+  "contentHash": "b2610e4a8d7d529890d35f5b9036f6769c0af44eaf507052e9e013439c02c27f",
+  "fetchedAt": "2026-11-10T15:40:07.893Z"
+}

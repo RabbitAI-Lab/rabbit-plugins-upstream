@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/Airtable/skills/tree/main/plugins/airtable/skills/marketing-ops",
+  "identifier": "Airtable/skills/plugins/airtable/skills/marketing-ops",
+  "repo": "Airtable/skills",
+  "path": "plugins/airtable/skills/marketing-ops",
+  "branch": "main",
+  "pushedAt": "2026-07-21T18:20:59Z",
+  "contentHash": "38a404ec532d38075ae2968a63a43af03831d0613991a4b4ce414d4fc057c47d",
+  "fetchedAt": "2026-11-10T15:40:02.576Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/fastgen-setup",
+  "identifier": "NVIDIA/skills/skills/fastgen-setup",
+  "repo": "NVIDIA/skills",
+  "path": "skills/fastgen-setup",
+  "branch": "main",
+  "pushedAt": "2026-11-10T15:09:48Z",
+  "contentHash": "2ffab376e3a07a0df37d88a083b40423dc3980196f0cb73f9d6f6ae6e5fac5f6",
+  "fetchedAt": "2026-11-10T15:40:07.892Z"
+}

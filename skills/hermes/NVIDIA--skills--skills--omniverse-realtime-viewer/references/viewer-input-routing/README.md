@@ -16,8 +16,12 @@ and `object-selection`; React UI state and DOM layout stay in
 
 - Use native transport input for pointer/key/wheel traffic. WebRTC apps receive
   `ovstream.InputEvent` structs through `server.on_input`; SHM clients send the
-  same native structs. Do not send continuous mouse movement as JSON
-  `mouseInput`.
+  same native structs.
+- A browser WebRTC app may use the narrowly scoped JSON `mouseInput` fallback
+  only after an explicit diagnostic proves that its data channel works while a
+  viewport interaction produces no server-side native `on_input` callback.
+  Treat native and fallback input as mutually exclusive modes; never send both
+  for the same gesture. SHM and in-process clients do not use this fallback.
 - Normalize every transport's button ids before calling shared camera or
   selection helpers.
 - Treat left click as selection only on button release and only when movement
@@ -90,6 +94,50 @@ Starting inactive creates a first-click race: the mouse-down can arrive through
 native input before the React activation message arrives through the data
 channel, so the release has no matching press and selection never queues.
 
+## Browser 2D gizmo ownership
+
+A browser UI handle over the stream may emit semantic parameter/transform
+commands over the app channel while camera and picking retain native input.
+This is a separate interaction target, not the viewport JSON fallback. Give the
+handle exclusive ownership from press through release/cancel: prevent the same
+gesture from reaching the SDK's native mouse/wheel listeners as well as React
+handlers. A late asynchronous viewport-gating message alone cannot prevent a
+press race; verify suppression at the SDK's actual event attachment points.
+
+Use the browser's verified capture or window-listener lifecycle to finish outside
+the handle. Cancel on lost capture, blur, disconnect, teardown, or scene change;
+restore the drag baseline according to the tool's policy. Tag queued intents
+with scene generation and drag identity, coalesce superseded moves, and reject
+late updates after cancellation. Release suppression so ordinary camera/picking
+input resumes. Follow the desktop-specific restrictions below for WebViews.
+
+## Desktop WebView Pointer Lifecycle
+
+For Tauri or another desktop WebView, make the viewport component own one pointer
+gesture from press through cleanup. On `pointerdown`, reject non-viewport
+controls, record the pointer id, button, and render-pixel press position, and
+enqueue one button-down intent. Route window-level `pointermove` only for that
+active pointer. Finish from window-level `pointerup` or `pointercancel`: enqueue
+cancel or button-up once, and clear the active pointer, press position, and drag
+state. Use this window-listener path without `setPointerCapture` in Tauri on
+Linux/WebKit2GTK; see `tauri-shm-transform-gizmo` for overlay input ownership.
+
+Window-level listeners are required because a drag may leave the viewport and
+some WebView button paths do not deliver the final event to the original element.
+Do not attach duplicate window listeners on every render; register them for the
+active gesture and remove them during completion and component teardown. A new
+stage load, window blur, or component teardown must follow the same cancel path.
+
+## Browser JSON Fallback For Verified Native-Input Failure
+
+Keep `input_mode = "native"` as the default. Switch to
+`input_mode = "json-fallback"` only after all of these are true:
+
+1. The browser has a live stream and the app data channel can complete a small request/response round trip.
+2. The user performs a pointer, button, and wheel test over the active viewport.
+3. Server logging confirms that `on_input` received none of those native events.
+
+Record the evidence and selected mode in the validation report. Do not infer fallback mode merely because a camera did not move: check viewport ownership, the camera command queue, and the native callback log first. In fallback mode, map DOM coordinates through the visible video rectangle to RenderProduct pixels, stop propagation to the streaming surface, and send `mouseInput` over the app data channel. The server ignores native input while this mode is active and passes fallback events through the same normalized camera, drag-threshold, and pick dispatch as native events. Switching modes cancels any active drag.
 ## Input Router Skeleton
 
 ```python
@@ -102,6 +150,7 @@ class InputRouter:
         self.render_width = render_width
         self.render_height = render_height
         self.viewport_input_active = True
+        self.input_mode = "native"
         self._active_button: int | None = None
         self._press_pos: tuple[float, float] | None = None
         self._dragged = False
@@ -115,6 +164,8 @@ class InputRouter:
             self._dragged = False
 
     def on_input(self, event, ovstream) -> None:
+        if self.input_mode != "native":
+            return
         if not self.viewport_input_active:
             self.commands.enqueue_cancel_interaction()
             return
@@ -166,9 +217,7 @@ thread before `renderer.step()`.
 ## Coordinate Ownership
 
 For WebRTC native input, NVST maps stream-surface coordinates for the fixed
-stream resolution. For app-owned DOM math, measure the visible video rectangle,
-reject letterboxed areas, and convert to RenderProduct pixels before camera or
-pick dispatch.
+stream resolution. For the JSON fallback and other app-owned DOM math, measure the visible video rectangle, reject letterboxed areas, and convert to RenderProduct pixels before camera or pick dispatch.
 
 Keep the RenderProduct size fixed for the session. Do not resize the server
 renderer because the browser CSS viewport changed.
@@ -185,6 +234,10 @@ renderer because the browser CSS viewport changed.
   click queues a pick, and `Selection changed` after decoded pick paths update
   selection.
 
+For ovui, adapt `(delta_x, delta_y, modifiers)` separately from ovstream
+`MouseEvent`. Forward the vertical delta to zoom and preserve modifier flags;
+see `local-viewer`.
+
 ## Validation Checklist
 
 - [ ] First left click after page load queues a pick and selects a prim.
@@ -194,7 +247,10 @@ renderer because the browser CSS viewport changed.
 - [ ] Selection stays synchronized between viewport, tree, and property panel.
 - [ ] Scene switch cancels active drag and clears stale pending picks.
 - [ ] Server logs show queued pick and selection-changed events for click tests.
-- [ ] No app protocol sends continuous pointer movement as JSON `mouseInput`.
+- [ ] A drag leaving the desktop viewport ends exactly once on pointer-up,
+  pointer-cancel, window blur, or scene switch.
+- [ ] Native input is the only active camera/picking path in the normal browser deployment; browser UI handles consume their own gestures.
+- [ ] If the JSON fallback is enabled, its data-channel/native-callback failure evidence is recorded, fallback coordinates match the render product, and native events are ignored so no gesture is applied twice.
 
 See also: `streaming-server`, `streaming-client`, `streaming-messages`,
 `camera-controls`, `native-picking-selection`, `object-selection`,
