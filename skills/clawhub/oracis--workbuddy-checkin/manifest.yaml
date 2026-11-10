@@ -1,0 +1,21 @@
+name: workbuddy-checkin
+display_name: WorkBuddy 每日签到领积分
+version: 1.5.3
+author: oracis
+category: 办公效率
+license: MIT
+homepage: https://github.com/oracis/workbuddy-checkin
+description: 用用户显式提供的 WorkBuddy accessToken 调用官方签到接口领取每日积分。仅当用户明确指名 WorkBuddy 时使用；若只说「签到/领积分」而未指明平台，须先向用户确认。只访问两个官方域名（白名单硬约束、无放行开关）、强制 HTTPS、默认 443 端口、禁止重定向，不读取也不写入本机客户端凭据，脚本幂等且零依赖。
+triggers:
+  - 领取 WorkBuddy 今日积分
+  - WorkBuddy 签到
+  - WorkBuddy 每日礼包
+  - WorkBuddy checkin
+  - WorkBuddy 积分今天领了吗
+  - 执行 WorkBuddy 每日签到任务
+tags:
+  - WorkBuddy
+  - 签到
+  - 积分
+  - 自动化
+  - 定时任务

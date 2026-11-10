@@ -1,41 +1,54 @@
-## Description: <br>
-Search the web for one or more queries in parallel. Use when you need current information, news, prices, or any web content to complement on-chain Nansen data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search the web for one or more queries in parallel. Use when you need current information, news, prices, or any web content to complement on-chain Nansen data.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-Developers and agents use this skill to run Nansen web searches for current information, market news, prices, and web context that can complement on-chain analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires the nansen CLI and access to NANSEN_API_KEY. <br>
-Mitigation: Install only if you trust the nansen-cli package, scope API key access appropriately, and keep use focused on web search and fetch commands. <br>
-Risk: Search queries may expose secrets or private business information to external services. <br>
-Mitigation: Avoid putting secrets, credentials, or sensitive private information into search queries. <br>
+## Use Case:
 
+Developers and agents use this skill to search the web for current information, news, prices, and other content that complements on-chain Nansen data.
 
-## Reference(s): <br>
-- [Nansen Web Searcher on ClawHub](https://clawhub.ai/nansen-devops/nansen-web-searcher) <br>
-- [nansen-devops publisher profile](https://clawhub.ai/user/nansen-devops) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with bash examples and JSON search results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search results include one entry per query with organic results and optional knowledge graph data; results per query are configurable from 1 to 20.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Web search queries are sent to the Serper API, so queries may disclose information to that service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid including confidential or personal information in search queries.
+
+Risk: Search results can omit some sources and may be incomplete or out of date.
+
+Mitigation: Check source links and dates before relying on results, especially for consequential decisions.
+
+## Reference(s):
+
+- [Browser login platform scope](https://github.com/nansen-ai/nansen-cli/blob/main/docs/browser-login.md#preview-platform-scope)
+- [Nansen Web Searcher on ClawHub](https://clawhub.ai/nansen-devops/skills/nansen-web-searcher)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [Search result data with titles, links, snippets, dates, and optional knowledge graph information; formatted JSON when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can return results for multiple queries in parallel; result count is configurable.]
+
+## Skill Version(s):
+
+0.1.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

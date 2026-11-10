@@ -1,44 +1,56 @@
-## Description: <br>
-Operate Agora through OOMOL's oo CLI for reading, creating, updating, and deleting Agora Console data without handling raw credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Agora (agora.io). Use this skill for ANY Agora request — reading, creating, updating, and deleting data. Whenever a task involves Agora, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Agora Console projects and App Certificate settings through an OOMOL-connected account. It supports listing, retrieving, creating, enabling, disabling, usage lookup, and primary certificate reset workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create projects, change project status, enable or disable the primary App Certificate, and reset the primary App Certificate through a connected OOMOL account. <br>
-Mitigation: Confirm the exact project, action, payload, and expected effect with the user before approving any write or destructive operation. <br>
-Risk: Certificate reset is destructive and may overwrite credential material for an Agora project. <br>
-Mitigation: Require explicit user approval for the target project before running reset_primary_certificate. <br>
-Risk: Actions run against the user's connected OOMOL account and can affect live Agora resources. <br>
-Mitigation: Use schema inspection before constructing payloads and only proceed when the connected account, project, and requested operation are clear. <br>
+## Use Case:
 
+Developers and teams use the connected Agora account to inspect projects and usage, create projects, and manage project status or certificates.
 
-## Reference(s): <br>
-- [Agora homepage](https://www.agora.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands call the Agora connector through the oo CLI and may return JSON responses containing data and an execution ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: The remote CLI installer and connector implementations have not been verified, and setup may synchronize other agent skills into the environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and connector behavior before use; consider disabling skill synchronization and keep the agent environment limited to reviewed skills.
+
+Risk: A connected Agora account may have permissions broader than an individual task requires.
+
+Mitigation: Use an account with only the needed permissions and retain the skill's approval requirements for project and certificate changes.
+
+## Reference(s):
+
+- [Agora](https://www.agora.io)
+- [Agora REST API authentication documentation](https://docs.agora.io/en/signaling/rest-api/restful-authentication)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Agora skill release on ClawHub](https://clawhub.ai/oomol/skills/oo-agora)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Guidance]
+
+**Output Format:** [Command-line instructions with JSON request payloads and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the connected Agora account; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

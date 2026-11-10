@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/google-docs-connector",
   "slug": "google-docs-connector",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1782261475124,
-  "contentHash": "c0e7e257f5ed8a07dab1d325cd56d01a2529901a48e440b14090a782e68c570b",
-  "fetchedAt": "2026-07-26T18:24:31.712Z"
+  "version": "1.0.3",
+  "updatedAt": 1794103608560,
+  "contentHash": "250a0b6565dfb20ff81cd4d43c7dba95d2d29ebe0920fcbf472f1d7f7849bc2e",
+  "fetchedAt": "2026-11-10T15:51:05.527Z"
 }

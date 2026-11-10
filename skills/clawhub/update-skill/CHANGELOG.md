@@ -7,6 +7,66 @@ and this skill adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-11-05
+
+### Added
+
+- Three usage lanes replace the single pond agent: summaries (settled conclusions), corrections (the user overriding how the tool or the skill was used), and a usage audit of sessions where the skill was loaded.
+- Report section 6, Operational learnings: `L` rows kept apart from the edit table, with an attestation of lanes, window, sessions read and query timings. GATE 1 accepts `L` IDs, and the no-op short-circuit requires section 6 to be empty.
+- pond interim notes: query shapes, filters and timings for a word-indexed remote store, pasted into every usage brief because subagents cannot read MCP resources. Remove once tenequm/pond#369 lands.
+- A usage row that conflicts with a recipe in the user's CLAUDE.md or AGENTS.md is kept and marked as a conflict.
+
+### Changed
+
+- The usage angle no longer asks for semantic queries: pond is word-indexed, so lanes query with the literal words expected in the text.
+- pond docs link points to https://pond.locker/.
+
+## [0.9.0] - 2026-11-05
+
+### Changed
+
+- Every run uses a separate worktree on `chore/update-<name>`; the yes/no question and the in-place path are gone, and how to create the worktree is left to the environment.
+- Phase 6: `just check` regenerates `README.md` in this repo - stage it with the skill changes.
+
+## [0.8.6] - 2026-11-05
+
+### Changed
+
+- Phase 1 pre-flight asks for a per-skill license file only when the repo requires one; ClawHub licenses every skill MIT-0.
+
+### Removed
+
+- Per-skill `LICENSE.txt`: ClawHub licenses every published skill MIT-0.
+
+## [0.8.5] - 2026-10-13
+
+### Fixed
+- Subagents ran toolchain probes (`swift build --help`) in the main checkout and left a `.build/` behind. Every toolchain command now runs in a named scratch directory outside all checkouts.
+- Phase 6 gains a checkout-hygiene hard blocker: both checkouts are compared against a Phase 1 `git status` snapshot, and leftovers are shown and removed before GATE 2.
+
+### Security
+- New rule: no backticks in shell arguments. A backtick in a double-quoted `rg` pattern ran as command substitution and printed the environment into a transcript.
+
+## [0.8.4] - 2026-09-09
+
+### Removed
+- Removed `disable-model-invocation`, so the skill can be invoked by the model as well as by `/name`.
+
+## [0.8.3] - 2026-09-09
+
+### Changed
+- Description condensed to fit the repo's 250-character limit.
+
+## [0.8.2] - 2026-08-21
+
+### Changed
+
+- Declared ClawHub browse categories (`agents, automation`) and topics in `metadata`, so the release pipeline publishes them instead of leaving the skill in the `other` category.
+
+### Removed
+
+- `skill-card.md`. The ClawHub CLI strips a root `skill-card.md` from every publish and the registry generates its own card, so the authored file never reached ClawHub.
+
 ## [0.8.1] - 2026-07-22
 
 ### Added

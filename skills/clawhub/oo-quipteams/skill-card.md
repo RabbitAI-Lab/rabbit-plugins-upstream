@@ -1,45 +1,55 @@
-## Description: <br>
-Quipteams (quipteams.com). Use this skill for ANY Quipteams request: searching and reading data through the OOMOL Quipteams connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read Quipteams data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and agents use this skill to search and read Quipteams employees, assets, device actions, kits, products, and hardware procurement quotes through an OOMOL-connected account. It is suited for business-data lookup tasks where the agent should inspect the connector schema before running read actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Quipteams business data, including employee HRIS metadata, quote recipients, comments, and inventory records. <br>
-Mitigation: Use the connected account with the minimum necessary scope and ask the agent to retrieve only the records needed for the task. <br>
-Risk: Connector payloads may be incorrect if the agent guesses action parameters. <br>
-Mitigation: Have the agent run the connector schema command before constructing each action payload. <br>
-Risk: Authentication, connection, scope, credential, or billing errors can interrupt execution. <br>
-Mitigation: Follow the first-time setup and recovery guidance only after a matching command failure occurs. <br>
+## Use Case:
 
+Users can search and read Quipteams employee, inventory, product, device action, kit, and quote data through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Quipteams homepage](https://www.quipteams.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-quipteams) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides an agent to inspect live connector schemas and run read-oriented Quipteams connector actions with JSON payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The setup instructions recommend running a remote CLI installer whose contents and local effects are unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately, verify the downloaded software, and inspect its effects before running it.
+
+Risk: The CLI setup includes bundled-skill synchronization, and the connector can expose employee and business data.
+
+Mitigation: Review or disable bundled-skill synchronization, connect only the Quipteams access needed, and handle returned employee and business data carefully.
+
+## Reference(s):
+
+- [Quipteams](https://www.quipteams.com)
+- [Quipteams API documentation](https://api.quipteams.com/docs)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [oo CLI commands and JSON query results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the selected Quipteams read action and query parameters.]
+
+## Skill Version(s):
+
+1.0.5 (source: skill frontmatter and release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,55 @@
-## Description: <br>
-Plane (plane.so). Use this skill for ANY Plane request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Plane requests to read, create, update, or delete data through the Plane connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and teams use this skill to let an agent inspect and manage Plane projects, members, labels, states, and work items through an OOMOL-connected Plane account. It supports read operations, work item creation and updates, and explicitly approved deletion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete Plane work items. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before write actions, and require explicit approval before delete_work_item. <br>
-Risk: One-time CLI installation or account connection steps affect the user's local environment and OOMOL-connected Plane access. <br>
-Mitigation: Run setup only after an authentication or connection failure, and perform installation or connection steps from a trusted environment. <br>
+## Use Case:
 
+People managing work in Plane use this skill to retrieve projects and work items and to create, update, or delete work items through their connected Plane account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-plane) <br>
-- [Plane Homepage](https://plane.so) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May trigger Plane read, write, or delete actions through the oo CLI when the user has configured OOMOL credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup uses downloaded installers that have not been verified, and the CLI may synchronize skill content beyond this integration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify and install a trusted CLI release yourself, and consider setting OO_SKILLS_SYNC_DISABLED before invoking it.
+
+Risk: Actions use the connected Plane account and can change work items.
+
+Mitigation: Review the account permissions and confirm each requested change before running it.
+
+## Reference(s):
+
+- [Plane API documentation](https://developers.plane.so/api-reference/introduction)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI environment variables](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md#environment-variables)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Shell commands with JSON inputs and structured JSON results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the connected Plane account; actions cover reading and managing Plane data.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

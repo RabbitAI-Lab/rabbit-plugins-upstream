@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/twitch-clip",
   "slug": "twitch-clip",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1778492026162,
-  "contentHash": "0de9b81ae1147be0325dd80f4e01221e1f2aa98ffe50545d192b70dee0a3977e",
-  "fetchedAt": "2026-07-26T19:58:17.243Z"
+  "version": "1.0.8",
+  "updatedAt": 1793852958615,
+  "contentHash": "59f95299b12a254c575ad0012a5ded17f3358134b1144c1abd1a1f8cb1fd1c07",
+  "fetchedAt": "2026-11-10T16:02:18.301Z"
 }

@@ -1,41 +1,54 @@
-## Description: <br>
-Capture and automate macOS UI with the Peekaboo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Capture and automate macOS UI with the Peekaboo CLI.
 
-## Publisher: <br>
-[steipete](https://clawhub.ai/user/steipete) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[steipete](https://clawhub.ai/user/steipete)
 
-## Use Case: <br>
-Developers and agent users on macOS use Peekaboo to inspect screens, identify UI targets, and automate app, window, input, clipboard, menu, and screenshot workflows through CLI commands. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill can inspect screen and clipboard contents and drive macOS UI input, which can expose secrets or perform unintended actions. <br>
-Mitigation: Install only when UI automation is intended; review commands before running them and avoid sensitive screens, clipboard contents, passwords, and account flows unless the workflow is trusted. <br>
-Risk: Peekaboo requires macOS Screen Recording and Accessibility permissions, giving it broad ability to observe and control the local UI. <br>
-Mitigation: Grant permissions only on trusted Macs and periodically review or revoke those permissions when automation is no longer needed. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Peekaboo homepage](https://peekaboo.boo) <br>
-- [ClawHub skill page](https://clawhub.ai/steipete/skills/peekaboo) <br>
-- [Publisher profile](https://clawhub.ai/user/steipete) <br>
+## Use Case:
 
+Developers and automation-focused users use this skill to let an agent inspect, capture, and operate macOS application interfaces through Peekaboo CLI commands.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and concise operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference JSON CLI output and image or screenshot files produced by Peekaboo commands.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill enables broad macOS screen inspection, clipboard access, dialog interaction, and input control.
+
+Mitigation: Install only from trusted Peekaboo package sources, grant Screen Recording and Accessibility permissions deliberately, and review automation actions before allowing clicks, typing, clipboard reads, or dialog interaction.
+
+Risk: Command examples may expose sensitive text if reused with real credentials or private clipboard data.
+
+Mitigation: Use placeholder values in examples, avoid entering real passwords through shared prompts or logs, and clear or avoid sensitive clipboard contents before running automation.
+
+## Reference(s):
+
+- [Peekaboo homepage](https://peekaboo.boo)
+- [ClawHub skill page](https://clawhub.ai/steipete/skills/peekaboo)
+- [Publisher profile](https://clawhub.ai/user/steipete)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline shell commands and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include JSON-producing Peekaboo command examples for scripting.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

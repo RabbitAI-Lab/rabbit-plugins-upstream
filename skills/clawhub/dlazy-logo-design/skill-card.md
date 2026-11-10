@@ -1,45 +1,56 @@
-## Description: <br>
-Dlazy Logo Design helps agents create, refine, or evaluate logo and brand identity work through the dLazy hosted logo-design template. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+logo design, logo maker, make a logo, brand identity, brand kit, VI design — brand-gene analysis, strategy, concepts, refinement, multi-context delivery, evaluation. Use to create, upgrade, or evaluate a logo / brand mark; ships a transparent-background logo with a live multi-context preview.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, designers, and developers use this skill to create, upgrade, or evaluate logos and brand identity concepts through the dLazy hosted logo-design template. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and any files attached with --files are sent to dLazy services. <br>
-Mitigation: Avoid confidential brand assets unless dLazy's terms and data handling are acceptable; attach only the files needed for the task. <br>
-Risk: The dLazy CLI can save an API key in the local user configuration. <br>
-Mitigation: Use OS-user protected configuration or the DLAZY_API_KEY environment variable, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: A global npm installation persists the pinned dLazy CLI on the host. <br>
-Mitigation: Use the pinned npx invocation when a persistent global CLI is not desired. <br>
+## Use Case:
 
+External users can use the skill to create, refine, or evaluate a logo and brand identity through the dLazy logo-design assistant. It provides design guidance, transparent-background logo output, and previews for multiple contexts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-logo-design) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown or terminal text from the dLazy CLI, with generated logo assets or preview links when the service returns them] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; optional local attachments are uploaded via the dLazy CLI when --files is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter, server release metadata) <br>
+Risk: The security guidance notes broad activation terms and login and project-listing commands that may not be clearly aligned with the stated logo-design purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the activation conditions and approve login or project-listing actions before invoking the skill.
+
+Risk: Some references were unresolved, leaving the security evidence incomplete.
+
+Mitigation: Review the available documentation and CLI behavior before installing or using the skill.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-logo-design)
+- [CLI repository link listed in the skill metadata](https://github.com/dlazy-ai/cli)
+- [dLazy website](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Images, Files]
+
+**Output Format:** [Text design guidance and generated logo image files with multi-context previews]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Transparent-background logo output; preview contexts include light and dark backgrounds, app icons, favicons, and business cards.]
+
+## Skill Version(s):
+
+1.3.36 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

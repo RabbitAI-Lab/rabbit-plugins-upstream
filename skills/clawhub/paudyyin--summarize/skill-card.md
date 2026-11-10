@@ -1,39 +1,54 @@
-## Description: <br>
-Summarize creates concise summaries and keyword lists from long text, local documents, or web pages, with configurable length and output format. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Summarize creates concise summaries and keyword lists from pasted text, local documents, and web pages with configurable output length.
 
-## Publisher: <br>
-[paudyyin](https://clawhub.ai/user/paudyyin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[paudyyin](https://clawhub.ai/user/paudyyin)
 
-## Use Case: <br>
-External users and developers can use this skill to summarize pasted text, selected local documents, or web pages, and to extract keywords for faster review and triage. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive local files, private documents, or internal URLs may be processed if supplied as inputs. <br>
-Mitigation: Use only deliberate file paths and URLs, avoid secrets or private files, and do not fetch internal or sensitive URLs in restricted environments. <br>
+## Use Case:
 
+External users and developers use this skill to summarize long text, supported local documents, and web pages, and to extract keywords in text, Markdown, or JSON formats.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/paudyyin/summarize) <br>
-- [Publisher profile](https://clawhub.ai/user/paudyyin) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json] <br>
-**Output Format:** [Plain text, Markdown, or JSON] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces summaries and keyword lists; optional metadata can include source, word count, and selected summary length.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence, SKILL.md frontmatter, package.json) <br>
+Risk: The skill can read user-specified local files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid using it with secret files or sensitive local documents unless the environment has appropriate file access controls.
+
+Risk: The skill can fetch user-specified URLs without safeguards.
+
+Mitigation: Avoid private or internal URLs, credential-bearing URLs, and sensitive network environments unless URL validation or network egress controls are added.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/paudyyin/skills/summarize)
+- [Publisher profile](https://clawhub.ai/user/paudyyin)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Plain text, Markdown, or JSON summaries and keyword lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports configurable summary length, keyword count, and optional metadata.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence, SKILL.md frontmatter, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

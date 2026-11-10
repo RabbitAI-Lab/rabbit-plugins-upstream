@@ -1,43 +1,51 @@
-## Description: <br>
-Operate Hex through an OOMOL-connected account using the oo CLI for project discovery, run inspection, and run control. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hex (hex.tech). Use this skill for ANY Hex request — reading, creating, updating, and deleting data. Whenever a task involves Hex, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and analysts use this skill to inspect Hex projects, list and check project runs, trigger published project runs, and cancel in-progress runs through the OOMOL connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installing or using the oo CLI brokers access to the user's Hex account through OOMOL. <br>
-Mitigation: Install only when OOMOL is trusted, review the CLI install command before running it, and use the documented first-time setup flow only after command failures. <br>
-Risk: Running or canceling Hex project runs can consume credits or affect downstream data workflows. <br>
-Mitigation: Confirm write-action payloads and expected effects with the user before invoking run_project or cancel_run. <br>
+## Use Case:
 
+Developers and analysts use this skill to inspect Hex projects and runs, start project runs, and cancel in-progress runs through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Hex skill](https://clawhub.ai/oomol/skills/oo-hex) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Hex homepage](https://hex.tech) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with oo CLI shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands rely on an installed, authenticated oo CLI and live connector schemas.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Automatic setup executes unverified remote code and may make broad changes to the agent environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a reviewed CLI release, explicitly approve local setup changes, and retain confirmations before starting or canceling Hex runs.
+
+## Reference(s):
+
+- [Hex API documentation](https://learn.hex.tech/docs/api-integrations/api/overview)
+- [Hex](https://hex.tech)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [Structured Hex project and run data with concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the connected Hex account and the selected action.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

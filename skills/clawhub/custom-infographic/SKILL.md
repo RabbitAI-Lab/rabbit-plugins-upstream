@@ -1,0 +1,285 @@
+---
+name: custom-infographic
+description: Generate a professional infographic from an article, document, URL, or topic, using the baoyu layout x style system (21 layouts x 21 styles). Original author 宝玉 (JimLiu); ported & customized by j3ffyang. Use when the user asks to create an infographic, 信息图, visual summary, 可视化, or a high-density information image, or wants an article turned into a visual poster.
+license: MIT
+compatibility: opencode
+metadata:
+  author: 宝玉 (JimLiu)
+  upstream: https://github.com/JimLiu/baoyu-skills#baoyu-infographic
+  version: 1.56.1
+---
+
+# Infographic Generator
+
+Adapted from [baoyu-infographic](https://github.com/JimLiu/baoyu-skills) v1.56.1 (ported via Hermes Agent) for opencode, then customized by j3ffyang to comply with the opencode standard and this repo's `imgs/` convention. Image generation uses OpenRouter image models through the bundled `scripts/generate_image.py`; the key requirement and its fallback are in Pitfall 6.
+
+Two dimensions: **layout** (information structure) × **style** (visual aesthetics). Freely combine any layout with any style — but never mix two styles in one image (Pitfall 4).
+
+## When to Use
+
+Trigger this skill when the user asks to create an infographic, visual summary, information graphic, or uses terms like "信息图", "可视化", or "高密度信息大图". The user provides content (text, file path, URL, or topic) and optionally specifies layout, style, aspect ratio, or language.
+
+*Note*: Image generation needs `OPENROUTER_API_KEY` set and an image-capable model (default `google/gemini-3.1-flash-image`). If the key is missing or the call fails, still produce `analysis.md`, `structured-content.md`, and `prompts/infographic.md` for external use — see Pitfall 6 and `references/workflow-example.md`.
+
+## Options
+
+| Option | Values |
+|--------|--------|
+| Layout | 21 options (see Layout Gallery), default: bento-grid |
+| Style | 21 options (see Style Gallery), default: craft-handmade |
+| Aspect | Named: landscape (16:9), portrait (9:16), square (1:1). Custom: any W:H ratio (e.g. `3:4`, `4:3`) — one the model cannot take as-is is mapped to the nearest supported preset (Step 5) |
+| Language | en, zh, ja, etc. |
+
+## Layout Gallery
+
+| Layout | Best For |
+|--------|----------|
+| `linear-progression` | Timelines, processes, tutorials |
+| `binary-comparison` | A vs B, before-after, pros-cons |
+| `comparison-matrix` | Multi-factor comparisons |
+| `hierarchical-layers` | Pyramids, priority levels |
+| `tree-branching` | Categories, taxonomies |
+| `hub-spoke` | Central concept with related items |
+| `structural-breakdown` | Exploded views, cross-sections |
+| `bento-grid` | Multiple topics, overview (default) |
+| `iceberg` | Surface vs hidden aspects |
+| `bridge` | Problem-solution |
+| `funnel` | Conversion, filtering |
+| `isometric-map` | Spatial relationships |
+| `dashboard` | Metrics, KPIs |
+| `periodic-table` | Categorized collections |
+| `comic-strip` | Narratives, sequences |
+| `story-mountain` | Plot structure, tension arcs |
+| `jigsaw` | Interconnected parts |
+| `venn-diagram` | Overlapping concepts |
+| `winding-roadmap` | Journey, milestones |
+| `circular-flow` | Cycles, recurring processes |
+| `dense-modules` | High-density modules, data-rich guides |
+
+Full definitions: `references/layouts/<layout>.md`
+
+## Style Gallery
+
+| Style | Description |
+|-------|-------------|
+| `craft-handmade` | Hand-drawn, paper craft (default) |
+| `claymation` | 3D clay figures, stop-motion |
+| `kawaii` | Japanese cute, pastels |
+| `storybook-watercolor` | Soft painted, whimsical |
+| `chalkboard` | Chalk on black board |
+| `cyberpunk-neon` | Neon glow, futuristic |
+| `bold-graphic` | Comic style, halftone |
+| `aged-academia` | Vintage science, sepia |
+| `corporate-memphis` | Flat vector, vibrant |
+| `technical-schematic` | Blueprint, engineering |
+| `origami` | Folded paper, geometric |
+| `pixel-art` | Retro 8-bit |
+| `ui-wireframe` | Grayscale interface mockup |
+| `subway-map` | Transit diagram |
+| `ikea-manual` | Minimal line art |
+| `knolling` | Organized flat-lay |
+| `lego-brick` | Toy brick construction |
+| `pop-laboratory` | Blueprint grid, coordinate markers, lab precision |
+| `morandi-journal` | Hand-drawn doodle, warm Morandi tones |
+| `retro-pop-grid` | 1970s retro pop art, Swiss grid, thick outlines |
+| `hand-drawn-edu` | Macaron pastels, hand-drawn wobble, stick figures |
+
+Full definitions: `references/styles/<style>.md`
+
+## Recommended Combinations
+
+| Content Type | Layout + Style |
+|--------------|----------------|
+| Timeline/History | `linear-progression` + `craft-handmade` |
+| Step-by-step | `linear-progression` + `ikea-manual` |
+| A vs B | `binary-comparison` + `corporate-memphis` |
+| Hierarchy | `hierarchical-layers` + `craft-handmade` |
+| Overlap | `venn-diagram` + `craft-handmade` |
+| Conversion | `funnel` + `corporate-memphis` |
+| Cycles | `circular-flow` + `craft-handmade` |
+| Technical | `structural-breakdown` + `technical-schematic` |
+| Metrics | `dashboard` + `corporate-memphis` |
+| Educational | `bento-grid` + `chalkboard` |
+| Journey | `winding-roadmap` + `storybook-watercolor` |
+| Categories | `periodic-table` + `bold-graphic` |
+| Product Guide | `dense-modules` + `morandi-journal` |
+| Technical Guide | `dense-modules` + `pop-laboratory` |
+| Trendy Guide | `dense-modules` + `retro-pop-grid` |
+| Educational Diagram | `hub-spoke` + `hand-drawn-edu` |
+| Process Tutorial | `linear-progression` + `hand-drawn-edu` |
+
+Default: `bento-grid` + `craft-handmade`
+
+## Keyword Shortcuts
+
+When user input contains these keywords, **auto-select** the associated layout and offer associated styles as top recommendations in Step 3. Skip content-based layout inference for matched keywords.
+
+If a shortcut has **Prompt Notes**, append them to the generated prompt (Step 5) as additional style instructions.
+
+| User Keyword | Layout | Recommended Styles | Default Aspect | Prompt Notes |
+|--------------|--------|--------------------|----------------|--------------|
+| 高密度信息大图 / high-density-info | `dense-modules` | `morandi-journal`, `pop-laboratory`, `retro-pop-grid` | portrait | — |
+| 信息图 / infographic | `bento-grid` | `craft-handmade` | landscape | Minimalist: clean canvas, ample whitespace, no complex background textures. Simple cartoon elements and icons only. |
+
+## Output Structure
+
+```
+infographic/{topic-slug}/
+├── source.md
+├── analysis.md
+├── structured-content.md
+└── prompts/infographic.md
+
+final image → imgs/<YYMMDD>-<slug>.png
+```
+
+Working files live in `infographic/{topic-slug}/`; the final image always lands in `imgs/` following this repo's `YYMMDD-slug` filename convention (see `ai-thoughts/AGENTS.md`).
+
+- `{topic-slug}`: 2-4 words kebab-case from the topic. If that folder already exists, append `-YYYYMMDD-HHMMSS`.
+- Final image name: `imgs/<YYMMDD>-<slug>.png` where `<slug>` is a 2-4 word kebab-case name and `<YYMMDD>` is the current date — or, when the source is an ai-thoughts article, the article's own `YYMMDD` prefix so the image shares it.
+
+## Core Principles
+
+- Preserve source data faithfully — no summarization or rephrasing (but **strip any credentials, API keys, tokens, or secrets** before including in outputs)
+- Define learning objectives before structuring content
+- Structure for visual communication (headlines, labels, visual elements)
+- Communicate concisely with the user — provide actionable updates rather than verbose explanations unless asked for details
+
+## Workflow
+
+### Step 1: Setup & Analyze
+
+**Load references**: Read `references/analysis-framework.md` from this skill.
+
+1. Save source content (file path or paste → `source.md` using `write`)
+   - **Backup rule**: If `source.md` exists, rename to `source-backup-YYYYMMDD-HHMMSS.md`
+2. Analyze: topic, data type, complexity, tone, audience
+3. Detect source language and user language
+4. Extract design instructions from user input
+5. Save analysis to `analysis.md`
+   - **Backup rule**: If `analysis.md` exists, rename to `analysis-backup-YYYYMMDD-HHMMSS.md`
+
+See `references/analysis-framework.md` for detailed format.
+
+### Step 2: Generate Structured Content → `structured-content.md`
+
+Transform content into infographic structure:
+1. Title and learning objectives
+2. Sections with: key concept, content (verbatim), visual element, text labels
+3. Data points (all statistics/quotes copied exactly)
+4. Design instructions from user
+
+**Rules**: Markdown only; no new information. Data fidelity and secret-stripping are governed by Core Principles and Pitfalls 1–2.
+
+See `references/structured-content-template.md` for detailed format.
+
+### Step 3: Recommend Combinations
+
+**3.1 Check Keyword Shortcuts first**: If user input matches a keyword from the **Keyword Shortcuts** table, auto-select the associated layout and prioritize associated styles as top recommendations. Skip content-based layout inference.
+
+**3.2 Otherwise**, recommend 3-5 layout×style combinations based on:
+- Data structure → matching layout
+- Content tone → matching style
+- Audience expectations
+- User design instructions
+
+### Step 4: Confirm Options
+
+Use the `question` tool to confirm options with the user. Ask all three in one call when they apply — skip Q3 when the source language already matches the user's:
+
+**Q1 — Combination**: Present the 3–5 layout×style combos from Step 3 with their rationale. Ask the user to pick one.
+
+**Q2 — Aspect**: Ask for aspect ratio preference (landscape/portrait/square or custom W:H).
+
+**Q3 — Language**: Ask which language the text content should use.
+
+If the user already specified all options, skip Step 4.
+
+### Step 5: Generate Prompt → `prompts/infographic.md`
+
+**Backup rule**: If `prompts/infographic.md` exists, rename to `prompts/infographic-backup-YYYYMMDD-HHMMSS.md`
+
+**Load references**: Read the selected layout from `references/layouts/<layout>.md` and style from `references/styles/<style>.md`.
+
+Combine:
+1. Layout definition from `references/layouts/<layout>.md`
+2. Style definition from `references/styles/<style>.md`
+3. Base template from `references/base-prompt.md`
+4. Structured content from Step 2
+5. **One text-accuracy block — the only place strings are enumerated.** Every renderable string goes in the `CRITICAL: Text Accuracy` block near the top of the prompt, and **nowhere else**. The rules that make duplication impossible:
+   - Wrap every renderable string in backticks. Write every meta-reference to a string (a constraint sentence, a "spell X exactly" note, a per-cell imagery hint) as **plain text without backticks** — so backticked spans are exactly the renderable set and nothing more.
+   - Do **not** append a second label dump at the end of the prompt. The base template deliberately has no `Text labels:` tail; do not reintroduce one.
+   - Do **not** repeat cell headings in the layout/style guidance or in the per-cell imagery notes — refer to cells by position instead.
+   - Prose must carry *meaning*, not restate labels: if a sentence would contain an exact label string, rephrase it.
+   - State that each string appears **exactly once**, and that no word outside the block may be rendered as text.
+   - For CJK (Chinese/Japanese/Korean) content the block must ALSO (a) name every rare or look-alike character explicitly with its forbidden substitutes (e.g. 菂 not 药、蔷 not 蓄、茄 not 茹、蕊 not 芯), and (b) state that every string and every card/element appears **exactly once**.
+   - Never tell the model to "drop the least important label" without naming the protected lists — it will drop a required chip (this happened: `Markdown` vanished from a stack cell). Protect list cells explicitly instead.
+
+**Aspect ratio resolution** for `{{ASPECT_RATIO}}` — the single place this is decided:
+- Named presets → ratio string: landscape→`16:9`, portrait→`9:16`, square→`1:1`
+- A custom W:H ratio passes as-is only if the selected model accepts it (Gemini: `16:9`, `9:16`, `1:1`, `3:4`, `4:3`, `21:9`, `1:4`, `4:1`, `1:8`, `8:1`); otherwise resolve it to the nearest accepted ratio and say so in the report
+
+Save the assembled prompt to `prompts/infographic.md` using `write`.
+
+### Step 6: Generate Image
+
+**Pre-flight — no-duplicate gate (hard stop).** Before generating, run the checker on the assembled prompt:
+
+```bash
+python .opencode/skills/custom-infographic/scripts/check_prompt_text.py \
+  infographic/{topic-slug}/prompts/infographic.md
+```
+
+It fails (exit 1) when any backticked string appears more than once, when a second label enumeration is present, or — with `--strings <file>` — when an expected string is missing. **Do not generate on failure; fix the prompt and re-run the check.**
+
+Run the bundled generator with the prompt from Step 5, writing the final image directly to `imgs/` with the repo-convention filename:
+
+```bash
+python .opencode/skills/custom-infographic/scripts/generate_image.py \
+  --prompt infographic/{topic-slug}/prompts/infographic.md \
+  --output imgs/{YYMMDD}-{slug}.png \
+  --aspect 16:9
+```
+
+- The final image goes to `imgs/<YYMMDD>-<slug>.png` (repo convention, see Output Structure) — never to `infographic/{topic-slug}/`.
+- `--aspect` takes the value resolved in Step 5 — do not re-derive it here.
+- The default model is `google/gemini-3.1-flash-image`; override with `--model`. The key requirement and its fallback are in Pitfall 6.
+- If the call fails, retry once yourself, then report the error to the user.
+- **Backup rule**: If the target `imgs/<YYMMDD>-<slug>.png` already exists, rename it to `imgs/<YYMMDD>-<slug>-backup-YYYYMMDD-HHMMSS.png` before writing. Never overwrite silently.
+
+### Step 7: Output Summary
+
+Report: topic, layout, style, aspect, language, output path (`imgs/<YYMMDD>-<slug>.png`), files created.
+
+## References
+
+- `references/analysis-framework.md` — Analysis methodology
+- `references/structured-content-template.md` — Content format
+- `references/base-prompt.md` — Prompt template
+- `references/layouts/<layout>.md` — 21 layout definitions
+- `references/styles/<style>.md` — 21 style definitions
+- `references/workflow-example.md` — Example workflow when image generation is unavailable
+- `scripts/generate_image.py` — OpenRouter image generator (Step 6)
+- `scripts/check_prompt_text.py` — Pre-flight no-duplicate gate; fail the run instead of rendering a duplicate (Step 6)
+
+## Pitfalls
+
+1. **Data integrity is paramount** — never summarize, paraphrase, or alter source statistics. "73% increase" must stay "73% increase", not "significant increase".
+2. **Strip secrets** — always scan source content for API keys, tokens, or credentials before including in any output file.
+3. **One message per section** — each infographic section should convey one clear concept. Overloading sections reduces readability.
+4. **Style consistency** — the style definition from the references file must be applied consistently across the entire infographic. Don't mix styles.
+5. **Aspect ratio support** — models accept only certain ratios, so an unsupported custom ratio is resolved to the nearest accepted one at Step 5. The generation call does not re-map it.
+6. **API availability** — generation fails without `OPENROUTER_API_KEY` or when the model cannot output images. Verify the key is set before starting; if generation is impossible, deliver the prompt-only outputs (`analysis.md`, `structured-content.md`, `prompts/infographic.md`) and tell the user.
+7. **Verify the render, not just the prompt** — the Text Accuracy block defined in Step 5 is mandatory. After generation, check every rendered string against that list with a vision model (e.g. `opencode run --model openrouter/z-ai/glm-4.6v --file`). Garbled, misspelled, dropped or doubled text means the image is not deliverable — fix the prompt and re-render. For a number or a short identifier, crop that region to 300% and read it again; a full-frame look misses a single wrong digit.
+8. **Chinese/CJK glyphs must be verified strictly, glyph by glyph** — treat CJK rendering as a hard gate, not a nice-to-have. After generation, compare every rendered glyph against the expected text list, character by character, using a vision model or by reading the image directly. Watch especially for: rare characters replaced by a common look-alike (菂→药、蔷→蓄、茄→茹), Simplified/Traditional swaps, dropped or doubled characters, and wrong-but-plausible variants. If any glyph is not exactly correct, the image is NOT deliverable as-is — stop and **discuss with the user**, offering: (a) accept the substitution only if it is a documented, acceptable variant, (b) re-render with a different image model, or (c) drop/rephrase the offending label. Never silently ship a mis-rendered name or character.
+9. **No duplicated data anywhere — text or image** — the final image must not repeat any text string (names, labels, sentences, the title, an arc line) or duplicate any imagery (echoed illustrations, cloned cells). **Prevent it at the prompt, not at the image:** duplication is caused upstream, when the same string is enumerated twice (a text-accuracy block *plus* a trailing label dump) or repeated in the layout/style guidance. Keep exactly one enumeration (Step 5) and gate generation with `scripts/check_prompt_text.py` (Step 6) — it fails the run before any cost is incurred. Then verify after generation (Pitfalls #7, #8): scan for duplicated cells, a title/arc rendered twice, names listed twice, and mirrored/echoed illustrations. If duplicates appear, regenerate or simplify the layout — never deliver with duplicated content.
+10. **Describe cells by geometry, never by content** — the layout section may say *where* a cell sits and *what shape* fills it; it must not say what the picture depicts. A sentence like "a neat stack of five books beside a cart of thirty" is read as content and drawn wherever it fits, often twice — the string gate passes because no string repeated, but the illustration does. Put meaning in the abstract closing paragraph only, and keep the layout section positional: "middle-right card, two halves, left calm, right piled." Observed 2026-11-04 on the `261022-agent-not-model` sheet: two renders duplicated the comparison and the loop card until the layout prose was reduced to pure geometry.
+11. **A proper noun shared between the title and a label is duplication the checker cannot see.** `scripts/check_prompt_text.py` compares whole backticked strings, so a ring label `HERMES` passes even when the subtitle already reads `HERMES AGENT ON A DISCORD SERVER`. Read the finished image for shared *words*, not just shared strings, and rename one side — subtitle or label, never both. Observed 2026-11-08 on the `261107-hermes-discord-private` sheet: the first render repeated the product name, and the fix was a neutral subtitle.
+12. **Change one variable at a time from the last good render.** A re-render that alters a string *and* a layout sentence can regress the whole composition — on 2026-11-08 the second sheet shifted every ring label one band inward, moved the centre label into a callout and merged two boxes, while the prompt change looked harmless. Keep the prompt that produced the good image, change exactly one line, re-render; on regression, revert to that prompt instead of layering another fix.
+13. **A border that exists is not a border that reads.** A thin accent stroke can close a rectangle on all four sides and still look open once the image is scaled: ten pixels away from a neighbouring band's white border, the two lines merge into one. Two prompt changes travel together here, and this is the documented exception to Pitfall 12 — draw the accented border at roughly twice the other stroke weights, and keep at least half a band-height between bands. Verify at the size the image will be *displayed*, not at 1:1; observed 2026-11-10 on `261105-hermes-skill-costs`, where the amber edge vanished in the banner but was intact in the full-size file.
+14. **A re-render orphans its derivatives.** If a banner or other crop already exists for this sheet (`imgs/<name>-banner-twitter.png`), ask before replacing it — `resize-for-banner` requires that confirmation — then regenerate it from the new render in the same step and say so in the report. Otherwise the article and the social card show different pictures, and only one of them is the one you approved.
+
+## Credits
+
+- **Original author**: 宝玉 (JimLiu) — the baoyu layout × style system, [JimLiu/baoyu-skills](https://github.com/JimLiu/baoyu-skills) v1.56.1.
+- **Ported & customized by**: j3ffyang — OpenCode adaptation and this repo's `imgs/` output convention.

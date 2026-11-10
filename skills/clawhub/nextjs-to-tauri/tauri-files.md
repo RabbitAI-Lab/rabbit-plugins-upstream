@@ -1,12 +1,20 @@
 # `src-tauri/` templates
 
-Copy-paste, then replace `<placeholders>`. Pin versions to whatever the "verify latest" step in SKILL.md reports — the numbers here were current 2026-06 and **will** drift.
+Copy-paste, then replace `<placeholders>`. The `2` / `^2` ranges below are deliberate: the lockfile pins the exact version. Verify the current stable major with the "verify latest" step in SKILL.md — numbers written here **will** drift.
 
 ---
 
 ## `tauri.conf.json`
 
 `mainBinaryName` (no spaces) gives a clean portable-exe filename while `productName` stays the display name. `webviewInstallMode: downloadBootstrapper/silent` auto-installs WebView2. Drop the `plugins.updater` block (and `createUpdaterArtifacts`) if you don't ship auto-update.
+
+> **What `webviewInstallMode: downloadBootstrapper / silent` does on the user's machine:**
+> the Windows build then ships *without* the WebView2 runtime, and on first launch the app
+> downloads the WebView2 bootstrapper and installs the runtime **without asking the user**
+> — no prompt, no confirmation. If the app must never install anything on its own, use
+> `{ "type": "offlineInstaller", "silent": true }` (the runtime is bundled into the
+> installer instead of downloaded at first run) or `{ "type": "skip" }` (WebView2 becomes a
+> prerequisite the user installs themselves).
 
 ```json
 {
@@ -26,7 +34,8 @@ Copy-paste, then replace `<placeholders>`. Pin versions to whatever the "verify 
       {
         "label": "main",
         "title": "<App Title>",
-        "url": "/en/",
+        "url": "/<default-locale>/",
+        "dragDropEnabled": false,
         "width": 1280,
         "height": 832,
         "minWidth": 720,
@@ -58,7 +67,8 @@ Copy-paste, then replace `<placeholders>`. Pin versions to whatever the "verify 
 }
 ```
 
-- `url: "/en/"` — set to your default locale dir (single-locale apps: `"/"`). Why a trailing slash: SKILL.md gotcha #1.
+- `url` — the app's **default locale directory**, e.g. `"/en/"` when the default locale is `en` (single-locale apps: `"/"`). It is a configurable value, not a fixed locale: point it at whichever locale the app should start in and keep it in sync with the app's `DEFAULT_LOCALE` (frontend-integration.md) — the app opens there until the user picks another language. Why a trailing slash: SKILL.md gotcha #1.
+- `dragDropEnabled: false` — counter-intuitive but required if the page has a drop zone. Tauri's own schema says disabling it "is required to use HTML5 drag and drop on the frontend on Windows"; leave it at the default `true` and the webview swallows the drop, so a file-drop UI does nothing with no error. Drop this line only if nothing in the app accepts a dropped file.
 
 ---
 
@@ -259,6 +269,13 @@ Only frontend→Rust IPC needs permissions. Rust-only plugins (window-state, sin
 
 Single source of truth = root `package.json` version. Run `yarn update-version` before building (CI does this).
 
+> **What it writes:** this helper rewrites `src-tauri/tauri.conf.json` **in place**,
+> replacing its `version` field with the one from the root `package.json`. It changes that
+> one field and nothing else — the rest of the config is preserved as-is — but it is still
+> a write to a project config file, so show the user the diff before running it (in CI the
+> checkout is disposable, so there is nothing to diff). It never touches `package.json`,
+> the signing keys, or anything outside the project.
+
 ```js
 /* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require("fs");
@@ -278,6 +295,6 @@ console.log(`Updated tauri.conf.json version -> ${pkg.version}`);
 ```
 src-tauri/target
 src-tauri/gen/schemas
+# the private signing key only; its .pub half is public and meant to be committed (gotcha #7)
 src-tauri/*.key
-src-tauri/*.key.pub
 ```

@@ -1,43 +1,59 @@
-## Description: <br>
-Audiolla connects an agent to a user-deployed audiolla server for stem separation, mastering, MIR analysis, DSP transforms, loudness normalization, and related audio-production workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects to a user-deployed audiolla server for audio processing, analysis, and MIDI workflows.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers, audio engineers, and agent operators use this skill to call a running audiolla server for audio analysis, processing, generation, MIDI, and workflow automation after the user provides AUDIOLLA_URL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: An exposed audiolla server without authentication can allow others to run audio processing or upload data to the staging area. <br>
-Mitigation: Keep the server bound to localhost or require a strong AUDIOLLA_AUTH_TOKEN before exposing it. <br>
-Risk: Remote file_url and output_url support can create server-side fetch or upload risk if enabled broadly. <br>
-Mitigation: Leave remote URL fetch/upload disabled unless needed, and use AUDIOLLA_FETCH_MODE=allowlist with trusted hosts when enabling it. <br>
-Risk: CPU/GPU-heavy audio processing can consume significant local compute when called repeatedly. <br>
-Mitigation: Restrict network access, use authentication, and apply rate limiting for deployments reachable beyond localhost. <br>
+## Use Case:
 
+Developers and audio engineers use this skill when the user explicitly requests Audiolla and has a running server, to process or analyze audio and create or transform MIDI.
 
-## Reference(s): <br>
-- [Audiolla setup guide](references/setup.md) <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/audiolla) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API calls, Configuration, Guidance] <br>
-**Output Format:** [Markdown with curl commands and JSON request bodies] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Audio-producing endpoints return JSON locations for staged files or URLs; analysis endpoints return JSON data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.2 (source: server release metadata) <br>
+Risk: The security scan was partial: one of two components was fully inspected, and the skill manifest could not be parsed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the benign verdict as limited coverage and review the complete release before deployment.
+
+Risk: The documented latest Docker image tags can resolve to changing builds.
+
+Mitigation: Pin any Docker image used to a specific tag or digest.
+
+Risk: Enabling remote URL fetch or upload adds an SSRF surface.
+
+Mitigation: Keep URL I/O disabled unless needed; when enabled, use an allowlist and retain private-address blocking.
+
+## Reference(s):
+
+- [Audiolla ClawHub release](https://clawhub.ai/psyb0t/skills/audiolla)
+- [Audiolla API reference](https://psyb0t.github.io/docker-audiolla/api/)
+- [Setup guide](references/setup.md)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, Analysis, Audio and MIDI files, Images and video]
+
+**Output Format:** [JSON API requests and responses; audio, MIDI, image, or video files when supported by the server]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Available operations and outputs depend on the deployed Audiolla server and its configured engines.]
+
+## Skill Version(s):
+
+2.0.2 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

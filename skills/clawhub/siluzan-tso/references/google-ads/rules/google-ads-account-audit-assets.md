@@ -94,9 +94,9 @@ siluzan-tso ad extension list -a <CID>
 | ---------------- | -------- | ---------- | ---------------------------- |
 | 标题             | 3        | 15（上限） | 广告强度降低，组合测试不充分 |
 | 描述             | 2        | 4（上限）  | 同上                         |
-| 包含关键词的标题 | >= 2     | 5+         | 相关性降低，QS 受影响        |
-| 独特卖点标题     | >= 2     | 3+         | 差异化不足                   |
-| CTA 标题         | >= 1     | 2+         | 缺乏行动号召                 |
+| 包含关键词的标题 | >= 2     | 2–3（勿堆满 15 条） | 相关性降低，或关键词堆砌     |
+| 独特卖点标题     | >= 3     | 3+         | 差异化不足；对照 1.2 配方    |
+| CTA 标题         | >= 1     | 2          | 缺乏行动号召；B2B/B2C 用词勿混 |
 
 ### 7.3 广告组广告数量
 
@@ -228,8 +228,8 @@ siluzan-tso ad campaigns -a <CID> --json-out ./snap
 
 ### 10.2 预算分配合理性
 
-1. 从 `campaigns` 获取每个系列的 spend、conversions、costPerConversion
-2. 计算每个系列的 ROAS 或 CPA
+1. 从 `campaigns` 获取每个系列的 spend、conversions、costPerConversion、conversionsValue
+2. ROAS 用该行 `conversionsValue / spend`（`conversionsValuePerCost` 已是这一比值，不要再平均）；CPA 用 `costPerConversion`
 3. 检查以下不合理分配：
 
 | 问题                  | 检测方式                            | 处理                               |

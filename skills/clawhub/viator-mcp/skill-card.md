@@ -1,44 +1,54 @@
-## Description: <br>
-Search Viator tours, activities, attractions, availability, pricing, and exchange-rate information through an MCP server using the Viator Partner API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Viator tours, activities and experiences via MCP. Use when the user asks to find tours, activities, excursions, day trips, tickets, or "things to do" in a city or destination, get details/pricing/availability for a Viator product, list attractions in a destination, or convert supplier-currency prices. Triggers on phrases like "things to do in Rome", "find a food tour in Paris", "is this tour available in September", "Viator", "book an excursion" (search only — no booking), or "skip-the-line Colosseum tickets". Requires the @chrischall/viator-mcp package installed and the viator server registered (see Setup), plus a Viator Partner API key (free Basic Access affiliate tier).
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and developers use this skill to search Viator travel products, compare activities or attractions, check details, pricing, availability, and exchange rates, and obtain Viator booking links without making bookings through the skill. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Travel search queries may be sent to a third-party commercial travel API. <br>
-Mitigation: Use the skill only when Viator-backed travel search is desired, and avoid sending sensitive personal information in queries. <br>
-Risk: Returned booking links preserve affiliate attribution and may not represent provider-neutral travel planning. <br>
-Mitigation: Confirm the user wants Viator results and review returned product links before relying on them for recommendations or booking decisions. <br>
-Risk: The skill requires a Viator Partner API key. <br>
-Mitigation: Store the API key in the MCP server environment and do not expose it in prompts, shared files, or generated output. <br>
+## Use Case:
 
+Travelers and travel assistants use this skill to find and compare Viator tours, attractions, availability, and prices for named destinations. It supports searches and product details only; booking takes place through Viator links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/viator-mcp) <br>
-- [npm package @chrischall/viator-mcp](https://www.npmjs.com/package/@chrischall/viator-mcp) <br>
-- [Viator Partner Resources](https://partnerresources.viator.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON configuration and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Viator Partner API queries; returned booking and attraction links may preserve affiliate attribution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The Viator API key could be exposed through credential-bearing configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Protect VIATOR_API_KEY and keep credential-bearing configuration out of version control.
+
+Risk: The external runtime package was not fully verified.
+
+Mitigation: Review and pin the package version before setup.
+
+## Reference(s):
+
+- [Viator MCP package on npm](https://www.npmjs.com/package/@chrischall/viator-mcp)
+- [Viator Partner Resources](https://partnerresources.viator.com/)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text]
+
+**Output Format:** [Structured JSON tour, attraction, destination, availability, and pricing results, optionally summarized in text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search and product details only; booking is not supported.]
+
+## Skill Version(s):
+
+2.2.0 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,50 @@
-## Description: <br>
-Publish WordPress posts with API and public URL receipts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Publish WordPress posts with API and public URL receipts.
 
-## Publisher: <br>
-[leostehlik](https://clawhub.ai/user/leostehlik) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[leostehlik](https://clawhub.ai/user/leostehlik)
 
-## Use Case: <br>
-Developers and operators use this skill to publish WordPress posts from agent, scheduled, or OpenClaw workflows and verify that the public artifact exists. It is useful when completion must be backed by both WordPress API state and an HTTP 200 response from the public URL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can support operational publishing workflows that change public WordPress content. <br>
-Mitigation: Use least-privilege WordPress credentials, keep user confirmation gates for publishing decisions, and review deployment targets before execution. <br>
-Risk: A scheduler may report success even when no public WordPress post exists. <br>
-Mitigation: Verify publication using the WordPress API response and a public URL HTTP 200 receipt after the scheduled publishing window. <br>
-Risk: Credential exposure could occur if application passwords, tokens, cookies, or authorization headers are logged or committed. <br>
-Mitigation: Store secrets in an env file outside the skill folder, avoid printing secrets, and do not commit real environment files. <br>
+## Use Case:
 
+Developers and operators use this skill to publish WordPress content from agent or scheduled workflows and verify publication against the WordPress API and public page.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/leostehlik/skills/wordpress-receipts) <br>
-- [Project homepage](https://github.com/LeoStehlik/wordpress-receipts) <br>
-- [README.md](README.md) <br>
-- [SKILL.md](SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON receipt examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports include title, URL, WordPress post ID, API status, public HTTP status, and duplicate-skip status when applicable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.2 (source: release evidence and SKILL.md metadata) <br>
+Risk: ClawScan rates this release suspicious with medium confidence because it found an unexpected issue and could only partially inspect the artifact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the available source and install only if you trust its source and accept the remaining uncertainty.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/LeoStehlik/wordpress-receipts)
+- [ClawHub release page](https://clawhub.ai/leostehlik/skills/wordpress-receipts)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Shell commands, Guidance]
+
+**Output Format:** [JSON publication receipts, concise text reports, and Markdown guidance with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Successful receipts identify the post, canonical URL, status, and public HTTP status.]
+
+## Skill Version(s):
+
+0.1.3 (source: release evidence, skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

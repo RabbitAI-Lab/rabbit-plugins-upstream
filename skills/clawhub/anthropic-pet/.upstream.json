@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/anthropic-pet",
   "slug": "anthropic-pet",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778492335556,
-  "contentHash": "32e44f97129686a7889e3319bfe36504751c58a7fde027fcda5c05f3e5fd191b",
-  "fetchedAt": "2026-07-26T19:40:06.101Z"
+  "version": "1.0.1",
+  "updatedAt": 1794306799464,
+  "contentHash": "242b866900452332d09b3ad8eccc94bd2b38fb4e1873d64b43d0c3341fc15469",
+  "fetchedAt": "2026-11-10T15:42:30.476Z"
 }

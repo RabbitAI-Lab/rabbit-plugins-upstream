@@ -8,7 +8,9 @@ const MAX_BODY = 500;     // 正文最长
 const MIN_BODY = 1;       // 正文最短（去空白后）
 const LIST_LIMIT = 200;   // 一次最多返回
 const RATE_WINDOW = 20;   // 同一 IP 两条留言最短间隔（秒）
-const IP_SALT = "hekouwang-deck-v1"; // 仅用于哈希 IP，不存明文 IP
+// IP 只存加盐哈希、不存明文。盐取 Pages 环境变量 IP_SALT（wrangler pages secret put IP_SALT），
+// 未配置时退回公开默认值，只够做限频，不算匿名化。
+const DEFAULT_IP_SALT = "yandu-deck-default-salt";
 const PAGE_RE = /^[a-z0-9][a-z0-9/_-]{0,60}$/; // 页 key 白名单：home / suanli/ep04 …
 
 // 规范化页 key；非法一律归到 home，避免任意写入
@@ -42,10 +44,10 @@ async function ensureSchema(db) {
   );
 }
 
-async function hashIP(ip) {
+async function hashIP(ip, salt) {
   const buf = await crypto.subtle.digest(
     "SHA-256",
-    new TextEncoder().encode(IP_SALT + "|" + (ip || "unknown"))
+    new TextEncoder().encode((salt || DEFAULT_IP_SALT) + "|" + (ip || "unknown"))
   );
   return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("").slice(0, 32);
 }
@@ -96,7 +98,7 @@ export async function onRequestPost({ request, env }) {
   try {
     await ensureSchema(env.DB);
     const ip = request.headers.get("CF-Connecting-IP") || "";
-    const ipHash = await hashIP(ip);
+    const ipHash = await hashIP(ip, env.IP_SALT);
     const now = Math.floor(Date.now() / 1000);
 
     // 限频：同 IP 在 RATE_WINDOW 秒内已发过 → 429
