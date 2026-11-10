@@ -1,43 +1,54 @@
-## Description: <br>
-Story Cover helps agents create Chinese web-novel covers by selecting genre and platform styling, building GPT-Image prompts, calling an image API, and saving the generated cover assets locally. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+根据书名、作者名和题材设计小说封面提示词，并在需要时生成封面图。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Authors, editors, and publishing teams use this skill to generate professional-looking Chinese web-novel cover concepts from a title, author name, target platform, and optional reference image. It guides the agent through prompt construction, image generation, local file output, platform-specific resizing, and quality checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Book titles, author names, prompts, and optional reference images may be sent to the configured image API. <br>
-Mitigation: Use only a trusted GPT_IMAGE_BASE_URL endpoint and avoid submitting sensitive or unlicensed reference material. <br>
-Risk: Generated cover images and prompt text are saved locally in the configured book directory. <br>
-Mitigation: Choose a BOOK_DIR appropriate for storing generated cover assets and review outputs before publication or upload. <br>
+## Use Case:
 
+Authors and writing assistants use this skill to create genre- and platform-aligned novel-cover prompts, then generate, export, and review a cover image when requested.
 
-## Reference(s): <br>
-- [Story Cover on ClawHub](https://clawhub.ai/worldwonderer/skills/story-cover) <br>
-- [Publisher profile](https://clawhub.ai/user/worldwonderer) <br>
-- [Source link from metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Cover style reference](references/cover-styles.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance with bash command blocks plus locally saved PNG cover files and prompt text files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires GPT_IMAGE_API_KEY and the curl, jq, and base64 command-line tools; BOOK_DIR controls where generated cover files are saved, with optional GPT_IMAGE_BASE_URL, GPT_IMAGE_MODEL, GPT_IMAGE_SIZE, UPLOAD_SIZE, and REF_IMAGE settings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.5 (source: release evidence) <br>
+Risk: Book details, prompts, and reference images may be sent to an external image-generation provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the provider and endpoint before generation, and share only material you are comfortable sending there.
+
+Risk: The security scan is partial because one local reference was unavailable for review.
+
+Mitigation: Review the missing reference and complete a full scan before relying on the security assessment.
+
+## Reference(s):
+
+- [Cover styles and prompt guidance](references/cover-styles.md)
+- [Image generation API fallback](references/api-fallback.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Image files]
+
+**Output Format:** [Novel-cover prompts and generated cover images]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prompt-only mode is available; image generation is optional.]
+
+## Skill Version(s):
+
+1.1.16 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

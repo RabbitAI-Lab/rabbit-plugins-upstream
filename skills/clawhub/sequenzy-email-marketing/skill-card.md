@@ -1,46 +1,52 @@
-## Description: <br>
-Primary agent guide for operating Sequenzy as an email-marketing platform across authentication, subscribers, campaigns, sequences, templates, team operations, webhooks, transactional email, stats, and supported-workflow checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through supported Sequenzy email marketing workflows for subscribers, campaigns, sequences, templates, inbox, webhooks, and reporting.
 
-## Publisher: <br>
-[polnikale](https://clawhub.ai/user/polnikale) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[polnikale](https://clawhub.ai/user/polnikale)
 
-## Use Case: <br>
-Developers, operators, and marketing teams use this skill to guide an agent through Sequenzy email-marketing workflows, including account checks, subscriber management, campaign and sequence creation, lifecycle control, delivery stats, webhooks, API keys, and product feedback. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill gives agents broad production email-marketing powers, including subscriber changes, campaign lifecycle control, webhooks, API-key creation, team invitations, product uploads, and feedback submission. <br>
-Mitigation: Require explicit user approval before campaign cancel/delete, scheduling sends, team invitations, API-key creation, webhook changes, subscriber bulk changes, product file uploads, or feedback submissions. <br>
-Risk: Campaign cancellation can stop scheduled, paused, waiting-approval, or sending campaigns immediately without a confirmation prompt. <br>
-Mitigation: Inspect the target campaign and confirm the intended action with the user before running cancellation or other destructive lifecycle commands. <br>
-Risk: Generated API keys and webhook signing secrets are sensitive one-time outputs. <br>
-Mitigation: Store generated secrets only in an approved secret manager or non-versioned local file, and redact raw values from chat, logs, tickets, and public transcripts. <br>
+## Use Case:
 
+Agents use this guide to inspect and manage Sequenzy email marketing data and workflows. It helps them check current CLI or MCP support, inspect records before changes, and follow the documented steps for the requested task.
 
-## Reference(s): <br>
-- [Sequenzy skill page](https://clawhub.ai/polnikale/skills/sequenzy-email-marketing) <br>
-- [Command reference](references/command-reference.md) <br>
-- [Use cases](references/use-cases.md) <br>
-- [Sequenzy application](https://sequenzy.com) <br>
-- [Sequenzy API](https://api.sequenzy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, markdown] <br>
-**Output Format:** [Markdown guidance with CLI and MCP command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include dashboard URLs, JSON-oriented command flags, and redacted handling notes for sensitive outputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release metadata) <br>
+Risk: ClawScan marks the release suspicious because its documented capabilities extend beyond the email marketing description, and some referenced material was only partially analyzed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the references relevant to the requested workflow and confirm the operation and scope before carrying out account changes or sending messages.
+
+## Reference(s):
+
+- [Sequenzy API reference](https://docs.sequenzy.com/api-reference)
+- [Sequenzy MCP Events](https://docs.sequenzy.com/concepts/mcp-events)
+- [Command reference](references/command-reference.md)
+- [Use cases](references/use-cases.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance with CLI commands and API or MCP workflow instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.6.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,50 +1,58 @@
-## Description: <br>
-Scrape web pages using Scrapling with anti-bot bypass, stealth headless browsing, spiders, adaptive scraping, and JavaScript rendering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scrape web pages using Scrapling with HTTP requests, stealth browsers, JavaScript rendering, browser actions, API response capture, concurrent spiders, and adaptive parsing. Use when asked to scrape, crawl, or extract data from websites; web_fetch fails; the site has anti-bot protections; write Python code to scrape/crawl; or write spiders.
 
-## Publisher: <br>
-[d4vinci](https://clawhub.ai/user/d4vinci) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-BSD 3-Clause <br>
+## Publisher:
 
+[d4vinci](https://clawhub.ai/user/d4vinci)
 
-## Use Case: <br>
-Developers and agents use this skill to plan and run Scrapling-based web scraping, crawling, JavaScript rendering, adaptive parsing, and spider workflows. It is intended for authorized scraping tasks where built-in web fetching is insufficient or protected/dynamic pages require Scrapling capabilities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+BSD 3-Clause
 
-## Known Risks and Mitigations: <br>
-Risk: Anti-bot, stealth browser, proxy, and Cloudflare-related capabilities can be misused against sites where scraping is not authorized. <br>
-Mitigation: Use the skill only for authorized targets, respect site terms and robots.txt, avoid paywalls or authenticated areas without permission, and prefer the least invasive fetch mode that works. <br>
-Risk: Large or concurrent crawls can create excessive request volume. <br>
-Mitigation: Apply crawl delays and rate limits, enable robots.txt enforcement for spiders, and keep concurrency appropriate for the target site. <br>
-Risk: Scraped pages may contain prompt injection or hidden content intended to manipulate agents. <br>
-Mitigation: Use AI-targeted/main-content extraction for command-line or MCP scraping workflows and review extracted content before relying on it. <br>
-Risk: Persistent browser sessions, crawl checkpoints, and development caches may retain scraped content or session state locally. <br>
-Mitigation: Close persistent sessions when finished and clear local crawl data or development caches that may contain sensitive or stale content. <br>
+## Use Case:
 
+Developers and engineers use this skill to write Python code and shell commands for fetching, parsing, and crawling websites with Scrapling. It supports static pages, JavaScript-rendered pages, and multi-page crawls.
 
-## Reference(s): <br>
-- [Scrapling documentation](https://scrapling.readthedocs.io/en/latest/index.html) <br>
-- [ClawHub skill page](https://clawhub.ai/d4vinci/skills/scrapling-official) <br>
-- [Scrapling MCP Server](references/mcp-server.md) <br>
-- [Fetchers basics](references/fetching/choosing.md) <br>
-- [StealthyFetcher](references/fetching/stealthy.md) <br>
-- [Getting started with spiders](references/spiders/getting-started.md) <br>
-- [Proxy management and handling blocks](references/spiders/proxy-blocking.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline Python and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide agents to produce local scraping outputs such as Markdown, HTML, text, JSON, crawl checkpoints, or cached responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.11 (source: frontmatter and server release metadata) <br>
+Risk: Saved browser login files and captured traffic may contain credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated browser context; keep these files private, exclude them from commits and uploads, and remove them when finished.
+
+Risk: Untrusted proxies or scraping requests that change remote data can expose users to avoidable security or operational risks.
+
+Mitigation: Choose trusted proxies and authorize any requests that modify remote data.
+
+Risk: Scraping sites without permission or ignoring their access rules can violate site terms or expose sensitive personal data.
+
+Mitigation: Scrape only authorized content, respect robots.txt and terms of service, and do not scrape personal or sensitive data.
+
+## Reference(s):
+
+- [Scrapling Documentation](https://scrapling.readthedocs.io/en/latest/index.html)
+- [ClawHub release page](https://clawhub.ai/d4vinci/skills/scrapling-official)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with Python code and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+0.5.1 (source: SKILL.md frontmatter; target release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

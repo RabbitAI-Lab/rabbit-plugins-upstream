@@ -1,43 +1,56 @@
-## Description: <br>
-Rosette Text Analytics lets agents use OOMOL-connected Rosette Text Analytics actions to analyze sentiment, extract entities, identify categories and languages, and tokenize text. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Rosette Text Analytics (babelstreet.com). Use this skill for ANY Rosette Text Analytics request — searching and reading data. Whenever a task involves Rosette Text Analytics, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to route Rosette Text Analytics requests through an OOMOL-connected account for text analytics tasks such as sentiment analysis, entity extraction, category identification, language identification, and tokenization. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected text is sent to Rosette Text Analytics through OOMOL when actions are run. <br>
-Mitigation: Send only text the user intends to analyze and connect a Rosette account only when using this service. <br>
-Risk: First-time setup may require installing or authenticating the oo CLI. <br>
-Mitigation: Use setup steps only after command, authentication, connection, or billing errors, and review the oo CLI installer source before first-time installation. <br>
+## Use Case:
 
+Developers and analysts use the OOMOL-connected Rosette service to analyze text for sentiment, entities, categories, language, and tokens. The skill guides them to check each action's schema and submit a matching request through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-rosette-text-analytics) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Rosette Text Analytics Homepage](https://www.babelstreet.com/babel-street-insights) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload and response expectations.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs the agent to inspect the live connector schema before sending JSON payloads and to expect action responses with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: An unchecked oo CLI installation may make persistent changes to agent skill directories.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a verified, fixed CLI release and review its persistent changes; set OO_SKILLS_SYNC_DISABLED=1 to prevent startup writes to agent skill directories.
+
+Risk: Text sent for analysis is processed by OOMOL and Rosette Text Analytics.
+
+Mitigation: Submit only text that you are authorized to share with both services.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Rosette Text Analytics documentation](https://documentation.babelstreet.com/analytics/text-analytics)
+- [Babel Street Insights](https://www.babelstreet.com/babel-street-insights)
+- [oo CLI environment options](https://github.com/oomol-lab/oo-cli/blob/main/docs/commands.md#environment-variables)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, API Calls, JSON, Shell commands]
+
+**Output Format:** [JSON requests and structured text-analysis results, with Markdown instructions and inline Bash examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Request payloads must match the live schema for the selected action.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

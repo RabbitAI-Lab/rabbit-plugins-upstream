@@ -1,45 +1,57 @@
-## Description: <br>
-Convert static images into dynamic videos using the Vidu Q2 image-to-video model. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Convert static images into dynamic videos with the Vidu Q2 image-to-video model, using prompts and generation settings to guide the result.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative users use this skill to invoke dLazy's Vidu Q2 image-to-video CLI, supplying prompts and source images to generate hosted video outputs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected prompts, parameters, and media files are sent to dLazy services for generation. <br>
-Mitigation: Confirm the user is comfortable sending the selected inputs to dLazy before invoking the CLI. <br>
-Risk: A dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Use per-invocation DLAZY_API_KEY when persistent storage is not desired, and rotate or revoke keys from the dLazy dashboard when they are no longer needed. <br>
-Risk: A global CLI installation persists on the system. <br>
-Mitigation: Prefer the pinned npx invocation when a non-persistent CLI execution is sufficient. <br>
+## Use Case:
 
+Developers and creators use this skill to turn reference images into short videos with prompts, optional first and last frames, and controls for duration, aspect ratio, resolution, and audio.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-i2v) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted result URLs or an async generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The CLI login flow stores a dLazy API key locally, and prompts or supplied media are sent to dLazy-hosted services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the account access and service terms before signing in or sending sensitive material; rotate or revoke the API key when needed.
+
+Risk: The security review did not inspect the CLI or resolve several references, and the login command's connection to image-to-video generation is unclear.
+
+Mitigation: Review the pinned CLI package and its documented login flow before installation, and start with non-sensitive inputs.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-i2v)
+- [dLazy CLI project link listed in skill metadata (GitHub provenance unavailable)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+- [dLazy API key setup](https://dlazy.com/dashboard/organization/api-key)
+
+## Skill Output:
+
+**Output Type(s):** [Video files, Hosted media URLs, JSON task and result metadata]
+
+**Output Format:** [Generated video asset, returned as a hosted URL or saved file, with JSON task/result metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports asynchronous task IDs and configurable generation settings.]
+
+## Skill Version(s):
+
+1.3.38 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

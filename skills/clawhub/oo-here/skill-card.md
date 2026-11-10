@@ -1,42 +1,55 @@
-## Description: <br>
-HERE connector access for searching and reading location data through the OOMOL oo CLI rather than direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables an agent to search and read HERE location data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to access HERE search, autocomplete, autosuggest, geocoding, reverse geocoding, and lookup workflows through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use configured service accounts and local helper scripts for HERE operational workflows. <br>
-Mitigation: Install only when that access is intended and use scoped API tokens for the connected account. <br>
-Risk: Incorrect action payloads could produce unintended HERE queries or results. <br>
-Mitigation: Inspect the live connector schema before building each payload and review any action that changes state before execution. <br>
+## Use Case:
 
+Developers and users of agent assistants can search HERE places and addresses, geocode queries, look up returned location identifiers, and reverse-geocode coordinates.
 
-## Reference(s): <br>
-- [HERE homepage](https://www.here.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub HERE skill page](https://clawhub.ai/oomol/skills/oo-here) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: CLI setup may execute unverified software and introduce broader agent changes without clear approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve CLI installation separately before enabling automatic setup; consider disabling startup skill synchronization with OO_SKILLS_SYNC_DISABLED=1.
+
+Risk: Locations submitted to HERE may be shared through OOMOL.
+
+Mitigation: Submit only locations intended to be shared through OOMOL with HERE.
+
+## Reference(s):
+
+- [HERE Geocoding and Search documentation](https://www.here.com/docs/category/geocoding-search)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-here)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, JSON, Guidance]
+
+**Output Format:** [Connector responses as JSON, with Markdown guidance and inline shell command examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requests use JSON action payloads; results include HERE location or address data.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

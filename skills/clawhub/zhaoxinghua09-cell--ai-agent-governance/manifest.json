@@ -1,0 +1,72 @@
+{
+  "schema": "ownership-attestation/1.0",
+  "package": "AI智能体治理",
+  "version": "1.0.0",
+  "author": "注册老炮",
+  "year": "2026",
+  "timestamp_utc": "2026-08-27T16:03:37.295539+00:00",
+  "timestamp_local": "2026-08-28T00:03:37.295551",
+  "package_fingerprint_sha256": "8e48190bcfb21a3c89166bb439f80fdfbe812cea42ee8b4f52777e690b2ad538",
+  "files": [
+    {
+      "path": "LICENSE.md",
+      "sha256": "e8a66e30b55e997de5fca2cb78bbf2bdabd1a50bc739145dcac48e08b748843d"
+    },
+    {
+      "path": "SECURITY_AUDIT.md",
+      "sha256": "7262ba65823968b1bd81d57cae6e58ec4dbd7628d164a73885ddb35e5863400c"
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "2bfc319f5f950e46c194e94721d2dc4e17427a2583164ccc93969bc4521c9383"
+    },
+    {
+      "path": "references/01-Agent与风险全景.md",
+      "sha256": "f708ade232d2f253b5437373718b4a8e7ce1fa2119709863be7d7a2d6ed744f9"
+    },
+    {
+      "path": "references/02-Agent生命周期治理.md",
+      "sha256": "56b9d47c01d2fcf8249941f224780bb440282f9fc21335abeeb9cf837aee756f"
+    },
+    {
+      "path": "references/03-Agent权限与护栏.md",
+      "sha256": "a477bec1d2304624b0d74d1794ef9a990a888027300ff97c47c5def78a4cf806"
+    },
+    {
+      "path": "references/04-Agent责任分配.md",
+      "sha256": "89d8af3a3ca9cf3b64deb6c594f12abb3d034a2148db76e8811fd4a72bd6a9fc"
+    },
+    {
+      "path": "references/05-Agent监管与合规.md",
+      "sha256": "82615397a8333d793806fbcf414322eaf945e23ee1faa8cc81994a21c5540147"
+    },
+    {
+      "path": "references/06-Agent治理制度模板.md",
+      "sha256": "afdf0e018607656726ea493bad1b0577e88526b9cdb8c9e6b22a41bfa7935d2f"
+    },
+    {
+      "path": "references/07-FAQ.md",
+      "sha256": "99d688385b2bbd16620d45b3cb38c269aed9ad54833fc89a655dfe5a84ddb81c"
+    },
+    {
+      "path": "tools/agent_gov_toolkit.py",
+      "sha256": "2a73d14b351b8b1a3806ead4a32e98ea2048300d7b1df9fb63375456ef0da3cb"
+    },
+    {
+      "path": "verify/agent_gov_quality_test.py",
+      "sha256": "00f45dd9b38e048f45aa4f5689fa3d5f91967c7cb621c045901f639896c2006f"
+    },
+    {
+      "path": "verify/gen_security_radar.py",
+      "sha256": "a43b2c74099b01caf0e1ee4f0ef5e01746477392c90362da5ab2cf898d19dc5d"
+    },
+    {
+      "path": "verify/security-radar.svg",
+      "sha256": "454822743804640f22336972d8ede7a6d72a3618245d10fefbb0d912fba1b348"
+    },
+    {
+      "path": "verify/security_results.json",
+      "sha256": "1678ce0b2b01de4676eb07dfd1b971cd45db04f9b2d9c5834dbf0efeb134e22f"
+    }
+  ]
+}

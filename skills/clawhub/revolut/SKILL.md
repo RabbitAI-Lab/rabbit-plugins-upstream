@@ -1,8 +1,8 @@
 ---
 name: revolut
-description: "Revolut web automation via Playwright: login/logout, list accounts, and fetch transactions."
-summary: "Revolut banking automation: login, accounts, transactions, portfolio."
-version: 1.3.3
+description: "Revolut web automation via Playwright: login/logout, list accounts, fetch transactions, and download Invest statements (year-end holdings, realised P&L, costs and charges)."
+summary: "Revolut banking automation: login, accounts, transactions, portfolio, statements."
+version: 1.4.0
 homepage: "https://github.com/odrobnik/revolut-skill"
 metadata:
   openclaw:
@@ -30,6 +30,7 @@ python3 {baseDir}/scripts/revolut.py --user oliver accounts
 python3 {baseDir}/scripts/revolut.py --user oliver transactions --from YYYY-MM-DD --until YYYY-MM-DD
 python3 {baseDir}/scripts/revolut.py --user sylvia portfolio
 python3 {baseDir}/scripts/revolut.py --user oliver invest-transactions --from YYYY-MM-DD --until YYYY-MM-DD
+python3 {baseDir}/scripts/revolut.py --user oliver invest-statements --year YYYY [--type all|account|pnl|costs] [--format pdf|csv] [--dir DIR]
 ```
 
 ## Updating Banker (Full Refresh)
@@ -60,6 +61,39 @@ python3 ~/Developer/Skills/banker/scripts/banker.py import --bank oliver@revolut
 
 # 5. Logout
 python3 {baseDir}/scripts/revolut.py --user oliver logout
+```
+
+## Invest exports: what the rows mean (since 1.4.0)
+
+`invest-transactions` exports every completed item of the brokerage feed, not only trades:
+
+| kind | meaning | amount sign |
+|---|---|---|
+| `buy` / `sell` | securities trades (quantity, price, total incl. fees) | cash paid / received |
+| `cash_top_up` | money moved from a Revolut pocket into the brokerage account | + |
+| `withdrawal` | money moved out of the brokerage account | − |
+| `dividend` | net dividend credited to the brokerage cash (`gross` and `tax` kept alongside) | + |
+| other | any new feed type, exported with its raw type as `kind` | by side |
+
+Every row carries the feed item `id`, which banker uses for de-duplication. The brokerage cash balance can therefore be reconstructed as `top-ups − withdrawals − buys + sells + dividends`, and `portfolio` now also returns a `cash` list (one entry per currency, with `availableToInvest` and `unsettled`); `accounts` puts the main cash balance into the depot entry's `balances.booked`.
+
+Re-importing after the upgrade: older chunks have no ids, so banker would keep both copies of a trade. Export the whole depot history once (`--from` the depot's opening date), import it, and delete the older id-less chunks with `banker.py files` / `banker.py delete`.
+
+## Invest statements (year-end depot, P&L)
+
+`invest-statements` downloads the brokerage documents Revolut offers in the Invest web app (Documents), for a calendar year (`--year`) or any range (`--from`/`--until`; a future end date is clamped to today):
+
+| `--type` | document | formats |
+|---|---|---|
+| `account` | account statement: starting/ending value, **portfolio breakdown at the period end** (symbol, ISIN, quantity, price, value), cash, all transactions | pdf, csv |
+| `pnl` | realised profit and loss: every sale with acquisition/sale date, cost basis, proceeds, gross P&L and fees, in USD and EUR with the FX rates | pdf, csv |
+| `costs` | costs and charges report (ex-post cost disclosure) | pdf only |
+
+Default is `--type all --format pdf`. Files go to `--dir` (workspace or `/tmp`; default `/tmp/openclaw/revolut/statements`) as `revolut_<user>_<kind>_<from>_<until>.<ext>`; stdout (or `--out`) gets a JSON list of the written files. Revolut generates each document on request, which takes a few seconds per file.
+
+```bash
+# Year-end documents for the tax return
+python3 {baseDir}/scripts/revolut.py --user oliver invest-statements --year 2025 --dir ~/clawd/revolut/statements
 ```
 
 ## Recommended Flow

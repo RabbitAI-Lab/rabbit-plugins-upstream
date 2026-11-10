@@ -41,6 +41,7 @@ siluzan-tso init -d /path/to-your/skills       # 写入自定义目录
 `siluzan-tso` 与 `siluzan-cso` **共用同一份凭据**，存储在 `~/.siluzan/config.json`，配置一次两个 CLI 均可使用。
 
 > **登录方式优先级**
+>
 > 1. **首选**：**手机号 + 短信验证码**两段式（`send-login-code` → `login --phone --code`）——无 TTY 不卡死、不依赖浏览器里复制 API Key，**对话式 AI / OpenClaw / CI 日志旁路**均适用。
 
 ### 通过手机号 + 验证码登录（**首选**；对话式 AI / 无 TTY 与各 Agent 环境）
@@ -139,6 +140,7 @@ siluzan-tso config show
 ## 使用 webUrl 进行网页操作
 
 - 涉及充值、账户激活、首页看板等**必须在网页完成**的操作时，应先通过 `siluzan-tso config show` 获取 `webUrl` 值，再按各业务文档提供的相对路径拼接完整链接，引导用户在浏览器中完成后续步骤。
+- **硬约束**：`webUrl` **必须**来自当轮 `config show` 输出；路径**必须**来自已 Read 的业务文档路径表。**禁止**凭记忆写出完整平台 URL，**禁止**把 `apiBaseUrl` / `googleApiUrl` 当作浏览器地址发给用户。文档未给出相对路径时不要拼接。详见 `agent-conventions.md` §四。
 
 ## 更新
 

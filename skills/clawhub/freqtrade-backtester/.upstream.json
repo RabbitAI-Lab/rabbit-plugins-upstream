@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/freqtrade-backtester",
   "slug": "freqtrade-backtester",
   "ownerHandle": null,
-  "version": "1.0.3",
-  "updatedAt": 1778492068588,
-  "contentHash": "b99bd463518601b23cd9e6b8268a0d6c86cde452a080c004915e4b2f4528cf06",
-  "fetchedAt": "2026-07-26T19:55:50.821Z"
+  "version": "1.0.5",
+  "updatedAt": 1793821541569,
+  "contentHash": "6ddedc95a5688ff006386d5981c727b163aab37720410b4a3efb466be9269255",
+  "fetchedAt": "2026-11-10T16:03:06.677Z"
 }

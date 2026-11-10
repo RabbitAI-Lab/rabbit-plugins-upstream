@@ -1,45 +1,58 @@
-## Description: <br>
-Provides GitLab CLI (glab) command reference and workflows for GitLab merge requests, CI/CD, issues, releases, repositories, authentication, variables, labels, milestones, snippets, and related GitLab operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Comprehensive GitLab CLI (glab) command reference and workflows for all GitLab operations. Use when working with merge requests, CI/CD pipelines, issues, releases, repositories, authentication, variables, labels, milestones, snippets, or any glab command. Covers 40+ sub-commands including glab mr, glab ci, glab issue, glab repo, glab release, glab variable, and more.
 
-## Publisher: <br>
-[vince-winkintel](https://clawhub.ai/user/vince-winkintel) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vince-winkintel](https://clawhub.ai/user/vince-winkintel)
 
-## Use Case: <br>
-Developers and engineers use this skill to plan and run GitLab CLI workflows for repository work, merge requests, issues, CI/CD, releases, authentication, variables, and other GitLab operations. It helps an agent produce command-oriented guidance and pre-flight checks before GitLab actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: GitLab write operations could run against the wrong host or visible account. <br>
-Mitigation: Confirm the GitLab host and visible account before any write, and use separate least-privilege bot or service-account tokens for different actors. <br>
-Risk: Destructive GitLab commands can modify or delete project resources. <br>
-Mitigation: Review commands that use delete, --yes, --force, or API write methods before execution, and confirm the intended project or group scope. <br>
+## Use Case:
 
+Developers and release engineers use this skill as a reference for GitLab CLI commands and workflows across merge requests, CI/CD, issues, repositories, authentication, releases, and other GitLab operations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/vince-winkintel/skills/gitlab-cli-skills) <br>
-- [GitLab REST API Documentation](https://docs.gitlab.com/api/) <br>
-- [GitLab GraphQL Documentation](https://docs.gitlab.com/api/graphql/) <br>
-- [GitLab Duo CLI Documentation](https://docs.gitlab.com/user/gitlab_duo_cli/) <br>
-- [NDJSON Specification](https://github.com/ndjson/ndjson-spec) <br>
-- [JSON Lines](https://jsonlines.org/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include GitLab host, account, token, and destructive-action review guidance before write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.13.18 (source: server release metadata) <br>
+Risk: Merge-request code may be run in an environment containing GitLab credentials or sensitive local files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run merge-request tests in a disposable environment without GitLab tokens or sensitive local files.
+
+Risk: Tests passing could lead to changes being approved without an independent review.
+
+Mitigation: Review changes independently before posting an approval.
+
+Risk: Advertised automation scripts are missing, leaving their behavior unassessed.
+
+Mitigation: Obtain and inspect the scripts before use; keep credentials narrowly scoped and separately review governance uploads, recurring jobs, and remote skill updates.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/vince-winkintel/skills/gitlab-cli-skills)
+- [GitLab Model Context Protocol server documentation](https://docs.gitlab.com/user/model_context_protocol/mcp_server/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions, Code]
+
+**Output Format:** [Markdown with shell command examples and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Command examples and operational guidance for GitLab CLI workflows.]
+
+## Skill Version(s):
+
+1.13.38 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

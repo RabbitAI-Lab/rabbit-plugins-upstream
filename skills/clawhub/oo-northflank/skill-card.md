@@ -1,43 +1,54 @@
-## Description: <br>
-Northflank helps agents search and read Northflank project and service data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use your OOMOL-connected account to search and read Northflank project and service information.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when they need an agent to inspect Northflank projects and services through an OOMOL-connected account. It supports read-only project and service discovery and detail lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Northflank connection through OOMOL, which allows the agent to read project and service metadata available to that connection. <br>
-Mitigation: Install and use it only for accounts where this read access is acceptable, and review the connected Northflank scopes before running actions. <br>
-Risk: The first-time setup path includes a third-party CLI installer command. <br>
-Mitigation: Review the oo CLI installer command or install the CLI through an approved internal process before using the skill. <br>
+## Use Case:
 
+Developers and operators use this skill to list Northflank projects and services and retrieve their details through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-northflank) <br>
-- [Northflank homepage](https://northflank.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces read-oriented Northflank connector actions and first-time setup guidance for the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: First-time setup recommends running downloaded installer code whose full local changes were unavailable for inspection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer, verify an official CLI release, and explicitly approve installation; check the CLI's bundled-skill synchronization settings.
+
+Risk: The connected account can expose Northflank project and service information through OOMOL.
+
+Mitigation: Use read-only permissions where available and limit the connected account to the projects needed for the task.
+
+## Reference(s):
+
+- [Northflank API documentation](https://northflank.com/docs/v1/api/use-the-api)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Guidance, Shell commands, JSON]
+
+**Output Format:** [Markdown guidance with shell command and JSON examples; Northflank results are returned as JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only project and service lookup actions.]
+
+## Skill Version(s):
+
+1.0.5 (source: SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

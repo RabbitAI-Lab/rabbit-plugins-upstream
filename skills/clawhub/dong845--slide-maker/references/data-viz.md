@@ -30,7 +30,9 @@ is for when the relationship is richer.)
 | Ranked / part list keyed to a chart | **leaderboard** (native) | `deckkit.leaderboard(rows)` |
 | One hub, many dependents | **hub-and-spoke** | native (`box`+connectors); radial layout |
 | **How a total builds start→end / a variance walk** | **waterfall / bridge** | `waterfall(out, items, ...)` — floating rise/fall/total bars + connector steps; the one **semantic up/down colour** exception (not the single-highlight rule) |
-| **A multivariate profile across 3+ axes** (compare shapes) | **radar / spider** | *no helper — hand-roll* matplotlib polar (≤3 overlaid polygons, transparent PNG in house style; PowerPoint's native radar is unthemeable) |
+| **A multivariate profile across 3–8 axes** (compare shapes, ≤3 series) | **radar / spider** | `radar(out, axes_labels, series, ...)` — enforces the limits that keep the form honest: ≤3 overlaid polygons, 3–8 axes, every spoke **zero-anchored** (per-axis min–max stretching is the usual radar cheat), and it prints the range it used. Note radar always *overstates* a lead (area grows as the square) and the spoke ORDER changes the shape — so prefer `small_multiples` or a per-metric `dot_strip`/`dumbbell` for "who wins on each metric", and use radar only when the profile SHAPE (balanced vs spiky) is itself the point. For 4+ series it raises. |
+| **Spread / uncertainty in SAMPLE data** (a value that is a mean of measurements — per-subject Dice, per-run latency, per-rater score) | **box plot · mean ± error · every point** | **`distribution(out, groups, ...)`** — the ONE case where a bar chart is a defect, not a preference: the bar hides n, the shape and the outliers (Nature Methods, *Kick the bar chart habit*; PLOS Biology, *Beyond Bar and Line Graphs*). `kind="auto"` applies that literature's rule in code — n≥5 → box (median/IQR/Tukey whiskers), n=3–4 → mean ± error, n<3 → **refuses** (two values have no distribution; use `dot_strip` and state n). `err="sd"/"se"/"ci95"` is **printed on the figure**, because the same drawn height means three different things. Counts still belong in a bar chart. |
+| **Size AND share together** (market share by segment, share of wallet, portfolio mix) | **marimekko / mekko** | `marimekko(out, columns, categories, ...)` — column WIDTH = segment size, height = the split inside it, so **cell area = the absolute quantity**. That is exactly what a 100% stacked bar throws away (it draws every segment as equally important). Widths are strictly proportional and a non-positive size raises. On a stacked form `highlight` keeps the accent but gives the others a *distinguishable* neutral each — flattening them to one grey would destroy the mix. |
 | A simple single comparison / one trend | **bar / line** | `matplotlib` (the existing path) |
 
 The recipes render a themed PNG → place with `deckkit.picture(out, ..., fit="contain")`.
@@ -45,6 +47,12 @@ The recipes render a themed PNG → place with `deckkit.picture(out, ..., fit="c
 - **Choropleth (value per region)** — one value PER COUNTRY / PER PROVINCE shaded on a real map → **`deckkit.choropleth(slide, x, y, w, h, data, mapname)`** where `mapname` = `'europe'` · `'world'` · `'china'` (provinces). Built on public-domain geometry (Natural Earth countries · DataV China provinces) via `scripts/maps.py`, projected (Albers for a region, equirectangular for the world), light→`accent` ramp with a neutral no-data fill. Key `data` by ISO-3166 alpha-2/alpha-3 or English name (countries) or province name/adcode (china); unmatched keys are reported. Title + gradient legend are NATIVE deckkit text (CJK-safe), so the map PNG stays language-agnostic. Geometry is fetched once and cached like icons (needs matplotlib — already a dep — and network on first use). Use it instead of a `dot_strip` when the geography itself carries meaning; keep `dot_strip` when a handful of named values on a common scale say it more simply.
 
 ## Chart anti-patterns (each one has shipped an ugly or misleading chart — check by name)
+- **The same number twice** — data labels on every point AND a value axis with gridlines print
+  each value in two places, so half the chart's ink carries no information (Tufte: erase
+  redundant data-ink). Pick the one the reader will actually use: direct labels when the
+  values ARE the message and there are few of them, the axis when the SHAPE is the message.
+  Gated as `CHART SAYS IT TWICE`; note that `native_chart` cannot produce the combination,
+  so this bites on hand-edited charts and on decks arriving from elsewhere.
 - **Dual-axis abuse** — two unrelated series forced onto twin axes to fake correlation; use it only
   for one genuinely paired ↑/↓ story, and colour-key each axis to its series.
 - **Too many series** — >4 lines/bars per chart turns evidence into spaghetti; split, or grey all
@@ -103,7 +111,7 @@ The recipes render a themed PNG → place with `deckkit.picture(out, ..., fit="c
 - **Chart with no takeaway** — a plot dropped on the slide with no assertion title / takeaway rail
   is data, not an argument; every chart answers a named question.
 - **Rainbow categorical palette** — hues with no semantic binding read as decoration; bind each hue
-  (semantic-color-contract.md) or stay monochrome + one accent.
+  (design-intelligence-addendum.md §6.1) or stay monochrome + one accent.
 
 ## The four rules every designed plot follows
 1. **Single highlight (one-accent discipline).** Recolor only the ONE series/wedge/row/bar that
@@ -178,11 +186,12 @@ notation, not a universal style. A bar's **fill** says which data world it shows
   "Performance overview".
 
 ## Colour-blind safety
+- 🔴 **Check the palette, don't just intend it**: `python3 scripts/palette_audit.py --inks …` simulates deuteranopia, protanopia and tritanopia and names any pair that stops being two colours for the ~8% of men with a red-green deficiency. It matters only where two hues carry MEANING (a series, a status, a legend); where they do, separate them by LIGHTNESS or by shape/label as well as hue.
 - `dk.OKABE_ITO` is the colour-blind-safe **categorical fallback** palette — reach for it whenever
   a chart genuinely needs 3+ categorical hues and the deck palette isn't verified safe.
 - **Hue-only ban:** multi-series lines must differ by more than hue — vary linestyle/marker or add
   direct end-of-line labels; status semantics (green/red, RAG) always pair the colour with an
-  icon/label/shape (rule 4 above; semantic-color-contract.md).
+  icon/label/shape (rule 4 above; design-intelligence-addendum.md §6.1).
 
 ## Editable native charts vs matplotlib rasters — pick by need
 Three ways to put a chart on a slide; choose by what the deck needs:
@@ -194,8 +203,8 @@ Three ways to put a chart on a slide; choose by what the deck needs:
   your deck's text font for the script (your `EAFONT` for CJK; a Cyrillic/Greek deck's `FONT` already
   covers those). **Covers nearly the whole roster:** `native_chart` (`line`/`line_markers`/`column`/
   `bar` + the **composition** kinds `column_stacked`/`…_stacked_100`/`bar_stacked`/`…_stacked_100`/
-  `area`/`area_stacked`/`…_stacked_100`, and **slope** = a 2-point line), `native_dual_axis` (two-scale 'A↑ vs B↓', e.g. 占比% vs
-  成本指数), `native_donut` (part-to-whole + a KPI in the hole), `native_pareto` (columns + cumulative-%
+  `area`/`area_stacked`/`…_stacked_100`, and **slope** = a 2-point line), `native_dual_axis` (two-scale 'A↑ vs B↓', e.g. share % vs
+  cost index), `native_donut` (part-to-whole + a KPI in the hole), `native_pareto` (columns + cumulative-%
   line on a secondary axis), `native_bubble` (x·y·size). Themed (`palette`, `dark`, `font`,
   `highlight`). **Data from a spreadsheet?** `deckkit.series_from_csv(path, x_col, y_cols)` → `(categories,
   series)` feeds `native_chart`/`native_dual_axis` directly (stdlib csv — no pandas; auto-sniffs the
@@ -239,3 +248,21 @@ dk.takeaway_rail(s, band[0]+band[2]*0.66, band[1]+0.3, band[2]*0.34,
 Short status updates, qualitative talks, or a slide with a single obvious number (use a hero stat /
 `scorecard`, not a chart). Reserve the richer roster for data/report/market/strategy decks that have
 many distinct quantitative relationships to show.
+
+## Clinical / evidence-synthesis charts
+
+Routed in full by `references/clinical-evidence-figures.md`. They are NOT in the roster above
+because that roster is a business-analytics vocabulary (waterfall, marimekko, pareto, radar) —
+which is the whole reason the clinical file exists.
+
+- `designed_charts.forest_plot` — effect + CI per row against a null line. Ratios on a LOG axis.
+- `designed_charts.km_curve` — survival as a STEP, censoring ticks, numbers at risk.
+- `designed_charts.bland_altman` — method agreement: bias ± 1.96·SD of the DIFFERENCES.
+- `designed_charts.roc_curve` — square canvas, chance diagonal, AUC in the legend.
+- `deckkit.consort_flow` — participant flow whose arithmetic is enforced.
+- a confusion matrix is `deckkit.heat_matrix`, axes labelled Predicted / Actual.
+
+🔴 **The chart anti-patterns above apply here unchanged**, and one of them bites hardest in this
+family: a bar chart of per-subject MEANS hides n, the spread and the outliers. If the value is a
+mean of measurements — per-subject Dice, per-run latency, per-rater score — the form is
+`designed_charts.distribution`, not a bar.

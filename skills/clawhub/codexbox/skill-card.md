@@ -1,47 +1,56 @@
-## Description: <br>
-codexbox runs OpenAI Codex CLI inside an aicodebox container and exposes shell, REST, OpenAI-compatible, MCP, Telegram, and cron interfaces for programmatic Codex use. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Install, configure, or run Codex through the codexbox wrapper, or connect to its HTTP, MCP, Telegram, or cron surfaces.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and automation engineers use codexbox to run Codex through scripts, CI jobs, OpenAI-compatible clients, MCP-aware agents, Telegram, or scheduled cron jobs instead of only through a local terminal. It is useful when a workflow needs prompt execution, workspace file operations, or schema-constrained Codex responses over networked interfaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Networked REST and MCP surfaces can provide run execution and full workspace file access when their bearer tokens are unset. <br>
-Mitigation: Set CODEXBOX_API_MODE_TOKEN and CODEXBOX_MCP_MODE_TOKEN before exposing ports, bind to loopback where possible, or place the service behind an authenticating proxy. <br>
-Risk: Workspace file deletion and prompt-running tools can remove or alter user data. <br>
-Mitigation: Review requested file operations, delete only task-owned files, avoid unauthenticated shared workspaces, and keep mounted workspaces scoped to the intended task. <br>
-Risk: The installer can execute remote shell code when piped directly into bash. <br>
-Mitigation: Download the installer, inspect it, and then run it only after trusting the source and channel. <br>
-Risk: Mounted Codex auth, session, and configuration directories can contain sensitive credentials or account state. <br>
-Mitigation: Treat mounted Codex directories as sensitive, restrict host and container access, and avoid sharing them across untrusted users or workloads. <br>
+## Use Case:
 
+Developers and engineers use codexbox to run Codex from a chosen workspace or connect it to scripts, MCP clients, Telegram, or scheduled jobs. The skill provides setup and configuration guidance for those workflows.
 
-## Reference(s): <br>
-- [ClawHub codexbox page](https://clawhub.ai/psyb0t/skills/codexbox) <br>
-- [codexbox setup](references/setup.md) <br>
-- [OpenAI Codex CLI](https://github.com/openai/codex) <br>
-- [aicodebox](https://github.com/psyb0t/docker-aicodebox) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Docker, curl, Python, YAML, and shell examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Describes bearer-token setup, workspace file operations, OpenAI-compatible requests, MCP tool access, Telegram operation, cron jobs, and destructive-operation cautions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.4 (source: server release metadata) <br>
+Risk: The security review was partial, and setup examples use mutable Docker image tags that can change after review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin a reviewed image version or digest and review image changes before installing or updating.
+
+Risk: When enabled without their own bearer tokens, reachable API or MCP surfaces can run prompts and access workspace files.
+
+Mitigation: Set distinct API and MCP tokens for each enabled surface, and bind services to loopback or place them behind an authenticating proxy.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/psyb0t/docker-codexbox)
+- [ClawHub release page](https://clawhub.ai/psyb0t/skills/codexbox)
+- [Setup guide](references/setup.md)
+- [Codex CLI](https://github.com/openai/codex)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions, API Calls]
+
+**Output Format:** [Markdown with shell commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Setup guidance for wrapper, HTTP, MCP, Telegram, and cron workflows.]
+
+## Skill Version(s):
+
+0.7.8 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

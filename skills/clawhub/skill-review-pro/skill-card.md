@@ -1,42 +1,49 @@
-## Description: <br>
-Skill Review Pro evaluates AI skills through static review, scoring, adversarial checks, and improvement guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Evaluates agent skills through static review, scoring, and type-aware policies, then provides a professional review report and improvement guidance.
 
-## Publisher: <br>
-[z-zihan](https://clawhub.ai/user/z-zihan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[z-zihan](https://clawhub.ai/user/z-zihan)
 
-## Use Case: <br>
-Developers and skill authors use this agent to review skill quality, score skills against documented criteria, identify robustness issues, and prepare concrete improvement plans. When explicitly requested, it can guide a user-confirmed fix workflow for the selected skill. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read local skill files and may propose changes that affect another skill's behavior. <br>
-Mitigation: Use it on intended target files only and review proposed findings before acting on them. <br>
-Risk: The optional fix workflow can edit the selected skill after the user chooses to proceed. <br>
-Mitigation: Review proposed diffs before approving fixes, especially for broad improvement requests. <br>
+## Use Case:
 
+Developers and skill maintainers use it to assess an agent skill's quality and robustness, receive a score and specific improvement suggestions, or check a repository and verify a ClawHub release.
 
-## Reference(s): <br>
-- [Skill Review Pro on ClawHub](https://clawhub.ai/z-zihan/skill-review-pro) <br>
-- [Publisher Profile](https://clawhub.ai/user/z-zihan) <br>
-- [Project Homepage](https://github.com/z-Zihan/awesome-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown review reports with scores, issue summaries, adversarial-check results, improvement priorities, and fix checklists when applicable] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs follow the user's language and may include user-confirmed skill-edit plans during fix workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server release metadata) <br>
+Risk: ClawScan reports a suspicious verdict with medium confidence. The publish-check workflow requires network access and may automatically fetch and run a package; analysis was partial because some referenced paths could not be resolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not install until comfortable with the network access and automatic package-fetch behavior; resolve and review the referenced paths and verify the complete release contents first.
+
+## Reference(s):
+
+- [Project repository](https://github.com/z-Zihan/awesome-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown review report with scores, findings, and improvement recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The response follows the user's language; optional repository audit or publish-verification results may be included.]
+
+## Skill Version(s):
+
+2.3.0 (source: SKILL.md frontmatter, ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
