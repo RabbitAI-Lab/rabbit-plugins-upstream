@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/thermos",
+  "repo": "cursor/plugins",
+  "skillId": "thermos",
+  "branch": "main",
+  "pushedAt": "2026-11-10T06:08:57Z",
+  "contentHash": "9cf3a0718e5996d63cae0b5c47fe8f5b18533003ebe8eea6f3c7b3ca34dcda15",
+  "fetchedAt": "2026-11-10T15:40:06.095Z"
+}

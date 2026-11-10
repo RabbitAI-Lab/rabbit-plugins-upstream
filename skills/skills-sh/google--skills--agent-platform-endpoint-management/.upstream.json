@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/agent-platform-endpoint-management",
+  "repo": "google/skills",
+  "skillId": "agent-platform-endpoint-management",
+  "branch": "main",
+  "pushedAt": "2026-11-10T14:51:48Z",
+  "contentHash": "c4e6cb763633ed89aab2b0bef1b456976e4848a4e604ef0e0b31ed7af6c30fc9",
+  "fetchedAt": "2026-11-10T15:41:51.683Z"
+}
