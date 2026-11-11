@@ -1,47 +1,65 @@
-## Description: <br>
-Deploy an HTTP(S) proxy that exposes OpenClaw agent capability as a REST API over a network IP, with API key authentication, optional HTTPS, skill exposure controls, prompt-injection hardening, and per-request session isolation through OpenClaw hooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Deploys an HTTP(S) proxy that exposes OpenClaw agent capability as a REST API over a network IP, with API key authentication, optional TLS, deny-list filtering, prompt-injection hardening, and OpenClaw hook-based request isolation.
 
-## Publisher: <br>
-[songhonglei](https://clawhub.ai/user/songhonglei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[songhonglei](https://clawhub.ai/user/songhonglei)
 
-## Use Case: <br>
-Developers and platform engineers use this skill to expose an OpenClaw agent as an internal HTTP(S) API so other services can trigger agent tasks and poll for results. It is intended for controlled network deployments where authentication, skill exposure, agent routing, and hook configuration are reviewed before use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes OpenClaw agent control over a network API. <br>
-Mitigation: Install only when that exposure is intended; prefer binding to 127.0.0.1 behind a TLS reverse proxy or enabling HTTPS before cross-host use. <br>
-Risk: A leaked API key or broad exposure settings could allow unwanted agent or skill access. <br>
-Mitigation: Protect and rotate the API key, set expose_skills and allowed_agent_ids narrowly, and review deny_skills before deployment. <br>
-Risk: Initialization and watchdog behavior can make persistent global OpenClaw configuration changes. <br>
-Mitigation: Back up ~/.openclaw/openclaw.json, avoid OPENCLAW_CONFIG_SYNC_PATHS unless needed, and disable the watchdog if automatic restart or hook-config repair is not desired. <br>
+## Use Case:
 
+Developers and operators use this skill to expose an OpenClaw agent as an internal REST API that other trusted systems can call for open-ended agent runs or targeted skill execution.
 
-## Reference(s): <br>
-- [Agent Easy Http on ClawHub](https://clawhub.ai/songhonglei/skills/agent-easy-http) <br>
-- [README](README.md) <br>
-- [Skill Instructions](SKILL.md) <br>
-- [Deployment Guide](references/deployment.md) <br>
-- [TLS and Authentication Standard](references/tls-auth-standard.md) <br>
-- [Architecture Design Reference](references/design.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, configuration fields, and JSON API examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The deployed service returns JSON run metadata and text agent transcripts through HTTP endpoints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and CHANGELOG.md) <br>
+Risk: The skill exposes an OpenClaw agent as a remotely callable HTTP service, which can become a remote control surface for file, shell, messaging, or other agent capabilities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this exposure is intentional, bind to localhost or a tightly firewalled interface, and allow access only from trusted callers.
+
+Risk: Default HTTP transport can expose API keys, prompts, and results in cleartext for cross-host traffic.
+
+Mitigation: Enable TLS for any cross-host or production traffic and avoid skipping certificate verification.
+
+Risk: The watchdog and initialization flow can modify and restore global OpenClaw hook configuration.
+
+Mitigation: Review the OpenClaw configuration changes before deployment and disable the watchdog unless persistent self-healing is required.
+
+Risk: API keys are bearer credentials, and deny_skills is not a hard security boundary while the open-ended /agent/run endpoint is enabled.
+
+Mitigation: Rotate exposed keys, keep credentials out of logs and shell history, restrict reachable clients, and use allowlists or tighter routing controls where possible.
+
+## Reference(s):
+
+- [README](README.md)
+- [Deployment Guide](references/deployment.md)
+- [Design Document](references/design.md)
+- [TLS and Authentication Standard](references/tls-auth-standard.md)
+- [ClawHub Skill Page](https://clawhub.ai/songhonglei/skills/agent-easy-http)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, configuration paths, and REST API examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce service setup instructions, API usage examples, configuration guidance, and operational troubleshooting steps.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and artifact changelog)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

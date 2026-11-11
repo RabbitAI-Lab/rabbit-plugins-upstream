@@ -1,45 +1,51 @@
-## Description: <br>
-Dlazy Webtoon Adapter helps agents adapt web novel material into Chinese-language webtoon plot breakdowns, episode tags, and per-episode scripts, with optional dLazy CLI-backed image generation guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助用户将网络小说改编为条漫剧本，并通过 dLazy CLI 调用托管服务进行图像生成。
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, creators, and agents use this skill to turn web novel source text into structured webtoon adaptation outputs in Chinese, including plot breakdowns, episode tagging, revision handling, and script drafts. When image generation is requested, it guides the agent through single-step dLazy CLI commands after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The dLazy CLI stores an API key in local configuration or accepts it through an environment variable. <br>
-Mitigation: Use a dedicated dLazy organization key, keep local configuration access-limited, and rotate or revoke the key from the dLazy dashboard when access changes. <br>
-Risk: Prompts and referenced local media may be sent to dLazy API and file services during generation. <br>
-Mitigation: Avoid sending sensitive source material or private media unless the user has approved that disclosure and accepts dLazy processing. <br>
-Risk: The skill asks agents to install or run @dlazy/cli@1.2.3 through npm or npx. <br>
-Mitigation: Review the npm package and CLI source before use, and prefer npx for one-off runs when a persistent global install is unnecessary. <br>
+## Use Case:
 
+面向创作者和编剧，用于把网络小说拆解为分集剧情并撰写条漫剧本。该技能还包含通过 dLazy CLI 生成图像的流程。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-webtoon-adapter) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown and structured Chinese prose with optional inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are conversation-bound; generation commands require user confirmation and use @dlazy/cli@1.2.3.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: evidence release and frontmatter) <br>
+Risk: The security review reports unclear activation and undisclosed authentication, CLI, and image-generation actions that conflict with the stated conversation-only workflow. When the CLI is used, prompts and local media may be sent to dLazy hosted services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing or invoking the CLI, confirm with the publisher when it runs, how authentication works, and what data is sent; avoid submitting sensitive prompts or media until those details are clear.
+
+## Reference(s):
+
+- [dLazy CLI repository (linked in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands]
+
+**Output Format:** [Chinese-language Markdown and structured text; shell commands for optional image generation]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Image generation requires a dLazy account and API key; prompts and supplied local media may be sent to dLazy hosted services.]
+
+## Skill Version(s):
+
+1.3.39 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

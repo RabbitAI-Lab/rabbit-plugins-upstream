@@ -29,7 +29,7 @@ Premium phone finder — **the most expensive phone rung in the catalog at 15 cr
 ```bash
 # Explicit user request + qualified leads only — 15 credits each
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cleon1","actionSlug":"findPhoneFromLinkedin","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"cleon1","actionSlug":"findPhoneFromLinkedin"}' \
   --records '[{"linkedinUrl":"https://linkedin.com/in/alicesmith"}]' \
   --wait-until-finished
 ```
@@ -38,7 +38,7 @@ cargo-ai orchestration action execute-batch \
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cleon1","actionSlug":"findPhone","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"cleon1","actionSlug":"findPhone"}' \
   --records '[{"firstName":"Alice","lastName":"Smith","companyName":"Acme","companyDomain":"acme.com"}]' \
   --wait-until-finished
 ```
@@ -62,6 +62,13 @@ Only `firstName` + `lastName` are required — but a bare name is the weakest po
 - `findPhoneFromLinkedin` / `findPhone` — **CONTACT stage, terminal rung** of the phone chain: `prospeo` (3) → `FullEnrich` (6) → `waterfall` (7) → `datagma` (8) → **cleon1 (15)**. Explicit user request only, qualified leads only.
 - Phones don't flow to VERIFY (that's an email stage) — but the record they attach to should already be verified before you spend 15 credits on it.
 
+## Recurring use
+
+No scheduled fit — per-record phone lookup only, and at 15 credits it should barely appear in recurring infrastructure at all.
+
+- **In-play gate:** if cleon1 sits in a play, it fires only where the phone column is **still empty after the entire cheaper chain** (`prospeo` → `FullEnrich` → `waterfall` → `datagma`) has run and missed, on qualified rows only — a re-evaluation that re-fires it bills 15 per row.
+- **Stable output:** a found phone doesn't decay; there is no case for re-running cleon1 on a row that already holds one.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"cleon1","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"cleon1","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**

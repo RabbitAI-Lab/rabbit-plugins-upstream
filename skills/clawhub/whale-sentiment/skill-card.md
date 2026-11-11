@@ -1,42 +1,59 @@
-## Description: <br>
-Whale leaderboard sentiment derived from Hyperliquid top traders <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns whale leaderboard sentiment derived from Hyperliquid top traders.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External agents and developers use this skill to request paid whale-sentiment data for crypto trade context, especially before large directional positions or as a confirming modifier for entries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically spend USDC from the configured EVM wallet when the agent calls the paid endpoint. <br>
-Mitigation: Use a dedicated low-balance wallet and require confirmation before allowing paid calls. <br>
-Risk: The skill requires access to an EVM private key. <br>
-Mitigation: Avoid primary wallet keys and restrict the environment variable to the agent runtime that needs it. <br>
+## Use Case:
 
+External users and trading agents can retrieve a real-time whale sentiment signal derived from Hyperliquid top traders to inform trade research or use as a confirming input for trade entries.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/kynto2001-ctrl/skills/whale-sentiment) <br>
-- [Whale Sentiment Endpoint](https://apexrunner.ai/signals/whale-sentiment) <br>
-- [Pricing Tier Check](https://apexrunner.ai/signals/my-pricing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Guidance] <br>
-**Output Format:** [JSON sentiment response with fields such as sentiment, score, and top_traders_long_pct] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY and can spend USDC from the configured wallet per request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: Each endpoint request incurs a USDC charge, and the listed discounted price may change.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the current endpoint price and set a spending limit before allowing repeated or automated requests.
+
+Risk: The skill passes an EVM private key to the payment client to authorize requests.
+
+Mitigation: Use a dedicated wallet with only the funds needed for calls, and keep the private key protected from prompts, logs, and shared environments.
+
+Risk: A whale-sentiment signal could be mistaken for a standalone trading recommendation.
+
+Mitigation: Treat the returned signal as one input to a trading decision and assess whether this use fits your needs.
+
+## Reference(s):
+
+- [Whale Sentiment endpoint](https://apexrunner.ai/signals/whale-sentiment)
+- [Liquidation Pressure signal](https://apexrunner.ai/signals/liquidation-pressure)
+- [Agent Conviction Score signal](https://apexrunner.ai/signals/agent-conviction-score)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON data]
+
+**Output Format:** [JSON sentiment data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes a sentiment label, score, and top-trader long percentage. Each request is paid in USDC on Base.]
+
+## Skill Version(s):
+
+1.0.1 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

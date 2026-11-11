@@ -1,42 +1,52 @@
-## Description: <br>
-Comprehensive grid health score with recommendations for optimisation <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns comprehensive grid health score with recommendations for optimisation.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External developers and trading workflow operators use this skill to request a paid, real-time grid health signal and optimisation recommendations before adjusting grid parameters or preparing performance reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires EVM_PRIVATE_KEY, which can authorize USDC spending on Base mainnet for paid signal calls. <br>
-Mitigation: Use a dedicated low-balance wallet, avoid keys with unrelated funds, and verify each paid call before execution. <br>
-Risk: Automatic x402 payment authorization may result in paid calls without clear per-call consent controls. <br>
-Mitigation: Configure the agent workflow to require explicit user confirmation before each paid request and review the quoted price before proceeding. <br>
+## Use Case:
 
+Crypto trading grid operators can call the paid endpoint to review current grid performance, consider parameter changes, and include a health score in weekly reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/kynto2001-ctrl/skills/grid-health-score) <br>
-- [APEX Runner Grid Health Score Signal](https://apexrunner.ai/signals/grid-health-score) <br>
-- [APEX Runner Pricing Tier Check](https://apexrunner.ai/signals/my-pricing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Analysis, Guidance] <br>
-**Output Format:** [JSON returned from an authenticated signal request, typically summarized by the agent in text or Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns score, grade, and recommendation fields when the paid request succeeds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Calls incur a USDC payment, and the skill requires an EVM private key for x402 authorization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the endpoint and current price before calling it, and use a dedicated wallet with only the funds needed for the request; keep its private key in a secure secret store.
+
+## Reference(s):
+
+- [Grid Health Score endpoint](https://apexrunner.ai/signals/grid-health-score)
+- [Related Grid Health signal](https://apexrunner.ai/signals/grid-health)
+- [Related Grid Levels signal](https://apexrunner.ai/signals/grid-levels)
+- [APEX Runner](https://apexrunner.ai)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Recommendations, Guidance]
+
+**Output Format:** [JSON response containing a score, grade, and recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Each call requires an EVM wallet key and incurs a USDC charge: $0.007 per call through 2027-01-01 under the early-adopter discount, with a $0.01 standard price.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

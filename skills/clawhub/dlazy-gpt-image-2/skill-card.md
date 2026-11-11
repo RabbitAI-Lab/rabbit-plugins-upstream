@@ -1,43 +1,55 @@
-## Description: <br>
-GPT Image 2 supports text-to-image generation and image editing with reference inputs through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit images with GPT Image 2 from text prompts and reference images.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to call dLazy's hosted GPT Image 2 service for image generation, image editing, and synthesis from prompts and reference images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local image inputs may be uploaded to dLazy's hosted service. <br>
-Mitigation: Use only prompts and files that are appropriate to share with dLazy, and avoid submitting sensitive or regulated content unless approved. <br>
-Risk: Authentication stores a dLazy API key in local CLI configuration unless a per-run environment variable is used. <br>
-Mitigation: Use OS user permissions, rotate or revoke keys when needed, and prefer DLAZY_API_KEY for short-lived runs where persistent storage is not desired. <br>
+## Use Case:
 
+Users and developers use this skill to generate images from text prompts or edit and synthesize images with up to five reference images.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-gpt-image-2) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Image URLs, Shell commands, Guidance] <br>
-**Output Format:** [JSON responses with generated image URLs and task status fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports synchronous results or asynchronous generateId polling; generated media is hosted by dLazy.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and skill frontmatter) <br>
+Risk: Prompts and reference media may be sent to dLazy services during generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only prompts and media you are comfortable sending to those services.
+
+Risk: ClawScan noted that the relationship between the image workflow and `dlazy login` is unclear, and that some service and installation details could not be resolved.
+
+Mitigation: Review the CLI authentication and installation steps and confirm they match the intended workflow before use.
+
+## Reference(s):
+
+- [dLazy CLI project page (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Images, JSON]
+
+**Output Format:** [Image files with a JSON result containing image URLs and metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional reference images; configurable size, format, and quality; supports asynchronous generation.]
+
+## Skill Version(s):
+
+1.3.40 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

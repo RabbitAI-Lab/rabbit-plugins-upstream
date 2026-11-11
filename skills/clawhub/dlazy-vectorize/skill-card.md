@@ -1,45 +1,52 @@
-## Description: <br>
-Image-to-SVG tool: converts raster images (PNG/JPG) into color vector SVG and returns the URL, suitable for lossless scaling and vectorization of logos, icons, and flat illustrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Image-to-SVG tool: converts raster images (PNG/JPG) into color vector SVG and returns the URL, suitable for lossless scaling and vectorization of logos, icons, and flat illustrations.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative production teams use this skill to convert user-selected raster image assets into scalable vector output through the dLazy CLI and hosted service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-selected images may be uploaded to dLazy's hosted service and returned as hosted files. <br>
-Mitigation: Use the skill only with images appropriate for third-party processing and review service terms before sending sensitive assets. <br>
-Risk: The CLI uses an API key saved in local user configuration or supplied through DLAZY_API_KEY. <br>
-Mitigation: Use per-invocation environment variables when persistent local credentials are not desired, and rotate or revoke keys when access is no longer needed. <br>
-Risk: A global CLI install persists a third-party binary on the system. <br>
-Mitigation: Use the pinned npx invocation when a non-persistent install path is preferred. <br>
+## Use Case:
 
+Developers and designers can use the skill to convert raster images such as logos, icons, and flat illustrations into color vector artwork and receive a hosted result URL.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-vectorize) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Files, Configuration instructions] <br>
-**Output Format:** [JSON response with hosted output URL; optional downloaded file when --save is used] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; accepts an image URL or local image path and supports asynchronous task polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.5 (source: frontmatter and server release metadata) <br>
+Risk: The scan was partial, and it reports credential setup behavior that is not demonstrated in the stated image-conversion workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI and its data handling before installing or supplying an API key or images.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-vectorize)
+- [dLazy website](https://dlazy.com)
+- [@dlazy/cli package on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [CLI project link listed in skill metadata](https://github.com/dlazy-ai/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Image, URL, JSON]
+
+**Output Format:** [JSON result containing a hosted output URL and image metadata; asynchronous calls may return task status.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The documented CLI also supports saving the returned asset to a local path.]
+
+## Skill Version(s):
+
+1.2.38 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

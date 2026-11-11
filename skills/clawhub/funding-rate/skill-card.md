@@ -1,44 +1,57 @@
-## Description: <br>
-Funding rate analysis across perpetuals with arbitrage opportunity scoring. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns funding rate analysis across perps with arb opportunity scoring.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External developers and trading analysts use this skill before opening perpetual futures positions, identifying funding arbitrage opportunities, and monitoring ongoing funding costs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses wallet credentials for x402 payments and can spend funds. <br>
-Mitigation: Use a dedicated low-balance wallet and require explicit confirmation for each paid request and spending limit. <br>
-Risk: Private key exposure could enable unauthorized wallet use. <br>
-Mitigation: Keep wallet private keys out of chat and logs, and review the x402 facilitator and client package source before use. <br>
+## Use Case:
 
+External users and agents can request current perpetual futures funding rate analysis and arb opportunity scoring before opening positions or monitoring funding costs. Each request costs $0.007 USDC on Base and requires an EVM wallet private key.
 
-## Reference(s): <br>
-- [Funding Rate Signal](https://apexrunner.ai/signals/funding-rate) <br>
-- [Funding Rate Pricing](https://apexrunner.ai/signals/my-pricing) <br>
-- [Related Signal: Funding Rate HL](https://apexrunner.ai/signals/funding-rate-hl) <br>
-- [Related Signal: Arb Spread](https://apexrunner.ai/signals/arb-spread) <br>
-- [Related Signal: OI Divergence](https://apexrunner.ai/signals/oi-divergence) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Analysis, Code, Configuration instructions] <br>
-**Output Format:** [Markdown guidance with Python example code and JSON API response] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY for x402 payment authorization; API responses include avg_rate_8h, arb_score, and recommended_action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Funding rates and arb opportunity scores are trading signals and may not reflect conditions when a position is opened.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check current exchange data and apply independent risk limits before trading.
+
+Risk: Requests incur a USDC charge and use an EVM private key for wallet authorization.
+
+Mitigation: Review the per-call price and keep the private key in a secure environment variable; use a wallet funded only for intended calls.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kynto2001-ctrl/skills/funding-rate)
+- [Funding Rate endpoint](https://apexrunner.ai/signals/funding-rate)
+- [Related signal: funding-rate-hl](https://apexrunner.ai/signals/funding-rate-hl)
+- [Related signal: arb-spread](https://apexrunner.ai/signals/arb-spread)
+- [APEX Runner](https://apexrunner.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, API Calls]
+
+**Output Format:** [JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A response with funding rate, arb score, and recommended action fields.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

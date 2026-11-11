@@ -1,51 +1,59 @@
-## Description: <br>
-AI-era-career-planner helps agents guide Chinese-language career planning conversations with staged intake, interest and values assessment, AI job-impact analysis, salary and demand references, and personalized action plans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI时代职业规划技能，帮助用户梳理兴趣与价值观、评估人工智能对职业的影响，并形成个性化职业规划。
 
-## Publisher: <br>
-[mnetfairy](https://clawhub.ai/user/mnetfairy) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mnetfairy](https://clawhub.ai/user/mnetfairy)
 
-## Use Case: <br>
-External users and career guidance agents use this skill to plan education choices, career entry, or career transitions in the AI era. The skill supports structured intake, assessment, career recommendations, AI-resilience guidance, and concrete next-step planning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with China-focused salary and insurance company reference data. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may ask for personal career-context information. <br>
-Mitigation: Collect only information the user chooses to provide and avoid saving profiles unless the user explicitly requests a saved record. <br>
-Risk: Salary references and insurance company recommendations may be stale, incomplete, or mistaken for endorsement. <br>
-Mitigation: Treat salary and company data as reference material, keep insurance recommendations disclosed as informational, and ask users to verify details before acting. <br>
-Risk: Optional email, subscription, live-search, or saved-record actions can affect user data outside the conversation. <br>
-Mitigation: Only use optional integrations when the current environment permits them and the user has clearly approved the specific action. <br>
+## Use Case:
 
+适用于正在选择专业、规划职业或考虑转型的个人。技能通过渐进式对话和职业兴趣、价值观及 AI 影响评估，提供个性化职业方向与行动建议。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/ai-era-career-planner) <br>
-- [AI career impact reference](references/ai_career_impact.md) <br>
-- [Career assessment framework](references/assessment.md) <br>
-- [Career anchor reference](references/career_anchor.md) <br>
-- [Education paths](references/education_paths.md) <br>
-- [Job demand trends](references/job_demand.md) <br>
-- [Industry trends](references/industry_trends.md) <br>
-- [Salary data](references/salary_data.md) <br>
-- [Insurance broker company reference](references/insurance_broker_companies.json) <br>
-- [Optional integrations reference](references/integrations.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Files] <br>
-**Output Format:** [Markdown career planning report and conversational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May optionally generate a Markdown report file when the host environment allows it and the user explicitly requests export.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.240 (source: server release metadata) <br>
+Risk: 技能包含独立于职业评估的商业保险渠道推荐，且推荐顺序由维护方设定。
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: 仅在用户明确表达保险兴趣时提供该模块，披露维护方设定的排序，并允许用户要求并列比较其他渠道。
+
+Risk: 安全分析为部分分析，部分本地路径引用未能解析。
+
+Mitigation: 依赖相关材料作出决定前，先检查这些参考资料；该安全结论不保证零风险。
+
+## Reference(s):
+
+- [AI 对未来职业的影响参考](artifact/references/ai_career_impact.md)
+- [职业测评框架](artifact/references/assessment.md)
+- [各职业典型学习路径](artifact/references/education_paths.md)
+- [职业与薪资资料](artifact/references/job_demand.md)
+- [海外就业资料](artifact/references/overseas_jobs.md)
+- [AXA 企业历程](https://www.axa.com.hk/zh/who-we-are)
+- [国家金融监督管理总局](https://www.nfra.gov.cn/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [个性化职业规划报告及对话式建议]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [可选导出报告或职业追踪记录；仅在用户明确要求时使用。]
+
+## Skill Version(s):
+
+2.3.11 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

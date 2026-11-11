@@ -1,44 +1,55 @@
-## Description: <br>
-Tongyi Wanxiang 2.7 video model for text-to-video, first/last-frame-to-video, and reference-to-video generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tongyi Wanxiang 2.7 video generation for text-to-video, first/last-frame-to-video, and reference-to-video workflows.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to invoke the dLazy hosted Wan2.7 video model from prompts and optional reference images, video, audio, or first and last frames. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local media may be uploaded to dLazy storage, and the security summary warns that uploads can occur even when using dry-run. <br>
-Mitigation: Avoid passing private local files unless upload is acceptable, and use `npx @dlazy/cli@1.2.3` for ad hoc runs when possible. <br>
-Risk: The skill uses a dLazy API key, and the security guidance warns that local CLI key storage may not enforce the restrictive permissions claimed by the artifact. <br>
-Mitigation: Prefer `DLAZY_API_KEY` per invocation in sensitive environments, or manually restrict permissions on `~/.dlazy/config.json` and rotate keys when needed. <br>
+## Use Case:
 
+Developers and agents use this skill to generate videos from text prompts, first and last frames, or reference images and videos through dLazy's hosted service.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-wan2-7) <br>
-- [Publisher Profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The wrapped CLI returns hosted media URLs for completed jobs or async task identifiers when no-wait mode is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The security scan could not verify the referenced CLI package or establish how its login flow relates to video generation; coverage is incomplete and confidence is medium.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI authentication flow and dLazy service details before installing or entering credentials.
+
+Risk: Prompts and local reference media are sent to dLazy-hosted services, so submitted material may leave the user's environment.
+
+Mitigation: Submit only prompts and assets you are authorized to share with dLazy, and review the service terms.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/dlazyai/skills/dlazy-wan2-7)
+- [dLazy service](https://dlazy.com)
+- [dLazy CLI package on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video, JSON]
+
+**Output Format:** [Hosted video asset URLs with JSON result or asynchronous task metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can return a task ID when asynchronous mode is requested.]
+
+## Skill Version(s):
+
+1.3.38 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

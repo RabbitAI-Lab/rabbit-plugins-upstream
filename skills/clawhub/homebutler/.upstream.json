@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/homebutler",
   "slug": "homebutler",
   "ownerHandle": null,
-  "version": "2.3.2",
-  "updatedAt": 1778492833926,
-  "contentHash": "525a562cbe47c20008d6a2c795360595d1705e6a66d57cca12401acd180247b4",
-  "fetchedAt": "2026-07-26T19:16:59.750Z"
+  "version": "2.8.0",
+  "updatedAt": 1794391459350,
+  "contentHash": "be306997e9e1ce54ee309f3a001cd1501050969d4c87a0ec0243e1423529ccfe",
+  "fetchedAt": "2026-11-11T15:22:46.056Z"
 }

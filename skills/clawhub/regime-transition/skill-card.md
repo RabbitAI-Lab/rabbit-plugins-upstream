@@ -1,45 +1,58 @@
-## Description: <br>
-Detects imminent regime transitions before they fully materialise. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a paid x402 API endpoint on Base that returns a live signal about likely crypto market regime transitions for $0.007 per call through 2026-12-31.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External agents and trading-system developers use this skill to request a paid, wallet-authenticated signal for anticipating crypto market regime shifts and reducing exposure ahead of uncertainty. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses EVM_PRIVATE_KEY for wallet-based x402 payments, and each invocation may spend USDC on Base mainnet. <br>
-Mitigation: Use a dedicated low-balance wallet, configure external spending limits and monitoring, and avoid recurring or autonomous use without separate payment controls. <br>
-Risk: The security verdict is suspicious because the skill does not provide built-in spending controls or explicit per-call user consent. <br>
-Mitigation: Require operator review or policy gating before enabling the skill, and inspect payment behavior before deployment. <br>
+## Use Case:
 
+Developers and trading agents use the endpoint to check for likely market regime transitions, inform strategy changes, and consider reducing exposure ahead of uncertainty.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kynto2001-ctrl/skills/regime-transition) <br>
-- [Regime Transition signal](https://apexrunner.ai/signals/regime-transition) <br>
-- [Pricing lookup](https://apexrunner.ai/signals/my-pricing) <br>
-- [Regime signal](https://apexrunner.ai/signals/regime) <br>
-- [Regime Confluence signal](https://apexrunner.ai/signals/regime-confluence) <br>
-- [Regime Transition Probability signal](https://apexrunner.ai/signals/regime-transition-probability) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with a Python example and JSON response] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY and may spend USDC per invocation on Base mainnet.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Requests use an EVM private key and authorize a paid USDC call.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep EVM_PRIVATE_KEY in a secret store, use a dedicated wallet with only the funds intended for these calls, and review payment details before requesting the signal.
+
+Risk: The security scan inspected the Markdown skill and found no issues, but some behavioral analyzers were not applicable.
+
+Mitigation: Review the endpoint behavior and payment request before enabling it in an automated workflow.
+
+## Reference(s):
+
+- [Regime transition signal endpoint](https://apexrunner.ai/signals/regime-transition)
+- [Regime signal](https://apexrunner.ai/signals/regime)
+- [Regime confluence signal](https://apexrunner.ai/signals/regime-confluence)
+- [Regime transition probability signal](https://apexrunner.ai/signals/regime-transition-probability)
+- [APEX Runner](https://apexrunner.ai)
+- [ClawHub release page](https://clawhub.ai/kynto2001-ctrl/skills/regime-transition)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON signal response with transition_likely, probability, and target_regime fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [One paid x402-authenticated request per signal; payment is $0.007 USDC per call through 2026-12-31.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

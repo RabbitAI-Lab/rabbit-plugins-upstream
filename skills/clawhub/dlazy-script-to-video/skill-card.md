@@ -1,45 +1,56 @@
-## Description: <br>
-Dlazy Script To Video helps agents turn a script or scene breakdown into a storyboarded, shot-by-shot video workflow using the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns a script or scene breakdown into a shot-by-shot storyboard and video workflow, from scene breakdown and shot generation through assembly and validation.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and creative teams use this skill when they want an agent to start or continue dLazy storyboard projects that convert scripts, screenplay material, or shot lists into multi-shot video plans and generated video assets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends prompts and options to the external dLazy API. <br>
-Mitigation: Review prompts for sensitive information before use and only run the skill with an approved dLazy account and API key. <br>
-Risk: Files attached with --files are uploaded to dLazy media storage. <br>
-Mitigation: Attach only files that are approved for upload to dLazy and omit private or regulated content unless the user has confirmed it is permitted. <br>
-Risk: A global CLI install persists the dLazy package on the local system. <br>
-Mitigation: Use the pinned npx invocation when a temporary, non-global execution path is preferred. <br>
+## Use Case:
 
+Creators and video production teams use this skill to turn a script or scene breakdown into a storyboarded, shot-by-shot video, including generated shots, audio, subtitles, and final assembly. It uses the dLazy hosted service and requires a dLazy API key.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-script-to-video) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and CLI guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May stream responses from the dLazy CLI and may reference uploaded user-provided files when the user explicitly attaches files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and ClawHub release evidence) <br>
+Risk: Prompts and options are sent to the dLazy API, and files attached to a chat are uploaded to dLazy media storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only send prompts and attach files that you are comfortable sharing with the hosted service.
+
+Risk: The skill depends on a pinned third-party CLI, and the supplied security assessment notes a partial scan and some uncertainty.
+
+Mitigation: Review the pinned CLI and confirm its login, project-listing, API, and upload behavior meets your needs before installing or using it.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-script-to-video)
+- [dLazy homepage](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [Publisher profile](https://clawhub.ai/user/dlazyai)
+
+## Skill Output:
+
+**Output Type(s):** [Video files, Storyboard, Text]
+
+**Output Format:** [Rendered video media with storyboard and chat responses; exact media formats depend on the dLazy service output.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a dLazy API key. Files attached to a chat are uploaded to dLazy media storage.]
+
+## Skill Version(s):
+
+1.0.36 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

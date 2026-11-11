@@ -1,44 +1,52 @@
-## Description: <br>
-Current Hyperliquid perpetual funding rates across tracked coins. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns current Hyperliquid perpetual funding rates across tracked coins.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External traders and agents use this skill to retrieve live Hyperliquid perpetual funding rates before opening or holding positions, identifying funding arbitrage opportunities, or avoiding high funding costs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can spend USDC from a wallet through paid x402 requests. <br>
-Mitigation: Use a dedicated low-balance wallet and require clear approval before the agent signs or sends any paid request. <br>
-Risk: The EVM private key required by the skill could be exposed if placed in chats, logs, or shared configuration. <br>
-Mitigation: Store the private key only in an environment variable or secret manager and keep it out of prompts, transcripts, and logs. <br>
-Risk: Repeated calls can accumulate costs even when each request is low priced. <br>
-Mitigation: Review the exact USDC amount before each request and set operational limits for agent-initiated calls. <br>
+## Use Case:
 
+Traders and agents use this skill to retrieve current Hyperliquid perpetual funding rates before opening or holding positions, to evaluate funding arbitrage, or to avoid unusually high funding costs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kynto2001-ctrl/skills/funding-rate-hl) <br>
-- [APEX Runner funding-rate-hl signal](https://apexrunner.ai/signals/funding-rate-hl) <br>
-- [APEX Runner pricing tier check](https://apexrunner.ai/signals/my-pricing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Guidance] <br>
-**Output Format:** [JSON response data with agent-facing Markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an EVM private key and can trigger paid x402 requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: Each request authorizes a paid call using an EVM wallet private key, so repeated calls can incur charges and exposed credentials could put wallet funds at risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep EVM_PRIVATE_KEY in a secret store, use a wallet funded only for intended requests, and monitor request frequency and spending.
+
+## Reference(s):
+
+- [Funding Rate HL endpoint](https://apexrunner.ai/signals/funding-rate-hl)
+- [Related funding-rate signal](https://apexrunner.ai/signals/funding-rate)
+- [Related arbitrage-spread signal](https://apexrunner.ai/signals/arb-spread)
+- [ClawHub skill release](https://clawhub.ai/kynto2001-ctrl/skills/funding-rate-hl)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Market data]
+
+**Output Format:** [JSON object containing funding rates and a timestamp]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Current values vary by asset and time.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

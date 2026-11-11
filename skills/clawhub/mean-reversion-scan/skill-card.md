@@ -1,45 +1,62 @@
-## Description: <br>
-Mean-reversion opportunity scan across RANGING and CHOPPY regimes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns mean-reversion opportunity scan across RANGING and CHOPPY regimes.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External agents and developers use this skill to request paid APEX Runner mean-reversion signals before considering entries in ranging or choppy crypto market regimes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses EVM_PRIVATE_KEY, which can authorize spending from the configured wallet. <br>
-Mitigation: Use a dedicated low-balance payment wallet, set strict funding limits, and avoid primary trading or custody wallets. <br>
-Risk: x402-authenticated requests can initiate paid calls automatically. <br>
-Mitigation: Require clear confirmation before paid requests and monitor wallet call history and balance. <br>
-Risk: Crypto trading signals may be incorrect, incomplete, or unsuitable for a user's strategy. <br>
-Mitigation: Review returned signals before acting and do not rely on them as the sole basis for trading decisions. <br>
+## Use Case:
 
+Agents use this paid APEX Runner signal to review potential oversold or overbought opportunities before mean-reversion entries in RANGING or CHOPPY market regimes. It returns market-signal data and does not itself place trades.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kynto2001-ctrl/skills/mean-reversion-scan) <br>
-- [APEX Runner mean-reversion scan](https://apexrunner.ai/signals/mean-reversion-scan) <br>
-- [APEX Runner pricing tiers](https://apexrunner.ai/signals/my-pricing) <br>
-- [APEX Runner](https://apexrunner.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, Code, JSON] <br>
-**Output Format:** [Markdown instructions with a Python example and JSON API response] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY for x402-authenticated paid requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The x402 endpoint charges for each request, and repeated calls can accumulate USDC charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the current price and Base network before use, and set a spending limit for repeated calls.
+
+Risk: The skill uses EVM_PRIVATE_KEY to authorize paid requests, so mishandling the key could expose wallet funds.
+
+Mitigation: Keep the key in a protected secret store and use a wallet with only the funds needed for expected calls.
+
+Risk: A market signal can be misleading and does not guarantee a profitable trade.
+
+Mitigation: Review the signal against current market conditions and independent risk controls; use it only for the documented RANGING and CHOPPY regimes.
+
+## Reference(s):
+
+- [Mean Reversion Scan endpoint](https://apexrunner.ai/signals/mean-reversion-scan)
+- [ClawHub release page](https://clawhub.ai/kynto2001-ctrl/skills/mean-reversion-scan)
+- [APEX Runner](https://apexrunner.ai)
+- [Related signal: bb-analysis](https://apexrunner.ai/signals/bb-analysis)
+- [Related signal: regime](https://apexrunner.ai/signals/regime)
+- [Related signal: liquidation-magnet](https://apexrunner.ai/signals/liquidation-magnet)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, API Calls, JSON]
+
+**Output Format:** [JSON opportunity-scan response]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Market-signal data for RANGING and CHOPPY regimes. Each call costs $0.007 USDC on Base through 2027-01-01 under the stated early-adopter discount; the skill lists $0.01 per call as the standard price.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,58 @@
-## Description: <br>
-Analyze and optimize retrieval-augmented generation pipelines for 100K-2M token documents using hybrid search, chunking, reasoning, and structured reporting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes and helps optimize long-document retrieval-augmented generation pipelines through chunking, hybrid search, retrieval evaluation, and multi-document reasoning.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, analysts, legal professionals, and researchers use this skill to design, evaluate, and improve long-context RAG workflows for large document collections, including financial reports, legal contracts, research papers, and regulatory filings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Confidential financial or legal documents could be exposed if embeddings or model calls are sent to third-party providers without review. <br>
-Mitigation: Decide whether embeddings and model calls must stay local before using the skill with confidential documents. <br>
-Risk: High-stakes RAG outputs can be misleading if generated without source grounding. <br>
-Mitigation: Require citations, page references, and confidence signals for financial, legal, or regulatory answers. <br>
+## Use Case:
 
+Developers, financial analysts, legal professionals, and researchers can use this skill to plan and assess RAG workflows for large document collections, including retrieval, cross-document analysis, and structured reporting. It emphasizes traceable answers and review by qualified professionals for consequential use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/long-context-rag-analyzer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, configuration, shell commands] <br>
-**Output Format:** [Markdown with tables, structured reports, configuration snippets, and code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include citations, confidence scores, retrieval metrics, action plans, and export recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.2 (source: frontmatter and release evidence) <br>
+Risk: The security scan reports no findings, but inspection was partial because of a manifest parsing error and a missing reference.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the complete skill content and its referenced material before installation; the scan result is not a guarantee of safety.
+
+Risk: Documents processed with this guidance may contain sensitive personal, financial, or business information.
+
+Mitigation: Use only the minimum necessary documents, redact or aggregate sensitive fields, and confirm authorization before indexing or sharing results.
+
+Risk: Generated financial or legal analysis may be incomplete or misleading if retrieval misses evidence or citations.
+
+Mitigation: Require source citations, verify important figures against the original documents, and have qualified professionals review consequential conclusions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/gechengling/skills/long-context-rag-analyzer)
+- [Publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Configuration instructions, Code]
+
+**Output Format:** [Markdown with structured reports, tables, configuration examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports can include source citations, confidence notes, and retrieval evaluation metrics.]
+
+## Skill Version(s):
+
+3.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

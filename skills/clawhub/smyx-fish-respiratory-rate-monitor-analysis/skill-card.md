@@ -1,44 +1,59 @@
-## Description: <br>
-Analyzes close-up aquarium camera media to estimate fish gill opening and closing respiratory rate, flag abnormal respiration or hypoxia warnings, and return structured monitoring reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes aquarium video to estimate fish gill-cover breathing rate and provide respiratory monitoring results and alerts.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Aquarium owners, aquaculture operators, public aquarium teams, and laboratory staff use this skill to analyze close-up fixed-camera fish videos or URLs, calculate respiratory BPM, review alert levels, and retrieve historical respiratory monitoring reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Aquarium videos or URLs may be sent to lifeemergence.com services and associated with an automatically resolved account identity. <br>
-Mitigation: Use only media the operator is authorized to upload, disclose the remote processing path before deployment, and confirm report retention, deletion, and account revocation procedures. <br>
-Risk: The skill may persist identity or token material locally through data/smyx-api-key.txt and shared SQLite storage. <br>
-Mitigation: Run the skill in an isolated workspace, review local credential and database files before and after use, and rotate or revoke stored credentials when access is no longer needed. <br>
-Risk: Respiratory alerts can influence animal-care decisions but are not veterinary diagnoses. <br>
-Mitigation: Require human review of video quality, species, water temperature, and recommended actions; do not use the skill to prescribe medications or directly control aquarium equipment. <br>
+## Use Case:
 
+Aquarists, aquarium staff, and fish keepers can use this skill to review aquarium video for gill-cover breathing rate patterns, receive respiratory alerts, and view monitoring reports. Results are visual monitoring signals and are not a veterinary diagnosis.
 
-## Reference(s): <br>
-- [Fish respiratory rate API documentation](artifact/references/api_doc.md) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fish-respiratory-rate-monitor-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Structured text or JSON analysis report, with Markdown tables for historical report listings and report export links when available] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs respiratory BPM, signal stability, abnormal respiration classification, alert level, recommended non-medication actions, disclaimers, and links to generated report exports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release evidence) <br>
+Risk: Remote video uploads and unclear destinations may expose aquarium footage or associated identity data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, ask the maintainer to identify what video and identity data are sent and where they go; avoid installation until those details are explained.
+
+Risk: Account creation and token storage behavior is unclear.
+
+Mitigation: Ask the maintainer to explain account creation and token storage before installation.
+
+Risk: The security scan was partial because one local reference could not be resolved.
+
+Mitigation: Treat the unresolved reference as a coverage gap; the other scanner's no-findings result does not establish that the skill is safe.
+
+## Reference(s):
+
+- [Skill API reference](artifact/references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fish-respiratory-rate-monitor-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance, Reports]
+
+**Output Format:** [Structured analysis reports and Markdown history listings with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports respiratory rate and alert information from aquarium imagery or video; recommendations do not control aquarium equipment.]
+
+## Skill Version(s):
+
+1.0.13 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

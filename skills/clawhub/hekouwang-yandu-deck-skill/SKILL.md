@@ -1,10 +1,12 @@
 ---
 name: hekouwang-yandu-deck-skill
-version: 1.2.0
-description: >
-  会勇禾口王的AI笔记 ·「演读 DECK」沉浸式演示产线与发布 Skill。把一篇文章/选题做成「一屏一镜、可翻页、能自动播放」的 keynote 演示版网页（默认米白引擎，国标系列走 V6 焰彩白；暖黑/焰彩黑为存量历史态），并自托管字体、发布到 Cloudflare Pages（hekouwang.pages.dev）。
-  当需要：① 把某篇文章/某期内容做成「演示版 / 演读 DECK / 翻页演示 / keynote 网页 / 沉浸式阅读页」；② 给「演读 DECK」站加一期演示、加一个系列、改首页；③ 给某个系列换主色/换肤（白↔黑 token-flip、切 V6 焰彩）；④ 发布/更新 hekouwang.pages.dev；⑤ 自托管字体、解决首屏字重跳变(FOUT)、子集化思源字体；⑥ 站点留言板（Cloudflare Pages Functions + D1）加装/排错 时使用。
-  触发词：演读DECK / 演读 deck / 演示版 / 翻页演示 / keynote 网页 / 沉浸式阅读 / 发布到 hekouwang / 加一期演示 / 演示版引擎 / deck换肤 / 焰彩deck / V6焰彩白 / token-flip / deck留言板。
+slug: hekouwang-yandu-deck-skill
+displayName: 演读 DECK 产线与发布
+summary: Immersive keynote-style HTML deck publisher — flip pages, auto-play, Cloudflare Pages. yandu-deck / hekouwang.pages.dev.
+license: MIT
+homepage: https://github.com/huiyonghkw/hekouwang-yandu-deck-skill
+version: 1.3.5
+description: "演读 DECK：把文章做成可翻页可自动播放的 keynote 网页，自托管字体并发布到 Cloudflare Pages；可选启用访客留言板（D1 存昵称/正文/IP 哈希）与站点分析 token"
 allowed-tools:
   - Bash
   - Read
@@ -13,12 +15,34 @@ allowed-tools:
   - Glob
   - Grep
   - AskUserQuestion
+metadata:
+  openclaw:
+    homepage: https://github.com/huiyonghkw/hekouwang-yandu-deck-skill
+    requires:
+      bins:
+        - python3
+      anyBins:
+        - node
+        - wrangler
+    envVars:
+      - name: YANDU_CF_PROJECT
+        required: false
+        description: Cloudflare Pages 项目名；仅 --deploy 时必填
+      - name: YANDU_CF_BEACON_TOKEN
+        required: false
+        description: Cloudflare Web Analytics token；留空则不注入统计脚本
+      - name: YANDU_ENABLE_COMMENTS
+        required: false
+        description: 设为 1/true 才向页面注入留言板；默认关闭
+      - name: IP_SALT
+        required: false
+        description: Pages 密钥，用于留言 IP 哈希限频
 ---
 
 # 演读 DECK · 沉浸式演示产线与发布
 
 > 「演读 DECK」= 会勇禾口王的AI笔记出品的一款**沉浸式阅读产品**：介于长文和视频之间的第三种读法——一屏一镜、方向键/空格/点击翻页、能自动播放，把一个复杂主题安静完整地讲给你看。
-> 线上：**https://hekouwang.pages.dev** ｜ 与图文产线 `hekouwang-content-factory-skill` 配套（那是出文章/贴图/视频，这是把内容做成翻页演示 + 发布）。
+> 线上：**https://hekouwang.pages.dev** ｜ 与图文产线 `hekouwang-content-master-skill` 配套（那是出文章/贴图/视频，这是把内容做成翻页演示 + 发布）。
 
 ## 0. 系统在哪（先认这个）
 
@@ -38,33 +62,34 @@ allowed-tools:
 └── README.md
 ```
 
-> ⚠️ **上面这套是「真身」，本 skill 里的是可移植副本**。日常在项目里改的是真身；**改完记得同步回 skill**，否则副本很快过时（历史上漂移过一次：skill 版落后到没有 Mozilla 字体、没有留言板）。
+> ⚠️ **上面这套是「真身」，本 skill 里的是可移植副本**。日常在项目里改的是真身；**改完跑 `bash scripts/sync-from-harness.sh <演读DECK路径>` 同步回 skill**，否则副本很快过时。
 
 本 Skill 按官方约定分目录带了**可移植副本**（新项目落地时拷过去）：
 - `assets/templates/` — `deck-engine-米白.html`（⭐默认）/ `deck-engine-V6焰彩白.html`（国标）/ `deck-engine-暖黑.html`（仅维护存量）、`home.html`（首页源）、`wrangler.toml` + `schema.sql`（留言板，**database_id 是占位符，落地填自己的**）
-- `scripts/publish.py`（发布脚本）、`assets/functions/api/comments.js`（留言板后端）
-- `references/换肤-token-flip.md`（换肤）、`references/留言板-D1.md`（留言板）、`references/系统说明.md`（**落地 README 模板**，拷进 `演读DECK/README.md` 给人看）、`examples/demo.html`（零依赖最小示例）
+- `scripts/publish.py`（发布脚本）、`scripts/sync-from-harness.sh`（真身→副本单向同步）、`assets/functions/api/comments.js`（留言板后端）
+- `references/换肤-token-flip.md`（换肤）、`references/留言板-D1.md`（留言板）、`references/mobile-and-comments.md`（移动端 safe-area / 留言板开关 / 视频交叉引用）、`references/系统说明.md`（**落地 README 模板**，拷进 `演读DECK/README.md` 给人看）、`examples/demo.html`（零依赖最小示例）
 
 > ⚠️ **落地时 `publish.py` 与 `home.html` 必须同目录**（`publish.py` 用 `SELF/home.html` 找首页源）；`functions/` 要放成 `演读DECK/functions/api/comments.js`。
-> ⚠️ 副本里 **`CF_BEACON_TOKEN` 与 `wrangler.toml` 的 database_id 都留空/占位**——落地新站时填自己的，别沿用他人的（否则流量统计报到别人面板、留言写进别人的库）。
+> ⚠️ 副本里**不带任何账号绑定值**：统计 token 取 `YANDU_CF_BEACON_TOKEN`（留空则不注入统计脚本）、Pages 项目名取 `YANDU_CF_PROJECT`、`wrangler.toml` 的 database_id 是占位符、留言 IP 哈希盐取 Pages 密钥 `IP_SALT`。落地新站时填自己的，别沿用他人的。`sync-from-harness.sh` 同步时会拦下带账号值的真身。
+> ⚠️ `assets/templates/home.html` 是作者站点的首页样例，含作者署名、联系方式与订阅引导；落地前替换成你自己的。
 
 ## 1. 把文章做成「演示版 deck」⭐ 核心
 
-一篇 V2 文章 → 一屏一镜的 keynote。**零依赖（纯 CSS + 原生 JS，不引 GSAP/外链，国内/CF 都快）。** 沿用源文章的视觉（默认米白，国标走 V6 焰彩白，见 §1.4）、字体、grain/mesh/frame/幽灵章节号。
+一篇 V2 文章 → 一屏一镜的 keynote。**零依赖（纯 CSS + 原生 JS，不引 GSAP/外链，国内/CF 都快）。** 沿用源文章的视觉（默认米白，国标走 V6 焰彩白，见 第1.4节）、字体、grain/mesh/frame/幽灵章节号。
 
 ### 1.1 引擎（照抄模板，别重写）
 
-样板（**默认拷米白**，选哪套见 §1.4）：
+样板（**默认拷米白**，选哪套见 第1.4节）：
 - `assets/templates/deck-engine-米白.html` — ⭐ **默认**，人文/方法论亮调。
 - `assets/templates/deck-engine-V6焰彩白.html` — 国标系列专属：紫主色+焰橙/粉，Mozilla 可变字体（`publish.py` 的 `MOZILLA_FILES` 已打包 Mozilla 字体、按页面含 "Mozilla" 注入 `PRELOAD_LINKS_V6`）。
 - `assets/templates/deck-engine-暖黑.html` — 🕰️ 仅维护存量（Harness），**新 EP 别拷**。
 **做新 EP = 拷一份对应主色的模板，`<head>` 的全部 CSS 和 `</main>` 之后的全部 `<script>` 逐字保留，只换内容 slide / 顶栏标签 / title / 片尾。** 引擎已实现：
 
-> ⚠️ 模板 `@font-face` 里的字体路径是占位符 `{{SKILL_DIR}}/assets/fonts/...`——指向兄弟 skill `hekouwang-content-factory-skill` 的字体。拷模板做 EP 时**把 `{{SKILL_DIR}}` 替换成 hekouwang-content-factory-skill 的绝对 Base directory**（本地预览/截图才有字体）。发布时 `publish.py` 会把它统一收成站内 `/fonts/`，万一漏替换也能兜底。
+> ⚠️ 模板 `@font-face` 里的字体路径是占位符 `{{SKILL_DIR}}/assets/fonts/...`——指向兄弟 skill `hekouwang-content-master-skill` 的字体。拷模板做 EP 时**把 `{{SKILL_DIR}}` 替换成 hekouwang-content-master-skill 的绝对 Base directory**（本地预览/截图才有字体）。发布时 `publish.py` 会把它统一收成站内 `/fonts/`，万一漏替换也能兜底。
 
 - 全屏 `.slide`（一屏一镜），`.stage` 居中 + JS `fit()` 等比缩放防裁切；
 - 导航：←/→/空格/点击/触屏滑动/底部圆点/Home/End/F 全屏；右下「▶ 自动播放」(7s/屏，像放视频)；顶部进度条 + `NN/总数`；`#N` 深链（可分享到某屏）；`prefers-reduced-motion` 自动关动画。
-- **S 放映 / 提词器**（讲者视图：计时器 + 当前镜逐字稿 + 下一镜预览，详见 §1.6）。模板已内置该模块，拷模板即带。
+- **S 放映 / 提词器**（讲者视图：计时器 + 当前镜逐字稿 + 下一镜预览，详见 第1.6节）。模板已内置该模块，拷模板即带。
 
 ### 1.2 进场动画钩子（只加 class + `--i` 递增控错峰，CSS 已定义）
 
@@ -81,8 +106,8 @@ allowed-tools:
 
 ### 1.3 内容映射铁律（一图一镜）
 
-源文每个 section + 每张图表都要有对应镜头。**封面屏 + 速览屏（用源文 hero 的关键数据做 readout 仪表条）打头，片尾签收卡收尾**（含私域 CTA），一篇 9 节 → 约 12–24 屏。
-**SVG 图表逐字搬运**（viewBox/坐标/配色/字体不改），只在外层 `.fig` 加 `an`、给数据条/节点/折线加动画钩子。源文的 `.fig.breakout` 破格在演示版里**去掉**（每屏已全宽居中，负 margin 会出问题）。文案可适度精简适配一屏，保意保语气、过 `hekouwang-content-factory-skill` #6.6 去 AI 味。
+源文每个 section + 每张图表都要有对应镜头。**封面屏 + 速览屏（用源文 hero 的关键数据做 readout 仪表条）打头，片尾签收卡收尾**（默认选题征集；作者自有 CTA 可替换，不强制站外导流），一篇 9 节 → 约 12–24 屏。
+**SVG 图表逐字搬运**（viewBox/坐标/配色/字体不改），只在外层 `.fig` 加 `an`、给数据条/节点/折线加动画钩子。源文的 `.fig.breakout` 破格在演示版里**去掉**（每屏已全宽居中，负 margin 会出问题）。文案可适度精简适配一屏，保意保语气、过 `hekouwang-content-master-skill` #6.6 去 AI 味。
 
 ### 1.4 主色：**米白是全站默认**，焰彩白是国标专属例外
 
@@ -125,21 +150,22 @@ allowed-tools:
 发布时 `publish.py` 的 `localize()` 把源 HTML 里所有 Google/loli 外链删掉、注入指向 `/fonts/` 的本地 `@font-face`；Anthropic 绝对路径也改写成 `/fonts/`。`subset_cjk()` 用 `tools/fenv` 的 `pyftsubset` 按**全站实际用字**把思源黑 4 字重（400/500/700/900，800 映射 900）+ 宋（金句衬线）子集化成小 woff2（各 ~180KB），连 Anthropic 一起打包进 `dist/fonts/`。
 
 - **首屏字重跳变(FOUT)**：每页 `<head>` 注入 4 条 `<link rel=preload>`（900/400/Anthropic Sans/Mono）让关键字体高优先级先下；`dist/_headers` 给 `/fonts/*` 设一周强缓存。这两条**必须保留**，否则首屏会「先系统字、再换思源」肉眼可见跳一下。
-- 字体源出处：思源来自 `@fontsource@5.0.0`（jsdelivr）逐字重静态 woff2；Anthropic 来自 `hekouwang-content-factory-skill/assets/fonts/`（自用/演示授权）；Mozilla Headline/Text VF 为 Mozilla 官方开源（OFL），可自由使用。
+- 字体源出处：思源来自 `@fontsource@5.0.0`（jsdelivr）逐字重静态 woff2；Anthropic 来自 `hekouwang-content-master-skill/assets/fonts/`（自用/演示授权）；Mozilla Headline/Text VF 为 Mozilla 官方开源（OFL），可自由使用。
 - venv 丢了重建：`cd 演读DECK && python3 -m venv tools/fenv && tools/fenv/bin/pip install fonttools brotli`。无 venv/字体源时 publish 回退用 `fonts/cache/`。
 
 ## 4. 发布
 
 ```bash
 # 从项目根运行
-python3 演读DECK/publish.py              # 构建 dist/ + 部署到 CF Pages（hekouwang）
-python3 演读DECK/publish.py --build-only # 只构建 dist/，不部署
+python3 演读DECK/publish.py                                        # 只构建 dist/（默认不部署）
+YANDU_CF_PROJECT=<项目名> python3 演读DECK/publish.py --deploy      # 构建 + 部署到 CF Pages
 ```
 
-- **加一期**：在 `publish.py` 的 `MANIFEST` 加一行（源 HTML 相对项目根的路径 + slug 如 `suanli/ep04` + 系列 + EP + 分类 + 标题 + 简介 + 屏数）。**加一个系列**：再补 `SERIES_META` 一条，**并手改 `home.html` 的系列卡**——首页系列卡是**静态手写**的，不由 MANIFEST 生成（`write_index()` 是遗留死函数，别指望它）。
-- **留言板**（Pages Functions + D1）随部署一起生效，**加装/排错 → 读 [`references/留言板-D1.md`](references/留言板-D1.md)**：部署得用配置式（不带 `dist` 参数）+ `cwd=SELF`，日志出现 `Uploading Functions bundle` 才算带上后端。
+- **部署会把内容公开到公网**：只有用户明确要求发布时才加 `--deploy`，部署前先让用户确认项目名和本次要上线的期数。Wrangler 需用户自行安装（脚本不会自动全局安装）。
+- **加一期**：在 `publish.py` 的 `MANIFEST` 加一行（源 HTML 相对项目根的路径 + slug 如 `suanli/ep04` + 系列 + EP + 分类 + 标题 + 简介 + 屏数）。**加一个系列**：再补 `SERIES_META` 一条，**并手改 `home.html` 的系列卡**——首页系列卡是**静态手写**的，不由 MANIFEST 生成（旧的 `write_index()` 已删除）。
+- **留言板**（Pages Functions + D1）默认不注入页面。需要时设 `YANDU_ENABLE_COMMENTS=1` 再构建；会收集访客昵称、留言正文，并在服务端存 IP 加盐哈希做限频。**加装/排错 → 读 [`references/留言板-D1.md`](references/留言板-D1.md)**：部署得用配置式（不带 `dist` 参数）+ `cwd=SELF`，日志出现 `Uploading Functions bundle` 才算带上后端。
 - 干净 URL：演示版拷进 `dist/<slug>.html`，CF Pages 自动去 `.html`（`/suanli/ep01`）。
-- 部署用 `wrangler pages deploy dist --project-name hekouwang`；首次需 `wrangler login`（用户自己 `! wrangler login`）。
+- 部署走 `publish.py --deploy`（内部用配置式 `wrangler pages deploy`）；首次需 `wrangler login`（用户自己 `! wrangler login`）。
 
 ## 5. 防踩坑（实测血泪）
 
@@ -152,6 +178,6 @@ python3 演读DECK/publish.py --build-only # 只构建 dist/，不部署
 7. 截图核验演示版给足时间（`--virtual-time-budget=5000`），让 fit/动画跑完再截。
 
 ## 配套与依赖
-- **内容产线（强依赖）：`hekouwang-content-factory-skill`**——演示版的源文章 HTML、视觉规范(V1/V2/V3)、配色 token、字体方案都来自它；本 Skill 只做「内容→翻页演示+发布」这一半。**⚠️ 它是付费 Skill**（需作者授权），仓库不含其内容。只用引擎可直接拷 `assets/templates/deck-engine-*.html`（零依赖独立可用）。
+- **内容产线（强依赖）：`hekouwang-content-master-skill`**——演示版的源文章 HTML、视觉规范(V1/V2/V3)、配色 token、字体方案都来自它；本 Skill 只做「内容→翻页演示+发布」这一半。**⚠️ 它是付费 Skill**（需作者授权），仓库不含其内容。只用引擎可直接拷 `assets/templates/deck-engine-*.html`（零依赖独立可用）。
 - 示例：`examples/demo.html`（自包含、零依赖、双击即看的最小动画示例）。
 - 记忆：`keynote-yanshi-site`（站点现状 + 发布链路）、`keynote-deck-engine`（引擎做法）、`brand-persona-tagline`（人设三句）。

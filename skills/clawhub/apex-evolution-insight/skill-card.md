@@ -1,43 +1,61 @@
-## Description: <br>
-Weekly strategy evolution insights from APEX's self-improvement engine. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns weekly strategy evolution insights from APEX's self-improvement engine.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External users and agent developers use this skill to request weekly APEX Runner strategy evolution signals, review strategy changes, and calibrate long-term trading alignment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an agent to access a raw EVM private key for paid x402 requests. <br>
-Mitigation: Use a dedicated low-balance wallet on Base and avoid reusing personal or treasury wallet keys. <br>
-Risk: Automatic x402 requests can incur per-call charges of about $15 before discounts. <br>
-Mitigation: Require explicit confirmation before each request and monitor wallet call history and balance. <br>
+## Use Case:
 
+Agents supporting a user's weekly APEX strategy review can request structured insights to help understand how the strategy is evolving and calibrate long-term strategy alignment. Treat the response as informational when making trading decisions.
 
-## Reference(s): <br>
-- [APEX Evolution Insight endpoint](https://apexrunner.ai/signals/apex-evolution-insight) <br>
-- [APEX pricing tier lookup](https://apexrunner.ai/signals/my-pricing) <br>
-- [APEX Runner](https://apexrunner.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/kynto2001-ctrl/skills/apex-evolution-insight) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Analysis, Code, Guidance] <br>
-**Output Format:** [Markdown guidance with a Python example and JSON API response] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY and USDC on Base mainnet for x402-authenticated paid requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Each request incurs a USDC payment, and repeated calls can increase the total spend.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the current endpoint price before requesting insights and monitor wallet spending.
+
+Risk: The skill requires an EVM private key to authorize x402 payments.
+
+Mitigation: Keep the key in a protected secret store or environment variable and use a wallet funded only for intended calls.
+
+Risk: Strategy insights may be incomplete or unsuitable as a basis for a trading decision.
+
+Mitigation: Review the response as informational analysis and independently validate it before acting.
+
+## Reference(s):
+
+- [APEX Evolution Insight endpoint](https://apexrunner.ai/signals/apex-evolution-insight)
+- [APEX Signal Intelligence](https://apexrunner.ai/signals/signal-intelligence)
+- [APEX Regime Transition](https://apexrunner.ai/signals/regime-transition)
+- [APEX Runner](https://apexrunner.ai)
+- [ClawHub release page](https://clawhub.ai/kynto2001-ctrl/skills/apex-evolution-insight)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Analysis]
+
+**Output Format:** [JSON response]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Weekly insight data with week, strategy_score, and top_insight fields.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

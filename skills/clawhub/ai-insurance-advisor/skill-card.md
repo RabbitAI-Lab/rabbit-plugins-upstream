@@ -1,46 +1,52 @@
-## Description: <br>
-AI Insurance Advisor provides mainland China insurance guidance for coverage planning, product comparison, premium estimates, protection-gap analysis, underwriting compliance, claims questions, and agent sales support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向中国大陆保险咨询，帮助个人与家庭分析保障需求、比较保险产品与保费、设计方案，并提供保险知识和合规提示。
 
-## Publisher: <br>
-[mnetfairy](https://clawhub.ai/user/mnetfairy) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mnetfairy](https://clawhub.ai/user/mnetfairy)
 
-## Use Case: <br>
-External users in mainland China use this skill to compare insurance products, estimate premiums, design household coverage plans, and receive insurance knowledge or compliance-oriented guidance. Agents can also use it to draft Chinese-language sales, training, and objection-handling materials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Mainland China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product recommendations or premium estimates may be outdated because the skill relies on static local product data. <br>
-Mitigation: Verify current product terms, availability, and pricing with licensed insurance providers before making purchase decisions. <br>
-Risk: Insurance guidance may be mistaken for professional financial, legal, or compliance advice. <br>
-Mitigation: Present outputs as informational guidance and route final plan, underwriting, claims, and compliance decisions to qualified professionals. <br>
-Risk: The skill can name a specific insurance sales company when asking whether the user wants contact information. <br>
-Mitigation: Disclose that any contact suggestion is informational and encourage users to compare multiple licensed providers. <br>
+## Use Case:
 
+供中国大陆有保险需求的个人与家庭，以及保险顾问使用，进行保障需求分析、产品比较、保费估算、方案规划和保险知识查询。营销文案与培训话术仅按用户明确要求生成，并应在对外使用前经过合规审核。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/ai-insurance-advisor) <br>
-- [Insurance knowledge reference](references/insurance-knowledge.md) <br>
-- [Compliance reference](references/compliance.md) <br>
-- [Product database](references/products.json) <br>
-- [Product validation report](references/validation_report_20260524_090219.md) <br>
+### Deployment Geography for Use:
 
+中国大陆
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, JSON, Shell commands] <br>
-**Output Format:** [Chinese-language Markdown responses with structured JSON from local helper scripts when analysis, plan design, or premium calculation is requested] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses static local product data and local Python scripts; recommendations and premiums should be verified with licensed providers before purchase decisions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.402 (source: server release metadata) <br>
+Risk: ClawScan rates this insurance-advice skill suspicious because it may overstate critical-illness coverage; unresolved referenced paths mean the evidence is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review stated critical-illness coverage against actual product limits and any budget reductions before relying on a recommendation.
+
+## Reference(s):
+
+- [保险产品目录](references/products.json)
+- [保险知识库](references/insurance-knowledge.md)
+- [合规要点](references/compliance.md)
+- [ClawHub release page](https://clawhub.ai/mnetfairy/skills/ai-insurance-advisor)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [结构化 JSON 结果及中文 Markdown 分析、比较表和建议]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [产品与保费信息应以实际产品条款和最新信息核对；营销文案及培训话术仅供参考，对外使用前须经合规审核。]
+
+## Skill Version(s):
+
+2.4.2 (source: SKILL.md frontmatter, ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

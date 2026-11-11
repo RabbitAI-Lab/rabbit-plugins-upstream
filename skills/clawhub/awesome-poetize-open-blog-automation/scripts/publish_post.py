@@ -342,6 +342,7 @@ def request_json(
     api_key: str,
     payload: dict[str, Any] | None = None,
     extra_headers: dict[str, str] | None = None,
+    return_error_dict: bool = False,
 ) -> dict[str, Any]:
     headers = {
         "X-API-KEY": api_key,
@@ -364,6 +365,9 @@ def request_json(
             return json.loads(content)
     except urllib.error.HTTPError as exc:
         body = exc.read().decode("utf-8", errors="replace")
+        if return_error_dict:
+            # 供调用方自行翻译 HTTP 层错误（如旧后端的 404/500），不再直接终止
+            return {"code": exc.code, "message": f"HTTP {exc.code} calling {url}", "detail": body[:500]}
         die(f"HTTP {exc.code} calling {url}\n{body}")
     except urllib.error.URLError as exc:
         die(f"Network error calling {url}: {exc}")
@@ -802,6 +806,15 @@ def is_probably_local_file_reference(reference: str) -> bool:
 
     decoded = urllib.parse.unquote(candidate)
     if os.path.isabs(decoded):
+        # 以 "/" 开头的是「站点根相对 URL」（如 /media/xxx、/static/xxx），不是本地磁盘路径。
+        # ⚠️ os.path.isabs("/media/xxx") 在 POSIX 与 Windows 上**都**返回 True，
+        # 之前因此把这类站内引用当成本地待传文件，磁盘上找不到就 die，
+        # 结果存量文章里写过 /media/ 的一更新就失败，只能先把正文改成绝对 URL 才发得出去。
+        # 真存在于磁盘的文件在 resolve_local_file_path() 那一步就已经被识别并返回了；
+        # 走到这里说明它不是本地文件 → 按站内已有资源处理，跳过即可。
+        if decoded.startswith("/"):
+            return False
+        # 其余绝对路径（Windows 盘符 C:\…、UNC \\server\share）仍按本地文件处理
         return True
 
     return not decoded.startswith("/")
@@ -1168,6 +1181,14 @@ def build_payload(markdown_text: str, args: argparse.Namespace) -> tuple[dict[st
         payload["labelName"] = label_name
     elif not is_update:
         die("Missing label. Provide front matter 'label' or 'labelId'.")
+
+    # 分类/标签描述（auto-create 时传入，避免后端用硬编码默认值）
+    sort_description = meta_value(meta, "sortDescription") or meta_value(meta, "sortDesc")
+    label_description = meta_value(meta, "labelDescription") or meta_value(meta, "labelDesc")
+    if sort_description is not MISSING:
+        payload["sortDescription"] = sort_description
+    if label_description is not MISSING:
+        payload["labelDescription"] = label_description
 
     if cover is not None:
         payload["cover"] = cover

@@ -1,0 +1,9 @@
+{
+  "name": "bounty-hunter",
+  "version": "1.0.2",
+  "description": "Serial-execution toolkit for winning pay-per-merge software bounties: ranking, stale demotion, boundary guards, preflight gate, repro scaffolder, PR checklist.",
+  "main": "SKILL.md",
+  "keywords": ["bounty", "github", "code-review", "testing", "automation", "security-guard", "rust", "solidity", "typescript"],
+  "author": "doishy-doish",
+  "license": "MIT"
+}

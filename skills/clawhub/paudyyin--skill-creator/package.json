@@ -1,0 +1,6 @@
+﻿{
+    "author":  "paudyyin",
+    "description":  "Create new skills, modify and improve existing skills. Includes advanced design patterns from Anthropic\u0027s claude-api skill: exhaustive trigger conditions, subcommand system, auto-detection logic, decision trees, and common pitfalls.",
+    "name":  "skill-creator",
+    "version":  "1.2.0"
+}

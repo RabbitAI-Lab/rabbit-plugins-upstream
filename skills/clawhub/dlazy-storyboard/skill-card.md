@@ -1,40 +1,55 @@
-## Description: <br>
-Dlazy Storyboard helps agents use the dLazy storyboard workflow to turn scripts, character details, shot prompts, reference sheets, frames, voice, music, effects, and subtitles into multi-shot animated shorts rendered with Remotion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns a multi-shot animation brief into a storyboard, consistent character references, shot prompts and generated media for a rendered animated short.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External creators and developers use this skill to start or continue dLazy storyboard projects for multi-shot animated shorts with consistent characters. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and attached reference files are sent to dLazy hosted services. <br>
-Mitigation: Avoid sending sensitive prompts or files unless intended, and use per-invocation API keys when persistent local credentials are not desired. <br>
+## Use Case:
 
+Creators and production teams use this skill to develop and render multi-shot animated shorts with consistent characters through dLazy's storyboard workflow.
 
-## Reference(s): <br>
-- [Dlazy Storyboard on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-storyboard) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and streamed CLI text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key and may upload user-selected reference files to dLazy-hosted storage.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and attached files are sent to dLazy's hosted service, and the security analysis notes that some behavior is not fully explained.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the service terms and the Chinese guide's padded section; avoid sending sensitive files unless their use is authorized.
+
+Risk: Use requires dLazy login and can list organization projects.
+
+Mitigation: Confirm that account access and organization project listing fit the intended use before installing.
+
+## Reference(s):
+
+- [CLI repository (link declared in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy homepage](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Images, Video, Audio]
+
+**Output Format:** [Storyboard and generation guidance in text, with generated media and a rendered video]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Project-scoped workflow; requires a dLazy API key.]
+
+## Skill Version(s):
+
+1.3.39 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

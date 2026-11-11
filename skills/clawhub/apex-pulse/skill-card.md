@@ -1,40 +1,57 @@
-## Description: <br>
-APEX system heartbeat — confirms live trading is active and healthy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns APEX system heartbeat — confirms live trading is active and healthy.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External users and agents use Apex Pulse to check whether APEX Runner's live autonomous crypto trading system is active and fresh before relying on related signals or trading workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can spend USDC from the configured EVM wallet each time an agent calls the paid endpoint. <br>
-Mitigation: Use a dedicated low-balance Base wallet, confirm the price before use, and gate repeated or automated calls. <br>
+## Use Case:
 
+External users and trading agents use the paid APEX heartbeat endpoint to check whether the live system is active and confirm signal freshness before relying on related signals.
 
-## Reference(s): <br>
-- [Apex Pulse signal endpoint](https://apexrunner.ai/signals/apex-pulse) <br>
-- [Apex Pulse pricing](https://apexrunner.ai/signals/my-pricing) <br>
-- [ClawHub skill page](https://clawhub.ai/kynto2001-ctrl/skills/apex-pulse) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with Python example and JSON response payload] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY for x402 payment; the endpoint charges USDC per request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Each request incurs a fee and uses an EVM wallet private key for x402 payment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the current per-call price, use a wallet funded only for the intended calls, and keep EVM_PRIVATE_KEY in secret storage.
+
+Risk: The external endpoint and its links were outside the security scan scope.
+
+Mitigation: Verify the endpoint and payment terms before sending authenticated requests or relying on its response.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/kynto2001-ctrl/skills/apex-pulse)
+- [APEX Pulse endpoint](https://apexrunner.ai/signals/apex-pulse)
+- [APEX Market Tick](https://apexrunner.ai/signals/market-tick)
+- [APEX Grid Health](https://apexrunner.ai/signals/grid-health)
+- [APEX Portfolio Heat](https://apexrunner.ai/signals/portfolio-heat)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON]
+
+**Output Format:** [JSON heartbeat response]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [One paid response per request.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
