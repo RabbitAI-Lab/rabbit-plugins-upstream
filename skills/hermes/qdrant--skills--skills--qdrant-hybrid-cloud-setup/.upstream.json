@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/qdrant/skills/tree/main/skills/qdrant-hybrid-cloud-setup",
+  "identifier": "qdrant/skills/skills/qdrant-hybrid-cloud-setup",
+  "repo": "qdrant/skills",
+  "path": "skills/qdrant-hybrid-cloud-setup",
+  "branch": "main",
+  "pushedAt": "2026-11-11T15:19:45Z",
+  "contentHash": "e9aa0c4c35a7b315b08747212ded26e362badd04a5ba74ff97e8731129afe5c5",
+  "fetchedAt": "2026-11-11T15:20:02.176Z"
+}

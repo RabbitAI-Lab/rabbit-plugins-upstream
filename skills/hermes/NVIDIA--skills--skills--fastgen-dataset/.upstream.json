@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/fastgen-dataset",
+  "identifier": "NVIDIA/skills/skills/fastgen-dataset",
+  "repo": "NVIDIA/skills",
+  "path": "skills/fastgen-dataset",
+  "branch": "main",
+  "pushedAt": "2026-11-11T02:07:59Z",
+  "contentHash": "c459752e58db498e8bf1ec2075354128a8e47d4e416d060185a9555ead529569",
+  "fetchedAt": "2026-11-11T15:20:05.547Z"
+}
