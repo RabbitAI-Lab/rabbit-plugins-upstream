@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/qdrant/skills/tree/main/skills/qdrant-model-migration",
+  "identifier": "qdrant/skills/skills/qdrant-model-migration",
+  "repo": "qdrant/skills",
+  "path": "skills/qdrant-model-migration",
+  "branch": "main",
+  "pushedAt": "2026-11-11T15:19:45Z",
+  "contentHash": "3931dd85c3f9ee1130b63a2699e3bf3754b8e87e150cfab580ff4ecb29f820bc",
+  "fetchedAt": "2026-11-11T15:20:02.176Z"
+}
