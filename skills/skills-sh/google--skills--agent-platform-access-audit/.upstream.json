@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/agent-platform-access-audit",
+  "repo": "google/skills",
+  "skillId": "agent-platform-access-audit",
+  "branch": "main",
+  "pushedAt": "2026-11-11T07:15:05Z",
+  "contentHash": "ca5163ef9e25e689e73dd4925173f9e108ad2a2c402d7d4520c20e6aa4c8bb2e",
+  "fetchedAt": "2026-11-11T15:22:19.548Z"
+}

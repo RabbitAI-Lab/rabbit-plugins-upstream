@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/managed-airflow-recommendations",
+  "repo": "google/skills",
+  "skillId": "managed-airflow-recommendations",
+  "branch": "main",
+  "pushedAt": "2026-11-11T07:15:05Z",
+  "contentHash": "cb51b917b3480712a44dab82779bce40d864bfa8022da7b9f6fda405224ca343",
+  "fetchedAt": "2026-11-11T15:22:19.388Z"
+}

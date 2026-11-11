@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-cloud-storage-diagnostic",
+  "repo": "google/skills",
+  "skillId": "google-cloud-storage-diagnostic",
+  "branch": "main",
+  "pushedAt": "2026-11-11T07:15:05Z",
+  "contentHash": "1dcf9129cc6d7b0138453b8c69cded9bcfcc59113b3a9d03cb0fd67381a214a9",
+  "fetchedAt": "2026-11-11T15:22:19.515Z"
+}
