@@ -1,44 +1,52 @@
-## Description: <br>
-海关数据分析专家Skill — 海关查询系统，海关数据查询平台，海关数据分析，海关数据统计，全球海关数据查询，外贸数据，国外进出口数据，提单数据，关单数据，国外采购商平台，海关数据查询，全球进出口数据，中国进出口数据，找国外客户，国外采购商订单。支持按HS编码/产品名称、采购商、供应商进行多维度贸易数据分析 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+提供海关进出口数据查询与贸易分析，支持按 HS 编码或产品、采购商、供应商及航运记录检索。
 
-## Publisher: <br>
-[oraagent](https://clawhub.ai/user/oraagent) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oraagent](https://clawhub.ai/user/oraagent)
 
-## Use Case: <br>
-External trade analysts, sales teams, and sourcing teams use this skill to query and analyze customs import/export data by HS code or product, buyer, supplier, country, time trend, recent records, trade intelligence, and shipping details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores and reuses an API key locally. <br>
-Mitigation: Use a dedicated, low-privilege key, rotate it if exposed, and control file permissions in shared workspaces. <br>
-Risk: Queries and credentials are sent to the customs query service. <br>
-Mitigation: Install only if you trust the service and avoid entering sensitive or confidential trade terms. <br>
+## Use Case:
 
+外贸分析人员可用它按产品、采购商或供应商查询海关进出口记录，并查看贸易趋势、交易明细和航运信息。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oraagent/skills/ora-customs-pro) <br>
-- [OraAgent publisher profile](https://clawhub.ai/user/oraagent) <br>
-- [Topeasy China homepage](https://www.topeasychina.com) <br>
-- [Customs query service endpoint](https://h.smtso.com/skill/botcustoms) <br>
-- [Ora service information](https://www.oraskl.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API results summarized for the user] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May invoke a Node.js client that returns JSON from the customs query service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Query details and API credentials are sent to the external customs service; the security review says part of the referenced client could not be fully inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the client and destination before use, narrow access, send only non-sensitive customs queries, and keep credentials out of tool output.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/oraagent/skills/ora-customs-pro)
+- [Topeasy China](https://www.topeasychina.com)
+- [Customs query service](https://h.smtso.com/skill/botcustoms)
+- [OraSKL](https://www.oraskl.com)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown]
+
+**Output Format:** [Text or Markdown summaries of trade statistics, rankings, trends, and records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Content varies with the selected query and may include trade metrics or shipment details.]
+
+## Skill Version(s):
+
+1.0.5 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

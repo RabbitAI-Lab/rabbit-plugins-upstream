@@ -49,9 +49,14 @@ The natural first move when optimizing is to find out what's actually wrong — 
 with the user on it before spending effort. So:
 
 1. **Render their deck** — `bash scripts/render_deck.sh their_deck.pptx` → one PNG per slide.
-2. **Extract their content** — `python3 scripts/extract_deck.py their_deck.pptx <dir>` → a
-   `content.md` (per-slide text + tables + image filenames) and every embedded figure saved
-   whole to `assets/`. This is what you carry forward; reuse their figures, don't redraw them.
+2. **Extract their content** — `python3 scripts/extract_deck.py their_deck.pptx <dir>` (accepts
+   `.potx`) → a `content.md` carrying, per slide, the text, the tables, **every native chart's real
+   CATEGORIES AND SERIES** (rebuild those with `native_chart` — never re-read the numbers off the
+   picture) and **the speaker notes** (their planned narration — carry it into the rebuild's notes,
+   don't re-draft it), plus every embedded figure saved whole to `assets/`. This is what you carry
+   forward; reuse their figures, don't redraw them. **Read the `⚠ UNEXTRACTED` lines if there are
+   any** — a shape the script could not read is listed with its type rather than dropped, so a lossy
+   extraction says so instead of looking complete.
 3. **Critique the current deck** — run the **same critic** (`agents/critic.md`) on the rendered
    PNGs against the deck's purpose + audience (and the source material, if they gave any). This
    produces a concrete, per-slide weakness list — the diagnosis.
@@ -70,10 +75,18 @@ with the user on it before spending effort. So:
 - **For a full re-author,** apply the normal build path (plan → deckkit → render → critic loop),
   but seed it with *their* real content and figures from the extraction — the point of a redesign
   is that the facts and figures are theirs; only the *presentation* changes.
-- **Which geometry net runs depends on the path.** A *re-author* has a deckkit build script, so end it
-  with the build-time `dk.lint_layout(prs)` gate (Step 4) before `prs.save()`. A *copy-in-place edit* has
-  no build script — there's nothing to call `lint_layout` from — so it relies on the **render-time**
-  `scripts/lint_deck.py` (Step 5) after rendering. Either way the deck reaches the critic geometry-clean.
+- **🔴 BOTH geometry nets run on BOTH paths — the path only changes what the gate is called FROM.**
+  A *re-author* ends its deckkit build script with `dk.lint_layout(prs, strict=True)` before
+  `prs.save()` (Step 4). A *copy-in-place edit* runs the same call from its consolidated fix-pass
+  script (protocol rule 1 below), which opens the original, mutates, and saves — for this gate that
+  script IS the build script. Then, on both paths, render → `scripts/lint_deck.py` (Step 5), which
+  catches what only pixels reveal. This bullet used to say a copy-in-place edit "has no build
+  script" and therefore relies on render-time lint alone; that reads as permission to drop a hard
+  gate, and it contradicts *Gate mapping* below, which says the build-time gate still runs in full.
+  It is the *Gate mapping* sentence that is right. (Rule 2 already has you linting the untouched
+  ORIGINAL to get the coordinates you target by — so keep that baseline report: it is what tells a
+  CRITICAL you introduced from one that was already theirs. A pre-existing CRITICAL is a diagnosis
+  finding to fix or surface, never a reason to pass `strict=False`.)
 - **Carry their numbers and emphasis faithfully.** A redesign that "improves" a slide into saying
   something the source doesn't is a fidelity failure (see the critic's fidelity check) — the most
   damaging thing you can do to someone's own deck.

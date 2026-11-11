@@ -1,5 +1,7 @@
 # 战略市场分析报告（交付模板）
 
+> **终稿语言**：`htmlContent` 正文和 `<html lang>` 跟 `meta.lang`（中文 `zh-CN`，英文 `en`）。`render` 必须带 `--lang`。
+>
 > **最终交付物**：可打开的 `market-analysis-report.html`。  
 > **质量门禁**：`render` 按 **TSO getMarketReport 原始业务维度** 校验 HTML，缺项失败（非文件大小）。
 

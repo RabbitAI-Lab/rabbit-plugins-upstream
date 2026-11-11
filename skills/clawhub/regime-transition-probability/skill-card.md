@@ -1,46 +1,56 @@
-## Description: <br>
-Probabilistic regime transition forecast with timing estimate. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns probabilistic regime transition forecast with timing estimate.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-Developers, agents, and trading teams use this skill to request a paid, real-time regime transition probability and timing estimate for dynamic strategy allocation and regime-aware hedging. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a live EVM private key that an agent can use while making requests. <br>
-Mitigation: Use only a dedicated low-balance wallet for this skill and never expose a main wallet private key. <br>
-Risk: Agent calls can trigger paid Base USDC requests, and repeated calls may spend funds unexpectedly. <br>
-Mitigation: Confirm the current call cost before use and rely on external wallet controls, low balances, or manual approval for spending limits. <br>
-Risk: The response is a probabilistic trading signal and may be incorrect or unsuitable for a specific strategy. <br>
-Mitigation: Treat the signal as decision support, validate it against independent risk controls, and avoid automated trading solely from this output. <br>
+## Use Case:
 
+Developers and trading agents use the endpoint to obtain a probabilistic estimate of regime transition risk and timing for strategy allocation and regime-aware hedging.
 
-## Reference(s): <br>
-- [APEX Runner regime transition probability signal](https://apexrunner.ai/signals/regime-transition-probability) <br>
-- [APEX Runner pricing tier lookup](https://apexrunner.ai/signals/my-pricing) <br>
-- [Related signal: regime transition](https://apexrunner.ai/signals/regime-transition) <br>
-- [Related signal: regime confluence](https://apexrunner.ai/signals/regime-confluence) <br>
-- [Related signal: regime transition probability institutional](https://apexrunner.ai/signals/regime-transition-probability-institutional) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Code, Guidance] <br>
-**Output Format:** [Markdown usage guidance with Python example code and a JSON API response] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY and a Base mainnet USDC wallet payment for each call.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The security scan did not assess the destinations of the three external links.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the linked endpoint destinations before use.
+
+Risk: Requests incur USDC charges and require an EVM private key; the documentation lists a $0.007 early-adopter price and a $0.01 standard price.
+
+Mitigation: Confirm the current endpoint price before calling it, store the private key in a managed secret store, and use a wallet funded only for intended calls.
+
+## Reference(s):
+
+- [Regime Transition Probability endpoint](https://apexrunner.ai/signals/regime-transition-probability)
+- [Related signal: Regime Transition](https://apexrunner.ai/signals/regime-transition)
+- [Related signal: Regime Confluence](https://apexrunner.ai/signals/regime-confluence)
+- [ClawHub release page](https://clawhub.ai/kynto2001-ctrl/skills/regime-transition-probability)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Analysis]
+
+**Output Format:** [JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns the current regime, transition probability, most likely next regime, and estimated transition timing in hours.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -29,6 +29,7 @@ bash scripts/query.sh keyword calendar  # search
 bash scripts/query.sh slug some-skill   # detail
 bash scripts/install.sh some-skill --yes
 bash scripts/edit.sh some-skill --summary "New summary"   # if your Hub supports /edit
+bash scripts/team.sh list 42 --json                          # team members (if your Hub has /team)
 bash scripts/doctor.sh                  # diagnose configuration
 ```
 
@@ -63,6 +64,7 @@ adapter targets `https://api.skillhub.cn`.
 | `sync.sh` | ⚪ no-op (live search needs no cache) |
 | `query.sh author <handle>` | ❌ no author filter (use `keyword`) |
 | `edit.sh` (edit card metadata) | ❌ card metadata is a one-way mirror from upstream clawhub/GitHub; change the upstream source and re-publish instead |
+| `team.sh` (team management) | ❌ no team endpoints on skillhub.cn |
 
 ## Security
 
@@ -70,7 +72,14 @@ adapter targets `https://api.skillhub.cn`.
   paths — path-traversal (`..`), absolute paths, and illegal characters are
   rejected.
 - Downloaded archives are checked for ZIP magic bytes and unsafe entry paths
-  before extraction.
+  (`..`, absolute paths) before extraction, and every extraction target is
+  re-resolved to confirm it stays inside the staging directory.
+- Extraction runs through `scripts/_zip_safe.py` (Python `zipfile`) rather than
+  `unzip`, so non-ASCII filenames survive intact — see
+  [SKILL.md](SKILL.md#requirements).
+- `install.sh` resolves the version from the Hub's version-history API (never
+  from a possibly stale local cache) and verifies the downloaded package's own
+  declared version before replacing anything on disk.
 - `--yes` is a **user-authorization flag**; an agent must not add it on its own.
 - Never commit tokens to git or echo full tokens.
 

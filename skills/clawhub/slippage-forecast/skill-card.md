@@ -1,41 +1,56 @@
-## Description: <br>
-Predicts expected slippage for a given order size and market condition. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a paid x402 endpoint that forecasts expected slippage for an order size and market condition; each call costs $0.007 USDC on Base.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External developers and trading agents use this skill before placing large crypto orders to estimate expected slippage, compare venues, and understand realistic execution costs from APEX Runner's live trading signal. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: x402-authenticated requests can automatically spend wallet funds per call. <br>
-Mitigation: Use a dedicated low-balance wallet and configure X402_POLICY_PATH with per-transaction caps, daily caps, and recipient allowlists before use. <br>
-Risk: The skill is a paid API gateway, and spending limits are optional rather than guaranteed. <br>
-Mitigation: Review wallet balances, policy settings, and expected call volume before broad or automated use. <br>
+## Use Case:
 
+External users and developers placing cryptocurrency orders can request an expected-slippage forecast to estimate execution costs and compare venues before trading.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kynto2001-ctrl/skills/slippage-forecast) <br>
-- [APEX Runner slippage forecast signal](https://apexrunner.ai/signals/slippage-forecast) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, code, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API response examples and Python code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY for x402-authenticated paid requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server-resolved release metadata) <br>
+Risk: Forecast requests incur a USDC charge, so repeated calls can add up.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set a request budget and confirm the current per-call price before use.
+
+Risk: The x402 client uses EVM_PRIVATE_KEY to authorize wallet payments.
+
+Mitigation: Store the key in a secret manager and use a dedicated wallet funded only for intended spending.
+
+## Reference(s):
+
+- [Slippage forecast endpoint](https://apexrunner.ai/signals/slippage-forecast)
+- [ClawHub release page](https://clawhub.ai/kynto2001-ctrl/skills/slippage-forecast)
+- [Related signal: optimal order routing](https://apexrunner.ai/signals/optimal-order-routing)
+- [Related signal: execution window optimizer](https://apexrunner.ai/signals/execution-window-optimizer)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [JSON slippage forecast with timestamp; Markdown instructions with a Python example]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Each request costs $0.007 USDC on Base through 2027-01-01; the documented standard price is $0.01 per call. Requires EVM_PRIVATE_KEY and a Base wallet funded with USDC.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

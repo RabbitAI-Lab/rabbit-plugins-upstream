@@ -1,46 +1,55 @@
-## Description: <br>
-Daily Xuanzang helps an agent deliver progressive bilingual readings of the Great Tang Records on the Western Regions with tracked progress, translations, route-map guidance, and optional voice narration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through daily, bilingual readings of the Great Tang Records on the Western Regions, with progress tracking, route maps, and optional narration.
 
-## Publisher: <br>
-[yumyumtum](https://clawhub.ai/user/yumyumtum) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yumyumtum](https://clawhub.ai/user/yumyumtum)
 
-## Use Case: <br>
-External users and developers use this skill to run a daily illustrated reading workflow for Xuanzang's journey, generating a lecture segment with translation, historical context, map guidance, progress tracking, and optional audio. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+GPL-3.0-or-later
 
-## Known Risks and Mitigations: <br>
-Risk: The skill persists reading progress and replay artifacts locally. <br>
-Mitigation: Tell users where progress and replay files are written and let them inspect, back up, or delete those files. <br>
-Risk: Voice generation depends on a referenced audio helper script that is not bundled in the artifact. <br>
-Mitigation: Inspect or provide the helper script before enabling voice output; skip voice if the script is unavailable. <br>
-Risk: Original historical passages may include biased or culturally dated descriptions. <br>
-Mitigation: Frame translated passages as historical source material and add context in the lecture. <br>
+## Use Case:
 
+External readers and learners use the skill to read the Great Tang Records on the Western Regions a segment at a time, with Chinese or English translation and historical context. It can also produce route maps and optional narration for each reading.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/yumyumtum/skills/daily-xuanzang) <br>
-- [README](README.md) <br>
-- [Structure Reference](references/structure.md) <br>
-- [Lecture Style Guide](references/style-guide.md) <br>
-- [Example Lecture](assets/example-lecture-001.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown lecture text with inline shell commands and structured generation guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide agents to generate route-map images, optional scene art, optional voice narration, and local progress or replay files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.0 (source: evidence.release.version and package.json) <br>
+Risk: Narration may be sent to an external speech service, which could expose private material.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the service's data handling and omit private material unless that sharing is acceptable.
+
+Risk: The suggested TTS package is unpinned, and the security scan was partial.
+
+Mitigation: Assess whether the dependency and tool scope are acceptable, and treat the scan as incomplete evidence.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/yumyumtum/skills/daily-xuanzang)
+- [Journey structure reference](artifact/references/structure.md)
+- [Reading style guide](artifact/references/style-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Images, Audio]
+
+**Output Format:** [A structured Markdown lecture, a bilingual route map image, and optional narrated audio]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [One reading segment per episode; route maps are the default, while scene art and narration are optional.]
+
+## Skill Version(s):
+
+0.2.1 (source: package.json, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

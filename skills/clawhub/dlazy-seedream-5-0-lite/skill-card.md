@@ -1,45 +1,55 @@
-## Description: <br>
-Fast image generation with Doubao Seedream 5.0 Lite, supporting text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fast image generation with Doubao Seedream 5.0 Lite, supporting text-to-image and image-to-image.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to generate images through the dLazy hosted Seedream 5.0 Lite API from text prompts or reference images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local image inputs are sent to dLazy cloud services for generation. <br>
-Mitigation: Avoid submitting confidential or restricted content unless the user has approved dLazy as a provider for that data. <br>
-Risk: The dLazy CLI may store an API key in a local config file. <br>
-Mitigation: Use the per-invocation DLAZY_API_KEY environment variable or verify config-file permissions on shared machines. <br>
-Risk: Generated assets are hosted by dLazy and returned as external URLs. <br>
-Mitigation: Review generated output links before sharing them outside the intended workflow. <br>
+## Use Case:
 
+Developers and other agents use the skill to generate images from text prompts, optionally guided by reference images, through the dLazy Seedream service.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-seedream-5-0-lite) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated image results are returned as dLazy-hosted URLs; async runs may return a task identifier for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and any local reference images are sent to dLazy hosted services, and generated assets are hosted there.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting sensitive prompts or images unless their transfer to the service is approved.
+
+Risk: The security review was partial: the CLI package and some referenced local paths were unavailable for assessment, and the documented command only logs in despite the image-generation description.
+
+Mitigation: Review the CLI package and any local files involved, and confirm the supported generation command before relying on the skill.
+
+## Reference(s):
+
+- [dLazy service](https://dlazy.com)
+- [dLazy CLI package](https://www.npmjs.com/package/@dlazy/cli)
+- [CLI repository (declared in artifact metadata)](https://github.com/dlazy-ai/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Images, JSON, Guidance]
+
+**Output Format:** [Generated image assets with a JSON result containing image URLs and metadata; Markdown guidance and shell commands for use.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can return an asynchronous task identifier; generated assets are hosted at dLazy file URLs and can optionally be saved locally.]
+
+## Skill Version(s):
+
+1.3.39 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

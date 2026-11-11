@@ -1,44 +1,61 @@
-## Description: <br>
-wickworks helps agents compute technical indicators and Smart-Money-Concepts primitives from caller-provided OHLC candlestick bars through a stateless REST or MCP service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Computes technical indicators and Smart-Money-Concepts primitives from OHLC candlestick bars through a stateless REST or MCP service.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and trading-data agents use wickworks when they already have OHLC bars and need technical indicators or SMC structures computed without forecasting, scoring, or stateful data storage. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The wickworks service is auth-less if exposed beyond localhost. <br>
-Mitigation: Bind it to localhost by default and expose it off-host only behind an authenticated reverse proxy or VPN. <br>
-Risk: Using an unpinned container image can reduce deployment reproducibility. <br>
-Mitigation: Pin a specific Docker image version for deployments that need repeatable behavior. <br>
-Risk: Requests can fail when they exceed configured bar limits or do not include enough warm-up bars for selected indicators. <br>
-Mitigation: Respect MAX_BARS and MIN_BARS settings, and handle insufficient_bars and 413 responses in the calling workflow. <br>
+## Use Case:
 
+Developers and engineers use Wickworks to compute technical indicators and market-structure primitives from OHLC bar data. The service returns data for analysis but does not provide forecasts or buy/sell opinions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/wickworks) <br>
-- [wickworks setup](references/setup.md) <br>
-- [Model Context Protocol](https://modelcontextprotocol.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, API calls, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with shell, JSON, REST, and MCP examples; service responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Computes stateless, NaN-safe outputs from caller-provided OHLC bars and returns insufficient-input or oversize-request errors when limits are not met.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.3 (source: server release metadata) <br>
+Risk: The Docker setup references a mutable `latest` image, and scanner analysis was partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the image's provenance and use a reviewed, pinned digest before deployment.
+
+Risk: The service has no built-in authentication, so anyone who can reach its port can submit requests.
+
+Mitigation: Bind it to loopback by default; protect off-host access with an authenticated reverse proxy or VPN.
+
+Risk: OHLC bars are sent to the configured Wickworks instance for computation.
+
+Mitigation: Review the service destination and data sent, and use an instance you or a trusted operator controls.
+
+## Reference(s):
+
+- [Setup guide](references/setup.md)
+- [Wickworks repository](https://github.com/psyb0t/docker-wickworks)
+- [Wickworks OpenClaw plugin](https://github.com/psyb0t/docker-wickworks/tree/main/.agents/plugins/wickworks)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+- [Wickworks on ClawHub](https://clawhub.ai/psyb0t/skills/wickworks)
+
+## Skill Output:
+
+**Output Type(s):** [JSON]
+
+**Output Format:** [JSON arrays, time series, and structured objects]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [camelCase fields; NaN values are serialized as null.]
+
+## Skill Version(s):
+
+0.7.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

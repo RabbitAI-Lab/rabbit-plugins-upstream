@@ -1,43 +1,55 @@
-## Description: <br>
-Embeddable Fear & Greed Index for crypto dashboards with terminal, JSON, React, HTML, and iframe usage examples. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides an embeddable crypto Fear & Greed Index widget and shell helper for dashboards, trading apps, and agent workflows using Strykr PRISM data.
 
-## Publisher: <br>
-[nextfrontierbuilds](https://clawhub.ai/user/nextfrontierbuilds) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[nextfrontierbuilds](https://clawhub.ai/user/nextfrontierbuilds)
 
-## Use Case: <br>
-Developers, dashboard builders, and agent users can fetch or embed crypto Fear & Greed sentiment data for trading dashboards, newsletters, portfolio tools, and market-sentiment workflows. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on a third-party Strykr PRISM endpoint and optional hosted widget/CDN examples. <br>
-Mitigation: Install only when the endpoint and hosted embeds are trusted, and review availability, privacy, and dependency expectations before production use. <br>
-Risk: The shell script expects curl and jq to be available. <br>
-Mitigation: Confirm these command-line tools are installed in the agent runtime before using the script. <br>
-Risk: Broad market-sentiment triggers may activate the skill in contexts where crypto Fear & Greed data is not intended. <br>
-Mitigation: Use more specific triggers or invocation guidance when deploying the skill in production agent workflows. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/nextfrontierbuilds/skills/fear-greed) <br>
-- [Strykr PRISM Fear & Greed Endpoint](https://strykr-prism.up.railway.app/market/fear-greed) <br>
-- [Strykr Fear & Greed Widget CDN](https://cdn.strykr.com/fear-greed.js) <br>
+## Use Case:
 
+Developers and external users can use this skill to add crypto market sentiment views to dashboards, trading tools, newsletters, bots, or portfolio apps, and to fetch the current index from a shell command.
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash, JSON, JSX, HTML, iframe, and environment-variable examples; the bundled script can emit terminal text or raw JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses PRISM_URL to select the Strykr PRISM API base URL; the shell script requires curl and jq.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.1.2 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill relies on mutable remote PRISM data and a remote JavaScript embed.
+
+Mitigation: Install only if comfortable with the Strykr PRISM endpoint; prefer the iframe embed for websites, and pin or self-host reviewed JavaScript for sensitive pages.
+
+Risk: The shell helper performs arithmetic on API values after weak validation and does not set network timeouts.
+
+Mitigation: Validate the API value before arithmetic use and add curl timeouts before trusting the helper in automation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/nextfrontierbuilds/skills/fear-greed)
+- [Strykr PRISM API base URL](https://strykr-prism.up.railway.app)
+- [Fear & Greed JavaScript embed](https://cdn.strykr.com/fear-greed.js)
+- [Fear & Greed iframe embed](https://widgets.strykr.com/fear-greed?theme=dark&variant=gauge)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Markdown, Code, Shell commands, Configuration guidance]
+
+**Output Format:** [Terminal text, JSON, Markdown with shell commands, and React/HTML embed snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses PRISM_URL to select the Strykr PRISM API base URL; no API key is documented.]
+
+## Skill Version(s):
+
+1.1.2 (source: server release metadata; artifact frontmatter says 1.1.1 and skill.json says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

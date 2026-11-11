@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# =============================================================================
+# pre-push hook — auto-publish camsnap skill when changes are pushed
+# =============================================================================
+# Install:
+#   ln -sf ../../skills/camsnap/scripts/git-hooks/pre-push .git/hooks/pre-push
+#
+# Or copy this file to .git/hooks/pre-push and make it executable.
+#
+# To skip: git push --no-verify
+# =============================================================================
+
+set -euo pipefail
+
+WORKSPACE="$(git rev-parse --show-toplevel)"
+SKILL_DIR="$WORKSPACE/skills/camsnap"
+AUTOPUBLISH="$SKILL_DIR/scripts/camsnap-autopublish.sh"
+
+# Only run if the camsnap skill changed in this push
+REMOTE_REF="${1:-}"
+LOCAL_REF="${2:-}"
+
+# Check if camsnap files are being pushed
+CHANGED_FILES=$(git diff --name-only @{upstream}..HEAD 2>/dev/null || true)
+if echo "$CHANGED_FILES" | grep -q "^skills/camsnap/"; then
+  echo "[pre-push] CamSnap changes detected, checking for publish..."
+  if [[ -x "$AUTOPUBLISH" ]]; then
+    "$AUTOPUBLISH" || {
+      echo "[pre-push] Auto-publish failed. Push will continue but skill may be out of date."
+      echo "[pre-push] Run manually: cd skills/camsnap && make release"
+    }
+  fi
+else
+  # Even if no direct file changes, check fingerprint
+  if [[ -x "$AUTOPUBLISH" ]]; then
+    "$AUTOPUBLISH" --dry-run 2>/dev/null | grep -q "Changes detected" && {
+      echo "[pre-push] CamSnap has unpublish changes. Running auto-publish..."
+      "$AUTOPUBLISH" || true
+    }
+  fi
+fi
+
+exit 0

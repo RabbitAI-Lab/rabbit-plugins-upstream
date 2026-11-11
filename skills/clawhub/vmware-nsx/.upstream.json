@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vmware-nsx",
   "slug": "vmware-nsx",
   "ownerHandle": null,
-  "version": "1.8.8",
-  "updatedAt": 1784668791826,
-  "contentHash": "9999651f1dc0aa14a45966dc49bbeee0e2e050d71d0cc95580c62b7dbc266028",
-  "fetchedAt": "2026-07-26T18:08:52.171Z"
+  "version": "1.15.3",
+  "updatedAt": 1794205325600,
+  "contentHash": "2cddae1aa218673d45c37cd03fbdcc02a7460b36d6a644980cfc487d1c1283d2",
+  "fetchedAt": "2026-11-11T15:30:58.063Z"
 }

@@ -1,45 +1,56 @@
-## Description: <br>
-Convert static character images into vivid action videos with Jimeng Dream Actor. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts static character images into action videos with Jimeng Dream Actor.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to invoke the dLazy CLI for Jimeng Dream Actor image-to-video generation from prompts and image or video references. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected media files are sent to the dLazy hosted API and media storage for generation. <br>
-Mitigation: Use only prompts and media approved for third-party processing, review dLazy service terms, and avoid sending sensitive or restricted content. <br>
-Risk: The skill requires a dLazy API key and may consume billable credits. <br>
-Mitigation: Prefer scoped organization keys, rotate or revoke keys from the dLazy dashboard when no longer needed, and use dry-run or balance checks before costly runs. <br>
-Risk: A globally installed CLI persists on the local system. <br>
-Mitigation: Use the pinned npx invocation for occasional use and review the CLI source before persistent installation. <br>
+## Use Case:
 
+Creators and developers use this skill to turn a static character image into an animated action video by supplying a prompt and media to Jimeng Dream Actor.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-dream-actor) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [JSON response with generated media URLs or async task status, plus concise guidance for authentication, balance, and execution errors.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload selected prompts and media files to dLazy endpoints and may use billable API credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and local media supplied to the skill are sent to dLazy's hosted API and media storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sending confidential or sensitive media unless its use with the service is approved.
+
+Risk: The security review was partial and did not clearly connect a reported login action to the skill's video-generation purpose.
+
+Mitigation: Review the CLI package and login flow before installing it or authorizing an account.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-dream-actor)
+- [CLI project page (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI package on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Video files, JSON]
+
+**Output Format:** [Generated media URL or saved media file, with JSON task and result metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts a prompt and up to one image or video input; asynchronous tasks can return a task ID before completion.]
+
+## Skill Version(s):
+
+1.3.39 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

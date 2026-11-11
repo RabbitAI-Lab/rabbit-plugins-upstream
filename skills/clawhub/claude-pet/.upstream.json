@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/claude-pet",
   "slug": "claude-pet",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778492335556,
-  "contentHash": "fce0184d31f58fccdb8c444e92810ee7324b52684750cb2913aeaff231993c2f",
-  "fetchedAt": "2026-07-26T19:40:05.969Z"
+  "version": "1.0.1",
+  "updatedAt": 1794308255474,
+  "contentHash": "c6749a300aaa8c4a9f7e0b18b14f64669016a2d800c452081ae2603f808270d5",
+  "fetchedAt": "2026-11-11T15:26:42.462Z"
 }

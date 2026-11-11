@@ -1,45 +1,55 @@
-## Description: <br>
-Image matting tool that separates foreground from background and returns a transparent-background image URL for product image processing, character cutout, and composition. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Image matting tool: separates foreground from background and returns transparent background URL, suitable for product image processing, character cutout, and composition.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to call the dLazy image segmentation CLI for background removal and receive hosted transparent PNG output URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected local media may be uploaded to dLazy's hosted service for processing. <br>
-Mitigation: Use the skill only with media that is approved for remote processing, and avoid passing private files unless that upload is intended. <br>
-Risk: The dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Prefer DLAZY_API_KEY for temporary use when appropriate, and rotate or revoke the key if it may have been exposed. <br>
-Risk: The skill depends on the external dLazy CLI and hosted API availability. <br>
-Mitigation: Review the pinned CLI package before installation and use dry-run or async polling options where they fit the workflow. <br>
+## Use Case:
 
+Developers and content creators use the skill to remove image backgrounds from product or people images and receive a transparent image for composition.
 
-## Reference(s): <br>
-- [Dlazy Imageseg on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-imageseg) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The CLI returns hosted image URLs, and async mode can return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and skill frontmatter) <br>
+Risk: The security summary flags a mismatch between the image-processing purpose and the documented login/authentication commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the authentication and install steps and the linked CLI repository before installing or entering credentials.
+
+Risk: The skill documentation says local image files are uploaded to dLazy media storage for processing.
+
+Mitigation: Only provide images you are authorized to send to the hosted service.
+
+## Reference(s):
+
+- [CLI repository listed in skill metadata](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Images, URLs, JSON]
+
+**Output Format:** [JSON result with a URL to the transparent image asset]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The image asset is hosted by dLazy; local image paths supplied to the CLI are uploaded for processing.]
+
+## Skill Version(s):
+
+1.3.39 (source: server-resolved release; skill frontmatter lists 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

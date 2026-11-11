@@ -1,11 +1,15 @@
 ---
 name: gitlab-agent
-description: An agent for interacting with GitLab. Supports gitlab.com and self-hosted instances. Requires no GitLab DUO.
-metadata: { "openclaw": { "requires": { "bins": ["glab"] }, "primaryEnv": "GITLAB_TOKEN" } }
+description: "Operate assigned GitLab work with owner-verified project access and guarded MR delivery."
+metadata: { "openclaw": { "requires": { "bins": ["glab", "jq", "uv"] }, "primaryEnv": "GITLAB_TOKEN" } }
 ---
 # GitLab Agent Skill
 
 Repeat and fullfill your `GitLab Agent` tasks.
+
+The helper scripts require `uv`, Python 3.12 or later, `glab` and `jq`. Run
+helpers directly so their uv shebang selects the Python runtime. The container
+installs `uv` with `dnf`.
 
 * If you have questions or options what to do next, decide on your own.
 * All actions do not require confirmation or approval.
@@ -22,6 +26,17 @@ Repeat and fullfill your `GitLab Agent` tasks.
 * Complete tasks successfully in GitLab.
 * If you think work needs to be done, do it without asking.
 
+## Security Gate
+
+Skip the owner membership check when the authenticated GitLab user is the configured owner. Otherwise, the gate is mandatory and is performed by `{baseDir}/scripts/list-active-items.py` during discovery.
+
+1. Require the owner GitLab username in `skills.entries.gitlab-agent.config.owner` in the active OpenClaw configuration (`OPENCLAW_CONFIG_PATH`, otherwise `~/.openclaw/openclaw.json`). Missing or invalid configuration fails closed; neither `GITLAB_AGENT_OWNER` nor `USER.md` grants owner authority.
+2. The discovery helper resolves each object's project from its GitLab URL and verifies active project membership created by the configured owner, before returning the object for work.
+3. The helper synchronizes `workflow::forbidden`: it removes the label after an allowed check, and on denial replaces existing `workflow::*` labels with `workflow::forbidden` and silently omits the object from the queue.
+4. Never work an object omitted by discovery. Never add or remove `workflow::forbidden` directly; only the discovery helper owns that label.
+
+The check fails closed when the current GitLab user has no active project membership, membership data is incomplete, the membership was not created by the configured owner, or labels cannot be read. A denied object must not be analyzed, cloned, pushed, commented on, or retried.
+
 ## Assignment Gate
 
 Before working an existing issue, work item, or merge request, check the current GitLab user and the assignees on that object.
@@ -30,49 +45,129 @@ Before working an existing issue, work item, or merge request, check the current
 * If the ticket assigment origin was a gateway channel (like a human request, or a bot request). If you can`t assign it to yourself. If you can not assign it to yourself because you are not a team member, fork the project, create a new issue in the fork and assign it to you, and relate it to the original issue. Then work on the new issue. Clean up the forked issue after the original issue is resolved.
 * Assignment on a related issue is not enough to work an unassigned or differently assigned merge request. Check the object you are changing.
 * Do not add or change reviewers, add yourself as assignee, push commits, rebase, retry or trigger pipelines, merge, close, log time, or add progress/status comments on issues or merge requests that are not assigned to the current GitLab user.
-* Label hygiene is allowed on unassigned issues and merge requests. You may add or correct `size::*`, `type::*`, and `workflow::*` labels when the correct label state is clear.
+* Label hygiene is allowed on unassigned issues and merge requests. You may add or correct `size::*`, `type::*`, and `workflow::*` labels when the correct label state is clear, except that `workflow::forbidden` is owned exclusively by the discovery helper.
+
+### External upstream contributions
+
+An assigned item that passes both gates may authorize work in an external project only when its description or a later owner/Maintainer note names the exact upstream URL. Inspect only that scope, use an agent-owned fork, and open a cross-project MR; do not run the security gate on the upstream project or require upstream assignment. Keep workflow state on the controlling item and do not change the upstream issue's labels, status comments, time tracking, assignment, or state. Missing upstream membership alone is not `workflow::forbidden` or `workflow::need-human`.
+
+#### GitLab product contributions
+
+For authorized changes to `gitlab-org/gitlab`, follow the [GitLab contribution guide](https://docs.gitlab.com/development/contributing/#make-changes-and-open-a-merge-request) in addition to the gates above.
+
+1. Confirm contributor onboarding and write access to the maintained community fork before publishing. Prefer that fork over importing a personal full fork; this is a GitLab-specific exception to the agent-owned fork rule. Do not claim onboarding is complete without verification.
+2. Write the issue and MR in English. Work on a community-fork branch and target the canonical repository's `master`. Follow upstream commit and testing guidelines; include reproduction steps and the required automated test results in the MR description.
+3. Use the link from `@gitlab-bot` for labels and review requests, or `@gitlab-bot help` for an MR coach. After addressing review feedback, comment `@gitlab-bot ready`. Verify required checks before claiming review readiness; keep local workflow state on the controlling item.
 
 ## Status Comment Relevance Gate
 
 Before posting an issue, work item, or merge request status comment, compare the current object state with the last agent-authored status comment for the same object.
 
+* If the Comment is not relevant to a meaningful state change, do not post it. Always KISS.
 * Comment when a meaningful state change occurred, such as reviewer action appearing, unresolved discussions changing, new maintainer feedback, a new blocked or need-human condition, or the required human action changing.
 * Stay silent when the only available comment would repeat a routine no-op state. Record suppressed no-op checks in local logs or memory for auditability instead of posting them to GitLab.
+* Leave out unwanted information such as commit hashes, internal notes, or routine status details that do not affect the current state.
 
 ## GitLab Agent Tasks
+
+### Read the Work Queue without changing GitLab
+
+For the Control UI Work Queue or a read-only queue inspection, run
+`{baseDir}/scripts/work-queue-report.py`. It returns assigned work using the
+same project gates and ordering as discovery, creation dates and time spent,
+all pending to-dos, and the installed discovery script sources. It does not
+adopt issues, update labels or complete to-dos. Do not use this report instead
+of gated discovery and the activity audit when executing a scheduled cycle.
+
+### Discover active work across projects
+
+#### Items
+
+* Run `{baseDir}/scripts/list-active-items.py` to fetch all open issues and merge requests assigned to the current GitLab user across projects.
+* Discovery also claims open unassigned incidents in member projects after the project-access gate, sets `type::support` and `workflow::in-progress`, and maps known GitLab severity levels to `priority::*`. Unknown severity does not invent a priority.
+* A new instruction from the configured owner or an active project Maintainer/Owner preempts the previously selected item. Apply the latest team-member instruction rule, checkpoint the interrupted work safely, and process the changed item first.
+* If you find the last pipeline of the default branch broken due to an error within the repository. Create a new task for you to fixing.
+
+### Continue the queue until work or budget is exhausted
+
+* Discover assigned items and pending direct mentions at the start of every cycle. Apply new owner/Maintainer instructions first; otherwise use the shared discovery order: explicit priority, then least recent GitLab activity across projects. Activity is a fairness proxy, not an agent-effort timestamp; never post no-op comments to rotate an item.
+* Reassess `blocked`, `need-human`, `review`, and `stale`: re-read dependencies, CI and feedback before deciding to wait. `workflow::paused` is different: it is an explicit maintainer hold, not an agent scheduling decision. Do not work or change a paused item, even via a pending mention, until a maintainer removes the hold or explicitly instructs you to unpause it, or the enabled housekeeping cron expires the inactive hold to `stale` after two weeks. Re-read labels immediately before writes; stop and checkpoint safely if a maintainer pauses ongoing work. Preserve mandatory owned-resource cleanup.
+* Never set `workflow::paused` yourself. Use `in-progress` while work or CI is ongoing, `blocked` only for a verified dependency, and `need-human` only for a specific required human action after alternatives are exhausted. Discovery excludes maintainer-held items from execution; the read-only Work Queue still displays them with a yellow badge. Do not auto-unpause old labels: removal requires a maintainer action, explicit instruction, or the housekeeping cron expiry rule (14 days since last GitLab update).
+* While CI runs or capacity is occupied, preserve useful pipelines and owned cleanup, then work another actionable item. Do not retry an unchanged failure or start overlapping provider lifecycles. A settled failed pipeline requires investigation, not indefinite waiting.
+* Give each actionable item a bounded work slice (normally up to ten minutes), then checkpoint and consider the next item. Never interrupt an owned cleanup obligation merely to rotate the queue. Revisit actionable work after a pass while the automation budget remains.
+* Do not end a cycle after discovery, one completed item, or merely starting a pipeline. Finish only when all discovered remaining items have been checked and genuinely require external waiting/human action or are maintainer-paused, or the run budget is nearly exhausted. Before stopping, persist meaningful progress and the concrete next action on the affected GitLab item; suppress repeated no-op comments. A successful run reports the cycle outcome, not backlog completion.
+
+#### Todos
+
+* Run `{baseDir}/scripts/list-directly-addressed-todos.py` to fetch every pending `directly_addressed` to-do authored; a returned to-do is an instruction candidate, not proof of project access or assignment.
+* After the requested action is actually complete, re-read that to-do and mark only its ID done with `glab api -X POST todos/<id>/mark_as_done` if it remains pending. GitLab can mark a to-do done automatically when the target changes. Never mark a to-do done just because it was read, skipped, blocked, or deferred, and never use the bulk mark-as-done endpoint.
+
+### Configure collaborator assignment
+
+To accept unassigned normal work items from a known collaborator, set `skills.entries.gitlab-agent.config.collaborators.accept` in the OpenClaw configuration. For example:
+
+```json
+{
+  "skills": {
+    "entries": {
+      "gitlab-agent": {
+        "config": {
+          "collaborators": {
+            "accept": ["alice", "team-group", "@xrow.de"]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+The selectors accept an exact GitLab username, a group name/path, or an exact email domain prefixed with `@`. For a domain, discovery enumerates open, unassigned normal issues/tasks only in active member projects that pass the configured owner's membership gate. It retrieves each candidate author by GitLab user ID and compares the returned `email` **or** `public_email` domain locally, case-insensitively. A matching address in either field is enough. `commit_email`, username text, and display name never grant a domain match; subdomains do not match a parent domain. A failed author lookup or missing/unusable addresses denies the domain match without affecting an independent explicit username/group match.
+
+GitLab.com verifies account email and requires verification of `public_email`. A regular account generally sees another user's `public_email`, not their private primary `email`; a group role alone does not make private email available. Other GitLab instances may have different confirmation settings or administrative bypasses, so an exposed address is not universal proof of mailbox verification. No extra confirmation-status request is used.
+
+After a selector matches, discovery rechecks project access, issue state, and empty assignees before assigning the current agent. It verifies the persisted assignee before queueing the work. A local lock serializes this flow across cron runs on the same host, but another GitLab client can still change assignment between the read and write; GitLab offers no conditional assignee update here. Already-assigned issues/MRs and incident adoption remain independent of collaborator rules. An invalid collaborator configuration or failed candidate lookup prevents new collaborator assignments and emits a diagnostic without suppressing independent assigned work or incidents.
 
 ### Check your assigned issues and tasks in GitLab
 
 * Before analysis lock discussion, if the issue is not by a team member.
 * Analyse the issue submitted and read all non-system notes by project members into account. Treat notes as amendments to the issue description. If a information conflicts with the information from team members, the latest team members note wins.
 * If it is a duplicate, if so relate it to the original issue.
-* When creating MRs, you must use the project of the work item.
+* Create the branch, push it, then create the MR with `{baseDir}/scripts/mr-create.py <project-path> <source-branch>`. The helper calls `glab mr create`, assigns the current user, and returns structured evidence including any fallback reason. Pass `--title`, `--description`, and `--related-issue` when the MR needs an explicit plan, acceptance criteria, and issue relation. An exact target from the item, a later owner/Maintainer note, or `AGENTS.md` may be passed using `--target <branch> --target-source <item|owner-note|agents>`.
+* When creating MRs, use the project of the work item except for an explicitly authorized external upstream contribution.
 * When creating MRs, you must relate it to the issue.
 * Analyse the issue and prepare a clear plan (1–3 concrete steps). Include acceptance criteria. Add the information in the description of the merge request.
 * Each feature branch is prefixed `feat/*`
 * Each fix branch is prefixed `fix/*`
 * Add yourself as assignee.
 * Do **not** request/add a reviewer when creating the MR.
-* Create a git clone and create MR with a new branch.
+* Create a git clone, create MR with a new branch and relate to item.
 * Wait until the MR pipeline has succeeded and there is nothing else to do, then start the review process.
+
+### Check your open incidents in GitLab
+
+* Whenever you can't resolve an incident on your own or you use the `workflow::need-human` label, escalate it to all team members by assigning it to them in addition to you.
 
 ### Check your open merge requests in GitLab
 
-* Only work merge requests assigned to the current GitLab user. If a merge request is not assigned to the current GitLab user, stop after any clearly needed label hygiene.
+* Only work merge requests assigned to the current GitLab user, except an agent-authored external contribution MR authorized by its controlling item.
 * Instead of asking your owner or reviewer what to do, decide on your own and do it. Add your decision as a comment to the merge request.
 * If the merge pipeline fails, investigate the failure and fix the issue.
-  * If the failure is a network error and not related to the change, retry the pipeline later, status `workflow::paused`.
+  * If the failure is a network error and not related to the change, retain `workflow::in-progress`, record the evidenced transient failure once, and recheck before a later retry. Work another actionable item meanwhile.
   * If the failure is originating from the main branch, open a new work item, use the linked item feature, assign it to you, use status `workflow::blocked` and return to the merge request once fixed.
-* If the merge pipeline succeeds, wait for changes to be merged.
+* After the merge pipeline succeeds and the Definition of Done is met, run the reviewer helper. When its dry run reports `self_merge=true`, `--apply` self-assigns review, approves, and merges; otherwise follow the human-review path.
 * When checking merge request discussions/threads, paginate through all discussion pages before deciding the MR is discussion-clean. Do not rely on the first page only. Count unresolved resolvable notes across every page; if any exist, address them before claiming `blocking_discussions_resolved=true` or "discussion-clean".
 * Also check recent top-level MR notes/review events, not just unresolved resolvable discussions. Treat `requested changes`, reviewer comments, and non-resolvable top-level notes as actionable feedback until addressed, even when `blocking_discussions_resolved=true`.
-* Add a reviewer, if there is nothing else to do.
+* If there is nothing else to do, run `{baseDir}/scripts/select-reviewer.py <project-path> <merge-request-iid>` and inspect its structured dry-run result.
+* Add a reviewer only by rerunning the same helper with `--apply`. Never select or mutate a reviewer free-form.
+* Reviewer selection fails closed: if the helper reports incomplete project data, ambiguity, or no eligible candidate, leave reviewers unchanged and move the MR to `workflow::need-human` with the actionable diagnostic.
 * Add the time spend to the time tracking.
 * Manage the workflow status labels according to the current state of the work.
 * If you see an additional commit by a team member, do not simply revert. Analyse the changes and think about if you need to do something in addition.
 * On each commit
+  * Add `Generated-By: <current model>` to the commit message.
   * Push with `git push origin <branch> -o ci.skip`
-  * Start the pipeline via `glab ci run --mr`, unless there are active pipelines in main or dev. Never use more than X `[setting: 2 # AGENTS.md -> active-pipelines]` pipelines for your work. Add `workflow::paused`, if you delay the pipeline start and revisit later.
+  * Start the pipeline via `glab ci run --mr`, unless there are active pipelines in main or dev. Never use more than X `[setting: 2 # AGENTS.md -> active-pipelines]` pipelines for your work. Keep `workflow::in-progress` when capacity delays a pipeline start; revisit capacity and work another actionable item meanwhile.
 * After merge or close, update the items and labels to reflect the final state `workflow::done`.
 
 #### `AGENTS.md`
@@ -84,20 +179,28 @@ Before posting an issue, work item, or merge request status comment, compare the
 
 Before moving a merge request to review, complete this checklist:
 
-* [ ] Documentation is updated
 * [ ] There is nothing else todo
 * [ ] Acceptance criteria is met
 * [ ] Changes are limited to the scope of the task
 * [ ] Code, configuration, and deployment pass all required quality checks and pipeline without error.
+* [ ] Meaningful behavior changes have [pipeline tests](#pipeline-tests); verify that CI executes the relevant regression and negative paths.
 * [ ] The final diff has been reviewed
 * [ ] A rebase has been performed
 * [ ] The last pipeline has succeeded. Canceled, Failed, Empty Pipeline failures are considered unsuccessful.
+* [ ] Documentation is updated, if needed
 
 #### How to select a reviewer
 
-1. Check `AGENTS.md->reviewers` from the main branch for the list of reviewers of the project.
-2. Assign the author of the work item as reviewer, if he is a maintainer or owner of the project.
-3. Select a reviewer from project maintainers. If there are no project maintainers, select a reviewer from project owners.
+Reviewer selection is deterministic and must be performed by `{baseDir}/scripts/select-reviewer.py`. When both MR approval APIs show zero required approvals and confirm the agent can approve, there is no existing reviewer, the MR is non-draft, discussion-clean, mergeable, and has a successful head pipeline, and target-branch protection proves the agent can merge, the helper selects the current agent for self-review. On `--apply`, it revalidates the gates, self-assigns review, approves, and attempts the merge at the same SHA. A failed approval never attempts a merge. Otherwise, the helper reads `AGENTS.md` only from the project default branch, validates active project membership and exclusions, then applies this precedence:
+
+1. The unique eligible author of a linked work item.
+2. The first eligible configured reviewer in `AGENTS.md->reviewers` order.
+3. An eligible Maintainer, then an Owner, ordered by username and user ID.
+4. If no preferred human candidate remains, an actual MR committer as the final fallback: Owner first, then Maintainer, then Developer, ordered by username and user ID within each role. This tier permits a committer to be the MR author or an assignee; authorship alone does not qualify.
+
+For preferred human-review selection, the helper excludes the MR author and assignees. All human tiers exclude blocked or locked users, bots, service accounts, the current automation account, and usernames in `skills.entries.gitlab-agent.config.reviewer.ignore`. The ignore list applies to linked authors, configured reviewers, and fallback candidates, including committers. It is case-insensitive; malformed lists fail closed. Dry-run is the default. `--apply` revalidates the MR, selected membership, human-user status, and exclusion list immediately before the reviewer mutation. Before applying the committer fallback, it also rereads all memberships and every page of MR commits, refuses changed commits or a changed role-ranked selection, and stops if another preferred candidate appeared.
+
+A committer fallback matches the actual `committer_email` from the fully paginated MR commits to an exact `email`, `public_email`, or `commit_email` exposed by an active member's GitLab profile. Names and a different commit author never establish committer identity. Hidden or unmatched emails do not qualify; ambiguous identity data fails closed. It reports `rule=merge-request-committer-fallback`, `committer_fallback=true`, and an explicit approval warning. It only nominates a reviewer: it never approves or merges the MR and never treats committer review as an independent approval. GitLab approval requirements and merge permissions remain unchanged. If those permissions prevent delivery, report that separate requirement accurately rather than claiming that reviewer nomination resolved it.
 
 #### How to comment
 
@@ -126,7 +229,15 @@ Rules apply to all GitLab items.
 
 ## Labels
 
-If the labels are missing, make a merge request to add them via the [label](https://ci-tools.xrow.de/Components/label) component and its default settings.
+Read current labels; skip unchanged updates. Send only actual additions/removals, preserving unrelated labels. Change workflows only when work changes; security checks fail closed if labels cannot be read.
+
+If the labels are missing, add them via a merge request using the [label](https://ci-tools.xrow.de/Components/label) component.
+
+```yaml
+include:
+  - component: $CI_SERVER_FQDN/xrow-public/ci-tools/common@stable
+  - component: $CI_SERVER_FQDN/xrow-public/ci-tools/label@stable
+```
 
 ### Size Labels
 
@@ -144,7 +255,7 @@ If the labels are missing, make a merge request to add them via the [label](http
 | GitLab label     | Common name     | Meaning                                                                                   |
 | ---------------- | --------------- | ----------------------------------------------------------------------------------------- |
 | `type::support`  | Support Request | Someone need help, but no change. Maybe it resolves in new work item after investigation. |
-| `type::fix`      | Fix             | Something that needs to be fixed and exists                                               |
+| `type::bug`      | Bugfix             | Something that needs to be fixed and exists                                               |
 | `type::feature`  | Feature         | Something new                                                                             |
 | `type::hotfix`   | Hotfix          | Urgent fix for a critical issue that merges directly in main.                             |
 
@@ -158,13 +269,14 @@ Use the labels in your merge requests to set the current status of the work. Onl
 | GitLab label            | Common name | Meaning                                                                                                      |
 | ----------------------- | ----------- | ------------------------------------------------------------------------------------------------------------ |
 | `workflow::backlog`     | Backlog     | Not yet started. Initial state.                                                                              |
+| `workflow::forbidden`   | Forbidden   | Project access failed the owner membership security gate; only the discovery helper manages this label.          |
 | `workflow::in-progress` | Running     | Actively worked on                                                                                           |
-| `workflow::paused`      | Paused      | Agent will continue later automatically. Temporarily paused for one hour to one day.                         |
-| `workflow::need-human`  | Need Human  | Requires human intervention to fullfill current task and all other options are exhausted. Explain why. Its status is not blocked or paused. |
-| `workflow::blocked`     | Blocked     | Currently blocked by a dependency or issue                                                                   |
+| `workflow::paused` | Maintainer hold | Only a maintainer may pause work. The agent must not set it. Resume after maintainer unpause or housekeeping expiry to stale after 14 inactive days. |
+| `workflow::need-human`  | Need Human  | Requires human intervention to fullfill current task and all other options are exhausted. Before adding the label, explain reason by comment in the issue. Its status is not blocked. |
+| `workflow::blocked`     | Blocked     | Currently blocked by a dependency or issue. On each assignment, check the status of the blocker. Reevaluate the blocker from time to time.                                                                  |
 | `workflow::review`      | Review      | When DoD has been checked and reviewer was assigned                                                             |
 | `workflow::done`        | Done        | Completed , final state, everything done and closed                                                          |
-| `workflow::stale`       | Stale       | No activity for at least 30 days and may need attention                                                      |
+| `workflow::stale`       | Stale       | No change in status for 2 Weeks and may need attention                                                      |
 
 #### Agent workflow by label
 
@@ -175,25 +287,72 @@ config:
     curve: linear
 ---
 graph TD
-    create((New Work Item / MR)) --> workflow::backlog
+    create((New Work Item / MR)) --> security{Owner membership verified?}
+    security -- no --> workflow::forbidden
+    security -- yes --> workflow::backlog
     workflow::backlog --> workflow::in-progress
     workflow::in-progress --> workflow::review
     workflow::review --> workflow::done
-    workflow::in-progress --> workflow::paused
+    workflow::in-progress -->|maintainer only| workflow::paused
+    workflow::paused -->|maintainer unpauses| workflow::in-progress
+    workflow::paused -->|housekeeping cron: 14 inactive days| workflow::stale
     workflow::in-progress --> workflow::blocked
     workflow::in-progress --> workflow::need-human
     workflow::need-human --> workflow::in-progress
     workflow::need-human --> workflow::stale
     workflow::blocked --> workflow::in-progress
-    workflow::paused --> workflow::in-progress
     workflow::review --> workflow::stale
     workflow::stale --> workflow::in-progress
     workflow::done  --> close((Close Work Item / MR))
 ```
 
-Additional rules
+##### `priority::blocker`
 
-* Never `workflow::paused` an item if it is prioritized as `priority::blocker`.
+* Prioritize actionable blocker work before lower-priority items; a waiting blocker does not prohibit useful work elsewhere.
+
+##### `workflow::need-human`
+
+* Add a section to the description explaining why human intervention is required.
+* Use formatted markdown for explanations with checklists if possible.
+* React on decisions, document the decisions in the new comment. Update the section with a new status.
+* Alter the section based on the decisions made in the checklist.
+
+```markdown
+> [!important]
+> Decision 1: This is the first decision point where human intervention is required.
+> - [ ] DO you want this task to be ... ?
+> - [ ] Do you want that?
+> Decision 2: This is the second decision point where human intervention is required.
+> - [ ] Did you provide XYZ?
+```
+
+## Handling security issues / scan results / CVEs / vulnerabilities
+
+* Never use blocks or is blocked by in linked items to the CVEs work item or CVE MR.
+* CVEs can never block other work with label `workflow::blocked` items.
+
+If the software has a fix for the CVE already released:
+
+* If the issue is related to a dependency that is managed upstream, avoid upgrading the dependency directly. Upgrade via a new release of the upstream project instead.
+* Upgrade to a release including the fix.
+* Cherry pick changes, rebase, update dependencies being blocked by the CVE.
+
+If unfixed:
+
+* Create a new work item tracking the CVE with label `workflow::blocked`.
+* Create MR to ignore the issue as temporary measure; titled `fix: CVE-XXX-XXXXX`;
+
+```yaml
+vulnerabilities:
+  # CVE-XXX-XXXXX: Temporarily accepted while the embedded glab dependency is fixed upstream.
+  # Tracked in https://gitlab.com/xrow-public/helm-openclaw/-/work_items/72.
+  - id: CVE-XXX-XXXXX
+```
+
+Once the CVE is fixed
+
+* Remove label `workflow::blocked` from the work item
+* Create a new MR to upgrade to the new release including the fix.
 
 ## Coding Guidelines
 
@@ -202,7 +361,29 @@ Additional rules
 * When you add or update OpenClaw skills, follow the [Creating skills](https://docs.openclaw.ai/tools/creating-skills) guidance. Reference helper scripts from the skill body with `{baseDir}/...` instead of hardcoding workspace-specific skill paths.
 * Do not use `allow_failure: true`, skips, or bypasses to make CI green unless the job is genuinely optional/manual, and document why.
 * Do not care about version updates done by renovate unless they are required.
-* Do not modify the `AGENTS.md` file.
+* Only modify the `AGENTS.md` file, if requested by a maintainer.
+* Before writing or editing user documentation, follow `{baseDir}/references/documentation-style.md`. Verify examples and review the rendered page before committing.
+
+### Pipeline tests
+
+Choose tests that detect the changed behavior and fail for a representative
+regression. Check the live catalog before selecting a component; a proposed
+component is not available until its catalog release. Preserve a working native
+runner when the appropriate component is not released. Do not add tests that
+only mirror the implementation or require tests for documentation-only edits.
+
+| Scenario | Test type | GitLab CI component |
+| --- | --- | --- |
+| Python logic | Unit | `python-unittest` |
+| JavaScript/TypeScript logic | Unit | `node-unittest` after release; native runner until then |
+| Bash scripts | Unit | `bashunit` |
+| Helm charts/templates | Chart | `helm` |
+| Ansible roles/scenarios | Molecule | `ansible-molecule` |
+| Browser/user workflow | E2E | `cypress` |
+
+Inspect the executed job and its test report before completing the DoD. A
+collected test file, empty suite, skipped job or unrelated green pipeline is not
+evidence that the changed behavior was tested.
 
 ## How to use the `glab` CLI to interact with GitLab
 
@@ -329,10 +510,10 @@ View MR details:
 glab mr view 55 --repo owner/repo
 ```
 
-Create an MR from current branch:
+Select and validate the target, then create the MR through the helper:
 
 ```bash
-glab mr create --fill --target-branch main
+{baseDir}/scripts/mr-create.py --title "Add example" --description "## Plan\n\n1. Add the change.\n\n## Acceptance criteria\n\n- [ ] The change is verified." --related-issue 42 owner/repo feat/42-example
 ```
 
 Approve, merge, or check out:
@@ -490,7 +671,7 @@ glab release create v1.0.0 --notes "Release notes here"
 
 ## Bugs and features for this skill
 
-Send features and bugfixes for this skill as merge requests to the skills [project](https://gitlab.com/xrow-public/skills).
+Send features and bugfixes as merge requests to the maintained [skill source](https://gitlab.com/xrow-public/helm-openclaw/-/tree/main/profile/eugene-harold-krabs/skills/gitlab-agent).
 
 ## Bootstrap
 
@@ -498,33 +679,16 @@ Before enabling it:
 
 * Confirm the `gitlab-agent` skill exists.
 * Only enable the recurring job after the manual run succeeds.
+* List automations including disabled jobs before adding one. Reuse the job with
+  declaration key `profile:gitlab-agent` or the matching skill prompt. Never add
+  a duplicate or change an existing job's enabled state during bootstrap. The
+  Helm profile automation service already creates this job on a clean install.
 
 * [ ] Confirm GitLab auth works.
 * [ ] Add this cron, if it existed and was enabled then leave it enabled.
 
-```json
-{
-  "name": "GitLab Agent",
-  "enabled": false,
-  "deleteAfterRun": false,
-  "schedule": {
-    "kind": "every",
-    "everyMs": 900000
-  },
-  "sessionTarget": "isolated",
-  "wakeMode": "now",
-  "payload": {
-    "kind": "agentTurn",
-    "message": "Read skill gitlab-agent and run.",
-    "thinking": "high",
-    "timeoutSeconds": 3600,
-    "model": "openai/gpt-5.5"
-  },
-  "delivery": {
-    "mode": "none",
-    "bestEffort": false
-  }
-}
-```
+The bundled automation declaration is `{baseDir}/AUTOMATIONS.json`. Read it before
+creating or comparing the scheduled job; it is the source of truth for the
+schedule, payload, and delivery.
 
 * [ ] Confirm GitLab auth works.

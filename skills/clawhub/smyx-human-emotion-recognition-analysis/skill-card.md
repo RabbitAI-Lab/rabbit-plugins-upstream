@@ -1,46 +1,57 @@
-## Description: <br>
-Analyzes frontal face images or videos with a cloud visual AI service to produce emotion recognition results, abnormal emotion flags, report links, and history lookups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes frontal-face images and videos to estimate emotional expressions, intensity, and anomalies, returning structured reports for human-computer interaction and monitoring workflows.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Developers and agents use this skill to analyze user-provided face media for structured emotion recognition reports and report-history retrieval. Results are for reference only and should not be treated as psychological counseling or clinical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Face images or videos and inferred emotion or mental-state data are sent to the publisher's cloud service. <br>
-Mitigation: Use only with appropriate consent and authorization, and avoid uploading sensitive media unless cloud processing is acceptable. <br>
-Risk: Report history is account-linked and may retrieve prior cloud analysis results for the resolved identity. <br>
-Mitigation: Review history output before sharing it, and segregate or clear workspace identity data when reports should not be reused across sessions. <br>
-Risk: The skill may store account tokens in a local workspace SQLite database. <br>
-Mitigation: Restrict workspace access and remove local token/database files when decommissioning or transferring the workspace. <br>
+## Use Case:
 
+Developers and product teams use the skill to analyze frontal-face images or video for emotion estimates, intensity, anomaly flags, and structured reports in human-computer interaction and monitoring workflows. Its results are informational and do not replace professional psychological assessment.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-human-emotion-recognition-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/18072937735) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API reference](references/api_doc.md) <br>
-- [Shared analysis API reference](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON analysis reports with optional report links and saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local image/video files or public media URLs, supports basic/standard/json detail levels, and can query cloud report history.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Shared account handling can mix users’ sensitive reports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Postpone shared-user deployments until sender isolation is fixed, and provide account deletion controls.
+
+Risk: The no-analysis option may still allow facial media uploads.
+
+Mitigation: Give users a clear upload and enrollment notice, and postpone use with private facial media until the export-only flag is fixed.
+
+Risk: Sensitive media and credentials may be exposed; provider retention and server-side isolation are unverified.
+
+Mitigation: Protect stored tokens, restrict credential-bearing requests to approved HTTPS origins, disable wire logging, and confirm provider retention and isolation before use.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-human-emotion-recognition-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured emotion analysis results and reports, including intensity estimates, anomaly flags, and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts image or video input; results are estimates of visible emotional expression.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

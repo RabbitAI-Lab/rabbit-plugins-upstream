@@ -54,7 +54,11 @@ Scope is agent-specific: default to a global/user install so PixelLab works in e
   - Antigravity IDE: **Agent panel ... → MCP Servers → Manage MCP Servers → View raw config**.
   - Antigravity CLI: `/mcp` for status, reload, and logs; use its `mcp_config.json` for manual server definitions.
 
-  Use Antigravity's global `mcp_config.json` opened through its UI, or workspace `.agents/mcp_config.json` when the user explicitly wants project scope. Remote servers require `serverUrl` — never use legacy `url` or `httpUrl`. Token-free preview (display only; `<PIXELLAB_SECRET>` is a placeholder, not documented environment-variable interpolation):
+  Use Antigravity's global `mcp_config.json` opened through its UI, or workspace `.agents/mcp_config.json` when the user explicitly wants project scope.
+
+  Remote servers require `serverUrl` — never use legacy `url` or `httpUrl`.
+
+  Token-free preview (display only; `<PIXELLAB_SECRET>` is a placeholder, not documented environment-variable interpolation):
 
   ```json
   {
@@ -95,12 +99,13 @@ Verify only after the user approves a no-credit check; never spend credits durin
 - **MCP**: `get_balance` when tools are exposed — verifies MCP auth without generating.
 - **REST v2**: `GET /balance` with `Authorization: Bearer <PIXELLAB_SECRET>` — never print auth headers or full JSON.
 - **Tool availability**: list or identify PixelLab MCP tools (match by suffix if prefixed) without generation calls.
+- **Old Game Art project file**: if the active project root has Game Art's `pixellab.json`, offer to rename it to `pixellab-pip-style.json` (a write: ask for this rename itself, even when the user asked to get the project ready; if both exist, ask which to keep). Pip never reads the old name.
 
 Check `PIXELLAB_SECRET` presence without outputting, logging, measuring, transforming, or inspecting the value — test only whether it is non-empty and emit a status word such as `set`/`not set`, never the value, and pass the value only to the approved check. For a readiness note before mode selection, check only whether the live `PIXELLAB_SECRET` environment variable is visible to the current process and whether PixelLab MCP tools are already visible in this session (already-loaded tools only — no config inspection); do not inspect project-local secret files, broad config directories, or recursive paths.
 
 After the check, report success/failure, the surface checked, and whether credentials were found; summarize any balance without raw headers or full JSON. On failure, name the likely layer: missing env var, app not reloaded, auth rejected, network failure, endpoint unavailable, or tool mismatch.
 
-**Never scan broad locations.** Do not scan home, auth, shell history, keychain, credential, config, project, or repository directories, and do not recursively search for token/secret/auth/env names. Inspect credential-bearing config only at exact paths the user named or approved after you explain why. Non-secret readiness checks may inspect only active-workspace files needed for the task.
+**Never scan broad locations** — follow `credentials.md` (Where to look, and where not to). Non-secret readiness checks may inspect only active-workspace files needed for the task.
 
 ## 6. Output
 
@@ -121,11 +126,17 @@ Compact templates (`[account step]` = the account-step sentence from section 2; 
 - **Manual**: "Open `https://www.pixellab.ai/mcp` and follow PixelLab's instructions. I will stop here."
 - **Manual with auth**: "Open `https://www.pixellab.ai/mcp` and follow PixelLab's instructions. If it asks for auth, [account step] I will stop here."
 
-Report outcome briefly: detected mode; readiness (ready, partially ready, not configured, blocked, unknown); credential location type (env var, app secret setting, secret store, literal config value, or not found — never the value); next safe step; any proposed write with destination and token handling; reload need; and what the no-credit check verified.
+Report outcome briefly: detected mode; readiness (ready, partially ready, not configured, blocked, unknown); credential location type (env var, app secret setting, secret store, literal config value, or not found — never the value); next safe step; any proposed write with destination and token handling; reload need; and what the no-credit check verified. Outside Manual mode, end with one optional note: some local helpers, such as image checks and animation fixes, need Python and extra packages; PixelLab generation works without them. Mention only; never check for or install them during setup.
 
 ## Setup guardrails
 
 - Do not scrape browser storage or session cookies, or use website/Supabase/browser session tokens for REST or MCP.
 - Do not call undocumented internal endpoints (website or Aseprite extension) as setup verification.
-- Do not claim SDK support, MCP tool availability, pricing, limits, or endpoint behavior without checking when those facts matter.
+- Check SDK support, MCP tool availability, pricing, limits, or endpoint behavior before claiming them when those facts matter.
 - Do not require Pip-specific behavior from apps that only support generic MCP or REST.
+
+## Migrating an existing Game Art installation
+
+When the user is replacing Game Art or known old task/project instructions are present, inspect only the named installation/project paths, read-only first. Identify old core/task skills, optional task-agent configs, and recognizable installed `AGENTS.md`/host instruction blocks that say never to ask or bypass Pip. A lower-priority skill cannot neutralize higher-priority installed instructions. Show a proposed scoped removal/replacement and preserve user edits; obtain explicit approval before deleting old components or editing those instruction blocks. Ambiguous ownership blocks cleanup, not a reason to erase the whole file. No silent coexistence or automatic migration.
+
+Rename the old project file as in step 5. Before the first paid migrated run, show the effective style (`project-style.md`): Pip merges nested style settings, has no unstored house defaults, and promises no exact visual match, so offer to pin the user's approved values or anchors and resolve any legacy caps (`project-style.md` → Legacy limits). Do not copy credential values: configure the existing `PIXELLAB_SECRET`/host secret mechanism if needed. Resume old jobs from recorded IDs before replacing a generation. Human migration examples: `../../../docs/merge/migration.md` (optional background; these operational boundaries apply even without that file).

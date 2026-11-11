@@ -1,47 +1,56 @@
-## Description: <br>
-Active grid levels, spacing, and next buy/sell prices per pair. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns active grid levels, spacing, and next buy/sell prices per pair.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve real-time grid trading levels, grid spacing, and next buy or sell prices for supported cryptocurrency pairs. It supports manual grid inventory management, dashboards, and reporting workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an EVM wallet private key for paid x402 requests. <br>
-Mitigation: Use a dedicated wallet with limited USDC, store EVM_PRIVATE_KEY only in secure secret storage, and avoid logging or hardcoding it. <br>
-Risk: Automatic payment authorization can spend funds without enough user control. <br>
-Mitigation: Require explicit approval and a maximum amount before each paid call. <br>
-Risk: The security verdict is suspicious because key-safety and user-control warnings are insufficient. <br>
-Mitigation: Review the skill carefully before installation and confirm the wallet, payment, and approval behavior before deployment. <br>
+## Use Case:
 
+Agents and operators use this skill to retrieve current grid levels, spacing, and buy/sell prices for trading pairs. This supports manual inventory management and reporting or dashboard integration.
 
-## Reference(s): <br>
-- [Grid Levels signal homepage](https://apexrunner.ai/signals/grid-levels) <br>
-- [Pricing tier lookup](https://apexrunner.ai/signals/my-pricing) <br>
-- [grid-health related signal](https://apexrunner.ai/signals/grid-health) <br>
-- [grid-health-score related signal](https://apexrunner.ai/signals/grid-health-score) <br>
-- [live-fill-rate related signal](https://apexrunner.ai/signals/live-fill-rate) <br>
-- [ClawHub skill page](https://clawhub.ai/kynto2001-ctrl/skills/grid-levels) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Guidance] <br>
-**Output Format:** [JSON response data with Markdown usage guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY for x402-authenticated paid requests using an EVM wallet with USDC on Base mainnet.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Each endpoint request incurs a USDC payment, and request volume can increase total charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the current price and monitor request volume before using the endpoint repeatedly.
+
+Risk: The x402 client uses an EVM wallet private key to authorize payment.
+
+Mitigation: Keep EVM_PRIVATE_KEY in a secure secret store and use a wallet funded only for the intended calls.
+
+## Reference(s):
+
+- [Grid Levels endpoint](https://apexrunner.ai/signals/grid-levels)
+- [Grid Health signal](https://apexrunner.ai/signals/grid-health)
+- [Grid Health Score signal](https://apexrunner.ai/signals/grid-health-score)
+- [APEX Runner](https://apexrunner.ai)
+
+## Skill Output:
+
+**Output Type(s):** [JSON]
+
+**Output Format:** [JSON response with per-pair active grid levels, spacing, and next buy/sell prices.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Values reflect live grid state and may change between calls.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

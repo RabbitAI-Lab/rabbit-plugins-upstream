@@ -1,40 +1,52 @@
-## Description: <br>
-Provides real-time bundled market data: price tick, Fear & Greed index, and market regime for BTC in a single authenticated API call. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns price tick + Fear & Greed + regime in one call.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External developers and agent builders use this skill to request a compact BTC market snapshot at the start of trading or decision workflows. The skill is intended for agents that can make paid x402-authenticated GET requests with a Base/USDC wallet. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks the agent to use a spend-capable crypto private key for paid x402 requests without clear spending safeguards. <br>
-Mitigation: Use a dedicated low-balance Base/USDC wallet, keep the private key out of logs and code, monitor charges, and avoid using a primary wallet or wallet with unrelated funds. <br>
+## Use Case:
 
+Agents can request a quick market snapshot containing a price tick, Fear & Greed reading, and market regime in one call. Each request is paid, so activation should match a clear market-data need and be authorized.
 
-## Reference(s): <br>
-- [ClawHub Market Pulse Bundle](https://clawhub.ai/kynto2001-ctrl/skills/market-pulse-bundle) <br>
-- [APEX Runner Market Pulse Bundle](https://apexrunner.ai/signals/market-pulse-bundle) <br>
-- [APEX Runner Pricing Tier Check](https://apexrunner.ai/signals/my-pricing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON data, Guidance] <br>
-**Output Format:** [JSON API response with Markdown usage guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY and a funded Base/USDC wallet for paid x402 requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Broad activation guidance may cause unnecessary paid market-data requests during unrelated agent loops.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require a clear market-data need and authorization for paid use before activating the skill.
+
+## Reference(s):
+
+- [Market Pulse Bundle endpoint](https://apexrunner.ai/signals/market-pulse-bundle)
+- [Trading Intelligence Bundle](https://apexrunner.ai/signals/trading-intelligence-bundle)
+- [Regime signal](https://apexrunner.ai/signals/regime)
+- [Fear & Greed signal](https://apexrunner.ai/signals/fear-greed)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Market data]
+
+**Output Format:** [JSON market snapshot]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [One response bundles a price tick, Fear & Greed reading, and market regime.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

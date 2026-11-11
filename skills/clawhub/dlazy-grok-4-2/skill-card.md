@@ -1,45 +1,52 @@
-## Description: <br>
-Efficient text generation, dialogue QA, and logical reasoning using the Grok 4.2 text model through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Efficient text generation, dialogue QA, and logical reasoning using Grok 4.2 text model. 使用 Grok 4.2 文本大模型，进行高效的文本生成、对话问答与逻辑推理。
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to invoke dLazy's Grok 4.2 text model for prompt-driven text generation, chat-style question answering, and logical reasoning. It is suited to agent workflows that can call a pinned npm CLI and handle cloud API responses. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and referenced local files may be sent to dLazy-hosted services for inference and media handling. <br>
-Mitigation: Use explicit invocations, review prompts and file paths before execution, and avoid sending sensitive data unless that transfer is intended. <br>
-Risk: The CLI can persist an API key in the local user configuration file. <br>
-Mitigation: Protect access to ~/.dlazy/config.json, prefer per-invocation credentials where appropriate, and rotate or revoke the key if it may have been exposed. <br>
-Risk: Broad trigger terms such as chat, QA, and text generation may invoke the skill in contexts where a cloud call was not expected. <br>
-Mitigation: Prefer explicit commands such as dlazy grok-4.2 and confirm cloud use before invoking the skill on sensitive tasks. <br>
+## Use Case:
 
+People using Grok 4.2 through dLazy can request text generation, question answering, and logical reasoning with a prompt.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-grok-4-2) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return asynchronous task identifiers when no-wait mode is used; generated result URLs are hosted on files.dlazy.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release metadata) <br>
+Risk: The security scan flags a mismatch between the stated text-generation purpose and the documented login and authentication steps, as well as broad triggers that may select the skill for ordinary requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Reconcile the skill’s purpose and login steps before installing, check that it is activated only for intended Grok 4.2 tasks, and clarify external service use, prompt handling, and possible charges.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-grok-4-2)
+- [dLazy](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy API key setup](https://dlazy.com/dashboard/organization/api-key)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [Generated text, optionally in a JSON response envelope]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prompt-driven output; requests require a dLazy API key.]
+
+## Skill Version(s):
+
+1.3.39 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
