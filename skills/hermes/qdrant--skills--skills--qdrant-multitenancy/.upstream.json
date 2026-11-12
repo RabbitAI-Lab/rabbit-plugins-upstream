@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/qdrant/skills/tree/main/skills/qdrant-multitenancy",
+  "identifier": "qdrant/skills/skills/qdrant-multitenancy",
+  "repo": "qdrant/skills",
+  "path": "skills/qdrant-multitenancy",
+  "branch": "main",
+  "pushedAt": "2026-11-11T15:20:23Z",
+  "contentHash": "eab847a3d638e54b62805e2bc6c7d7141ac3afdfd54fe4171c8b5cad0b8ecc67",
+  "fetchedAt": "2026-11-12T16:01:51.054Z"
+}

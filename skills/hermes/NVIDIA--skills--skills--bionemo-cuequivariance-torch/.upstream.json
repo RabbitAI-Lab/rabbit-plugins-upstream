@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-cuequivariance-torch",
+  "identifier": "NVIDIA/skills/skills/bionemo-cuequivariance-torch",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-cuequivariance-torch",
+  "branch": "main",
+  "pushedAt": "2026-11-12T14:09:43Z",
+  "contentHash": "1cd0c4af700f6b6dcb5dbfe1040e6b349dbd305e89373bc5f766f214ebb9c7a0",
+  "fetchedAt": "2026-11-12T16:01:55.097Z"
+}
