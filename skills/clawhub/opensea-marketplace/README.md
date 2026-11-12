@@ -1,5 +1,9 @@
 # OpenSea Skills
 
+> **Read-only mirror.** This package is developed in a private monorepo and mirrored to [ProjectOpenSea/opensea-skill](https://github.com/ProjectOpenSea/opensea-skill) when a version is released, so the public code can trail the internal main branch by weeks.
+>
+> Pull requests opened on the mirror cannot be merged there. They are read, and a fix worth taking is recreated in the monorepo. Because a fix that has landed internally is not public until the next release, filing an issue before writing a patch is the quickest way to find out whether a bug is already fixed.
+
 Agent Skills for interacting with [OpenSea](https://opensea.io/): query NFT and token data, trade on the Seaport marketplace, swap ERC20 tokens, and build AI agent tools with onchain gating.
 
 This repository follows the [Agent Skills specification](https://agentskills.io/specification).
@@ -65,7 +69,7 @@ The tree above covers the common cases. These edge cases catch the easy-to-misro
 | Stream real-time marketplace events (WebSocket) | `opensea-api` |
 | Cross-chain NFT purchase (pay from a different chain) | `opensea-marketplace` |
 | Sweep multiple listings in one transaction | `opensea-marketplace` |
-| Check token balances for a wallet | `opensea-swaps` |
+| Check token balances for a wallet | `opensea-api` |
 | Configure wallet signing policies (caps, allowlists) | `opensea-wallet` |
 | Gate a tool with NFT ownership or x402 payments | `opensea-tool-sdk` |
 
@@ -74,11 +78,11 @@ The tree above covers the common cases. These edge cases catch the easy-to-misro
 All three paths install the router `SKILL.md` plus all five sub-skills:
 
 ```bash
-# Auto-installs all five skills (recommended)
+# Installs the router and all five skills (recommended)
 npx skills add ProjectOpenSea/opensea-skill --yes
 
 # ClawHub (single slug, all skills bundled)
-clawhub install opensea
+clawhub install opensea-marketplace
 
 # Manual (Claude Code / Cursor / Codex)
 git clone https://github.com/ProjectOpenSea/opensea-skill.git ~/.claude/skills/opensea
@@ -105,7 +109,7 @@ The root `SKILL.md` is a thin router that directs agents to the correct sub-skil
 
 ### ClawHub
 
-Register one slug (`opensea`) and publish via `clawhub skill publish .`. The installed layout:
+The bundle is published under one slug, `opensea-marketplace` (owner `opensea`), by `.github/workflows/clawhub-publish.yml` on each release. The slug predates the router and is kept so existing installs keep updating. The installed layout:
 
 ```
 opensea/
@@ -117,11 +121,15 @@ opensea/
 └── opensea-tool-sdk/SKILL.md
 ```
 
-Do **not** publish five separate ClawHub slugs.
+Do not publish five separate ClawHub slugs.
 
 ### `npx skills add` behavior
 
 The vercel-labs/skills CLI discovers both root `SKILL.md` and `skills/` subdirectories. With the router at root, `npx skills add ProjectOpenSea/opensea-skill` installs the router plus all sub-skills as a single directory tree. Verify this with `--dry-run` after any structural changes.
+
+## Security
+
+Found a vulnerability? Report it through OpenSea's Bugcrowd program at https://bugcrowd.com/engagements/opensea rather than opening a public issue. See [SECURITY.md](SECURITY.md).
 
 ## License
 

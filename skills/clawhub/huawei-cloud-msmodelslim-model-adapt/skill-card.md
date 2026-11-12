@@ -1,49 +1,57 @@
-## Description: <br>
-Create basic Transformers model adapters for msModelSlim and verify W8A8/W4A16 quantization workflows for decoder-only LLMs and understanding VLM text backbones. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create basic Transformers model adapters for msModelSlim and verify them through a four-step quantization workflow.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and engineers use this skill to create msModelSlim adapters for custom decoder-only LLMs or understanding VLM text backbones, register those adapters, and run the required four-step quantization verification workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Model loading during adapter verification may execute code from model artifacts. <br>
-Mitigation: Use trusted and reviewed model sources only, pin model revisions, and run verification in an isolated development environment. <br>
-Risk: Verification scripts and registration workflows may be run against arbitrary downloaded model directories. <br>
-Mitigation: Review model files and generated adapter changes before execution, and avoid running the workflow on untrusted Hugging Face, ModelScope, or local model directories. <br>
-Risk: Registration requires running install.sh after config changes. <br>
-Mitigation: Inspect install.sh and related configuration updates before running them. <br>
+## Use Case:
 
+Developers adapting decoder-only LLMs or understanding VLM text backbones use this skill to implement msModelSlim adapters and validate quantization workflows for supported models.
 
-## Reference(s): <br>
-- [Model Analysis Guide](artifact/references/model_analysis.md) <br>
-- [Implementation Guide](artifact/references/implementation_guide.md) <br>
-- [Interface Reference](artifact/references/interface_reference.md) <br>
-- [Registration Guide](artifact/references/registration_guide.md) <br>
-- [Verification Guide](artifact/references/verification_guide.md) <br>
-- [Verification Methods](artifact/references/verification-method.md) <br>
-- [Acceptance Criteria](artifact/references/acceptance-criteria.md) <br>
-- [Troubleshooting](artifact/references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Python code, YAML configuration, and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Focuses on adapter creation, registration, and four-step verification for msModelSlim quantization workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Verification can execute model-supplied custom code without an explicit safety choice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review model code at a fixed revision, opt in before enabling custom-code execution, and run it in an isolated environment without credentials.
+
+Risk: The workflow instructs users to run an external install.sh script.
+
+Mitigation: Inspect install.sh before executing it.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-msmodelslim-model-adapt)
+- [Implementation Guide](artifact/references/implementation_guide.md)
+- [Verification Guide](artifact/references/verification_guide.md)
+- [IAM Policies](artifact/references/iam-policies.md)
+- [Troubleshooting](artifact/references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Python adapter code, configuration examples, shell commands, and Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Adapter and verification guidance for supported Transformers LLMs and VLM text backbones.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

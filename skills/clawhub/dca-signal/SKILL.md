@@ -1,6 +1,6 @@
 ---
 name: dca-signal
-description: DCA entry signal with gate status, regime, and F&G conditions
+description: "Paid x402 endpoint: $0.007 USDC per call on Base. Returns DCA entry signal with gate status, regime, and F&G conditions."
 metadata:
   openclaw:
     requires:
@@ -52,18 +52,13 @@ print(response.json())
 ```
 
 ## Pricing
-**$1.00/call** — standard price
+**$0.01/call** — standard price
 
-Early adopters automatically receive 30% off ($0.70/call) until 2026-09-21. Discount tiers apply automatically based on wallet call history:
-- Early Adopter (0–9 calls): 30% off
-- Engaged (10–49 calls): 15% off
-- Loyal (50–199 calls): 15% permanent
-- VIP (200+ calls): 20% permanent
-
-Check your tier: `https://apexrunner.ai/signals/my-pricing`
+Every caller is charged $0.007/call until 2027-01-01 under the
+early-adopter discount (30% off the standard price). No tier, no wallet
+history, no enrolment — that is simply the price.
 
 ## Related Signals
-- [dca-reentry-gate](https://apexrunner.ai/signals/dca-reentry-gate)
 - [fear-greed](https://apexrunner.ai/signals/fear-greed)
 - [portfolio-heat](https://apexrunner.ai/signals/portfolio-heat)
 

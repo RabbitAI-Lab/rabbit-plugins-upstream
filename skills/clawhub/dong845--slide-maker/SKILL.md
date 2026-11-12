@@ -10,7 +10,7 @@ description: >-
   and tell me what's weak", "make a slide about X", "help me present this work". Works
   with or without a template (matches theirs, else designs a clean one) and with or
   without source material (mines provided code/docs/figures, else web-researches and
-  fact-checks), in any language (e.g. English or 中文). Interviews first, then runs an
+  fact-checks), in any language (e.g. English or Chinese). Interviews first, then runs an
   actor–critic loop until an independent critic consents. Trigger even without the words
   "skill", "deck", or "pptx".
 ---
@@ -23,7 +23,14 @@ and why before touching a slide, make each slide earn its place, and **think
 carefully at each step** rather than rushing to output. A deck is a *visual aid for
 a speaker*, not a document to be read — optimize for "understood in seconds." Read
 `references/design-principles.md` for the craft, and treat the actor-critic loop
-(step 5) as non-negotiable: you are not the final judge of your own work.
+(step 5) as the default you never skip on your own authority: you are not the final
+judge of your own work — only the USER may decline the review, at the post-build
+question, with the rendered deck in front of them, and that decline is recorded.
+
+🔴 **Read this whole file before Step 1 — it is sized to be read in full.** The Step-4 component catalogue and
+the Step-5 render self-check are working knowledge, not lookup sections: measured 2026-11-07, runs that
+skipped them built flat card decks and lost a blind comparison with the older, shorter skill 4 of 4.
+Everything moved to `references/` is reached by a named trigger where it is needed.
 
 **THE TASTE PROTOCOL — rules are the floor, judgment is the ceiling.** This skill carries many
 rules, gates, components, and presets. They exist to prevent known failures — they are NOT the
@@ -77,9 +84,50 @@ Two time sinks compress well: ingesting material/assets, and the critic loop.
   building. Parallelism speeds *gathering*, never *understanding*.
   Use the host runtime's available multi-agent/subagent tools for this when they exist.
 - **Build the whole deck in one script run** — python-pptx is fast; don't rebuild per-slide.
-- **Scale the critic to stakes** (step 5): two focused **lens** critics (content · design) even for a
-  quick deck; the larger multi-critic + arbiter, multi-round panel for high-stakes. The loop is
-  non-negotiable; its *weight* is what you tune.
+- **Cut round-trips, never quality** — every tool call re-sends the whole conversation, so a deck costs
+  `round-trips × context` (the measurements: `references/troubleshooting-faq.md`). Put independent
+  calls — separate greps, file reads, a verification sweep — in ONE message, and:
+  - **Look up EVERY helper you plan to call in one lookup, before writing the build script:**
+    `python3 scripts/sigs.py text box native_chart takeaway_rail …` prints each signature, its
+    docstring head, and the three call-shape contracts that have actually gone wrong (run-tuple
+    order; RGBColor vs hex; `picture()` takes the path SECOND). Reading `deckkit.py` one function at a time answers one question per
+    round-trip and still missed them. **`--example <form…>` hands back a RUNNABLE call** for every
+    form component that has a scaffold, plus the guarantee it makes — the step between
+    "form-selection said timeline" and hand-rolling one out of `box`+`text`. Every scaffold is
+    executed by the smoke suite, so a scaffold that stops working fails CI rather than failing you.
+    **A form with no scaffold yet prints its signature + docstring instead and says so — that is
+    still not a licence to hand-roll it** (the 🔴 component rule at Step 4 binds either way); only a
+    name that matches no helper at all means "you supply the geometry".
+    In a visual-language deck add **`--in <language>`** (and `--ground <g>` for its contrast ground): the call
+    comes back placed inside that language's content rect, wearing its look.
+  - **Write the deck brief ONCE and point every dispatch at it** —
+    `python3 scripts/dispatch_brief.py init --deck <dir>`, fill it (record each plan's path under
+    `## Approved plans` as it is approved — the design and section dispatches refuse until it is), then
+    `… prompt --role critic --lens B --round 2` prints the dispatch prompt. Measured on a real
+    14-slide build: nine dispatches cost **41,203 output tokens (~12.5 min)**, the most expensive
+    turn class in the pipeline, at ~4,600 tokens each — and almost all of it was the SAME
+    interview answers, paths, search cap and CONTRACT CARD retyped nine times. The generated
+    prompt is ~220 tokens. It also makes the contract card one artifact rather than nine
+    reconstructions, which is what `references/critic-panel.md` asks for and cannot check.
+  - **Repair with `Edit`, not a whole-script rewrite** (*default*). Which canon rules (Duarte, Minto, Mayer,
+    Tufte…) are gated and which stay judgment: `references/troubleshooting-faq.md`.
+  - 🔴 **NEVER pipe a gate through `tail`/`head`. Read the whole report.** Every gate batches on
+    purpose — `deck_gates.py check`, `render_deck.py --gate-check` and `codex_delivery_gate.py`
+    each list ALL their faults in one run and number them `[4/9]`. MEASURED, on a real 12-page
+    build: the run read `deck_gates.py check . | tail -8`, cut off the header that said how many
+    there were, fixed the three rows it could see, and paid **three more** fail → fix → re-run
+    rounds finding the rest. The gate was right; the window was not. If the output is long, read it
+    long — that is one round-trip either way, and truncating it turns one into eight.
+  - **Iterate with `python3 scripts/deck_cycle.py build_<deck>.py`** (`--render` adds the render and the
+    render-time lint), so one fix costs one round-trip. It prints every finding verbatim and stops before
+    rendering on a CRITICAL. 🔴 Its LOOP BREAKER binds: after the same fault survives 3 runs, a re-run whose
+    edit only moved numbers is REFUSED — re-derive that layout by measurement, or pass
+    `--nudge-again "<why>"`. Every completed build is snapshotted into `.versions/` (Step 6 shows the diff).
+    Full behaviour: `references/troubleshooting-faq.md`.
+- **Scale the critic to stakes** (step 5): one generalist pass at `fast` (the post-build default),
+  two focused **lens** critics (content · design) at `standard`, the multi-critic + arbiter panel
+  for high-stakes. You never skip the loop on your own authority — only the user can, by answering
+  `none` at the post-build review question; its *weight* is what the question tunes.
 
 **Two modes.** *Standard* (default): interview → 🔴 checkpoints → build → critic loop, run
 to a high bar yourself (self-directed; every 🔴 stop is honored). *Collaborative* (opt-in — when the user wants to see options or approve as
@@ -92,28 +140,32 @@ one line; never force it. See `references/collaborative-mode.md` (+ `scripts/arc
 proceed until the user confirms. Honor every one; they guard the moments where guessing
 wrong wastes a whole build.
 
-**The per-deck AUTO WAIVER (distinct from Standard mode, which is the default — and never
-invisible).** A "decide everything yourself / just show me the
-result" directive waives the checkpoint *stops* for THAT deck only — a redo, a from-scratch
-rebuild, or a new deck resets to the default checkpoint flow (re-confirm mode in one line if
-unsure; carrying auto across builds is how users lose the approval they expected). And even
-under the auto waiver the checkpoints stay **visible — presented directly in chat, not as files**: the
-checkpoint artifact is a **compact terminal-friendly markdown table** pasted into the
-conversation (approval stop normally, FYI under the auto waiver). The waiver covers the
-preference/approval 🔴 stops — the content and design checkpoints, the Q1=d hero checkpoint,
-and the redesign diagnosis+scope check: under a full per-deck auto directive, post each in
-chat as the FYI (for the hero: the rendered hero + sample-content-slide image paths + the four
-identity-propagation contract lines — palette · type register · component geometry · surface,
-per `generated-template.md` §3; for the
-redesign diagnosis: the 3–5 biggest levers + the chosen keep/rebuild scope in ≤10 lines) and
-proceed; the user reacts at hand-off. **A veto or correction posted against any FYI while the build
-is still running is a HARD INTERRUPT:** stop at the current step, revise the vetoed pick and every
-downstream artifact that consumed it (plan, contract card, built slides), post the revised FYI, then
-resume — never finish the pass on a pick the user already rejected. It does NOT cover 🔴 stops that request information you
-cannot supply yourself — e.g. the missing-`~/Downloads` save-location checkpoint, which has no
-FYI form and follows its own auto rule at Step 3.
+**The per-deck AUTO WAIVER** — a "decide everything yourself / just show me the result" directive waives the
+checkpoint *stops* for THAT deck only (a redo, a rebuild or a new deck resets to the default flow).
+🔴 **Read `references/auto-delegation-quality-gates.md` in full before acting on it** — the full waiver text is
+there. What binds every auto run: the checkpoints stay **visible** (posted in chat as FYIs) and still land in
+`.deck-gates.json` (`content.slides`, and `content.checkpoint` / `design_plan.checkpoint` with `mode: auto`);
+every Step-0 axis you decided is recorded with `python3 scripts/deck_gates.py picks <deck> --set AXIS=VALUE
+--source … [--basis …] [--alternative …]`, and 🔴 **`angle` is never `delegated`**; a delegated **`density` is
+balanced (图文均衡)** — only the user can choose text-heavy, and only that choice waives the text budget; a veto posted against any FYI
+while the build runs is a **HARD INTERRUPT** (stop, revise the pick and everything downstream of it, re-post,
+resume); and the waiver never covers a 🔴 stop that asks for information only the user has. The gates check
+the records — the picks through `scripts/delegated_picks.py` on all three gate paths.
 
-**→ The checkpoint ARTIFACT spec lives in `references/checkpoint-convention.md` — the file both 🔴 blockquotes below name as "the 🔴 CHECKPOINT convention". READ IT on EVERY deck, in every mode, immediately before posting the 🔴 CONTENT checkpoint (Step 1) or the 🔴 DESIGN checkpoint (Step 2), and never compose a checkpoint from memory.** It owns the required columns and lines — the `# | 角色 | 记忆句 | 承载证据 | units` table and its SOURCE-TRACE rule, the digests, the `boldness:` / `signature move:` / `logo plan:` lines, the required `direction gate:` (branch c) / `style gate:` (branch d) line and the rule that a branch-(c)/(d) design checkpoint with no gate line is NOT READY, the ~25-line budget, and the rule that plan files are never written into the deliverable folder. **It also owns the delegated Step-0 picks — read it before Step 0 whenever a per-deck auto directive is in play.**
+**→ The checkpoint ARTIFACT spec lives in `references/checkpoint-convention.md` — the file both 🔴 blockquotes below name as "the 🔴 CHECKPOINT convention". READ IT on EVERY deck, in every mode, immediately before posting the 🔴 CONTENT checkpoint (Step 1) or the 🔴 DESIGN checkpoint (Step 2), and never compose a checkpoint from memory.** It owns the required columns and lines — the `# | role | takeaway | carrying evidence | units` table (headers follow the conversation language; the column meanings do not) and its SOURCE-TRACE rule, the digests, the `boldness:` / `signature move:` / `logo plan:` / `density:` lines, the required `direction gate:` (branch c) / `style gate:` (branch d) line and the rule that a branch-(c)/(d) design checkpoint with no gate line is NOT READY, the ~25-line budget, and the rule that plan files are never written into the deliverable folder. **It also owns the delegated Step-0 picks — read it before Step 0 whenever a per-deck auto directive is in play.**
+
+**Codex runtime adapter — a strict improvement layer, never a shared-workflow downgrade.** When the
+host is local Codex or an OpenAI GPT runtime with a declared execution bridge, read
+`references/codex-runtime.md` (its Runtime routing section first) before Step 2, then run the evidence
+gate before hand-off. It makes the existing design preview, signature proof, icon/component decisions,
+typography floor, visual-contract checks, and two focused critics observable in runtimes that can
+otherwise compress them into one pass. **Do not run this adapter or reinterpret
+`component_audit.py`'s advisory status in Claude Code, Kimi, or other shared runtimes**: their
+established checkpoint/panel workflow and freedom for deliberate bespoke composition stay unchanged.
+
+**Codex PPTX routing — HARD RULE (codex profile):** a Codex-verified delivery MUST use this skill's DeckKit
+build path and its render, lint, component-audit, visual-contract, critic and delivery-gate artifacts; another
+PPTX tool may inspect or convert the file but never replace that path. Full rule: `references/codex-runtime.md`.
 
 ## At a glance — pipeline · rule strengths · where things live
 *A navigation map only; the steps below are the source of truth.*
@@ -125,6 +177,12 @@ every **🔴 CHECKPOINT** is a hard stop.
 **Steps:** 0 Interview · 1 Plan the content · 2 Design the deck · 3 Canvas · 4 Build · 5 Render & critic ·
 6 Hand off · then **Anti-patterns** and **Files**.
 
+**Where commands run.** `SKILL` names the folder that holds this `SKILL.md` (the path the skill was loaded from);
+set it once per shell: `export SKILL="/absolute/path/to/slide-maker"`. A command written
+`python3 "$SKILL/scripts/…"` runs from any working directory. A command written `python3 scripts/…` means the same
+file under `$SKILL`, and runs as written only from inside that folder: from the deck folder, prefix the path with
+`"$SKILL/"`.
+
 **Rule-strength vocabulary** (how to read the rules below):
 
 | Marker | Means |
@@ -135,29 +193,29 @@ every **🔴 CHECKPOINT** is a hard stop.
 | **by taste / opt-in** | A judgment call (generated/sourced images, motion) — apply where it helps, justify where not; the image SOURCE is not a taste call once an image is planned (REFERENT RULE). Icons are NOT in this class: on category/entity-rich content they are a design must (self-verify (g) · PRE-FLIGHT 12(e)) |
 | **carve / exception** | A named case where a rule deliberately yields — follow the carve, don't over-apply it |
 
-> **Enforcement invariant (for anyone evolving this skill):** every 🔴 MUST must be *wired into a gate
-> artifact* — an interview question, a required plan field/column, a self-verify item, the PRE-FLIGHT
-> checklist (Step 4), a deterministic lint check, or a named critic-rubric item. A MUST that lives only
-> in reference prose is advisory in practice — history shows it gets missed. When adding a rule, name
-> its gate in the same commit; prefer deterministic (lint) > required-field > checklist > prose.
+> **Changing this skill?** Every 🔴 MUST must be wired into a gate artifact, and removing or merging anything
+> needs `references/maintenance-boundaries.md` (in the source repository, https://github.com/addsumtech/slides_maker, not in this package) first — both rules are spelled out there.
 
 **Where things live** — the reference that *owns* each concern (read it when that concern is in play):
 
 | Concern | Owner |
 |---|---|
 | The craft / the "why" (contrast · hierarchy · C.R.A.P. · layout safety) | `references/design-principles.md` |
-| Per-purpose look (defense vs exec vs lecture …) | `references/design-by-purpose.md` |
+| Per-purpose look (defense vs exec vs lecture …) | `references/design-by-purpose.md` — 🔴 four genres (grant · progress/guidance committee · journal club · clinical case) also DECLARE content they are not finished without, checked on both gate paths by `scripts/purposes.py` + `scripts/check_purpose.py` |
+| Per-TOPIC look (domain → apt presets → ANTI-PICK + cliché guard — the topic-adapted pick) | `references/design-by-topic.md` — 🔴 it adapts the LOOK only; a domain that needs its own FORM vocabulary is routed on the two rows below |
+| Bespoke registers invented from a subject's world (verified library to ADAPT + grow) | `references/bespoke-registers.md` |
 | Content — deep read + per-slide message (Step 1) | `agents/content-planner.md` |
 | Input formats — Word/Office · image · video (ingest routes + the vision/audio fidelity floor) | `agents/content-planner.md` §1 (Input formats) · `scripts/ingest.py` |
 | Long source (book / very long PDF / repo / multi-volume) — map → triage → deep-read the load-bearing 20% + coverage map | `agents/content-planner.md` §1 (long-source mode) · `scripts/extract_pdf.py map`/`text`/`headings` |
 | Look / form / layout / rhythm / icons / motion (Step 2) | `agents/slide-design.md` |
 | Independent review + JSON schema | `agents/critic.md` · `agents/arbiter.md` · `references/review-rubrics.md` |
 | Which visual FORM a slide takes (avoid the card-grid default) | `references/form-selection.md` |
-| Colour-means-one-thing (bind a hue to a concept deck-wide) | `references/semantic-color-contract.md` |
+| Colour-means-one-thing (bind a hue to a concept deck-wide) | `references/design-intelligence-addendum.md` §6.1 |
 | Style + component catalogue (looks · presets · when to use each) | `references/design-gallery.md` |
 | Charts (which type · editable-native vs raster) | `references/data-viz.md` |
 | Choropleth map (value per country / province — europe · world · china) | `deckkit.choropleth()` · `scripts/maps.py` · `references/data-viz.md` |
 | Science schematics (force / ray / circuit / apparatus …) | `references/schematic-diagrams.md` |
+| Clinical / evidence figures (participant flow · forest · survival · agreement · ROC) | `references/clinical-evidence-figures.md` |
 | Generated + sourced imagery (when/how · text-free · topical · REFERENT RULE + source tokens) | `references/image-generation.md` |
 | Generated-template branch (hero + shallow bg + frosted blocks) | `references/generated-template.md` |
 | Icons (one family · recolored · treatments) | `references/icons.md` |
@@ -168,9 +226,13 @@ every **🔴 CHECKPOINT** is a hard stop.
 | Cross-deck user taste — registry-root `taste.md` schema · read/write · dial promotion | `references/user-taste.md` |
 | Large / sectioned decks · collaborative gates | `references/large-deck-orchestration.md` · `references/collaborative-mode.md` |
 | East-Asian / ink looks | `references/east-asian-aesthetic.md` |
-| Canvas formats (16:9 default · 4:3 · 1:1 · 小红书 3:4 · story 9:16 · A4) | `scripts/formats.py` (registry) · `references/canvas-formats.md` (per-surface layout DNA) |
+| Canvas formats (16:9 default · 4:3 · 1:1 · rednote 3:4 · story 9:16 · A4) | `scripts/formats.py` (registry) · `references/canvas-formats.md` (per-surface layout DNA) |
+| A deck you PRESENT FROM — contents page that jumps, backup slides for the questions, the way back | `references/navigation-and-qa.md` (`deckkit.link`/`agenda(targets=)`/`back_link` · the `content.qa` gate) |
+| Citing published work — BibTeX in, markers + reference page out, consistency checked | `references/citations-and-bibliography.md` (`scripts/citations.py` · `scripts/check_citations.py`) |
 | The build helpers (source of truth) | `scripts/deckkit.py` (docstrings) |
 | Geometry lint — build-time · render-time | `deckkit.lint_layout(prs, strict=True)` (Step 4, pre-render) · `scripts/lint_deck.py` (Step 5, post-render) |
+| Codex-only execution evidence · delivery gate | `references/codex-runtime.md` · `scripts/codex_delivery_gate.py` |
+| What this skill does to the machine — installs, subprocesses, network, session data, file deletion, and every opt-out | `references/security-and-capabilities.md` (read it if a user asks what the skill touches, if a scanner flags it, or before running it on material you do not trust) |
 | ANY error / lint finding / env failure — symptom → cause → fix, plain language | `references/troubleshooting-faq.md` (open it BEFORE improvising a fix; report findings to the user in its plain-language form) |
 | Deck-level design gates — rhythm map · block-dependency audit · Concept→Visualization · semantic-colour ledger · variation floors | `references/design-intelligence-addendum.md` (Step 2's measured design targets) |
 
@@ -187,13 +249,15 @@ filled-field gate, or a deterministic check — that makes skipping them visible
 
 | Read it at | Owner | What catches you if you skip it |
 |---|---|---|
+| Step 0, under "decide yourself" / auto delegation | `references/auto-delegation-quality-gates.md` | the delegated-picks recap in the hand-off note (`handoff-checklist.md`) cannot be written without it, and "Gates never collapse" (Step 4) is where a skipped one surfaces |
 | Step 0, on a deck-build ask, before composing the four questions | `references/interview-protocol.md` | the Step-0 picks FYI can't be written without it |
 | Step 1, before writing the comprehension brief | `references/content-plan-spec.md` | the comprehension gate rejects an unfilled brief |
 | End of Step 1 and Step 2, before posting either 🔴 checkpoint | `references/checkpoint-convention.md` | the checkpoint artifact is the thing it specifies |
 | Step 2, once the plan is approved and any asset is named | `references/asset-production.md` | PRE-FLIGHT 4 (charts) · 5 (evidence) · 12(e) (icons) |
-| Step 3, on a non-16:9 surface or a supplied template | `references/deck-setup.md` | `CJK_NO_EA` fails the build on a missing EA font |
-| Step 5, at every critic dispatch and returned review | `references/critic-panel.md` | `validate_review.py` rejects a non-conforming review |
+| Step 3, on a non-16:9 surface or a supplied template | `references/deck-setup.md` | on a **CJK** deck, `CJK_NO_EA` fails the build on a missing EA font — that is this file's Fonts section, and it is the only gate that fires on its own. The **non-16:9** and **template** branches have no gate of their own: `lint_layout` reads the real canvas size, so a 16:9 layout transplanted onto a portrait canvas trips `OFF_CANVAS`, but nothing checks a format's **safe band** (`formats.py band()`), its `lint_flags`, or the design plan's `format:` line. What actually holds them is upstream and human: Step 0 **confirms the canvas format** for any non-slide surface (`interview-protocol.md`), and the answer rides into the Step-0 picks FYI. Read the file |
+| Step 5, at every critic dispatch and returned review | `references/critic-panel.md` | `validate_review.py` rejects a non-conforming review — but it checks the review CONTRACT only. Panel size, lens assignment and the arbiter pass have **no** check; Step 5's dispatch names this file for them |
 | Step 6, before composing the hand-off — every deck | `references/handoff-checklist.md` | the hand-off note is itself the visible artifact |
+| A helper's exact call contract, before writing build code | `scripts/sigs.py <names…>` (one lookup, many helpers; `--example` for a runnable call) | **nothing** — `sigs.py` is a PULL tool with no gate. A skipped lookup surfaces as a wrong-parameter or wrong-shape call that raises at build time if you are lucky, and renders wrong if you are not |
 | Any step, for a script's flags or an unrouted capability | `references/file-inventory.md` | lookup only — nothing depends on having read it |
 
 *(Full file/script inventory: see **Files** at the end.)*
@@ -206,6 +270,32 @@ filled-field gate, or a deterministic check — that makes skipping them visible
 > directly; running the four-question interview there is noise. When in doubt ("improve my deck"
 > could be either), one clarifying line beats a wrong assumption.
 
+### Step 0.0 — INITIALIZE: the version choice, before anything is asked
+
+🔴 **This runs FIRST on ANY invocation, build or not — before the capability ledger, before the
+four questions, before you read a single byte of their material.** (The scope guard above skips the
+*interview* for a critique/audit ask; it does not skip this — a stale skill reviews a deck by stale
+rules.) `python3 scripts/check_version.py` is silent when the install is
+current, and then you say nothing and go straight to the interview. Cost is one network call at most
+per 24h (~0.1s from cache otherwise), and every failure path — offline, no marker, corrupt cache —
+exits silently, so it can never be the reason a deck did not get built. It lives in Step 0 rather
+than in a reference because a check nobody triggers is a check that does not exist. Opt out with
+`SLIDE_MAKER_NO_VERSION_CHECK=1`.
+
+🔴 **When it reports an update (or `DIFFERS … at the same version`), read `references/troubleshooting-faq.md`
+BEFORE replying.** It holds the three options to ASK as the first thing in the conversation (spell out what
+each answer does; under a per-deck AUTO WAIVER do not stop — build on the installed version and say so), the
+per-`shape` update command (never `npx skills add` on a plugin install), the rule to re-read SKILL.md after an
+update, and why `dirty: null` means *unknown*, never "no local changes".
+
+### Step 0.0b — ENSURE THE TOOLCHAIN, right after the version is settled (build asks only)
+
+🔴 **Before the interview, on a deck-BUILD ask, run `python3 scripts/check_env.py --ensure`.** It is silent
+when everything is present and installs missing pip deps itself. Act on the exit code: **`0`** go on; **`3`**
+LibreOffice is missing — show the user the install command it printed NOW (the render needs it); **`1`** a pip
+dep could not be installed — show the printed command, and never add `--break-system-packages` for them.
+Skip it on a critique/question run. Details: `references/troubleshooting-faq.md`.
+
 **Run this interview every time, from scratch — do not skip it because earlier
 conversation, a previous deck, or context "obviously" implies an answer.** A terse
 request like *"make slides for MICCAI"* specifies only one thing (the venue);
@@ -214,12 +304,21 @@ the content, source material, style, and template are all still unknown and must
 assumptions from a prior deck in the same session (its topic, its content, its
 style, its template) — every deck starts fresh with these questions.
 
-Collect all four answers in **one cheap interview turn**. Match the host UI:
+Collect all the answers in **one cheap interview turn**. Match the host UI:
 - **If the runtime provides a structured choice UI** (for example Claude Code's
-  `AskUserQuestion`), ask the four questions in one batched call with concise options.
-- **If the runtime does not provide that UI** (for example plain Codex chat), ask one
-  compact direct question and let the user answer in free text. Do not fabricate a fake
-  multiple-choice form; give short examples only where they reduce ambiguity.
+  `AskUserQuestion`), ask the questions in one batched call with concise options.
+- **If the runtime does not provide that UI** — plain Codex chat, a GPT/Gemini/Kimi chat surface,
+  an API caller, a CLI with no widgets: **the norm, not the exception** — ask one compact direct
+  question and let the user answer in free text. Do not fabricate a fake multiple-choice form;
+  give short examples only where they reduce ambiguity.
+  🔴 **Fewer WIDGETS, never fewer QUESTIONS.** A choice UI carries the axes for you — every option
+  the host renders is one you cannot forget to ask. In plain text nothing carries them, so the
+  axes that vanish are exactly the ones with no downstream artifact demanding them: **deck length**
+  first (measured: decks arriving at ONE page), then delivery mode. Ask all
+  five numbered lines below; a host without widgets is not a host with a shorter interview.
+  🔴 **Ask in the USER's language.** The fallback block is written in English because this file is;
+  a user writing Chinese gets the same five questions in Chinese. Translating the questions is not
+  personalisation, it is the baseline — and it costs one pass over a block you are already typing.
 
 Direct-question fallback:
 ```text
@@ -227,11 +326,36 @@ Before I build, please give me:
 1. Template/brand: existing template, new template, design a clean one, or generate one with an image tool?
 2. Purpose/audience/time: who is this for, how long — and is it presented live, screen-shared, sent to self-read, or presented live THEN sent around (hybrid: presented density on-slide, self-sufficient speaker notes)? Main goal: inform, support a decision, or inspire action? — If decide/inspire, one cheap follow-up: what exactly is the ASK, who says yes, and what's the biggest objection you expect? (Duarte's briefing trio; it sharpens the money slide and the close.)
 3. Source material: paper, deck, doc, figures, repo, or none? — When material IS provided, one follow-up: condense freely, preserve key phrasing verbatim, or hybrid (verbatim for claims/numbers, condense elsewhere)? Record the answer; it governs every rewrite downstream.
-4. Style/language: density (≈a phrase / one sentence / 2–3 sentences per point?), tone (minimal/corporate/academic/playful), and language (中文/English/etc.)?
-5. Review effort: `standard` (what your purpose derives) or `thorough`? Say `fast` if you want it
-   cheap and accept one generalist critic and a single round — this is the deck's cost dial, and
-   `fast` is the only tier you have to ask for.
+4. HOW MANY SLIDES: a spoken deck takes it from the time budget (~1 slide/minute); a self-read one
+   needs it said — short ~5-8, medium ~9-15, long 16+. Never assume, and never take silence as ONE.
+5. Style/language: density (≈a phrase / one sentence / 2–3 sentences per point?), tone (minimal/corporate/academic/playful), and language (Chinese/English/etc.)?
 ```
+
+*(No review question here — it is asked at Step 5, AFTER the first clean render, with the deck in
+front of the user. Asking it blind at Step 0 forced a cost decision about a deck nobody had seen.)*
+
+🔴 **Q1 answered "our brand" — a company / lab / product deck, with a logo, a brand-guide PDF, an old on-brand .pptx, or just hex codes and font names?** Do not hand-build a .potx and never guess a brand's colours from its name. `python3 scripts/brand_kit.py extract <files…> [--hex #RRGGBB …] [--font "Name" …] --out <deck-dir>/brand.json`, then `brand_kit.py review <deck-dir>/brand.json` — show the user its table (auto mode: `--auto`, and record the delegated pick it prints) — then `brand_kit.py confirm … --primary … --accent … --neutral …` with THEIR roles. Every command prints its `NEXT:`. A brand used before needs none of it: `brand_kit.py list` · `use <name> <deck-dir>`; save a new one at hand-off with `save <brand.json> --name <name>`.
+
+Only a website to go on? OFFER to read it and run it only on a yes, never on your own (auto mode included): it downloads a third-party npm package and opens a live site. With Node 22+ and a Chrome-family browser, `npx easybrandkit@0.4.0 <url> --no-stores --out <deck-dir>/brand-src` opens the site in a headless Chrome on the user's machine and saves its logo files, with the colours by where the site uses them and the fonts listed in `brand-src/BRAND.md`. Pass a logo file from there (the `.svg` when there is one) to `extract`, the button and heading colours as `--hex` and the fonts as `--font`. The version is pinned on purpose: never swap in `@latest` — a new release reaches users only through a reviewed change here. A no, no Node, no browser or a failed run: ask for the logo file, hex codes and font names instead.
+
+🔴 **On a host with NO choice UI — the norm, not the exception — one command carries the axes for you.** `python3 scripts/deck_gates.py interview <deck-dir> --lang en|zh` prints the four questions in the USER's language (this file's fallback block is English because this file is; the command carries Chinese too, so "ask in their language" stops being an instruction whose only example contradicts it), and `… interview <deck-dir> --set language=… --set density=… --set length=… --set goal=…` records them. With no `--set` it lists what is still unanswered and exits 1, so it is also the pre-flight. A plain-chat runtime has nothing carrying these axes — a widget carries them for a host that has one — which is why this is a command and not a paragraph.
+
+🔴 **A choice UI takes FOUR questions per call and this interview has FIVE lines — so "one batched
+call" silently truncates the last one, which is the line LANGUAGE lives on.** Measured in this
+repo's own session: a real deck was built and language was never asked, while the record carried
+`delivery`, `builds` and `content.slides` — the three axes something downstream demanded — and no
+answer for language, density, length or goal. Send **two calls** (four, then the rest); a host with
+widgets does not get a shorter interview. 🔴 **And RECORD the answers**: `interview.language`,
+`.density`, `.length` and `.goal` are required by `--gate-check` and by the codex gate, from one
+shared axis list (`deck_gates.INTERVIEW_AXES`), and `deck_gates.py --init` scaffolds them. Those
+four are singled out because nothing else demands them — which is exactly why they are the ones
+that go unasked. The waiver is written (`{"interview": {"waived": "<why>"}}`), and under the auto
+directive these are your delegated picks: the waiver removes the STOP, never the record.
+
+🔴 **A missing answer is a QUESTION, never a default — and least of all a one-slide default.** If
+the user names no length and no time budget, ask; if they decline to answer, derive it from the
+CONTENT (how many takeaways the material actually supports) and say the number in the plan before
+building. A deck silently built at one page is not a small deck, it is an unasked question.
 
 This batching is deliberate: the interview is non-negotiable, so it has to be *cheap*.
 Only drop a question if the user already answered *that* one in their current request — or the
@@ -241,20 +365,30 @@ source-material floor still gets asked);
 when in doubt, keep it. Never assume the **topic/content**, the **style**, or **which
 template** — confirm each.
 
-**Ask the `review:` effort tier in the same batch — it is a first-class interview axis, not a
-footnote.** One word (`fast` | `standard` | `thorough`) scales BOTH cost centres, the research
-fan-out and the review panel, and its default is DERIVED from the purpose the same question
-already collects. 🔴 **`fast` is opt-in only and never derived**, so the derivation has just two
-rows — `standard` and `thorough` — and they are pure ALIASES for the low-stakes and high-stakes
-behaviour the skill already had. The full table (which purpose maps where, and the rule that
-purpose decides while SIZE never lowers a tier) is in `references/interview-protocol.md`; it and
-this sentence must agree — change one, change both. Aliasing rather than redefining is what makes
-the dial safe: **a user who says nothing gets the behaviour that predates it.** This
-axis exists because the scaling rule was always in the rubric and never on the menu — a single
-low-stakes deck measured ~32 subagents and ~2M tokens at full weight, and the user had no way to
-say "less". Options, the derivation table and the 🔴 rule that a downgrade must be stated and
-recorded: `references/interview-protocol.md`; what each tier dispatches:
-`references/critic-panel.md` → "Review effort tiers".
+🔴 **Hand-off checks that bind when their record exists** — each runs on both gate paths; the full rules are in
+`references/troubleshooting-faq.md`. Record the field whenever it applies:
+- **Purpose sections** — 12 of the 13 purposes declare required content (e.g. defense: contributions ·
+  limitations · future work); `check_purpose.py` looks for it in the built deck (extend with
+  `design_plan.purpose_section_terms`).
+- **A talk has a slot** — record `content.talk_minutes`; `check_talk_time.py` holds the speaker notes to it.
+- **Presented live where the room can interrupt** (defense, committee, conference, board) → read
+  `references/navigation-and-qa.md`; record `content.qa`.
+- **Cites published work** → read `references/citations-and-bibliography.md`; cite from the .bib via
+  `scripts/citations.py`, never from memory; record `content.citations`.
+- Every gate run ends with a **COVERAGE** line — read it: PASSED is not CHECKED.
+- `--deliverables` exports an accessible PDF and a speaker-notes handout.
+
+**The `review:` question is NOT asked here — it moved to Step 5, after the first clean render.**
+It used to be a Step-0 axis, which forced the user to size a review of a deck nobody had seen;
+with the rendered deck in front of them the same choice is informed instead of blind, and that is
+what makes the cheaper default safe (Step 5 owns the question, its four options and the recording
+rules). What Step 0 STILL decides is the **research breadth**, because research happens before
+anything renders and cannot wait for the post-build question: derive it from the purpose —
+`standard` for a lab meeting / status update / teaching deck, `thorough` for a defense /
+conference talk / exec readout / pitch (the same two stakes classes the skill has always had;
+purpose decides, deck SIZE never lowers it) — state the derived value in the Step-0 picks/plan,
+and hand it to the planner at Step 1. Research narrows BREADTH only, never the fidelity floor:
+every claim that reaches a slide is traced to a primary source at every breadth.
 
 **🔴 Read `references/interview-protocol.md` before you ask anything on a build ask** — it owns the rest of Step 0: two-stage personalization from THIS user's footprint + `taste.md` precedence (🔴 MUST: current request > this interview's answers > `taste.md`), scaling the interview to the ask, Q1's four template choices (a)–(d) — all four MUST be offered, never a hardcoded institution — with each branch, Q2's delivery · deck-length · appear-builds · primary-goal axes + per-purpose cases + venue research, and Q3's source-material routing per input format.
 > **One 🔴 CHECKPOINT lives in that file:** the Q1(d) generated-template **hero checkpoint** (show the hero + a sample content slide, iterate until the user confirms). The Q1(c) **direction gate** (4 rendered directions) RUNS BY DEFAULT on the design-a-clean-one branch — skippable only via its named carves, and recorded on the design checkpoint's `direction gate:` line.
@@ -280,7 +414,7 @@ throughout** — default to the language the *user* writes in. **When the source
 material is in a different language than the user** (e.g. an English-speaking user with
 a Chinese codebase/paper), or it's otherwise ambiguous, **ask which language the slides
 should be in** — don't assume the source's. **When you ask the language, also offer
-bilingual as an option** (e.g. "English only, 中文 only, or bilingual EN+中文?") so a user
+bilingual as an option** (e.g. "English only, Chinese only, or bilingual EN+ZH?") so a user
 who'd benefit doesn't have to volunteer it. Then translate the content into that language
 and keep every slide consistent. Established technical terms, proper nouns, acronyms,
 units, and code may stay in their original form (that's not "mixing"). Build a
@@ -291,12 +425,15 @@ systematically (same pairing on every slide). See `references/multilingual.md`.
 **Use `agents/content-planner.md` for this step — the CONTENT only** — dispatch
 it through an available multi-agent/subagent tool when the host exposes one (in Codex,
 discover multi-agent tools with `tool_search` if needed), otherwise run the same planner
-brief inline yourself. It is the
+brief inline yourself. **On the design-a-clean-one branch, dispatch it in the SAME message that
+posts the direction-gate link** — the directions page carries no content, so the two waits overlap
+into one (`references/interview-protocol.md`); the gate itself is unchanged and still blocks Step 2.
+It is the
 constructive counterpart to the critic/arbiter judges. Give it the interview answers
 (purpose/audience/time, **delivery context** & **primary goal**, style/language, template
 decision, venue if any **plus the Step-0 venue-research findings — the planner builds on them
 (re-verify, don't re-research)**), the source material (or "none"), and the content references
-(`review-rubrics.md` — the content lens — and `multilingual.md`). *(The design references —
+(`review-rubrics.md` — the content lens — and `multilingual.md`), and the **`search cap:`** below. *(The design references —
 `design-principles.md`, `design-by-purpose.md`, `form-selection.md`, `schematic-diagrams.md`,
 `animation.md`, `image-generation.md` — belong to the slide-design agent in Step 2, not here.)*
 It returns a **Content plan** — message only, no design: a comprehension brief + a claim ledger
@@ -310,12 +447,49 @@ planner is *one mind* — it may fan out *reading* across multiple documents, bu
 understanding, arc, and per-slide message itself; never split one paper across blind agents. For a
 quick, low-stakes deck you may do this pass inline yourself rather than dispatching — but
 the deep-understanding and planning standard below is the same either way.
-**Hand the planner the `review:` effort tier too** — the same one word collected at Step 0 sizes
-this research sweep and the Step-5 panel, because the two measured comparable on a real deck
-(~1.02M tokens of research against ~0.95M of review) and a user asking for speed means the
-pipeline, not half of it. What the tier narrows is BREADTH, never the fidelity floor: every claim
-that reaches a slide is still traced to a primary source at every tier. If no tier was collected,
-the planner works at `standard` and says so.
+🔴 **Each arc candidate carries a `serves_goal` clause, and the competition is scored on the
+recorded `interview.goal` BEFORE it is scored on elegance.** `arc_divergence.py` requires the field
+and reports a set whose candidates serve the goal in the same words — that collapse is the field
+being satisfied rather than the competition being run. The order is the point: an arc chosen for
+being memorable and *then* checked against the goal is an arc chosen for being memorable.
+
+**🔴 The arc is COMPETED, not derived — 2–3 candidates over one ledger.** The planner returns 2–3
+candidate arcs (each naming its audience question, the objection it pre-empts, its closing ask and
+the ledger ids it carries), you run `python3 scripts/arc_divergence.py <arcs>.json`, and **YOU pick**
+— it is not a new user stop. The competition reaches the user as the content checkpoint's required
+**`arc gate:`** line (picked + the losers + one clause each + the divergence verdict); a content
+checkpoint without it is not ready. Rationale, both collapse modes, and the escape hatch:
+`agents/content-planner.md` §3. This exists because the arc is the only decision whose error
+invalidates everything downstream — a wrong form costs one slide, a wrong arc costs the design plan
+and the build under it — and it was the one decision with no alternative on the record.
+🔴 **Its GATE is `content.arc.candidates` in `.deck-gates.json` — the candidate arcs THEMSELVES, not a
+verdict about them.** The hand-off gate runs `arc_divergence.check()` over them at delivery, so the
+line you paste is no longer the evidence: it re-scores the set. Losers go in `content.arc.rejected`
+(every one of them, with its clause) and a flagged-but-kept set needs
+`content.arc.divergence_justified`. This changed because a delivered deck passed with
+`"divergence": "ok"` — two characters — while the script had never been run for it; the previous
+gate demanded the losers and their clauses, which raised the price of writing the record without
+making it impossible. Both `render_deck.py --gate-check` and `codex_delivery_gate.py` recompute; a
+run that skipped the competition now has nothing true to write, which is the point.
+**🔴 Hand the planner a `search cap:` too — and do the SMALL, NAMED lookups BEFORE dispatching it.**
+Web search is capped per SESSION, shared with every subagent, and it does not reset between decks in
+one conversation. Measured: one research fan-out — 12 agents plus 7 verifiers, none of them told a
+cap existed — spent all 200, and the bill arrived hours later when a single lookup for a company's
+official logo could not run and that deck shipped without it. The cheap, late, small queries starve
+because the big early fan-out took everything, so fix it in the order that buys the most: (1) run the
+handful of NAMED lookups first — the logo, the brand colours, the one clearance number — since they
+are few, they are exactly what starves, and Step 2 needs them anyway; (2) state a per-agent cap **in
+each dispatch prompt** — an agent not told a cap searches until satisfied, and N of them do it in
+parallel — keeping the whole round under about half of what REMAINS, not half of the original cap;
+(3) carry `searches: planned N / spent N` to the hand-off `cost:` line. If the budget does run out,
+say so on the deck's limitations page and in the hand-off: **"could not verify" must never be allowed
+to look like "does not exist"** (full rationale at Step 5's SEARCH BUDGET block).
+**Hand the planner the RESEARCH breadth too** — the purpose-derived value from Step 0 (`standard`
+for the low-stakes class, `thorough` for defense / conference / exec / pitch). It sizes only the
+research sweep; the REVIEW tier is chosen later, at Step 5, with the rendered deck visible, and
+the planner neither knows nor needs it. What breadth narrows is BREADTH, never the fidelity
+floor: every claim that reaches a slide is still traced to a primary source at every breadth. If
+no derivation was recorded, the planner works at `standard` and says so.
 
 The rest of this step is the **specification the planner works to** (and what
 you check its plan against). The bar — understand it deeply, don't skim:
@@ -329,11 +503,36 @@ very long PDF / large corpus — do NOT fake a single linear read: classify the 
 run **long-source mode** (map → triage → deep-read the load-bearing ~20% + a blocking
 Source-coverage map). See the long-source bullet below and `content-planner.md` §1.)*
 
+🔴 **BEFORE any of that, write the AUDIENCE BRIEF — what the people in the room have to DECIDE,
+in the order they will face it, each with what they need in hand — and aim the information
+gathering at THAT list.** It is a required field (`content.audience_brief`, checked by
+`deck_gates.py`, `--gate-check` and the Codex gate from one contract in `scripts/audience_brief.py`)
+and it carries an `audience:` line onto the Step-1 checkpoint. 🔴 **On a deck with NO SOURCE it
+REPLACES the comprehension brief**: there is nothing to comprehend, so a brief written anyway is a
+summary of the SUBJECT, and a subject brief ships a deck *about* the topic where one *for* the
+audience was asked for.
+
+> **The test, when you cannot tell:** read the takeaway spine top to bottom. If it reads as a set
+> of true statements ABOUT the subject rather than as answers to what this room has to decide, the
+> frame is wrong — and patching a missing topic onto it (the Melbourne rebuild's first move was to
+> bolt two landmark pages onto the survey spine) fixes the symptom and keeps the frame.
+
 Then **write a comprehension brief — a REQUIRED, fixed-field, source-traced artifact** (the
 planner's `agents/content-planner.md` §1 is the spec); every field must trace to a locatable
 source span, not memory:
 
 - **The field list is in `references/content-plan-spec.md` §Comprehension brief — read it before writing (or checking) the brief.** It holds the one-sentence message + its verbatim source sentence, the contributions, the method essence, the one-row-per-figure-AND-table spec, the nuance/limitation quotes, and the claim-ledger columns (same spec as `agents/content-planner.md` §1–2).
+
+🔴 **Sweep the source for what IT says is NOT yet established, and record it — `content.open_ledger`.**
+Future work · next steps · a roadmap · an open gate · "cannot establish" · "not yet" · a TODO. One row
+each: `claim | where the source says so | absent from the deck, or stated AS OPEN on slide N`. **No row
+may reach a slide in the established voice.** This is a DIFFERENT failure from inventing and neither the
+never-invent rule nor the claim ledger can see it: the fact really is in the source, promoted from
+hypothesis to result, so it verifies clean and ships. Measured on a research deck: a slide asserted that
+extra respiratory bins helped the reconstruction while the source listed exactly that as an untested
+gate — the kind of thing an expert room catches in one sentence. `[]` is a legitimate value and records
+that the sweep happened (a no-source deck writes `[]`); BOTH gate paths block the missing KEY and never
+the count. Field spec: `references/content-plan-spec.md`.
 
 **This is a hard gate, not a sanity check.** Self-verify the brief against the source; if any
 field is empty, hedged, or untraced — or the emphasis test fails (your one-sentence message
@@ -351,7 +550,7 @@ at *today's* date**: a paper's "state-of-the-art", an adoption number, a "first/
 latest" superlative may be stale by presentation day. Re-verifying a source claim is not
 inventing — it's fidelity to what's *true now*.
 
-- **No content — and any web fact-check on any deck:** draft the outline from your own expertise, then ground *and verify* every falsifiable claim against a **primary** source, and ground the deck to *today*. **Read `references/content-plan-spec.md` §Web verification & no-source decks before running any search or putting a falsifiable/time-bound claim on a slide** — it owns the PROVENANCE CONTRACT, the re-verify-on-every-build list, the dated-event tense rule, and the no-web-tool fallback.
+- **No content — and any web fact-check on any deck:** draft the outline from your own expertise, then ground *and verify* every falsifiable claim against a **primary** source, and ground the deck to *today*. **Read `references/content-plan-spec.md` §Web verification & no-source decks before running any search or putting a falsifiable/time-bound claim on a slide** — it owns the PROVENANCE CONTRACT, the re-verify-on-every-build list, the dated-event tense rule, and the no-web-tool fallback. 🔴 **A web pass ships on three floors (`content-planner.md` §2(e)): COMPREHENSIVE** (map the domain, sweep breadth-first, + a proactive **LIFECYCLE sweep** — every featured product/version/entity checked live-vs-discontinued as of today, so a dead/renamed thing is never headlined), **SUBSTANTIAL** (every load-bearing slide carries a concrete number/date/price/named result, not adjectives), **ACCURATE** (each fact corroborated ≥2 *independent* credible sources — content-farm blogs corroborate nothing; confidence-tagged; MED facts ship only when labelled "per public reporting"). The content checkpoint MUST then carry the `coverage:` · `lifecycle:` · `provenance:` lines, or it is NOT READY (the content-planner §1 web-research gate + `checkpoint-convention.md`). Measured: a no-source deck shipped thin and headlined two discontinued products because none of this was enforced.
 
 - **A long source (a book / very long PDF / large corpus / multi-volume set)** is NOT read front-to-back — a faked linear read either overflows or, worse, *fits* and goes shallow. **The moment a source might exceed ~40–50 pp or not fit one pass, read `references/content-plan-spec.md` §Long-source mode** — deterministic size classification (`extract_pdf.py map`, CJK counting, multi-file sum), structure map, triage, the verbatim ~20% deep-read with page-traced claims, **page-scoped figure locators (never whole-document `autofig`)**, the Source-coverage map, the TWO-PHASE dispatch that posts the selection FYI *before* the deep-read, and the scanned/DRM no-text case.
 
@@ -387,6 +586,11 @@ verbatim-vs-skimmed line + the `selection FYI:` line; a missing/partial map is "
 for a video-sourced deck the transcript-status line** (supplied locator or the visual-only GAP
 line); an empty/hedged/untraced brief is **not ready** — send it back to the planner. Fold in the
 user's edits to the story, then move to design (Step 2).
+> **🔴 THE USER'S OWN FILES, checked against themselves — before the planner reads them:** list them in
+> `content.sources` (`[]` if none) and run `python3 scripts/source_check.py material <deck-dir>`; each finding
+> is a 「材料自相矛盾」 open question at the content checkpoint, resolved in `content.material_check`. The gate
+> later traces every number on the built slides to these files (`source_check.py numbers <deck-dir>`;
+> `--write-rows` records the unambiguous ones). Row shapes and limits: `references/troubleshooting-faq.md`.
 > **🔴 CHECKPOINT — CONTENT:** show the comprehension brief + claim ledger + narrative arc + the
 > per-slide takeaways/content, and confirm the pace/slide-count, before any design work begins —
 > rendered as the compact ≤~25-line checkpoint artifact defined under the 🔴 CHECKPOINT convention
@@ -397,6 +601,64 @@ user's edits to the story, then move to design (Step 2).
 > the coverage gate at book scale (also surfaced earlier as a cheap FYI, before the verbatim deep-read).
 
 ## Step 2 — Design the deck (use the slide-design agent)
+
+> ### 🔴 OPEN STEP 2 BY READING WHAT THIS USER HAS ALREADY TAUGHT
+> `python3 scripts/taste_ledger.py list --binds-at design --format prompt`
+>
+> Corrections the user made by hand on *earlier* decks live here — icons missing on categorical
+> content, a deck that came back as grey blocks, a motif louder than the content it carried, a type
+> default they set themselves. Without this the same note arrives deck after deck, each one costing
+> a delivery to rediscover; the user becomes the skill's memory, and pays for it every time.
+> **An empty ledger asks nothing** (a fresh install has one, and that is the normal case). When it
+> is not empty, record one row per active entry in `design_plan.taste_applied` —
+> `{"id": …, "applied": true}` or `{"id": …, "applied": false, "why_not": "<why it does not bind
+> here>"}`. The gate checks that each was **considered**, never that it was obeyed: a taught rule
+> can be right to break on this deck, and a skip written down is design (this is the taste
+> protocol's rule 3 applied to the user's own corrections). Learned something new at hand-off?
+> `taste_ledger.py add --id … --quote "<their words>" --rule … --binds-at … --deck …` — the quote
+> must be **theirs**, or the rule is something you decided and attributed to them. And when a rule
+> earns a deterministic check, `retire <id> --gate <CODE>`: entries leave by being **promoted**, not
+> forgotten, which is what keeps the ledger from turning into noise.
+
+> ### 🔴 STEP 2 IS BRANCH-INVARIANT — it runs IN FULL on EVERY Q1 template choice
+> The Q1 choice — (a) design-a-clean-one, (b) a provided template, (c) the direction gate, (d) a
+> generated visual identity — decides only the **LOOK SOURCE**. It NEVER removes the design plan or
+> its 🔴 design checkpoint. **A branch's look-gate confirms the LOOK, not the per-slide DESIGN:** the
+> branch-(c) direction gate and the branch-(d) **hero checkpoint are NOT the design checkpoint** (the
+> per-deck auto-waiver lists them as separate stops for this reason). After either, you STILL produce
+> the design plan (form ledger · rhythm · signature move under a boldness dial · the 3 design musts ·
+> semantic colour · density · logo/motif) and post the design checkpoint — with its `direction gate:`
+> (c) / `style gate:` (d) line — **before building**. A generated identity *feeds* the plan (palette /
+> motif / surface / type are inputs, recorded as the four-line contract); it does not replace it.
+> **Enforced deterministically:** `render_deck.py` REFUSES a full render when a content plan is
+> recorded but no design plan + design checkpoint is (a `--slides` probe render is exempt, and it
+> reads both the shared `.deck-gates.json` and the Codex `.codex-deck-evidence.json`) — so the plan
+> can never be reconstructed post-hoc to pass the hand-off gate. This closes a measured regression:
+> the generated (d) branch's workflow once routed interview → build and let its hero checkpoint stand
+> in for Step 2, shipping a deck whose layout, rhythm, and forms were never planned or reviewed.
+
+> ### 🔴 STEP 2 OPENS WITH A MATERIAL PROBE — one REAL slide, built and looked at, BEFORE the plan is written
+> **Author the signature page in the invented register with real deckkit, render it, and LOOK at it —
+> then write the design plan's declarations to describe what you made.** Not after. The plan is a
+> description of an artifact that exists, never a promise about one that does not.
+>
+> 1. Build ONE slide: the page the signature move lands on, in the register you just invented,
+>    using the same `build_<deck>.py` the deck will use. Render it (`render_deck.py … --slides 1`).
+> 2. **Look at it, and answer one question in one line: what would the SAFE version of this page
+>    have been?** If the honest answer is "about the same thing", the register is a look, not a
+>    move — go back and invent, before twenty declarations are written on top of it.
+> 3. Then write the design plan. The checkpoint carries a **`material probe:`** line — the rendered
+>    PNG plus that one-sentence comparison.
+>
+> **Cost is one build + one render (seconds), and the page is not a throwaway** — it becomes the
+> deck's signature slide and serves as the Step-4 anchor proof's `signature` anchor, so the ritual
+> is paid once. **It is a different question from the anchor proof**, which asks whether the move
+> SURVIVED the build; this asks whether the register was worth building at all.
+>
+> **Skip only when the look is not yours to invent:** a registered/provided template or a Mode-A
+> mimic (the material is the template's), or a 1–2 slide tiny ask. `boldness: conservative` does
+> NOT skip it — restraint is a material decision too, and a page is exactly where you see whether
+> it reads as deliberate or as nothing.
 
 With the **Content plan approved**, first build the **Evidence manifest** — one READ-ONLY probe line per asset the approved plan names, so the art director plans geometry with its eyes open (a no-asset deck skips it entirely). **Read `references/asset-production.md` §Evidence manifest before dispatching slide-design** for the line format, the probing tools, and the rule that probing NEVER materializes crops/equations/plates (asset-prep still runs only after the design plan is approved). That file is the asset lifecycle end-to-end — probe → image opt-in → crops → charts → logo/icons → equations.
 
@@ -421,7 +683,7 @@ interview answers that steer register
 (purpose/audience/time, delivery mode, style, template/brand decision, venue — plus, when the user
 gave a Q4 style example, the **written style brief + chosen mimic mode**), and the craft
 references it designs against (`form-selection.md`, `design-gallery.md`, `scripts/presets.py`,
-`design-by-purpose.md`, `design-principles.md`, `design-intelligence-addendum.md`, `semantic-color-contract.md`, `data-viz.md`,
+`design-by-purpose.md`, `design-by-topic.md`, `bespoke-registers.md`, `design-principles.md`, `design-intelligence-addendum.md` (§6.1: semantic colour), `data-viz.md`,
 `schematic-diagrams.md`, `icons.md`, `animation.md`, `image-generation.md`,
 `east-asian-aesthetic.md` — and, for a mimic deck, `style-analysis.md`). It consumes the approved content — it does **not** reopen it — and
 returns a **Design plan**: the deck's **Design language** (a *named* signature motif + a
@@ -432,18 +694,72 @@ checklist** (which the Step-5 critic's design lens then applies), and the **imag
 art director is *one mind* over the whole deck — only it sees every slide at once, so deck rhythm and
 where the appear-builds fall are its call, not the builder's.
 
+🔴 **On a host that CAN dispatch subagents, the art director IS a subagent, and its Design plan is a
+FILE.** `python3 scripts/dispatch_brief.py prompt --brief <brief> --role design` prints its prompt; save
+the Design plan it returns as a .md file next to the deck brief (plan files never ship beside the
+deck), then record it: `python3 scripts/design_plan_record.py <design-plan.md> --deck <deck-dir>
+--dispatched`. The hand-off gate re-reads that file — slide-design.md's Output sections and its
+self-verify checks — and blocks without it; a host that cannot dispatch records
+`--waived "<why>" --category no-dispatch-on-host` and runs the same brief inline *with slide-design.md
+open*. Measured 2026-11-07: eight runs of this skill typed the design fields themselves and none opened
+slide-design.md; the older skill's runs read it, and won a blind design comparison 3–4 of 4.
+🔴 **The plan decides the light/dark pacing, and the gate checks the built pages.** Its Deck rhythm ends with
+`grounds: flips <slide>, <slide> — <why>` (two or more interior beats on the flipped ground — the peak, the key
+number, a turn) or `grounds: single — <conservative | visual-language | template-locked | tiny-deck>: <why>`.
+Register kits paint the quiet ground on every content page, so a flip is painted on purpose with
+`dk.slide_background(slide, <deep colour>)`. Measured 2026-11-08: the older skill's decks flipped 1–3 interior
+pages each and won every consistent blind pair; the newer ones flipped 0–1. The same rhythm names a **`hero: slide <n>`**
+whose number or words reach 2.5x the deck's typical top type size, accent at full strength (or `hero: none —
+conservative | template-locked | tiny-deck | image-led: <why>`); the gate measures it on the built file.
+
 **The design plan is the cheapest place to change visual direction**, so end the step by showing it
 and getting the user's OK before the canvas is set up or anything is built. **This design intelligence
 runs on EVERY deck — it's how the art director designs, never opt-in per deck — and scales down
 gracefully to small decks (a 4-slide deck still earns one hero per slide, no card-grid reflex, semantic
 colour, and one memorable moment); only the deck-level numeric floors are size-gated (hard at ~8+ content
-slides, strong guidance at 6–7).** **Precondition — the design gate:** the plan is **not ready** unless it has a concrete **Design language** (a *named*
+slides, strong guidance at 6–7).** **Precondition — the design gate:** the plan is **not ready** unless it carries a **`concept:` line
+— what this deck's idea is a PICTURE of, **the two middle rungs that produced it** (`via <core
+concepts> → <visual language>`), plus the TWO pictures it beat and the clause that lost each**
+*(the ladder is `topic → core concepts → visual language → motif`; the MIDDLE rung is the one that
+gets skipped, and skipping it is what produces industry stereotype — an MRI deck jumped straight to a
+picture gives you a scanner, routed through `frequency · sampling` it gives you a k-space grid. A
+winner with no rungs is a picture that arrived, not one that was derived. Full ladder + the
+domain-neutral §3 dictionary it resolves through: `agents/slide-design.md` §1.
+🔴 **This rule governs the MOTIF, never the CONTENT.** Rejecting the obvious PICTURE is the job;
+dropping the obvious SUBJECT is a different act and it is almost always wrong. Measured: asked for
+a Chinese request reading "a PPT introducing Paris", a run correctly refused the Eiffel-tower silhouette as a governing image — and
+then also deleted the landmarks, the neighbourhoods and the food from the CONTENT, delivering an
+argument about 19th-century building regulation to an audience that came for a city introduction.
+A deck may carry Notre-Dame, the Louvre and Montmartre while its visual language owes nothing to a
+postcard. **Give the audience what they came for, in a form no template would have found** — that
+is the whole sentence, and taking only its second half produces a deck that is distinctive and
+useless.)*
+(*an intelligence network* · *a digital organism* · *a hand and a machine hand doing one job* — three
+governing images for the same approved argument, not three styles and not three layouts). This is the
+one divergence the pipeline never had: the direction gate diverges on STYLE (its own preview page says
+"the same four slide types … only the *style* differs") and form-selection diverges on LAYOUT per
+slide, and both hold the picture constant. The motif does not fill the hole — it is chosen as an
+attribute of a preset picked first and capped at ≤3 appearances, so a governing image is structurally
+forbidden from governing. It costs three sentences at plan time: no extra dispatch, no extra render,
+no extra round trip (`agents/slide-design.md` §0). One picture with no alternatives is not a choice,
+it is the first thing that came to mind — and the hand-off gate rejects two "alternatives" that are
+the winner in other words. It also has a concrete **Design language** (a *named*
 signature motif + a deliberately-chosen palette/type, not a defaulted light/minimal/blue), a one-line
 **taste-profile field** in that Design language section — `taste profile: <n dials applied / none on
 file> · freshness: varied <foundation> vs <last look-history line>`, or the alternate arm `look
 LOCKED (registered/provided template) — carve applies` — the line that makes the freshness rule
 checkable and any profile override visible (`references/user-taste.md`), **a `boldness:` line
-(conservative | balanced+ | bold | experimental — default balanced+) AND a real `signature move:`
+(conservative | balanced+ | bold | experimental — **DERIVED, not a flat default**: explicit user
+request > `taste.md`'s promoted dial > the purpose — *conservative* for a sober defense / regulatory
+/ status readout unless asked otherwise, *bold* for a pitch / launch / brand / culture deck,
+**balanced+** for everything else; record which arm set it (`agents/slide-design.md` owns the full
+table). This derivation used to live ONLY in the art-director's own file, so an inline run — which
+never opens it — gave a launch deck and a status readout the same middling dial, and then judged
+both against it: the pitch was never asked to be brave and the status readout was told off for not
+being. Layer 1 has to carry the mapping because layer 1 is what an inline run reads; **at `conservative` the risk is
+OPTIONAL — take a modest restrained move, or fill the field with the one-clause `deliberately
+restrained: <why>`, and then `signature_proof` is not required because there is no risk to prove.
+Every other field still is, and above `conservative` a real move is required, not optional**) AND a real `signature move:`
 line** — the ONE deliberate aesthetic RISK a template wouldn't make, scoped to where it lands (cover /
 WOW / money slide) and adapting a named bold reference, **plus a `carried_by:` clause naming 2–3
 slides (the signature slide + ≥1 more) where the same idea does STRUCTURAL work** — one brave slide
@@ -463,37 +779,107 @@ re-form-vs-taste-reason call), a **Form
 ledger** whose diversity gate passes (no one format-family on >~40–50% of content slides — the
 card-overuse guard), the addendum's **deck-level design gates** — a **rhythm map**, a **semantic-colour
 ledger**, a passing **block-dependency audit** (no >2 consecutive card slides), and the **minimum
-deck-level variation** (`references/design-intelligence-addendum.md`) — plus, for a **company / product /
-single-entity** deck (its subject IS one org / product / brand / institution, or a talk naming a
-tool/framework/model), a **logo plan WITH EVIDENCE** per the slide-design LOGO PRINCIPLE's situation
+deck-level variation** (`references/design-intelligence-addendum.md`) — plus, on **ANY deck that NAMES
+a real entity** (not only a single-entity one: a company / product / brand / institution / government
+body as the SUBJECT, a tool/framework/model named as content, **or a slide whose FORM is a roster of
+named real entities** — an ecosystem map, an alliance's member list, a comparison whose rows are
+institutions), a **logo plan WITH EVIDENCE** per the slide-design LOGO PRINCIPLE's situation
 table: the line must read `official asset — <source>`, `searched, none found → designed wordmark
-(flagged)`, or `n/a — <multi-entity | template carries it | user opted out>` — a bare "wordmark"/
-"text only" with no recorded search, or a missing line on a single-entity deck, makes the plan
+(flagged)`, or `n/a — <named inline as text | template carries it | user opted out | third-party assessment>`
+— and a **roster slide additionally carries `entity marks: <N of M sourced | none — reason>`**, because
+one line cannot say both "the deck's own mark" and "the eight institutions on slide 5". 🔴 **A generic
+placeholder glyph in a mark's slot — a coloured square, a repeated stock icon, a bullet dot dressed as a
+crest — is NOT an acceptable value for that field.** It is decoration impersonating information and it
+fails the 1-second decodability floor; plain type beats a shape that looks like it means something.
+*(Measured: a 12-page deck listed all eight Go8 universities around a hub — the exact ecosystem-map form
+the LOGO PRINCIPLE says earns a logo wall — and shipped eight identical blue squares. Nothing was wrong
+with the rule; the deck was multi-entity, so no `logo plan:` line was ever required, and a rule nobody is
+asked to evaluate is a rule that does not run.)*
+— **`third-party assessment` is a full member of this set, not a footnote**: it is decided BEFORE the
+search and overrides its result (the 🔴 row below), so a deck that qualifies for it must be able to
+name it here — a bare "wordmark"/
+"text only" with no recorded search, or a missing line on any deck that names a real entity (including a roster slide), makes the plan
 **incomplete** (send it back; self-verify (o) owns this) — and the **THREE
 DESIGN MUSTS** addressed (`slide-design.md`'s three design musts) —
 **(1) appear-builds — ONLY if the user opted in** (the interview's presented-deck choice): if IN, a
 motion manifest places builds where they help (build/static *with a reason* per slide) and each built
 slide is staged FULLY (every content element in a step, deliberate order); if OUT, every slide is
-`static: user opted out` and that is complete, not a gap. **(2) a style-matched SVG icon family** on any
-category/entity-rich deck — every branch, incl. generated-template (self-verify (g); "opt-in" never waives it), **(3) diverse formats** (not a card grid repeated) — musts 2–3 are
-*applied where they help or justified where not* (a must to consider + apply, never a blank per-slide
-quota — still smart about where/when). A plan that defaults its look, over-relies on one format, forgets
-icons, or — when builds are opted in — leaves a built slide half-staged or forgets builds where they'd
-clearly help is **not ready** — send it back to the art director.
+`static: user opted out` and that is complete, not a gap. **(2) a style-matched SVG icon family** — 🔴
+**icons are the DEFAULT on any deck with categorical / multi-item / conceptual content** (a roster,
+a set of pillars/roles/tools, a 3-item preview, a step list): they aid the 1-second read and reinforce
+the visual system, with no cost worth their absence, so the question is never "should this deck have
+icons" but "which slides earn them" — every branch, incl. generated-template (self-verify (g); "opt-in"
+never waives it). **Skipping the family is a HIGH-bar choice, not a casual one**: `icon_family: none`
+must classify WHY from four reasons where an icon family would genuinely HURT — `motif-dominant` (a
+strong constructed motif icons would dilute, the ≤3-loud budget), `editorial-register` (a data/editorial
+register — FT/Economist — icons would cheapen into corporate), `tiny-deck` (a 1–2 slide ask), or
+`template-locked` (a provided template that carries its own marks) — recorded as
+🔴 **A FIFTH category exists: `user-declined` — the user asked for no icons.** The four above each
+make a claim about the DECK, and none of them can say *the user decided*, so a deck whose user said
+a Chinese "no icons needed" instruction had to be filed `template-locked` — a different claim, and one the Codex gate VERIFIES
+against the built file, so the forced label can also fail for the wrong reason. It is their deck; a
+gate has no standing to second-guess that, only to record it. `icon_none_checked` still names every
+flagged slide.
+🔴 **The icon-waiver category is verified against the BUILT pages** (`motif-dominant` needs a real loud motif,
+`tiny-deck` a real tiny deck, `template-locked` a real template) and must name every flagged slide — full rule:
+`references/troubleshooting-faq.md`.
+
+**Codex only:** include `references/codex-runtime.md` in the art-director brief and begin its hidden
+`.codex-deck-evidence.json` once the design direction is known. Its per-slide ledger must mark which
+slides are categorical, bind those to one actual icon family or a slide-specific waiver, and name any
+early component carve; do not let either decision disappear into the builder's convenience.
+
+**🔴 One row of the LOGO PRINCIPLE table decides BEFORE the search and overrides its result: a
+THIRD-PARTY ASSESSMENT.** The deck is *about* an entity but is not *from* it, and carries what that
+entity would not publish about itself — open recalls, a "first but not unique" correction, a
+limitations page, competitor counter-evidence. There the answer is `n/a — third-party assessment`
+plus the finding that makes it so: **no official livery on any page**, the entity's name set in the
+deck's own type. The test is authorship, not sentiment — a favourable independent review has the
+same problem as a critical one. A reader seeing the mark concludes the entity produced or endorsed
+this, and for an independent assessment that is a misattribution: the same class of error as an
+unsourced number, committed in the chrome instead of the body. Because it is a question about who
+wrote the deck, finding a real logo does not overturn it and "not found" is never its reason.
+*(Real: a briefing carrying two open Class I recalls and a "first, but not alone" correction was
+headed for build in its subject's brand colours; it was caught by hand and recorded as a named
+deviation. This row makes that the default instead of a save.)*
 
 **The per-slide content-image opt-in is a CROSS-CUTTING choice available on EVERY deck** — independent of the template decision and separate from Q1's generate-a-template path; offer it whenever an image tool OR web search for sourced photos is available. **Read `references/asset-production.md` §Per-slide content-image opt-in before writing the opt-in list** — the three guardrails (content-related, never every slide, and the REFERENT RULE that decides generated vs real sourced imagery) and the per-row source-token grammar. Fold in the user's design edits, then set up the canvas (Step 3).
 
-> **🔴 CHECKPOINT — DESIGN:** show the Design language + Form ledger + the 3 design musts + the
-> **`boldness:` line + the `signature move:` line** (the one scoped aesthetic risk + where it lands +
-> the bold reference it adapts — so a wrong dial or a timid/too-wild move costs one glance to veto) + the
+> **🔴 CHECKPOINT — DESIGN:** show the **`concept:` line (the governing image + the two middle rungs
+> that produced it — `via <core concepts> → <visual language>` — + the two it beat, each with the
+> clause that lost it)** + the Design language + Form ledger + the 3 design musts + the
+> **`boldness:` line + the `signature move:` line with its `carried_by:` clause** (the one scoped
+> aesthetic risk + where it lands + the bold reference it adapts + the 2–3 slides where the same idea
+> does STRUCTURAL work — so a wrong dial, a timid/too-wild move, or a risk that lives on exactly one
+> slide costs one glance to veto) + the
 > image opt-in list (each row with its `generated — <tool>` / `sourced — <origin> (<license>)` /
 > `provided — …` / `searched, none found → …` rung — full grammar: `references/image-generation.md`
-> step 5 — source token) + (for a company/product/single-entity deck) the **`logo plan:` line WITH its
+> step 5 — source token) + (on ANY deck naming a real entity — subject, named-as-content, or a ROSTER slide) the **`logo plan:` line WITH its
 > evidence token** (`official asset — <source>` / `searched, none found → designed wordmark (flagged)` /
-> `n/a — <reason>`) + the **motif line stating the device AND its meaning + how it's made legible**
-> (label / legend / figurative — the STRANGER TEST) — presented as the compact checkpoint artifact from the 🔴 CHECKPOINT convention block
-> (same fields, incl. the rhythm-map table and the `direction gate:` line — picked direction or
-> named carve) — and get the user's OK before building.
+> `n/a — <reason, incl. third-party assessment>`) + the **motif line stating the device AND its meaning
+> + how it's made legible + `motif generates:` (background · markers · one PAGE whose geometry IS the
+> motif — `none — <reason>` beats an invented artifact) + ONE MEANING PER REPEATED FORM deck-wide** —
+> the last two are gates, not garnish: a motif that only recurs is an ornament with a schedule, and a
+> device meaning one thing on the cover and another inside passes every per-page check while still
+> sending the reader asking what it means (measured twice, on two different decks). On branch (c) both
+> are REQUIRED rather than weighed, because there the motif IS the deck's visual design; `conservative`
+> and a 1–2 slide tiny ask carve out, and on a locked template the ladder is not re-run on its device
+> (label / legend / figurative / **removed** — the STRANGER TEST; **a motif may be a CONSTRUCTED
+> OBJECT rather than a shape** — something this deck's own material would BUILD, gaining a part per
+> beat instead of appearing again per beat, which is what makes `carried_by` structural rather than
+> stamped. Derive it from this content; there is deliberately no menu, because a menu of objects
+> becomes the next house style. The test: *could this object belong to any other deck?* And it is
+> the right answer only when the argument ACCUMULATES — a comparison, a set of independent findings,
+> or a sober regulatory register wants the abstract device instead, and picking that deliberately is
+> the same judgement working, not a failure to be bold. Full when/when-not:
+> `agents/slide-design.md`; a reading that DEFERS to a later
+> slide is a failed test written as a passing sentence) + the **`interior register:` line** (the quiet
+> cue that carries the style onto ordinary interior pages, or `none (flat by register — <reason>)` —
+> self-verify (q) · PRE-FLIGHT 6b · the critic's `register_interiors` check all read this field, and a
+> style dressed only on the bookends fails) + the **`density:` line as two numbers**
+> — presented as the compact checkpoint artifact from the 🔴 CHECKPOINT convention block
+> (same fields, incl. the rhythm-map table and the branch **gate line** — `direction gate:` on branch
+> (c), `style gate:` on branch (d); picked look or named carve) — and get the user's OK before building.
 
 ## Step 3 — Set up the canvas
 **First, decide where the deck lands.** Deliver each deck as one self-contained
@@ -517,7 +903,13 @@ don't silently dump into `/tmp`. You'll remind them to open it in step 6.
 > `./<deck-name>/` in the working directory. Never `/tmp`. State the chosen location in chat the
 > moment you decide it — auto mode is never invisible — and repeat it in the hand-off.)*
 
-**Canvas format.** The default deck is 16:9 via `deckkit.blank_deck()` — untouched, and everything below assumes it. **If the interview confirmed any non-16:9 surface (4:3 venue · 小红书 3:4 · square 1:1 · story 9:16 · A4 print) — or the design plan carries a `format:` line that isn't `wide` — read `references/deck-setup.md` §Canvas format BEFORE creating the presentation object**; it carries the `scripts/formats.py` contract (`band` safe rect · `chrome` · `columns_ok` · `display_scale` · `lint_flags`) and the rule that the design plan records a `format:` line whenever it isn't `wide`.
+> **Generated plates?** The moment you have a folder (and the Step-2 design checkpoint is approved), dispatch
+> ONE image manifest — signature slide first — and author the build script while it runs. Details:
+> `references/asset-production.md` → "Dispatch the image manifest".
+
+**Canvas format.** The default deck is 16:9 via `deckkit.blank_deck()`, and everything below assumes it.
+🔴 **Any other surface the interview confirmed (4:3 · 3:4 · 1:1 · 9:16 · A4 · A0/A1 poster) → read
+`references/deck-setup.md` → "Canvas format" before building.**
 
 **Keep the per-deck build script (`build_<deck>.py`) in that same folder, beside the
 `.pptx`.** The build script — not the rendered file — is the *source of truth* for the
@@ -529,51 +921,104 @@ iterate without clobbering the user's manual edits. In that script, resolve deck
 relative to the script file (for example `ROOT = Path(__file__).resolve().parent`) rather
 than the current working directory, so `python /path/to/build_<deck>.py` works from anywhere.
 
+- **Brand branch** — a confirmed `brand.json` from Step 0: `python3 scripts/brand_kit.py style <deck-dir>/brand.json [--ground dark]` writes `brand_style.py` beside it (the presets' shape and style.py's names); the build does `import brand_style as bs; B = bs.apply()` (import it BEFORE `deckkit` — it puts `scripts/` on `sys.path`) — palette, faces and ground in one call, like `presets.apply()` — draws with `bs.INK` / `bs.ACCENT` / `bs.ACCENTS` / `bs.GREY` / `bs.MUTE`, and places `B['logo']` on the cover. A preset's SURFACE kit still composes with it; a preset's colours do not.
 - **Template branch** — the user supplied a `.pptx`, or Step 0 found an official conference template: read `references/deck-setup.md` → "Template branch" BEFORE creating the deck object (inspect → `open_template()` → adopt the template's brand → register a reusable `profile.md`).
+  🔴 **A registered `profile.md` is now CHECKED against the deck you build, not merely available to read.** Give it one fenced **`## Machine-checkable contract`** json block — any of `match` (the layout-name + canvas-size fingerprint this binds by), `layouts`, `fonts`, `title_color`, `must_cover` — and `scripts/check_template_profile.py` holds the built file to it on BOTH gate paths (`LAYOUT OFF PROFILE` · `FONT OFF PROFILE` · `TITLE COLOUR OFF PROFILE` · `UNCOVERED TEMPLATE FURNITURE`; waive with `{"template_profile": {"waived": "<why this deck differs>"}}`). It binds by the DECK's own fingerprint rather than by a recorded template name, so a runtime that compressed the interview away is still checked; a profile with no contract block reports NOT CHECKED, never clean. **Why it exists:** the registry is the one artefact here with a MEMORY across decks — the layout indices, the decorative rectangle that cannot be deleted and must be covered, the font trap someone already hit — and measured by grep it was read by two producers and by NO check, so a build could ignore every line of it silently. When you learn something new about a template, add it to the prose AND, if a machine can decide it, to the contract.
 
-- **No-template branch** — you are designing the look yourself: read `references/deck-setup.md` → "No-template branch" BEFORE the first palette/preset/font call (`set_palette` semantics — a bare `deckkit.MAGENTA = …` does NOT re-theme components whose signature default binds at import · `scripts/presets.py` · `references/design-by-purpose.md` · `references/design-gallery.md`). Two rules that survive no matter what: **never ship deckkit's default blue, and never reuse the last deck's scheme** — each deck gets its own distinct identity.
+- **No-template branch** — you are designing the look yourself: read `references/deck-setup.md` → "No-template branch" BEFORE the first palette/preset/font call. **Reach for `presets.apply("<name>")` — one call: palette AND structure AND ground.** `set_palette` alone re-themes only colour (a bare `deckkit.MAGENTA = …` does not re-theme components whose signature default binds at import); `deckkit.set_geometry(radius=…, rule_w=…)` carries the structural half — **`radius=0` squares every box-based component and `node()`**, which is how you reach `brutalist`/`swiss`/`ink_wash`/`blueprint`, whose own guards forbid rounded cards; **`rule_w` scales every card border, divider and node outline**, which is the other half of what makes brutalist look brutalist. `deckkit.set_ground(<bg>)` is the third token — `apply()` sets it and `add_slide()` paints it, so the 8 dark registers are dark from slide one instead of leaving the author to remember (measured before it existed: `dark_tech` shipping its light ink on a white canvas at 1.18:1). All three are no-ops at their defaults (`scripts/presets.py` · `references/design-by-purpose.md` · `references/design-gallery.md`). Two rules survive no matter what: **never ship deckkit's default blue, and never reuse the last deck's scheme** — each deck gets its own distinct identity. Both are now GATED against the render rather than left to memory: `scripts/check_register_pixels.py` (run by `--gate-check` as the `register_pixels` section, and by the codex gate) measures the deck's own PNGs and fails when deckkit's stock identity is what actually shipped, when a declared colour reached no pixel, or when the canvas repeats a recent deck's from `taste.md`'s LOOK HISTORY. It is the only check that can see a **bespoke** register at all — `check_style_applied.py` reads the build script for a `presets.apply()` call, which a hand-built register does not contain. 🔴 It judges COLOUR only. The **shape-level** half is `scripts/check_register_guard.py` (`--gate-check` section `register_guard`, and the codex gate): each preset's own `guard` states what its register FORBIDS, and `presets.FORBIDS` carries the part a machine can settle — rounded corners under `swiss`/`brutalist`, gradients under `risograph`/`bauhaus`, an unswitched theme shadow, a proportional face under `terminal`, more than one oversized primitive under `bauhaus`. 🔴 **Only 7 of 18 registers declare prohibitions and that is deliberate**: "photography carries ALL the colour" and "titles must be full-sentence conclusions" are equally real and undecidable from the file, so they stay prose and the checker REPORTS which registers it could not check. **`apply()` sets palette, geometry tokens and ground — nothing more.** Measured: one page through all 18 presets produced 18 pages differing only in ground, radius and rule weight, with none of memphis's header bands or bauhaus's primitives. The register's `surface` field is the executable spec; read it and BUILD it, or the deck is a palette wearing a name. Composition still needs a render and your eyes. And on a **printed** surface it inverts: freshness there must come from paper warmth, accent hue and type — never from going dark, which is the one ground print shops uniformly advise against.
 
-**Fonts (every deck, both branches).** A `.pptx` stores font *names*, not the fonts — before setting `deckkit.FONT`/`MONO`/`EAFONT`/`EQ_MATHFONT`, read `references/deck-setup.md` → "Fonts" (CJK `EAFONT` is required for any 中文/日本語/한국어 deck; portability, the `EQ_MATHFONT` / STIX / Cambria Math dependency to flag at hand-off, and tofu recovery live there) and flag any font dependency at hand-off.
+- 🔴 **A register is BUILT with a kit, not described.** `presets.apply()` gives only its COLOURWAY;
+  `register_surface.py` builds its SURFACE; an invented register can be registered as a kit too and lives
+  beside the deck as `surface_*.py` (every gate loads it from there); the direction the user picked is checked
+  against the deck that ships; and `python3 scripts/save_register.py <deck-dir>` keeps an invented register at
+  hand-off. 🔴 **Read `references/bespoke-registers.md` → "Register kits" before building a preset or invented
+  register.**
+
+- **Accessibility is a FLOOR.** Missing alt-text, untitled or duplicate-titled slides, reading order and
+  non-text contrast block at hand-off on both gate paths; waive only in writing
+  (`{"a11y": {"waived": "…", "waived_category": "…"}}`). Details: `references/troubleshooting-faq.md`.
+
+**Fonts (every deck, both branches).** A `.pptx` stores font *names*, not the fonts — before setting `deckkit.FONT`/`MONO`/`EAFONT`/`EQ_MATHFONT`, read `references/deck-setup.md` → "Fonts" (CJK `EAFONT` is required for any Chinese / Japanese / Korean deck; portability, the `EQ_MATHFONT` / STIX / Cambria Math dependency to flag at hand-off, and tofu recovery live there) and flag any font dependency at hand-off.
+🔴 **A face the deck NAMES but the machine cannot RESOLVE is a measurement fault, not a portability note.** Every fit/wrap/overflow/footer guard sits on `deckkit._measure_lines`, which measures whichever face it can resolve — so a named-but-absent face makes the build and the lint compute from the same wrong number and **agree with each other while the render disagrees with both**. "Will the presenter have it?" stays advisory (unknowable from the file); "does it resolve HERE?" is decidable and now blocks at hand-off on both gate paths via `scripts/check_fonts_resolve.py` (waive with `{"fonts": {"waived": "<why a substituted measurement is acceptable here>"}}`). Two consequences worth knowing before you set a face: deckkit's shipped defaults are `FONT='Calibri'` / `MONO='Consolas'` and **neither ships with macOS**, so a stock macOS build measures everything in a stand-in until you call `deckkit.use_platform_fonts()` or install them; and a font that lives only inside an application bundle (macOS keeps Calibri and Cambria inside PowerPoint) is invisible to the renderer, so copy it into `~/Library/Fonts` first — ask before copying, it is the user's machine.
 
 ## Step 4 — Build with deckkit
 
-> ### 🔴 Step 4 opens with the SIGNATURE PROOF — one slide, rendered, BEFORE the other slides exist
+> ### 🔴 Step 4 opens with the ANCHOR PROOF — THREE slides, rendered, BEFORE the other slides exist
+>
+> 🔴 **AND THE SIGNATURE ANCHOR IS COMPETED, NOT COMPOSED ONCE.** Build **2–3 genuinely different
+> compositions of that one page**, render them in ONE pass, read them blind, and pick by what you
+> SAW. Why here and nowhere else: this skill compares LOOKS at deck level (the direction gate, 4
+> rendered directions) and has never compared COMPOSITIONS at page level —
+> `check_direction_applied.py` says so itself, naming skeleton and motif as NOT CHECKED because
+> they are a judgement. This is the judgement, made the way a designer makes it.
+>
+>     python3 scripts/render_deck.py <probe>.pptx render          # all variants, ONE pass
+>     python3 scripts/composition_probe.py compare <probe>.pptx --slides 1,2,3
+>     python3 scripts/blind_read.py packet <probe-dir>            # then an independent reader
+>
+> 🔴 **The pick is made by LOOKING, not by reasoning about the plan.** The blind reader answers the
+> same fixed questions on each variant; the one to keep is the one whose `claim` comes closest to
+> the takeaway this page owes — that is `blind_read.overlap(claim, takeaway)`, an actual number,
+> calibrated — with fewest `unreadable` entries and fewest hard problems. Ties go to your judgement,
+> written down. Deciding from the build script instead is the habit this step replaces.
+>
+> **It costs almost nothing:** LibreOffice startup dominates a render, so three variants in one
+> pass cost what one costs (measured: 1 page 5.0s, 3 pages 4.5s). **Vary the SKELETON, not the
+> colours** — how many blocks, which one dominates, does the page run across or down. A recoloured
+> or retyped copy is a look change, the direction gate already owns look, and
+> `composition_probe.py` refuses it: its divergence measure was fitted on a 10-layout corpus and
+> validated on 9 layouts it never saw (0 errors in 36 pairs), so "three variants" cannot be three
+> restylings. Record it as `design_plan.composition` — the measured signatures, the pick, and
+> **`why`: what you SAW, naming the versions you compared**. `looks better` is the sentence this
+> whole step exists to replace. A `boldness: conservative` deck is not asked (it declared no
+> aesthetic risk); a provided template claims `template-locked`. 🔴 Every carve is checked AGAINST THE BUILT FILE, not accepted as a word — and a **generated visual identity (Q1 d) sits on a blank deck, so it cannot borrow it**: the Q1 choice decides the LOOK SOURCE, never who composes the pages.
 > The `boldness:` / `signature move:` contract is approved as **prose**. The pixels that either honour
 > it or sand it back to safe do not appear until Step 5, after the whole deck is built — at which point
 > the critic's "the signature move got sanded" finding costs a rebuild, and that cost is exactly why it
-> gets accepted instead of fixed. **Put the evidence where the decision is:**
-> 1. Author the **signature slide first** (the one the `signature move:` line names) — plus its
->    `carried_by:` partner if the idea's structural claim is only legible across the pair.
-> 2. Build, then render just that page:
->    `python3 scripts/render_deck.py <deck>.pptx <out> --slides N` (~5s vs ~12s full; the PNG is
->    byte-identical to the same page from a full render, so it is evidence, not an approximation).
-> 3. **Post the PNG** with one line: *"this is what `<signature move>` actually looks like."* A 🔴 stop
->    in the default flow; under a per-deck AUTO WAIVER it downgrades to a posted FYI like every other
->    approval stop — the waiver removes the wait, never the artifact.
-> 4. Then author the rest. If the proof is wrong you have re-authored ONE slide, not twenty.
-> 5. **Record it** — the run carries a `signature proof:` token to Step 5 on the critic contract
->    card: `signature proof: slide N → <png path>` or `skipped: <the named carve>`. Without it the
->    step is advisory by construction, which is the failure mode this whole batch exists to fix:
->    the critic can then check the SHIPPED signature slide against the frame that was approved, and
->    a silent skip is visible instead of invisible.
+> gets accepted instead of fixed. **Put the evidence where the decision is** — and prove the three
+> things that each cost a rebuild when they surface at Step 5, not just the one:
 >
+> | anchor | the page | what it proves | the failure it catches |
+> |---|---|---|---|
+> | **`signature`** | the slide `signature move:` names | the aesthetic risk survived the build | the move got sanded back to the safe catalogue |
+> | **`complex`** | the densest page in the content plan | the design HOLDS the content | looks good but cannot hold the content — a look approved on a spacious page |
+> | **`data`** | the most critical data/conclusion page | the charts speak the same visual language | palette + type were chosen against text, and the first native chart obeys none of them |
+>
+> *(Why not the cover, the obvious third? It already has two gates — branch (c) renders four full
+> directions at the direction gate, branch (d) posts a rendered hero at its own 🔴 checkpoint. Making
+> it an anchor would re-prove the one page nothing was missing on, and leave these two unproven.)*
+>
+> 1. Author the **three anchor slides first** — the signature slide plus its `carried_by:` partner if
+>    the idea's structural claim is only legible across the pair, the densest planned page, and the
+>    key data/conclusion page. On a deck with fewer than three slides the count drops to the deck size
+>    (a 1–2 slide tiny-ask skips the ritual entirely, below).
+> 2. Build, then render just those pages:
+>    `python3 scripts/render_deck.py <deck>.pptx <out> --slides N,M,K`. The PNGs are byte-identical to
+>    the same pages from a full render, so they are evidence, not an approximation. 🔴 **`--slides` is
+>    not the saving here** — three pages cost about what all eighteen cost (below), because the render
+>    is a fixed LibreOffice start. What this ritual saves is AUTHORING: you learn the design is wrong
+>    having built three slides instead of twenty.
+> 3. **Post the three PNGs** with one line each: *"this is what `<signature move>` actually looks
+>    like"* · *"this is the design carrying the heaviest page"* · *"this is a real chart in this
+>    language."* A 🔴 stop in the default flow; under a per-deck AUTO WAIVER it downgrades to a posted
+>    FYI like every other approval stop — the waiver removes the wait, never the artifact.
+> 4. Then author the rest. If the proof is wrong you have re-authored THREE slides, not twenty.
+> 5. **Record it** — the run carries a `signature proof:` token to Step 5 on the critic contract
+>    card, one entry per anchor: `signature proof: signature slide N → <png> · complex slide M → <png>
+>    · data slide K → <png>` or `skipped: <the named carve>`. Without it the
+>    step is advisory by construction, which is the failure mode this whole batch exists to fix:
+>    the critic can then check each SHIPPED anchor against the frame that was approved, and
+>    a silent skip is visible instead of invisible. The delivery gates enforce the same three
+>    (`design_plan.signature_proof` is now a LIST of `{role, slide, png}` — one contract in
+>    `scripts/anchor_proof.py`, imported by both gate paths so they cannot drift apart).
+>
+> 🔴 **The carve is recordable:** `{"material_probe": {"waived": "…", "waived_category": "registered-template |
+> provided-template | mode-a-mimic | tiny-ask"}}` — never `conservative` (`references/troubleshooting-faq.md`).
 > **Skip only when:** `boldness: conservative` with its "deliberately restrained" clause recorded (no
 > risk was taken, so there is nothing to prove), or a 1–2 slide tiny-ask. A registered/provided template
 > does NOT skip it — a borrowed look still has a signature slide, and that is exactly where a template
 > deck either becomes designed or stays a template.
 >
-> *(Measured: build ≈ 1.8s, `--slides` render ≈ 4.7s vs 12.3s full. The proof costs less than one
-> critic round, and it is spent BEFORE the expensive authoring rather than after. This does not
-> contradict "build the whole deck in one script run" below: the proof runs the SAME build script
-> while it still contains only the signature slide — you extend one script, you never maintain two.
-> Asset note: the signature slide's assets are the first thing asset-prep delivers, per its brief.
-> One render can serve several rituals: when Gate A's one-real-slide fidelity confirm has not yet
-> run, use the signature slide AS that confirm slide; on a large deck the proof doubles as the
-> early-render sample. Never run three separate single-slide ceremonies.
-> If the proof looks WRONG: revise the signature slide in the same build script and re-run the same
-> `--slides N` command — the loop is slide-level and costs seconds; slide N here is the slide's
-> CURRENT index, so if later authoring renumbers it, the `signature proof:` token records the final
-> number at hand-off.)*
 
 Write a small per-deck build script that imports `scripts/deckkit.py` (don't re-derive primitives;
 full signatures + behaviour are in its docstrings). **Build the approved Design plan** (form ledger,
@@ -616,6 +1061,42 @@ The helper set, by job:
   `icon_ghost` an oversized faint watermark, `icon_card` the upper-left feature-card pattern; vary the
   treatment to fit the deck — see `references/icons.md` "Treatments"). *(These exist so you never
   hardcode a low `y` — the recurring overlap/footer bug.)*
+- **A shape deckkit has no helper for → `dk.adopt(slide.shapes.add_shape(...))`.** python-pptx
+  leaves the theme `<p:style>` on a hand-added shape, so LibreOffice draws a soft drop shadow under
+  it and `lint_layout` reports `INHERITED_EFFECT`; the only cure used to be the PRIVATE `_flat`,
+  which an author finds by reading the source. `adopt` returns the shape, so it composes inline.
+- **Shape primitives:** `box` (a rectangle; `round=True` rounds its corners) and **`disc`** (a
+  CIRCLE, or an ellipse with `h=`). 🔴 **`box(round=True)` cannot draw a circle at any radius** —
+  it is a rounded rectangle and `r=d/2` is still a rounded rectangle. Measured: a deck whose
+  signature motif was a two-state ring shipped three rendered iterations with a green SQUARE where
+  its device belonged, with no error and no lint code, because the library used `MSO_SHAPE.OVAL`
+  seventeen times internally and exposed it nowhere. `disc(s, x, y, d, fill=…, line=…, line_w=…)`
+  takes the same grammar as `box`, places from the TOP-LEFT like every other primitive, and is
+  flattened so it carries no inherited theme shadow.
+- **Editorial picture forms:** `picture(..., fit="cover", shape="ellipse"|"arch"|"snip"|"notch"|"blob")`
+  clips a photo to a circle, an arch, chamfered corners, a notched card or an organic blob (the
+  mask is real in the render, not just the XML); `focus=(fx, fy)` aims the crop so a face is not
+  cut off; `rotation=` tilts a pinned print. Both gates measure a rotated shape where it PAINTS —
+  exact at 90°, so a vertical margin label is safe. A cut-out PNG becomes a sticker with
+  `image_fx.sticker_outline(path)` (it refuses an opaque photo: cut the subject out first).
+  🔴 A masked or rotated picture is still a CONTENT image — alt text and the referent rule apply.
+- **Highlighted words:** `dk.mark(run, color)` puts one run on a highlighter block inside a
+  `text()` paragraph — native `<a:highlight>`, follows the wrap, works for CJK. A shape drawn behind
+  the word instead is placed by guesswork and drifts off it when the line wraps. `mark()` refuses an
+  ink under WCAG on its highlight (pick the ink with `dk.on(color)`); the render gate reads the
+  highlight as that run's backing.
+- **Hand-made marks (`scripts/ornaments.py`):** `squiggle` · `scribble` · `brush_stroke` · `tape` ·
+  `scallop` — native editable geometry, tagged as quiet motif (`loud=True` for a hero), so the motif
+  budget counts them and TEXT_OVER_MOTIF sees a caption laid across one. Use one or two that MEAN
+  something (a squiggle under the claim, `tape(..., holds=pic)` holding the print — `holds=`
+  declares that one overlap and refuses a print the tape does not touch), never confetti. A number set on a
+  small `scallop` badge reads as text over a device: declare it with `dk.overlap_intent(<the TEXT
+  shape>, "<why>")` — the check reads the declaration from the text, not from the badge.
+- **Pure decoration:** `dk.decorative(shape, "<why>")` declares that nothing a viewer must read
+  rides on a shape — a pale washi tape, a hairline flourish — so the hand-off floor NON-TEXT CONTRAST
+  (WCAG 1.4.11, which exempts decoration) does not hold it. Per shape, with a sentence (CJK counts
+  double toward the floor); the lint PRINTS every exemption with its reason. Undeclared, a mark under
+  3:1 on the page ground is still held — the check cannot tell ornament from a meaningful mark.
 - **Text & blocks:** `bullet`, `callout` (auto-grows), `chip`, `modbox` (a labelled MODULE box —
   reach for it as the node when mapping architecture modules / code files / system parts joined by
   `connector`, where a plain `node` is too bare; role word + optional filename/tag), `arrow`, `table` (highlight
@@ -628,8 +1109,23 @@ The helper set, by job:
   `native_dual_axis` / `native_donut` / `native_pareto` / `native_bubble` (feed them straight from a
   spreadsheet with **`series_from_csv(path, x_col, y_cols)`** → `(categories, series)`, stdlib, no pandas),
   plus the raster recipes in `scripts/designed_charts.py` (incl. **`waterfall`** — a total's rise/fall/
-  total walk, semantic up/down colour) — pick per `references/data-viz.md`.
-- **Walkthrough / hierarchy / comparison-grid:** **`annotated_figure`** (a real figure + numbered
+  total walk, semantic up/down colour; **`distribution`** — the form to use when a value is a mean of
+  MEASUREMENTS rather than a count, since a bar of sample means hides n, shape and outliers;
+  **`marimekko`** — size *and* share at once; **`radar`** — a profile across 3–8 axes, ≤3 series)
+  — pick per `references/data-viz.md`.
+- **Page ARCHITECTURE (the skeleton, not the contents):** **`skeleton(slide, kind)`** returns the named rects for one of the eight architectures `lint_deck` already demands variety across — `statement` · `split` · `island` · `dashboard` · `band` · `full_bleed` · `rail` · `gallery` (`flip=True` mirrors the asymmetric three). It paints nothing, like `columns()`. 🔴 **Decide the SEQUENCE before you build**: `python3 scripts/plan_rhythm.py --roles <r1,r2,…> --carry <n,m>` proposes an architecture per slide from its role, guarantees ≥4 distinct and no repeat inside a 3-slide window, and runs in ~40ms — deterministic arithmetic, not a model call. SKELETON VARIETY and LAYOUT SAMENESS both fire AFTER the build, when varying the architecture means re-laying written pages; measured, the same content planned scored **8 distinct skeletons against 2 improvised**. It is a PROPOSAL — deviate where the content wants something else, and record the deviation. Pass `--home <skeleton>` when a direction gate picked a composition, so the user's pick stays the deck's visible default. At review time, `python3 scripts/composition_cues.py <deck-dir>` reports seven measured cues and the deck-wide RANGE per cue — a FLAT range is the samey-deck finding no per-page look produces, and it is **reported, never gated**.
+- **Modular layout:** **`bento(slide, x, y, w, h, tiles, cols=…)`** — a grid of UNEQUAL tiles on one rhythm, packed from `(span_cols, span_rows)` spans and returning rects for you to draw into. `columns()`/`rows()` give equal-weight strips and `columns(weights=…)` varies width within ONE row; this varies both axes against a single module, so one message splits into units of honestly different importance — the biggest tile is the point and the reader gets the ranking from the geometry before reading a word. The gutter is one number for the whole grid, because unequal gutters are what make a modular layout read as an accident; it raises rather than silently dropping a tile that will not fit.
+- **Walkthrough / hierarchy / comparison-grid:** **`image_grid`** (an N×M LABELLED IMAGE
+  COMPARISON — methods across the columns, cases down the rows, a metric under each cell. THE
+  results slide of an image/reconstruction talk, and the one image idiom where a grid IS the
+  argument, so `form-selection.md`'s "one strong image beats a grid of small ones" does not apply.
+  It reads each picture's REAL placed rect back and derives every label from it, and locks ONE
+  aspect ratio for the whole grid so `contain` and `cover` coincide — zero letterbox, zero crop, by
+  construction. Refuses mixed FOVs, ragged rows, a missing `col_labels`, >16 cells, sub-0.8in cells
+  and a metric that wraps, rather than shipping unreadable thumbnails. Measured on the hand-rolled
+  version it replaces: every label 0.67in off the panel it named, 65% of each cell lost to
+  letterbox — and `lint_deck` reported `0 findings ✓ clean`, because `CAPTION NOT ALIGNED`
+  structurally cannot fire on a multi-row grid) · **`annotated_figure`** (a real figure + numbered
   markers + a numbered caption rail + optional magnified inset — the guided figure walkthrough the
   integral-figure rule kept demanding by hand) · **`small_multiples`** (identical mini native charts
   with a SHARED value axis — the documented recipe left each panel auto-scaling, so a small bump and
@@ -645,31 +1141,143 @@ The helper set, by job:
   hierarchy, or ONE hero chart, never every slide; text cannot be sheared onto a face, so labels sit
   beside the geometry. When the 2.5D wants to be a rich atmospheric *scene* (not data), that is the
   generated-image branch, not these.
+- **The register signature (`register_mark`) — build the quiet motif, don't re-derive it.** A
+  bespoke register is REQUIRED at the direction gate, and until this helper existed deckkit had no
+  primitive to draw one, so every deck hand-rolled its signature out of raw boxes. Measured: one
+  such helper offset each ring in x but **not in y** and therefore drew three *interlocking*
+  circles — a Venn diagram — in the corner of twelve pages, and nothing caught it because no gate
+  knows what a motif is supposed to look like. `register_mark(slide, kind, corner=…)` draws
+  eleven marks correct-by-construction — the graphic-neutral five, **`arcs`** (concentric rings
+  sharing ONE centre, so that bug is unrepresentable) · **`rule`** (an inset edge rule) ·
+  **`ticks`** (an evenly-spaced scale) · **`ordinal`** (a corner numeral) · **`grid`** (a small
+  hairline field), and six drawn from SUBJECT WORLDS, because a deck reaching for the neutral five
+  produces the same corner as every other deck and that sameness is what the direction gate exists
+  to prevent: **`seal`** (a stamp — authority, permits, certificates) · **`stitch`** (a
+  perforated seam — a made object's join) · **`trace`** (a signal waveform — anything measured,
+  monitored, heard) · **`contour`** (isolines — terrain, fields, level sets) · **`caliper`** (a
+  scale bar — anything measured to size) · **`hatch`** (drawn shading — the hand counterpart to
+  `grid`'s machine one) — and TAGS what it draws. Invention stays open: draw whatever you like and call **`deckkit.tag_motif(shape,
+  loud=…)`** on it. 🔴 **The tag is what gives the motif a machine-readable existence**, and two
+  contracts the skill has always stated become checkable only because of it: **`TEXT_OVER_MOTIF`**
+  (a title crossing the device — invisible to `TEXT_OVERLAP`, which measures text against TEXT
+  while a motif is geometry; declare a deliberate one with `overlap_intent`) and
+  **`MOTIF_BUDGET`** (the ≤3 LOUD appearances the design plan promises — pass `loud=True` for a
+  hero appearance; the quiet register signature is excluded by design, because it is *meant* to
+  repeat on every page). An untagged deck is never punished for not using this vocabulary.
+- **The LOUD tier (`motif_page`) — the page whose GEOMETRY is the motif, and the key that explains
+  it.** `motif_generates.page` asks every deck for that page and, until this helper, every deck
+  built it out of raw boxes — the same situation that produced the Venn diagram above, one tier up
+  and with the deck's hero page riding on it. `motif_page(slide, kind, legend=…)` builds it from
+  the generative relations that recur across subjects, tags every shape LOUD (so the page spends
+  exactly one budgeted appearance and `MOTIF_BUDGET` can see it), and draws the key with the
+  device: **`seam`** (two registers meeting at a hinge — a crossing from one state to another) ·
+  **`conduit`** (a spine with tap-offs — accumulation along a line) · **`strata`** (layers of
+  unequal weight — depth, hierarchy, sediment) · **`radial`** (rays from one origin — dispersion,
+  reach) · **`lattice`** (interwoven members — coupling, network) · **`orbit`** (concentric paths
+  with a rider — cycles, return) · **`aperture`** (frames narrowing to an opening — focus, a
+  funnel) · **`terrace`** (ascending steps — staged advance). 🔴 **Pick the kind whose RELATION is
+  your content's relation, then swap the MATERIAL for your subject** (`references/bespoke-registers.md`
+  — keep the method, swap the material); a kind chosen for how it looks is an ornament with a
+  schedule. `faint=True` drops it to a ground content can sit on. **The STRANGER TEST is now
+  countable:** `motif_legend(slide, "<what the device MEANS>")` draws a small key (a sample of the
+  mark + the words) and `MOTIF_UNEXPLAINED` reports a deck that carries a loud motif with no key
+  anywhere — the three sanctioned answers are still LABEL it, KEY it, or make it FIGURATIVE, and
+  the third one leaves this advisory standing on purpose.
+- **A strike-through is a rule crossing its own text, and may now SAY so.** `RULE_THROUGH_TEXT` is
+  a CRITICAL written for the hand-picked-`y` divider that a growing paragraph later swallowed — and
+  it had no declaration, while both its siblings do (`TEXT_OVERLAP` → `overlap_intent`,
+  `OFF_CANVAS` → `bleed_intent`). Measured: a deck that wanted three struck-out items had to
+  abandon the mark. `deckkit.overlap_intent(rule, "<why this crossing IS the mark>")` now waives
+  it — the GEOMETRY only: `TEXT NOT VISIBLE`, contrast and the occlusion checks still run, so a
+  rule that actually erases its text is still caught, and an UNdeclared one still fails exactly as
+  before.
+- **Deliberate bleed (`bleed_intent`)** — `OFF_CANVAS` is a CRITICAL that refuses to save, and it
+  is right to be: a card or a headline off the page is the commonest way a build ships something
+  unreadable. But a signature device that runs off the edge is ordinary design — a ray fan whose
+  origin sits outside the frame, a weave that continues past the trim, an orbit drawn as arcs of a
+  much larger circle — and the only way to ship one was `lint_layout(strict=False)`, which switches
+  the check off for the WHOLE deck. Measured: three of `motif_page`'s eight kinds could not be
+  saved by the standard build path at all. `deckkit.bleed_intent(shape, "<why this leaves the
+  canvas>")` is the narrow, recorded escape — **per shape, with a reason, honoured by both linters**
+  (`OFF_CANVAS` at build time and `OVERFLOW` at file level), and it COMPOSES with a motif tag so a
+  bleeding device stays countable in the ≤3 budget. An UNdeclared shape off the canvas still fails,
+  which is the point: the check keeps catching the accident and stops refusing the composition.
+  `motif_page` declares its own bleeders for you.
+- **Composed overlap (`overlap_intent`)** — `lint_layout`'s `TEXT_OVERLAP` is a CRITICAL that refuses
+  to save, and it is right to be: colliding text is the commonest way a build ships unreadable. But it
+  also refused two moves that are ordinary editorial design — **a giant display word with a small line
+  riding it** (scale contrast) and **background geometry running through a paragraph** — with no way to
+  say "this one is on purpose", so those decks could not be saved at all. Tag the element that is
+  deliberately the ground: `dk.overlap_intent(big, "the display word is the ground the caption rides")`.
+  A TAG, not a threshold, for the reason already written beside `ghost_numeral`'s exemption —
+  *"guessing from size either waves through a real defect or blocks a legitimate watermark."* The
+  reason is required (≥16 chars) and travels in the shape, so the declaration is evidence in the
+  artifact rather than a claim in a plan. **It waives the GEOMETRY, never the floor:** contrast,
+  `TEXT NOT VISIBLE` and the render-time occlusion checks still apply, and an undeclared collision
+  still fails exactly as before.
 - **Placement by measurement:** `image_fx.quiet_region(path)` → the image's calmest ONE-INK region
   + its mean luminance (choose dark vs light ink from data, not eyeballing) · `deckkit.pic_alpha`
   (native picture opacity — a faint plate that keeps its own hues, no scrim shape) ·
-  `deckkit.design_intent(slide, envelope=…, rhyme=…)` (declare a deliberate quiet/baseline/bleed
-  register so the render-time lint audits intent instead of guessing it).
+  `deckkit.design_intent(slide, envelope=…, rhyme=…, weight=…)` (declare a deliberate quiet/baseline/bleed
+  register so the render-time lint audits intent instead of guessing it). **`role="appendix"`** marks where the backup/Q&A run
+  starts: from there the slides are read at *briefing* density (reference material is dense on
+  purpose — undeclared, a defense's backup slides draw TEXT WALL + CROWDED on every one), and the
+  slide before it gets back the closing-slide exemption a trailing appendix otherwise steals.
+  **`weight="left"|"right"|
+  "asymmetric"`** declares a deliberately one-sided editorial composition — the art-director move where
+  the opposite half is held as real air. It is the one register whose lint advice ("rebalance") would
+  destroy the design, so it is declarable rather than argued with; undeclared lopsidedness still flags.
 - **Decision / plan / grid:** **`eval_matrix`** (options×criteria scoring grid — `harvey_ball` fifths-fill
   glyphs or ✓/◐/✕ marks, `recommend=` tints the winner) · **`heat_matrix`** (category×category grid coloured
   by value, `scale="seq"|"div"|"risk"`) · **`tier_stack`** (one taper: `mode="funnel"` drop-off /
   `mode="pyramid"` layers, + `funnel()`/`pyramid()` wrappers) · **`gantt`** (dated task bars on a shared
-  `axis_scale`, `lanes=` swimlanes, `today=` marker — durations & overlap, where `timeline` shows only points).
+  `axis_scale`, `lanes=` swimlanes, `today=` marker — durations & overlap, where `timeline` shows only points) ·
+  **`sankey`** (CIRCULATION — where a quantity GOES, ribbon width strictly proportional to value on ONE
+  deck-wide scale: money out and back, a supply chain, a budget split; `links=[(src,dst,value),…]`,
+  columns derived from the graph, `col_labels=` names the stages. It reserves `label_w` label gutters
+  and derives the ribbon area from what is LEFT, so hand it a whole region. Refuses a zero/negative
+  value or a cyclic graph rather than drawing a width that means nothing).
 - **Diagrams / patterns:** `quadrant`, `hub_spoke`, `timeline`, `before_after`/`image_tab`/
   `photo_triptych`, **`device_frame`** (a real screenshot in a `chrome="browser"`/`"phone"` bezel),
   `wireframe_grid`+`spec_list`, `corner_frame`, `photo_card`, `backdrop_motif`,
   `repeat_row` (N identical-except-index units as representatives + `…` + `×N`, shared detail said
   once — never N duplicate blocks).
+- **Value→geometry mappers — pick by what the mark ENCODES, and never hand-roll the arithmetic:**
+  **`axis_scale(x, w, lo, hi)`** maps a value to a POSITION on a track (dot strips, dumbbells,
+  value-spaced timelines, `gantt`); any `lo` is legitimate there, because a dot at 47 between 40
+  and 50 reads correctly. **`bar_scale(span, values, group=)`** maps a value to a LENGTH, and takes
+  **no `lo` at all** — a bar's length is a proportion claim, so a non-zero baseline is not a scaling
+  choice but a false statement (1.5 and 2.1 drawn from 1.4 look like 1 : 7). Call `sc.bar(slide, x,
+  y, thickness, value, fill=…)` (`vertical=True` for columns): it draws zero-based, puts negatives
+  on the far side of the zero line — the `max(abs(v))` slip picks the largest POSITIVE value and
+  mis-places that line — and tags each bar so the build-time **`DATUM SCALE`** check can confirm the
+  geometry still matches the numbers. A bar you draw yourself is unchecked, not assumed correct;
+  `mark_datum(shape, value, group=)` opts it in.
+- **A photo carrying the page:** **`photo_backdrop`** — the image FULL-BLEED, the words on a solid panel placed where `image_fx.quiet_region` MEASURES the picture calmest, returning `(x, y, w, h, ink)` with the ink resolved against the panel rather than against the photograph, and the attribution credit set inside it. `alt=` is required (a missing one is a blocking a11y finding) and an alpha under **0.88** RAISES — a scrim only dims linework, it does not remove it, so `scrim_overlay` is the component that means a deliberate wash. `panel=` overrides the measurement (`left`/`right`/`bottom`), `panel="none"` returns the safe rect with an ink chosen from the image's own luminance and hands you the contrast.
 - **Surface (dark / glass / print):** `glass_card`/`glow`/`scrim_overlay` (gradient+alpha fill),
   `offset_shadow` (hard letterpress/riso shadow).
+  **`slide_background(s, color)` paints a SOLID page backdrop — use it instead of
+  `box(s, 0, 0, W, H, fill=…)`.** It writes the real `<p:bg>`, so the backdrop is not a shape the
+  user can select, drag or delete while editing (a full-canvas rect is, and click-dragging any
+  empty part of the slide grabs it). Renders identically, lints identically — the linter
+  synthesises the same background record from `<p:bg>`, so contrast, dark-plate and density
+  checks are unchanged. **Non-solid backdrops keep the rect/`picture()`/`scrim_overlay` path**:
+  gradients, images and alpha have no `<p:bg>` route here.
+- **Glass over a photo:** `frosted_panel(slide, backdrop_pic, x, y, w, h)` blurs exactly the part of
+  the placed photo under the panel and returns `(x, y, w, h, ink)` — the ink measured against the
+  glass's own dark and light ends, at the lightest wash that lets it clear 4.5:1 (or it raises).
+  `glass_card` stays the vector fake for dark UI grounds.
 - **Publication & math:** `cover`/`colophon` (bookend the deck), `sources_page`, `specimen_card`;
   **`equation_native`** (EDITABLE LaTeX-subset math — real text runs, renders everywhere; the default) /
   `equation_png` (rasterised LaTeX, for 2-D math: fractions/matrices) / `eq_par` (inline runs).
-- **East-Asian (CJK) accents:** `seal` (vermilion chop/印章 stamp — the one red accent on an ink deck),
+- **East-Asian (CJK) accents:** `seal` (vermilion chop stamp — the one red accent on an ink deck),
   `cjk_numeral` (壹·贰·叁 section markers vs Latin "01"). See `references/east-asian-aesthetic.md`.
 - **Diagram kit (general flowcharts):** `node` + `connector` / `flow_chain` (straight links between adjacent nodes) + `elbow_connector` /
   `loop_path` (elbow / U-shaped paths for a feedback/repeat loop, a return, or a link between NON-adjacent
-  nodes) — any architecture from rounded-rect/pill/circle nodes (+ diamond/parallelogram/cylinder when
+  nodes) — any architecture from rounded-rect/pill/circle nodes.
+  🔴 **When you link two BLOCKS, dock on their EDGES — reach for the edge-docked family, never hand a
+  block's CENTRE to `connector`/`loop_path` (the #1 connector defect, `CONNECTOR_IN_BOX`): **`connect_boxes(a_rect, b_rect)`** for a straight arrow · **`hub_spokes(hub, spokes)`** for one hub to many · **`loop_between(a_rect, b_rect)`** for a feedback/return U-loop (its rect-aware sibling `loop_path` takes raw coords and invites a centre). Pass the same `(x,y,w,h)` you gave `box`/`node` and both ends land on a boundary by construction.**
+  (+ diamond/parallelogram/cylinder when
   formal flowchart notation applies — see the Standard-notation crib in `design-gallery.md`) with
   **stroke semantics** (solid=required
   · dashed=optional · dotted=feedback) and **shape semantics** (straight=adjacent flow · elbow/U=loop /
@@ -677,8 +1285,7 @@ The helper set, by job:
   focal path can carry emphasis instead)  *(NB two similarly-named helpers: **`hub_spoke`** draws the
   whole radial FIGURE — one centre + labelled spoke nodes on a ring; **`hub_spokes`** only draws the
   CONNECTORS from an existing hub to existing nodes. Reach for `hub_spoke` to build the diagram,
-  `hub_spokes` to wire one you laid out yourself.)* the
-  focal path can carry emphasis instead); `diagram_island` (bright figure panel on a dark slide);
+  `hub_spokes` to wire one you laid out yourself.)*; `diagram_island` (bright figure panel on a dark slide);
   `concentric_rings` (nested framework); `step_list` (numbered process, vertical/horizontal).
   - **This kit draws conceptual BOX-FLOW only — not physical science schematics.** For a
     **labelled science schematic** explaining a principle / mechanism / experiment / definition (a
@@ -697,13 +1304,62 @@ The helper set, by job:
   ordinal), `concept_equation` (ZINE=MAGAZINE word-equation), `pull_quote`/`standfirst`, `cta_button`/
   `cta_pair`, `status_stamp`/`corner_tab`, `spec_card`, `year_badge`, `gradient_rule` (2-stop brand rule),
   `catalogue_frame` (double-line specimen frame — museum/eastern presets).
+- **Clinical / evidence-synthesis forms — reach for these before hand-rolling a scatter** (full
+  rules + when each is the wrong answer: `references/clinical-evidence-figures.md`):
+  **`deckkit.consort_flow`** (participant flow whose ARITHMETIC IS ENFORCED — every stage's count
+  minus its documented exclusions must equal the next stage's, or it raises with the sum spelled
+  out; no other gate in this skill can see a wrong number, because a wrong number is a perfectly
+  well-formed shape) · **`designed_charts.forest_plot`** (effect + CI per row against a null line;
+  ratios forced onto a LOG axis with plain-number ticks, since a linear axis draws a symmetric CI
+  lopsided — and it is the general form for *the same comparison measured several times*, so it
+  serves subgroup effects, regression coefficients and per-segment A/B lifts too) ·
+  **`designed_charts.km_curve`** (survival as a STEP from raw `(times, events)`, censoring ticks,
+  numbers-at-risk table) · **`designed_charts.bland_altman`** (method agreement as bias ± 1.96·SD
+  of the DIFFERENCES — two methods can correlate almost perfectly and still disagree by a fatal
+  constant, so a correlation is the classic wrong answer) · **`designed_charts.roc_curve`**
+  (square canvas + chance diagonal + AUC in the legend). A **confusion matrix** needs no new
+  component — it is `heat_matrix`, with the axes labelled *Predicted*/*Actual* and the caption
+  saying whether the cells are counts or row-normalised.
+- **Sample data / overlap:** **`designed_charts.distribution`** (SPREAD, not just the average —
+  `groups=[(label,[v,…]),…]`; `kind="auto"` gives a box plot at n≥5, mean ± error at n=3–4, and
+  **refuses n<3**; every observation overlaid; `err="sd"|"se"|"ci95"` is printed ON the figure).
+  **Reach for it whenever a value is a mean of MEASUREMENTS rather than a count** — per-subject Dice,
+  per-run latency, per-rater score. A bar chart of such means hides n, the shape and the outliers, and
+  is the one chart choice the literature calls a defect (Nature Methods, *Kick the bar chart habit*).
+  · **`designed_charts.marimekko`** (width = segment size, height = its split → cell **area** = the
+  absolute quantity; what a 100%-stacked bar throws away) · **`designed_charts.radar`** (profile across
+  3–8 axes, ≤3 series, zero-anchored spokes — raises outside that; prefer `small_multiples` for
+  "who wins per metric") · **`venn`** (2–3 sets, `zones={"1":…,"12":…,"123":…}` by set index; zone
+  labels are placed and SIZED from each region's own geometry, and one too long for its lens raises.
+  Circles are equal — area encodes nothing by design).
 - **Micro-viz:** `dot_meter` (●●○), `tradeoff_list` (+/−), `segmented_bar` (cumulative 100%), `meter_bar`
   (a single percentile/share/progress row — track + accent fill + a value label **vertically centered on
   the bar**; use this instead of hand-building "track box + fill box + number", which is how value labels
   end up floating off the bar's centerline; canvas-safe by construction — an overflowing value
-  auto-shortens the bar instead of leaving the slide).
+  auto-shortens the bar instead of leaving the slide) · **`unit_grid`** (an isotype/waffle field —
+  N square cells sized to fit the region, `filled=` of them accented, plus a **mandatory unit label**
+  saying what one cell IS. Reach for it when the COUNT is the point — 34 attributed paintings, 12 of
+  40 sites, the "N in 100" framing — and ALSO when a share is so TINY a bar would hide it: a 1%
+  sliver is a hairline, one dark cell in a field of a hundred is unmistakable. Use `meter_bar` for a
+  single large percentage/progress row instead. It refuses a texture rather
+  than a count (8,412 cells is a texture), and refuses a blank unit label, because an unlabelled grid
+  of squares means nothing) ·
+  **`range_bars`** (the "football field" — floating min–max bars per row on a SHARED axis, for a value
+  RANGE per category: a valuation band, a forecast spread, a min–max estimate. Use `dot_strip` instead
+  when each row is really one best-estimate point).
+- **Provenance:** **`source_note`** (the per-SLIDE source line — `sources`, `as_of=`, `label="来源"` on a
+  CJK deck; auto-lifts clear of a `footer`, so call it last). `sources_page` defends the *deck*; this
+  defends the *slide*, which is the unit that actually travels — screenshotted, pasted into a memo, shown
+  out of order. **DEFAULT ON in the `briefing` register and on any slide whose numbers a reader could act
+  on;** a chart whose source sits 14 pages away is unsourced at the moment someone doubts it.
 - **Photo on-brand (`scripts/image_fx.py`):** `duotone` / `grayscale` so a colour photo doesn't fight
   the accent (riso/brutalist/ink/luxury/museum), then `picture(fit="cover")`.
+- **Image-led decks (`imagery: series`):** when the picked direction is image-led, imagery may sit on
+  most pages as ONE art-directed series — plan it in `series.json` (every slot's meaning line, the
+  REFERENT RULE, the people rule), generate the key image first and the rest with `--style-ref`, QC it,
+  and place every slot with `image_series.slot_picture` (never `dk.picture`: the gate reads its tags).
+  Read `references/image-generation.md` → "Image-led decks — the SERIES exception" BEFORE writing the
+  plan; `python3 scripts/image_series.py check` refuses a plan that breaks it.
 
 If the user gave a **style example** (Q4),
 build to your **style brief** of it *per the chosen mimic mode* (`references/style-analysis.md`) —
@@ -712,6 +1368,36 @@ build to your **style brief** of it *per the chosen mimic mode* (`references/sty
 borrowed components + signature motif, but keep the topic-fit palette/type already locked in the
 Step-2 design plan — do NOT carry the example's colours.
 A few rules that matter (see `references/design-principles.md`):
+- **Adding a NEW visual language** (not using one): `references/visual-language-authoring.md` (in the source repository, https://github.com/addsumtech/slides_maker, not in this package) —
+  `scripts/new_visual_language.py <name>` (in the source repository, https://github.com/addsumtech/slides_maker, not in this package) starts it and `scripts/check_vl_contract.py <name>` (in the source repository, https://github.com/addsumtech/slides_maker, not in this package) names what is left.
+- **Visual languages (<!-- vl:list-image -->`editorial` · `soft` · `collage` · `storybook`<!-- /vl -->, and the <!-- vl:count-drawn -->twenty-six<!-- /vl --> drawn ones below):** when the picked direction is a
+  visual language (`"vl"` in `directions.json`), READ `references/visual-languages.md` before the build
+  script: `visual_languages.use(name, prs)` gives the palette, system fonts (both platforms by default,
+  per script for CJK) and ground, and its seven page functions (cover, section, image_text, points, quote, data, closing) lay out your own copy and images — never
+  hand-roll those pages. Record `design_plan.visual_language`; the delivery gate checks it was applied.
+  A deck that will carry photos or illustrations OFFERS at least one visual language among its directions —
+  the user's pictures, or ones you will GENERATE (an image tool is available and the plan uses imagery) or
+  FETCH (`direction_gate.images: photos | illustrations | none`, whoever made them — both gates hold it and read
+  it against `image_sources` / `imagery`, so `none` on a deck that generates its pictures is refused;
+  `references/interview-protocol.md`).
+  A deck with NO pictures offers one of the NATIVE visual languages (<!-- vl:list-drawn -->`ink` · `poster` · `cutpaper` · `drafting` · `starlit` · `broadsheet` · `journal` · `tally` · `chalkboard` · `interface` · `wayfinding` · `herbarium` · `airmail` · `vinyl` · `receipt` · `comic` · `pixel` · `bricks` · `boardgame` · `circuit` · `topo` · `scoreboard` · `periodic` · `recipe` · `stainedglass` · `calendar`<!-- /vl -->, drawn, no
+  pictures needed) — the one that fits the topic — and records why in
+  `direction_gate.native_fit` (both gates hold it; `references/visual-languages.md`).
+  Build with `ground="auto"` (light paper, or the language's contrast ground when your last decks already
+  sit on light paper) and record what it printed with
+  `python3 "$SKILL/scripts/visual_languages.py" --gates NAME --ground G --deck "<deck folder>" --for "<what it is for>"`,
+  then run the commands it prints (`--deck` is required). The whole order, canvas to `--gate-check`, every command
+  run end to end: `references/visual-languages.md` → "Build a visual-language deck, in order".
+- 🔴 **A visual language is a VOCABULARY, not the deck's layouts.** Its palette, fonts, ground and furniture
+  carry the look, and its seven page functions are the STANDARD pages (cover, section, quote, closing, a plain
+  points or data page) — never hand-roll those. But the three anchors (signature · densest · key data) and every
+  page whose idea has a shape are COMPOSED for this content inside the language: `vl.use`'s palette, fonts and
+  ground, the kit's furniture, deckkit's components (`python3 scripts/sigs.py --example <form> --in <language>`)
+  and icons — and no more than about half the interior pages are stock page functions. Measured 2026-11-07/08:
+  kids-explainer decks built page function by page function, in three different languages, lost a blind
+  comparison to a bespoke deck every time ("repetitive, reads as a template"). When no template is given, the
+  strongest direction is often a register invented from the subject's world (`references/bespoke-registers.md`);
+  a visual language has to beat it at the direction gate on FIT, never on convenience.
 - **Use the source's own figures, WHOLE — integral is the default.** For *any* deck
   (research, work, exec, teaching): if the source — paper, report, doc, existing slide, or a
   chart already produced from the code/data — has a figure (architecture, results, a plot),
@@ -773,39 +1459,60 @@ A few rules that matter (see `references/design-principles.md`):
   get the safe region from **`content_band()`**, and pack content-height blocks with
   **`vstack(..., bottom=…)`** (equal gaps + no overlap by construction, errors at build time on
   overflow). Use `measure_callout/measure_bullets/measure_text` when you must position manually.
+  **A block that grows can be measured — every one of them, so this rule is followable rather than
+  aspirational:** `measure_table(rows)` · `measure_timeline(events, orientation=, polarity=)` ·
+  `measure_takeaway_rail(label, hero, body, w)` · `measure_chip(title, sub, w)` ·
+  `measure_modbox(role, fname, w)` · `measure_node(label, sub, w)`. The last four are *enforced by
+  their own component* (`h = max(h, measure_…)`, the way `callout` has always enforced
+  `measure_callout`), so a chip/modbox/node cannot be built too small for its own text — size a
+  row of chips with `ch = max(measure_chip(t, s, cw) for t, s in stages)` to keep it even.
+  `takeaway_rail` now MEASURES its body and returns its bottom y; it used to reserve a fixed 2.0in
+  and put a long body's ink at y=5.45, inside the footer band, with every gate reporting clean.
   Then run the Step-5 render self-check.
   - **Reserve the bottom callout's space BEFORE sizing content above it — don't add it last.**
     `bottom_callout()` returns its TOP y; the recurring mistake is to hardcode tall panels/cards
     (e.g. `y=1.7, h=2.5`) and *then* drop a callout on top, so the bar overlaps the cards' bottom
     edge. Call the callout FIRST, then size content to end **a full `GUTTER` above** its returned
-    top: `top = dk.bottom_callout(s, 0.6, W-1.2, "要点", "…"); card_h = top - GUTTER - card_y`. A
+    top: `top = dk.bottom_callout(s, 0.6, W-1.2, "KEY POINT", "…"); card_h = top - GUTTER - card_y`. A
     *near-zero* overlap is not harmless — the bar draws on top and **clips the cards' rounded
     corners** — so require a visible gap, not just non-collision. (The build-time lint now warns
     **`SLIVER_GAP`** on panel-on-panel grazing — a 0.005–0.10in seam between panels or a panel and
     a picture — and the Step-5 render self-check still eyeballs the seam; reserving the space by
     construction remains the fix, the warn is the net.)
+- **Never hand-pick an x for a LABEL either — derive it from the thing the label names.** The
+  y-rule above has an x-twin, and it is the more common miss because nothing crashes: a caption,
+  a tag, a unit, a legend key, an axis note is *positioned* rather than *anchored*, and it lands
+  near its subject instead of on it. Every such element gets its x from one of exactly three
+  sources — the same grid column as its subject, its subject's own measured edge, or its
+  subject's centre — and never from an offset nudged off a neighbour until it "fits". **Two
+  measured failures, one class:**
+  - *Caption on the wrong grid.* A four-panel figure is ONE picture, so its panels have no shape
+    geometry to align to; the captions went onto the text grid (`ML + i*CW/4`) while the panels
+    sat where matplotlib put them, at **unequal widths** — each panel keeps its own aspect ratio,
+    so equal quarters are wrong by construction. Fix: have the plotting script export each
+    panel's span as a fraction of the figure (`ax.images[0].get_window_extent()` after
+    `fig.canvas.draw()`, over `fig.get_window_extent().width`) and place captions from the
+    picture's *placed* rect — `dk.picture` returns the shape, so `pic.left/914400` is the real x
+    after `fit="contain"` letterboxing. Backstopped by the **`CAPTION NOT ALIGNED`** render lint.
+  - *A tag nudged into a corner.* A Chinese gloss for an English product name was placed at
+    `(mx + 1.46, yy + 0.24)` — past the end of the rule, above the next row — giving one unit
+    three left edges and four baselines, so the eye could not tell what it belonged to. Fix: an
+    apposition is not a separate element. Same paragraph, same baseline, one left edge:
+    `[[(name, …, FONT), ("　", …), (tag, …, EAFONT)]]`.
+
+  The general rule behind both: **an element that annotates another element is not free to be
+  anywhere.** If you find yourself adding a constant to make a label sit nicely, the constant is
+  the bug — ask what edge it should share and compute that instead. Only the caption case has a
+  lint; the rest is on you, which is why it is also PRE-FLIGHT 9.
 - **🔴 Gate the geometry at BUILD time — end the build script with `dk.lint_layout(prs, strict=True)`
   before `prs.save()`.** `strict=True` makes it a *real* gate: an unresolved CRITICAL **raises and the
   deck is never saved**, so you can't accidentally ship a broken layout to the render/critic (plain
   `lint_layout(prs)` only *prints* and relies on you noticing — use it only when you deliberately want a
-  non-blocking report, e.g. a known off-canvas bleed). This is the cheapest place to catch
-  the mechanical layout faults: it runs in-process in milliseconds, *before* the slow render +
-  visual-critic round, and walks **every** shape — however it was placed, the grid helpers or raw
-  coordinates — reasoning about each label's **ink** rectangle (where the glyphs actually land), so it
-  stays quiet on the generously-sized frames real builds use. It **hard-fails (CRITICAL)** on five
-  things: content (text ink / a card / a non-bleed image) **off-canvas**, text **overflowing** a visible
-  box, **text-on-text** overlap, a **connector routed through a block** (`CONNECTOR_IN_BOX`), a **decorative RULE
-  drawn through a text block's ink** (`RULE_THROUGH_TEXT` — a divider/hairline placed at a hand-picked `y`
-  that the text above it later grew into; derive the rule from the block's measured end, never a guessed
-  coordinate), **CJK runs with no `<a:ea>` font** (`CJK_NO_EA` — set
-  `deckkit.EAFONT` before building; catching it here saves the render round-trip lint_deck previously
-  needed), and **CJK runs with no `<a:ea>` font** (`CJK_NO_EA` — set
-  `deckkit.EAFONT` before building; catching it here saves the render round-trip lint_deck previously
-  needed); it **warns** on **display numerals in an old-style figure face** (`OLDSTYLE_FIGURES` — digits at mixed heights make a big number visibly bob; the figure components resolve a lining face themselves via `deckkit.numeral_run_face`, so this fires only on hand-set runs — a taste call, deliberately not a build blocker), on a label/figure **escaping its card**, a **single
-  line left off-centre** in a card, content **reaching the footer**, and **two panels nearly
-  touching** (`SLIVER_GAP` — a 0.005–0.10in seam between panels, or a panel and a picture: the
-  hand-picked-pitch bug). (Each code's plain-language meaning + first fix:
-  `references/troubleshooting-faq.md` §4.) Every CRITICAL it prints is real *when the deck's fonts are
+  non-blocking report). It runs in milliseconds before any render and hard-fails (CRITICAL) on content
+  off-canvas, text overflowing its box, text-on-text, a connector routed through a block, a rule drawn through
+  text and a malformed slide part — each printed with its fix; the full list and why each exists:
+  `references/troubleshooting-faq.md` → "Build-time lint". (Each code's plain-language
+  meaning + first fix: `references/troubleshooting-faq.md` §4.) Every CRITICAL it prints is real *when the deck's fonts are
   installed* — when a font is substituted for measurement it says so and carries ~1 line of slack
   (conservative, may under-flag), so it never fabricates. It is a **net, not a substitute for
   looking** (it can't see contrast, z-order, a figure smothering text, or shapes inside groups — the
@@ -831,7 +1538,7 @@ A few rules that matter (see `references/design-principles.md`):
   disabled, not a category — it makes a coloured row look half-finished). **Bind each hue to ONE
   concept deck-wide** (the accent = the proposed method, or "risk", or one product) — a colour that
   means the same thing on every slide is the biggest "this deck is credible" move: see
-  `references/semantic-color-contract.md`. **🔴 A hue used as TEXT must itself clear ≥4.5:1 on its
+  `references/design-intelligence-addendum.md` §6.1. **🔴 A hue used as TEXT must itself clear ≥4.5:1 on its
   background** — a vivid gold / coral / lime that looks great as a fill can render at 2–4:1 as small
   label/kicker/emphasis text on a light surface (invisible-ish), the recurring "the coloured text is
   too faint" bug. So keep TWO tokens per accent when needed: a **bright fill-only** variant (rules,
@@ -866,11 +1573,29 @@ docstring `role=… | form=… | build:…/static:… | takeaway='…'` → an o
 `main()`): the docstrings make plan↔code correspondence greppable instead of remembered, and it
 does not change "build the whole deck in one script run" — `main()` always builds every slide.
 
-**Scaling up — section fan-out for large decks (optional).** For a normal deck
-(~6–14 slides), one author writing one build script is both faster and more coherent —
-**that's the default** (and stays the single-author default up to ~14 slides). Only fan
-out when it genuinely pays: **large decks (15+ slides)** or **independently-sourced sections**
-(different papers/datasets/areas). The
+**Scaling up — section fan-out.** For a **tiny deck (~≤5 slides)** one author writing one build
+script is both cheaper and more coherent — **that's the default there**. From **~6 slides up,
+fan out** (when the host can dispatch subagents); also fan out at any size for
+**independently-sourced sections** (different papers/datasets/areas). The number is owned by
+`references/large-deck-orchestration.md` — change it there, then here and in both gates. *(This threshold has moved
+twice, 15+ → 9 → 6, both times on the same evidence. The old rule was weighed on TOKEN cost,
+where one author is genuinely cheaper — no context is duplicated — and wall clock was never on
+the scale. Measured across five real build sessions, the build step is 40–71% of all
+model-active minutes, and it is one agent generating serially into a context that runs ~500k by
+mid-build. Fan-out does not make the deck cost fewer tokens; it makes the tokens happen at the
+same time, and it gives each author a fresh ~60k context instead of the coordinator's saturated
+one — which also buys better rule-following, since a 500k context is where instructions start
+getting missed. The 9→6 move added a second measurement: a 13-slide deck built solo ran 241
+round-trips against a ~125 budget with a 1.00 batching ratio and 37 slide images read one
+message at a time — the batching rules were IN context the whole time and stopped being
+followed, which is precisely the failure a fresh 60k context prevents.)*
+🔴 **The decision is RECORDED, not assumed: `design_plan.build_shape` in `.deck-gates.json`** —
+`"fanout — <n> sections"` or `"solo — <reason>"` (e.g. `solo — host has no subagent dispatch`,
+`solo — 6 slides but one tightly-coupled argument`). The hand-off gate requires it on any deck
+of ~6+ content slides and never blocks on the CHOICE — solo is legitimate on every host and
+mandatory on hosts without dispatch — only on the absence of a decision, exactly the
+`form_reach` pattern. It exists because this rule was prose: the 241-round-trip deck above was
+13 slides, well past the threshold, and nothing anywhere asked why it was built solo. The
 rule that keeps quality high: **centralize coherence, parallelize only the independent
 work.** The coordinator (you) keeps the comprehension brief, the arc, and a single
 shared `style.py` (palette/font/chrome — copy `references/examples/style_example.py`);
@@ -882,6 +1607,13 @@ fragile .pptx merging). Don't do one-agent-per-slide-with-neighbour-chat — it 
 fights the single-file artifact, and doesn't speed up the parts that actually cost
 time. Full workflow (incl. the critic panel + finding-routing) in
 `references/large-deck-orchestration.md`.
+🔴 **Fanning out the BUILD does not change the REVIEW shape.** The sectioned critic panel
+(per-section critics + one whole-deck coherence critic, at every tier — `references/critic-panel.md`)
+belongs to a **large** deck, ~15+ slides, because a 40-slide deck read as one document is a worse
+review. It is not triggered by having used section authors: a 10-slide deck built by three authors
+is still reviewed by the normal two focused lens critics reading the whole deck. Keep the two
+thresholds apart deliberately — wiring them together would quietly add critics to every mid-sized
+deck and spend the wall clock this fan-out just saved.
 
 **Motion & builds — the animation that matters is in-slide "appear" builds, NOT slide transitions.**
 🔴 **Do not "animate" a deck by putting a fade transition on every slide — that adds nothing and is the
@@ -929,25 +1661,46 @@ that single slide (legibility, no placeholder text, lining figures), and run the
 first WHOLE-deck render as always.)*
 This is the fixed boarding-pass between build and render. **Emit it as twelve literal ✓/✗ lines** (in
 your working notes or the build script's tail comment) — writing the ticks is what forces the checks
-to actually run; a deck with un-ticked pre-flight items is not ready to render. It exists because
+to actually run; a deck with un-ticked pre-flight items is not ready to render.
+
+**🔴 First run `python3 scripts/preflight_check.py <deck>.pptx --build build_<deck>.py` and paste
+its block into the ticks** (add `--selfread` / `--static` to match the deck's mode). It decides the
+MECHANICAL half — speaker-notes coverage (1), build timing present/absent (2), every `build:`
+docstring actually having `Build.step` calls (3b), native charts + `equation_native` (4), the deck
+carrying an as-of date (7), **meta-annotations and unfilled `<slot>`/`{slot}` template text leaked
+onto a slide (8)**. With `--build` it also reads the SCRIPT: a literal stride constant in a placement
+loop (the #1 geometry defect), and a **bar of sample means** — a computed mean/median fed to a
+column/bar `native_chart`, which hides n, the spread and the outliers; the fix is
+`designed_charts.distribution`. Items 2, 7 and 10 are **advisory** — whether builds were opted in, whether
+any claim is time-bound, and whether a font exists on the PRESENTER's machine are all facts absent
+from the file, and a check that fails on what it cannot know is one people learn to ignore. Exit 1 means not ready;
+`NOT CHECKED` + exit 2 means it could not run, which is never the same as clean.
+**`preflight_check.py` also emits four hard FAILs that are not numbered items** — mono overflow, a mono face
+not installed, a Latin run followed by a full-width mark, and a non-positive text box. When one fires, fix the
+deck rather than route around it; each is explained in `references/troubleshooting-faq.md`.
+**It deliberately does NOT decide 5, 6, 6b, 9, 11** — those are judgment (is the figure the real
+artifact, does the first look land on the hero, is the title the takeaway) and it prints them as
+still-yours rather than implying coverage. Item 12 keeps its own script. *(Why: eleven of the twelve
+ticks were self-attested — the model wrote twelve checkmarks and nothing anywhere read them, which is
+the exact silent-skip class the checklist was written to prevent.)* It exists because
 these are the rules that history shows get *silently* skipped when they live only as prose — they are
 judgment calls the render-time lint cannot measure (lint already covers: word load, ink coverage,
 font drama, build presence, layout sameness, CJK ea-font, contrast, footer, overlaps — don't re-tick
 those here; read its report instead).
 1. **Speaker notes**: presented deck (screen-shared = presented) → every slide's notes = the plan's **Spoken thread, verbatim**, via `dk.speaker_notes` (deviations — e.g. a split/merged slide — noted in one clause); self-read → prose is ON the slides instead.
 2. **Builds — opted-in? then FULLY staged**: builds appear only if the user opted in; every animated slide reveals ALL its content beats in order (nothing content-bearing pre-shown but the title/frame — no half-animated slide), starting from an empty content area (first beat included), with no spoiling summary/legend in the base.
-3. **Plan↔code correspondence**: (a) mechanical — diff the design plan's per-slide rows against the slide-function docstrings (icon family included; the classic inline-mode miss); (b) spot-check — each `build:` docstring has matching `Build.step` calls in its function body; (c) **cover carries its promises** — the built cover shows the self-verify-(l) device, the motif's label/legend where the plan said the STRANGER TEST is satisfied by labeling, and the `logo plan:` asset placed as planned (official file untouched; on a single-entity deck a cover with no logo and no recorded `n/a` reason is a ✗).
+3. **Plan↔code correspondence**: (a) mechanical — diff the design plan's per-slide rows against the slide-function docstrings (icon family included; the classic inline-mode miss); (b) spot-check — each `build:` docstring has matching `Build.step` calls in its function body; (c) **cover carries its promises** — the built cover shows the self-verify-(l) device, the motif's label/legend where the plan said the STRANGER TEST is satisfied by labeling, and the `logo plan:` asset placed as planned (official file untouched; on a single-entity deck a cover with no logo and no recorded `n/a` reason is a ✗; and a roster slide's declared `entity marks:` count is matched by that many REAL marks in the render — a generic glyph sitting in a mark's slot is a ✗, not a partial pass).
 4. **Charts native**: every chart is editable-native unless a matplotlib look was deliberately chosen; legends sit off the data. Same bar for math: every 1-D equation is `equation_native`; raster `equation_png` only for genuinely 2-D layout (fractions/matrices), named as such.
-5. **Evidence real**: every domain image/figure is the real computed/source artifact — no plausible stand-in; PDF crops checked on all four edges; every SOURCED photo comes from a sanctioned origin (Commons / Openverse / press kit / user file), its subject verified against caption/geotag/category, it is **watermark-free** (a watermark is an unlicensed-preview tell → reject the file; never crop/blur/inpaint the mark away), its license recorded (credit placed where required), it is **aesthetically vetted** (an ugly / under-construction / blurry / unrepresentative shot is rejected even when the subject is correct → re-source, or generate a declared-stylized illustration via the `searched, found but low-quality → generated, flagged illustrative` rung), and it is palette-treated so mixed sources read as one deck; no generated CONTENT image claims photographic reality for a real-and-specific subject (REFERENT RULE, `references/image-generation.md` — generated-template identity plates and declared stylized illustrations are exempt; a real subject with no findable photo uses a recorded `searched, none found → …` rung). Any **text over a hero/photo/plate** is verified legible against the pixels — no image linework crosses the glyphs (a scrim only dims a bright line; cover it with a near-opaque panel), eyebrow/kicker included, with a clear title↔subtitle gap (render self-check "Text over an image").
+5. **Evidence real**: every domain image/figure is the real computed/source artifact — no plausible stand-in; PDF crops checked on all four edges; every SOURCED photo comes from a sanctioned origin (Commons / Openverse / press kit / user file), its subject verified against caption/geotag/category, it is **watermark-free** (a watermark is an unlicensed-preview tell → reject the file; never crop/blur/inpaint the mark away), its license recorded (credit placed where required), it is **aesthetically vetted** (an ugly / under-construction / blurry / unrepresentative shot is rejected even when the subject is correct → re-source, or generate a declared-stylized illustration via the `searched, found but low-quality → generated, flagged illustrative` rung), and it is palette-treated so mixed sources read as one deck; no generated CONTENT image claims photographic reality for a real-and-specific subject (REFERENT RULE, `references/image-generation.md` — generated-template identity plates and declared stylized illustrations are exempt; a real subject with no findable photo uses a recorded `searched, none found → …` rung). **CLINICAL imagery carries one more check, before anything else:** no burned-in patient identifier (name, MRN/ID, accession, date of birth, study date, institution), read on all four edges and in any overlay/header strip rather than the middle — highest risk on a user-supplied scan or PACS screenshot, and a published figure is usually de-identified already but is still read. **If one is there, get a de-identified export — do NOT crop or blur it out and ship:** a crop can miss a second identifier in another corner and a blur is not a guarantee. Unlike every other item here this one is irreversible once the deck is sent. Any **text over a hero/photo/plate** is verified legible against the pixels — no image linework crosses the glyphs (a scrim only dims a bright line; cover it with a near-opaque panel), eyebrow/kicker included, with a clear title↔subtitle gap (render self-check "Text over an image").
 6. **Colour keyed**: the semantic-colour ledger's meanings are taught on-slide (key at first use) and no accent appears outside its bound meaning; chrome stays quiet — the **loud** signature motif ≤3 appearances (a *quiet register signature* — faint grid/scanline, corner numeral, edge rule, small seal — MAY repeat on every slide; that is SYSTEM, not stamping) — AND the chosen preset's `guard` constraints hold on every slide (quote the guard line in the tick).
-6b. **Register carries all pages (的风格要走所有页)**: the quiet register signature reaches ordinary interior slides, not just the cover/dividers — the `interior register:` contract cue is present on interiors, or a `none (flat by register — <reason>)` carve is recorded. A style dressed only on the bookends fails.
+6b. **Register carries all pages**: the quiet register signature reaches ordinary interior slides, not just the cover/dividers — the `interior register:` contract cue is present on interiors, or a `none (flat by register — <reason>)` carve is recorded. A style dressed only on the bookends fails.
 7. **Claims current**: every time-bound ledger row re-verified with as-of = TODAY; the deck carries its "as of" date.
 8. **Language & hygiene**: one language throughout; zero meta-annotations ("placeholder"/"TODO"/"AI-generated"); voice pass done on every line.
-9. **Eye path**: squint each slide — first look lands on the named hero, 3–4 hierarchy levels survive the blur.
+9. **Eye path & anchoring**: squint each slide — first look lands on the named hero, 3–4 hierarchy levels survive the blur. Then, un-squinted, **name the anchor of every label** — caption, tag, unit, legend key, axis note: which edge does it share with the thing it names (its subject's left / centre / right, or the same grid column)? **List the slides that carry labels and the anchor each uses.** A label whose x is a constant nobody can justify is the defect; `CAPTION NOT ALIGNED` only backstops the captions-under-panels case, and **`TEXT_GRAZES_SHAPE`** backstops the *collision* half (a label's ink running INTO the bar/chip/node beside it — invisible to `TEXT_OVERLAP`, which measures text against TEXT). Neither sees a label that merely floats near the wrong thing, so the anchoring judgement is still yours. 🔴 **When `TEXT_GRAZES_SHAPE` fires, the fix is the label COLUMN'S EDGE, derived from how far the mark can actually reach — not the string.** Measured: the first repair shortened the text and the label still grazed, because a right-aligned column that clears the *axis* does not clear a bar that grows *past* it (`_name_r = ZERO − max(|negative value|)·SCALE − pad`).
 10. **Hand-off ready**: font/portability deps + per-slide click order noted for the hand-off; open questions carried, not dropped; output dir resolved + announced (`~/Downloads/<deck>/` or the user's stated choice); image licenses/credits noted (sourced photos).
 11. **Titles bound to takeaways**: every content slide's title IS the plan's takeaway or a compression keeping its subject + verb + claim; **list the slide numbers** of compressions and of noted exceptions (bare topic labels are fine on cover/divider/agenda/closing; a named exception covers: Mode A "match its title treatment", a registered user template with a fixed title register, or a slide whose planned takeaway demonstrably lands as its named hero / `insight_banner` / `takeaway_rail` — note which element carries it). Emitting the slide numbers, not just a ✓, is what forces the per-slide comparison.
 12. **Form diversity & frame fill — EMIT THE TALLY**: **first run
-    `python scripts/component_audit.py build_<deck>.py <deck>.pptx` and paste its two summary lines
+    `python3 scripts/component_audit.py build_<deck>.py <deck>.pptx` and paste its two summary lines
     into the tick** (it takes ~50ms and reads the finished file, so it costs nothing and cannot be
     guessed). It states one fact — how many of the form components it can name a guarantee for this
     deck actually called (deckkit's wider form catalogue is ~59) — and points at clusters whose
@@ -962,7 +1715,20 @@ those here; read its report instead).
     the geometry bugs — a baseline short of the last bar, a value label off the bar's centreline —
     that the components were written to fix. SKILL.md had said "when a COMPONENT exists, BUILD that
     component" as prose for a long time; it was violated dozens of times and detected zero times.)*
-    Then write the deck's form-family tally as one literal line (`cards/panels: N · diagram: N · chart/proportional: N · big-type/editorial: N · timeline/roadmap: N · hero-image: N …`) and check six things against it: (a) **no family >~40% of content slides** — a first draft's greedy default is the card/panel, and per-slide checks can't see deck-level sameness, so this tally is the one place the crutch becomes visible; (b) every slide whose content is a RATIO / FLIP / DIVISION / PROCESS uses the form that *shows* it (a proportional bar, a topology diagram, a split, a roadmap), not a box that states it; (c) each interior slide **fills its frame** — a slide whose content ends in the top half either gets enriched, merged with its neighbour, or names its deliberate quiet register in one clause; (d) **one canvas system** — no background value/colour flip landing on exactly one interior slide (a flip must recur as a divider family or bookend; on the generated-template branch the plate stays on every content page and rhythm comes from imagery strength — `ONE-OFF CANVAS FLIP` lint is the render-time backstop); (e) **icons where content is categorical** — list the slides whose content names tools/entities/roles/pillars/categories; each such slide carries the planned icon family (one family, palette-recolored) or a one-clause waiver — "opt-in" never waives this silently (self-verify (g)); (f) **architecture rotation** — emit a second one-line tally of each content slide's TAKEAWAY SLOT (bottom-strip / side-rail / inline / headline / none) and CONTAINMENT (panelled / direct-on-canvas): no single takeaway slot on more than ~half the content slides (a bottom strip on every page is a template tell — `BOTTOM-STRIP MONOCULTURE` lint backstops it), and on a calm canvas at least ~1/3 of content slides put their protagonist directly on the canvas, un-panelled. Emitting the tallies + the (b)/(c)/(d)/(e)/(f) slide numbers, not just a ✓, is what forces the deck-level look a slide-by-slide build never takes.
+    🔴 **And the hand-off gate now asks for the answer rather than printing the question.** When
+    `--gate-check` measures a low reach against a build that is otherwise raw `box`/`text`, it
+    **blocks until `design_plan.form_reach.waived` records a written reason**. It never blocks on
+    the NUMBER — bespoke composition is legitimate and is often the signature move itself, and a
+    catalogue cannot produce a Mondrian page. It blocks on the absence of a DECISION, because that
+    is the failure that actually happens: nobody looked, and `sigs.py --list` is one call.
+    *(Measured: a delivered deck shipped at 1 of 23 named components, and three of its review
+    findings — a label grazing its bar, a value floating off a track's centreline, a reference line
+    drawn three different ways — are defects the unused components prevent by construction.)*
+    Then write the deck's form-family tally as one literal line (`cards/panels: N · diagram: N · chart/proportional: N · big-type/editorial: N · timeline/roadmap: N · hero-image: N …`) and check six things against it: (a) **no family >~40–50% of content slides** (the same band the Step-2 form-ledger diversity gate, the critic and `form-selection.md` use — a family landing inside the band needs the one-clause content reason the plan-time gate asks for, not a silent ✗) — a first draft's greedy default is the card/panel, and per-slide checks can't see deck-level sameness, so this tally is the one place the crutch becomes visible; (b) every slide whose content is a RATIO / FLIP / DIVISION / PROCESS uses the form that *shows* it (a proportional bar, a topology diagram, a split, a roadmap), not a box that states it; (c) each interior slide **fills its frame** — a slide whose content ends in the top half either gets enriched, merged with its neighbour, or names its deliberate quiet register in one clause; (d) **one canvas system** — no background value/colour flip landing on exactly one interior slide (a flip must recur as a divider family or bookend; on the generated-template branch the plate stays on every content page and rhythm comes from imagery strength — `ONE-OFF CANVAS FLIP` lint is the render-time backstop); (e) **icons where content is categorical (the DEFAULT — icons aid the 1-second read and reinforce the system)** — list the slides whose content names tools/entities/roles/pillars/categories/steps; each such slide carries the planned icon family (one family, palette-recolored), and skipping the family deck-wide requires a CLASSIFIED high-bar reason (`icon_none_category`: motif-dominant / editorial-register / tiny-deck / template-locked) + `icon_none_checked: [slides]`, never a bare "not category-rich" — "opt-in" never waives this silently (self-verify (g)). Icons must ENCODE not decorate: no topic-stamp beside a lone number/statement; (f) **architecture rotation** — emit a second one-line tally of each content slide's TAKEAWAY SLOT (bottom-strip / side-rail / inline / headline / none) and CONTAINMENT (panelled / direct-on-canvas): no single takeaway slot on more than ~half the content slides (a bottom strip on every page is a template tell — `BOTTOM-STRIP MONOCULTURE` lint backstops it), and on a calm canvas at least ~1/3 of content slides put their protagonist directly on the canvas, un-panelled. Emitting the tallies + the (b)/(c)/(d)/(e)/(f) slide numbers, not just a ✓, is what forces the deck-level look a slide-by-slide build never takes.
+
+**Codex only:** after PRE-FLIGHT 12, follow `references/codex-runtime.md`. Its separate gate does
+not change the global audit's advisory classification; it merely requires Codex to either use a
+detected component or preserve a slide-specific bespoke rationale in the evidence record.
 
 **Gates never collapse.** A quick / low-stakes / inline run scales the *size* of each artifact
 (a 5-line content plan, a 10-line design plan), never the *existence* of the gates: interview →
@@ -975,29 +1741,33 @@ only the emitted form-candidates (per-slide runner-up from a different family) +
 tally push toward the ceiling. A delegated deck emits them for itself, not for the user.
 
 ## Step 5 — Render, verify, then run the actor–critic loop
-**You should already have run the build-time geometry gate** (`dk.lint_layout(prs)` at the end of
+**You should already have run the build-time geometry gate** (`dk.lint_layout(prs, strict=True)` at the end of
 Step 4) and cleared its CRITICALs (off-canvas · overflow · text-on-text) in-process, so the render
 loop starts mostly geometry-clean. `lint_deck.py` below then re-checks that geometry on the final file
 as a backstop and adds the render/parse-only faults; the rest is what needs real pixels (crop,
 contrast, balance, a tofu glyph, text on a busy image), which only the render shows.
 
-**Iterating on a deck you already rendered? Add `--fast`.** `render_deck … --fast` fingerprints
-every slide (its XML + rels + the bytes of the media it references, mixed with a deck-global digest
-covering the theme/master/layouts/canvas size) against the previous run, then re-renders **only the
-slides that changed** — it subsets the pptx to those slides, converts that, and overwrites just their
-PNGs. Measured on an 18-slide deck: a full render is ~12s, a one-slide change is **~4.7s**, and a run
-where nothing changed is **0.07s**. Output is byte-identical to a full render (verified), so the
-critic and the render-time lint see exactly what they would have seen anyway. It falls back to a full
-render — and says why — whenever the mapping could be wrong: slide count changed, every slide changed,
-no cache, or the deck contains **auto slide-number fields** or **hidden slides** (LibreOffice drops
-hidden slides from the PDF, so page N stops being slide N — a full render now warns loudly and
-refuses to cache when the page count and slide count disagree). **Use it for the actor-critic fix rounds
-and for post-delivery tweaks** ("change slide 7 to a chart"); use a plain full render for the first
-render of a deck and whenever you pass `--deliverables`.
+**Iterating on a deck you already rendered? Add `--fast`** — `render_deck … --fast` fingerprints every slide and
+re-renders only the ones that changed. Details and when a full render is still required:
+`references/troubleshooting-faq.md`.
 
 First **render and look** (`bash scripts/render_deck.sh <deck.pptx>` → one PNG per
 slide). python-pptx writes blind — overflow, low contrast, a callout on the footer,
 or a missing glyph only show up in the image. Fix mechanical issues and re-render.
+**Chain build → render → lint into ONE command** — `python3 build_<deck>.py && bash
+scripts/render_deck.sh <deck>.pptx --fast && python3 scripts/lint_deck.py <deck>.pptx --renders render`.
+🔴 **`--fast` belongs in the chain itself, not in your judgment.** It is safe on the FIRST render
+too: with no cache it prints `--fast fell back to a full render: no previous render cache` and does
+the full one — same for a changed slide count, a deck-global edit, hidden slides, or auto
+slide-number fields. So the flag costs nothing when it cannot help and saves a full render on every
+round when it can. It was previously advised one paragraph above this command and omitted FROM it,
+which is the same as not being there: the chain is what gets copied each round.
+(The one command that must NOT carry it is the hand-off render — `--deliverables` needs a whole-deck
+PDF and dies if you pass both.)
+They are a strict dependency chain, so they cannot run in parallel, but they also need no
+decision between them: running them as three messages buys nothing and pays the full
+conversation context three times instead of once. `&&` already stops the chain at the first
+failure, which is the same place you would have stopped anyway.
 (First time on a machine, or a render errors? `bash scripts/check_env.sh` verifies
 LibreOffice + the python deps and prints the fix for anything missing.)
 **When anything in this step fails or flags** — a build exception, a lint finding you don't
@@ -1012,59 +1782,161 @@ sandbox even though `check_env.py` passes; in that case rerun only the render co
 unsandboxed execution, then continue the normal render -> lint -> critic loop. This is an environment
 permission issue, not evidence that the deck is malformed.
 
-**Then run the layout lint** — `python scripts/lint_deck.py <deck.pptx>` (add `--json out.json` for a structured copy of findings + the stats block — hand THAT to dispatched critics instead of re-parsing console text; the lint auto-reads the `./render` PNGs beside the deck to add the colour/value-pacing row + the `FLAT RHYTHM` warn, or pass `--renders <dir>` — silently skipped when no renders exist, so it never changes a render-less run). `render_deck.sh` also emits `render/thumb_first.png` + `thumb_last.png` (~240px) for the critic's poster test. The build-time
+**Then run the layout lint** — `python3 scripts/lint_deck.py <deck.pptx>` (add `--json out.json` for a structured copy of findings + the stats block — hand THAT to dispatched critics instead of re-parsing console text; the lint auto-reads the `./render` PNGs beside the deck to add the colour/value-pacing row + the `FLAT RHYTHM` warn, or pass `--renders <dir>` — silently skipped when no renders exist, so it never changes a render-less run). `render_deck.sh` also emits `render/thumb_first.png` + `thumb_last.png` (~240px) for the critic's poster test. The build-time
 `dk.lint_layout` (Step 4) already cleared the pure-geometry faults *before* this render; **lint_deck.py
 is its render-time complement** — it re-checks geometry on the FINAL file and adds the faults that only
 the rendered/parsed deck reveals (which `lint_layout` deliberately leaves to it). A cheap, deterministic
 check, it flags **invisible/low-contrast text against its backing fill (an uncoloured run defaults to black and vanishes on a dark card), off-slide overflow, text overflowing the card behind it, uneven card heights in a
 row, two solid blocks/images overlapping (neither contained), footer collisions, orphaned punctuation
-/ widow (a lone 。/，or single glyph on the last line — 避头尾), CJK text with no EA font (the kinsoku
+/ widow (a lone 。/，or single glyph on the last line — kinsoku), CJK text with no EA font (the kinsoku
 root cause), whole-page-image (editability), and orphan/empty slides**: exactly the failures the eye
 misses (a callout tucked under a panel; a 2-line body hanging below a card; a 。 stranded on its own row). Fix every finding, re-render, and re-lint
 to clean before handing to the critic. It also prints soft **`[warn]`s** (advisory, non-blocking) for
 what the hard families can't fail on: **missing alt-text** on an informative image, a **math-font
 tofu** risk (an `equation_native` font not installed on the render host), **LOW/BODY CONTRAST**
 bands (1.8–4.5:1), **grouped-only content**, and the **accessibility set** — NO SLIDE TITLE /
-DUPLICATE SLIDE TITLES / READING ORDER (screen-reader navigation) and NON-TEXT CONTRAST (WCAG
-1.4.11 for icons/lines). Resolve them or consciously accept them (FAQ §7). The hard families also
+DUPLICATE SLIDE TITLES / READING ORDER (screen-reader navigation), NON-TEXT CONTRAST (WCAG
+1.4.11 for solid marks/lines) and **ICON CONTRAST** (the same 3:1 floor for a recolored
+monochrome icon vs its backing — icons are PICTURES, so the check above cannot see them). Resolve them or consciously accept them (FAQ §7). The hard families also
 include **TEXT ON IMAGE** — a render-pixel contrast estimate (<1.5:1) for text sitting on a
 photo/gradient with no opaque backing, exactly the class solid-fill contrast checks can't see;
 its 1.5–3.0 band is the TEXT-ON-IMAGE CONTRAST `[warn]`.
+**TEXT CONTRAST** (WCAG 1.4.3) is in the accessibility set too: text under 14pt, or under 18pt and not bold,
+below 4.5:1 on a fill is held at hand-off (not advisory), and the finding names the nearest ink that keeps the hue.
+A slide whose visible title is not first in reading order (a kicker above it) or sits low: `deckkit.a11y_title(slide,
+"<title>")` declares it — a TITLE placeholder above the canvas, nothing drawn; the visual-language pages call it themselves.
+
+**🔴 RECORD the delivery mode once, in the build script, instead of retyping a flag:**
+`dk.declare_delivery(OUT, "selfread")` beside `prs.save(OUT)` — one of `presented` · `textheavy` ·
+🔴 **And `notes="none"` when the user declined the spoken script** —
+`dk.declare_delivery(OUT, "presented", builds="static", notes="none")`, so `NO NOTES` does not fire on their
+decision (why: `references/troubleshooting-faq.md`).
 
 **It then prints a DECK STATS block — the measured form of the design targets. READ it, don't skim
-past it** (pass `--selfread` for a read-alone deck — it raises the TEXT WALL budget (~40→~90 words)
+past it** (pass `--selfread` for a read-alone deck — it raises the TEXT WALL budget (~40→~90 words); `--briefing` for an **editorial data briefing** — an FT/Economist-style dense read where ~150 words beside six charts is the FORM, which raises the word budget to ~150 and the occupancy band to 80% rather than removing either check the way `--textheavy` does
 and drops the presented-only SMALL TYPE / NO BUILDS warns; the other warns are mode-independent —
 `--surface` for a poster/single-canvas artifact, `--textheavy` when the user explicitly chose
 text-heavy density for a presented deck, or `--static` on a presented deck when the user opted OUT of
 appear-builds (silences NO BUILDS — a static presented deck was their choice, not an omission), so the
 budgets fit the delivery mode). Per slide it measures:
-reading **load** (latin words + CJK chars/2) vs the ~40-word presented budget · **text% / ink%
-coverage** vs the ~50–70% whitespace target · **max font pt** · shape/picture/chart counts ·
-**build** presence · **sim↑** (layout-skeleton similarity vs the previous slide); deck-wide it
-prints the **font histogram + type-drama ratio** and **builds/transitions n/N**. Its `[stats]`
-warnings name the rule they measure — **`TEXT WALL`** (word budget blown → cut copy to notes or
-split), **`CROWDED`** (occupancy past ~70% — role bands: cover 25–35 · exec 45–60 · technical 55–70 →
-subtract or split, don't shrink), **`LAYOUT SAMENESS`**
-(3 consecutive slides share one skeleton → the §1.2 skeleton-rotation rule failed), **`FLAT TYPE`**
-(no typographic hero → the type-scale drama rule failed), **`SMALL TYPE`** (body-median under the
-canvas-relative ≈18pt-equivalent floor → fewer words, bigger type), **`SIZE SPRAWL`** (>3–4 font sizes
-on one slide → use the declared type-scale tokens), **`NO BUILDS`** (presented deck with no
-appear-builds → the motion manifest failed *unless the user opted out of builds* — then pass
-`--static`), **`SKELETON VARIETY`** (<4 distinct layout skeletons
-across an 8+-slide deck → the canvas architecture barely rotates), **`TIMID COVER`** (slide 1's
-largest run under 2× body → the cover lacks poster scale), **`FLAT RHYTHM`** (when render PNGs are
-present via `--renders`/`./render`: no light/dark or colour-temperature event across the deck → the
-rhythm map's Background-mode column is single-note), and on CJK decks **`CJK TIGHT LEADING`** (multi-line
-CJK at ≤ single spacing → use the script-aware default) and **`CJK-LATIN SPACING`** (both 盘古之白
-conventions mixed → pick one deck-wide). Treat each `[stats]` warning as the NAMED design rule
-having failed measurably: fix it or write one clause of why this deck is the exception, and **paste
-the stats block into the critic's input** so the judges score numbers, not impressions. It's a safety
-net for the no-overlap / fits-its-box / density / rhythm rules, **not** a
-replacement for looking (it can't judge crop, balance, legibility, or fidelity).
+reading load, coverage against the slide role's occupancy band, build presence and skeleton similarity;
+deck-wide, the font histogram and type drama. Every `[stats]` warning names the rule it measures and its first
+fix (`TEXT WALL`, `HOLLOW FILL`, `LAYOUT SAMENESS`, `FLAT TYPE`, `SMALL TYPE`, `CROWDED`, `CARD DOMINANCE`,
+`ENVELOPE MONOCULTURE` …) — 🔴 act on each one or write why not; the full list is in
+`references/troubleshooting-faq.md` → "Deck stats". It is a net, not a replacement for looking.
+
+**Codex only — close the execution loop before consent is treated as hand-off:** retain the final
+lint JSON and component-audit JSON, complete `.codex-deck-evidence.json`, then run
+`scripts/codex_delivery_gate.py` exactly as `references/codex-runtime.md` specifies, with a
+`.codex-delivery-receipt.json` output. Before sharing a file path, download link, file citation, or
+claim of completion, run `scripts/codex_handoff_guard.py` against that receipt and the final PPTX.
+**No matching `CODEX HANDOFF GUARD: PASS` means no delivery** — report progress or an
+**unverified draft** instead. A clean hard-lint alone is not a pass: unresolved card dominance, type
+sprawl, CJK leading, or missing evidence stays blocked unless a precise, named waiver explains why
+this deck is the exception.
+
+**🔴 When the gate says clean and the pixels say broken, the PIXELS win.** Paint order is the fault
+class that keeps proving this: a shape added after a text box is drawn ON TOP of it while every
+geometry check stays green. Three real decks shipped that way — a footer hairline over a sources
+line, a 150-tile field erasing a caption, a dashed rule of 40 boxes struck through a footnote — and
+each was found by a human looking at a PNG. The lesson was not "add another rule": the old check
+enumerated *causes* (this shape type, painted then, covering that much), and causes are unbounded,
+so every exclusion in it was a hole. `OCCLUSION` / `RULE THROUGH TEXT` now measure the **union** of
+everything painted over a text block, so a thing built from many small parts cannot slip a
+per-shape threshold; and `TEXT NOT VISIBLE` asks the one question with a bounded answer — *does
+this line render any glyphs at all?* — straight from the pixels, so it catches a picture, a group,
+a gradient or a same-colour-as-its-ground block without knowing which it was. Still a net, not a
+proof. The model remains
+blind to: **shapes inside groups** (imported SVG and user .pptx files on the redesign branch),
+**chart interiors** (neither linter opens a chart part, so a bad number-format code renders raw),
+**rotated shapes**, **text measured with a substituted font** (the lint says so and carries ~1 line
+of slack), and anything **LibreOffice draws differently** from what the XML implies. A clean lint
+means "nothing the model can see is wrong", never "the slide is right" — which is the entire reason
+this scan exists and why it is not optional.
+
+**Also read what the lint says it did NOT do.** With no renders beside the deck the pixel-backed
+families disable themselves; the run now prints one `[skipped] … NOT checked: …` line and carries
+`pixel_checks` in `--json`. `0 findings` with that line present is a different sentence from `0
+findings` without it, and only one of them means what it looks like.
 
 **Render self-check — scan EVERY slide for these before handing to the critic** (they're
 invisible in the build code and only appear in the pixels; catching them yourself saves a
 critic round — full rationale in `references/design-principles.md`):
+
+> **Look at `render/contact.png` first — then read every slide anyway.** The render writes one
+> image of the whole deck beside the per-slide PNGs. It is the only view in which the DECK-level
+> questions are actually visible: the light/dark rhythm, whether the bookends bookend, form
+> variety, one chrome treatment stamped on every page, a canvas flip that lands on exactly one
+> slide — the things `ONE-OFF CANVAS FLIP` / `TITLE-RULE MONOCULTURE` / `FLAT RHYTHM` /
+> `BOTTOM-STRIP MONOCULTURE` measure and no single-slide read can see. 🔴 **It settles NO per-slide
+> question and never substitutes for the reads below.** Measured: a page there is 46 px/inch, so a
+> 23pt title is 15px and legible while **13.5pt body text is 8.6px and a 10pt source line 6.4px —
+> both unreadable.** Typography, contrast, a label grazing its bar, an overlap, whether a number is
+> right: none of that is decidable from the sheet. Use it to arrive at the per-slide read knowing
+> which pages deserve the most attention; treating it as the visual check IS the "passed because
+> nothing looked" failure this skill keeps finding elsewhere.
+>
+> 🔴 **Read the slide PNGs in ONE message — every slide, one tool block — then judge them one at a
+> time.** This is the preamble's `round-trips × context` rule at the place it binds hardest: reading
+> N slides in N messages re-sends the whole conversation N times, and by mid-build that context runs
+> ~300k, so a 14-slide deck spends ~4.2M tokens to look at ~21k tokens of image. Reading them
+> together costs the images once. **Batching the READS must not blur the JUDGMENTS:** walk the
+> slides in order afterwards and **record a one-line verdict for EVERY slide** — `s07: ok` /
+> `s07: teal glyph on aqua tile, <3:1` — because one aggregate impression over fourteen images is
+> not the same act as fourteen scans, and the zoom-level checks this list demands (each icon tile at
+> ~3:1 on its own ground; all four edges of every PDF crop) still need their own look. The verdict
+> lines are the artifact that shows the scan happened; a slide with no line was not checked.
+> 🔴 **This look is now a GATE ARTIFACT, not prose — record it in `.deck-gates.json` as
+> `render_selfcheck.slides`, one verdict per slide, covering every slide** (`{"n": 7, "verdict":
+> "ok — signature lands"}` / `{"n": 7, "verdict": "teal glyph <3:1 — recoloured"}`; Codex:
+> `render_selfcheck` in the evidence file). The hand-off gate refuses a deck missing it or short a
+> slide, so the cheap actor-side look — the one that catches an overflow / cropped subject / wrong
+> number BEFORE a critic round is spent — leaves a trace instead of being the easiest step to skip.
+> Its honest limit is the same as `content.slides`: it proves the trace exists, not that the eye
+> judged well (`ok` on a bad page still passes) — the strong per-slide guarantee is the independent
+> critic's coverage bind. Genuinely no render to look at (a rare `--static` edge)? Waive it in
+> writing (`render_selfcheck.waived`).
+>
+> 🔴 **THE BLIND READ-BACK — the check that reads the PICTURE, not the file. Run it after the
+> self-check above, before the critic.** Every other gate in this skill answers *what does the file
+> contain*; none of them reads the page as a page, and that is the gap every "green but broken"
+> deck in this skill's history walked through — a wireframe, `<placeholder>` text that cleared every
+> width floor, a deck of six grey blocks, negative bars drawn as absolute, Chinese measured 46%
+> short. The self-check above cannot close it *because it is self-attested*: measured, a 15-slide
+> deck recorded `ok` on all fifteen, and the first outside sentence about it named a defect.
+> Three steps, one round-trip each:
+>
+>     python3 scripts/blind_read.py packet  <deck-dir>          # PNG paths + a fixed question list
+>     # → hand ONLY that to an independent reader (agents/blind-reader.md). It must NOT see
+>     #   .deck-gates.json, the plan, or the topic — a reader who knows the takeaway finds it in
+>     #   the picture whether or not the picture carries it.
+>     python3 scripts/blind_read.py compare <deck-dir> --answers <its json> --write
+>
+> The comparison is **computed, not asserted** — there is no verdict field to write `ok` into. It
+> triages into three: **HARD** (clipped/overlapping text, an on-screen contradiction, a placeholder,
+> a page carrying nothing, planned icons the reader cannot see) — fix it and record `fixed`;
+> **ASK** — answer in writing; **note** (a judgement call: "no food imagery on a food page") —
+> recorded for the critic, no answer owed. The reader is **not infallible**: when it is wrong, say
+> what you re-checked on the rendered page in `refuted` — never a fake fix. Measured on its first
+> real run over a shipped 15-page deck: 10 hard findings, including a body/source-line number
+> contradiction that had passed the provenance gate, the critic, and fifteen `ok` verdicts.
+> No independent reader in this runtime? Claim the carve `no-reader` — which *records that the deck
+> shipped unread* rather than implying it was read.
+>
+> 🔴 **Do not hand-write `blind_read.findings`, and do not edit a severity.** The gate re-runs the
+> comparison over the recorded ANSWERS and requires every finding that owes an answer to be there
+> with the same severity — so a HARD finding edited down to a `note`, or a findings list emptied to
+> look clean, is caught and named. (Added after an audit showed both tricks passing: the first
+> version's "nothing to write `ok` into" was true of the *shape* and not yet of the *content*.)
+> Adding a finding the comparator missed is welcome and never flagged. If it complains after you
+> legitimately changed the record, that means the comparison is stale — re-run `compare --write`.
+>
+> 🔴 **Reading a deck that is not in English or Chinese?** The triage's keyword sets cover those two,
+> so a defect written in any other language falls through to `note` and the deck reads as clean. The
+> reader must then tag each problem: `{"what": "…", "kind": "clipped|bleed|overlap|contradiction|
+> legibility|unkeyed|judgement"}`. The reader picks the KIND; the gate still decides the severity.
+> Either way the record carries a `READ_TRIAGE_COVERAGE` line stating how many problems were
+> classified, so "all judgement calls" can never pass for "all fine" in silence.
 - **Overflow / contrast / footer / glyphs** — no clipped or spilling text, ≥4.5:1 contrast,
   nothing jammed on the footer, no tofu/missing glyphs, and **no orphaned punctuation** (a lone 。/，
   or single glyph stranded on its own row — set `deckkit.EAFONT` so PowerPoint's kinsoku keeps it
@@ -1085,6 +1957,11 @@ critic round — full rationale in `references/design-principles.md`):
   ladder, a list, stacked chips should **distribute evenly** to fill the available height; don't
   bottom-/top-anchor and strand a visible gap between the header and the first item (compute the gap
   from the region — `(region_h − n·item_h)/(n−1)` — or use `vstack`/`rows`, never a hand-picked offset).
+  **And every label sits ON the thing it labels** — a caption centred on its own panel (not on the
+  text column divided by N, which is wrong the moment the panels are unequal), a tag on its subject's
+  baseline and left edge. A label sharing no edge with its subject reads as floating even though
+  nothing overlaps and nothing overflows; PRE-FLIGHT 9 makes you name each anchor, and
+  `CAPTION NOT ALIGNED` backstops only the captions-under-panels case.
 - **Block padding & no inflated filler** — text inside a chip/card/callout hugs the box with a
   **modest, balanced** top/bottom margin (middle-anchored; not floating in a tall box, not cramped).
   A short card must not leave a white strip at the bottom. **No oversized block faking a full slide:**
@@ -1147,7 +2024,7 @@ critic round — full rationale in `references/design-principles.md`):
 - **Diagrams** — arrows point the way the flow moves (down/up between stacked boxes); adjacent
   blocks have a visible gap (never touching); a lone glyph/icon optically centred (ASCII, not
   full-width, for a centred mark on a CJK deck). **A connector / loop label (e.g. a feedback-loop's
-  「修订」/「retry」) sits in the OPEN GAP next to the line — offset above a horizontal segment, or beside a
+  "revise"/"retry") sits in the OPEN GAP next to the line — offset above a horizontal segment, or beside a
   vertical one, with clearance — NOT inside an opaque chip that STANDS OUT over the line.** A chip that
   contrasts with the slide reads as a band-aid; route the label into clear space so the line and text
   simply don't collide. (On a PLAIN background a label that knocks the line OUT in the background colour —
@@ -1228,8 +2105,73 @@ So verify the fully-built PNG reads correctly on its own (run the loop as normal
 in step 6 **describe the click order** to the user. Builds are a layer on a correct
 static slide, never a fix for a cluttered one.
 
-Then run the **actor-critic loop** — this is the quality engine, and the critic is a
-*demanding* judge (see `agents/critic.md`), not a rubber stamp:
+### 🔴 THE POST-BUILD REVIEW QUESTION — ask it HERE, with the deck in front of the user
+
+The render is clean, both lints are clean, the self-check verdict lines are written. **Now — not
+at Step 0 — post the rendered deck (contact sheet + the slide PNG paths) and ask ONE question:**
+
+| option | what runs | rough cost |
+|---|---|---|
+| **`fast` (default)** | 1 generalist critic, 1 round, top-5 claims re-checked | ~10–20 min · ~250k tok |
+| `standard` | 2 lens critics (content · design), 2 rounds, top-10 claims — the low-stakes panel (lab meeting / status update / teaching) | ~30–60 min · ~600k |
+| `thorough` | multi-critic panel + arbiter, 3 rounds, every claim — worth it for a defense / pitch / exec readout (the high-stakes panel, `references/critic-panel.md`) | ~1–2 h · ~2M |
+| `none` | no review — deliver as-is | 0 |
+
+🔴 **On a runtime with NO choice UI — plain Codex chat, Kimi, a GPT surface, an API caller: the
+norm, not the exception — ask it as ONE typed question and never fake a form.** Say it in the
+USER's language. This is the same rule Step 0 carries, and it is repeated here because this
+question has no interview block to inherit it from — and an unaskable question does not become a
+default quietly, it becomes a default *silently*:
+> The deck is rendered — slides are at `<path>/render/slideNN.png` (contact sheet:
+> `<path>/render/contact.png`). Have a look, then tell me how hard to review it:
+> **fast** (default — 1 critic, 1 round, ~10–20 min) · **standard** (2 lens critics, 2 rounds,
+> ~30–60 min) · **thorough** (panel + arbiter, 3 rounds, ~1–2 h) · **none** (ship it as-is).
+
+**A host that cannot DISPLAY images still asks it** — the paths are the deck: the user opens them.
+What a no-image host may not do is answer the question on the user's behalf; that is the one
+substitution this question exists to prevent.
+
+Why the question lives here and not in the interview: at Step 0 it was a **blind** cost decision
+about a deck nobody had seen, and blind is why `fast` could never be the default (a silent recall
+drop the user never chose). With the deck visible the same choice is **informed** — the user has
+already judged the thing itself, so the cheap tier is a proportionate default and declining
+entirely is a legitimate answer, not a loophole. Three rules keep it honest:
+- **The option texts carry the cost and what is skipped, every time** (the table above). On a
+  RESEARCH-SOURCED deck, `none`'s option text must additionally say it skips the adversarial
+  primary-source re-check — the one defect class the user's own eyes cannot catch — and the
+  hand-off's `provenance:` line then reads `skipped — user declined post-build review`, never a
+  tally that implies it ran.
+- **`none` is recorded, not silent**: the standard `user-waived` critic waiver in
+  `.deck-gates.json`, quoting the decline — `{"critic": {"waived": "<the user's words>",
+  "waived_category": "user-waived"}}`, plus `{"provenance": {"waived": "skipped — user declined
+  the post-build review"}}` on a research-sourced deck, so the record and the hand-off line say
+  the same thing. (Codex path: `review_effort: "none"` + `none_opt_in`.) This is the machinery
+  that always existed for exactly this.
+  A surviving `fast` blocker still goes back to the user by name (the cap rule below), so the
+  default tier never silently ships a known-broken deck.
+- **Under a per-deck AUTO WAIVER, run `fast` — never `none`.** "You decide" delegates effort
+  sizing, not the decision to skip review entirely; the FYI records `review: fast (post-build
+  default — auto)` and the user escalates at hand-off if they want more. Auto MAY escalate above
+  `fast` for a high-stakes purpose (defense / exec readout / pitch) with the reason recorded —
+  `review: thorough (escalated — defense deck, auto)` — it may only never decline.
+
+Then run the **actor-critic loop** at the chosen tier — this is the quality engine, and the
+critic is a *demanding* judge (see `agents/critic.md`), not a rubber stamp:
+> 🔴 **Do not retype the dispatch below.** `python3 scripts/dispatch_brief.py prompt --brief <path>
+> --role critic --lens A|B --round N --deck <dir>` prints it — ~220 tokens against the ~4,600 a
+> hand-written one measured, and the CONTRACT CARD then comes from the one file every critic reads
+> rather than being reconstructed at each dispatch (the reconstruction this step warns about
+> below). The brief is written once, at Step 1, with `dispatch_brief.py init`; the tool refuses to
+> emit a prompt while any required section is unfilled, so a hollow brief fails loudly instead of
+> dispatching a critic that was told nothing. Everything the numbered item asks for still has to be
+> in the brief — the tool changes where it is written, never whether it is.
+> **`--lens AB` is the `fast` tier's ONE critic** (both lenses as two passes, as `agents/critic.md` asks of a sole
+> critic); `standard` and `thorough` dispatch `--lens A` and `--lens B` as separate critics.
+
+🔴 **On a host that CAN dispatch subagents, the critic IS a subagent.** `no-dispatch-on-host` is for hosts
+that cannot. Measured 2026-11-07: three of four runs on a host that could dispatch waived it anyway and
+shipped self-reviewed decks — and the runs that dispatched were the ones whose design held up.
+
 1. **Critique.** Dispatch an independent critic subagent through the host's available
    multi-agent/subagent tool, pointed at `agents/critic.md`, giving it the rendered PNGs, the deck's **purpose + audience**
    (plus the interview's recorded **delivery mode + density choice**, so the rubric's density carves can apply),
@@ -1246,22 +2188,33 @@ Then run the **actor-critic loop** — this is the quality engine, and the criti
    sole critic; its section's range for a per-section critic), `passes` covers both lenses on a
    sole critic, `stats_block_seen: true`, and `contract_card_seen` is not false when a card was
    sent. A review failing any of these is **rejected and re-dispatched once** with the gap named —
-   never acted on. Arbiter outputs validate the same way (`validate_review.py arbiter`); an
+   never acted on.
+   **The contract-card audit is checked by the same command, not by your eye.** `validate_review.py`
+   requires the `plan_audit` block and the `probes` entry each lens in `passes` owes (content →
+   `lens_a` + `memory_sentence`; design → `lens_b` + `per_slide`), every named subfield inside them,
+   and refuses `contract_card_seen: true` over an empty or null `plan_audit`. That last rule is the
+   one worth knowing: a review can otherwise assert it received the card while auditing none of its
+   contracts, and `concept_landed`, `signature_move`, `register_interiors`, `takeaway_titles` and
+   the rest — the entire mechanism by which declared design intent is tested against pixels — go
+   unchecked with the deck still consenting.
+   **The coverage half of that check is now MECHANICAL, at hand-off** — `render_deck.py
+   --gate-check` re-opens the recorded review, counts the deck's real slides, and refuses a consent
+   whose `slides_opened` does not reach them. So a **per-section critic MUST declare its range** or
+   the gate reads it as a whole-deck review with holes: `"coverage": {"scope": [4, 9],
+   "slides_opened": [4,5,6,7,8,9], …}`. (Why it was added: a schema-valid review of a 15-slide deck
+   declaring `slides_opened: [1]` was accepted, recorded with a sha256, printed as *verified*, and
+   passed every hand-off gate — "verified" meant the FILE still hashed to what was recorded, never
+   that the DECK had been looked at. `slides_opened` is the anti-skim field; nothing compared it to
+   the deck. The Codex delivery gate already bound it; this is the shared path catching up.) Arbiter outputs validate the same way (`validate_review.py arbiter`); an
    arbiter's `escalated_unreviewed` entries are handed to the next round's fresh critic as
    candidate findings (or, at the round cap, surfaced to the user with the other open questions).
 
-   - **Record the consent as EVIDENCE, not as a claim — add `--record <deck-dir>` to the validation
-     you are already running:** `python3 scripts/validate_review.py critic <review.json> --record
-     ~/Downloads/<deck>/`. It writes the `critic` block of `.deck-gates.json` **from the validated
-     review itself** (verdict · blocker/major counts · the review file's path + sha256), and the
-     Step-6 gate then re-reads that artifact instead of trusting a summary — a moved, edited, or
-     revise-verdict review fails the hand-off. Run it on every round; `rounds` is the count of
-     distinct reviews recorded, so it cannot be inflated. On a high-stakes deck, `--record` on the
-     arbiter's Job-2 payload files the corroborating pass under `critic.corroborated_by`. **Why this
-     is not ceremony:** a record you TYPE at hand-off is self-certification — the model that skipped
-     the loop writes the same JSON as the model that ran it, so both produce identical prose and
-     only an artifact tells them apart. A hand-written record still passes, and is labelled
-     `SELF-REPORTED` when it does.
+   - 🔴 **Ask for the review in the shape the validator prints, land every returned review on disk the moment it
+     arrives, and record it as evidence:** `python3 scripts/validate_review.py --schema critic` prints the
+     contract to hand the critic; save each review (or the failed dispatch) as a file before acting on it; then
+     `python3 scripts/validate_review.py critic <review.json> --record <deck-dir>` registers it where the gate
+     re-reads it. Full rules: `references/critic-panel.md` → "Review shape, landing every review on disk,
+     recording consent".
 
    - **Hand the critic the approved claim ledger WHOLE — never a summary you retyped for the
      dispatch.** A critic can only check a slide against what it was handed, so every verified
@@ -1286,14 +2239,15 @@ Then run the **actor-critic loop** — this is the quality engine, and the criti
    low-stakes analogue of high-stakes' "fail loudly at the cap" below. Cap the rounds by
    stakes so the loop converges fast: **low-stakes ≈ up to 2 rounds, high-stakes up
    to 3.**
-   **The user's `review:` tier (Step 0) is the same rule with a handle on it:** `fast` = 1 round,
-   `standard` = 2, `thorough` = 3. `standard` and `thorough` are pure ALIASES for the two stakes
-   classes above — same panel, same arbitration, same fresh whole-deck re-review on every round —
-   so a deck whose user says nothing behaves exactly as it did before the dial existed. `fast` is
-   the one genuinely new band and is 🔴 **opt-in only, never derived**. At `fast` there is no
-   second round to absorb a surviving blocker/major, so it goes back to the USER named, and the
-   run does not end until they answer: either they authorise one extra round (a recorded exception
-   to the cap) or the ship is recorded as *their* waiver, never the model's. Tier table:
+   **The user's `review:` tier (the POST-BUILD question above) is the same rule with a handle on
+   it:** `fast` = 1 round, `standard` = 2, `thorough` = 3, `none` = 0 (recorded as `user-waived`,
+   never run). `standard` and `thorough` are pure ALIASES for the two stakes classes above — same
+   panel, same arbitration, same fresh whole-deck re-review on every round. `fast` is the DEFAULT
+   because the choice is made with the rendered deck visible — an informed cheap tier, not a
+   silent one. At `fast` there is no second round to absorb a surviving blocker/major, so it goes
+   back to the USER named, and the run does not end until they answer: either they authorise one
+   extra round (a recorded exception to the cap) or the ship is recorded as *their* waiver, never
+   the model's — this rule is what makes the cheap default safe. Tier table:
    `references/critic-panel.md` → "Review effort tiers".
    *(The cap numbers live in TWO places on purpose — here, because a cap is coordinator-enforced and
    nothing lints it, so layer 1 must carry it; and in `critic-panel.md`, which owns the rest. They
@@ -1316,38 +2270,30 @@ Then run the **actor-critic loop** — this is the quality engine, and the criti
    > must say the same thing — this rule has a history of drifting apart across files.)* If the first render is already clean and the critic consents, you're done
    in one round — don't manufacture extra rounds. Otherwise apply the blocker+major
    fixes, rebuild, re-render.
+   > 🔴 **On a fanned-out deck, get the slide map before you fix anything** —
+   > `python3 scripts/slide_index.py section_*.py` prints `slide N -> file:line function` plus each
+   > slide's plan-row docstring. Section fan-out means YOU DID NOT WRITE THIS CODE, so a finding on
+   > slide 7 otherwise starts with grepping three modules you have never read: on one measured
+   > build that search cost 33 round-trips and ~30,000 output tokens (~9 min), re-deriving a map the
+   > section authors already had. Read the map once; open files at lines after that.
+   > 🔴 **Apply the whole promoted fix list in ONE message, then rebuild + re-render + re-lint in
+   > ONE chained command** (`python3 build_<deck>.py && python3 scripts/render_deck.py <deck>.pptx
+   > render --fast && python3 scripts/lint_deck.py <deck>.pptx --renders render`). The promoted
+   > findings arrive as a list and have no data dependency on each other, so one `Edit` per finding
+   > is the preamble's *1.00 tool per round-trip* failure with a fresh name: ~18 findings across a
+   > standard two-round loop, each re-sending ~300k of context, is ~5.4M tokens spent to emit a few
+   > hundred. Fixes that genuinely conflict (two findings on the same block, where the second edit
+   > depends on how the first landed) are the exception — do those in a second message and say why.
+   > This changes only how the edits are *transmitted*: every promoted finding is still applied,
+   > still individually, and the change manifest still lists them one by one.
 3. **Repeat.** The critic **re-reviews the whole deck fresh** (fixes introduce new
    issues). Converge; keep a short record of what changed each round so improvement is
    visible, not just churn.
 
-**🔴 PRIMARY-SOURCE GATE — research-sourced decks only, before hand-off.** When the deck's
-load-bearing claims came from **web research** (every no-source deck, and any sourced deck where
-research supplied slide-level numbers/quotes), the content critic verifying slides *against the
-ledger* is not enough — a hallucinated or secondhand ledger row passes that check by construction.
-So before hand-off, run one **adversarial primary-source spot-check**: independent verifier
-agent(s) with live web access take the deck's load-bearing claims (every headline number, date,
-direct quote, ranking, attribution) and try to **REFUTE** each against its **primary source** (the
-original paper / the org's own post / official docs — never an aggregator), returning per claim
-`CONFIRMED (URL) / WRONG / PARTLY-WRONG / UNVERIFIABLE`. **WRONG and PARTLY-WRONG are fixed before
-ship; UNVERIFIABLE is hedged as unverified or cut — never shipped as established fact.** While
-there, verifiers also flag the planner's PROVENANCE CONTRACT breaks (spliced figures, quote-mark
-abuse — `agents/content-planner.md` §2, rubric item 10). Scale it to stakes like the critic itself
-(a quick deck: one verifier over the top ~10 claims; high-stakes: a fan-out over all of them) —
-**and the user's `review:` tier is the handle on that same scale** — `fast` = the top ~5 load-bearing
-claims, `standard` = the top ~10, `thorough` = all of them. The tier narrows the SAMPLE and never the
-gate; on a research-sourced deck the gate itself runs at every tier —
-but never skip it entirely on a research-sourced deck: this is the gate between "the slides match
-the ledger" and "the ledger matches reality." **Ordering:** run the
-verifier pass in parallel with (or immediately before) the FINAL critic round; any WRONG /
-PARTLY-WRONG fix re-enters the normal rebuild → re-render → re-lint path, and a fix landing after
-critic consent gets a cheap confirmation look (the touched slides, not a fresh full round) — gate
-fixes never count against the critic round caps. **The gate's artifact (required, per the enforcement
-invariant):** the Step-6 hand-off carries one `provenance:` line — `N claims checked · N confirmed
-· N fixed · N cut/hedged` — plus the per-claim verdict list on request; a research-sourced hand-off
-without that line means the gate did not run (Step 6's checklist lists it). Decks built purely from the user's own material skip
-this gate — there, fidelity is to the provided source, and item 10 already owns it — **but** a
-source claim that §2(b) re-verification *updated or replaced* with a web-found current value counts
-as research-supplied, and pulls the gate in for those rows.
+**🔴 Before any web research, read `references/content-plan-spec.md`** — the search cap is shared with every
+subagent and never resets within a conversation: do the small named lookups first, state a budget in each
+dispatch, record planned vs spent. A deck whose load-bearing claims came from web research passes the
+**PRIMARY-SOURCE GATE** (an adversarial spot-check by independent verifiers) before hand-off.
 
 **High-stakes decks:** after each fix round's re-render, read `references/critic-panel.md` → "Verify the fixes and corroborate consent" — the arbiter re-check of the change manifest (with its required `dulled` flag) and the corroborated-consent rule that gates shipping. *(This is the "fail loudly at the cap" passage the round-cap rule above points at.)*
 
@@ -1364,26 +2310,50 @@ self-contained: it references the `render/` PNGs by relative path, so move the t
 during the build, because a deck still being edited makes them stale immediately. Ask in one line
 ("want a PDF and a browser preview?"); on a yes — or once the user confirms this is the final
 version — run `bash scripts/render_deck.sh <deck.pptx> --deliverables` (or
-`python scripts/render_deck.py … --deliverables`), which parks both at the deck root beside the
+`python3 scripts/render_deck.py … --deliverables`), which parks both at the deck root beside the
 `.pptx`, and surface the two `file://` links then. **Re-run it after any later change** so the pair
 never lags the deck. If you added any forward-looking content (per the fidelity rule), call that
 out explicitly here so they can confirm it.
 
-**`--deliverables` refuses to run until `<deck-dir>/.deck-gates.json` records that the Step-2
-design plan, the Step-5 critic and the Step-6 provenance pass actually ran.** Write it when the
-critic loop converges — `{"critic": {"verdict": "consent", "rounds": N}}`, the design plan's
-`boldness` / `signature_move` / `carried_by` / `form_ledger`, and the provenance pass's **per-claim
-`claims` list, never a summary tally** (a tally is written by the same pass that would have skipped
-the refutation). A gate you deliberately skipped is **waived in writing** —
-`{"critic": {"waived": "<reason>"}}` — never omitted; the tool prints the reason, so a skip is
-visible instead of invisible. This file is the hand-off's evidence, not a formality: the model that
-skips a gate is the same model that would write the note claiming it ran, so both produce identical
-prose and only an artifact tells them apart (`references/handoff-checklist.md` lists it).
-The `critic` block is **written by `validate_review.py --record`, not by hand** (Step 5) — you supply
-only the two blocks no tool can produce for you: the design plan's four fields and the provenance
-pass's per-claim list.
+> **🔴 Run the gates on EVERY hand-off, whatever the user answers about the PDF:**
+> `python3 scripts/render_deck.py <deck>.pptx --gate-check` — it runs every hand-off gate, renders
+> nothing, and takes under a second. Add `--selfread` / `--textheavy` / `--surface` when that is the
+> deck's delivery mode, exactly as you would for `lint_deck.py`, so the text budget it enforces is
+> the budget that mode is actually held to — or, better, record it once with
+> `dk.declare_delivery(OUT, "<mode>")` in the build script and neither tool needs the flag again.
+>
+> 🔴 **A deck built from a brand kit carries `"brand": {"file": "brand.json"}`** (`deck_gates.py set <deck-dir> brand '{"file": "brand.json"}'`; the Codex evidence file takes the same key). `--gate-check`'s `brand` section and the codex gate then run `brand_kit.py check` — off-brand colours in text, fills, lines and native chart series (tints/shades of brand colours pass; pictures are ignored), off-brand faces, and the logo on a single-entity deck. Run `python3 scripts/brand_kit.py check <deck>.pptx --brand <deck-dir>/brand.json` yourself first; it names each finding by slide and shape.
+>
+> 🔴 **Write the record with `deck_gates.py`, not by hand — `python3 scripts/deck_gates.py init
+> <deck-dir> --slides N`, fill it, `… check <deck-dir>`.** The gate stops at the first problem in a
+> SECTION on purpose (its later checks read what the earlier one validated), and `design_plan` is
+> the section with a dozen required fields — so a hand-typed record pays one round-trip per wrong
+> SHAPE. Measured on a real build: **six consecutive `--gate-check` runs**, one field each —
+> `boldness` written as `bold — because …` (the gate tests that field for equality, so the reason
+> belongs in `boldness_derivation`), then `signature_proof`, `material_probe`, `concept` as a
+> string instead of `{chosen, rejected[]}`, and `type_scale.body` under the legibility floor.
+> `deck_gates.py check` reports all of those in ONE pass because it only reads the JSON. It is a
+> SHAPE pre-flight and never the gate: it cannot know whether the anchors render, whether the
+> register reached the pixels, or whether the credits landed on a slide — run `--gate-check` after it.
+>
+> 🔴 **It reports EVERY failure at once — `[1/N] <section>`, so FIX THEM ALL, then re-run.** Fixing
+> the first one and re-running is the habit this batching exists to kill: the gate used to stop at
+> the first problem, which cost one round-trip per field at the most expensive point of the run.
+> The only stops that still come alone are structural (no `.deck-gates.json`, unreadable JSON, an
+> unknown recorded delivery) — every later gate reads what those could not produce.
+>
+> **Two of those gates judge DESIGN and can send you back to the build:** **SAMENESS** (repetition alone does
+> not block; four independent kinds of it do) and **TIMIDITY** (a timid cover, monotone ink…). When either
+> fires, take the repair the advisories name first — re-form the page, never delete to pass. Details:
+> `references/troubleshooting-faq.md` → "Sameness and timidity".
 
-**Before you write the hand-off note, read `references/handoff-checklist.md` — every deck.** It is the ONE authoritative list of what the note carries (minimal caveats + next steps, never a recap or self-praise) and of the conditional REQUIRED lines the owning rules point here for: `provenance:`, **`review:`** (the effort tier that ran + how it was reached) and **`cost:`** (subagents · tokens · wall-clock — a dial whose bill is never shown builds no intuition), click order, image licences, the GIF note, accepted advisories, `distinctiveness:`, the delegated-picks recap, the optional `ceiling` line, and the two taste-ecosystem offers — **including the save-this-look offer, which is skipped entirely under a per-deck auto directive: never an un-consented registry write.**
+**`--deliverables` refuses to run until `.deck-gates.json` records that the Step-2 design plan, the Step-5
+critic and the Step-6 provenance pass actually ran** — the arc competition; the design plan's `concept`, `boldness`,
+`signature_move`, `carried_by`, `form_ledger`, `icon_family`, `palette`, `type_scale`, `signature_proof`,
+`motif_generates`, `style_pick`, `image_sources`; the critic verdict or its waiver. It names each missing field; the field
+specs are in `references/troubleshooting-faq.md` → "What --deliverables requires".
+
+**Before you write the hand-off note, read `references/handoff-checklist.md` — every deck.** It is the ONE authoritative list of what the note carries (minimal caveats + next steps, never a recap or self-praise) and of the conditional REQUIRED lines the owning rules point here for: `provenance:`, **`review:`** (the effort tier that ran + how it was reached) and **`cost:`** (subagents · tokens · wall-clock — a dial whose bill is never shown builds no intuition), click order, image licences, the GIF note, accepted advisories, `distinctiveness:`, the delegated-picks recap, the optional `ceiling` line, and the two taste-ecosystem offers — **including the save-this-look offer, which is skipped entirely under a per-deck auto directive: never an un-consented registry write.** For a Codex-verified PPTX, the hand-off note is forbidden until the final-file guard passes; an explicit **unverified draft** is the only disclosure alternative.
 
 **For a long deck (~15+ slides), show work at ~50%, not only at 100%.** When a build is large enough
 that a wrong direction is expensive to unwind, render the first few finished slides (cover + a couple
@@ -1392,6 +2362,18 @@ slides; continuing in this direction unless you'd change something." Cheaper tha
 palette/density/structure mismatch after all 20 are built. (A soft check-in, not a 🔴 stop: under a
 per-deck auto directive, post the early renders as an FYI and continue without waiting; in the
 default flow, wait briefly for a reaction before finishing. Short decks: just build and run the critic.)
+
+**Versions — show what a rebuild changed, and go back.** `deck_cycle.py` snapshots every completed
+build into `<deck-dir>/.versions/`. Right before you show the user a version, mark it:
+`python3 scripts/deck_versions.py snapshot <deck-dir> --keep` (the version they saw is never pruned).
+After a critic round or a feedback rebuild, run `python3 scripts/deck_versions.py diff <deck-dir>`
+(default: the last two versions) and show the user its `versions-diff_vA_vB.html` with the changed
+NUMBERS it lists first — each one is a claim to re-check against its source. To go back:
+`python3 scripts/deck_versions.py restore <deck-dir> vNNN` (whole deck; the current state is
+snapshotted first) or `… restore <deck-dir> vNNN --slides 7` (slide numbers as in vNNN; replaces that
+slide's `def slide_NN` in the build script, then rebuild with the printed `deck_cycle.py` line).
+`python3 scripts/deck_versions.py list <deck-dir>` ends with the hand-off `version:` line. Each command
+prints its `NEXT:`; a refusal says why and what to do instead.
 
 **Presenting, editing, and iterating after delivery — `references/handoff-checklist.md` (same file, later section).** Read it at hand-off on **any deck that carries speaker notes** (Presenter View / `export_notes.py` / how to edit without losing work), and **always** before you re-run the build on the user's feedback — it holds the reconcile-don't-clobber procedure and the required `user-dials:` round-record line.
 
@@ -1422,10 +2404,20 @@ A checkable red-flag list; if a draft does any of these, stop and fix it before 
   "(AI-generated)", "(placeholder)", "(draft)", "generated by…", TODO/FIXME. Slide text is the
   audience's content, never a note about how it was made; that goes in code comments or the hand-off.
 - **Never let stacked groups blur together** — the gap between groups must beat the gap within a group.
-- **Never leave a slide awkwardly empty, and never fake fullness with an oversized block** — fill space
+- **Never leave a slide LEFTOVER-empty, and never fake fullness with an oversized block** — fill space
   by **enriching the content** (add the detail/example/figure the point deserves) or enlarging the hero;
   never inflate a card/callout around a single short line of small font to cover a gap (shrink the box
-  to hug its text instead).
+  to hug its text instead). **The word is LEFTOVER, and the distinction is the whole rule**, because two
+  pages with identical ink coverage are opposite things:
+  **COMPOSED** — one protagonist, vast air around it. A 60pt statement over an empty lower half is the
+  oldest move in editorial design; the air is the frame the hero is mounted in. `UNDERFILLED` and
+  `DEAD BOTTOM` now stand down on their own when a slide has typographic dominance (its biggest run
+  ≥2× its own body tier) AND few objects (≤6) — you no longer have to declare a composition to be
+  allowed one. **LEFTOVER** — a grid that ran out of content: flat type, many peers, and a band of
+  nothing at the bottom because the last row had nothing to put in it. That is what this rule forbids.
+  *(Interior pages keep balanced fullness — the role OCCUPANCY bands stand. Vast whitespace is a
+  register for the BOOKENDS and the statement/pivot page, not the default for a content slide; the
+  cover/divider band is already ~25–35% ink for exactly that reason.)*
 - **Never set content text as large as (or larger than) the slide title** — body/callout/formula/label
   must be visibly smaller than the title; only a deliberate hero numeral/equation may exceed body size,
   and it still stays below the title.
@@ -1451,5 +2443,8 @@ A checkable red-flag list; if a draft does any of these, stop and fix it before 
   deck (research the venue); **never** let the deck drift between languages.
 
 ## Files
+
+**Changing the SKILL itself?** Score it, don't guess — `scripts/run_eval.py` (in the source repository, https://github.com/addsumtech/slides_maker, not in this package) and the design comparison are
+described in `references/maintenance-boundaries.md` (in the source repository, https://github.com/addsumtech/slides_maker, not in this package).
 
 Full inventory — every script and its flags, the agents, all reference files, the 18 `presets.py` design presets, and the template **Registry** paths — is in `references/file-inventory.md`. Read it whenever you need a capability the *Where things live* table above doesn't already route (an unfamiliar script's arguments, the preset list, which agent or reference owns a concern). Each script's own operating contract is also restated at the step that runs it, so this is a lookup, not a gate.

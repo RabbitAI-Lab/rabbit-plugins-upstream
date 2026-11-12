@@ -1,42 +1,56 @@
-## Description: <br>
-用于抖音文案提取、抖音文案一键提取、抖音视频文案提取、抖音视频转文字、抖音口播转文字和抖音逐字稿，用户粘贴抖音视频链接、分享文案或 aweme_id 后，提取视频上下文、原视频简介和口播逐字稿，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于抖音文案提取、抖音文案一键提取、抖音视频文案提取、抖音视频转文字、抖音口播转文字和抖音逐字稿。用户粘贴抖音视频链接、分享文案或 aweme_id 后，提取视频上下文、原视频简介和口播逐字稿，来自 SocialDataX 社媒数据助手。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+创作者和编辑可使用此技能，从抖音视频链接、分享文案或 aweme_id 获取视频上下文、原始简介和口播逐字稿，并查看任务状态。
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Selected video references and usage attribution are sent to SocialDataX, and transcription consumes service credits.
+
+Mitigation: Submit only video references you intend to send to the service, and consider credit use before starting a transcription.
+
+Risk: The CLI software is downloaded at runtime and can change between runs.
+
+Mitigation: Prefer a reviewed, fixed CLI version and limit its permissions.
+
+Risk: An exposed API key could allow unauthorized use.
+
+Mitigation: Store the key in supported secret storage and keep workspace settings containing it out of version control.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External users and agents use this skill to submit or check Douyin speech-to-text transcript jobs from a video URL, share text, aweme_id, or existing job_id. The skill returns visible video context, the original description, transcript text, copy-ready text, a concise version, and task status. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Shell commands, SRT subtitle file]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends the provided Douyin URL, share text, aweme_id, or job_id to SocialDataX using SOCIALDATAX_API_KEY. <br>
-Mitigation: Use it only when the user is comfortable sharing that input with SocialDataX and has configured the intended SOCIALDATAX_API_KEY. <br>
-Risk: Transcript jobs may remain in progress after the initial command. <br>
-Mitigation: Keep the returned job_id and poll the same job instead of submitting duplicate transcript jobs. <br>
-Risk: Insufficient balance errors can lead to repeated failed submissions. <br>
-Mitigation: Stop submitting or polling after an insufficient balance response, show the recharge URL returned by the service, and resume only after the same account is funded. <br>
+**Output Format:** [Markdown transcript report with video context, original description, transcript, copy-ready and concise versions, and task status; optional UTF-8 SRT file]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
+**Other Properties Related to Output:** [Transcript jobs may be asynchronous; an existing job can be checked by its job ID.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured transcript sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include a job_id, current status, and a follow-up polling command when transcript processing is not complete.] <br>
+0.1.12 (source: ClawHub release metadata)
 
-## Skill Version(s): <br>
-0.1.5 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

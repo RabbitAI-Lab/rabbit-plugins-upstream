@@ -1,45 +1,55 @@
-## Description: <br>
-Chat with the dlazy sandbox agent, a project-scoped assistant that runs skills end-to-end over multiple turns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chat with the dLazy sandbox agent, a project-scoped assistant for running skills over multiple turns.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to start or continue project-scoped conversations with dLazy's hosted sandbox agent, discover available skills and projects, and run multi-turn work through the dlazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger words could route ordinary chat or attached files to dLazy unintentionally. <br>
-Mitigation: Use explicit requests such as 'use dlazy chat' and review attached files before invocation. <br>
-Risk: Prompts and files passed with --files are sent to dLazy's hosted API and media storage. <br>
-Mitigation: Avoid attaching sensitive files unless use of the dLazy hosted service is acceptable for that data. <br>
-Risk: The CLI may store a dLazy API key in the local user configuration. <br>
-Mitigation: Use npx for on-demand execution when preferred, and rotate or revoke stored API keys when access should change. <br>
+## Use Case:
 
+Developers and other dLazy users can use the skill to have project-scoped, multi-turn conversations with the dLazy sandbox agent, discover available skills and projects, and continue ongoing work.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-chat) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or terminal text with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Streams replies through the dlazy CLI; local files attached with --files are uploaded before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.8 (source: frontmatter and server release evidence) <br>
+Risk: Broad activation phrases may select the skill for unrelated requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit use to relevant project conversations and review the skill's activation phrases before enabling it.
+
+Risk: Messages and attached files may be sent to dLazy services.
+
+Mitigation: Review what content will be sent and avoid attaching sensitive files unless sharing them with dLazy is appropriate.
+
+## Reference(s):
+
+- [dLazy CLI repository (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Text responses streamed through the CLI]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Project-scoped, multi-turn conversation; attached files may be uploaded for the request.]
+
+## Skill Version(s):
+
+1.2.42 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

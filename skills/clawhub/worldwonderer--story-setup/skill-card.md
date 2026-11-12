@@ -1,50 +1,56 @@
-## Description: <br>
-Story Setup deploys a web-fiction writing toolbox across Claude Code, OpenCode, Codex, ZCode, OpenClaw, Reasonix, and generic agent environments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Deploys and checks a web fiction writing toolkit across supported agent environments, using host-specific setup or a generic file-based configuration.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers, writing teams, and developers use this skill to set up project-level story-writing agents, commands, rules, hooks, and reference material for supported CLI and file-based agent environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill installs persistent project-level automation that can change future agent behavior. <br>
-Mitigation: Install only when the project needs this writing toolbox, review the selected target platforms, and inspect hook and configuration changes before trusting them. <br>
-Risk: Browser-CDP features can interact with an existing logged-in Chrome session. <br>
-Mitigation: Disable or avoid browser-CDP use unless the user explicitly accepts authenticated browser control in that environment. <br>
-Risk: Automatic update behavior and managed hooks can introduce unexpected changes after setup. <br>
-Mitigation: Consider disabling the automatic update check and re-review managed hooks, commands, and config files after upgrades. <br>
+## Use Case:
 
+Authors and project maintainers use the skill to deploy, update, or diagnose an AI-assisted web fiction writing workspace across supported agent tools.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/worldwonderer/skills/story-setup) <br>
-- [OpenClaw Metadata Source](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Skill Definition](SKILL.md) <br>
-- [Upgrade Notes](UPGRADING.md) <br>
-- [Agent Reference Bundle](references/agent-references/) <br>
-- [Hook Templates](references/templates/hooks/) <br>
-- [Codex Hook Configuration](references/codex/hooks/hooks.json) <br>
-- [OpenCode Plugin Template](references/opencode/plugin.ts) <br>
-- [ZCode Hook Configuration](references/zcode/hooks/hooks.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code, shell, and configuration file instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or merge project-level agent, hook, rule, command, and reference files depending on the selected target environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.14 (source: ClawHub release metadata; artifact frontmatter reports 1.2.7) <br>
+Risk: ClawScan rates the skill suspicious with high confidence and reports shell command injection risk and unsafe installation guidance. Its scan was partial, so some behavior is not fully assessed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review shell-based search handling and installation steps before deploying, verify the project folder, and keep a recoverable copy of existing project configuration.
+
+Risk: The security assessment says behavior extends beyond the described setup and checking purpose, including writing checks, external research, and browser interaction.
+
+Mitigation: Use check-only mode for diagnostics, and review the selected host's deployment instructions and any research or browser actions before proceeding.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/worldwonderer/skills/story-setup)
+- [Repository link in OpenClaw metadata](https://github.com/zenstory-ai/oh-story-claudecode)
+- [Deployment and recovery guidance](references/deploy-generic.md)
+- [Environment diagnostics](references/diagnostics.md)
+
+## Skill Output:
+
+**Output Type(s):** [Configuration, Shell commands, Code, Guidance]
+
+**Output Format:** [Project configuration files, Markdown instructions, and setup or diagnostic guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The selected host and project determine which configuration files and guidance are produced.]
+
+## Skill Version(s):
+
+1.2.8 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

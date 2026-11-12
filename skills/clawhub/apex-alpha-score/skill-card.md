@@ -1,45 +1,60 @@
-## Description: <br>
-APEX proprietary alpha score for current market opportunity quality. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns APEX proprietary alpha score for current market opportunity quality.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External developers and trading agents use this skill to request a paid, real-time APEX Runner alpha score for ranking crypto market opportunity quality before trade entry or capital deployment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can spend USDC through an EVM private key when requesting the paid signal. <br>
-Mitigation: Use a dedicated low-balance wallet, review each request before it is made, and avoid exposing a primary wallet private key through EVM_PRIVATE_KEY. <br>
-Risk: The signal is intended to inform crypto trading decisions before capital deployment. <br>
-Mitigation: Apply independent trading limits and human review before using the signal to deploy significant capital. <br>
+## Use Case:
 
+External agents can request a paid APEX market opportunity score to help rank opportunities and inform trade evaluation. The skill describes using the score before trade entry; it should be treated as one input to a decision.
 
-## Reference(s): <br>
-- [ClawHub Apex Alpha Score Listing](https://clawhub.ai/kynto2001-ctrl/skills/apex-alpha-score) <br>
-- [APEX Alpha Score Signal](https://apexrunner.ai/signals/apex-alpha-score) <br>
-- [APEX Signal Pricing Tiers](https://apexrunner.ai/signals/my-pricing) <br>
-- [Combined Alpha Signal](https://apexrunner.ai/signals/combined-alpha) <br>
-- [Agent Conviction Score Signal](https://apexrunner.ai/signals/agent-conviction-score) <br>
-- [Institutional Apex Alpha Score Signal](https://apexrunner.ai/signals/apex-alpha-score-institutional) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Code, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with Python and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY and a funded EVM wallet with USDC on Base mainnet; x402 payment may be made per request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill uses an EVM wallet private key to authorize paid requests, so exposing the key could put wallet funds at risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Supply the key through a trusted secret store or protected environment variable, and keep only the funds needed for intended calls in the wallet.
+
+Risk: Each request incurs a USDC charge, and the documented early-adopter price is time-limited.
+
+Mitigation: Check the current price and wallet balance before enabling repeated calls; set a request or spending limit where possible.
+
+Risk: An alpha score may not reflect all factors relevant to a trade or its risk.
+
+Mitigation: Evaluate the score alongside independent market and risk checks instead of using it as the sole basis for deploying capital.
+
+## Reference(s):
+
+- [APEX Alpha Score endpoint](https://apexrunner.ai/signals/apex-alpha-score)
+- [ClawHub skill release](https://clawhub.ai/kynto2001-ctrl/skills/apex-alpha-score)
+- [Combined Alpha](https://apexrunner.ai/signals/combined-alpha)
+- [Agent Conviction Score](https://apexrunner.ai/signals/agent-conviction-score)
+
+## Skill Output:
+
+**Output Type(s):** [API response, JSON]
+
+**Output Format:** [JSON market opportunity score and accompanying fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Retrieved through a paid x402 GET request; requires an EVM wallet private key and USDC on Base.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

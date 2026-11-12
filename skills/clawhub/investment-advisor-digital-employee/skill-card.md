@@ -1,42 +1,57 @@
-## Description: <br>
-Covers A-share hot-spot discovery, comparable-company analysis, fund diagnosis and screening, stock capital-flow analysis, multi-factor screening, market and technical analysis, shareholder and share-capital analysis, and deep technical analysis to provide investment advisers with market analysis references. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+覆盖A股热点发现、可比公司分析、基金诊断筛选、股票资金流向分析、多维选股、行情技术分析、股东股本分析、深度技术分析全流程。为投资顾问提供全方位的市场分析参考。
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Financial professionals and investment advisers use this skill to structure A-share stock and public-fund analysis, including market hot spots, comparable-company analysis, fund screening and diagnosis, capital-flow review, technical analysis, shareholder and share-capital review, and multi-factor screening. Outputs are reference analyses that require qualified human review before real-world use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: External data and web retrieval may exceed the stated capability notice. <br>
-Mitigation: Review and align the manifest and capability notice with actual external data and web retrieval behavior before deployment; restrict outbound access where required. <br>
-Risk: Generated report files may not be fully declared in the skill metadata. <br>
-Mitigation: Confirm file-generation behavior, output locations, and sandbox permissions before broad deployment. <br>
-Risk: Financial analysis outputs could be mistaken for investment advice. <br>
-Mitigation: Require qualified human review before real-world use and preserve clear reference-only disclaimers in generated reports. <br>
+## Use Case:
 
+证券投资顾问和研究人员可用它梳理 A 股热点、公司与基金分析及筛选流程，并生成结构化研究报告草稿。所有结果须由具备相应资质的人员复核，不能替代客户适当性判断或个性化投资建议。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/investment-advisor-digital-employee) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown reports, tabular analysis, and occasional Excel workbooks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Financial analysis outputs are reference-only, may depend on current market data, and require human review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: evidence release metadata and SKILL.md frontmatter) <br>
+Risk: Analytical drafts may be mistaken for individualized investment advice or trading instructions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Have a qualified professional review the analysis against client suitability requirements; do not use it for automatic live trading.
+
+Risk: Client holdings or nonpublic business information could be included in reports.
+
+Mitigation: Use only necessary data and redact or aggregate sensitive details; preview the complete report and obtain explicit confirmation before saving or sharing it.
+
+Risk: Market and fund metrics may use inconsistent definitions or data times.
+
+Mitigation: State the data period, classification, and metric definitions; cross-check against authorized services or official disclosures, and mark unavailable data rather than estimating it.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/investment-advisor-digital-employee)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown reports, Comparison tables, Fund and stock screening summaries, Research guidance]
+
+**Output Format:** [Structured Markdown reports and tables, with Excel workbook layouts for comparable-company analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Research drafts requiring qualified human review; data sources, definitions, and as-of times should be stated where available.]
+
+## Skill Version(s):
+
+2.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

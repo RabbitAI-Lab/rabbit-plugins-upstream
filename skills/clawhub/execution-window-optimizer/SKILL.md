@@ -1,6 +1,6 @@
 ---
 name: execution-window-optimizer
-description: Identifies optimal execution windows based on volatility and liquidity
+description: "Paid x402 endpoint: $0.007 USDC per call on Base. Returns identifies optimal execution windows based on volatility and liquidity."
 metadata:
   openclaw:
     requires:
@@ -53,20 +53,15 @@ print(response.json())
 ```
 
 ## Pricing
-**$0.20/call** — standard price
+**$0.01/call** — standard price
 
-Early adopters automatically receive 30% off ($0.14/call) until 2026-09-21. Discount tiers apply automatically based on wallet call history:
-- Early Adopter (0–9 calls): 30% off
-- Engaged (10–49 calls): 15% off
-- Loyal (50–199 calls): 15% permanent
-- VIP (200+ calls): 20% permanent
-
-Check your tier: `https://apexrunner.ai/signals/my-pricing`
+Every caller is charged $0.007/call until 2027-01-01 under the
+early-adopter discount (30% off the standard price). No tier, no wallet
+history, no enrolment — that is simply the price.
 
 ## Related Signals
 - [slippage-forecast](https://apexrunner.ai/signals/slippage-forecast)
 - [optimal-order-routing](https://apexrunner.ai/signals/optimal-order-routing)
-- [live-atr-sizing](https://apexrunner.ai/signals/live-atr-sizing)
 
 ---
 *APEX Runner — autonomous AI crypto trading signals. [apexrunner.ai](https://apexrunner.ai)*

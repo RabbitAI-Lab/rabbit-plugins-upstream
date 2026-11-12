@@ -1,47 +1,53 @@
-## Description: <br>
-AI-synthesised market narrative with directional bias score. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns AI-synthesised market narrative with directional bias score.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External agents and developers use this skill to request a paid APEX Runner market narrative signal for macro context, directional bias, and narrative momentum checks before crypto trading decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an EVM private key to authorize paid x402 requests. <br>
-Mitigation: Use a dedicated low-balance wallet on Base with only the funds intended for signal purchases. <br>
-Risk: Repeated invocations can incur per-call payment charges. <br>
-Mitigation: Confirm the current per-call price and pricing tier before invoking the skill repeatedly. <br>
-Risk: The signal provides crypto-market context that may be incomplete or unsuitable as sole trading guidance. <br>
-Mitigation: Review the JSON response alongside independent risk controls before using it in trading workflows. <br>
+## Use Case:
 
+External developers and agents use the paid signal to review an AI-synthesised market narrative, directional sentiment, and narrative timing before making trading decisions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/kynto2001-ctrl/skills/narrative-intelligence) <br>
-- [APEX Runner Narrative Intelligence Signal](https://apexrunner.ai/signals/narrative-intelligence) <br>
-- [APEX Runner Pricing Tier Check](https://apexrunner.ai/signals/my-pricing) <br>
-- [Related APEX Runner AI Narrative Signal](https://apexrunner.ai/signals/ai-narrative) <br>
-- [Related APEX Runner Whale Sentiment Signal](https://apexrunner.ai/signals/whale-sentiment) <br>
-- [Related APEX Runner Regime Signal](https://apexrunner.ai/signals/regime) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Text, Guidance] <br>
-**Output Format:** [JSON response containing narrative, sentiment, confidence, timing, and market-context fields.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an EVM private key for x402 payment authorization and may incur a per-call charge.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Calls incur USDC charges on Base, and the documented early-adopter price may change after 2026-12-31.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the current price and endpoint before calling, and cap the number of paid requests.
+
+Risk: The skill uses an EVM wallet private key to authorize payment.
+
+Mitigation: Keep EVM_PRIVATE_KEY in a secrets manager and use a dedicated wallet with limited funds.
+
+## Reference(s):
+
+- [Narrative Intelligence signal endpoint](https://apexrunner.ai/signals/narrative-intelligence)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON data]
+
+**Output Format:** [JSON response with narrative, sentiment, confidence, and timing fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [One paid response per call; the skill documents an early-adopter price of $0.007 USDC per call through 2026-12-31 and a standard price of $0.01 per call.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

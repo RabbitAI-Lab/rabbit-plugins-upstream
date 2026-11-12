@@ -1,47 +1,54 @@
-## Description: <br>
-帮助英语老师把听力课从放录音和刷题转为围绕目标、材料、听前预测、听中分层、听后任务、微技能训练和学员档案的系统化教学设计。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+英语听力教学设计：把“放一遍录音对答案”变成有目标、有策略、有微技能训练的听力课。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-English teachers use this skill to design listening lessons, choose appropriately licensed materials, create pre-listening and while-listening tasks, plan micro-skill practice, and maintain pseudonymous listening profiles for students. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Student listening profiles may contain identifiable or sensitive learning information. <br>
-Mitigation: Use pseudonyms, avoid sensitive student identifiers, and require teacher confirmation before saving profile data to shared records. <br>
-Risk: Listening materials may have copyright or licensing restrictions. <br>
-Mitigation: Confirm copyright status before use and rely on textbook, original, Creative Commons, or authorized materials rather than copying unauthorized audio. <br>
-Risk: Assessment suggestions could be mistaken for automated grading. <br>
-Mitigation: Use the skill's rubrics and frameworks as teacher-reviewed guidance; keep dictation scoring and final listening grades under teacher control. <br>
+## Use Case:
 
+English teachers use this skill to plan listening lessons, choose appropriately leveled and rights-cleared materials, design before-, during-, and after-listening tasks, and prepare micro-skill practice and teacher-reviewed class records.
 
-## Reference(s): <br>
-- [Listening Material Sources](references/listening-material-sources.md) <br>
-- [Listening Rubric](references/listening-rubric.md) <br>
-- [Micro-Skill Training](references/micro-skill-training.md) <br>
-- [Pre-Listening Prediction Sample](references/pre-listening-prediction-sample.md) <br>
-- [Student Listening Profile Template](references/student-listening-profile-template.md) <br>
-- [While-Listening Task Sample](references/while-listening-task-sample.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown-style teaching plans, task templates, rubrics, and profile guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces teaching design guidance and structured templates; it does not execute code, grade dictation, or assign final listening scores.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Student voice recordings raise privacy concerns, and the security review was partial because one local reference could not be resolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before using recording guidance, confirm appropriate student and parent or guardian authorization, limit access and redistribution, set deletion deadlines, and offer a non-recording alternative. Review the unresolved reference before relying on the security assessment.
+
+## Reference(s):
+
+- [Listening material sources and rights guidance](references/listening-material-sources.md)
+- [Listening rubric and assessment guidance](references/listening-rubric.md)
+- [Micro-skill training methods](references/micro-skill-training.md)
+- [Pre-listening prediction sample](references/pre-listening-prediction-sample.md)
+- [While-listening task sample](references/while-listening-task-sample.md)
+- [Student listening profile template](references/student-listening-profile-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration]
+
+**Output Format:** [Chinese lesson plans, task prompts, material guidance, and optional structured class-workspace entries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher-facing drafts; AI-generated materials and questions require teacher verification before classroom or assessment use.]
+
+## Skill Version(s):
+
+2.12.7 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

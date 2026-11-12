@@ -1,43 +1,52 @@
-## Description: <br>
-Lightweight Fear & Greed index snapshot for high-frequency polling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns lightweight Fear & Greed index snapshot for high-frequency polling.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-Developers and trading agents use this skill to make paid x402-authenticated requests for a lightweight market sentiment signal before trade decisions or more expensive signal calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid x402 requests can create repeated USDC charges during high-frequency polling. <br>
-Mitigation: Use a dedicated low-balance Base wallet and set agent-side polling limits before enabling the skill. <br>
-Risk: EVM_PRIVATE_KEY exposure would allow wallet misuse. <br>
-Mitigation: Store the key only in a secret manager or protected environment variable, and avoid logging request configuration or environment values. <br>
+## Use Case:
 
+Agents that need frequent market-sentiment checks can call this paid endpoint to retrieve a lightweight Fear & Greed snapshot. It can be used for polling or as one input to trade-decision workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kynto2001-ctrl/skills/fg-micro) <br>
-- [APEX Runner fg-micro signal](https://apexrunner.ai/signals/fg-micro) <br>
-- [APEX Runner pricing tiers](https://apexrunner.ai/signals/my-pricing) <br>
-- [APEX Runner](https://apexrunner.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Guidance] <br>
-**Output Format:** [JSON response with markdown usage guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY and an EVM wallet with USDC on Base mainnet; each successful signal call may incur payment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Each request is a paid call and uses an EVM wallet private key; frequent polling can increase charges. The linked service pages were outside the scan’s scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated wallet with a limited USDC balance, confirm the current endpoint and price, and set a polling limit before making repeated calls.
+
+## Reference(s):
+
+- [ClawHub fg-micro release](https://clawhub.ai/kynto2001-ctrl/skills/fg-micro)
+- [APEX Runner fg-micro endpoint](https://apexrunner.ai/signals/fg-micro)
+- [APEX Runner fear-greed signal](https://apexrunner.ai/signals/fear-greed)
+- [APEX Runner regime-micro signal](https://apexrunner.ai/signals/regime-micro)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, API data]
+
+**Output Format:** [Compact JSON containing a Fear & Greed value, label, and timestamp]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returned by a paid x402 request; polling frequency affects total cost.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

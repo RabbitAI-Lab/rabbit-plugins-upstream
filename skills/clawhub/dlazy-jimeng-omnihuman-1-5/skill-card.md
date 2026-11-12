@@ -1,44 +1,54 @@
-## Description: <br>
-Generate realistic digital human broadcast videos from portrait images and audio/text using Jimeng OmniHuman 1.5. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates realistic digital presenter videos from portrait images and audio or text using Jimeng OmniHuman 1.5.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External developers and agent users use this skill to generate digital human broadcast videos through the dLazy hosted Jimeng OmniHuman 1.5 API from supplied portrait images and audio or text prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The pinned CLI may upload selected local media, including during dry-run behavior identified by the security evidence. <br>
-Mitigation: Avoid dry-run with sensitive local images or audio unless the behavior is fixed or confirmed acceptable. <br>
-Risk: Saved API keys may not have the permission hardening claimed by the skill documentation. <br>
-Mitigation: Prefer DLAZY_API_KEY per invocation or manually restrict permissions on ~/.dlazy/config.json when saving a key. <br>
-Risk: Persistent global CLI installation increases exposure to package and update risks. <br>
-Mitigation: Prefer npx for one-off use when a persistent global CLI is not required. <br>
+## Use Case:
 
+External users and developers use the skill to create presenter-style videos from a portrait image and audio or text. It sends the generation request to dLazy's hosted service and returns the resulting media asset.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-omnihuman-1-5) <br>
-- [dLazy homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with bash examples and JSON CLI result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [CLI responses may include generated media URLs or an async task identifier for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and portrait or audio media are sent to dLazy's hosted API and media storage for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting sensitive or non-consensual media, and review dLazy's service terms and privacy practices before use.
+
+Risk: The security scan was partial and could not resolve several references, including the CLI package.
+
+Mitigation: Review the published CLI package and its source before installing it if you need to assess that dependency.
+
+## Reference(s):
+
+- [dLazy](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video, Files, API Calls]
+
+**Output Format:** [Generated video asset URL or locally saved video file, with JSON status and result data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts one portrait image and audio or text prompt; supports 720p and 1080p output.]
+
+## Skill Version(s):
+
+1.3.38 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,6 +1,6 @@
 ---
 name: market-tick
-description: Cross-asset market tick: price, volume, and spread snapshot
+description: "Paid x402 endpoint: $0.014 USDC per call on Base. Returns BTC, ETH and SOL prices, market regime, Fear & Greed, and a momentum label."
 metadata:
   openclaw:
     requires:
@@ -13,12 +13,12 @@ metadata:
 # market-tick
 
 ## What It Does
-Cross-asset market tick: price, volume, and spread snapshot. This signal is computed in real time from APEX Runner's live autonomous trading system operating across Kraken, Coinbase Advanced Trade, and Hyperliquid — not from backtests or third-party aggregators.
+Minimal live tick in one small JSON object: BTC, ETH and SOL prices, a one-word market regime, the Fear & Greed value, and a momentum label. Prices are Hyperliquid mid prices (with a secondary feed if Hyperliquid does not price a coin); regime is APEX's BTC regime classification; momentum is an ADX + volume label on BTC. If any input is unavailable the endpoint answers 503 and you are not charged.
 
 ## When to Use
-- For a cross-asset snapshot in a single call
-- When building portfolio dashboards
-- To monitor spread and volume simultaneously
+- For a cheap, frequent BTC/ETH/SOL price check
+- To read the current market regime and sentiment in one call
+- As a lightweight polling input for a trading agent
 
 ## How to Use
 The agent makes an x402-authenticated GET request to:
@@ -54,15 +54,11 @@ print(response.json())
 ```
 
 ## Pricing
-**$0.01/call** — standard price
+**$0.02/call** — standard price
 
-Early adopters automatically receive 30% off ($0.01/call) until 2026-09-21. Discount tiers apply automatically based on wallet call history:
-- Early Adopter (0–9 calls): 30% off
-- Engaged (10–49 calls): 15% off
-- Loyal (50–199 calls): 15% permanent
-- VIP (200+ calls): 20% permanent
-
-Check your tier: `https://apexrunner.ai/signals/my-pricing`
+Every caller is charged $0.014/call until 2027-01-01 under the
+early-adopter discount (30% off the standard price). No tier, no wallet
+history, no enrolment — that is simply the price.
 
 ## Related Signals
 - [btc-price-tick](https://apexrunner.ai/signals/btc-price-tick)

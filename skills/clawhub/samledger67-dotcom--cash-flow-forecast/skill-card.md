@@ -1,42 +1,53 @@
-## Description: <br>
-Build a 13-week rolling cash flow forecast from QBO data with 3-scenario modeling (base, upside, downside). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds a 13-week rolling cash flow forecast from QuickBooks Online data with base, optimistic, and pessimistic scenarios for cash runway, burn rate, and liquidity planning.
 
-## Publisher: <br>
-[samledger67-dotcom](https://clawhub.ai/user/samledger67-dotcom) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samledger67-dotcom](https://clawhub.ai/user/samledger67-dotcom)
 
-## Use Case: <br>
-Finance, accounting, and advisory users can generate a 13-week cash-flow forecast from QuickBooks Online data, including scenario comparisons, burn-rate analysis, runway estimates, assumptions, and forecast accuracy tracking. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The generated Excel reports and CDC cache may contain sensitive cash, runway, burn-rate, and client financial information. <br>
-Mitigation: Use only authorized client data, restrict access to report and cache locations, and handle generated files as sensitive financial records. <br>
-Risk: QuickBooks Online access can expose client accounting records beyond what is needed for a forecast. <br>
-Mitigation: Prefer sandbox or least-privilege read-only QBO access where available, and verify the selected company slug before running the forecast. <br>
-Risk: Scenario forecasts can be misleading if inputs, thresholds, or client SOP assumptions are incorrect. <br>
-Mitigation: Review SOP-driven assumptions, low-cash thresholds, and forecast outputs before using them for advisory or operating decisions. <br>
+## Use Case:
 
+Finance and accounting operators use this skill to generate rolling cash forecasts from QuickBooks Online data for client advisory, runway monitoring, burn analysis, and scenario-based liquidity planning.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/samledger67-dotcom/cash-flow-forecast) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI examples and Excel report descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces guidance for generating an Excel workbook with Summary, Weekly Detail, Scenarios, Burn Rate, Assumptions, and CDC Log tabs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence.json release.version) <br>
+Risk: QuickBooks Online data, forecast workbooks, and local cache files can contain sensitive client financial information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run the skill only in a trusted environment with authorized QBO access, protect the .cache/cash-flow-forecast/ files, and choose a secure output directory instead of a shared or cloud-synced Desktop.
+
+Risk: Unpinned dependencies can change workbook generation behavior over time.
+
+Mitigation: Use a pinned dependency environment for openpyxl when generating client-facing reports.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/samledger67-dotcom/skills/cash-flow-forecast)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Files]
+
+**Output Format:** [Markdown guidance with bash commands and Excel workbook output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces CashFlowForecast_{slug}_{YYYY-MM-DD}.xlsx with summary, weekly detail, scenarios, burn rate, assumptions, and CDC log tabs.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

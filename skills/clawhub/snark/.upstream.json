@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/snark",
   "slug": "snark",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778492340445,
-  "contentHash": "2b5c8dbccce5f60f63ef5cb6666022d14f65b7597baea34e35b99258707b4815",
-  "fetchedAt": "2026-07-26T19:39:50.622Z"
+  "version": "1.0.1",
+  "updatedAt": 1794247097269,
+  "contentHash": "dad1dae24c0951905b86234edcfd772b2ffc2c09c878a135d31d980377ddd3bf",
+  "fetchedAt": "2026-11-12T16:15:09.290Z"
 }

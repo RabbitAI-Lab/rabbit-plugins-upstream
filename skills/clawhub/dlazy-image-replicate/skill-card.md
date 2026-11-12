@@ -1,44 +1,55 @@
-## Description: <br>
-Image replicate tool that analyzes a source image's visuals, composition, colors, lighting, and style, builds a replicate prompt, and uses Seedream 4.5 to generate a new image in the same style. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes a reference image’s composition, colors, lighting, and style, then creates a prompt for generating a similar image with Seedream 4.5.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to invoke the dLazy CLI for image replication workflows, including sending reference images to a hosted generation service and receiving generated image output URLs or async task identifiers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a third-party dLazy CLI and hosted cloud service with a required API key. <br>
-Mitigation: Confirm the user is comfortable using the third-party service, prefer per-invocation DLAZY_API_KEY when local key persistence is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: User-supplied media may be uploaded to dLazy storage and generated outputs are hosted by dLazy. <br>
-Mitigation: Avoid submitting sensitive or restricted media unless the user has approved that cloud upload and hosted output handling. <br>
+## Use Case:
 
+People using an AI agent can provide a reference image and use the skill to create a new image with a similar visual style through dLazy’s Seedream 4.5 service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-image-replicate) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results may include hosted image URLs or an async generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: frontmatter and server release evidence) <br>
+Risk: The security review was partial and flagged login and API-key setup that should be understood before use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the linked CLI project and the authentication steps before installing or configuring the CLI; use an API key you can rotate or revoke.
+
+Risk: The skill sends prompts to dLazy’s hosted API and uploads supplied local media files to its media storage.
+
+Mitigation: Avoid submitting sensitive images or prompts, and use only content you are permitted to send to the service.
+
+## Reference(s):
+
+- [CLI project link listed in skill metadata](https://github.com/dlazy-ai/cli)
+- [dLazy CLI package on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Image, JSON]
+
+**Output Format:** [JSON result containing generated image output and its URL]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill may return an asynchronous task identifier when invoked without waiting for completion.]
+
+## Skill Version(s):
+
+1.3.40 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

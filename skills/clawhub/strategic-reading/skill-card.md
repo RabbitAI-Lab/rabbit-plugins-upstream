@@ -1,41 +1,55 @@
-## Description: <br>
-Read a source through the lens of a specific problem and produce an applied playbook rather than a general summary. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read a source through the lens of a specific problem. Produces an applied playbook, not a summary.
 
-## Publisher: <br>
-[jjjhenriksen](https://clawhub.ai/user/jjjhenriksen) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jjjhenriksen](https://clawhub.ai/user/jjjhenriksen)
 
-## Use Case: <br>
-Developers, researchers, and knowledge workers use this skill when they have both a source and a specific strategic problem. It turns books, papers, articles, transcripts, or case studies into source-grounded recommendations and short-, medium-, and long-term actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may create or update a local reading or project note when used. <br>
-Mitigation: Confirm the destination path before saving and review the generated note before relying on or sharing it. <br>
-Risk: Applied recommendations can be misleading if the strategic problem is vague or the source passages are not checked. <br>
-Mitigation: Provide a specific question, require recommendations to map back to source passages, and review the resulting playbook against the original source. <br>
+## Use Case:
 
+Readers, researchers, and professionals use the skill to apply a source to a defined strategic question and produce an actionable, source-traced playbook. It requires both source text and a specific problem or question.
 
-## Reference(s): <br>
-- [Strategic Reading Skill Page](https://clawhub.ai/jjjhenriksen/skills/strategic-reading) <br>
-- [Artifact SKILL.md](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Text, Guidance, Files] <br>
-**Output Format:** [Markdown applied-reading note with YAML frontmatter and structured sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires source text and a specific strategic problem; may save the resulting note under a relevant project or reading directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Recommendations may overstate what a source passage supports or blur source claims with proposed applications.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Give each recommendation a precise passage locator, a scoped source claim, a separately labeled applied inference, and assumptions or checks; label unsupported ideas as hypotheses.
+
+Risk: The resulting playbook may be generic or disconnected from the user's decision.
+
+Mitigation: Require a specific strategic problem before reading and connect each recommendation to a relevant source passage.
+
+## Reference(s):
+
+- [Strategic Reading release page](https://clawhub.ai/jjjhenriksen/skills/strategic-reading)
+- [Traceable example](artifact/references/traceable-example.md)
+- [Fictional source fixture](artifact/references/fictional-source.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown applied-reading playbook]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Each recommendation has a source passage locator, source claim, separately labeled applied inference, and assumptions or limits.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

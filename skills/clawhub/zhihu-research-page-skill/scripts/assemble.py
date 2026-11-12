@@ -179,7 +179,7 @@ nav_items = "".join(
 sidebar = f'''<aside class="zh-sidebar">
 
   <div class="zh-card zh-sideblock">
-    <h3>📑 本页章节</h3>
+    <h3>📑 本页回答</h3>
     <ol>
 {nav_items}
     </ol>

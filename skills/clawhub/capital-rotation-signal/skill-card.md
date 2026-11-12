@@ -1,42 +1,58 @@
-## Description: <br>
-Detects capital rotation between BTC, ETH, alts, and stables. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A paid x402 endpoint that returns signals about capital rotation among BTC, ETH, altcoins, and stablecoins.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External agents and developers use this skill to call an x402-authenticated APEX Runner endpoint for real-time crypto capital rotation signals across BTC, ETH, alts, and stables. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an EVM wallet private key to authorize USDC payments for each API call. <br>
-Mitigation: Use a dedicated wallet funded only with USDC you are willing to spend, monitor repeated calls, and avoid wallets holding significant or unrelated assets. <br>
+## Use Case:
 
+Agents use this skill to query a paid signal endpoint for indications of capital rotation among BTC, ETH, altcoins, and stablecoins, including a suggested direction and allocation example.
 
-## Reference(s): <br>
-- [Capital Rotation Signal](https://apexrunner.ai/signals/capital-rotation-signal) <br>
-- [Pricing Tier Check](https://apexrunner.ai/signals/my-pricing) <br>
-- [BTC Dominance Signal](https://apexrunner.ai/signals/btc-dominance) <br>
-- [Altcoin Season Signal](https://apexrunner.ai/signals/altcoin-season) <br>
-- [Regime Transition Signal](https://apexrunner.ai/signals/regime-transition) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Guidance] <br>
-**Output Format:** [JSON response data with concise agent-facing guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an EVM private key for x402 payment authorization and returns paid real-time trading signal data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Four external links were outside the scanner's assessment, so their destinations were not assessed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the linked destinations before installing or using the skill.
+
+Risk: The example uses an EVM wallet private key to authorize paid calls, and the endpoint charges $0.007 USDC per call on Base according to the artifact.
+
+Mitigation: Keep EVM_PRIVATE_KEY in a secure secret store and use a wallet funded only for intended calls; check the current price before making requests.
+
+## Reference(s):
+
+- [Capital Rotation Signal endpoint](https://apexrunner.ai/signals/capital-rotation-signal)
+- [BTC Dominance signal](https://apexrunner.ai/signals/btc-dominance)
+- [Altcoin Season signal](https://apexrunner.ai/signals/altcoin-season)
+- [Regime Transition signal](https://apexrunner.ai/signals/regime-transition)
+- [ClawHub release page](https://clawhub.ai/kynto2001-ctrl/skills/capital-rotation-signal)
+- [Publisher profile](https://clawhub.ai/user/kynto2001-ctrl)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown instructions with a Python example; endpoint responses are JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Paid x402 call: $0.007 USDC per call on Base until 2027-01-01, according to the artifact. Requires an EVM wallet private key in EVM_PRIVATE_KEY.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

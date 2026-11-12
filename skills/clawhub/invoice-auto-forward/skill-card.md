@@ -1,48 +1,65 @@
-## Description: <br>
-Automates scanning configured mailboxes for invoice emails, parsing PDF, OFD, or XML invoices, and forwarding standardized invoice summaries and attachments to designated finance or admin recipients. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automatically scans invoice emails, extracts invoice data from PDF, OFD, or XML files, and forwards matching invoices to configured finance or administrative recipients with whitelist filtering, link-based invoice download, scheduling support, and send-rate controls.
 
-## Publisher: <br>
-[songhonglei](https://clawhub.ai/user/songhonglei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[songhonglei](https://clawhub.ai/user/songhonglei)
 
-## Use Case: <br>
-Employees, finance teams, administrators, and developers use this skill to configure mailbox invoice forwarding workflows, preview candidate invoices, and run or schedule forwarding after recipient and rule review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill needs sensitive mailbox read and send access for invoice forwarding. <br>
-Mitigation: Install it only for mailboxes approved for this workflow, prefer interactive secret entry or environment/secret-manager injection, and keep authorization codes out of shared chat, logs, and configuration files. <br>
-Risk: Incorrect forwarding rules or recipients could send invoice data to the wrong destination. <br>
-Mitigation: Review recipients and run a dry-run scan before enabling run mode or scheduled execution. <br>
-Risk: Downloading invoice links can broaden the set of external URLs contacted during scans. <br>
-Mitigation: Set trusted link_domains for expected invoice providers and rely on the skill's invoice-format gate before forwarding downloaded content. <br>
-Risk: Dependency installation can modify the active Python environment. <br>
-Mitigation: Use check --install-deps only in environments where pip changes are acceptable, or install optional PDF dependencies manually in a controlled environment. <br>
+## Use Case:
 
+Employees, finance operations teams, and agent operators use this skill to configure and run automated invoice forwarding from supported mailboxes. It helps preview, filter, deduplicate, and forward invoice messages to the right recipients while keeping credentials outside the skill package.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/songhonglei/skills/invoice-auto-forward) <br>
-- [Skill Instructions](SKILL.md) <br>
-- [Configuration Example](references/config.example.json) <br>
-- [Troubleshooting Guide](references/troubleshooting.md) <br>
-- [Changelog](CHANGELOG.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce mailbox scan previews, setup/check/run command output summaries, and configuration guidance for local secret and schedule files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill needs mailbox access and SMTP sending authority, which can expose sensitive invoice and account data if configured on a broad mailbox.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated invoice mailbox where possible, keep authorization codes out of chat and logs, and verify the generated secrets file permissions before unattended runs.
+
+Risk: Unattended forwarding can send unwanted or duplicate invoice messages if filters, recipients, or state files are wrong.
+
+Mitigation: Run the scan preview and review recipients, buyer whitelist settings, and de-duplication state before enabling scheduled run mode.
+
+Risk: Email-controlled link fetching can retrieve content from links embedded in messages.
+
+Mitigation: Disable link fetching when it is not needed, or configure a strict link_domains allowlist with conservative timeout and size limits.
+
+Risk: Automatic dependency installation changes the active Python environment.
+
+Mitigation: Use a dedicated virtual environment and install pinned dependencies manually before running check or scheduled jobs.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/songhonglei/skills/invoice-auto-forward)
+- [Configuration Example](references/config.example.json)
+- [Troubleshooting Guide](references/troubleshooting.md)
+- [README](README.md)
+- [Changelog](CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON configuration, and script-generated text or Markdown reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The runtime script can produce scan previews, send summaries, parsed invoice fields, persistent configuration files, credential file instructions, de-duplication state, and daily Markdown reports.]
+
+## Skill Version(s):
+
+1.0.9 (source: frontmatter and CHANGELOG, released 2026-09-05)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

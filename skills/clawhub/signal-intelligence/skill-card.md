@@ -1,41 +1,57 @@
-## Description: <br>
-Aggregated signal quality score across all active APEX modules <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 access to a Base endpoint that returns an aggregated signal quality score across all active APEX modules for $0.007 USDC per call.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External developers and trading agents use this skill to request a paid, real-time APEX signal quality score before committing capital or calibrating confidence across active trading signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an EVM private key to make paid x402 calls, so each use can spend wallet funds. <br>
-Mitigation: Use a dedicated low-balance wallet, verify the endpoint and cost before execution, and avoid primary or broad-purpose private keys. <br>
+## Use Case:
 
+External developers and agents can query an aggregated quality score across APEX signals to help calibrate confidence before acting on those signals.
 
-## Reference(s): <br>
-- [Signal Intelligence endpoint](https://apexrunner.ai/signals/signal-intelligence) <br>
-- [Signal pricing tiers](https://apexrunner.ai/signals/my-pricing) <br>
-- [APEX Runner](https://apexrunner.ai) <br>
-- [ClawHub listing](https://clawhub.ai/kynto2001-ctrl/skills/signal-intelligence) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [json, code, guidance] <br>
-**Output Format:** [JSON responses with Markdown usage guidance and Python examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY and may spend wallet funds for x402 paid calls on Base mainnet.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Users may rely on an aggregated trading signal when deciding whether to commit capital.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the score as one input, verify current conditions, and apply independent risk controls before trading.
+
+Risk: The skill requires an EVM wallet private key to authorize paid requests.
+
+Mitigation: Store EVM_PRIVATE_KEY in a secure secret store and avoid exposing it in prompts, logs, or shared files.
+
+## Reference(s):
+
+- [Signal Intelligence endpoint](https://apexrunner.ai/signals/signal-intelligence)
+- [APEX Composite signal](https://apexrunner.ai/signals/apex-composite)
+- [Combined Alpha signal](https://apexrunner.ai/signals/combined-alpha)
+- [APEX Alpha Score signal](https://apexrunner.ai/signals/apex-alpha-score)
+- [ClawHub release page](https://clawhub.ai/kynto2001-ctrl/skills/signal-intelligence)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON]
+
+**Output Format:** [JSON response with quality_score, signals_active, and confidence fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A call costs $0.007 USDC on Base; it requires an EVM wallet with USDC and EVM_PRIVATE_KEY.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

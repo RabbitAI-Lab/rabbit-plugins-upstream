@@ -1,42 +1,57 @@
-## Description: <br>
-Current market regime label at minimal cost for fast agent loops. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns current market regime label at minimal cost for fast agent loops.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-Developers and trading-agent operators use this skill to fetch a low-cost, real-time crypto market regime label for frequent agent loops, pre-filtering, and deciding when to skip more expensive analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: An agent can use EVM_PRIVATE_KEY to authorize paid x402 requests for each call. <br>
-Mitigation: Use a dedicated low-balance Base wallet funded only with the USDC budget you are willing to spend. <br>
-Risk: Frequent agent loops can accumulate per-call costs. <br>
-Mitigation: Set loop-level budgets, rate limits, or approval gates before enabling repeated calls. <br>
+## Use Case:
 
+Developers building crypto-market agent loops use the endpoint for frequent regime checks, stable-regime filtering, or as a pre-filter before a confluence signal.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kynto2001-ctrl/skills/regime-micro) <br>
-- [Regime Micro signal endpoint](https://apexrunner.ai/signals/regime-micro) <br>
-- [APEX Runner pricing tier check](https://apexrunner.ai/signals/my-pricing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python example code and JSON response shape] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an EVM wallet private key in EVM_PRIVATE_KEY for paid x402 requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Each endpoint request incurs a USDC charge, so frequent agent loops can accumulate spend.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set request-frequency and spend limits, and check the endpoint's current price before running repeated calls.
+
+Risk: The example uses an EVM private key to authorize payments; exposing that key could put the wallet at risk.
+
+Mitigation: Keep the key in a protected secret store or environment, and use a dedicated wallet funded only for expected calls.
+
+## Reference(s):
+
+- [Regime Micro endpoint](https://apexrunner.ai/signals/regime-micro)
+- [Regime signal](https://apexrunner.ai/signals/regime)
+- [Regime Confluence signal](https://apexrunner.ai/signals/regime-confluence)
+- [Trend Confirmed signal](https://apexrunner.ai/signals/trend-confirmed)
+- [ClawHub release page](https://clawhub.ai/kynto2001-ctrl/skills/regime-micro)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON]
+
+**Output Format:** [JSON object containing compact market regime labels and a timestamp]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The response uses b, e, s, and a for regime labels and t for the timestamp.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

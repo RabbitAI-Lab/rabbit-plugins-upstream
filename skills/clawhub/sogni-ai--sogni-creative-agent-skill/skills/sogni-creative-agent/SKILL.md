@@ -1,0 +1,13 @@
+---
+name: sogni-creative-agent
+description: Generate and edit images, video, and music using Sogni AI's decentralized GPU network. Use for image generation or editing, Pixal3D 3D reconstruction, BiRefNet background removal, Qwen3-TTS speech and voice cloning, MiniMax Music 3, SAM 3 object masks, first-frame/last-frame animation, video generation, music and soundtrack creation, personas, style transfer, playable Sogni Worlds through the open-source Sogni Worlds Kit, and other Sogni Creative Agent workflows.
+---
+
+# Sogni Creative Agent
+
+This is the Codex plugin surface. Wherever the referenced skill says
+`sogni-agent` or `sogni-agent-claude-code`, invoke `sogni-agent-codex`.
+
+Read `../../plugin-skills/sogni-creative-agent/SKILL.md` relative to this installed file completely and follow it. Resolve every subsequent plugin path from the plugin root two directories above this file, never from the user's working directory.
+
+Use `--network fast|relaxed` for a direct render. Use `--priority` only after the user opts in to earlier Fast queue placement at 1.5× fair-use consumption on paid Unlimited. Worker models only; hosted chat and hosted workflows do not accept it. See the long-jobs-and-queues reference for details.

@@ -1,44 +1,66 @@
-## Description: <br>
-Installs agent skills from ClawHub, skillhub.cn, skills.sh, Anthropic's skills repository, or a configured self-hosted hub, with source routing, conflict handling, license prompts, and safe archive extraction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Installs agent skills from ClawHub, skillhub.cn, skills.sh, Anthropic's skills repository, or a configured self-hosted hub while routing requests, handling conflicts, and enforcing documented license and extraction checks.
 
-## Publisher: <br>
-[songhonglei](https://clawhub.ai/user/songhonglei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[songhonglei](https://clawhub.ai/user/songhonglei)
 
-## Use Case: <br>
-Developers and agent users use this skill to install skills from the hub they name or from a private hub, while preserving clear choices for conflicts, restricted licenses, and custom-hub setup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installing skills from public, GitHub-backed, or self-hosted hubs can introduce untrusted prompts or code into an agent environment. <br>
-Mitigation: Install only from trusted sources, review downloaded skills before relying on them, and scan artifacts before deployment. <br>
-Risk: Installer actions can replace local skill directories when the user chooses overwrite, which may discard local modifications. <br>
-Mitigation: Read overwrite prompts carefully and back up locally modified skills before replacing them. <br>
+## Use Case:
 
+Developers and agent users use this skill to ask an AI coding agent to install skills from common public or self-hosted skill hubs and to handle source selection, local name collisions, and license prompts.
 
-## Reference(s): <br>
-- [Skill Hub United on ClawHub](https://clawhub.ai/songhonglei/skill-hub-united) <br>
-- [ClawHub](https://clawhub.ai) <br>
-- [SkillHub](https://skillhub.cn) <br>
-- [skills.sh](https://skills.sh) <br>
-- [Anthropic Skills documentation](https://docs.claude.com/en/docs/build-with-claude/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown responses with inline shell commands and structured status guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May invoke installer commands that download and extract skill archives when the user requests an installation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence; artifact SKILL.md Version field agrees) <br>
+Risk: Remote skill packages can write persistent agent skill files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from reviewed sources, inspect downloaded skill contents before use, and scan installed skills before deployment.
+
+Risk: Mutable external installer fallbacks can change behavior between runs.
+
+Mitigation: Review or patch the unpinned npx fallback path before broad use, and prefer controlled or pinned installation paths where possible.
+
+Risk: Custom hub configuration can route installs to an untrusted endpoint.
+
+Mitigation: Use custom hubs only when you control the endpoint, and avoid persisting SKILL_HUB_CUSTOM_URL casually.
+
+Risk: Archive extraction and path handling bugs can affect the local skills directory.
+
+Mitigation: Keep slug validation and path-traversal-safe extraction enabled, and review archive handling before high-trust or enterprise use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/songhonglei/skills/skill-hub-united)
+- [ClawHub](https://clawhub.ai)
+- [SkillHub](https://skillhub.cn)
+- [skills.sh](https://skills.sh)
+- [Anthropic skills repository](https://github.com/anthropics/skills)
+- [Anthropic Skills specification](https://docs.claude.com/en/docs/build-with-claude/skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown-formatted guidance with shell commands and structured JSON status messages from the installer.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include installer status JSON for conflicts, license confirmation, multiple skill selection, or custom hub configuration prompts.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata and SKILL.md Version field)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

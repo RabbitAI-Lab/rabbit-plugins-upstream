@@ -1,42 +1,60 @@
-## Description: <br>
-Composite stress index measuring systemic risk across all APEX modules. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns composite stress index measuring systemic risk across all APEX modules.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External developers and agents use this skill to request a paid APEX Runner signal for monitoring systemic risk across APEX modules, reducing exposure when stress rises, and informing circuit-breaker decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an agent environment to access an EVM wallet private key for automatic paid calls. <br>
-Mitigation: Use only a dedicated low-balance wallet and avoid exposing any primary wallet private key to the agent environment. <br>
-Risk: Each x402-authenticated call can spend USDC on Base mainnet and the skill does not describe built-in spending controls. <br>
-Mitigation: Confirm current costs before first use and apply external wallet, balance, or execution controls before allowing repeated calls. <br>
+## Use Case:
 
+Developers and agents use the signal to monitor systemic stress across APEX modules and as one input to circuit-breaker or exposure-reduction decisions.
 
-## Reference(s): <br>
-- [Agent Stress Index endpoint](https://apexrunner.ai/signals/agent-stress-index) <br>
-- [ClawHub skill page](https://clawhub.ai/kynto2001-ctrl/skills/agent-stress-index) <br>
-- [Publisher profile](https://clawhub.ai/user/kynto2001-ctrl) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Guidance] <br>
-**Output Format:** [Markdown guidance with Python example and JSON API response] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY for x402 payment authorization; endpoint responses include stress score, stress level, trend, anomalies, monitored agents, and timestamp.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Each call incurs a USDC charge through x402.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set request limits and keep only the intended spending amount in the wallet used for calls.
+
+Risk: The skill reads EVM_PRIVATE_KEY to authorize paid requests; exposure of the key could compromise the wallet.
+
+Mitigation: Store the key in a protected secret store and use a dedicated wallet with limited funds.
+
+Risk: The returned stress index may be incomplete or unsuitable as the sole basis for trading decisions.
+
+Mitigation: Validate the signal against other risk controls before changing exposure.
+
+## Reference(s):
+
+- [Agent Stress Index endpoint](https://apexrunner.ai/signals/agent-stress-index)
+- [ClawHub skill release](https://clawhub.ai/kynto2001-ctrl/skills/agent-stress-index)
+- [Related signal: crowded-trade-detector](https://apexrunner.ai/signals/crowded-trade-detector)
+- [Related signal: portfolio-heat](https://apexrunner.ai/signals/portfolio-heat)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON]
+
+**Output Format:** [JSON response with a stress score, level, trend, detected anomalies, monitored-agent count, and timestamp]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Each request is paid in USDC on Base through x402.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
