@@ -19,7 +19,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { ab, sleep, evalJSON, safeStr, getArg, runCli } = require("./cdp-utils");
+const { ab, sleep, evalJSON, safeStr, getArg, localDateStamp, runCli } = require("./cdp-utils");
 
 const BOOKLIST_URL = "https://manage.zhangwenpindu.cn/books/booklist";
 const API_BASE = "https://ms.zhangwenpindu.cn";
@@ -80,7 +80,40 @@ const PAGES = parseInt(getArg(args, "--pages") || "5", 10);
 const CHANNEL = getArg(args, "--channel") || "all";
 const DETAIL = args.includes("--detail");
 
-function buildAndSave(allBooks, total, filtered, filepath) {
+/**
+ * 字数格式化：手写千分位，不能用 toLocaleString()。
+ * 后者按宿主 ICU locale 取分隔符，de_* 会写成「123.456字」（读起来像 123 字），
+ * fr_* 用 U+202F、en-IN 会分成「1,23,456」——同一份报告在不同机器上数字不一样。
+ * 兼容接口把 words 返回成字符串的情况。
+ */
+function fmtWords(words) {
+  const n =
+    typeof words === "number"
+      ? Math.trunc(words)
+      : parseInt(String(words == null ? "" : words).replace(/[^0-9]/g, ""), 10);
+  if (!Number.isFinite(n) || n <= 0) return "";
+  return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "字";
+}
+
+function outputFilename(channel, date) {
+  if (!["all", "male", "female"].includes(channel)) {
+    throw new Error(`未知 --channel: ${channel}（支持 male/female/all）`);
+  }
+  return `黑岩书库列表_${channel}_${date}.md`;
+}
+
+/**
+ * 文件头「数据质量」：书库没有热度字段，列表模式只有书单；--detail 按详情取到几成定级。
+ * 取值要在 aggregate-rank.js 的 QUALITY_WORDS 里，聚合「采集情况」才会翻成白话。
+ */
+function dataQuality(books, detail) {
+  if (!detail) return "[仅列表-无核心指标]";
+  const got = books.filter((b) => b && b.detailOk).length;
+  if (got === books.length) return "[OK]";
+  return got / books.length < 0.5 ? "[详情解析异常/登录态缺失]" : "[部分详情缺失]";
+}
+
+function buildAndSave(allBooks, total, filtered, filepath, detail = DETAIL) {
   const now = new Date().toISOString();
   const maleBooks = filtered.filter((b) => b.classifyStr === "男频");
   const femaleBooks = filtered.filter((b) => b.classifyStr === "女频");
@@ -102,8 +135,9 @@ function buildAndSave(allBooks, total, filtered, filepath) {
     `- 来源：${BOOKLIST_URL}`,
     `- 抓取时间：${now}`,
     `- 总条目：${total}`,
-    `- 已采集：${filtered.length} 条（${PAGES} 页）`,
-    DETAIL ? "- 含详情（标签、简介）" : "- 列表模式（加 --detail 获取标签和简介）",
+    `- 已采集：${filtered.length} 条（${Math.ceil(allBooks.length / PAGE_SIZE)} 页）`,
+    detail ? "- 含详情（标签、简介）" : "- 列表模式（加 --detail 获取标签和简介）",
+    `- 数据质量：${dataQuality(filtered, detail)}`,
     "",
     "---",
     "",
@@ -117,10 +151,13 @@ function buildAndSave(allBooks, total, filtered, filepath) {
       try {
         const b = g.books[i];
         lines.push(`### #${i + 1} ${b.name}`);
+        // 聚合按位置认「作者 · 题材」：缺作者时用占位，否则题材会被当成作者
         const meta = [
-          b.userName,
-          b.classifyStr + "/" + b.typeDesc,
-          b.words ? b.words.toLocaleString() + "字" : "",
+          b.userName || "佚名",
+          // 分别入数组再拼：预先 classifyStr + "/" + typeDesc 会把缺字段拼成
+          // 「undefined/undefined」这种真值字符串，filter(Boolean) 拦不住，直接写进报告
+          [b.classifyStr, b.typeDesc].filter(Boolean).join("/"),
+          fmtWords(b.words),
           b.price ? b.price + "钻" : "",
           b.open ? "公开" : "未公开",
         ].filter(Boolean).join(" · ");
@@ -157,8 +194,7 @@ function main() {
   console.log("\n→ 采集 黑岩书库列表（API 模式）...");
   console.log(`  计划采集: ${PAGES} 页（每页 ${PAGE_SIZE} 条）`);
 
-  const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-  const filename = `黑岩书库列表_${date}.md`;
+  const filename = outputFilename(CHANNEL, localDateStamp());
   const filepath = path.join(OUTDIR, filename);
 
   // 先导航到管理后台获取 token
@@ -242,21 +278,43 @@ function main() {
     return 0;
   }
 
-  // 质量门：书名命中率。API 改字段名时会整片 undefined，必须拦截而非静默写盘
-  const named = allBooks.filter((b) => b && b.name).length;
-  if (named / allBooks.length < 0.5) {
-    console.error(
-      `[heiyan] 采集失败：${allBooks.length} 条里仅 ${named} 条有书名，疑似接口字段变动，已放弃写盘。`
-    );
-    return 0;
+  // 质量门：核心字段命中率。API 改字段名时会整片 undefined，必须拦截而非静默写盘。
+  // classifyStr 同样要查：它决定男频/女频分组和 --channel 筛选，字段一改全部书都掉进
+  // 「其他」、--channel male 直接筛成 0 条，写出一份「已采集：0 条」的假成功报告。
+  const CORE_FIELDS = [
+    { key: "name", label: "书名" },
+    { key: "classifyStr", label: "频道(classifyStr)" },
+  ];
+  for (const f of CORE_FIELDS) {
+    const hit = allBooks.filter((b) => b && b[f.key]).length;
+    if (hit / allBooks.length < 0.5) {
+      console.error(
+        `[heiyan] 采集失败：${allBooks.length} 条里仅 ${hit} 条有${f.label}，疑似接口字段变动，已放弃写盘。`
+      );
+      return 0;
+    }
   }
 
   // 频道筛选
   let filtered = allBooks;
-  if (CHANNEL === "male") {
-    filtered = allBooks.filter((b) => b.classifyStr === "男频");
-  } else if (CHANNEL === "female") {
-    filtered = allBooks.filter((b) => b.classifyStr === "女频");
+  if (CHANNEL === "male" || CHANNEL === "female") {
+    const want = CHANNEL === "male" ? "男频" : "女频";
+    filtered = allBooks.filter((b) => b.classifyStr === want);
+    if (!filtered.length) {
+      // 筛成 0 条不能算成功：把实际 classifyStr 分布打出来，区分「接口字段变了」
+      // 和「这个频道确实没作品」，而不是写一份看不出差别的空报告
+      const seen = {};
+      for (const b of allBooks) {
+        const k = b && b.classifyStr ? b.classifyStr : "(空)";
+        seen[k] = (seen[k] || 0) + 1;
+      }
+      const dist = Object.keys(seen).map((k) => `${k}×${seen[k]}`).join("、");
+      console.error(
+        `[heiyan] 采集失败：--channel ${CHANNEL} 筛选后 0 条（${allBooks.length} 条的 classifyStr 取值：${dist}），已放弃写盘。`
+      );
+      console.error(`  → 若确实没有${want}作品，去掉 --channel 重跑即可拿到全部书目。`);
+      return 0;
+    }
   }
 
   // 可选：逐本获取详情（标签等）
@@ -270,6 +328,7 @@ function main() {
           filtered[i].tags = detail.data.tags || [];
           filtered[i].description = detail.data.description || "";
           filtered[i].chapterCount = detail.data.chapterCount || 0;
+          filtered[i].detailOk = true;
         }
         if ((i + 1) % 10 === 0) {
           console.log(`    已获取 ${i + 1}/${filtered.length}`);
@@ -289,4 +348,13 @@ if (require.main === module) {
   runCli(main, "黑岩采集");
 }
 
-module.exports = { probePage, getToken, fetchBookList, fetchBookDetail, buildAndSave };
+module.exports = {
+  probePage,
+  getToken,
+  fetchBookList,
+  fetchBookDetail,
+  fmtWords,
+  outputFilename,
+  dataQuality,
+  buildAndSave,
+};

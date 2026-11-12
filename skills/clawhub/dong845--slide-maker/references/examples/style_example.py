@@ -23,6 +23,25 @@ WHITE  = RGBColor(0xFF, 0xFF, 0xFF)
 FONT = "Calibri"          # set once for the whole deck
 deckkit.FONT = FONT        # deckkit resolves FONT at call time, so every section inherits
 
+# ---- the other two thirds of a visual identity: GEOMETRY and GROUND ----
+# Colour and type were the only tokens this scaffold carried, so a deck-owned identity — the
+# Q1(d) generated template above all — could declare its four-line IDENTITY-PROPAGATION CONTRACT
+# (`palette:` · `type:` · `geometry:` · `surface:`, references/generated-template.md §3) and then
+# have no way to carry the last two into the components. The `geometry:` line is read off the
+# hero image ("outline/corner/shadow/fill"); THIS is where it lands.
+#
+#   radius: a SCALE on every box-based component's corner (and node()). 0 = square — the only
+#           way a hard-edged identity reaches the library. 1 = today. >1 = softer.
+#   rule_w: a SCALE on card borders, dividers and node outlines. A heavy-ruled poster identity
+#           is ~2.5-3; a hairline editorial one ~0.5-0.7.
+# Both are no-ops at 1.0, so leaving them alone changes nothing.
+deckkit.set_geometry(radius=1.0, rule_w=1.0)
+
+# The deck's GROUND — add_slide() paints it, so a dark identity is dark from slide one instead of
+# from wherever the author remembered to draw a rectangle. None = paint nothing.
+GROUND = None              # e.g. RGBColor(0x0C, 0x13, 0x20) for a dark identity
+deckkit.set_ground(GROUND)
+
 W, H = 10.0, 5.625         # 16:9
 
 def base_deck():
@@ -46,3 +65,33 @@ def footer(s, page, tag=""):
         text(s, 0.6, H - 0.4, 6.0, 0.3, [[(tag, 8.5, MUTE, False, False)]], space_after=0)
     text(s, W - 1.0, H - 0.4, 0.6, 0.3, [[(str(page), 9, MUTE, True, False)]],
          align=PP_ALIGN.RIGHT, space_after=0)
+
+
+# ─── the two things sections must NOT each decide for themselves ────────────────────────
+# Both live here for the same reason the palette does: sections are authored in PARALLEL by
+# separate agents, so anything a section computes locally drifts silently between sections.
+
+def band(s, kicker=True):
+    """The safe content rect (x, y, w, h) for THIS deck's chrome — below the title rule,
+    above the footer band.
+
+    `deckkit.content_band` defaults to `top=1.15`, which is deckkit's OWN title_bar. This deck
+    has its own title treatment, so the top edge is derived from it here, once: the rule sits at
+    ``ty + 0.66`` and is 0.045 tall, plus breathing room. A section that calls the bare
+    `content_band(s)` gets deckkit's number, not this deck's, and lands its first block ~0.4in
+    too high — the kind of drift that is invisible per-section and obvious once assembled.
+    """
+    return deckkit.content_band(s, top=(0.6 if kicker else 0.45) + 0.66 + 0.045 + 0.24)
+
+
+def register(s, loud=False):
+    """This deck's register signature — ONE tagged device, shared by every section.
+
+    Hand-rolling the mark per section is how a deck ends up with three slightly different
+    versions of its own signature, and — because a hand-rolled mark carries no tag — how
+    `TEXT_OVER_MOTIF` and the <=3-loud-appearance budget end up watching a deck they cannot see.
+    Measured on a real 14-page build: 383 shapes, ZERO motif tags. Pass ``loud=True`` only on a
+    hero page (cover / section opener).
+    """
+    return deckkit.register_mark(s, "arcs", corner="tr", color=ACCENT,
+                                 size=(2.0 if loud else 1.1), loud=loud)

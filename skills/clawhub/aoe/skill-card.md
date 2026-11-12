@@ -1,41 +1,54 @@
-## Description: <br>
-Manage AI coding agent sessions via Agent of Empires (aoe). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage AI coding agent sessions via Agent of Empires (aoe).
 
-## Publisher: <br>
-[njbrake](https://clawhub.ai/user/njbrake) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[njbrake](https://clawhub.ai/user/njbrake)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to launch, organize, monitor, and inspect AI coding-agent sessions running through Agent of Empires and tmux. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reduced-oversight launch options can skip normal agent approval prompts. <br>
-Mitigation: Review the skill before installation if agents should operate only with explicit approvals, and use reduced-oversight examples only in disposable or tightly sandboxed workspaces. <br>
-Risk: Forceful worktree deletion can remove local work. <br>
-Mitigation: Check git state and confirm the worktree contains nothing needed before using forceful worktree deletion. <br>
+## Use Case:
 
+Developers use this skill to launch, organize, monitor, and manage AI coding agent sessions in tmux, including parallel work in Git worktrees.
 
-## Reference(s): <br>
-- [Agent of Empires project homepage](https://github.com/agent-of-empires/agent-of-empires) <br>
-- [ClawHub skill page](https://clawhub.ai/njbrake/skills/aoe) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the aoe and tmux binaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.13.1 (source: server release evidence) <br>
+Risk: Sending a message can start a stopped agent session, and sending before its prompt is ready can leave the message unsent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Wait until session capture confirms the agent is ready; use --no-revive when a stopped session must not be started.
+
+Risk: YOLO mode skips permission prompts, and purge options can permanently delete session data or worktrees.
+
+Mitigation: Use these options only when intended, and confirm the target session and worktree before running them.
+
+## Reference(s):
+
+- [Agent of Empires project homepage](https://github.com/agent-of-empires/agent-of-empires)
+- [Sandbox guide](https://github.com/agent-of-empires/agent-of-empires/blob/main/docs/guides/sandbox.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON]
+
+**Output Format:** [Markdown instructions with shell command examples and JSON output schemas]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Examples cover session management, monitoring, and worktree workflows.]
+
+## Skill Version(s):
+
+1.23.0 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

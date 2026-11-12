@@ -1,52 +1,59 @@
-## Description: <br>
-Provides guidance for Huawei Cloud KooCLI command-line operations, including installation, IAM authentication, credential configuration, command construction, and common error troubleshooting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides users through installing and configuring Huawei Cloud KooCLI, constructing commands, and troubleshooting common errors.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to install and configure KooCLI, construct Huawei Cloud hcloud commands, troubleshoot command errors, and manage cloud resources with explicit security checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation triggers may apply Huawei Cloud guidance outside explicit KooCLI work. <br>
-Mitigation: Install and use the skill only for explicit Huawei Cloud KooCLI command-line tasks. <br>
-Risk: Credential examples, inline AK/SK parameters, and debug output can expose sensitive authentication material. <br>
-Mitigation: Prefer scoped IAM users, SSO, ECS agency, or profiles over inline AK/SK, and redact debug or raw logs before sharing. <br>
-Risk: Generated commands can modify production resources, security groups, networks, or delete cloud assets. <br>
-Mitigation: Require explicit confirmation before deletion, network, security group, or production changes, and prefer read-only checks before changes. <br>
-Risk: Remote installer scripts can introduce supply-chain risk if executed without verification. <br>
-Mitigation: Verify installer provenance before running remote scripts. <br>
+## Use Case:
 
+Developers and cloud operators use this guidance to install KooCLI, configure authentication, form Huawei Cloud service commands, and troubleshoot common errors.
 
-## Reference(s): <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [KooCLI Error Troubleshooting and FAQ](references/cli-troubleshooting.md) <br>
-- [Common Operation Workflows](references/common-workflows.md) <br>
-- [Core Commands](references/core-commands.md) <br>
-- [IAM Permission Policies](references/iam-policies.md) <br>
-- [Huawei Cloud KooCLI Installation Guide](references/installation-guide.md) <br>
-- [KooCLI Parameter Format Rules and Examples](references/parameter-format.md) <br>
-- [Huawei Cloud Service Catalog and Command Quick Reference](references/service-catalog.md) <br>
-- [Huawei Cloud KooCLI latest version information](https://support.huaweicloud.com/wtsnew-hcli/index.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include hcloud command examples, profile and IAM guidance, troubleshooting steps, and security reminders.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The guide has conflicting execution boundaries and includes unsafe root logins and potentially destructive cleanup guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep it advisory until its execution rules are consistent. Use least-privilege credentials and verified SSH host keys, obtain separate approval for resource changes, and confirm backups and exact disks before cleanup; preserve profiles unless explicitly purging them.
+
+Risk: Installation examples retrieve external installers and container images, and diagnostic output can contain sensitive information.
+
+Mitigation: Verify installer and container provenance before execution, and redact diagnostic logs before sharing them.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-cli-guidance)
+- [Getting Started](references/getting-started.md)
+- [Credential Security Best Practices](references/credential-security.md)
+- [Installation Guide](references/installation-guide.md)
+- [KooCLI Error Troubleshooting and FAQ](references/cli-troubleshooting.md)
+- [IAM Policies](references/iam-policies.md)
+- [OBS Operations](references/obsutil-operations.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes command and configuration examples; review execution boundaries before use.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

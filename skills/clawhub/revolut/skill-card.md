@@ -1,43 +1,57 @@
-## Description: <br>
-Revolut web automation via Playwright: login/logout, list accounts, and fetch transactions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Revolut web automation via Playwright: login/logout, list accounts, fetch transactions, and download Invest statements (year-end holdings, realised P&L, costs and charges).
 
-## Publisher: <br>
-[odrobnik](https://clawhub.ai/user/odrobnik) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[odrobnik](https://clawhub.ai/user/odrobnik)
 
-## Use Case: <br>
-Developers and finance operators use this skill to automate an authenticated Revolut web session and export account balances, wallet transactions, investment portfolio holdings, and investment transactions as JSON. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill automates an authenticated Revolut web banking session and stores browser session data under workspace/revolut. <br>
-Mitigation: Run it only in a private workspace, treat workspace/revolut as sensitive banking session data, and use logout after each session. <br>
-Risk: An optional app PIN can be stored in config.json. <br>
-Mitigation: Avoid storing the PIN unless necessary and restrict access to the configuration file. <br>
-Risk: Exported JSON can contain sensitive account, transaction, and portfolio data. <br>
-Mitigation: Keep exported files out of shared folders and backups, and write outputs only to trusted workspace or /tmp paths. <br>
+## Use Case:
 
+Individuals and developers use this skill to retrieve Revolut account balances, transaction history, and investment data, and to download brokerage statements for financial recordkeeping.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/odrobnik/skills/revolut) <br>
-- [Publisher profile](https://clawhub.ai/user/odrobnik) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Shell commands, Guidance] <br>
-**Output Format:** [JSON output and Markdown command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Playwright with Chromium and an authenticated Revolut session; optional --out writes JSON under the workspace or /tmp.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.3 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The security assessment reports portfolio and data-import capabilities beyond the stated tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review whether those capabilities are needed and inspect the tool access before installing.
+
+Risk: The setup supports an optional app PIN in the configuration file, and the security guidance warns against storing it in plaintext.
+
+Mitigation: Avoid putting the Revolut PIN in plaintext configuration.
+
+Risk: The security assessment raises concern about deleting financial records and reports partial scan coverage.
+
+Mitigation: Review the migration instructions and available security guidance before importing or deleting financial records.
+
+## Reference(s):
+
+- [Revolut skill release on ClawHub](https://clawhub.ai/odrobnik/skills/revolut)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Files]
+
+**Output Format:** [JSON account and transaction data; PDF or CSV investment statements]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs can include sensitive account balances, transaction history, investment holdings, and tax-related details.]
+
+## Skill Version(s):
+
+1.4.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

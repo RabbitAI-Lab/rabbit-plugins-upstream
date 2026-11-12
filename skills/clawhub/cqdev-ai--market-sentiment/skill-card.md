@@ -1,45 +1,60 @@
-## Description: <br>
-Analyzes CSV market data with a four-dimension sentiment model, producing a 0-100 score, market state, trend views, and decision-support suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes CSV market data with a four-factor sentiment model and returns a 0-100 market score, market state, and trading-context guidance.
 
-## Publisher: <br>
-[cqdev-ai](https://clawhub.ai/user/cqdev-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cqdev-ai](https://clawhub.ai/user/cqdev-ai)
 
-## Use Case: <br>
-External users and developers use this skill to evaluate market sentiment from CSV inputs, review score breakdowns and trends, and pass a market-state parameter into stock-planner workflows. Its outputs are decision support and should be independently reviewed before any trading decision. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Finance-related scores, market states, positions, and thresholds may be mistaken for investment advice. <br>
-Mitigation: Treat outputs as decision support only and require independent suitability review before any trading decision. <br>
-Risk: Incorrect, incomplete, stale, or mismapped CSV market data can distort sentiment scores and suggestions. <br>
-Mitigation: Verify input data quality, column mappings, and date coverage before relying on analyzer output. <br>
-Risk: Automatically feeding the planner parameter into downstream stock-planner workflows can propagate unsuitable guidance. <br>
-Mitigation: Review the market-state mapping and planner threshold behavior before automating workflow integration. <br>
+## Use Case:
 
+Developers and analysts use this skill to run local CSV-based market sentiment checks, inspect score components, track short trends, and pass a market-state parameter into a stock-planning workflow. Its outputs are reference material and not investment advice.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/cqdev-ai/skills/market-sentiment) <br>
-- [README](artifact/README.md) <br>
-- [Skill Definition](artifact/SKILL.md) <br>
-- [Changelog](artifact/CHANGELOG.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Terminal text reports and JSON summaries from CSV input, with command examples for running analyzer modes.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can emit JSON to a file with --output; suggested positions, thresholds, and planner parameters are advisory only.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release, package.json, CHANGELOG released 2026-07-24) <br>
+Risk: Market scores, states, and suggested trading posture could be mistaken for investment advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat all outputs as reference material only and require independent financial judgment before making investment decisions.
+
+Risk: Incomplete, incorrect, or unintended CSV inputs can produce misleading analysis.
+
+Mitigation: Use only CSV files intended for analysis and verify that required market columns are present and accurate.
+
+Risk: The optional output path writes local JSON and could overwrite a file if chosen carelessly.
+
+Mitigation: Choose the --output path deliberately and review generated files before using them downstream.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/cqdev-ai/skills/market-sentiment)
+- [Artifact README](artifact/README.md)
+- [Artifact skill definition](artifact/SKILL.md)
+- [Sentiment analysis script](artifact/scripts/sentiment.py)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, guidance]
+
+**Output Format:** [Terminal text reports with optional JSON file output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reads local CSV market data and can write JSON to a user-selected output path.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata, package.json, CHANGELOG.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

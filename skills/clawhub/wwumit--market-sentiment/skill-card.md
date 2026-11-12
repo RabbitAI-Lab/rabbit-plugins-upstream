@@ -1,45 +1,53 @@
-## Description: <br>
-Analyzes user-provided CSV market data with a four-dimension sentiment model to produce a 0-100 market score, market state, and planning guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes stock-market sentiment from local CSV market data using a four-dimension model, producing 0-100 scores, market states, and planner-facing suggestions.
 
-## Publisher: <br>
-[wwumit](https://clawhub.ai/user/wwumit) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wwumit](https://clawhub.ai/user/wwumit)
 
-## Use Case: <br>
-Developers, analysts, and financial researchers use this skill to summarize market sentiment from CSV inputs and translate the result into a market-state parameter for planning workflows. Its outputs are advisory context only and are not investment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial sentiment output could be mistaken for trading advice. <br>
-Mitigation: Present the output as advisory context only and require users to make independent investment decisions using their own risk tolerance and professional advice. <br>
-Risk: Incorrect, incomplete, delayed, or mismapped CSV data can produce misleading scores and market states. <br>
-Mitigation: Validate CSV source quality, required columns, and date coverage before using the results in planning workflows. <br>
-Risk: The emitted stock-planner market parameter may not match a user's downstream workflow semantics. <br>
-Mitigation: Verify the market parameter mapping against the target stock-planner workflow before relying on it. <br>
+## Use Case:
 
+Developers and analysts use this skill to turn user-provided market CSV data into market sentiment reports, trend summaries, JSON outputs, and stock-planner market parameters. It is intended for decision support and requires human review before any trading use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wwumit/skills/market-sentiment) <br>
-- [Artifact README](artifact/README.md) <br>
-- [Artifact SKILL.md](artifact/SKILL.md) <br>
-- [Artifact changelog](artifact/CHANGELOG.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown-style text reports, JSON objects, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads user-provided CSV market data and emits a score, market state, stock-planner market parameter, suggested position guidance, and threshold guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata, package.json, CHANGELOG) <br>
+Risk: The skill produces trading-oriented suggestions that could be mistaken for investment advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review outputs manually and do not connect planner parameters to automated trading without separate human confirmation and risk controls.
+
+Risk: Scores and market states depend on the completeness and accuracy of the input CSV data.
+
+Mitigation: Validate market data sources, column mappings, and freshness before relying on generated sentiment reports.
+
+## Reference(s):
+
+- [Market Sentiment skill page](https://clawhub.ai/wwumit/skills/market-sentiment)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, guidance]
+
+**Output Format:** [Terminal text reports with optional JSON files and Markdown usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs include sentiment scores, dimension details, market state labels, planner parameters, suggested position sizing, and thresholds.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata, package.json, CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

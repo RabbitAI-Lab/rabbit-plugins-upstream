@@ -1,0 +1,8 @@
+interface:
+  display_name: "AI短剧制作工作流 v1.4"
+  short_description: "可复用项目配置、留存钩子、催更机制与交付流水线"
+  brand_color: "#C44B2B"
+  default_prompt: "Use $ai-short-drama-production to turn this concept into a reusable, retention-driven AI short-drama project with a project profile, audience promise, cliffhanger budget, comment prompts, shareable moments, scene logic, coverage, character consistency, generation manifests, voice, subtitles, lip-sync, packaging, validation, and delivery controls."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,45 +1,53 @@
-## Description: <br>
-Composite Fear & Greed index with source and staleness metadata. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns composite Fear & Greed index with source and staleness metadata.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External developers and trading agents use this skill to retrieve a paid real-time Fear & Greed market signal with source and staleness metadata before DCA entries, position sizing, or market-risk checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an EVM private key and may spend wallet funds for paid x402 requests. <br>
-Mitigation: Use a dedicated wallet with limited USDC on Base and monitor repeated calls. <br>
-Risk: Exposure of EVM_PRIVATE_KEY could compromise the funded wallet. <br>
-Mitigation: Keep EVM_PRIVATE_KEY secret and scope it to a low-balance wallet used only for this skill. <br>
+## Use Case:
 
+Agents supporting users who assess crypto market risk appetite can retrieve a composite Fear & Greed signal, with source and staleness metadata, before considering DCA entries or position sizing.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/kynto2001-ctrl/skills/fear-greed) <br>
-- [APEX Runner Fear Greed signal](https://apexrunner.ai/signals/fear-greed) <br>
-- [APEX Runner pricing tier check](https://apexrunner.ai/signals/my-pricing) <br>
-- [Related signal: fg-micro](https://apexrunner.ai/signals/fg-micro) <br>
-- [Related signal: dca-signal](https://apexrunner.ai/signals/dca-signal) <br>
-- [Related signal: dca-reentry-gate](https://apexrunner.ai/signals/dca-reentry-gate) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Guidance] <br>
-**Output Format:** [JSON response from an x402-authenticated GET request, with Markdown usage guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY for a wallet funded with USDC on Base; each invocation may incur a small paid request charge.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Each request incurs a USDC charge and uses an EVM wallet private key for x402 payment authorization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep EVM_PRIVATE_KEY out of prompts and logs, use a wallet funded only for intended calls, and check the endpoint price before making requests.
+
+## Reference(s):
+
+- [Fear & Greed endpoint](https://apexrunner.ai/signals/fear-greed)
+- [ClawHub fear-greed release](https://clawhub.ai/kynto2001-ctrl/skills/fear-greed)
+- [APEX Runner](https://apexrunner.ai)
+- [APEX Runner fg-micro signal](https://apexrunner.ai/signals/fg-micro)
+- [APEX Runner dca-signal](https://apexrunner.ai/signals/dca-signal)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Analysis]
+
+**Output Format:** [JSON response containing an index value, classification, source, and timestamp]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A paid x402-authenticated request; response includes source and staleness metadata.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,60 @@
-## Description: <br>
-Volume profile analysis detecting accumulation or distribution patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paid x402 endpoint: $0.007 USDC per call on Base. Returns volume profile analysis detecting accumulation or distribution patterns.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External agents and developers use this skill to request real-time APEX Runner volume-profile signals for confirming breakouts, identifying accumulation or distribution, and informing momentum entries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an EVM wallet private key for automatically paid x402 requests without clear per-call consent or spending limits. <br>
-Mitigation: Use a dedicated low-balance wallet and only fund it with the amount you are willing to spend on calls. <br>
-Risk: Each invocation may authorize a paid request. <br>
-Mitigation: Review expected pricing before use and monitor wallet activity while the skill is enabled. <br>
+## Use Case:
 
+Developers and traders can request a live volume profile signal to assess accumulation or distribution, confirm breakouts with volume, and add context before momentum entries.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/kynto2001-ctrl/skills/volume-analysis) <br>
-- [APEX Runner Volume Analysis](https://apexrunner.ai/signals/volume-analysis) <br>
-- [APEX Runner Pricing Tiers](https://apexrunner.ai/signals/my-pricing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Analysis, JSON, Guidance] <br>
-**Output Format:** [JSON response with signal fields and concise agent-facing analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY for x402-authorized paid requests; each invocation may spend wallet funds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Each request makes a paid USDC call; the documented early-adopter price is $0.007 per call through 2027-01-01, with a stated standard price of $0.01.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the current price and endpoint before sending a request, and keep only the amount you intend to spend in the calling wallet.
+
+Risk: The skill requires an EVM private key to authorize payment.
+
+Mitigation: Provide the key through a protected secret environment variable and use a dedicated wallet with limited funds.
+
+Risk: Volume signals may inform cryptocurrency trading decisions but do not establish that a trade will be profitable.
+
+Mitigation: Treat the response as one input, check it against independent analysis, and apply your own trading and risk limits.
+
+## Reference(s):
+
+- [ClawHub volume-analysis release](https://clawhub.ai/kynto2001-ctrl/skills/volume-analysis)
+- [APEX Runner volume-analysis endpoint](https://apexrunner.ai/signals/volume-analysis)
+- [Related signal: trend-confirmed](https://apexrunner.ai/signals/trend-confirmed)
+- [Related signal: bb-analysis](https://apexrunner.ai/signals/bb-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, API Calls, JSON]
+
+**Output Format:** [JSON response containing a signal label and volume metrics]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A paid request returns a signal, volume_ratio, and above_average value.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

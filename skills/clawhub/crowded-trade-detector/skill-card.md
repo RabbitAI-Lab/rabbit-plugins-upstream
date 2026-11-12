@@ -1,41 +1,60 @@
-## Description: <br>
-Detects when too many agents are in the same trade - liquidation risk. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries a paid endpoint for data about crowded trades and potential liquidation risk.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External agents and developers use this skill to query a paid APEX Runner crypto-market signal before entering popular trades, avoiding liquidation-cascade exposure, or adding a crowding-risk gate to trading workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an EVM private key and can authorize real USDC charges through x402 requests. <br>
-Mitigation: Use a dedicated low-balance wallet on Base mainnet and avoid exposing a primary wallet private key to the agent environment. <br>
-Risk: Automatic paid requests may occur without clear per-call user confirmation. <br>
-Mitigation: Require explicit price confirmation before each call and monitor repeated invocations. <br>
+## Use Case:
 
+AI trading agents and developers can query the signal before popular trades to assess crowding as one input to their exposure and risk controls.
 
-## Reference(s): <br>
-- [Crowded Trade Detector signal](https://apexrunner.ai/signals/crowded-trade-detector) <br>
-- [Crowded Trade Detector on ClawHub](https://clawhub.ai/kynto2001-ctrl/skills/crowded-trade-detector) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [json, guidance, analysis] <br>
-**Output Format:** [JSON response containing crowded trade entries, crowding scores, severity, contrarian signals, market consensus, and timestamp.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY and can authorize paid x402 requests using USDC on Base mainnet.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Each endpoint call spends USDC, and the listed early-adopter price may change after its stated end date.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the current price and endpoint before calling, and fund the wallet only for the intended number of requests.
+
+Risk: The EVM_PRIVATE_KEY environment variable grants signing access to the wallet used for payment.
+
+Mitigation: Use a dedicated, low-balance wallet and keep its private key out of logs, prompts, and shared environments.
+
+Risk: Crowding and contrarian signals can be mistaken for reliable trade instructions or may no longer reflect current conditions.
+
+Mitigation: Check the response timestamp, corroborate the signal, and apply independent exposure and liquidation controls before acting.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kynto2001-ctrl/skills/crowded-trade-detector)
+- [APEX Runner Crowded Trade Detector](https://apexrunner.ai/signals/crowded-trade-detector)
+- [APEX Runner Agent Stress Index](https://apexrunner.ai/signals/agent-stress-index)
+- [APEX Runner Liquidation Pressure](https://apexrunner.ai/signals/liquidation-pressure)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON]
+
+**Output Format:** [JSON response from the x402-authenticated endpoint]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Per-call payment in USDC on Base; response includes a timestamp.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

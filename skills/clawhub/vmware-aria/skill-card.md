@@ -1,49 +1,62 @@
-## Description: <br>
-Use this skill when an agent needs VMware Aria Operations data for performance metrics, alerts, capacity planning, anomaly detection, and automated reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use VMware Aria Operations and VCF Operations to inspect infrastructure metrics, alerts, capacity, anomalies, reports, and platform health.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and infrastructure operations teams use this skill to inspect VMware Aria Operations environments, investigate alerts, analyze capacity and anomalies, and generate reports. It is read-heavy, with audited write actions limited to alert state changes, alert definition management, and report generation or deletion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access VMware Aria Operations data and includes limited administrative write actions. <br>
-Mitigation: Install it only for agents that should access VMware Aria Operations, use least-privilege or read-only service accounts unless writes are required, and review the audit log for acknowledged, canceled, generated, or deleted objects. <br>
-Risk: Credentials may be stored in local VMware Aria configuration files. <br>
-Mitigation: Keep ~/.vmware-aria/.env locked down and prefer external secret injection when stronger protection is required. <br>
-Risk: Disabling TLS verification can weaken protection for production connections. <br>
-Mitigation: Keep SSL verification enabled in production. <br>
+## Use Case:
 
+Operations engineers use this skill to review Aria Operations or VCF Operations health, metrics, alerts, capacity, anomalies, and reports. It can also perform selected alert, report, alert-definition, and maintenance actions when configured.
 
-## Reference(s): <br>
-- [VMware Aria source homepage](https://github.com/zw008/VMware-Aria) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
-- [Investigation Protocol](references/investigation-protocol.md) <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-aria) <br>
-- [Publisher profile](https://clawhub.ai/user/zw008) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured operational summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include VMware Aria metric summaries, alert and capacity analysis, report workflow steps, and configuration guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server-resolved release metadata) <br>
+Risk: The security verdict is benign with medium confidence, and one scanner's assessment was partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup and Docker instructions, image reference, authentication options, and documented write behavior before installation.
+
+Risk: Write operations can change alert, report, alert-definition, or maintenance state; optional confirmation bypasses are documented.
+
+Mitigation: Restrict write access and review the target and change impact before confirming an operation or enabling a bypass.
+
+Risk: The skill uses target credentials and can expose an authenticated MCP endpoint.
+
+Mitigation: Use least-privilege credentials, protect secret files, and verify MCP authentication and tool exposure settings.
+
+## Reference(s):
+
+- [Setup guide](references/setup-guide.md)
+- [Operations playbooks](references/ops-playbooks.md)
+- [Agent guardrails](references/agent-guardrails.md)
+- [Investigation protocol](references/investigation-protocol.md)
+- [Project homepage](https://github.com/vmware-skills/VMware-Aria)
+- [ClawHub release page](https://clawhub.ai/zw008/skills/vmware-aria)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown, Guidance]
+
+**Output Format:** [Markdown summaries with metrics, findings, recommendations, and report links when available]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the selected Aria target, available data, and product version.]
+
+## Skill Version(s):
+
+2.4.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

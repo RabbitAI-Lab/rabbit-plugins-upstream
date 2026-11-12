@@ -1,45 +1,55 @@
-## Description: <br>
-Convert static images into dynamic videos using the Vidu Q2 image-to-video model. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts static images into dynamic videos with the Vidu Q2 image-to-video model.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative users use this skill to invoke dLazy's Vidu Q2 image-to-video CLI, supplying prompts and source images to generate hosted video outputs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected prompts, parameters, and media files are sent to dLazy services for generation. <br>
-Mitigation: Confirm the user is comfortable sending the selected inputs to dLazy before invoking the CLI. <br>
-Risk: A dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Use per-invocation DLAZY_API_KEY when persistent storage is not desired, and rotate or revoke keys from the dLazy dashboard when they are no longer needed. <br>
-Risk: A global CLI installation persists on the system. <br>
-Mitigation: Prefer the pinned npx invocation when a non-persistent CLI execution is sufficient. <br>
+## Use Case:
 
+Developers and creators use this skill to turn still images into short videos by providing a prompt and image or frame inputs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-i2v) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted result URLs or an async generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The partial security scan found no confirmed malicious behavior, but did not establish how CLI login and credential setup relate to image-to-video generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI setup instructions and source, and decide whether you are comfortable installing it and providing a dLazy API credential; the scan does not establish credential theft.
+
+Risk: Image and other local media supplied to the skill are uploaded to dLazy media storage for hosted generation.
+
+Mitigation: Only submit media you are authorized to share with the hosted service and are comfortable uploading.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-i2v)
+- [dLazy](https://dlazy.com)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video files, JSON, Shell commands]
+
+**Output Format:** [Hosted video result URL and JSON task/result metadata; media can optionally be saved as a local file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Asynchronous task IDs are returned when requested; generated media is hosted by dLazy.]
+
+## Skill Version(s):
+
+1.3.39 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

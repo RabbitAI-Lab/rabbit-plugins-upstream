@@ -14,7 +14,7 @@ Sub-agent for `cargo-gtm`. Executes **one bounded slice** of a sourcing job — 
 
 The invoking prompt MUST specify, and this agent MUST NOT exceed:
 
-1. **The exact action** — full `{"kind":"connector","integrationSlug":"…","actionSlug":"…","config":{}}` JSON and the records/filters payload.
+1. **The exact action** — full `{"kind":"connector","integrationSlug":"…","actionSlug":"…"}` JSON and the records/filters payload.
 2. **The row cap** — the `limit` to pass and the maximum rows to return.
 3. **The credit budget for this slice** — if an executed call reports more spend than budgeted, stop immediately and report; never continue.
 4. **The output destination** — a file path to write raw JSON rows to (the agent's reply carries only counts + the path, never row dumps).
@@ -22,7 +22,7 @@ The invoking prompt MUST specify, and this agent MUST NOT exceed:
 ## Rules
 
 - Execute ONLY the command(s) given. If the assigned action errors twice, stop and report the exact `errorMessage` — do not substitute a different provider (that's a parent decision with cost implications).
-- Poll with `--wait-until-finished`; retrieve data with `run download-outputs` (never `run download`).
+- Poll with `--wait-until-finished`; it prints the batch object, not rows. Retrieve the rows of a direct `action execute-batch` with `orchestration batch download --uuid <batch-uuid>` (a signed CSV URL; a search's result array lands in one `cargo` column), and a saved tool's with `run download-outputs` (never `run download`).
 - Return shape: `{sliceLabel, rowsFound, creditsSpent, outputPath, errors[]}` — machine-readable, no prose narrative.
 - No enrichment, no verification, no personalization — sourcing rows only. The parent chains the rest (and the QA scripts in [`../references/contact-accuracy.md`](../references/contact-accuracy.md)).
 - Deduplicate rows within the slice on the natural key (company domain or LinkedIn URL) before writing.

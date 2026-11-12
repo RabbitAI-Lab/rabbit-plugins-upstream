@@ -22,7 +22,7 @@ Trigger it after finishing a deep-analysis draft:
 
 > "Review this article with the panel."
 
-The panel runs the nine-step workflow (fact & originality check → red-line scan → reader reps → depth → distribution → consolidate → re-check → finalize) and outputs per-role feedback graded as must-fix / suggested / optional / for-author-decision.
+After the panel revision, run a separate **reader-fit test**. It is not a ninth panelist or a second review round: it tests whether selected target readers correctly understand the core message, scope and technical level. Lock the article positioning first, select 3–4 roles that fit the piece, and triage feedback as must-fix / suggested / optional / reject-or-park. Do not adopt every role's opinion.
 
 ## Design
 

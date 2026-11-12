@@ -1,47 +1,55 @@
-## Description: <br>
-Confirms whether the current trend has sufficient momentum to trade. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Returns whether the current trend has sufficient momentum to trade.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External developers and trading agents use this skill to query a paid APEX Runner signal before entering trend-following trades, filtering breakouts, or applying a final confirmation gate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a raw EVM private key for automatic x402-paid requests, so each invocation can spend USDC from the configured wallet. <br>
-Mitigation: Use a dedicated low-balance wallet on Base mainnet and fund it only with amounts you are prepared to spend. <br>
-Risk: The private key is supplied through EVM_PRIVATE_KEY and could expose wallet funds if leaked to logs, prompts, or shared environments. <br>
-Mitigation: Store the key in a secret manager or isolated runtime environment, avoid echoing it in commands or logs, and rotate the wallet if exposure is suspected. <br>
-Risk: The endpoint provides trading-signal guidance that may be incorrect or unsuitable for a user's strategy. <br>
-Mitigation: Treat responses as one confirmation input, validate them against independent risk controls, and avoid autonomous trade execution without human-approved limits. <br>
+## Use Case:
 
+Agents and traders can request a real-time momentum confirmation before considering a trend-following entry or filtering a possible breakout.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/kynto2001-ctrl/skills/trend-confirmed) <br>
-- [APEX Runner Trend Confirmed Signal](https://apexrunner.ai/signals/trend-confirmed) <br>
-- [APEX Runner Pricing Check](https://apexrunner.ai/signals/my-pricing) <br>
-- [Momentum Status Related Signal](https://apexrunner.ai/signals/momentum-status) <br>
-- [Regime Related Signal](https://apexrunner.ai/signals/regime) <br>
-- [APEX Composite Related Signal](https://apexrunner.ai/signals/apex-composite) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Code, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with Python and JSON code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EVM_PRIVATE_KEY for x402-authenticated paid requests; endpoint responses include confirmation, direction, and strength fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: A positive momentum signal could be mistaken for a guarantee or a complete trading recommendation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the signal as one input, and independently assess market conditions and trading risk before placing an order.
+
+Risk: Each request incurs a USDC charge, and the client requires access to an EVM wallet private key.
+
+Mitigation: Set wallet spending controls and keep the private key in protected secret storage; fund the wallet only for intended calls.
+
+## Reference(s):
+
+- [Trend Confirmed signal endpoint](https://apexrunner.ai/signals/trend-confirmed)
+- [Regime signal](https://apexrunner.ai/signals/regime)
+- [APEX composite signal](https://apexrunner.ai/signals/apex-composite)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON data]
+
+**Output Format:** [JSON response with confirmation, direction, and strength fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Real-time signal; calls are paid in USDC on Base through x402.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

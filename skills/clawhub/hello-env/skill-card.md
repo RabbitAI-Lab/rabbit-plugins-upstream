@@ -1,40 +1,61 @@
-## Description: <br>
-Zero-dependency Bash environment health check for Linux, macOS, containers, and K8s pods. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+hello-env helps agents run a zero-dependency Bash diagnostic that reports operating system, user, runtime, basic tool, network, container or Kubernetes, workdir, optional config-file, and PVC remount signals.
 
-## Publisher: <br>
-[songhonglei](https://clawhub.ai/user/songhonglei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[songhonglei](https://clawhub.ai/user/songhonglei)
 
-## Use Case: <br>
-Developers and engineers use this skill to inspect a local, container, or Kubernetes shell environment, including OS details, current user, common runtime and tool versions, network context, workdir status, optional config presence, and PVC remount signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may print selected environment variable values and local environment details during diagnostics. <br>
-Mitigation: Run it only in shells where exposed environment values are acceptable, and avoid production, CI, or Kubernetes contexts that may contain tokens unless the script is changed to mask values by default. <br>
-Risk: PVC checks write local snapshot state under the configured snapshot directory. <br>
-Mitigation: Choose a snapshot directory appropriate for the workspace and review generated snapshot files before relying on them for operational decisions. <br>
+## Use Case:
 
+Developers and engineers use this skill to inspect a local machine, CI runner, container, or Kubernetes pod and understand basic environment health. It is especially useful when checking installed tooling, current network context, or whether a Kubernetes PersistentVolume may have been silently remounted.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/songhonglei/hello-env) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, guidance] <br>
-**Output Format:** [Terminal text output with status lines and diagnostic guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs as a Bash diagnostic script and may create PVC snapshot files when PVC monitoring is enabled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: A crafted option or probe value could cause unintended shell command execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only trusted CLI arguments and trusted HELLO_ENV_PROBE_ENV or --probe-env values; review the script before deployment.
+
+Risk: Probe output may reveal environment-variable values or other local environment details.
+
+Mitigation: Avoid probing secret-bearing variables and review output before sharing logs.
+
+Risk: Snapshot-file handling writes state under the configured workdir or snapshot directory.
+
+Mitigation: Run with a trusted workdir and snapshot directory, and avoid shared or untrusted paths until snapshot handling is reviewed.
+
+Risk: Running the diagnostic with root privileges increases the impact of script bugs.
+
+Mitigation: Run as a non-root user unless elevated privileges are explicitly required and reviewed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/songhonglei/skills/hello-env)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown with inline shell commands and diagnostic text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local environment diagnostics; no API calls or third-party packages are required.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and artifact documentation)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

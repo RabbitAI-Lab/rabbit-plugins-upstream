@@ -1,49 +1,57 @@
-## Description: <br>
-Routes agents to the right Cargo CLI skill and explains setup, workflows, UUID conventions, async polling, use cases, and common gotchas for Cargo workspaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Routes Cargo CLI requests to the appropriate Cargo skill and explains shared setup, execution, polling, and workflow conventions.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and GTM operators use this router when working with Cargo CLI skills to choose the right capability skill, bootstrap workspaces, stitch tasks together, and manage Cargo workspace workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks agents to refresh tools and skills and may use lifecycle hooks that affect local tooling or session records. <br>
-Mitigation: Prefer the npm or OpenClaw install path, inspect any curl-to-shell installer before use, and confirm the active workspace before writes. <br>
-Risk: The skill can send session or report data to Cargo services when the user consents. <br>
-Mitigation: Ask before sharing, omit secrets and record-level data, and skip reporting when the user declines. <br>
-Risk: Cargo CLI access can affect workspace resources through token creation, deploys, removals, deletes, or paid actions. <br>
-Mitigation: Watch prompts carefully and require explicit user confirmation before sensitive, destructive, or paid operations. <br>
+## Use Case:
 
+External users and developers use this skill to choose the right Cargo capability for go-to-market and workspace tasks, then follow shared CLI setup and workflow guidance.
 
-## Reference(s): <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Cargo skill on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo) <br>
-- [Glossary](references/glossary.md) <br>
-- [Interaction conventions](references/interaction.md) <br>
-- [Cargo CLI prerequisites](references/prerequisites.md) <br>
-- [End-to-end use cases](references/use-cases.md) <br>
-- [UUID flow between skills](references/uuid-flow.md) <br>
-- [Common gotchas](references/gotchas.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and CLI guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires @cargo-ai/cli and a Cargo account; Cargo commands generally return JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.15.0 (source: frontmatter and release evidence) <br>
+Risk: The package installer and instruction sources may be unpinned, so what is installed or followed can change.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and pin the CLI package and instruction sources to versions you trust before use.
+
+Risk: Reports or enrichment workflows could expose command or record data you want kept private.
+
+Mitigation: Review the data and destination before sending reports or running enrichment workflows.
+
+Risk: Security scan coverage is partial, and static analysis could not fully evaluate obfuscated instruction text in part of SKILL.md.
+
+Mitigation: Review the skill and its dependencies before installation, and inspect commands before execution.
+
+## Reference(s):
+
+- [Cargo Skills repository (metadata homepage)](https://github.com/getcargohq/cargo-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Routes requests among Cargo skills and summarizes relevant CLI conventions.]
+
+## Skill Version(s):
+
+1.36.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

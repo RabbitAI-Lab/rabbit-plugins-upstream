@@ -1,42 +1,57 @@
-## Description: <br>
-Provides a Chinese-language strategic reflection framework based on public Zhang Yiming thinking models for entrepreneurship, product direction, team management, and long-term decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-first strategic thinking assistant that uses frameworks inspired by Zhang Yiming to help users reason about business strategy, entrepreneurship, product decisions, and team management.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers and end users can use this skill for structured brainstorming around startup decisions, strategic planning, product direction, and team-management questions. It is best suited for reflective analysis, not final decisions in regulated domains. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat strategic brainstorming as qualified financial, legal, medical, or other regulated advice. <br>
-Mitigation: Use the skill for general reflection only and seek qualified advice before acting in regulated or high-stakes domains. <br>
-Risk: The skill defaults to Chinese-language guidance, which may be difficult for some users to review accurately. <br>
-Mitigation: Install it only when Chinese-language output is acceptable or request translation and review before relying on the result. <br>
-Risk: Broad strategy prompts can produce persuasive but incorrect or misleading recommendations. <br>
-Mitigation: Review outputs critically, verify claims against current sources, and treat recommendations as prompts for further analysis. <br>
+## Use Case:
 
+Entrepreneurs, product leaders, and managers use the skill to structure strategic, product, and team decisions with long-term thinking and practical decision frameworks. Treat its output as a way to reason through a question, not as a factual conclusion or professional advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/zhangyiming-think-partner) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style advisory text with structured headings, questions, and scenario templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese is the default language; English terms may be retained where useful.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.1 (source: server release evidence and artifact metadata) <br>
+Risk: Broad decision questions may activate the skill, and its responses are primarily in Chinese.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it when structured strategic reflection is wanted, and specify a preferred response language when needed.
+
+Risk: Framework-based analysis could be mistaken for factual conclusions or professional advice on investment, medical, legal, or contractual matters.
+
+Mitigation: Use the output to clarify questions, verify underlying facts, and consult a qualified professional before acting on those matters.
+
+Risk: Prompts may include sensitive customer, health, financial, or nonpublic business information.
+
+Mitigation: Share only the minimum necessary context, redact identifying details, and do not provide credentials or secret keys.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/zhangyiming-think-partner)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Text]
+
+**Output Format:** [Chinese-first conversational prose with structured sections and bullet points]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses are primarily in Chinese and are intended as a thinking framework.]
+
+## Skill Version(s):
+
+2.1.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

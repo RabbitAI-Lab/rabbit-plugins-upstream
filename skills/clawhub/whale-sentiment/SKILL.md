@@ -1,6 +1,6 @@
 ---
 name: whale-sentiment
-description: Whale leaderboard sentiment derived from Hyperliquid top traders
+description: "Paid x402 endpoint: $0.007 USDC per call on Base. Returns whale leaderboard sentiment derived from Hyperliquid top traders."
 metadata:
   openclaw:
     requires:
@@ -50,18 +50,13 @@ print(response.json())
 ```
 
 ## Pricing
-**$0.50/call** — standard price
+**$0.01/call** — standard price
 
-Early adopters automatically receive 30% off ($0.35/call) until 2026-09-21. Discount tiers apply automatically based on wallet call history:
-- Early Adopter (0–9 calls): 30% off
-- Engaged (10–49 calls): 15% off
-- Loyal (50–199 calls): 15% permanent
-- VIP (200+ calls): 20% permanent
-
-Check your tier: `https://apexrunner.ai/signals/my-pricing`
+Every caller is charged $0.007/call until 2027-01-01 under the
+early-adopter discount (30% off the standard price). No tier, no wallet
+history, no enrolment — that is simply the price.
 
 ## Related Signals
-- [oi-divergence](https://apexrunner.ai/signals/oi-divergence)
 - [liquidation-pressure](https://apexrunner.ai/signals/liquidation-pressure)
 - [agent-conviction-score](https://apexrunner.ai/signals/agent-conviction-score)
 

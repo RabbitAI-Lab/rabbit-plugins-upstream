@@ -1,42 +1,56 @@
-## Description: <br>
-Identifies price levels with dense liquidation clusters <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies price levels with dense liquidation clusters through a paid x402 endpoint costing $0.007 USDC per call on Base.
 
-## Publisher: <br>
-[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kynto2001-ctrl](https://clawhub.ai/user/kynto2001-ctrl)
 
-## Use Case: <br>
-External agents and users query this skill to identify high-risk price zones with dense liquidation clusters before setting stop losses or sizing positions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an EVM wallet private key to make x402 payments, which can expose funds if the key is mishandled. <br>
-Mitigation: Use a dedicated low-balance wallet and avoid storing or pasting the private key in chat. <br>
-Risk: Automated pay-per-call use can create unintended spend. <br>
-Mitigation: Configure X402_POLICY_PATH with per-call and daily caps plus a recipient allowlist, and keep X402_AUTOPREFLIGHT enabled. <br>
+## Use Case:
 
+External traders and agents use this signal to identify dense liquidation zones when assessing risk levels, stop losses, and position sizing.
 
-## Reference(s): <br>
-- [Liquidation Magnet signal endpoint](https://apexrunner.ai/signals/liquidation-magnet) <br>
-- [Liquidation Magnet ClawHub listing](https://clawhub.ai/kynto2001-ctrl/skills/liquidation-magnet) <br>
-- [kynto2001-ctrl publisher profile](https://clawhub.ai/user/kynto2001-ctrl) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, configuration] <br>
-**Output Format:** [Markdown with Python example code and JSON API response] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an EVM wallet private key for x402-authenticated paid API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Each request spends USDC from the configured wallet.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the current per-call price and wallet balance before requesting the signal.
+
+Risk: The request uses the EVM_PRIVATE_KEY environment variable to authorize payment.
+
+Mitigation: Store the private key in a secure secret store and do not expose it in logs or output.
+
+## Reference(s):
+
+- [Liquidation Magnet signal](https://apexrunner.ai/signals/liquidation-magnet)
+- [Liquidation Pressure signal](https://apexrunner.ai/signals/liquidation-pressure)
+- [Crowded Trade Detector signal](https://apexrunner.ai/signals/crowded-trade-detector)
+- [APEX Runner](https://apexrunner.ai)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Analysis]
+
+**Output Format:** [JSON response with liquidation levels, a risk label, and distance percentage]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Real-time signal data returned by the paid endpoint]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

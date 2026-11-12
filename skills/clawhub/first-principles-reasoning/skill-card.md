@@ -1,40 +1,50 @@
-## Description: <br>
-Guides an agent through a first-principles reasoning workflow that surfaces assumptions, identifies defensible fundamentals, rebuilds conclusions, and states implications. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use for first principles thinking, or when the user questions an inherited default: "why do we do it this way?", "is this cost really necessary?", "should we copy what competitors do?". Strips analogies and rebuilds from fundamentals.
 
-## Publisher: <br>
-[ysskrishna](https://clawhub.ai/user/ysskrishna) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ysskrishna](https://clawhub.ai/user/ysskrishna)
 
-## Use Case: <br>
-External users and developers use this skill to structure reasoning from first principles for strategic, design, cost, or product decisions, especially when inherited assumptions or incumbent practices need to be challenged. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate for broader reasoning or strategy prompts than intended. <br>
-Mitigation: Enable it when a first-principles reconstruction is desired, and narrow or disable it when the workflow should run only on explicit request. <br>
-Risk: Reasoning from incomplete fundamentals can make conclusions look more grounded than the available evidence supports. <br>
-Mitigation: Use the skill's clarifying-question step when constraints are unclear, mark uncertain premises as assumptions, and state when grounding is insufficient. <br>
+## Use Case:
 
+Developers and decision-makers use this skill to examine inherited choices and rebuild a decision from documented constraints, evidence, and explicit assumptions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ysskrishna/first-principles-reasoning) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Analysis] <br>
-**Output Format:** [Markdown with clearly headed reasoning sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs Surface, Question, Bedrock, Rebuild, and Implications sections; may ask up to three clarifying questions when immutable constraints are unclear.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2026.5.17 (source: server release metadata and skill frontmatter) <br>
+Risk: Security review coverage is partial because one local reference could not be resolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the unresolved reference and its contents before relying on the skill.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/ysskrishna/skills/first-principles-reasoning)
+- [Worked example](references/example.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A structured review of assumptions, bedrock evidence, a stepwise rebuild, and implications.]
+
+## Skill Version(s):
+
+2026.11.11 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
