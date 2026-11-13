@@ -1,14 +1,13 @@
 ---
 name: dlazy-veo-3.1
 version: 1.3.5
-description: Generate high-quality cinematic effects videos with Google Veo 3.1. 使用 Google Veo 3.1 模型，生成高质量的电影级特效视频，支持文生视频与图生视频。
-metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy veo-3.1 -h for help."}}
+description: "Generate high-quality cinematic effects videos with Google Veo 3.1. 使用 Google Veo 3.1 模型，生成高质量的电影级特效视频，支持文生视频与图生视频。"
+metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy veo-3.1 -h for help."}}
 ---
 
-# dlazy-veo-3.1
+# 视频生成 Veo 3.1
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 Generate high-quality cinematic effects videos with Google Veo 3.1.
@@ -49,7 +48,7 @@ Each key is scoped to your dLazy organization and can be **rotated or revoked at
 
 ## About & Provenance
 
-- **CLI source code**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI source code**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **Maintainer**: dlazyai
 - **npm package**: `@dlazy/cli` (pinned to `1.2.3` in this skill's install spec)
 - **Homepage**: [dlazy.com](https://dlazy.com)
@@ -93,6 +92,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 
@@ -105,7 +105,7 @@ Options:
   "ok": true,
   "result": {
     "tool": "veo-3.1",
-    "modelId": "veo-3.1",
+    "modelId": "veo-3-1",
     "outputs": [
       {
         "type": "image",

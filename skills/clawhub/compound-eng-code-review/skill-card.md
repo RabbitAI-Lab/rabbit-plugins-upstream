@@ -1,47 +1,62 @@
-## Description: <br>
-Structured code reviews with severity-ranked findings and deep multi-agent mode for reviewing code, auditing code quality, and critiquing PRs, MRs, or diffs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Performs structured code reviews with severity-ranked findings and an optional deep, multi-agent workflow.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to perform structured code reviews that check intended behavior first, then assess correctness, maintainability, security, reliability, performance, and test coverage. It supports standard reviews and deeper multi-agent review for large or sensitive diffs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Deep or external review modes may expose repository diffs and PR discussion to local tools, gh, and configured agent or model providers. <br>
-Mitigation: Use those modes only when the repository and PR discussion are appropriate for the configured tools and providers. <br>
-Risk: Auto-applied safe fixes can still affect the working tree. <br>
-Mitigation: Review any auto-applied changes before committing. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to review code changes, audit code quality and security, and assess pull requests or inline diffs. It returns severity-ranked findings and a readiness verdict while preserving caller-defined scope and report format.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-code-review) <br>
-- [Skill instructions](artifact/SKILL.md) <br>
-- [Skill specification](artifact/SPEC.md) <br>
-- [Action Routing](artifact/references/action-routing.md) <br>
-- [Deep Review Process](artifact/references/deep-review.md) <br>
-- [Scope & comparison-range resolution](artifact/references/scope-resolution.md) <br>
-- [Security Detection Patterns](artifact/references/security-patterns.md) <br>
-- [Severity Levels and Confidence Rubric](artifact/references/severity-and-confidence.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown review reports with severity-ranked findings, residual risks, verdicts, and inline shell commands when verification is needed] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask scope or review-mode questions; may propose or apply safe local fixes according to the skill's action-routing rules.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.1 (source: ClawHub release evidence) <br>
+Risk: ClawScan reports medium confidence and incomplete inspection: 21 of 22 components were fully inspected, one was partially inspected, and a purpose mismatch was flagged.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the reported code change behavior and the partially inspected referenced file to confirm they fit the intended review use before deployment.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/iliaal/skills/compound-eng-code-review)
+- [Review skill instructions](SKILL.md)
+- [Skill specification](SPEC.md)
+- [Reviewer trust boundary](references/reviewer-trust-boundary.md)
+- [Scope and mode selection](references/scope-and-mode-selection.md)
+- [Scope resolution and coverage](references/scope-resolution.md)
+- [Deep review workflow](references/deep-review.md)
+- [Standard review process](references/standard-review-process.md)
+- [Severity and confidence guidance](references/severity-and-confidence.md)
+- [Security review patterns](references/security-patterns.md)
+- [Security test coverage](references/security-test-coverage.md)
+- [Action routing](references/action-routing.md)
+- [Review report and integrations](references/report-and-integration.md)
+- [External review subprocess guidance](references/external-review-subprocess.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown code review report with severity-ranked findings, coverage status, and a readiness verdict]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the caller's scope and report format; identifies review limitations and residual risks.]
+
+## Skill Version(s):
+
+5.1.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,13 @@
+interface:
+  display_name: "元认知 × 科学创造力｜科研智能体进化计划"
+  short_description: "边做科研边保存可复用成果，用元认知复盘和后续验证改进智能体的工作方法"
+  default_prompt: 用 $agent-evolution 完成这个研究任务，在工作中保存可复用成果，结束时简短盘点。
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

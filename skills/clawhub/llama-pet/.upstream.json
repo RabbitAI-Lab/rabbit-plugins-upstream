@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/llama-pet",
   "slug": "llama-pet",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778492335556,
-  "contentHash": "2a031cacabd214160d8d51726d8f4ac7a426a420adff8252a043754d887df6d9",
-  "fetchedAt": "2026-07-26T19:40:00.058Z"
+  "version": "1.0.1",
+  "updatedAt": 1794296932932,
+  "contentHash": "914df392eff0aef88458d78153fa039978f01779fa03a0f86795c9474cde3b43",
+  "fetchedAt": "2026-11-13T15:41:40.319Z"
 }

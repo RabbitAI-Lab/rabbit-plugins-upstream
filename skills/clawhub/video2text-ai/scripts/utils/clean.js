@@ -1,35 +1,37 @@
 const constants = require("../config/constants");
-const helper = require("../utils/helper");
 const utils = require("../utils/utils");
 const fs = require("fs");
 const path = require("path");
+const { downloadPath } = utils;
 
 /**
  * 清理技能运行中临时下载的过期文件，以节省磁盘空间
  */
 function deleteExpire() {
   const now = Date.now();
-  const filepath = helper.downloadPath();
+  const filepath = downloadPath();
 
   fs.readdir(filepath, (err, files) => {
     if (err) {
       return;
     }
     files.forEach((file) => {
+      if (file === ".last_task_id") return;
       fs.stat(path.join(filepath, file), (err, stats) => {
         if (err) {
           return;
         }
         const fileTime = stats.mtime || stats.birthtime;
-        if (fileTime) {
-          const fileDate = new Date(Date.parse(fileTime));
-          if (fileDate.getTime() < now - constants.EXPIRE_TIME * 1000) {
+        if (fileTime && typeof fileTime.getTime === "function") {
+          if (fileTime.getTime() < now - constants.EXPIRE_TIME * 1000) {
             utils.printInfo(
               "清理技能运行中临时下载的过期文件: " + file + " ，以节省磁盘空间",
             );
             fs.unlink(path.join(filepath, file), (err) => {
               if (err) {
-                utils.printError("删除过期文件失败: " + (err.message || String(err)));
+                utils.printError(
+                  "删除过期文件失败: " + (err.message || String(err)),
+                );
               }
             });
           }

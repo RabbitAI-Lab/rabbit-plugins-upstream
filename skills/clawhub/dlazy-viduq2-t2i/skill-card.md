@@ -1,45 +1,56 @@
-## Description: <br>
-Generate high-quality images with Vidu Q2, including text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate high-quality images with Vidu Q2 from text prompts or reference images.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to invoke dLazy's hosted Vidu Q2 image generation service for prompt-based image creation and image-conditioned edits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected local image inputs may be uploaded to dLazy's hosted service. <br>
-Mitigation: Avoid submitting sensitive prompts or files unless the deployment's data-handling requirements allow use of dLazy's hosted API. <br>
-Risk: The dLazy CLI can store an API key in the local user configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-invocation credentials when persistent local storage is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: Broad image-generation requests could trigger the skill unintentionally. <br>
-Mitigation: Invoke it explicitly with Vidu Q2 or dLazy terms, matching the security guidance's overbroad-trigger caution. <br>
+## Use Case:
 
+People using an AI agent can create images from text prompts or edit images using up to ten reference images, with Vidu Q2 options for aspect ratio and resolution.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-t2i) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated image outputs are returned as hosted URLs; asynchronous requests may return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and skill frontmatter) <br>
+Risk: The security scan was partial: six local references were unresolved, including CLI-related references, and the external CLI’s internal behavior was not shown. The reported login command has no demonstrated connection to image generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the install and login details and the CLI source before installing, and confirm the login behavior is expected for this image-generation task.
+
+Risk: Prompts and any local reference images are sent to dLazy’s hosted API and media storage for processing.
+
+Mitigation: Do not submit sensitive prompts or images unless they are approved for processing by the dLazy service.
+
+## Reference(s):
+
+- [dLazy CLI source linked by the skill](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key)
+
+## Skill Output:
+
+**Output Type(s):** [Images, API Calls, Shell commands]
+
+**Output Format:** [Generated image assets (PNG) returned through hosted URLs, with a JSON response envelope]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Asynchronous requests can return a task identifier before image outputs are ready.]
+
+## Skill Version(s):
+
+1.3.40 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

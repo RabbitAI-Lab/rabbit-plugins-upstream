@@ -1,44 +1,59 @@
-## Description: <br>
-Analyzes authorized child bedroom night audio/video for crying, fear-of-dark behavior, nightmare wakeups, and out-of-bed events, then returns structured soothing actions and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes supplied child-bedroom audio and video for signs of bedtime distress and returns structured findings, suggested responses, or report links.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users or developers use this skill to analyze authorized child bedroom or nursery night recordings and review detected unrest events, suggested soothing actions, and report history. It is intended for behavior detection and caregiver support, not medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Highly sensitive child bedroom audio/video may be uploaded to or referenced by remote services. <br>
-Mitigation: Use only with trusted publisher and backend services, confirmed caregiver authorization, and an understood retention and report-access model. <br>
-Risk: The skill may create or reuse local and remote identities and link cloud report history automatically. <br>
-Mitigation: Review identity and token storage before deployment, run in a controlled environment, and clear local identity state between users or households. <br>
-Risk: Behavior detection and soothing recommendations could be mistaken for medical or psychological diagnosis. <br>
-Mitigation: Treat outputs as caregiver support only; repeated or severe sleep events should be referred to appropriate pediatric sleep or child psychology professionals. <br>
+## Use Case:
 
+Parents and caregivers can use the skill to review child-bedroom recordings for crying, fear-related behavior, or nightmare awakenings and receive a structured report. Use requires careful handling of sensitive recordings and independent caregiver judgment.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-child-bedtime-soothing-analysis) <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown text with structured analysis results, soothing recommendations, and report links; JSON output is available for detailed results.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save results to a file with --output; history queries are retrieved from the remote report service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Private bedroom recordings may be uploaded for remote processing even when an export-only option is selected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the workflow and obtain clear approval for remote processing before supplying recordings; do not treat export-only as a privacy boundary.
+
+Risk: The bundled code does not establish automatic soothing or urgent caregiver alerts, and provider retention and device-action delivery are unverified.
+
+Mitigation: Treat reports as advisory and do not rely on automatic soothing or urgent alerts; verify retention and delivery before any care workflow depends on them.
+
+Risk: Local authentication tokens persist in the workspace database, and credential and identity fields require separation.
+
+Mitigation: Review token storage and separate credentials from identity fields before installation or use.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-child-bedtime-soothing-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured analysis report in JSON or Markdown, with findings, suggestions, and report links where returned by the service.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Output details depend on the service response.]
+
+## Skill Version(s):
+
+1.0.16 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,10 @@
+{
+  "name": "code-stats",
+  "version": "1.0.0",
+  "description": "Analyze workspace code complexity — file counts, line counts, language breakdown, TODO density",
+  "main": "index.js",
+  "scripts": {
+    "stats": "node scripts/stats.js",
+    "test": "node ../../test/code-stats.test.js"
+  }
+}

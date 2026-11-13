@@ -1,45 +1,55 @@
-## Description: <br>
-4MP high-resolution raster image generation for print-ready assets and large-scale use. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates 4MP high-resolution raster images suitable for print-ready assets and large-scale use.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative users invoke this skill to generate high-resolution raster images through the dLazy hosted Recraft V4 Pro service. It is suitable for creating print-ready visual assets and large-format imagery from prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a third-party CLI and hosted image-generation service. <br>
-Mitigation: Verify that the dLazy CLI package and service are trusted before installing or invoking the skill. <br>
-Risk: API keys may be stored in a local CLI configuration file when using persistent login. <br>
-Mitigation: Use DLAZY_API_KEY for per-invocation authentication on shared or untrusted machines, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: Local media paths supplied to the CLI may be uploaded to dLazy-hosted storage. <br>
-Mitigation: Only pass files that are appropriate to upload to the third-party service. <br>
+## Use Case:
 
+External users and developers can generate high-resolution raster images from text prompts, choose an aspect ratio, and save the resulting image locally.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-pro) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Images, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON responses containing generated image URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated image outputs are returned as dLazy-hosted URLs; asynchronous requests may return a task identifier for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: The security assessment is benign but incomplete and flags the authentication steps, pinned CLI installation details, and a whitespace finding for review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the authentication flow, pinned @dlazy/cli version, and flagged whitespace before use.
+
+Risk: Prompts and local media supplied to the skill are sent to dLazy's hosted service, and input files are uploaded for processing.
+
+Mitigation: Send only prompts and files that are appropriate to share with the hosted service.
+
+## Reference(s):
+
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy](https://dlazy.com)
+- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key)
+
+## Skill Output:
+
+**Output Type(s):** [Images, JSON]
+
+**Output Format:** [PNG image assets with JSON result metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Up to 4MP; aspect ratio is selectable.]
+
+## Skill Version(s):
+
+1.3.40 (source: server-resolved release metadata; artifact frontmatter: 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

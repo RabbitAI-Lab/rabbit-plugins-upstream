@@ -1,46 +1,62 @@
-## Description: <br>
-Helps developers open-source local agent skills to GitHub and optionally ClawHub by guiding copy creation, stripping checks, metadata normalization, licensing, git setup, push, and publishing steps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Quickly open-source a local skill to GitHub as the primary target and optionally clawhub.com, with slug checks, copy-based release preparation, internal-information scanning, license and README generation, git setup, GitHub push support, and optional hub publishing.
 
-## Publisher: <br>
-[songhonglei](https://clawhub.ai/user/songhonglei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[songhonglei](https://clawhub.ai/user/songhonglei)
 
-## Use Case: <br>
-Developers and engineers use this skill to prepare a local agent skill for public release, including creating a separate open-source copy, checking for internal or sensitive content, generating public-facing files, initializing git, and publishing to GitHub or supported skill hubs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Credential handling is part of the publishing workflow and may be broader than expected. <br>
-Mitigation: Use short-lived or least-privilege tokens, prefer gh auth token or a keychain over plaintext OSG_GITHUB_TOKEN, and revoke temporary tokens after use. <br>
-Risk: Automatic cleanup and exclusion behavior may remove or omit files before publishing. <br>
-Mitigation: Review the generated fork, inspect any .osg-exclude file, and check the commit before pushing or publishing. <br>
-Risk: Suggested memory notes could accidentally capture sensitive internal details. <br>
-Mitigation: Avoid writing secrets, internal hosts, private paths, or sensitive organizational context into memory notes. <br>
+## Use Case:
 
+Developers and engineers use this skill to prepare a local agent skill for public release by creating an open-source copy, scanning for internal or sensitive content, normalizing release files, and publishing to GitHub or optional skill hubs after review checkpoints.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/songhonglei/skills/opensource-skill-to-github) <br>
-- [Open-Sourcing a Skill - Full Playbook](references/opensource_playbook.md) <br>
-- [11-rule stripping checklist](references/strip_checklist.md) <br>
-- [UGLIC quick reference](references/uglic_quickref.md) <br>
-- [README template](references/readme_template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Code] <br>
-**Output Format:** [Markdown with inline bash code blocks and script-driven file changes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes decision checkpoints for license choice, slug conflicts, sensitive-content findings, and token handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: server release metadata and SKILL.md, released 2026-07-22 in CHANGELOG.md) <br>
+Risk: The workflow can commit or upload sensitive files before a strict safety review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run strip_scan.sh --strict, inspect the generated fork and file list, and remove sensitive findings from both the working tree and git history before any push or publish step.
+
+Risk: Plaintext publishing tokens can be exposed if stored in profile configuration or release artifacts.
+
+Mitigation: Prefer one-time environment variables or command-backed token sources, avoid plaintext token storage, and revoke temporary personal access tokens after use.
+
+Risk: Publishing a single-skill fork directly to a mono-repo can overwrite unrelated repository contents.
+
+Mitigation: Use the documented mono-repo subdirectory workflow unless the user explicitly confirms that overwriting the target repository is intended.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/songhonglei/skills/opensource-skill-to-github)
+- [Repository path](https://github.com/Songhonglei/build-better-skills/tree/main/skills/opensource-skill-to-github)
+- [build-better-skills suite README](https://github.com/Songhonglei/build-better-skills#stages)
+- [Open-source playbook](references/opensource_playbook.md)
+- [Strip checklist](references/strip_checklist.md)
+- [UGLIC quick reference](references/uglic_quickref.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration, markdown]
+
+**Output Format:** [Markdown guidance with inline shell commands and generated release files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or modify a forked skill directory, release documentation, license files, git commits, and publishing commands after user review.]
+
+## Skill Version(s):
+
+1.0.18 (source: frontmatter and server release, released 2026-09-05)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,54 @@
-## Description: <br>
-Turns a document, topic, or brief into a narrated explainer video by outlining, storyboarding, producing voiceover, building, and validating the result through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns documents, topics, or briefs into narrated explainer videos through outlining, storyboarding, voiceover, video creation, and validation.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, creators, educators, and business users can use this skill to turn source documents, reports, topics, or briefs into narrated explainer, courseware, or training videos using the dLazy hosted service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, options, and attached files may be sent to dLazy APIs or uploaded to dLazy storage. <br>
-Mitigation: Do not attach confidential documents, secrets, personal data, or regulated data unless the user is comfortable sending them to dLazy. <br>
-Risk: Installing a third-party global CLI creates persistent local software and configuration. <br>
-Mitigation: Confirm trust in the dLazy CLI and service before installing, and prefer the pinned npx invocation when a persistent global install is not needed. <br>
-Risk: The skill requires a dLazy API key saved in local configuration or passed through an environment variable. <br>
-Mitigation: Use normal secret-handling practices for the API key and rotate or revoke it from the dLazy dashboard when access should change. <br>
+## Use Case:
 
+Content creators, educators, and business teams can use the skill to turn documents, topics, or briefs into narrated explainers, courseware, training videos, or report summaries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-explainer-video) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and dLazy CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill may continue work across project-scoped dLazy chat sessions and may upload attached local files through the dLazy CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and ClawHub release evidence) <br>
+Risk: The scanner's benign verdict has medium confidence and the scan was partial, with some referenced paths missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI and service references and confirm the installation and data handling fit your needs before installing or using the skill.
+
+Risk: Files attached for a video project are uploaded to dLazy media storage before being referenced by the hosted service.
+
+Mitigation: Attach only files you are authorized to share with dLazy, and check organizational requirements before uploading sensitive material.
+
+## Reference(s):
+
+- [dLazy](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video, Text]
+
+**Output Format:** [Generated explainer video plus command-line text for setup, progress, and results; video encoding is service-defined.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Video generation runs through the dLazy hosted service.]
+
+## Skill Version(s):
+
+1.0.38 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,52 @@
-## Description: <br>
-Generates Excalidraw diagrams from text content in Obsidian Markdown or standard .excalidraw JSON formats. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds deterministic Excalidraw drawings from a boxes-and-arrows spec, with layout and bindings, and produces Obsidian .excalidraw.md notes or .excalidraw files.
 
-## Publisher: <br>
-[Ricardodpalmeida](https://clawhub.ai/user/Ricardodpalmeida) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ricardodpalmeida](https://clawhub.ai/user/ricardodpalmeida)
 
-## Use Case: <br>
-Developers, knowledge workers, and Obsidian users use this skill to turn architecture diagrams, flowcharts, concept maps, sequence flows, system designs, and other visual structures into Excalidraw-compatible files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or overwrite local diagram files, including files inside an Obsidian vault. <br>
-Mitigation: Confirm the full save path and filename before writing, and require explicit approval before overwriting an existing file. <br>
-Risk: Generated diagrams may encode an incomplete or inaccurate interpretation of the user's source material. <br>
-Mitigation: Review the diagram content and Excalidraw output before relying on it or adding it to shared documentation. <br>
+## Use Case:
 
+Developers and agent users can turn a requested boxes-and-arrows diagram into an editable Excalidraw drawing for Obsidian or excalidraw.com. The skill is intended for explicit Excalidraw requests.
 
-## Reference(s): <br>
-- [Excalidraw JSON Format Reference](references/excalidraw-format.md) <br>
-- [Obsidian Excalidraw Plugin](https://github.com/zsviczian/obsidian-excalidraw-plugin) <br>
-- [Excalidraw](https://excalidraw.com) <br>
-- [ClawHub Skill Page](https://clawhub.ai/Ricardodpalmeida/excalidraw-diagrams) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Files, Configuration] <br>
-**Output Format:** [Markdown wrapping Excalidraw JSON for Obsidian, or standard Excalidraw JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit user confirmation for output mode, save path, filename, and overwrites before writing files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server-resolved release evidence) <br>
+Risk: The security evidence reports a benign verdict with medium confidence and partial scan coverage; it notes file read and write capabilities, and that the host runtime's permissions were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the unresolved path-like reference and limit the skill's filesystem access to the intended diagram files.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/ricardodpalmeida/skills/excalidraw-diagrams)
+- [Project homepage](https://github.com/Ricardodpalmeida/openclaw-excalidraw-diagrams)
+- [Excalidraw format reference](references/excalidraw-format.md)
+- [Obsidian Excalidraw plugin](https://github.com/zsviczian/obsidian-excalidraw-plugin)
+
+## Skill Output:
+
+**Output Type(s):** [Files, JSON, Markdown]
+
+**Output Format:** [Excalidraw scene files (.excalidraw) or Obsidian Markdown notes with embedded Excalidraw scenes (.excalidraw.md)]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Editable diagrams with deterministic layout, labels and bound arrows.]
+
+## Skill Version(s):
+
+1.1.7 (source: server-resolved release and CHANGELOG.md, released 2026-11-07)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

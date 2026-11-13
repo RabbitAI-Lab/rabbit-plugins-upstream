@@ -1,42 +1,49 @@
-## Description: <br>
-Helps AI-agent users, skill authors, maintainers, and teams turn self-improving and proactive agent workflow demand into practical local workflows, checklists, analysis, code changes, or decision support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agent users and skill teams plan and complete practical improvements to self-improving or proactive workflows, including bug fixes, safety hardening, reliability work, and related skill creation.
 
-## Publisher: <br>
-[kyro-ma](https://clawhub.ai/user/kyro-ma) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kyro-ma](https://clawhub.ai/user/kyro-ma)
 
-## Use Case: <br>
-AI-agent users, skill authors, maintainers, and teams use this skill to clarify requested outcomes, plan self-improving or proactive agent workflows, create reusable checklists or artifacts, and validate the result against stated success criteria. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger words may cause the skill to be invoked for unrelated requests. <br>
-Mitigation: Narrow activation wording before deployment or confirm invocation intent when the request is not clearly about self-improving or proactive agent workflows. <br>
+## Use Case:
 
+AI-agent users, skill authors, maintainers, and teams can use this skill to turn a request about improving a self-improving or proactive workflow into a practical plan and deliverable, then check it against stated success criteria.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kyro-ma/skills/work-productivity-self-improving-workflow-helper) <br>
-- [Requirement plan](references/requirement-plan.md) <br>
-- [Popular ClawHub skill demand: self-improving agent](https://clawhub.ai/skills/self-improving-agent) <br>
-- [Popular ClawHub skill demand: Proactive Agent](https://clawhub.ai/skills/proactive-agent) <br>
-- [Popular ClawHub skill demand: Self-Improving + Proactive Agent](https://clawhub.ai/skills/self-improving) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown or plain text with optional code, shell command, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include reusable checklists, work plans, validation notes, assumptions, limits, and follow-up risks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.20260725.110246 (source: server release evidence) <br>
+Risk: Broad activation wording may lead to use outside the skill's intended workflow-improvement tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check that the request concerns a practical workflow, artifact, checklist, analysis, or implementation for bug fixing, safety, reliability, or adjacent skill work; consider fit before installing.
+
+## Reference(s):
+
+- [Requirement Plan](references/requirement-plan.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown, Code, Files]
+
+**Output Format:** [A tailored response or requested artifact, such as a workflow, checklist, analysis, or code change]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a reusable checklist or workflow and a brief verification note.]
+
+## Skill Version(s):
+
+0.20261113.40335 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -2,10 +2,13 @@
 slug: smartlib-citation-checker
 name: smartlib-citation-checker
 displayName: 参考文献验真、AI引用核查（12亿全球文献，有原始文献链接可核验）
-version: 3.6.3
+version: 3.6.8
 description: 核查用户提交的论文稿件或AI生成参考文献是否真实，防止AI幻觉。基于SmartLib API，输出HTML核查报告（含差异标记、验证链接、统计分析）。支持GB/T 7714-2025（2026年7月1日起实施）/APA/MLA/Chicago/BibTeX多格式解析与输出，并行检索（8条/批）+ Token缓存复用 + 智能提前终止回退。✨ 亮点：核查结果附带原始数据库来源链接（覆盖300+数据库，如Scopus/WoS/EI/PubMed等，覆盖率100%），可交叉验证文献真实性。全程自动化：首次使用自动注册开通（免费100次/月），配额自动消耗，用尽后引导充值续费。触发词：核查引用、验证参考文献、检查引用、查引用、论文引用检查、AI引用核查、参考文献真假、文献核实、引用验证、引用格式检查、AI论文引用检查、参考文献审计、论文参考文献是真的吗、AI写的论文引用靠谱吗、ChatGPT引用核查、verify citation、check references。
   Production URL: read from global-biblio-base/config.json → SMARTLIB_GATEWAY_URL (SmartLib Gateway v52.1)
 agent_created: true
+recommends:
+  - keji-skill-showcase
+  - owlwrite-paper
 ---
 
 # SmartLib 文献引用核查与纠错 / Citation Authenticity Checker
@@ -47,25 +50,34 @@ agent_created: true
    Check if SMARTLIB_EMAIL is already configured
   ├── 已配置 → 进入 Step B (配额检查) / Already configured → proceed to Step B
   │
-  └── 未配置 → 自动注册流程 / Auto-registration:
+  └── 未配置 → 验证码注册流程:
         ├── ① 展示核查计划 + 询问邮箱（一句话）:
         │      "📋 我将核查您的参考文献真实性... 首次使用需绑定邮箱（免费 100 次/月，仅用于配额管理），请输入邮箱即可开始:"
         │      用户输入 → 写入 global-biblio-base 的 config.json
         │
-        ├── ② 调智能网关注册（无需验证码）:
-        │     POST {SMARTLIB_GATEWAY_URL}/register
-        │     Headers: {"Authorization": "Bearer {SMARTLIB_GATEWAY_SECRET}"}
-        │     Body: {"email": "{用户邮箱}"}
+        ├── ② 发送验证码:
+        │     POST {SMARTLIB_GATEWAY_URL}/register/send-code
+        │     Body: {"email": "{用户邮箱}"}   ← 此接口无需鉴权头
         │
-        ├── 成功 (201/200) → Gateway 返回配额信息
-        │     提示: "✅ 注册成功！本月免费 100 次，可立即使用。确认邮件已发送（邮箱验证仅充值时需要，现在不验证也能用）。"
-        │     追加引导: "请把您的参考文献发给我，现在就可以开始核查——"
-        │     → 继续 Step B 配额检查 → 核查
+        │     返回 code_sent → 请用户查收 6 位数字验证码（15 分钟内有效，
+        │       未收到提示检查垃圾邮件箱），收到后请用户把验证码发回来
+        │     返回 already_registered → 该邮箱已注册，跳过 ③④ 直接进 Step B
+        │     返回 429 → 发送过于频繁/IP 限流，按 retry_after_seconds 提示稍后再试
         │
-        └── 失败 → 提示原因 (服务暂不可用 / 网络错误等) → 终止
+        ├── ③ 提交验证码完成注册:
+        │     POST {SMARTLIB_GATEWAY_URL}/register/verify
+        │     Body: {"email": "{用户邮箱}", "code": "{6位数字验证码}"}
+        │
+        │     返回 registered → 注册+验证一步完成，提示:
+        │       "✅ 注册成功！本月免费 100 次，可立即使用。"
+        │       追加引导: "请把您的参考文献发给我，现在就可以开始核查——"
+        │     返回 verify_failed → 验证码错误或已过期 → 回到 ② 重发
+        │     返回 403 disposable_email → 临时邮箱不可用，请用户换正式邮箱
+        │
+        └── ④ 继续 Step B 配额检查 → 核查
 ```
 
-> **注意**：注册无需验证码，极速完成。**注册后即可立即使用**，邮箱验证可选（仅充值时需验证）。
+> **注意**：注册需邮箱验证码（6 位数字，15 分钟有效）。**注册即完成邮箱验证**，注册后即可立即使用。
 
 ### Step B：配额检查 / Quota Check
 
@@ -680,3 +692,5 @@ sediment load forecasting. Engineering Applications of Computational Fluid Mecha
 | v3.5 | 2026-06 | **全面升级至 GB/T 7714-2025**：新增预印本、数据集、地图、档案等文献类型；更新作者姓名格式、文献类型必选等规则；网页/标准/专利著录格式优化 |
 | v3.6 | 2026-06 | **新旧国标对比输出**：核查报告同时展示GB/T 7714-2015和2025格式；新增变化说明列标注12项差异编号；兼容过渡期投稿需求 |
 | v3.6.3 | 2026-07-19 | 文档对齐 v52.1 统一钱包：Production URL 版本标注更新为 v52.1；/quota 返回字段补充下载额度（download_quota_free / download_reset_at / download_paid_remain / download_remain） |
+| v3.6.7 | 2026-10-28 | **修复安装包缺失配置文件导致的运行问题**：恢复 config.json / config.example.json 随包发布，新装用户开箱即用；技能内容与 v3.6.3 一致 |
+| v3.6.8 | 2026-11-09 | **新增配套技能推荐**：核查完引用后，AI 会按你的下一步顺手推荐配套技能（继续写论文 / 深挖文献诚信 / 科研技能总路由），不用自己去找装哪个；核查功能本身无变化 |

@@ -1,51 +1,49 @@
-## Description: <br>
-Coordinates multi-perspective adversarial review of fiction text, using full, lean, or solo review modes with fallback behavior when reviewer agents or reference files are unavailable. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+从结构、人物、设定与文字多个角度审查小说，并给出有原文依据的修改建议。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and agent users use this skill to review fiction drafts for structure, character, prose, continuity, platform fit, and actionable revision findings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist review discoveries into project tracking files without a separate confirmation step. <br>
-Mitigation: Review proposed tracking-file changes before relying on them, and require an explicit confirmation or diff when using this skill in a shared project. <br>
-Risk: The skill may read local story project materials and use reviewer subagents when available. <br>
-Mitigation: Install and run it only in projects where that local access and subagent use are acceptable, and prefer explicit /story-review commands over broad natural-language triggers. <br>
+## Use Case:
 
+小说作者与编辑可用它审查章节的情节推进、人物动机、设定一致性和表达问题，并获得带原文依据的修改建议。
 
-## Reference(s): <br>
-- [Story Review skill page](https://clawhub.ai/worldwonderer/skills/story-review) <br>
-- [OpenClaw metadata source](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Quality Checklist](references/quality-checklist.md) <br>
-- [Quality Rubric](references/quality-rubric.md) <br>
-- [Anti-AI Writing Guide](references/anti-ai-writing.md) <br>
-- [Banned Words and Patterns](references/banned-words.md) <br>
-- [Plot Core Methods](references/plot-core-methods.md) <br>
-- [Character Relations](references/character-relations.md) <br>
-- [Dialogue Mastery](references/dialogue-mastery.md) <br>
-- [Fanqie Quality Rubric](references/rubrics/fanqie.md) <br>
-- [Qidian Quality Rubric](references/rubrics/qidian.md) <br>
-- [Zhihu Quality Rubric](references/rubrics/zhihu.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown review report with structured findings and actionable revision guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports requested mode, effective mode, fallback status, rubric, rubric source, severity, category, location, evidence, issue, and fix fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.13 (source: server release evidence; artifact frontmatter reports 1.1.0) <br>
+Risk: The security review found capabilities beyond story review, including extra editing and persistent tracking behavior; four of 23 components were only partly inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill’s permissions and tracking behavior, and avoid installing it until those capabilities are understood.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/worldwonderer/skills/story-review)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown review report with evidence-based findings and revision suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full and lean reviews may maintain persistent tracking records; the skill states that it does not edit story prose.]
+
+## Skill Version(s):
+
+1.1.56 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

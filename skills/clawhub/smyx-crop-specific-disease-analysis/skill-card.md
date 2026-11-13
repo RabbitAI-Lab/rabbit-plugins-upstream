@@ -1,42 +1,55 @@
-## Description: <br>
-Expands the disease identification library to cover economic-crop-specific diseases such as corn northern and southern leaf blight, potato late blight, peanut leaf spot, and tomato viral disease for precise leaf-disease recognition. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies visual disease symptoms in leaves of economic crops such as corn, potato, peanut, and tomato, and returns a structured report.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and agricultural developers use this skill to analyze crop leaf images, videos, or URLs for economic-crop-specific disease identification and structured report retrieval. It focuses on visual recognition and report output, not treatment or prevention recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Leaf images, videos, URLs, and report requests are sent to a remote Life Emergence service. <br>
-Mitigation: Review the service and data handling expectations before installation, and avoid submitting sensitive or unrelated media. <br>
-Risk: The skill can silently create or reuse a local identity and persist session tokens in a workspace SQLite database. <br>
-Mitigation: Install only in trusted workspaces, review local persistence before use, and remove stored identity or token data when the skill is no longer needed. <br>
+## Use Case:
 
+Growers can submit crop-leaf images or videos to receive a structured visual disease-identification report with symptoms and confidence information for initial screening.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-crop-specific-disease-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis reports with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include disease type, confidence, symptom description, report links, and Markdown tables for historical reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter says 1.0.3) <br>
+Risk: ClawScan rates the skill suspicious because reported identity, account, and remote-service behavior does not clearly fit its crop-disease purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the reported behavior and access before installing, as advised by the security evidence.
+
+Risk: The scan was partial because a local reference was unresolved, so the evidence does not establish that the skill is safe.
+
+Mitigation: Resolve and review the missing reference and consider the suspicious verdict before use.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/18072937735/skills/smyx-crop-specific-disease-analysis)
+- [API interface notes](artifact/references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured disease-identification report in JSON; historical report lists can be presented as Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Visual screening information, including disease type, symptoms, confidence, and report links; does not provide treatment or prevention advice.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

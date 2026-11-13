@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/btc-price-tick",
   "slug": "btc-price-tick",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1782301735271,
-  "contentHash": "21dc5c481195b6bc511eb4c8ce4467847b8b3a622fbec62eca307547f90bcaf6",
-  "fetchedAt": "2026-07-26T18:24:05.635Z"
+  "version": "1.0.2",
+  "updatedAt": 1794527868043,
+  "contentHash": "d5bd6e41193ad41b381da8d1394bdb1065a0ee6628e12e12c383ab36e28fc206",
+  "fetchedAt": "2026-11-13T15:34:57.553Z"
 }

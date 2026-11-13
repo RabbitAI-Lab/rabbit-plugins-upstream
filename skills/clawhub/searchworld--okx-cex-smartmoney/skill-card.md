@@ -1,47 +1,62 @@
-## Description: <br>
-Provides OKX Smart Money leaderboard, trader analytics, position tracking, trade records, closed-position history, aggregated consensus signals, and signal history through the OKX CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Smart Money analytics on OKX: leaderboard traders, position tracking, trade records, closed-position history, aggregated consensus signals, and signal history.
 
-## Publisher: <br>
-[searchworld](https://clawhub.ai/user/searchworld) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[searchworld](https://clawhub.ai/user/searchworld)
 
-## Use Case: <br>
-External users, developers, and trading analysts use this skill to query OKX Smart Money leaderboard, trader, position, trade-history, and signal analytics through the OKX CLI. The skill guides authenticated read-only queries and presents results as concise Markdown tables. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on the user's local OKX authentication profile for Smart Money queries. <br>
-Mitigation: Confirm the OKX CLI package is trusted, use an OKX profile with the least permissions needed, and guide users through the documented config or OAuth flow instead of asking them to paste secrets into chat. <br>
-Risk: The skill is read-only by instruction but may inspect local OKX auth and profile status to decide how to run queries. <br>
-Mitigation: Review the proposed commands before execution and keep authentication setup in the OKX CLI configuration flow. <br>
-Risk: Signal aggregation excludes coin-margined contracts, which can understate a trader's exposure for an asset. <br>
-Mitigation: Cross-check with trader position queries when full exposure matters, especially for BTC or ETH positions. <br>
+## Use Case:
 
+External users and agents use this skill to query OKX Smart Money leaderboard traders, trader positions, trade history, closed-position performance, and aggregated long/short signal trends through the OKX CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/searchworld/skills/okx-cex-smartmoney) <br>
-- [OKX homepage](https://www.okx.com) <br>
-- [Trader Commands Reference](references/trader-commands.md) <br>
-- [Signal Commands Reference](references/signal-commands.md) <br>
-- [Smart Money Workflows](references/workflows.md) <br>
-- [Templates & Formatting Reference](references/templates.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown tables with inline shell commands and summarized analytics.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses JSON CLI output and requires a locally configured OKX authentication profile for authenticated read-only queries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: release evidence and skill frontmatter metadata) <br>
+Risk: The skill uses the OKX CLI and local OKX authentication or profile state to access live Smart Money analytics.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when comfortable granting the OKX CLI access to local OKX authentication state, keep trading and transfer permissions separate from analytics use where possible, and never paste OKX API keys or secrets into chat.
+
+Risk: The npm package that provides the OKX CLI is an external dependency.
+
+Mitigation: Verify the package provenance for @okx_ai/okx-trade-cli before installation and keep the CLI updated through trusted package-management workflows.
+
+Risk: Smart Money signal aggregation covers linear USDT- and USDS-margined instruments and can omit coin-margined exposure.
+
+Mitigation: Cross-check a trader's full position book with trader-position commands when coin-margined exposure could materially affect interpretation.
+
+## Reference(s):
+
+- [OKX homepage](https://www.okx.com)
+- [ClawHub skill page](https://clawhub.ai/searchworld/skills/okx-cex-smartmoney)
+- [Signal Commands Reference](references/signal-commands.md)
+- [Trader Commands Reference](references/trader-commands.md)
+- [Smart Money Workflows](references/workflows.md)
+- [Templates & Formatting Reference](references/templates.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses JSON-formatted OKX CLI results and presents read-only analytics as concise Markdown.]
+
+## Skill Version(s):
+
+1.4.8 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

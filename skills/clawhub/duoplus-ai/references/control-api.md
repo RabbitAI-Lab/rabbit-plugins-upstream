@@ -38,10 +38,11 @@ The official limit is 1 QPS per endpoint. A successful envelope has `code: 200`;
 | Power on | `/api/v1/cloudPhone/powerOn` | `{"image_ids":[...]}` | Asynchronous; maximum 100. Temporary compute starts billing immediately. |
 | Power off | `/api/v1/cloudPhone/powerOff` | `{"image_ids":[...]}` | Maximum 20. Stops temporary-compute billing. |
 | Restart | `/api/v1/cloudPhone/restart` | `{"image_ids":[...]}` | Asynchronous; maximum 20. |
+| Execute shell command | `/api/v1/cloudPhone/command` | `{"image_id":"...","command":"..."}` | Fallback only; prefer Gateway `SHELL_COMMAND`. Do not add an `adb shell` prefix. Commands should finish within 10 seconds. |
 | Init proxy | `/api/v1/cloudPhone/initProxy` | `{"images":[...]}` | Configure a phone before its first power-on. |
 | Proxy list | `/api/v1/proxy/list` | pagination and optional status | Maximum 100 per page. |
 
-Official sources: [list](https://help.duoplus.cn/docs/cloud-phone-list), [status](https://help.duoplus.cn/docs/cloud-phone-status), [detail](https://help.duoplus.cn/docs/huo-qu-yun-ji-xiang-qing), [power on](https://help.duoplus.cn/docs/batch-power-on), [power off](https://help.duoplus.cn/docs/pi-liang-guan-ji), [restart](https://help.duoplus.cn/docs/pi-liang-chong-qi), [proxy list](https://help.duoplus.cn/docs/proxy-list).
+Official sources: [list](https://help.duoplus.cn/docs/cloud-phone-list), [status](https://help.duoplus.cn/docs/cloud-phone-status), [detail](https://help.duoplus.cn/docs/huo-qu-yun-ji-xiang-qing), [power on](https://help.duoplus.cn/docs/batch-power-on), [power off](https://help.duoplus.cn/docs/pi-liang-guan-ji), [restart](https://help.duoplus.cn/docs/pi-liang-chong-qi), [execute command](https://help.duoplus.cn/docs/execute-the-adb-command), [proxy list](https://help.duoplus.cn/docs/proxy-list).
 
 New AI-routing fields in each list item:
 
@@ -101,6 +102,19 @@ Gateway operations:
 - `submit`: synchronous UI-state or action execution, up to roughly 300 seconds
 - `query`: retrieve a retained command result
 - `stop`: stop a task
+
+## Shell execution route priority
+
+Use Gateway `SHELL_COMMAND` first. The official `/api/v1/cloudPhone/command` endpoint is a fallback, not a parallel or preferred route. Invoke it through:
+
+```bash
+python3 scripts/duoplus_ai.py --api-key 'API_KEY' platform-shell IMAGE_ID \
+  --command 'getprop ro.build.version.release'
+```
+
+The platform endpoint returns single-phone output in `data.content` and succeeds only when the envelope has `code=200` and `data.success=true`. It accepts a command without the `adb shell` prefix and only guarantees commands that complete within 10 seconds.
+
+Fallback is safe before Gateway submission when routing is unavailable or the executor remains unavailable after the normal readiness timeout. After submission, a timeout or connection loss is ambiguous: query the Gateway `command_id` first. Never replay a state-changing or non-idempotent command through the platform unless Gateway non-execution is known or the user explicitly accepts the duplicate-execution risk. A completed Gateway failure may still have partial side effects, so automatic replay is limited to read-only or idempotent commands.
 
 ## Lifecycle orchestration
 

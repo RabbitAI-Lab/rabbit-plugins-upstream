@@ -1,42 +1,54 @@
-## Description: <br>
-Always-on ambient signal capture. Detects original thinking and entity mentions in every inbound message and captures them without blocking the conversation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Capture authorized original thinking and notable entity facts from an explicitly scoped conversation into a designated knowledge destination.
 
-## Publisher: <br>
-[jjjhenriksen](https://clawhub.ai/user/jjjhenriksen) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jjjhenriksen](https://clawhub.ai/user/jjjhenriksen)
 
-## Use Case: <br>
-Developers and knowledge-management users can use this skill to detect original ideas and notable entity mentions in user messages, then log concise capture entries for later review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Ambient note capture may persist sensitive user messages automatically. <br>
-Mitigation: Install only when ambient capture is intended; define allowed write locations, exclude sensitive topics and secrets, and require review before writes. <br>
-Risk: Broad capture behavior may record more conversation content than expected. <br>
-Mitigation: Configure clear skip rules, keep notability filters active, and maintain a way to disable the skill and delete captured entries. <br>
+## Use Case:
 
+External users can capture original ideas and notable entity facts from authorized conversations into an approved knowledge destination, with scope and audience controls.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jjjhenriksen/skills/signal-detector) <br>
-- [Publisher profile](https://clawhub.ai/user/jjjhenriksen) <br>
-- [Skill artifact](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [One-line capture log entries with note, entity page, or queue targets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Captures user phrasing and provenance when substantive messages contain original ideas or notable entity mentions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Persistent capture could expose private or sensitive details if the approved scope, destination, audience, or retention is unclear.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit authorization for each of those boundaries before writing; skip capture when any is ambiguous and exclude secrets and sensitive details.
+
+Risk: Guidance to act “without checking” may not fit a user's preferences.
+
+Mitigation: Assess whether that guidance fits the user's preferences before relying on it; the security review rates the release benign but notes that benign does not mean risk-free.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/jjjhenriksen/skills/signal-detector)
+- [Scoped capture examples](artifact/references/capture-examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Knowledge-base notes]
+
+**Output Format:** [Short notes using exact permitted excerpts with source context and date; optional one-line capture receipt]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Capture only within explicit scope; omit secrets and sensitive details.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

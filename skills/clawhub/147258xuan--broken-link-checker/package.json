@@ -1,0 +1,11 @@
+{
+  "name": "broken-link-checker",
+  "version": "1.0.0",
+  "description": "Check for broken links in documentation and markdown files",
+  "main": "index.js",
+  "scripts": {
+    "check": "node index.js"
+  },
+  "keywords": ["links", "broken", "documentation", "check", "automation"],
+  "license": "MIT"
+}

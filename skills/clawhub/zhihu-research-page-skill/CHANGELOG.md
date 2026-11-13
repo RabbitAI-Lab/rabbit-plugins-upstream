@@ -2,6 +2,80 @@
 
 ---
 
+## v22.0.2 — 2026-11-09（重新发布，修正包内版本字段）
+
+### 为什么发
+v22.0.1 发布时，`SKILL.md` 的注释头与「当前版本」行已改为 22.0.1，但 frontmatter 的 `version:` 字段漏改，仍是 `22.0.0`。ClawHub 上 `22.0.1` 这个版本号的包内因此写着 22.0.0，而平台不允许同版本覆盖，只能升版本重发。
+
+### 改动
+- `SKILL.md`：`version:` → `22.0.2`，注释头、当前版本行、更新日志同步
+- `.claude-plugin/marketplace.json`：`version` → `22.0.2`
+- 内容与 v22.0.1 完全一致（表述统一为「回答」）
+
+---
+
+## v22.0.1 — 2026-11-09（表述统一：章节 → 回答）
+
+### 为什么改
+页面形态是「一个问题 + 10 个不同答主写的回答」，不是「10 个章节」。README 已先行更正为「默认生成含 10 个回答」，其余文档未跟上，造成同一份说明里两种叫法。
+
+### 统一范围（面向用户的介绍性表述）
+- `SKILL.md`：frontmatter `examples[].output`（2 处）、概述要点（2 处）、阶段 0 参数表（回答建议 / 回答撰写语言）、N% 裁剪表（每个回答字数 / 回答数 / 字数/回答）、资源文件说明
+- `README.md`：核心特性表（10 个回答多答主 / 每个回答独立答主）、剪裁比例表列名、TROUBLESHOOTING 条目数（12 → 15 类）、补齐文件结构（`inline_images.py`、`examples/`、`tests/`、`.claude-plugin/`、`CHANGELOG.md`）
+- `examples/basic.md`、`examples/advanced.md`、`tests/test.md`：示例与自检条目描述
+
+### 未改动（有意保留）
+- `CHANGELOG.md` 历史记录——日志是事实记录，不倒改
+- 内部实现术语 `CHAPTERS` / `_draft_ch_*.html` / 锚点 `ch-01` / 组装步骤——代码与文件名仍以章节为单位，改了会与实现脱节
+
+### 一处产品输出变更
+- 生成页侧栏标题 `<h3>📑 本页章节</h3>` → `<h3>📑 本页回答</h3>`（`SKILL.md` 骨架模板与 `scripts/assemble.py` 同步修改）
+
+---
+
+## v22 — 2026-10-29（单文件 HTML 交付 + 可选上传资料库 + 三平台发布）
+
+### 新增文件
+- **`scripts/inline_images.py`** — 单文件 HTML 打包脚本
+  - 内嵌三类引用：`<img src>`、`<style>`/`style=` 内 `url()`、`<source srcset>`
+  - MIME 映射 png/jpeg/svg+xml/gif/webp/ico/bmp/avif
+  - 缺失图片保留原路径 + 打印清单，不中断
+  - **三重校验**通过才删除 `index.html`：`zh-header` + `</main>`、`<article id="ch-` 计数一致、`data:image/` 计数达标
+  - 失败时两个文件都保留，退出码 1
+
+### SKILL.md 改动
+- 阶段 7 重组：`7.1 结构校验 → 7.2 链接抽检 → 7.3 打包单文件 → 7.4 交付 → 7.5 可选上传资料库 → 7.6 工作记忆`
+- **7.3 打包单文件 HTML**：命名规则 `{工作区文件夹名}_{ASCII 主题名}.html`（中文主题**意译成英文**、去标点、词首大写、≤32 字符）
+- **7.5 可选上传资料库**：交付后主动询问一次 → 用户同意才调 `LibraryUpload`（绝对路径）；>100 MiB 直接跳过
+- 工作区目录约定：最终产物改为单文件 HTML，`index.html` 降级为中间产物（打包后删除，**不留副本**）
+- 阶段 0 输出路径参数同步
+- 工作流总览 `[7]` 改为「打包单文件 + 交付 + 可选上传资料库」
+- 质量规则新增 3 条（单文件交付 / 删除前校验 / 资料库上传）
+- 报错与降级新增 2 条（缺图 / 体积超限）
+- 资源文件新增 `scripts/inline_images.py`
+
+### frontmatter 补充（供 SkillHub 发布）
+- 新增 `slug: zhihu-research-page`、`displayName`、`summary`、`license: MIT`
+- `version` → `22.0.0`
+
+### TROUBLESHOOTING.md
+- 12 类 → 15 类：新增「单文件打包缺图」「单文件超 100 MiB」「删除 index.html 后需重生成」
+
+### 已发布平台
+- GitHub：`timeRATE-966/zhihu-research-page-skill`
+- ClawHub：`@timerate-966/zhihu-research-page-skill`
+- SkillHub：`@user_f9803b42/zhihu-research-page`
+
+---
+
+## v21 — 2026-07-21（教程/学习模式 + 自动同步 + 版本头）
+
+- 主题含教程/教学/学习路径/怎么做/入门时启用教程模式：提炼答主背景、必要时提问、搜索偏入门实战、写作按「跟着做就能上手」结构
+- 阶段 0 新增「自动同步检查」：对比 `<!-- VERSION -->` 与工作区 `.skill_version`，落后则归档旧脚本到 `./other/_OLD/{时间戳}/` 再复制新版
+- SKILL.md 顶部新增版本头 + 逐版本压缩更新日志（带秒级时间戳）
+
+---
+
 ## v20 — 2026-07-19（v2_1pct 实战日志 4 项修复）
 
 ### 修复 1（阻断性）：assemble.py f-string 转义引号 → SyntaxError

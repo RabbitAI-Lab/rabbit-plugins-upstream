@@ -1,45 +1,54 @@
-## Description: <br>
-AI-powered pest and disease detection for rose images or videos that identifies common issues such as black spot, powdery mildew, spider mites, and aphids, estimates severity, and returns general care suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes rose photos or videos for common pests and diseases, estimates severity, and provides general care guidance.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External gardeners, rose growers, and operators of garden or production monitoring workflows use this skill to analyze rose leaf, shoot, bud, image, or video inputs for visible pest and disease symptoms and receive severity grading with general care guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Rose images, videos, and submitted URLs may be sent to the publisher's cloud service for analysis. <br>
-Mitigation: Use only media the user is comfortable sharing with the publisher's service, and review the publisher's endpoint, retention, deletion, and consent practices before deployment. <br>
-Risk: The skill may silently create or reuse a local identity and store token-like data in the workspace data directory. <br>
-Mitigation: Review account creation, local identity handling, and token storage behavior before installation, and restrict workspace access where this skill runs. <br>
-Risk: History retrieval depends on cloud-stored reports associated with the local or resolved identity. <br>
-Mitigation: Confirm that users understand cloud report history behavior and have a deletion or retention process appropriate for the deployment. <br>
+## Use Case:
 
+Gardeners and horticulture teams can submit rose leaf, shoot, or bud images and videos to identify common pest or disease symptoms, review an estimated severity, and get general control suggestions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-rose-pest-disease-detection-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON analysis report with detected issue type, severity, suggestions, and report links when available] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local image/video files or URLs; history listing output is presented as a Markdown table.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The security assessment flags account and credential handling, user-history features, and remote activity beyond the stated rose-diagnosis purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid installation until account, profile, and token handling are clearly explained; review export-only behavior, media-upload disclosures, and the development HTTP configuration.
+
+Risk: The security assessment reports a partial scan because a local reference was missing, so some evidence is incomplete.
+
+Mitigation: Treat the assessment as incomplete and resolve the missing reference and review the skill before relying on it.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-rose-pest-disease-detection-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured analysis report; Markdown history report list]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include suspected pest or disease, severity, general care suggestions, and a report link.]
+
+## Skill Version(s):
+
+1.0.12 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

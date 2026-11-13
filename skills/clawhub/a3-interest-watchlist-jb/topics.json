@@ -1,0 +1,46 @@
+{
+  "topics": [
+    {
+      "id": "deadlock",
+      "query": "Deadlock official update patch notes",
+      "source_hosts": [
+        "forums.playdeadlock.com",
+        "playdeadlock.com",
+        "www.playdeadlock.com"
+      ]
+    },
+    {
+      "id": "valorant",
+      "query": "Valorant official patch news esports",
+      "source_hosts": [
+        "playvalorant.com",
+        "www.playvalorant.com",
+        "valorantesports.com",
+        "www.valorantesports.com"
+      ]
+    },
+    {
+      "id": "gaming",
+      "query": "official game release announcement"
+    },
+    {
+      "id": "ai",
+      "query": "AI industry company official announcement"
+    },
+    {
+      "id": "companies",
+      "query": "Salesforce company earnings official news"
+    },
+    {
+      "id": "politics",
+      "query": "politics government policy primary source"
+    },
+    {
+      "id": "youtube",
+      "query": "YouTube creator news verified statement"
+    }
+  ],
+  "freshness_hours": 72,
+  "max_items": 5,
+  "quiet_behavior": "omit category; never recycle old items"
+}

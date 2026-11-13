@@ -2,10 +2,10 @@
 name: dlazy-storyboard
 version: 1.3.5
 description: "storyboard to video, character animation, animated short, AI anime, multi-shot video — script, characters and shot prompts, ref-sheets and first/last frames, i2v shot videos, voice/TTS plus music/SFX/subtitles, then Remotion assembles and renders. Use for a multi-shot animated short with consistent characters."
-metadata: {"clawdbot":{"emoji":"🎞️","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When this skill is called, run 'dlazy chat --skill storyboard --prompt ...' for a new task, or 'dlazy chat --project <id> --prompt ...' to continue (discover ids via 'dlazy projects list'). Never pass both --skill and --project."}}
+metadata: {"clawdbot":{"emoji":"🎞️","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When this skill is called, run 'dlazy chat --skill storyboard --prompt ...' for a new task, or 'dlazy chat --project <id> --prompt ...' to continue (discover ids via 'dlazy projects list'). Never pass both --skill and --project."}}
 ---
 
-# storyboard
+# 分镜脚本 Storyboard
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 
@@ -50,7 +50,7 @@ Each key is scoped to your dLazy organization and can be **rotated or revoked at
 
 ## About & Provenance
 
-- **CLI source code**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI source code**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **Maintainer**: dlazyai
 - **npm package**: `@dlazy/cli` (pinned to `1.2.3` in this skill's install spec)
 - **Homepage**: [dlazy.com](https://dlazy.com)

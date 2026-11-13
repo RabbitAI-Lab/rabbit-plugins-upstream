@@ -1,48 +1,57 @@
-## Description: <br>
-Analyzes short-form Chinese web fiction by breaking down story premise, structure, emotional arcs, reversals, writing techniques, character functions, and reusable genre patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+按阶段拆解短篇网文的故事结构、情感线、反转与写作手法，并生成可供后续创作参考的结构化报告。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-External users and writing teams use this skill to produce structured literary analysis of short web-fiction works they are authorized to analyze. The generated analysis supports later drafting workflows by preserving plot nodes, technique notes, source backups, and metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill saves full copies of user-provided stories and derived reports in the project workspace. <br>
-Mitigation: Use it only with fiction the user has the right to analyze, store outputs in approved workspace locations, and remove source backups when they are no longer needed. <br>
-Risk: Market-oriented genre guidance may be unsuitable when the user needs neutral literary criticism. <br>
-Mitigation: Review the genre framing before reuse and request neutral literary analysis when market-oriented advice is not desired. <br>
+## Use Case:
 
+面向短篇小说作者、编辑和写作学习者，用于分析其有权处理的作品，提炼故事结构、情绪机制和可参考的写法，并形成后续创作资料。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-short-analyze) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Output contract](references/output-contract.md) <br>
-- [Output templates](references/output-templates.md) <br>
-- [Short story decomposition methodology](references/material-decomposition.md) <br>
-- [Genre catalog](references/genre-catalog.md) <br>
-- [Quality checklist](references/quality-checklist.md) <br>
-- [AI-style banned words and sentence patterns](references/banned-words.md) <br>
-- [Anti-AI writing guide](references/anti-ai-writing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, configuration, guidance] <br>
-**Output Format:** [Markdown reports, JSON metadata, and local source-backup files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes analysis artifacts under a per-story output directory, including a main report, plot-node notes, technique notes, source backups, and _meta.json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.12 (source: server release metadata; artifact frontmatter reports 3.0.0) <br>
+Risk: The security scan was benign but partial because some local references were unresolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill and its referenced materials before installation if complete scan coverage matters.
+
+Risk: The workflow saves a backup of the source story alongside its analysis outputs.
+
+Mitigation: Only provide material you have permission to process, and protect access to the per-title output folder.
+
+## Reference(s):
+
+- [Output contract](references/output-contract.md)
+- [Quality checklist](references/quality-checklist.md)
+- [Analysis method](references/analysis-method.md)
+- [ClawHub release page](https://clawhub.ai/worldwonderer/skills/story-short-analyze)
+- [Repository link listed in skill metadata](https://github.com/zenstory-ai/oh-story-claudecode)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Markdown analysis reports and JSON metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates a per-title folder with a source-text backup, staged analysis report, plot-node and writing-technique files, and structure counts.]
+
+## Skill Version(s):
+
+1.1.33 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

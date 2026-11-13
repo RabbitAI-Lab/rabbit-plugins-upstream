@@ -1,40 +1,57 @@
-## Description: <br>
-Chanlun Analysis Pro helps agents produce Chanlun-style technical analysis for A-share indexes, individual stocks, and sectors, including fractals, strokes, line segments, central hubs, divergence, multi-timeframe structure, and buy/sell point research. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chanlun technical-analysis guidance for A-share charts, including market structure, divergence, and multi-timeframe review.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, analysts, and market-research agents use this skill to draft Chanlun technical-analysis reports, algorithm notes, Python examples, and trading-plan templates for educational research. Generated signals should not be treated as personalized financial advice, and market data should be independently verified before trading. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/chanlun-analysis-pro) <br>
-- [Chanlun algorithm Python reference](references/chanlun_algorithm_python.md) <br>
-- [Chanlun analysis templates](references/chanlun_analysis_templates.md) <br>
-- [Chanlun practice guide](references/chanlun_practice_guide.md) <br>
+Developers, analysts, and Chanlun learners use it to structure A-share chart reviews across market structure, divergence, and multiple timeframes. Its draft analysis is intended for independent review with authorized, current market data.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports with Python snippets, shell commands, checklists, and structured trading-analysis templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Financial-risk guidance applies: treat generated buy/sell points, price zones, stop-losses, and position sizes as educational research rather than personalized investment advice.] <br>
+Global
 
-## Skill Version(s): <br>
-5.2.1 (source: server release and SKILL.md frontmatter) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Broad activation terms may cause the skill to respond to general stock-market requests.
+
+Mitigation: Use it for Chanlun-specific analysis requests and review its response before relying on it.
+
+Risk: The security scan had partial coverage, and linked reference files are not present in the supplied artifact.
+
+Mitigation: Review the complete skill and its referenced materials before deployment; treat the scan as incomplete evidence.
+
+Risk: Chanlun structure can admit multiple interpretations, and examples are educational rather than current market assessments.
+
+Mitigation: Reanalyze with authorized, current data, record the chosen assumptions, and obtain independent review; do not treat examples as trading instructions.
+
+## Reference(s):
+
+- [Project link listed in the skill source](https://github.com/gechengling/chanlun-analysis-pro)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown, Code]
+
+**Output Format:** [Markdown with tables and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft analysis depends on the supplied market data; the skill describes no live market feed or trade execution.]
+
+## Skill Version(s):
+
+5.2.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

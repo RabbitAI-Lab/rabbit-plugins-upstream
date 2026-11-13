@@ -1,40 +1,50 @@
-## Description: <br>
-Guides an agent through boundary, structure, dynamics, delays, leverage, and synthesis analysis for interconnected systems before recommending action. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Maps loops, delays, and leverage points to explain ripple effects and recurring problems, while skipping single-step fixes.
 
-## Publisher: <br>
-[ysskrishna](https://clawhub.ai/user/ysskrishna) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ysskrishna](https://clawhub.ai/user/ysskrishna)
 
-## Use Case: <br>
-External users and developers use this skill to structure broad problem analysis before recommending actions, especially when feedback loops, delays, incentives, or unintended consequences matter. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: May over-apply systems-thinking structure to simple linear tasks, adding unnecessary analysis. <br>
-Mitigation: Use it for interconnected problems and narrow or disable invocation if it activates too often. <br>
-Risk: System maps can rely on incomplete boundaries or unstated assumptions. <br>
-Mitigation: Ask concise scoping questions when needed and state remaining working guesses before recommendations. <br>
+## Use Case:
 
+Developers, analysts, and teams use the skill when recurring problems or proposed changes may affect multiple connected components. It guides a structured analysis of system boundaries, relationships, feedback, delays, and leverage points, then produces recommendations that account for unintended effects.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ysskrishna/systems-thinking) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with headed analysis sections and bullets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask up to three scoping questions when the system boundary is unclear.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2026.5.17 (source: server release metadata and skill metadata) <br>
+Risk: The security review could not resolve one reference, so its contents were not assessed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the unresolved reference independently before relying on it or installing the skill.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/ysskrishna/skills/systems-thinking)
+- [Worked example](artifact/references/example.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance]
+
+**Output Format:** [Structured Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Organized into boundary, structure, dynamics, delays, leverage, and synthesis; diagrams are optional.]
+
+## Skill Version(s):
+
+2026.11.11 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
