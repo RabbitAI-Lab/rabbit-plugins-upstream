@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/newton-performance",
+  "identifier": "NVIDIA/skills/skills/newton-performance",
+  "repo": "NVIDIA/skills",
+  "path": "skills/newton-performance",
+  "branch": "main",
+  "pushedAt": "2026-11-12T14:09:43Z",
+  "contentHash": "60500b29504e70e09a11df0a6403e969fbb4466577246ac617537529cc4dd654",
+  "fetchedAt": "2026-11-13T15:28:57.212Z"
+}

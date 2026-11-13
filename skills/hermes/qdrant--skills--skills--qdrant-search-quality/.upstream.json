@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/qdrant/skills/tree/main/skills/qdrant-search-quality",
+  "identifier": "qdrant/skills/skills/qdrant-search-quality",
+  "repo": "qdrant/skills",
+  "path": "skills/qdrant-search-quality",
+  "branch": "main",
+  "pushedAt": "2026-11-13T10:14:02Z",
+  "contentHash": "69aeb044bff35acd82914fe3c5d256f40ffb9e1a7d94cea3282f5e3dbed6d0fa",
+  "fetchedAt": "2026-11-13T15:28:50.666Z"
+}
