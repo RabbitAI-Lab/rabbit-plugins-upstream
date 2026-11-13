@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/coderabbitai/skills/autofix",
+  "repo": "coderabbitai/skills",
+  "skillId": "autofix",
+  "branch": "main",
+  "pushedAt": "2026-11-13T11:25:47Z",
+  "contentHash": "e0942bcd68114abd646da599f71f96f3c8266527d935b5463c39fd7832aaa3f3",
+  "fetchedAt": "2026-11-13T15:30:41.632Z"
+}

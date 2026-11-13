@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/origin-api",
+  "repo": "cursor/plugins",
+  "skillId": "origin-api",
+  "branch": "main",
+  "pushedAt": "2026-11-13T13:57:05Z",
+  "contentHash": "ff1e7410fd59ac8a25b176b7a598539f866515cfe6aeaf0fcb37cd4457d12369",
+  "fetchedAt": "2026-11-13T15:28:37.898Z"
+}

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import "./lib/windows-exe-search.mjs";
 import { execFileSync, spawn } from "node:child_process";
 import { once } from "node:events";
 import { existsSync, mkdirSync, renameSync, rmSync } from "node:fs";
@@ -120,7 +121,7 @@ async function run() {
 function probe(filePath) {
   const raw = execFileSync(
     "ffprobe",
-    ["-v", "error", "-print_format", "json", "-show_streams", "-show_format", filePath],
+    ["-v", "error", "-print_format", "json", "-show_streams", "-show_format", "--", filePath],
     { encoding: "utf8", timeout: 10_000 },
   );
   const parsed = JSON.parse(raw);
