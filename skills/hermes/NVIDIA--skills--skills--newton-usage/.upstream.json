@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/newton-usage",
+  "identifier": "NVIDIA/skills/skills/newton-usage",
+  "repo": "NVIDIA/skills",
+  "path": "skills/newton-usage",
+  "branch": "main",
+  "pushedAt": "2026-11-12T14:09:43Z",
+  "contentHash": "e5b0c87f87e1c879214d050516ff75533f00308e130472c3b3f6b0f6dd4cbcb2",
+  "fetchedAt": "2026-11-13T15:28:57.212Z"
+}

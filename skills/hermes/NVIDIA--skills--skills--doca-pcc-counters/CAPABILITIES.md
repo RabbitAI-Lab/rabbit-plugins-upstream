@@ -34,8 +34,8 @@ Two cross-cutting rules that apply to *every* pattern above:
 - **`set` arms, `query` reads — in that order.** `query`
   without a prior `set` reads whatever the device's `diag_cnt`
   was last configured for (possibly nothing). The documented
-  sequence in the script's own header comment is *"always
-  `set` first then `query`"*.
+  sequence in the script's own header comment is *“always
+  `set` first then `query`”*.
 - **These are firmware / HW diagnostic counters.** They exist
   at the device level and are INDEPENDENT of any custom
   `doca-pcc` DPA kernel. Do not condition a reading on a
@@ -45,9 +45,7 @@ Two cross-cutting rules that apply to *every* pattern above:
 ## Capabilities and modes
 
 `pcc_counters.sh` is a **bash script** installed under the
-DOCA tools directory (`install_data` in
-`tools/pcc_counters/meson.build`, installed when the build is
-not an internal-tool build). There is no daemon, no library to
+DOCA tools directory on a standard install. There is no daemon, no library to
 link against, no `--help`, no `--version`, and no subcommands
 beyond the two operations below. The entire interaction model
 is *run the script with two positional arguments, read the
@@ -105,24 +103,22 @@ script (which this skill forbids — see
 
 For the canonical DOCA version-detection chain and NGC
 container semantics, see
-[`doca-version`](../../doca-version/SKILL.md). The body lives
+`doca-version/SKILL.md`. The body lives
 there; this skill does not duplicate it.
 
 **The `pcc_counters.sh`-specific overlay** is:
 
 - **Confirm the script is present before assuming
   availability.** It is installed under the DOCA tools
-  directory by `install_data` in
-  `tools/pcc_counters/meson.build` (and only when the build is
-  not an internal-tool build). If the script is absent, route
-  to [`doca-setup`](../../doca-setup/SKILL.md); do NOT
+  directory on a standard install. If the script is absent, route
+  to `doca-setup/SKILL.md`; do NOT
   re-implement the script or quote counter values from memory.
 - **mst / MFT and debugfs are the real preconditions.** The
   script depends on `mst status -v` resolving the device and
   on `/sys/kernel/debug/mlx5/<pci>/diag_cnt/` being present
   (debugfs mounted, mlx5 driver loaded). These are
   environment facts, not DOCA-version facts; confirm them per
-  [`doca-setup`](../../doca-setup/SKILL.md).
+  `doca-setup/SKILL.md`.
 - **The counter set is fixed in the script.** Counter names
   do not vary by flag or version at the script level — they
   are the constant case-statement above. What CAN vary is
@@ -137,8 +133,8 @@ order:
 
 1. **Script-not-present.** `pcc_counters.sh` is not under the
    DOCA tools directory. Cause: DOCA / MFT not installed, or an
-   internal-tool build that did not install it. Routing:
-   [`doca-setup ## install`](../../doca-setup/TASKS.md#configure).
+   install that did not include it. Routing:
+  `doca-setup ## configure` (`doca-setup/TASKS.md#configure`).
 2. **Bad-device.** The script prints `ERROR: Bad Device`.
    Cause: the mst device path does not match an entry in
    `sudo mst status -v` (wrong path, mst service not started,
@@ -154,14 +150,17 @@ order:
    stale / zero because `set` was never run for this device
    (or the device's `diag_cnt` was reconfigured by something
    else). Fix: run `set` first, then `query`, per the script's
-   documented order.
+   documented order, once. If the same condition recurs after that single
+   recovery, stop; preserve both captures and escalate to layer 7 to identify
+   the external process reconfiguring `diag_cnt`. Do not repeat privileged
+   arm/read cycles.
 5. **Debugfs-or-permission.** The script cannot read/write
    `/sys/kernel/debug/mlx5/<pci>/diag_cnt/`. Cause: not running
    as root / sudo, debugfs not mounted, or the mlx5 driver does
    not expose `diag_cnt` for this device. Fix: run under sudo,
    confirm `mount | grep debugfs`, confirm the mlx5 driver is
    loaded. Route env-side issues to
-   [`doca-setup ## debug`](../../doca-setup/TASKS.md#debug).
+   `doca-setup ## debug` (`doca-setup/TASKS.md#debug`).
 6. **Counter-stuck-at-zero.** The script runs, the dump prints,
    but a counter reads 0. Cause is usually correct behaviour —
    the device genuinely saw no such events (no congestion, no
@@ -171,9 +170,9 @@ order:
    readable, but the user's question is really about the
    custom `doca-pcc` algorithm, firmware PCC configuration,
    BlueField mode, or driver / firmware behaviour. Route to
-   [`doca-pcc`](../../libs/doca-pcc/SKILL.md),
-   [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md),
-   or [`doca-debug TASKS.md ## debug`](../../doca-debug/TASKS.md#debug).
+   `doca-pcc/SKILL.md`,
+   `doca-public-knowledge-map/SKILL.md`,
+   or `doca-debug TASKS.md ## debug` (`doca-debug/TASKS.md#debug`).
 
 ## Observability
 
@@ -192,11 +191,11 @@ metrics, traces, or DOCA logs of its own.
   script has no built-in diff).
 - For the custom-algorithm host-side report stream (a separate
   surface), see
-  [`doca-pcc CAPABILITIES.md ## Observability`](../../libs/doca-pcc/CAPABILITIES.md#observability).
+  `doca-pcc CAPABILITIES.md ## Observability` (`doca-pcc/CAPABILITIES.md#observability`).
 
 ## Safety policy
 
-> **Overlay on the bundle-wide hardware-safety meta-policy.** The rules below are this skill's per-artifact overlay on the cross-cutting rules in [`doca-hardware-safety` CAPABILITIES.md ## Safety policy](../../doca-hardware-safety/CAPABILITIES.md#safety-policy) (specifically [### Per-artifact overlay pattern](../../doca-hardware-safety/CAPABILITIES.md#per-artifact-overlay-pattern)). When the two layers disagree, the stricter wins; when either layer says STOP, the agent stops.
+> **Overlay on the bundle-wide hardware-safety meta-policy.** The rules below are this skill's per-artifact overlay on the cross-cutting rules in `doca-hardware-safety` CAPABILITIES.md ## Safety policy (`doca-hardware-safety/CAPABILITIES.md#safety-policy`) (specifically ### Per-artifact overlay pattern (`doca-hardware-safety/CAPABILITIES.md#per-artifact-overlay-pattern`)). When the two layers disagree, the stricter wins; when either layer says STOP, the agent stops.
 
 `query` is read-only; `set` writes to the device's debugfs
 `diag_cnt` interface to reconfigure which diagnostic counters
@@ -207,8 +206,14 @@ might derive from a reading are high-stakes.
 - **`set` is a privileged debugfs write.** It reprograms the
   device's diagnostic counter selection. It does not change
   congestion-control behaviour, but it is a root-level write
-  to a kernel debug interface — run it deliberately, on the
-  intended device, not speculatively across devices.
+  to a kernel debug interface. Before running it, show the exact resolved mst
+  device and PCI BDF, explain that it reprograms diagnostic-counter selection,
+  and obtain the operator's explicit confirmation. Run it on that one intended
+  device, never speculatively across devices.
+- **The script does not mount debugfs or start mst.** Those are separate
+  host-state changes. If either prerequisite is absent, stop and route the
+  remediation through `doca-setup`; do not perform it implicitly as part of a
+  counter read.
 - **The reading is evidence; the tuning decision it informs is
   high-stakes.** A misread counter that drives a
   congestion-control parameter change can destabilize the
@@ -231,9 +236,9 @@ might derive from a reading are high-stakes.
 The canonical public source for device PCC behaviour and the
 firmware congestion-control surface is the DOCA / PCC
 documentation on `docs.nvidia.com`, reachable through
-[`doca-public-knowledge-map ## DOCA tools`](../../doca-public-knowledge-map/SKILL.md#doca-tools).
+`doca-public-knowledge-map ## DOCA tools` (`doca-public-knowledge-map/SKILL.md#doca-tools`).
 The authoritative source for the script's exact behaviour is
-the script itself (`tools/pcc_counters/pcc_counters.sh`) on the
+the script itself (`/opt/mellanox/doca/tools/pcc_counters.sh`) on the
 user's install. For the `doca-pcc` library that loads custom
 congestion-control kernels (a separate surface), see
-[`doca-pcc`](../../libs/doca-pcc/SKILL.md).
+`doca-pcc/SKILL.md`.
