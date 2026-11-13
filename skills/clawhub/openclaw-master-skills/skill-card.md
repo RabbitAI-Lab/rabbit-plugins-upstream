@@ -1,41 +1,52 @@
-## Description: <br>
-A curated, weekly updated catalog of OpenClaw skills spanning AI tools, productivity, marketing, frontend, mobile, backend, DevOps, and related agent workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A curated collection of 3219+ best agent skills — AI tools, productivity, marketing, frontend, mobile, backend, DevOps and more. Harness-agnostic, refreshed daily by MyClaw.ai — Powered by MyClaw.ai.
 
-## Publisher: <br>
-[leoyeai](https://clawhub.ai/user/leoyeai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[leoyeai](https://clawhub.ai/user/leoyeai)
 
-## Use Case: <br>
-OpenClaw users and agent operators use this catalog to discover installable skills across AI, search, productivity, development, marketing, media, finance, communication, smart home, memory, security, data, and social-content workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Catalog entries can point to skills with materially different behaviors, including credential use, browser automation, posting, memory, or background updates. <br>
-Mitigation: Vet each selected skill separately before installation or use, using the security evidence for that specific skill. <br>
-Risk: Manual clone or copy installation can bypass package-level review of the specific skill being installed. <br>
-Mitigation: Prefer reviewed ClawHub installation when available, or scan and review the copied skill before enabling it for an agent. <br>
+## Use Case:
 
+External users can use the collection to discover and install agent skills across common harnesses, including OpenClaw, Claude Code, Codex, Cursor, Gemini CLI, and Hermes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/leoyeai/skills/openclaw-master-skills) <br>
-- [Install guide](references/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Catalog guidance only; the inspected artifact contains markdown and no executable behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.21.4 (source: server-resolved release metadata) <br>
+Risk: The security assessment reports broad instructions to invoke unrelated skills and an external package installation that is not disclosed by the stated purpose; the installed package's contents and behavior are unknown.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Clarify the intended invocation scope and identify and review the package and its behavior before installing or running the skill.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/leoyeai/skills/openclaw-master-skills)
+- [Project repository listed by the artifact](https://github.com/LeoYeAI/agent-master-skills)
+- [Installation guide](references/install-guide.md)
+- [MyClaw.ai](https://myclaw.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Skill recommendations, Installation guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The collection points users to individual skills for task-specific outputs.]
+
+## Skill Version(s):
+
+0.22.10 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,56 @@
-## Description: <br>
-Configure OpenClaw installations with optimized settings, channel setup, security hardening, and production recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Configure OpenClaw installations with optimized settings, channel setup, security hardening, and production recommendations.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Developers and operators use this skill as a setup reference for configuring OpenClaw channels, agents, tools, memory, automation, gateway access, and security posture before running an installation. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Copied channel or gateway examples can expose messaging access, local services, or remote control surfaces if allowlists, pairing, or authentication are omitted. <br>
-Mitigation: Use allowlisted or pairing-based messaging, keep gateways on loopback or private networks where possible, and require strong token or Tailscale authentication before enabling remote access. <br>
-Risk: The guide covers powerful exec, browser, email, memory, audio, webhook, and automation features that can affect local data, sessions, or external services. <br>
-Mitigation: Prefer sandboxed or allowlisted exec, isolated browser profiles, metadata-only email ingestion, local or private memory search, and explicit opt-in for public exposure, audio processing, webhook-to-agent automation, session indexing, and automatic memory capture. <br>
-Risk: Documentation examples may be incomplete for a user's environment and could create misleading or unsafe configurations if applied without review. <br>
-Mitigation: Review each example against the target environment and run OpenClaw health and diagnostic checks after configuration changes. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/ivangdavila/setup) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/ivangdavila) <br>
+## Use Case:
 
+Developers and operators use this skill to configure OpenClaw installations, including messaging channels, agent defaults, gateway access, automation, memory, tools, and security settings.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; users should review configuration examples before applying them.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Broad tool profiles and full exec access can expose high-impact command capabilities.
+
+Mitigation: Prefer minimal or coding-specific tool profiles, sandbox exec, and avoid exec.security full unless a reviewed use case requires it.
+
+Risk: Remote gateway, browser relay, session transcript, email body, and memory settings can expose private data or control surfaces.
+
+Mitigation: Keep personal Chrome relay off unless needed, use local memory search for sensitive work, exclude session transcripts and email bodies by default, and require reviewed gateway authentication.
+
+Risk: Credential examples rely on local environment files that may contain sensitive tokens.
+
+Mitigation: Protect ~/.openclaw/.env with restrictive permissions or use a proper secret store.
+
+## Reference(s):
+
+- [Setup skill page](https://clawhub.ai/ivangdavila/skills/setup)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON configuration examples and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only guidance for OpenClaw setup and hardening.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

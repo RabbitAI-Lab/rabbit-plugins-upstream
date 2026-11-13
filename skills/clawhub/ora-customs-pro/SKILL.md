@@ -118,6 +118,8 @@ homepage: https://www.topeasychina.com
 | EndDate | 结束日期 | YYYY-MM-DD |
 | importer | 采购商名称 | 可选，非中文模糊匹配 |
 | exporter | 供应商名称 | 可选，非中文模糊匹配 |
+| page | `第几页`用于`近期采购明细`查询 | 可选，默认第1页，最大不超过25 |
+| limit | `每页多少条数据返回`用于`近期采购明细`查询 | 可选，默认20，最大20 |
 
 ## 产品概览返回数据
 - `sum_amount`：总金额

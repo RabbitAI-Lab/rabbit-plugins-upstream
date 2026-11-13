@@ -1,38 +1,53 @@
-## Description: <br>
-HyperFrames CLI guides agents through the `npx hyperframes` dev loop for scaffolding, linting, visual inspection, preview, rendering, and environment troubleshooting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HyperFrames CLI helps agents run `npx hyperframes` commands for scaffolding, linting, visual inspection, preview, rendering, and environment troubleshooting for HyperFrames video projects.
 
-## Publisher: <br>
-[lucas-kay8](https://clawhub.ai/user/lucas-kay8) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lucas-kay8](https://clawhub.ai/user/lucas-kay8)
 
-## Use Case: <br>
-Developers and agents use this skill to run HyperFrames CLI commands for building and checking video projects, from project initialization through render and environment diagnostics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: HyperFrames CLI commands can create files, copy or process media, download supporting tools or models, run local preview servers, and consume significant local resources. <br>
-Mitigation: Review command paths, flags, and media inputs before execution, especially `init`, render commands, `--non-interactive`, and commands that download browsers or models. <br>
+## Use Case:
 
+Developers and agents use this skill to operate the HyperFrames video development loop: create projects, validate compositions, inspect layout, preview work, render outputs, and troubleshoot the local render environment.
 
-## Reference(s): <br>
-- [HyperFrames CLI skill page](https://clawhub.ai/lucas-kay8/hyperframes-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advises Node.js >= 22, FFmpeg, and command review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill may cause agents to run mutable npm package code while scaffolding, linting, previewing, rendering, or troubleshooting HyperFrames projects.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a pinned and reviewed HyperFrames CLI version or a lockfile-backed local install, and run commands inside a limited workspace.
+
+Risk: The scaffold workflow can modify projects and install additional AI coding skills.
+
+Mitigation: Review requested project changes and installed skills before use, and avoid `--non-interactive` until consent behavior is clear.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/lucas-kay8/skills/hyperframes-cli)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown with inline shell commands and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct agents to run mutable npm-based commands that scaffold, inspect, preview, render, or modify HyperFrames projects.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

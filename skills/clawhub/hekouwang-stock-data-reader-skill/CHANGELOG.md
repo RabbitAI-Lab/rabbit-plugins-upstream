@@ -8,6 +8,59 @@
 
 ---
 
+## [1.2.6] - 2026-11-10
+
+### 修复（ClawHub 复查）
+- 全文去掉远程字体相关字样（含否定表述），避免与「仅本地字体」自相矛盾的扫描误判
+
+## [1.2.5] - 2026-11-10
+
+### 修复（ClawHub 复查）
+- SKILL.md 去掉「思源黑体」远程字体表述，与本地字体保证一致
+
+## [1.2.4] - 2026-11-10
+
+### 修复（ClawHub 复查）
+- `build_report.py` 去掉 Google Fonts 远程引用，贴图仅用本地 `@font-face` / 系统中文字体
+
+## [1.2.3] - 2026-10-15
+
+### 修复（ClawHub 安全审查）
+- `screenshot.js`：改用 `execFileSync` 参数数组调 Chrome，不再拼 shell 命令；去掉 `--no-sandbox` 与 `--allow-file-access-from-files`；Chrome 路径支持 `CHROME_PATH`
+- `build_report.py`：analysis.json 与公司简称写进 HTML 前统一转义，防止渲染时注入
+
+### 变更
+- `screenshot.js` 默认保留 HTML，`--clean` 才在截图成功后删除
+- 页脚署名默认关闭；用 `--brand/--handle` 或 `STOCK_REPORT_BRAND/STOCK_REPORT_HANDLE` 才渲染
+- `requirements.txt` 精确 pin（akshare 1.18.64 / pandas 3.0.3）；`bootstrap.sh` 不再顺手升级 pip/wheel
+- SKILL.md 工作流加「先确认代码与输出目录再跑」
+
+## [1.2.2] - 2026-08-12
+
+### 变更
+- ClawHub 分类：`finance`
+
+## [1.2.1] - 2026-08-12
+
+### 功能
+- `build_report.py --theme v3`：V3 Readdy 财经白一键开关（默认 v2 米白）
+
+### 优化
+- `references/report-structure.md`：祛魅完必须给一把尺子（龙虎榜基准分位）
+- README：30 秒验收；summary 英文 SEO 关键词
+
+## [1.2.0] - 2026-08-12
+
+### 功能
+- **`scripts/bootstrap.sh`**：一键 venv + `pip install -r requirements.txt`
+- **`scripts/fetch.py --probe`**：依赖与 akshare 联网探针
+- **`analyze.py`**：龙虎榜席位买卖对称度（双向席位数、通道型计数、`seat_symmetry`）
+- **`references/lhb-symmetry.md`**：对称度解读护栏与当日基准要求
+- **`references/title-checklist.md`**：标题/封面合规自检清单
+
+### 变更
+- `requirements.txt`：pin `akshare>=1.18,<2.0`、`pandas>=2.0,<3.0`
+
 ## [1.1.0]
 
 ### 变更

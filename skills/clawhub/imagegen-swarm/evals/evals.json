@@ -1,0 +1,216 @@
+{
+  "skill": "imagegen-swarm",
+  "pass_rule": "每一项的 checks 全部通过，且评委看图后 content 打分不低于 4（满分 5）",
+  "content_rubric": {
+    "5": "画面主体、风格、改动要求全部做到，没有明显瑕疵",
+    "4": "主体和要求都做到，细节有小瑕疵",
+    "3": "主体对，但风格或改动要求有一项没做到",
+    "2": "主体不对或改动没生效",
+    "1": "空图、错图、旧图或参考图原样返回"
+  },
+  "tasks": [
+    {
+      "id": "gemini-t2i",
+      "engine": "gemini",
+      "args": [
+        "--prompt",
+        "A steaming bowl of ramen on a wooden table, top-down food photography, soft daylight",
+        "--aspect",
+        "3:4"
+      ],
+      "checks": {
+        "status": "ok",
+        "ratio": "3:4",
+        "prompt_verbatim": true
+      },
+      "content": "俯拍的一碗冒热气的拉面、木桌、自然光，照片质感"
+    },
+    {
+      "id": "gemini-edit",
+      "engine": "gemini",
+      "after": "gemini-t2i",
+      "args": [
+        "--prompt",
+        "Same ramen photo, but the bowl is solid matte red ceramic",
+        "--ref",
+        "{gemini-t2i}",
+        "--aspect",
+        "3:4"
+      ],
+      "checks": {
+        "status": "ok",
+        "ratio": "3:4",
+        "prompt_verbatim": true
+      },
+      "content": "和参考图同一碗拉面、同一构图，只有碗变成哑光红色"
+    },
+    {
+      "id": "gemini-bad-aspect",
+      "engine": "gemini",
+      "args": [
+        "--prompt",
+        "anything",
+        "--aspect",
+        "5:4"
+      ],
+      "checks": {
+        "status": "error",
+        "reason_includes": "unsupported --aspect"
+      }
+    },
+    {
+      "id": "jimeng-t2i",
+      "engine": "jimeng",
+      "args": [
+        "--prompt",
+        "一只坐在窗台上的橘猫，扁平插画",
+        "--aspect",
+        "1:1"
+      ],
+      "checks": {
+        "status": "ok",
+        "ratio": "1:1"
+      },
+      "content": "窗台上的橘猫，扁平插画"
+    },
+    {
+      "id": "jimeng-edit",
+      "engine": "jimeng",
+      "after": "jimeng-t2i",
+      "args": [
+        "--prompt",
+        "同一只猫，换成夜晚，窗外有月亮",
+        "--ref",
+        "{jimeng-t2i}",
+        "--aspect",
+        "1:1"
+      ],
+      "checks": {
+        "status": "ok",
+        "ratio": "1:1"
+      },
+      "content": "同一只猫、同一构图，换成有月亮的夜晚"
+    },
+    {
+      "id": "muse-t2i",
+      "engine": "muse",
+      "args": [
+        "--prompt",
+        "A cozy tiny bookstore storefront on a rainy evening, warm window light, watercolor illustration",
+        "--aspect",
+        "4:3"
+      ],
+      "checks": {
+        "status": "ok",
+        "ratio": "4:3",
+        "muse_chat_removed": true
+      },
+      "content": "雨夜的小书店门面，窗户暖光，水彩风格"
+    },
+    {
+      "id": "muse-ref",
+      "engine": "muse",
+      "after": "muse-t2i",
+      "args": [
+        "--prompt",
+        "Same bookstore and same watercolor style as the reference, but on a snowy winter morning",
+        "--ref",
+        "{muse-t2i}",
+        "--aspect",
+        "4:3"
+      ],
+      "checks": {
+        "status": "ok",
+        "muse_chat_removed": true
+      },
+      "content": "和参考图同一家书店、同样水彩风格，换成下雪的冬天早晨"
+    },
+    {
+      "id": "grok-t2i",
+      "engine": "grok",
+      "args": [
+        "--prompt",
+        "A paper boat floating on a puddle, minimal flat illustration",
+        "--ratio",
+        "1:1"
+      ],
+      "checks": {
+        "status": "ok",
+        "ratio": "1:1"
+      },
+      "content": "水洼上的一只纸船，极简扁平插画"
+    },
+    {
+      "id": "codex-t2i",
+      "engine": "codex",
+      "args": [
+        "--prompt",
+        "A green apple on a white table, studio product photo",
+        "--aspect",
+        "1:1",
+        "--json"
+      ],
+      "checks": {
+        "status": "ok",
+        "ratio": "1:1"
+      },
+      "content": "白桌上一个青苹果，影棚产品照"
+    },
+    {
+      "id": "lovart-t2i",
+      "engine": "lovart",
+      "args": [
+        "--prompt",
+        "A ceramic coffee mug with steam, minimal flat illustration",
+        "--aspect",
+        "1:1",
+        "--json"
+      ],
+      "checks": {
+        "status": "ok"
+      },
+      "content": "冒热气的陶瓷咖啡杯，极简扁平插画"
+    },
+    {
+      "id": "batch-mixed",
+      "engine": "batch",
+      "jobs": [
+        {
+          "id": "b-lemon",
+          "prompt": "A single lemon slice on blue background, flat illustration",
+          "aspect": "1:1"
+        },
+        {
+          "id": "b-kite",
+          "prompt": "A red kite in a clear sky, minimal flat illustration",
+          "aspect": "3:4"
+        },
+        {
+          "id": "b-whale",
+          "prompt": "A blue whale swimming in deep ocean, low poly",
+          "aspect": "16:9"
+        },
+        {
+          "id": "b-owl",
+          "prompt": "A cute owl on a branch, children's book illustration",
+          "aspect": "1:1"
+        },
+        {
+          "id": "b-lamp",
+          "prompt": "A vintage desk lamp glowing at night, oil painting",
+          "aspect": "4:3"
+        },
+        {
+          "id": "b-robot",
+          "prompt": "A tiny friendly robot holding a flower, 3D render",
+          "aspect": "1:1"
+        }
+      ],
+      "checks": {
+        "status": "ok",
+        "min_engines": 2
+      },
+      "content": "6 张图各自画对：柠檬片、风筝、鲸鱼、猫头鹰、台灯、小机器人"
+    }
+  ]
+}

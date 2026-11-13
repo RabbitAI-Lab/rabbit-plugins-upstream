@@ -1,43 +1,54 @@
-## Description: <br>
-Figma helps agents guide design and engineering work inside Figma, including auto layout, components, variables, libraries, prototypes, Dev Mode handoff, plugins, and REST API automation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds and debugs Figma files for auto layout, components, variables, libraries, prototypes, Dev Mode handoff, and scriptable plugin or REST API workflows.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Designers, product teams, and developers use this skill to diagnose Figma file issues, structure components and variables, prepare Dev Mode handoff, and produce executable plugin, REST API, or configuration guidance where automation is appropriate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may persist Figma preferences and observed context under ~/Clawic/data/figma/. <br>
-Mitigation: Review or delete those local files when persistent context is not desired. <br>
-Risk: Preference migration from older folders can overwrite or move user-maintained context. <br>
-Mitigation: Back up existing preference folders before migrating them to ~/Clawic/data/figma/. <br>
-Risk: Prototype testing notes can include participant information or sensitive observations. <br>
-Mitigation: Get participant consent before recording prototype test context. <br>
+## Use Case:
 
+Designers, design-system maintainers, and product engineers use this skill to diagnose and structure Figma files, prepare handoff, plan variables, components, and libraries, and draft plugin or REST API automation.
 
-## Reference(s): <br>
-- [ClawHub Figma skill page](https://clawhub.ai/ivangdavila/skills/figma) <br>
-- [Clawic Figma skill page](https://clawic.com/skills/figma) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with ordered panel steps, inline code, and optional plugin, REST API, shell, or configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference user-maintained Figma preferences in ~/Clawic/data/figma/ when present.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Generated plugin or REST API workflows may read or modify sensitive Figma files if used with broad access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use narrow-scoped Figma tokens, review generated automation before running it, and avoid unvetted plugins on confidential files.
+
+Risk: Local preference memory may record user-specific Figma workflow context.
+
+Mitigation: Review and manage files under ~/Clawic/data/figma/ according to the user's privacy and retention expectations.
+
+## Reference(s):
+
+- [ClawHub Figma Skill](https://clawhub.ai/ivangdavila/skills/figma)
+- [Clawic Figma Skill Page](https://clawic.com/skills/figma)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Configuration]
+
+**Output Format:** [Markdown guidance with ordered Figma UI steps and optional plugin or REST API code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference local Figma preference memory under ~/Clawic/data/figma/; Figma canvas changes require user execution unless using plugin or REST API workflows.]
+
+## Skill Version(s):
+
+1.0.2 (source: artifact/SKILL.md frontmatter and evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

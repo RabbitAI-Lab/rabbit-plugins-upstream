@@ -1,42 +1,55 @@
-## Description: <br>
-Daily Tongjian helps an agent deliver a bilingual daily reading experience for Zizhi Tongjian, with tracked progress, full lecture text, scene art guidance, and voice narration guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides daily bilingual reading of the 294-volume Zizhi Tongjian with progress tracking, full lecture text, scene illustrations, and voice narration.
 
-## Publisher: <br>
-[yumyumtum](https://clawhub.ai/user/yumyumtum) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yumyumtum](https://clawhub.ai/user/yumyumtum)
 
-## Use Case: <br>
-External users and developers use this skill to turn Zizhi Tongjian into a daily lecture series with original-text excerpts, translation, commentary, scene-image direction, voice narration direction, and replay-friendly local archives. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+GPL-3.0-or-later
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can update reading progress and save generated lecture text, images, and audio under ~/.openclaw. <br>
-Mitigation: Use explicit prompts such as "今日通鉴" or "继续读通鉴", review status before advancing, and manage or delete local replay files when retention is not desired. <br>
-Risk: Lecture content is generated from the agent's knowledge rather than a bundled full-text source. <br>
-Mitigation: Review important historical excerpts, translations, and commentary against trusted editions before relying on them for publication or instruction. <br>
+## Use Case:
 
+Readers use the skill for a daily, guided Chinese or English reading of the Zizhi Tongjian, with selected passages, translation, historical commentary, and optional generated media. It tracks reading progress and organizes each lecture for later export.
 
-## Reference(s): <br>
-- [Daily Tongjian ClawHub listing](https://clawhub.ai/yumyumtum/skills/daily-tongjian) <br>
-- [Daily Tongjian Structure Guide](references/structure.md) <br>
-- [Daily Tongjian Style Guide](references/style-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown lecture content with inline bash commands and local progress or replay file outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update ~/.openclaw/workspace/daily-tongjian/progress.json and save replay text, image, and audio files under ~/.openclaw/media/outbound.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.0 (source: server release metadata and package.json) <br>
+Risk: The narration workflow sends narration text to an external speech service, and the scan reports an unpinned package reference.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep private material out of narration and review or pin the speech package before use.
+
+Risk: The security scan marks the release suspicious and says its evidence is incomplete, with some local references unresolved and binary images outside some analyzer coverage.
+
+Mitigation: Review the scan verdict and inspect the skill and assets before installing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/yumyumtum/skills/daily-tongjian)
+- [Historical structure guide](references/structure.md)
+- [Lecture style guide](references/style-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Images, Audio, Files]
+
+**Output Format:** [Structured lecture text and reading scripts, scene illustrations, voice narration, and progress or archive files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full lecture text, illustrations, and narration are the default; text-only delivery is supported when requested.]
+
+## Skill Version(s):
+
+0.2.1 (source: ClawHub release, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

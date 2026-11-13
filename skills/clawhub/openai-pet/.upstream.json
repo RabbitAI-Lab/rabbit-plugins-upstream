@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/openai-pet",
   "slug": "openai-pet",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778492335556,
-  "contentHash": "30c50550e15717cdc2efc2e7e471baa3fafd9a19638275f6140fa0d3e33b92ee",
-  "fetchedAt": "2026-07-26T19:40:01.118Z"
+  "version": "1.0.1",
+  "updatedAt": 1794302672913,
+  "contentHash": "1cbdf1dfe8cd3deb58881c6b89b1318c37571321f945a3a144fc1591094ec237",
+  "fetchedAt": "2026-11-13T15:41:21.546Z"
 }

@@ -1,45 +1,53 @@
-## Description: <br>
-Security partner for Inner Warden - validates commands before execution, monitors server health, diagnoses and fixes issues. Requires Inner Warden installed. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Install, verify, and manage InnerWarden to help OpenClaw agents screen tool and MCP calls, with optional Linux host enforcement in Pro.
 
-## Publisher: <br>
-[maiconburn](https://clawhub.ai/user/maiconburn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[maiconburn](https://clawhub.ai/user/maiconburn)
 
-## Use Case: <br>
-Developers and server operators use this skill to work with Inner Warden for security status checks, command validation, service health diagnostics, and approved remediation on Linux or Darwin hosts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can propose sudo-level service, log, configuration, and disk-maintenance commands on a server. <br>
-Mitigation: Install only when you use or plan to use Inner Warden, review proposed commands, and approve privileged remediation only when it matches your maintenance intent. <br>
-Risk: Dashboard authentication may require the user to provide the local Inner Warden dashboard password to the agent session. <br>
-Mitigation: Provide the dashboard password only when you intend the local agent to authenticate to the localhost API; otherwise use CLI-only workflows or disable dashboard auth. <br>
-Risk: Initial setup relies on downloading and running an install script and release binaries. <br>
-Mitigation: Download and inspect the install script before execution, and verify installed binaries against their SHA256 sidecar files. <br>
+## Use Case:
 
+OpenClaw agent owners and developers use this skill to install and verify InnerWarden, inspect what it screens, review command verdicts, and manage monitor or enforce settings. It also explains the limits of Community coverage and Linux-only Pro host controls.
 
-## Reference(s): <br>
-- [Inner Warden website](https://innerwarden.com) <br>
-- [Inner Warden GitHub project](https://github.com/InnerWarden/innerwarden) <br>
-- [Inner Warden releases](https://github.com/InnerWarden/innerwarden/releases) <br>
-- [Inner Warden issue tracker](https://github.com/InnerWarden/innerwarden/issues) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Inner Warden or its localhost API for full operation; privileged changes are proposed for user approval before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: The release is marked suspicious because its install guidance runs a remotely fetched script directly; the available scan coverage is partial because three referenced local materials were missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid installation unless the installer can be independently verified before it runs, and review the missing materials before relying on the scan evidence.
+
+## Reference(s):
+
+- [InnerWarden skill documentation](https://github.com/InnerWarden/innerwarden-skill)
+- [Pro server setup](https://github.com/InnerWarden/innerwarden-skill/blob/master/docs/pro-on-a-server.md)
+- [Managing InnerWarden Pro](https://github.com/InnerWarden/innerwarden-skill/blob/master/docs/managing-pro.md)
+- [InnerWarden pricing](https://innerwarden.com/pricing)
+- [ClawHub release page](https://clawhub.ai/maiconburn/skills/innerwarden-security)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands and code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.8 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

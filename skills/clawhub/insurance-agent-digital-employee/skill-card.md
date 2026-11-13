@@ -1,40 +1,61 @@
-## Description: <br>
-Insurance Agent Digital Employee is an insurance agent assistant that supports customer profiling, needs analysis, coverage gap review, plan drafting, policy explanation, objection handling, health disclosure guidance, pre-application checks, business planning, renewal retention, product knowledge, and social media marketing workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A reference framework that helps insurance agents prepare draft customer profiles, coverage analyses, policy explanations, customer responses, and service plans.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance professionals use this skill as a reference framework for customer analysis, insurance planning workflows, policy and product explanation, renewal follow-up, and marketing content preparation. Outputs are for professional reference and require human review before use with customers or in regulated insurance activity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may process sensitive customer, financial, or health-disclosure information. <br>
-Mitigation: Use it only in a controlled professional environment and require human review before using generated insurance, health-disclosure, marketing, or customer-facing material. <br>
-Risk: The evidence reports conflicting instructions about local file writes, web or API use, and social-media posting. <br>
-Mitigation: Keep network access, local file writes, social-media publishing, and logged-in browser automation disabled unless explicitly approved. <br>
+## Use Case:
 
+Insurance agents use this reference to structure customer profiling, needs and coverage-gap analysis, policy explanations, objection responses, and service or follow-up plans. Appropriately qualified personnel must verify outputs and carry out any client-facing action.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/insurance-agent-digital-employee) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include tables, checklists, customer-analysis templates, plan outlines, review prompts, and marketing draft content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence and skill frontmatter) <br>
+Risk: Customer, financial, or health information could be exposed if entered in full.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Minimize and mask sensitive details before use; do not enter complete identity, account, or medical identifiers.
+
+Risk: Draft insurance analyses or explanations could be inaccurate or mistaken for professional advice.
+
+Mitigation: Have appropriately qualified personnel verify outputs against current policy terms, official sources, and institutional requirements before use.
+
+Risk: Client queries, records, or communications could be acted on without proper authority or review.
+
+Mitigation: Require explicit human confirmation for each action and have authorized staff carry it out in the institution's approved systems.
+
+Risk: Some referenced files were unavailable during security review, limiting scan coverage.
+
+Mitigation: Review those files before installation when they are available.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/insurance-agent-digital-employee)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with structured tables, draft analyses, explanations, and customer-facing scripts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts for human review; no actions are performed automatically.]
+
+## Skill Version(s):
+
+1.0.12 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

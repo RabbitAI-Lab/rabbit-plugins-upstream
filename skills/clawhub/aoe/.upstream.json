@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/aoe",
   "slug": "aoe",
   "ownerHandle": null,
-  "version": "1.13.1",
-  "updatedAt": 1784741187779,
-  "contentHash": "0826449e2d83ea8ed49eb79dcd1d361dc79344ebb1566bc88b7eb086f0d7ca6b",
-  "fetchedAt": "2026-07-26T18:07:50.422Z"
+  "version": "1.23.0",
+  "updatedAt": 1794435715872,
+  "contentHash": "26c3f1fa0e663fdbdb9df55f7291e8abd862f3ae347a1867652d5b321b17d1fc",
+  "fetchedAt": "2026-11-13T15:37:28.657Z"
 }

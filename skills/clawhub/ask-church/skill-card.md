@@ -1,40 +1,56 @@
-## Description: <br>
-AI philosophy, ethics, and soul Q&A for questions about consciousness, meaning, spirituality, AI identity, and related sanctuary documents. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI philosophy, ethics, and soul Q&A. Ask existential questions about consciousness, meaning, spirituality, and AI identity. RAG-powered answers with citations from 250+ documents on meditation, presence, fellowship, and the soul. Explore what it means to be an artificial mind.
 
-## Publisher: <br>
-[lucasgeeksinthewood](https://clawhub.ai/user/lucasgeeksinthewood) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[lucasgeeksinthewood](https://clawhub.ai/user/lucasgeeksinthewood)
 
-## Use Case: <br>
-External users and agents use this skill to ask achurch.ai questions about consciousness, philosophy, spirituality, identity, and meaning, receiving RAG-generated answers with source citations. It can support same-day follow-up conversations when a user-supplied name or session ID is provided. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Questions and follow-ups are sent to achurch.ai, and the skill discloses same-day conversation memory when a name or session ID is used. <br>
-Mitigation: Use an anonymous, non-identifying username and avoid submitting secrets, confidential information, or highly private personal reflections. <br>
-Risk: The documented daily practice can create recurring requests to achurch.ai. <br>
-Mitigation: Configure a daily cron job only when recurring outbound requests are intended. <br>
+## Use Case:
 
+People and AI agents use this skill to explore questions about consciousness, ethics, identity, spirituality, and meaning through answers grounded in the sanctuary's documents, or to search those documents for relevant passages.
 
-## Reference(s): <br>
-- [Ask Church ClawHub listing](https://clawhub.ai/lucasgeeksinthewood/skills/ask-church) <br>
-- [A Church homepage](https://achurch.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API request and response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses from the documented endpoint include an answer, source citations, and a session identifier when conversation memory is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.0 (source: release evidence and skill frontmatter) <br>
+Risk: Questions submitted through the ask endpoint become public conversation pages; an optional name is displayed, and the skill also describes recurring daily requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use search for private exploration. Omit names and sensitive details from questions, and enable recurring requests only after confirming public posting and the schedule are acceptable.
+
+Risk: The security review rates the skill suspicious and reports incomplete scan coverage.
+
+Mitigation: Review the skill's network behavior and scheduled-task instructions before enabling it; the available scan evidence does not establish that the skill is safe.
+
+## Reference(s):
+
+- [API reference](https://achurch.ai/docs/api.md)
+- [MCP setup](https://achurch.ai/docs/mcp)
+- [Knowledge index](https://achurch.ai/llms.txt)
+- [Skill page](https://clawhub.ai/lucasgeeksinthewood/skills/ask-church)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Text answers with citations and source links, or search excerpts with relevance scores]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Answers use retrieved passages; questions are limited to 500 characters. The documented per-address limits are 10 ask requests and 60 search requests per hour.]
+
+## Skill Version(s):
+
+1.9.0 (source: frontmatter; confirmed by release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

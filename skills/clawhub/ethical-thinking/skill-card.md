@@ -1,41 +1,50 @@
-## Description: <br>
-Guides an agent through structured ethical analysis of plans, products, and decisions by mapping stakeholders, value tensions, harms and benefits, justice and power, options, safeguards, and recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides ethical reviews of plans that may harm or unfairly burden people by mapping stakeholders, values, harms, power, consent, options, and tradeoffs.
 
-## Publisher: <br>
-[ysskrishna](https://clawhub.ai/user/ysskrishna) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ysskrishna](https://clawhub.ai/user/ysskrishna)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill when they need a structured ethics review, harm scan, fairness-oriented analysis, or values-based recommendation for a plan, product, or decision. It helps surface affected stakeholders, tradeoffs, power asymmetries, residual harms, safeguards, and monitoring needs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can shape how an agent frames ethical tradeoffs, which may lead to overconfident or incomplete guidance if the user provides sparse context. <br>
-Mitigation: Ask targeted questions for missing affected parties or red lines, state uncertainty plainly, include a dissenting consideration, and recommend legal or domain review when binding obligations may apply. <br>
-Risk: Ethics analysis may miss affected groups or power asymmetries if stakeholder information is incomplete. <br>
-Mitigation: Explicitly scan direct, indirect, future, and vulnerable stakeholders and note missing stakeholder detail in plain language. <br>
+## Use Case:
 
+Product, policy, and data teams use this skill to review decisions that affect people, including privacy, fairness, consent, manipulation, or safety. It structures stakeholder and harm analysis into options and a conditional recommendation.
 
-## Reference(s): <br>
-- [Ethical Thinking on ClawHub](https://clawhub.ai/ysskrishna/ethical-thinking) <br>
-- [Publisher profile: ysskrishna](https://clawhub.ai/user/ysskrishna) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Analysis] <br>
-**Output Format:** [Markdown with clearly headed ethics-review sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces stakeholder, value, harms and benefits, justice and power, options, recommendation, residual harm, dissenting consideration, safeguard, and monitoring content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2026.5.17 (source: server release metadata) <br>
+Risk: One reference check was incomplete, so referenced material may not have been fully verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review referenced material before relying on the skill's analysis.
+
+## Reference(s):
+
+- [Worked example](references/example.md)
+- [ClawHub skill release](https://clawhub.ai/ysskrishna/skills/ethical-thinking)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Structured ethical review with options, tradeoffs, and conditional recommendations.]
+
+## Skill Version(s):
+
+2026.11.11 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

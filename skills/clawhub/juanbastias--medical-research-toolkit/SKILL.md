@@ -1,5 +1,6 @@
 ---
 name: medical-research-toolkit
+license: MIT-0
 description: Query 14+ biomedical databases for drug repurposing, target discovery, clinical trials, and literature research. Access ChEMBL, PubMed, ClinicalTrials.gov, OpenTargets, OpenFDA, OMIM, Reactome, KEGG, UniProt, and more through a unified MCP endpoint. Use when researching disease targets, finding approved/investigational drugs, searching clinical evidence, discovering genetic associations, or analyzing compound bioactivity data.
 ---
 
@@ -7,7 +8,13 @@ description: Query 14+ biomedical databases for drug repurposing, target discove
 
 Query 14+ biomedical databases for drug repurposing, target discovery, clinical evidence, and literature research — all via a unified MCP endpoint.
 
-## ⚡ 30-Second Start
+## Availability and data flow
+
+This document describes a third-party hosted MCP endpoint, not a bundled server or a verified live service. Queries sent to that endpoint leave the local machine and are handled by its operator. Use only non-identifying public research terms; do not transmit patient records, private files, passwords or API keys. Check current endpoint availability, supported tools, terms and access requirements before relying on examples. Examples below were not executed as part of this release review.
+
+This is research support, not a diagnosis or treatment recommendation. Separate trial status, approval status and evidence strength in outputs. Do not infer efficacy or causality from a database match or spontaneous adverse-event report.
+
+## Example request
 
 ```bash
 # Find drugs for myasthenia gravis
@@ -16,7 +23,7 @@ curl -X POST https://mcp.cloud.curiloo.com/tools/unified/mcp \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"chembl_find_drugs_by_indication","arguments":{"indication":"myasthenia gravis","max_results":10}},"id":1}'
 ```
 
-**That's it!** You now have approved and investigational drugs for the disease.
+Validate the actual response schema and source records before reporting results; an example request is not proof of a successful search.
 
 ---
 
@@ -128,7 +135,7 @@ Compile evidence for a hypothesis:
 
 ### 📊 Literature Mining
 Systematically search biomedical research:
-1. PubMed: 35M+ articles searchable by gene, disease, drug, chemical
+1. PubMed: search literature by gene, disease, drug or chemical; verify query results and coverage.
 2. Preprints: bioRxiv, medRxiv
 3. Filter by keywords, date, study type
 
@@ -143,36 +150,11 @@ https://mcp.cloud.curiloo.com/tools/unified/mcp
 
 All 14+ databases unified into one endpoint.
 
-**Running Locally:**
-```bash
-pip install medical-mcps
-medical-mcps
-# Available at: http://localhost:8000/tools/unified/mcp
-```
+## Package contents and local deployment
 
----
+This package contains this guide only. The reference guides and example workflow previously linked here are not bundled, so those links have been removed. Use the examples included in this document and the original database documentation; do not claim missing reference files were consulted.
 
-## Complete References
-
-See detailed guides for each database:
-
-- **[PubMed Guide](./references/pubmed.md)** — Literature search (genes, diseases, keywords)
-- **[ClinicalTrials Guide](./references/clinical-trials.md)** — Find active trials
-- **[ChEMBL Guide](./references/chembl.md)** — Drug-target data & bioactivity
-- **[OpenTargets Guide](./references/opentargets.md)** — Disease-target associations
-- **[OpenFDA Guide](./references/openfda.md)** — Drug safety & adverse events
-- **[OMIM Guide](./references/omim.md)** — Genetic diseases (requires API key)
-- **[Other APIs](./references/other-apis.md)** — Reactome, UniProt, KEGG, GWAS, etc.
-
----
-
-## Workflow Example
-
-**Complete Drug Repurposing Pipeline:**
-
-See [drug-repurposing-workflow.md](./scripts/drug-repurposing-workflow.md) for step-by-step example with all 8 steps + curl commands.
-
----
+A local server is not included. Do not execute the previous unpinned package-install recipe automatically. If local deployment is needed, first review the server project's source, release, dependencies and configuration, then obtain authorization for the concrete installation.
 
 ## API Keys
 
@@ -190,12 +172,9 @@ Most APIs are **free, no key required**. Optional keys for higher rate limits:
 
 ---
 
-## Rate Limits & Caching
+## Service limits
 
-- **No authentication** for production endpoint (public)
-- **Rate limits**: Generous (~1000+ requests/day per database)
-- **Caching**: Automatic 30-day HTTP caching (RFC 9111)
-- **Cost**: $0 (all databases public or researcher-accessible)
+Authentication, quotas, caching and charges can change and differ between the hosted intermediary and original databases. No specific request allowance, cache duration or zero-cost guarantee is established by this guide. Verify current terms and report access failures explicitly.
 
 ---
 
@@ -269,5 +248,5 @@ Returns: Equivalent IDs in NCBI Gene, Uniprot, Ensembl, MyGene, etc.
 
 - Database not working? → Check [Troubleshooting](#troubleshooting)
 - Want detailed guide? → See [Complete References](#complete-references)
-- Need a workflow example? → See [drug-repurposing-workflow.md](./scripts/drug-repurposing-workflow.md)
-- Question about OpenClaw? → See [OPENCLAW-USAGE.md](./OPENCLAW-USAGE.md)
+- Need a workflow example? Use the included Quick Recipes and record which requests actually succeeded.
+- Question about the host agent? Consult its installed documentation; no host-specific setup guide is bundled.

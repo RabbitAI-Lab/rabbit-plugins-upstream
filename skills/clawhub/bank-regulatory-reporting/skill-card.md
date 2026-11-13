@@ -1,42 +1,54 @@
-## Description: <br>
-AI-powered banking regulatory reporting assistant for drafting NFRA/PBOC/SAFE reports, 1104 statistical submissions, Basel III capital reports, AML reports, and compliance documentation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides bank compliance teams in preparing drafts of regulatory reports, statistical submissions, and compliance documentation.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Bank compliance officers, data analysts, IT systems teams, and regulatory affairs staff use this skill to prepare draft regulatory reports, data checklists, compliance narratives, and report structures for Chinese banking supervision workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may elicit or process sensitive banking data such as customer identities, account numbers, transaction logs, SAR/STR narratives, or confidential supervisory communications. <br>
-Mitigation: Use only with authorized banking compliance staff; anonymize and aggregate inputs where possible and avoid pasting unnecessary confidential data. <br>
-Risk: Generated regulatory citations, report content, or compliance interpretations may be incomplete, outdated, or unsuitable for filing. <br>
-Mitigation: Treat outputs as drafts, verify regulatory references against official sources, and require human compliance and legal review before submission. <br>
-Risk: Appendix material includes credit-policy, lending, and regulatory strategy guidance that could be over-applied outside report drafting. <br>
-Mitigation: Do not use appendix material as standalone credit-policy, lending, or regulatory strategy advice. <br>
+## Use Case:
 
+Bank compliance officers, regulatory affairs staff, and data analysts use the skill to draft regulatory reports and supporting checks from supplied information. Outputs require review by authorized staff before filing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/bank-regulatory-reporting) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown report drafts, checklists, tables, and compliance guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Draft outputs require review by authorized compliance, legal, or regulatory reporting staff before use or submission.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.1.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Broad activation phrases may cause the skill to activate for requests outside the intended reporting tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the activation phrases and confirm the requested report is within scope before relying on the output.
+
+Risk: Security review coverage was partial because of a malformed manifest and a missing local reference.
+
+Mitigation: Inspect and correct the manifest, resolve the missing reference, and review the skill before installation.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/gechengling/skills/bank-regulatory-reporting)
+- [Publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown reports, checklists, and structured guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts and recommendations require human verification before regulatory use.]
+
+## Skill Version(s):
+
+5.2.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

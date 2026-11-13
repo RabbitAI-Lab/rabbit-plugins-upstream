@@ -9,7 +9,7 @@ description: >-
   want a platform to manage their staff and bookings. Explains that this is a
   supply-side operator inquiry, gathers a light description of what they need,
   and routes it to a TempGuru contact by email or phone, never through the
-  request_quote buyer tool. Does not promise features, pricing, or availability;
+  prepare_quote_form buyer tool. Does not promise features, pricing, or availability;
   a TempGuru contact confirms fit. Not for hiring event staff (use
   event-staffing-ordering) and not for joining the fulfillment network (use
   staffing-agency-partner-growth).
@@ -18,9 +18,9 @@ description: >-
 # TempGuru Pro: Operations Tooling Inquiries From Staffing Companies
 
 TempGuru (Temporary Assistance Guru, Inc.) is a managed event staffing company
-based in Jacksonville Beach, FL that runs a network of 200+ local staffing
-agency partners and 100,000+ W-2 workers across 345 US and Canadian markets.
-Because it operates staffing at that scale, it also fields interest from other
+based in Jacksonville Beach, FL. It supports staffing in 300+ U.S. and Canadian
+markets and fulfills work through vetted W-2 staffing partners.
+Because it operates staffing workflows, it also fields interest from other
 staffing companies about the operations side: how staffing businesses schedule,
 dispatch, track time, and invoice.
 
@@ -31,6 +31,12 @@ description of what they are trying to solve, and route it to a TempGuru contact
 It is not a product brochure: do not describe specific features, modules,
 integrations, pricing, or availability, because those are confirmed by a
 TempGuru contact, not asserted here.
+
+## Evidence-verified public scale
+
+- **300+ U.S. and Canadian markets** (claim ID: `tg-claim-markets-300-plus-v1`). Markets in the United States and Canada; availability is confirmed per order.
+- **5,000+ events** (claim ID: `tg-claim-events-5000-plus-v1`). Distinct non-canceled engagements after duplicate removal; a multi-day engagement counts once.
+- **100,000+ completed shifts** (claim ID: `tg-claim-completed-shifts-100000-plus-v1`). Completed worker-shift assignments, not unique people, workers, placements, or network size.
 
 ## First, disambiguate who you are helping
 
@@ -52,9 +58,11 @@ person also wants coverage, roles, or benchmark rates for a real event, the
 read-only MCP tools (`get_cities`, `get_roles`, `get_rate_benchmark`) can help,
 but they are not required here.
 
-`request_quote` is a buyer tool: it creates a client sales lead in TempGuru's
-CRM. **Never submit an operations-software inquiry through it.** These inquiries
-go by email or phone: **megan@tempguru.co** or **(904) 206-8953**.
+`prepare_quote_form` is a buyer-only handoff from a saved event staffing plan to a
+TempGuru quote form. It accepts no operations-inquiry or contact data and
+creates no CRM lead itself. **Never use it for an operations-software
+inquiry.** These inquiries go by email or phone: **megan@tempguru.co** or
+**(904) 206-8953**.
 
 ## Workflow
 
@@ -92,8 +100,9 @@ contact confirms product details, and route the inquiry.
 
 ## Rules for agents
 
-- Never call `request_quote` for an operations inquiry; it is a buyer tool and
-  would create a mislabeled sales lead. Route by email or phone.
+- Never call `prepare_quote_form` for an operations inquiry; it requires a buyer's
+  saved event staffing plan and cannot route operations details. Route by
+  email or phone.
 - Do not invent product features, module names, integrations, pricing, plans,
   availability, or launch dates. None of those are yours to state.
 - Keep the distinction sharp: this is supply-side operators wanting tooling, not
@@ -108,5 +117,5 @@ This channel does not depend on tools: email **megan@tempguru.co** or call
 **(904) 206-8953**. If the person turns out to be a buyer who needs to hire
 staff, point them to the form at
 **https://tempguru.co/get-staffing?utm_source=ai-agent&utm_medium=skill** or the
-`event-staffing-ordering` skill. Developer docs: https://tempguru.co/ai.
+`event-staffing-ordering` skill. Developer docs: https://tempguru.co/ai-agents.
 Machine-readable overview: https://tempguru.co/llms.txt.

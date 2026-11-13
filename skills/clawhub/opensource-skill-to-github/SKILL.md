@@ -1,5 +1,6 @@
 ---
 name: opensource-skill-to-github
+version: 1.0.18
 description: >
   Quickly open-source a local skill to GitHub (primary) and optionally clawhub.com.
   Workflow: slug pre-check, fork to opensourceskills, strip internal info, normalize
@@ -12,10 +13,10 @@ description: >
 
 # Open-source a Local Skill to GitHub (+ optional clawhub.com)
 
-- **Version**: 1.0.13
+- **Version**: 1.0.17
 - **License**: MIT
 - **Author**: Evan Song · [github.com/Songhonglei](https://github.com/Songhonglei)
-- **Repository**: https://github.com/Songhonglei/opensource-skill-to-github
+- **Repository**: https://github.com/Songhonglei/build-better-skills/tree/main/skills/opensource-skill-to-github
 
 > 把一个本地 skill 端到端开源到 **GitHub**（主）+ **clawhub.com**（可选）。
 > 基于多个 skill 开源实践沉淀的完整方法论（见 `references/opensource_playbook.md`）+ 11 条剔除清单 + 16 项 checklist。
@@ -297,6 +298,8 @@ scripts/git_init.sh <fork-path> "<user.name>" "<user.email>"
 
 ## Step 9: GitHub repo 创建 + push
 
+> ⚠️ **mono-repo 安全护栏（2026-08-02 新增）**：`github_push.sh` 推送前会检测目标 repo 根目录是否含 `skills/` 目录。若检测到（说明是 mono-repo），脚本会 **exit 8 拒绝推送**，并给出「子目录模式」手动发布指引。这是因为本流程把单个 skill 当 repo 根目录推到 main，会 force-overwrite 掉 mono-repo 里 `skills/` 下的所有其它 skill（`better-office-work-flow` 仓库 08-02 被这样冲掉过：4 skill → 1 skill）。对 mono-repo **必须**改用子目录模式（clone 目标 repo → 放进 `skills/<slug>/` → commit → push），绝不能直接推 fork 的 main。如确需清空 repo 只留这一个 skill，设 `OSG_ALLOW_MONOREPO_OVERWRITE=1`。
+
 ### 9.1 用户操作（必须用户做，AI 不能自动）
 
 1. 浏览器登录 GitHub → 新建 repo `<repo-name>`（**勾 main 分支**，不勾 README/LICENSE/gitignore）
@@ -376,6 +379,8 @@ CLAWHUB_TOKEN=clh_xxx scripts/clawhub_publish.sh <fork-abs-path>
 - 关联：指向上一个开源 skill 的 memory（链式继承）
 
 通用经验沉淀到 `feedback_*.md`。
+
+> ⚠️ **沉淀内容红线**：memory 笔记只记「决策与经验」，**严禁写入任何 token / secret / 明文凭证，也不要抄录内部路径、内网域名、平台代号等敏感上下文**。这与 §8「token 绝不落盘到 git/remote/memory」的硬规则一致——发布后的复盘笔记同样受此约束。
 
 ---
 
