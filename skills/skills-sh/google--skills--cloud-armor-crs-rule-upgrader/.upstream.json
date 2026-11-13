@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/cloud-armor-crs-rule-upgrader",
+  "repo": "google/skills",
+  "skillId": "cloud-armor-crs-rule-upgrader",
+  "branch": "main",
+  "pushedAt": "2026-11-12T23:00:01Z",
+  "contentHash": "b1a9b3fb4b00c801e2111dbf024cdfbd464ada72a3a10d37bb4350bc44a10684",
+  "fetchedAt": "2026-11-13T15:30:13.001Z"
+}
