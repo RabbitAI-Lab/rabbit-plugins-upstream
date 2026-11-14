@@ -1,43 +1,66 @@
-## Description: <br>
-Query crypto project details, Web3 investor info, funding rounds, trending projects, and personnel job changes from RootData. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Query RootData for crypto projects, investors, people, funding rounds, upcoming crypto events, RD and X rankings, stock contract exchanges, and personnel changes. Use for factual Web3 research backed by RootData records.
 
-## Publisher: <br>
-[rdquanyu](https://clawhub.ai/user/rdquanyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rdquanyu](https://clawhub.ai/user/rdquanyu)
 
-## Use Case: <br>
-Developers and analysts use this skill to answer questions about crypto projects, Web3 investors, recent funding rounds, trending projects, and public personnel movements using RootData. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill contacts RootData, creates a local anonymous API key, and retrieves public crypto-industry profile and personnel data. <br>
-Mitigation: Use it only where outbound RootData API access and local ROOTDATA_SKILL_KEY storage are acceptable, and treat returned person or job-change information responsibly before sharing or acting on it. <br>
-Risk: Returned profile, funding, investor, or personnel data could be used in outreach, compliance, hiring, or investment decisions without enough context. <br>
-Mitigation: Verify important claims against source links or other authoritative sources and apply human review before using the data for consequential decisions. <br>
+## Use Case:
 
+Web3 researchers and analysts use this skill to look up RootData records about crypto projects, investors, people, funding, events, rankings, exchange metrics, and personnel changes.
 
-## Reference(s): <br>
-- [RootData](https://www.rootdata.com) <br>
-- [RootData Crypto Skill on ClawHub](https://clawhub.ai/rdquanyu/skills/rootdata-crypto) <br>
-- [README.md](artifact/README.md) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API Calls, Configuration] <br>
-**Output Format:** [Markdown guidance with JSON request examples and summarized API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ROOTDATA_SKILL_KEY; first use may create a local anonymous RootData API key. Funding data is limited to the past 365 days, funding round investors are capped at three, and personnel job changes are capped at 20 recent entries per category.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence, released 2026-07-10) <br>
+Risk: The security scan was only able to inspect part of one reference file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill references before installation, including the portion that was not fully inspected by the scan.
+
+Risk: API requests use a RootData skill key.
+
+Mitigation: Keep ROOTDATA_SKILL_KEY in local secret storage and do not include it in answers, shared files, or URLs.
+
+## Reference(s):
+
+- [RootData Skill API](https://api.rootdata.com/open/skill)
+- [RootData Crypto release page](https://clawhub.ai/rdquanyu/skills/rootdata-crypto)
+- [Search projects, investors and people](artifact/references/ser_inv.md)
+- [List IDs](artifact/references/id_map.md)
+- [Project details](artifact/references/get_item.md)
+- [Person details](artifact/references/get_people.md)
+- [Calendar events](artifact/references/get_event.md)
+- [Funding rounds](artifact/references/get_fac.md)
+- [RD Hot Index Top 100](artifact/references/hot_index.md)
+- [RD Growth Index Top 300](artifact/references/get_rd_top300.md)
+- [Stock contract exchange ranking](artifact/references/stock_leaderboard.md)
+- [X hot projects](artifact/references/hot_project_on_x.md)
+- [X popular people](artifact/references/leading_figures_on_crypto_x.md)
+- [Personnel position changes](artifact/references/job_changes.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown or plain text research summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Coverage follows RootData records and documented date and investor limits.]
+
+## Skill Version(s):
+
+2.0.0 (source: frontmatter; confirmed by server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

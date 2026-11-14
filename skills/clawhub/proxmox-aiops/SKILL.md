@@ -18,7 +18,7 @@ installer:
 argument-hint: "[vmid or describe your Proxmox task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["PROXMOX_AIOPS_CONFIG"],"bins":["proxmox-aiops"],"config":["~/.proxmox-aiops/config.yaml","~/.proxmox-aiops/.env"]},"optional":{"env":["PROXMOX_TARGET_SECRET"]},"primaryEnv":"PROXMOX_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Proxmox-AIops","emoji":"🧱","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["proxmox-aiops","uvx"]},"optional":{"env":["PROXMOX_AIOPS_CONFIG","PROXMOX_TARGET_SECRET"]},"homepage":"https://github.com/AIops-tools/Proxmox-AIops","emoji":"🧱","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed Proxmox VE operations. The governance harness (audit, token/runaway budget, undo, risk-tier labels) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.proxmox-aiops/ (relocatable via PROXMOX_AIOPS_HOME).
@@ -30,6 +30,8 @@ compatibility: >
 ---
 
 # Proxmox AIops
+
+> **Audit availability:** Real writes require a durable audit intent. Reads and previews can continue if audit storage fails; check the warning and audit health before relying on their audit trail.
 
 > **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by Proxmox Server Solutions GmbH.** "Proxmox" is a trademark of its owner. Source code is publicly auditable at [github.com/AIops-tools/Proxmox-AIops](https://github.com/AIops-tools/Proxmox-AIops) under the MIT license.
 
@@ -60,6 +62,15 @@ Governed VM and container lifecycle operations for Proxmox VE — **43 MCP tools
 uv tool install proxmox-aiops
 proxmox-aiops doctor
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/proxmox-aiops
+openclaw skills info proxmox-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 
@@ -200,7 +211,7 @@ permitted. That is your agent's judgement, or the permission of the account you 
 use a Proxmox VE user or API token granted only read privileges (no VM.*/Datastore.* write roles),
 and writes then fail at the server. There is no read-only switch, policy file, or approval gate.
 
-- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.proxmox-aiops/audit.db` (relocatable via `PROXMOX_AIOPS_HOME`): params, result, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
+- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.proxmox-aiops/audit.db` (relocatable via `PROXMOX_AIOPS_HOME`): params, outcome summary, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
 - `PROXMOX_AUDIT_APPROVED_BY` / `PROXMOX_AUDIT_RATIONALE` are optional annotations recorded on the audit row (who/why); they are never required and never block.
 - **Runaway guard** — a safety backstop, not authorization: the same call looped in a tight window trips a circuit breaker. Disable with `PROXMOX_RUNAWAY_MAX=0`; optional hard ceilings via `PROXMOX_MAX_TOOL_CALLS` / `PROXMOX_MAX_TOOL_SECONDS`.
 - Undo store records inverse descriptors for reversible writes (start/stop/shutdown/reconfigure/clone/migrate/snapshot-create, container start/stop).

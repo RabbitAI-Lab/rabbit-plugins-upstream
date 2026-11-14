@@ -1,45 +1,53 @@
-## Description: <br>
-Guides developers through converting a static-export Next.js 16 App Router web app into a Tauri 2 desktop app with packaging, updater, i18n, and CI templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers in wrapping a client-side Next.js 16 static export as a Tauri 2 desktop app, with optional desktop integrations and cross-platform release automation.
 
-## Publisher: <br>
-[rockbenben](https://clawhub.ai/user/rockbenben) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rockbenben](https://clawhub.ai/user/rockbenben)
 
-## Use Case: <br>
-Developers and engineers use this skill to migrate compatible client-side Next.js applications into desktop builds, adding Tauri configuration, frontend integration hooks, signing reminders, and GitHub Actions release workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A leaked Tauri updater private key could let an attacker sign malicious updates that clients trust. <br>
-Mitigation: Keep the private key out of source control, store it only as a GitHub secret for intended release repositories, and rotate it if exposure is suspected. <br>
-Risk: The build workflow grants release permissions and can publish signed artifacts. <br>
-Mitigation: Enable the workflow only in repositories where release publishing is intended and review copied permissions before use. <br>
-Risk: The optional language persistence hook stores a preferred language locally, which has a small privacy tradeoff. <br>
-Mitigation: Persist the preferred language only after the user explicitly chooses one, or omit the hook when cross-launch language memory is unnecessary. <br>
+## Use Case:
 
+Developers use this skill to adapt a client-side Next.js 16 static export into a Tauri 2 desktop app while preserving web behavior. It provides optional native integrations and a cross-platform build and release workflow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/rockbenben/skills/nextjs-to-tauri) <br>
-- [Frontend integration templates](artifact/frontend-integration.md) <br>
-- [Tauri file templates](artifact/tauri-files.md) <br>
-- [Desktop build workflow template](artifact/desktop-build.yml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline code blocks and copy-paste configuration templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes project-specific placeholders and reminders to verify current dependency and action versions before applying.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: frontmatter and server release evidence) <br>
+Risk: The security scan marks this release suspicious because install and update guidance uses unpinned tools and elevated CI commands, while scanner coverage is incomplete; it found no clear malicious intent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect the referenced files before installation, review and pin tool versions and CI permissions and commands, and wait for fuller scan coverage.
+
+## Reference(s):
+
+- [Skill homepage](https://github.com/rockbenben/aishort-skills/tree/main/skills/nextjs-to-tauri)
+- [Tauri Content Security Policy documentation](https://v2.tauri.app/security/csp/)
+- [Tauri EGL issue](https://github.com/tauri-apps/tauri/issues/9394)
+- [AppImage compatibility case](https://github.com/espressif/idf-im-ui/issues/755)
+- [Host library preload implementation example](https://github.com/refactoringhq/tolaria/commit/8c286a4856637d662f05428f679faa4aee607c66)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with code blocks for TypeScript, Rust, YAML, JSON, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Adaptable templates and optional integrations for the target project.]
+
+## Skill Version(s):
+
+1.1.16 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

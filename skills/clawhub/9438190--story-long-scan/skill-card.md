@@ -1,48 +1,59 @@
-## Description: <br>
-Analyzes ranking data from long-form Chinese web-novel platforms such as Qidian, Fanqie, Qimao, Ciweimao, and Jinjiang to identify market trends and topic opportunities. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Story Long Scan helps agents collect and analyze long-form web-novel ranking data from platforms such as Qidian, Fanqie, Jinjiang, Qimao, and Ciweimao to identify market trends, popular genres, topic candidates, and validation actions.
 
-## Publisher: <br>
-[9438190](https://clawhub.ai/user/9438190) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[9438190](https://clawhub.ai/user/9438190)
 
-## Use Case: <br>
-Developers, writers, and publishing analysts use this skill to gather or ingest web-novel ranking samples, compare platform-specific signals, and produce scan reports plus topic-decision recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may make outbound requests to web-novel ranking sites during data collection. <br>
-Mitigation: Run collection only in environments where those requests are expected and permitted, and review the selected platforms before starting broad scans. <br>
-Risk: Browser-based collection can involve an existing Chrome profile, including site logins or cookies. <br>
-Mitigation: Use a separate browser profile for CDP collection when existing browsing state should not be involved. <br>
-Risk: The skill can write multiple ranking reports and topic-decision files to an output directory. <br>
-Mitigation: Choose an explicit output directory and review generated files before using them in downstream writing or publishing workflows. <br>
+## Use Case:
 
+Authors, editors, and agent operators use this skill to scan web-novel ranking samples, compare platform-specific signals, and turn repeated market patterns into practical long-form story topic recommendations. The skill can guide live scraper use, analyze user-provided ranking data, or fall back to bundled trend references when current data is unavailable.
 
-## Reference(s): <br>
-- [Scan Output Format](references/scan-output-format.md) <br>
-- [Topic Decision](references/topic-decision.md) <br>
-- [Genre Trends](references/genre-trends.md) <br>
-- [Reader Profiling](references/reader-profiling.md) <br>
-- [Publishing Guide](references/publishing-guide.md) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [ClawHub skill page](https://clawhub.ai/9438190/skills/story-long-scan) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, text, shell commands, code, guidance] <br>
-**Output Format:** [Markdown reports and recommendations with inline shell commands for optional scraper execution] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write platform ranking scan files and a topic-decision Markdown file to a user-selected output directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Server security evidence reports a suspicious verdict because the browser automation helper uses an unsafe shell command pattern that could allow hostile page content to run local commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing or running; use an isolated workspace and dedicated browser profile, avoid unrelated logged-in sessions, and replace shell command construction with execFileSync or spawnSync argument arrays plus strict HTTPS host allowlists before trusting scraped pages.
+
+Risk: Ranking data can be incomplete, stale, blocked, or misparsed when platform pages change or anti-crawling behavior interferes with collection.
+
+Mitigation: Use the skill's documented data-quality headers and checks, rerun or repair failed collections, and treat sparse or fallback-only analysis as a hypothesis until validated with current ranking samples.
+
+## Reference(s):
+
+- [Scan Output Format](references/scan-output-format.md)
+- [Topic Decision](references/topic-decision.md)
+- [Genre Trends](references/genre-trends.md)
+- [Publishing Guide](references/publishing-guide.md)
+- [Reader Profiling](references/reader-profiling.md)
+- [OpenClaw Source Metadata](https://github.com/worldwonderer/oh-story-claudecode)
+- [ClawHub Skill Page](https://clawhub.ai/9438190/skills/story-long-scan)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports, Markdown data files, and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce platform scan reports and topic decision notes; scraper-backed workflows depend on network access, current page structure, and browser/CDP availability.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

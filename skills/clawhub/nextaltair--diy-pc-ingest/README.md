@@ -6,7 +6,7 @@ Discordなどに貼り付けたPCパーツ購入ログ/メモを、OpenClaw経�
 - 迷うところは止めて質問、確実なところは即時反映
 - Notion APIは **2025-09-03**(data_sources世代)前提
 
-> このリポジトリには個人のNotion IDやAPIキーは含めません。各自の環境のに設定してください。
+> このリポジトリには個人のNotion IDやAPIキーは含めません。各自の環境に設定してください。
 
 ---
 
@@ -14,18 +14,31 @@ Discordなどに貼り付けたPCパーツ購入ログ/メモを、OpenClaw経�
 
 - Notionの各テーブルに対して **作成/更新(upsert運用)** を行う
 - ストレージはシリアル優先で追記しやすい
+- シリアル不明でもストレージ / PCInputへ登録でき、後から実シリアルを追記できる
 - 必要に応じてストレージをPCConfig側にも「構成要素」としてミラー登録できる
 
 ---
 
 ## セットアップ
 
-### 0) 依存スキル(ClawHub)
+### 0) 導入済みのNotionスキルを確認
 
 このスキルのNotion運用/デバッグ用依存は、ClawHubの `notion-api-automation` です。
 
-- 推奨インストール: `clawhub install notion-api-automation`
-- 同梱の `scripts/notion_apply_records.js` は単体でも動作しますが、Notion APIの疎通確認/調査には `notionctl.mjs` が便利です
+- OCで読むスキル名は `notion`、ClawHubの配布名は `notion-api-automation` です。
+- `skills_read(name="notion")` で実際の配置と手順を読みます。見つからなければ `skills_search` で候補を確認します。
+- 読み込んだ `SKILL.md` の場所から `scripts/notionctl.mjs` を解決し、実行時の `--notionctl-path` で絶対パスを渡します。同じ親ディレクトリへの配置は前提にしません。
+- `scripts/notion_apply_records.js` は依存スキルの `notionctl.mjs api` を使用します。単体では通信できません。
+- `node <実際のCLIパス> --help` で `api` と必要な引数を確認します。導入済みで動く依存を再インストールする必要はありません。
+
+未導入の場合だけ、対象エージェントを指定して導入します。
+
+```bash
+openclaw skills install @tristanmanchester/notion-api-automation --agent <agent-id>
+```
+
+`<agent-id>` はOCの設定済みエージェントIDです。人間のプロフィールIDではありません。
+`dependsOnSkills` / `optionalEnv` / `network` はOCが解釈するmetadataではないため、依存確認や通信範囲は本文の手順で扱います。
 
 ### 1) Notion Integration を作る
 
@@ -54,7 +67,7 @@ Notion AIに以下を貼り付けて、DIY_PC用の4テーブル(PCConfig / PCIn
 
 必須プロパティ:
 - Name (title)
-- シリアル (text)
+- シリアル (text)  ※判明していれば主キー。値は空欄でも可
 - 種別 (select) 例: SSD, HDD
 - 規格 (select) 例: NVMe, SATA
 - 容量(GB) (number)
@@ -113,7 +126,7 @@ Notion AIに以下を貼り付けて、DIY_PC用の4テーブル(PCConfig / PCIn
 必須プロパティ:
 - 名前 (title)
 - 型番 (text)
-- Serial (text)
+- Serial (text)  ※値は空欄でも可
 - 購入日 (date)
 - 購入店 (text)
 - 価格(円) (number)
@@ -124,74 +137,73 @@ Notion AIに以下を貼り付けて、DIY_PC用の4テーブル(PCConfig / PCIn
 作成後、各DBを「DIY_PC」ページ配下に置いてください。
 ```
 
-### 1.8) (推奨) Notion操作スキルをインストール(ClawHub)
-
-Notion APIの疎通確認/デバッグ/手作業オペレーション用に、ClawHubの `notion-api-automation` を入れておくと便利。
-
-```bash
-clawhub install notion-api-automation
-```
-
 ### 2) トークン(APIキー)を用意
 
-環境変数で渡す
+ホストの保護された認証設定を使います。秘密値をチャット、コマンド、ログへ貼り付けないでください。
 
-```bash
-export NOTION_API_KEY="<your notion token>"
+OpenClawでは `skills.entries["diy-pc-ingest"].apiKey` に設定する方法も使えます。
+`apiKey` はこのskillの `primaryEnv` である `NOTION_API_KEY` として実行時に注入されます。
+SecretRef provider はユーザー環境ごとに異なるため、このskillには特定のvault/item/pathを固定しません。
+
+```json5
+{
+  skills: {
+    entries: {
+      "diy-pc-ingest": {
+        apiKey: { source: "exec", provider: "your_notion_secret_provider", id: "value" }
+      }
+    }
+  }
+}
 ```
 
-OpenClawでは `~/.openclaw/.env` に書いて起動時に環境変数として読ませる
+`source` は `env` / `file` / `exec` など、OpenClaw Gatewayで設定済みのSecretRef providerに合わせてください。
 
-### 3) NotionのIDを自動検出して設定(推奨)
+認証の注入はホストのagent runに限定され、別nodeやsandboxへ自動では渡りません。
+依存CLIの `NOTION_TOKEN` / `NOTION_API_TOKEN` は補助的な認証経路ですが、このスキルのOC利用可能判定には `NOTION_API_KEY` または設定済み `apiKey` が必要です。
 
-Notionの `data_source_id` / `database_id` は、Integrationがアクセスできる範囲なら検索で取得できます。
-このスキルには初期設定用スクリプトが同梱されているので、通常は手でIDを書く必要はありません。
+### 3) 対象IDを指定
 
-```bash
-cd skills/diy-pc-ingest
-
-# NOTION_API_KEY を設定した状態で実行
-node scripts/bootstrap_config.js
-```
-
-これで `~/.config/diy-pc-ingest/config.json` が生成されます。
-
-DB名が環境で違う場合は `--names` で指定できます:
-
-```bash
-node scripts/bootstrap_config.js --names   pcconfig=PCConfig   pcinput=PCInput   storage=ストレージ   enclosure=エンクロージャー
-```
-
-### 3b) 手動設定(うまく検出できない場合)
-
-検索に出ない/同名が複数ある等で失敗する場合は、テンプレをコピーして手で埋めてください。
-
-- テンプレ: `references/config.example.json`
-- 配置先: `~/.config/diy-pc-ingest/config.json`
-
-```bash
-mkdir -p ~/.config/diy-pc-ingest
-cp references/config.example.json ~/.config/diy-pc-ingest/config.json
-```
-
-`config.json` の以下を埋めます:
-- `notion.targets.*.data_source_id`
-- `notion.targets.*.database_id`
-
+ワークスペースの `AGENTS.md` 内 `DIY-PC Notion Targets` を確認し、対象ごとの `--<target>-dsid` / `--<target>-dbid` を指定します。自動検出スクリプトやconfig.json読み込みはありません。
 
 ## 使い方
 
-このスキルのコア処理は `scripts/notion_apply_records.js` です。
+インストール先の `SKILL.md` があるディレクトリから実行します。導入済みNotionスキルから解決したCLIの絶対パスを `--notionctl-path` で渡してください。優先順位はCLI引数、`NOTIONCTL_PATH`、従来の同階層 / owner外ルート探索です。明示したパスが無効なら別経路へ切り替えません。
 
-### JSONLを適用(手動)
+### 既定動作はplan
 
 ```bash
-cd skills/diy-pc-ingest
-
-node scripts/notion_apply_records.js <<'JSONL'
-{"target":"storage","properties":{"Name":"Samsung 970 EVO Plus 1TB (MZ-V7S1T0B/IT)","購入日":"2021-11-21","購入店":"JoshinWeb","価格(円)":14980,"型番":"MZ-V7S1T0B/IT","メモ":"Serial未入力"}}
-JSONL
+node scripts/notion_apply_records.js --plan --notionctl-path "<RESOLVED_NOTIONCTL_PATH>" --storage-dsid <STORAGE_DS_ID> --storage-dbid <STORAGE_DB_ID> < records.jsonl
+node scripts/notion_apply_records.js --apply --notionctl-path "<RESOLVED_NOTIONCTL_PATH>" --storage-dsid <STORAGE_DS_ID> --storage-dbid <STORAGE_DB_ID> < records.jsonl
 ```
+
+`--dry-run` もplanです。モード省略でも書き込みません。mirrorにはPCConfigのIDも指定します。JSONL例:
+
+```json
+{"target":"storage","properties":{"Name":"Example SSD","シリアル":"EXAMPLE-001","メモ":"購入記録"}}
+{"target":"storage","properties":{"Name":"Another SSD","購入日":"2026-10-05","価格(円)":5000,"メモ":"シリアル未確認"}}
+```
+
+入力/結果は個人情報を含むため、リポジトリ外で扱います。
+
+- plan: 対象、キー、create/update/archive/skip、変更前後を表示。読み取りとqueryのみで書き込み0件。
+- 重複キー、キー不足、未知のプロパティ、取得不完全はblocked。apply前の全件照合で書き込みを止めます。
+- apply: 各操作前に再照合し、変更後を読み戻して一致したものだけappliedに計上。失敗後は残りをnot_executedとして停止。
+- 成功/skip/失敗/未実行を確認してから日次メモや進捗を記録。部分成功を全体成功とは扱いません。
+- 拒否時に別経路へ切り替えません。原因不明は不明のまま報告。問題解決後の再開では現状を再取得し、成功済み行を再作成せず未反映分をplanします。
+- 既存のユーザー承認範囲内で不要な再承認を求めません。未承認のarchive/overwriteや曖昧な個体同定は確認します。
+- Notion側に一意制約/トランザクションはありません。同じキーの同時実行を避けてください。
+
+詳細なキー条件、JSONL、再開手順は [SKILL.md](SKILL.md) を参照してください。
+
+### シリアル不明の扱い
+
+- シリアル不明だけを理由に質問せず、値を省略して登録できます。`null`・空欄・`不明`・`unknown`・`n/a` なども共通シリアルとして保存しません。
+- ストレージは `Name` と入力された `購入日` / `価格(円)`、PCInputは `型番` + `名前` と入力された購入情報で暫定照合します。シリアル既知の別行には名前だけで合流しません。
+- 後から実シリアルを渡すと、同じ暫定情報の行へ追記できます。確定後は実シリアルまたは記録した `page_id` を使います。
+- 同じ暫定情報の既存行が複数ある場合や、1バッチに同じ暫定情報の入力が複数ある場合は書込み前に止めます。別個体は名前にベイ番号・個体番号などを付け、同一個体への複数追記は1レコードへまとめます。偽シリアルは作りません。
+- `overwrite:true` でも「不明」や空欄で既知シリアルは消しません。意図的な消去は `page_id` / `id` + `overwrite:true` + 明示的な `null` の組合せに限定します。
+- ストレージのPCConfigミラーは、シリアル不明なら `Spec` を空欄に保ち、判明後に追記できるようにします。
 
 ### オプション(運用向け)
 

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/skill-to-http",
   "slug": "skill-to-http",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1784127906112,
-  "contentHash": "48eee167c4e59f2092bff4e04e94ecb043fe679c2e6a88873e1a37159e4c91ef",
-  "fetchedAt": "2026-07-26T18:13:54.474Z"
+  "version": "1.0.2",
+  "updatedAt": 1794347652016,
+  "contentHash": "c12953074596ce94d9e771c470a3822019bdca7fceb6c9ddbd3cc665c6c320f7",
+  "fetchedAt": "2026-11-14T14:27:12.462Z"
 }

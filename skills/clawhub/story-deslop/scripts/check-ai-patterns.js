@@ -2,9 +2,11 @@
 'use strict';
 
 const fs = require('fs');
+const { loadStyleWhitelist, maskStyleText } = require('./style-whitelist.js');
 const path = require('path');
 
 const USAGE = `Usage: node check-ai-patterns.js [--check] [--json] [--fail-on=blocking|all] <file...>
+       node check-ai-patterns.js --list-review-classes
 
 Detect high-risk AI-flavor prose patterns that need human rewrite:
   - negative setup followed by positive flip in the same sentence
@@ -13,6 +15,7 @@ Detect high-risk AI-flavor prose patterns that need human rewrite:
   - repeated negative setup followed by positive flip
   - em-dash (按功能改写), 碎句号 (连续短叙述句), 长段落 (按镜头断段)
   - 微动作复读 (「了下/了一下」式轻量补语高密度，电报体指纹)
+  - 套式反应细节 (指尖/指节/目光等无功能微动作与「平静得像在念」式语气比喻成片)
   - 抽象总结复读 (命运/棋局/这一刻终于明白/才刚刚开始，AI 结尾腔)
   - 套词密度过高 (仿佛/一丝/深吸一口气/平静无波等禁用词聚集)
   - 比喻密度过高 (像/好像/仿佛/如同等比喻标记成片复现)
@@ -23,13 +26,19 @@ Detect high-risk AI-flavor prose patterns that need human rewrite:
   - 监控摄像头式动作清单 (同段连续摆放动作动词，缺少视角温度/情绪缓冲)
   - 音量反差腔 (声音不高/不大…却…, 实战漏网句式)
   - 否定排比 (没有X，没有Y…连排 / 没X…只是Y 先否定后肯定, 实战漏网句式)
+  - 工整并列 (至于X不X，怎么X / 同动词「不V A，不V B」，含台词，advisory)
   - 反序对比 (是A，不是B — not-is 的反序变种, 实战漏网句式)
   - 预告式总结收尾 (文末窗口 没人知道/才刚刚开始/正朝着…压了过去, 实战漏网句式)
+  - 章尾状态总结体 (文末窗口 这一夜注定/这一切都结束了/新的人生才刚刚开始/命运的齿轮)
   - 引号强调滥用 (叙述里 1-4 字短词加引号强调，密度型)
+  - 叙述省略号过密 (引号与面板外 …… 高密度刷屏，advisory)
 
-Each finding carries severity: blocking by default for generation/deslop cleanup (not-is-comparison / em-dash / voice-contrast / negation-parade / reverse-not-is / trailer-ending). This is a local style/readability gate, not an AIGC detector score; functional human text can be marked for review instead of hard-edited for a detector.
-或 advisory (period-stutter / long-paragraph / micro-action-tic / action-list-tic / abstract-summary-tic / cliche-density-tic / metaphor-density-tic / reasoning-chain-tic / system-notice-formality-tic / overcompressed-prose-tic / low-connective-density-tic / quote-emphasis-tic，是提示，justified 的长推理/氛围段可保留)。
+Book-local .deslop-whitelist literal spans are excluded from style scanning (no regex or ancestor inheritance).
+Each finding carries severity: blocking by default for generation/deslop cleanup (not-is-comparison / em-dash / voice-contrast / negation-parade / reverse-not-is / trailer-ending / trailer-summary), where single/low-count hits of rhetorical patterns downgrade to semantic advisory and high-density clusters block. This is a local style/readability gate, not an AIGC detector score; functional human text can be marked for review instead of hard-edited for a detector.
+或 advisory (period-stutter / long-paragraph / micro-action-tic / negation-pair-tic / stock-reaction-tic / action-list-tic / abstract-summary-tic / cliche-density-tic / metaphor-density-tic / reasoning-chain-tic / system-notice-formality-tic / overcompressed-prose-tic / low-connective-density-tic / quote-emphasis-tic / formulaic-parallelism / ellipsis-density-tic，是提示，justified 的长推理/氛围段可保留)。
 --fail-on=blocking 只在出现 blocking finding 时退出 1；默认 --fail-on=all 有任何 finding 即退出 1。
+Each finding also carries review: mechanical（表面形态确定、就地改写即可）或 semantic（可能承担叙事功能，需读上下文判断是否保留）；blocking 一律 mechanical。--list-review-classes 输出完整分类表（JSON）。
+HTML comments (<!-- ... -->, e.g. the 去味:跳过 exemption marker) are metadata, not prose, and are never scanned.
 
 The script reports findings only. It never rewrites text, because the safe fix is
 contextual: usually delete the negative setup, write the positive term directly,
@@ -53,7 +62,32 @@ const LONG_PARAGRAPH_CHARS = 200;
 // 单次出现是正常中文。
 const MICRO_TIC_PATTERN = /了(?:[一两三几半])?[下阵圈道声眼口气会]/g;
 const MICRO_TIC_MIN_HITS = 5;
+// 「没A，也没B」「不A，也不B」否定对偶：七猫人类长篇约 0.07 处/千字，模型稿 0.4-1.5 处/千字；
+// 写人物没做什么是英文式节奏，一章 3 处以上报一条提示。
+const NEGATION_PAIR_PATTERN = /(?:没有|没|不)[^，。！？；,!?\n]{1,10}[，,；]\s*[^，。！？；,!?\n]{0,6}?也(?:没有|没|不)/g;
+const NEGATION_PAIR_MIN_HITS = 3;
 const MICRO_TIC_PER_KILO = 6;
+
+// 套式反应细节：不是禁写身体，而是提示成片出现的“部位 + 轻微动作/状态”、
+// “胸口像被撞了一下”、喉结/眼圈/声音放轻等通用情绪尾巴，以及“平静语气 +
+// 像在念/宣判”模板。此类句子词面变化大，不能逐词 blocking；按章聚集到 4 处才
+// advisory，要求逐处做删除测试。正常受伤、打斗、生理反应若承担物理后果可保留。
+const STOCK_REACTION_PATTERNS = [
+  /(?:指尖|指腹|手指|指节|手背|掌心|拳头|袖口|衣角|裙角|下唇|嘴唇|唇角|嘴角|眉头|眼底|眸光|目光|视线|肩膀|呼吸)[^。！？!?\n]{0,16}(?:轻轻|微微|缓缓|慢慢|悄然|不自觉|无意识|下意识|攥紧|握紧|收紧|绞紧|拢住|按住|压住|扣住|捻|泛白|发白|叩|敲|摩挲|抿紧|抿成|移开|垂下|躲开|落[在到][^，。！？!?\n]{1,10}(?:停|顿)|一颤|颤了?一下|停了?一下|顿了?一下)/g,
+  /(?:手|指尖|手指)往(?:袖口?|怀|兜|口袋|身后|背后)里?一?(?:缩|揣|收|藏)/g,
+  /(?:语气|声音)[^。！？!?\n]{0,12}(?:平静|冷静|平淡|冷淡|淡漠|平直)[^。！？!?\n]{0,12}(?:像|仿佛|如同|好像)[^。！？!?\n]{0,16}(?:念|读|报|说|陈述|宣判|背诵)/g,
+  /(?:胸口|心口)[^。！？!?\n]{0,16}(?:像|仿佛|如同|好像)[^。！？!?\n]{0,16}(?:撞|锤|压|攥|堵)[^。！？!?\n]{0,8}(?:一下|一记|一拳)?/g,
+  /(?:声音|嗓音|语气)[^。！？!?\n]{0,12}(?:放轻|压低|发紧|发颤|很轻|轻了些)/g,
+  /(?:喉结|喉头|喉咙)[^。！？!?\n]{0,10}(?:滚|动|紧|堵|发涩|发干)/g,
+  /(?:眼眶|眼圈|鼻子)[^。！？!?\n]{0,8}(?:发红|红了|发热|发酸|一酸)/g,
+  /(?:抿了?下唇|抿了?抿唇|抿了?下嘴|抿着笑)/g,
+];
+const STOCK_REACTION_MIN_HITS = 4;
+// 校准（真人语料，<br> 已还原为换行）：qimao 长篇 5584 章 + heiyan 短篇整篇 3983 篇。
+// 长篇章尺度（中位约 2100 字）per-kilo 1.0→1.5 误报 0.43%→0.39%，几乎不动；
+// 短篇整篇 8000-20000 字下 MIN_HITS 形同虚设、只剩密度门，1.0 时误报 5.57%，
+// 1.5 降到 1.46%。故取 1.5，把两个总体拉到同一量级（四份副本共用一组阈值）。
+const STOCK_REACTION_PER_KILO = 1.5;
 
 // 监控摄像头式动作清单：同一段连续堆叠通用动作动词（伸手/拿起/取过/挑开/放下/转身等），
 // 且用逗号/顿号串联成步骤表时，读感像无视角温度的监控记录。只做 advisory；
@@ -101,15 +135,17 @@ const METAPHOR_DENSITY_MIN_HITS = 7;
 const METAPHOR_DENSITY_PER_KILO = 3;
 
 // 解释链密度：常见“他知道/他明白/这意味着/必须需要”
-// 连续替读者推理，读感像报告。单个判断词可服务推理；高密度聚集才提示回到角色当下证据。
+// 连续替读者推理，读感像报告。单个判断词或领域名词可服务叙事；只有论文推导词/义务情态链成片出现才报。
+// 顺序固定为 connector → modal → mental → abstract，供同一行去重重叠区间（如“必须在规则惩罚前做出判断”只计 1 次 modal）。
 const REASONING_CHAIN_PATTERNS = [
+  { key: 'connector', core: true, pattern: /这意味着|也就是说|换句话说|真正的问题(?:在于)?|问题在于|关键在于|在这种情况下|按照这个逻辑/g },
+  { key: 'modal', core: true, pattern: /(?:(?<!不)(?:必须|需要|应该|只要|就会|可能|无法)|不能)[^。！？!?\n]{0,16}(?:判断|确认|承担|维持|稳住|控制|扩大|失控|带来|造成|默认|核对|筛选|减少|建立|风险|结果|秩序|责任)/g },
   { key: 'mental', core: true, pattern: /(?<![不没未无])(?:他|她|我)?(?:知道|明白|意识到|清楚|判断|确认|分析)/g },
-  { key: 'connector', core: true, pattern: /这意味着|也就是说|换句话说|真正的问题(?:在于)?|问题在于|关键在于|在这种情况下|按照这个逻辑|只有这样|想到这里/g },
-  { key: 'modal', core: true, pattern: /(?:(?<!不)(?:必须|需要|应该|只要|就会|可能|可以|能够|无法)|不能)[^。！？!?\n]{0,16}(?:判断|确认|承担|维持|稳住|控制|扩大|失控|带来|造成|理解|默认|回家|进门|核对|筛选|减少|建立|风险|结果|秩序|责任)/g },
   { key: 'abstract', core: false, pattern: /(?:任务|条件|风险|来源|逻辑|局面|结果|责任|秩序|规则|信息不足|决策能力)/g },
 ];
 const REASONING_CHAIN_MIN_HITS = 8;
 const REASONING_CHAIN_CORE_MIN_HITS = 4;
+const REASONING_CHAIN_MIN_LINKS = 3;
 const REASONING_CHAIN_MIN_BUCKETS = 2;
 const REASONING_CHAIN_PER_KILO = 18;
 
@@ -157,8 +193,11 @@ const AFFIRMATION_TAG_PARTICLES = new Set(['的', '啊', '呀', '呢']);
 const AFFIRMATION_TAG_BOUNDARY = new Set(['', '，', ',', '。', '.', '！', '!', '？', '?', '、', '；', ';', '：', ':', '\n', '\r', '\t', ' ']);
 
 // 成对引号（台词/系统播报/弹幕）的字符对，stripQuoted 与 quotedRanges 共用一份来源。
+// 引号片段一律不跨行（字符类里排掉 \n）：正文漏一个收引号很常见（多段台词只在末段收尾、
+// 全半角引号混用都会漏），若允许跨行配对，一个未闭合的开引号会把后面成百上千字全算成
+// 「引号内」，让 quotedRanges 的消费方（not-is 跨行扫描）把整段叙述静默豁免掉。
 const QUOTE_PAIRS = [['「', '」'], ['『', '』'], ['【', '】'], ['“', '”'], ['‘', '’'], ['"', '"'], ["'", "'"]];
-const QUOTE_SOURCES = QUOTE_PAIRS.map(([open, close]) => `${escapeRegExp(open)}[^${escapeRegExpCharClass(close)}]*${escapeRegExp(close)}`);
+const QUOTE_SOURCES = QUOTE_PAIRS.map(([open, close]) => `${escapeRegExp(open)}[^${escapeRegExpCharClass(close)}\\n]*${escapeRegExp(close)}`);
 
 // ---- 实战测试漏网句式（来源：实战写作抓到的真实漏网例句；2026-07 校准）----
 // 校准基线：《万疆》真人正文 20 章（第1/10/20/…/190章）+ demo 前 20 章。
@@ -173,11 +212,24 @@ const VOICE_CONTRAST_PATTERN = /声音(?:并)?不[大高响亮][^。！？!?\n]{
 // 否定排比（实战漏网 B）：「没有伴奏，没有和声，没有提词器。」同句 ≥2 个「没有X，」连排；
 // 变体「他没炫技，没有那种…架势。他只是唱」先否定铺垫、再用「只是/只会/只有」收肯定。
 // 只收「没/没有」段，不收「不X」段——真人叙述里「不哭不闹」类太常见，收进来误报换不来收益。
+// 光杆「没」还得挡两类非否定用法，否则正常叙述会被判成排比：
+//   1) 黏着语素（沉没/淹没/埋没/出没/隐没…）——前字排除，「船沉没在雾里，没人回头，…只有…」不算；
+//   2) 时间惯用语（没多久/没过多久/没等X）——后字排除，「没多久，没等她撑伞，…只有…」不算。
+// 「没有X」段不带这两种歧义（黏着语素后接不出「有」，时间惯用语已被后字排除覆盖），
+// 第一条连排式照旧不加护栏。
 // 校准：《万疆》20 章 0 命中，demo 前 20 章 0 命中。
 const NEGATION_PARADE_PATTERNS = [
   /(?:没有[^。！？!?\n，,]{1,12}[，,]){2}/g,
-  /没(?:有)?[^。！？!?\n，,]{1,12}[，,]\s*没(?:有)?[^。！？!?\n，,]{1,16}[，,。.][^。！？!?\n，,]{0,6}只(?:是|会|有)/g,
+  /(?<![沉淹埋出隐湮吞覆漫泯])没(?!有?过?多久)(?:有)?[^。！？!?\n，,]{1,12}[，,]\s*没(?!有?过?多久)(?:有)?[^。！？!?\n，,]{1,16}[，,。.][^。！？!?\n，,]{0,6}只(?:是|会|有)/g,
 ];
+const CROSS_NEGATION_START = /^不是[^。！？!?\n]{1,24}[。！？!?]?$/;
+const CROSS_NEGATION_MIDDLE = /^(?:也|还)不是[^。！？!?\n]{1,24}[。！？!?]?$/;
+const CROSS_NEGATION_END = /^只是[^。！？!?\n]{1,32}[。！？!?]?$/;
+
+// 两类常见但不能直接判错的工整框架，只做 advisory。与 blocking 规则不同，这里故意扫描
+// 台词：自然点单「不放辣，不放葱」靠对象最短长度排除；更长的同动词清单交语义审查判断功能。
+const DECISION_FRAME_PATTERN = /至于([\u3400-\u9fff]{1,3})不\1[，,]\s*怎么\1/g;
+const REPEATED_NEGATIVE_VERB_PATTERN = /不([\u3400-\u9fff]{1,2})([\u3400-\u9fff]{2,8})[，,]\s*不\1([\u3400-\u9fff]{2,8})/g;
 
 // 反序对比腔（实战漏网 C）：「是真嗓子，不是修音修出来的」——not-is-comparison 的反序变种。
 // 复用 not-is 的排除基建：引号内剥离（maskQuoted）、「是的/是啊」确认语（isAffirmationTagAt）；
@@ -198,6 +250,21 @@ const REVERSE_NOT_IS_PREV_EXCLUDE = new Set([...COMPACT_EITHER_OR_PREV, '还', '
 const TRAILER_ENDING_PATTERN = /没人知道|谁也不知道|谁也没想到|殊不知|(?:这)?才刚刚开(?:始|头)|正(?:朝着|向着)[^。！？!?\n]{0,24}(?:压|涌|袭|逼)(?:了?过去|了?过来|来)|(?<!正式)拉开(?:序幕|帷幕)|即将(?:开始|来临|降临)/g;
 const TRAILER_ENDING_WINDOW_CHARS = 600;
 
+// 章尾状态总结体：把细纲「结尾设定」原样写成总结句收章（「这一夜注定无人入眠」
+// 「这一切都结束了」「新的人生才刚刚开始」「命运的齿轮」）。与 trailer-ending 共用文末窗口，
+// 区别是它盖章过去、trailer-ending 预告将来；收的都是 banned-words 已按名禁掉的形态。
+// 不收「(这|那)一刻…终于明白」：真人语料里那是正常的认知节拍，短篇第一人称审判句还是卖点
+// （short-craft「审判金句 / 心死余韵」），密度型由 advisory 的 abstract-summary-tic 兜。
+// 各分支都要求落在句末断言位，否则会吃进条件从句（等这一切结束了，我们就…）、动补
+// （这一切都说明得非常清楚）、成语跨匹配（这一刻…命中注定）、系表（这一战的结果是注定的）、
+// 及物用法（就这样…才结束了这个话题）、场内报幕（就这样…宣布…圆满落幕）和否定认知
+// （他不知道这一切意味着什么）——最后一类靠 (?!什么) 排掉间接疑问，那是盖章的反面。
+// 校准（文末 600 字窗口，命中逐条人工复核）：qimao 章中段 20000 章命中 1 处（0.005%）、
+// heiyan 整篇 3999 篇命中 22 处（0.550%，全部是上列禁用形态）；同批既有 trailer-ending
+// 分别命中 1.345% / 6.602%——本规则误报面显著小于已上线的同窗口规则。短篇整篇即收口，
+// 基线天然高于长篇章中段，故两个总体分别报数。
+const TRAILER_SUMMARY_PATTERN = /这一(?:夜|天|刻|战|年|局|役)[，,]?[^。！？!?，,\n]{0,6}(?<!命中)(?<!是)注定[^。！？!?\n]{0,8}[。！]|就这样[，,][^。！？!?，,\n]{0,8}(?:一切|全部)[^。！？!?，,\n]{0,4}(?:结束了|落幕|收场)[。！]|这一切[，,]?[^。！？!?，,\n]{0,6}(?:都)?(?:说明|意味着|结束了)(?!的)(?:(?!什么)[^。！？!?\n]){0,6}[。！]|(?:新的篇章|新的旅程|崭新的篇章|新的人生)[^。！？!?\n]{0,6}(?:开始|拉开|展开)|命运[^。！？!?\n]{0,6}齿轮/g;
+
 // 引号强调滥用（实战漏网 E，advisory 密度型，风格照 metaphor-density-tic）：
 // 叙述里短词加引号强调（他是被请来"把关"的）。只数叙述层 1-4 字成对引号片段；
 // 排除项：【】系统面板载体、引语动词（说|道|问|喊|答|念|叫|回|吼|嘀咕，加细 骂|写|读|唱）
@@ -208,7 +275,75 @@ const TRAILER_ENDING_WINDOW_CHARS = 600;
 // “邀战书”等转述载体，真人也这么写），所以该规则只做 advisory，不升 blocking。
 const QUOTE_EMPHASIS_MIN_HITS = 3;
 const QUOTE_EMPHASIS_MAX_VISIBLE = 4;
-const QUOTE_EMPHASIS_SPEECH_VERB_PATTERN = /[说道问喊答念叫回吼骂写读唱嘀咕]/;
+const QUOTE_EMPHASIS_SPEECH_VERB_PATTERN = /[说道问喊答念叫回吼骂写读唱笑叹应哼嗤啐呸嘀咕]|开口|摇头|点头|出声|冷笑|苦笑|轻声|低声|沉声/;
+
+// 叙述旁白省略号密度：真人网文近三分之一章节在自由间接引语和悬念停顿处使用旁白 `……`（番茄 P90 约 3.0/千字），
+// 单处或少量留白正常保留；全章引号与面板外 ≥6 处且 ≥3.5/千字才报 advisory。
+const ELLIPSIS_DENSITY_PATTERN = /…+|\.{3,}|。{3,}/g;
+const ELLIPSIS_DENSITY_MIN_HITS = 6;
+const ELLIPSIS_DENSITY_PER_KILO = 3.5;
+
+// 单章密度分级门槛（800 章真人长篇 + 500 篇真人短篇误报校准）：偶发 1 处（not-is 族 1-2 处）常承担正常纠错、转折或章末钩子，
+// 降为 advisory + semantic 交上下文判断；同章高频连刷升为 blocking + mechanical 强制清零。
+// 短篇整篇（约 8,000-12,000 字）写在单个 正文.md 时，按章节当量 DENSITY_SCALE_UNIT_CHARS 等比抬升全篇句式阻断线（单章 ≤6,749 字时倍数为 1）。
+const DENSITY_SCALE_UNIT_CHARS = 4500;
+const NOT_IS_BLOCKING_MIN_HITS = 3;
+const VOICE_CONTRAST_BLOCKING_MIN_HITS = 2;
+const NEGATION_PARADE_BLOCKING_MIN_HITS = 2;
+const TRAILER_ENDING_BLOCKING_MIN_HITS = 2;
+
+// review 分类：下游按它分流。mechanical = 命中的表面形态本身就是问题，写作端就地改写即可；
+// semantic = 同一形态可能承担叙事功能，要读上下文判断保留还是改（交语义审查）。blocking 只能是
+// mechanical（blocking 的含义就是不需判断、必须清零）。新增 finding type 必须在此登记，否则运行期
+// 直接报错退出（scripts/test-ai-patterns.sh 另从源码抽 type 与本表双向核对）。
+//   type                         review      理由
+//   not-is-comparison            mechanical  固定句式模板「不是A，而是B」，blocking
+//   voice-contrast               mechanical  固定反差模板「声音不大…却」，blocking
+//   negation-parade              mechanical  固定否定排比模板，blocking
+//   reverse-not-is               mechanical  固定反序对比模板「是A，不是B」，blocking
+//   trailer-ending               mechanical  文末窗口固定预告短语，blocking
+//   trailer-summary              mechanical  文末窗口固定总结短语，blocking
+//   em-dash                      mechanical  标点，blocking
+//   long-paragraph               mechanical  段长阈值，断段即可
+//   period-stutter               mechanical  连续短句计数，合句即可
+//   micro-action-tic             mechanical  固定补语「了下/了一下」密度
+//   negation-pair-tic            semantic    「没A，也没B」否定对偶，留真正要强调的
+//   cliche-density-tic           mechanical  固定禁用词表密度
+//   stock-reaction-tic           semantic    身体反应可能承担物理后果或情绪，要逐处做删除测试
+//   action-list-tic              semantic    打斗/追逐等功能性动作编排可保留
+//   abstract-summary-tic         semantic    作者总结/上帝视角，是否越位要看语境
+//   metaphor-density-tic         semantic    比喻是否服务画面、删哪几个要读上下文
+//   reasoning-chain-tic          semantic    替读者推理的解释链，长推理段可能是正当的
+//   system-notice-formality-tic  semantic    系统/规则文本本就可以公文腔，看体裁功能
+//   overcompressed-prose-tic     semantic    短段过密可能是节奏选择，禁止机械注水
+//   low-connective-density-tic   semantic    同上，连接词补不补要看读感
+//   quote-emphasis-tic           semantic    标语/转述载体的引号是正常写法
+//   formulaic-parallelism        semantic    工整并列可能承担辩解或悬念排除
+const REVIEW_CLASSES = Object.freeze({
+  'not-is-comparison': 'mechanical',
+  'voice-contrast': 'mechanical',
+  'negation-parade': 'mechanical',
+  'reverse-not-is': 'mechanical',
+  'trailer-ending': 'mechanical',
+  'trailer-summary': 'mechanical',
+  'em-dash': 'mechanical',
+  'long-paragraph': 'mechanical',
+  'period-stutter': 'mechanical',
+  'micro-action-tic': 'mechanical',
+  'negation-pair-tic': 'semantic',
+  'cliche-density-tic': 'mechanical',
+  'stock-reaction-tic': 'semantic',
+  'action-list-tic': 'semantic',
+  'abstract-summary-tic': 'semantic',
+  'metaphor-density-tic': 'semantic',
+  'reasoning-chain-tic': 'semantic',
+  'system-notice-formality-tic': 'semantic',
+  'overcompressed-prose-tic': 'semantic',
+  'low-connective-density-tic': 'semantic',
+  'quote-emphasis-tic': 'semantic',
+  'formulaic-parallelism': 'semantic',
+  'ellipsis-density-tic': 'semantic',
+});
 
 const options = {
   json: false,
@@ -220,6 +355,9 @@ for (let i = 2; i < process.argv.length; i += 1) {
   const arg = process.argv[i];
   if (arg === '--check') {
     // Accepted for symmetry with normalize-punctuation.js; detection is always check-only.
+  } else if (arg === '--list-review-classes') {
+    process.stdout.write(`${JSON.stringify(REVIEW_CLASSES, null, 2)}\n`);
+    process.exit(0);
   } else if (arg === '--json') {
     options.json = true;
   } else if (arg.startsWith('--fail-on=')) {
@@ -254,7 +392,13 @@ for (const file of options.files) {
     continue;
   }
 
-  const findings = scanDocument(input).map((finding) => ({ file, ...finding }));
+  let whitelist;
+  try { whitelist = loadStyleWhitelist(fullPath); }
+  catch (error) { die(`${file}: unable to read .deslop-whitelist (${error.message})`); }
+  const findings = scanDocument(maskStyleText(input, whitelist)).map((finding) => {
+    const baseReview = reviewClass(finding.type);
+    return { file, ...finding, review: finding.review || baseReview };
+  });
   allFindings.push(...findings);
 }
 
@@ -268,8 +412,18 @@ if (options.json) {
 
 if (failed) process.exit(2);
 // --fail-on=blocking 只在出现 blocking finding 时退出 1（advisory 仅报告）；默认 all 沿用「有任何 finding 即 1」。
+// 用 process.exitCode 而非 process.exit(1)，确保 >64KB JSON 管道输出完整刷出后再退出。
 const hasBlocking = allFindings.some((f) => f.severity === 'blocking');
-if (options.failOn === 'blocking' ? hasBlocking : allFindings.length > 0) process.exit(1);
+if (options.failOn === 'blocking' ? hasBlocking : allFindings.length > 0) process.exitCode = 1;
+
+function reviewClass(type) {
+  const review = REVIEW_CLASSES[type];
+  if (!review) {
+    console.error(`internal error: finding type '${type}' has no review class (add it to REVIEW_CLASSES)`);
+    process.exit(2);
+  }
+  return review;
+}
 
 function escapeRegExp(text) {
   return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -285,11 +439,15 @@ function die(message) {
   process.exit(2);
 }
 
-function scanDocument(input) {
+// unclosedOpenings：到文末都没闭合的 `<!--` 位置（"行号:列号"）。未闭合的注释不是注释，
+// 否则一个漏写的 `-->` 会把后面整章藏起来；这些位置按正文扫描，只把 `<!--` 本身抹掉。
+function scanDocument(input, unclosedOpenings = new Set()) {
   const lines = input.split(/\r?\n/);
   const findings = [];
   let fence = null;
   let inFrontMatter = hasYamlFrontMatter(lines);
+  let commentOpen = false;
+  let commentStart = null;
   let block = [];
   const proseLines = [];
 
@@ -316,23 +474,69 @@ function scanDocument(input) {
       continue;
     }
 
-    if (fenceMarker) {
+    if (fenceMarker && !commentOpen) {
       flushBlock();
       fence = fenceMarker;
       continue;
     }
 
-    block.push({ text: line, lineNo: index + 1 });
-    proseLines.push({ text: line, lineNo: index + 1 });
+    // HTML 注释（如 `<!-- 去味:跳过 -->` 豁免标记）是元信息不是正文：注释段等长换成空格
+    // 保列号，整行都是注释的直接跳过；注释可跨行。
+    const masked = maskHtmlComments(line, commentOpen, index, unclosedOpenings);
+    commentOpen = masked.open;
+    if (masked.openedAt !== null) commentStart = masked.openedAt;
+    if (masked.text !== line && !masked.text.trim()) continue;
+
+    block.push({ text: masked.text, lineNo: index + 1 });
+    proseLines.push({ text: masked.text, lineNo: index + 1 });
+  }
+
+  if (commentOpen && commentStart !== null) {
+    return scanDocument(input, new Set([...unclosedOpenings, commentStart]));
   }
 
   flushBlock();
   findings.push(...scanProsePatterns(proseLines));
+  let proseChars = 0;
+  for (const { text } of proseLines) {
+    const trimmed = text.trim();
+    if (!trimmed || isDivider(trimmed) || isStructural(trimmed)) continue;
+    proseChars += Array.from(trimmed.replace(/\s+/g, '')).length;
+  }
+  applyDensitySeverityGates(findings, proseChars);
   findings.sort((a, b) => a.line - b.line || a.column - b.column);
   return findings;
 }
 
-// 段落级检测：碎句号（连续短叙述句）、长段落、破折号（按功能改写，非机械替换）。
+function applyDensitySeverityGates(findings, proseChars = 0) {
+  const scale = Math.max(1, Math.floor((proseChars + Math.floor(DENSITY_SCALE_UNIT_CHARS / 2)) / DENSITY_SCALE_UNIT_CHARS));
+  const counts = new Map();
+  for (const f of findings) {
+    counts.set(f.type, (counts.get(f.type) || 0) + 1);
+  }
+  const notIsCombined = (counts.get('not-is-comparison') || 0) + (counts.get('reverse-not-is') || 0);
+  for (const f of findings) {
+    let block = null;
+    if (f.type === 'not-is-comparison' || f.type === 'reverse-not-is') {
+      block = notIsCombined >= NOT_IS_BLOCKING_MIN_HITS * scale;
+    } else if (f.type === 'voice-contrast') {
+      block = (counts.get('voice-contrast') || 0) >= VOICE_CONTRAST_BLOCKING_MIN_HITS * scale;
+    } else if (f.type === 'negation-parade') {
+      block = (counts.get('negation-parade') || 0) >= NEGATION_PARADE_BLOCKING_MIN_HITS * scale;
+    } else if (f.type === 'trailer-ending') {
+      block = (counts.get('trailer-ending') || 0) >= TRAILER_ENDING_BLOCKING_MIN_HITS;
+    }
+    if (block === true) {
+      f.severity = 'blocking';
+      f.review = 'mechanical';
+    } else if (block === false) {
+      f.severity = 'advisory';
+      f.review = 'semantic';
+    }
+  }
+}
+
+// 段落级检测：碎句号（连续短叙述句）、长段落、旁白破折号（按功能改写，对白引号与面板内豁免）。
 function scanProsePatterns(proseLines) {
   const findings = [];
 
@@ -340,15 +544,16 @@ function scanProsePatterns(proseLines) {
     const trimmed = text.trim();
     if (!trimmed || isDivider(trimmed) || isStructural(trimmed)) continue;
 
+    const dashScanText = maskQuotedWithUnclosed(text);
     const dashPattern = /——|—|--+/g;
     let dash;
-    while ((dash = dashPattern.exec(text)) !== null) {
+    while ((dash = dashPattern.exec(dashScanText)) !== null) {
       findings.push({
         line: lineNo,
         column: dash.index + 1,
         type: 'em-dash',
         severity: 'blocking',
-        message: '破折号按功能改写：打断→动作 beat/短句，拖长音→省略或动作，插入说明→逗号/冒号；勿一律改句号。',
+        message: '叙述旁白不用破折号，按功能改写：打断→动作或抢白，停顿→逗号或省略，插入说明→逗号/冒号；勿一律改句号。',
         excerpt: compact(text.slice(Math.max(0, dash.index - 8), dash.index + dash[0].length + 8)),
       });
     }
@@ -367,11 +572,14 @@ function scanProsePatterns(proseLines) {
 
   findings.push(...findVoiceContrast(proseLines));
   findings.push(...findNegationParade(proseLines));
+  findings.push(...findFormulaicParallelism(proseLines));
   findings.push(...findReverseNotIs(proseLines));
   findings.push(...findTrailerEnding(proseLines));
   findings.push(...findQuoteEmphasisTic(proseLines));
   findings.push(...findPeriodStutter(proseLines));
   findings.push(...findMicroActionTic(proseLines));
+  findings.push(...findNegationPairTic(proseLines));
+  findings.push(...findStockReactionTic(proseLines));
   findings.push(...findActionListTic(proseLines));
   findings.push(...findAbstractSummaryTic(proseLines));
   findings.push(...findClicheDensityTic(proseLines));
@@ -380,11 +588,11 @@ function scanProsePatterns(proseLines) {
   findings.push(...findNoticeFormalityTic(proseLines));
   findings.push(...findOvercompressedProseTic(proseLines));
   findings.push(...findLowConnectiveDensityTic(proseLines));
+  findings.push(...findEllipsisDensityTic(proseLines));
   return findings;
 }
 
-// 音量反差腔（实战漏网 A）：引号外叙述逐处 blocking，位置与摘录取自原文
-// （maskQuoted 等长占位保偏移；命中片段不含句号，故不会落进占位区）。
+// 音量反差腔（实战漏网 A）：引号外叙述命中，单处 advisory、同章 ≥2 处 blocking。
 function findVoiceContrast(proseLines) {
   const findings = [];
 
@@ -400,7 +608,7 @@ function findVoiceContrast(proseLines) {
         column: match.index + 1,
         type: 'voice-contrast',
         severity: 'blocking',
-        message: '音量反差腔：「声音不大/不高…却/但…」是 AI 高频反差模板；删掉音量铺垫，直接写声音落进场子的具体效果（谁停了手、哪排安静了）。',
+        message: '音量反差腔：「声音不大/不高…却/但…」是 AI 高频反差模板；删掉音量铺垫，直接写台词分量、利害后果或在场者的立场反应。',
         excerpt: compact(text.slice(match.index, match.index + match[0].length)),
       });
     }
@@ -409,7 +617,7 @@ function findVoiceContrast(proseLines) {
   return findings;
 }
 
-// 否定排比（实战漏网 B）：两个变体（同句「没有X，」连排 / 先否定后「只是」收肯定）
+// 否定排比（实战漏网 B）：同句「没有X，」连排 / 先否定后「只是」收肯定。
 // 可能在同一片文字上重叠命中，按区间去重只报一次。
 function findNegationParade(proseLines) {
   const findings = [];
@@ -445,6 +653,61 @@ function findNegationParade(proseLines) {
         excerpt: compact(text.slice(start, end)),
       });
     }
+  }
+
+  return findings;
+}
+
+function findFormulaicParallelism(proseLines) {
+  const findings = [];
+
+  for (const { text, lineNo } of proseLines) {
+    const trimmed = text.trim();
+    if (!trimmed || isDivider(trimmed) || isStructural(trimmed)) continue;
+    for (const [pattern, message] of [
+      [DECISION_FRAME_PATTERN, '「至于X不X，怎么X」把同一决定拆成工整栏目；若只是复述细纲，压成角色当下的一次判断或直接动作。'],
+      [REPEATED_NEGATIVE_VERB_PATTERN, '同动词「不V A，不V B」容易写成否定清单；含台词也要按语境复核，保留真正有功能的一项即可。'],
+    ]) {
+      pattern.lastIndex = 0;
+      let match;
+      while ((match = pattern.exec(text)) !== null) {
+        findings.push({
+          line: lineNo,
+          column: match.index + 1,
+          type: 'formulaic-parallelism',
+          severity: 'advisory',
+          message,
+          excerpt: compact(match[0]),
+        });
+      }
+    }
+  }
+
+  // 跨段「不是A / 也不是B / 只是C」既可能是细纲复述，也可能是正常的
+  // 辩解、悬念排除或情绪递进。纯句法无法稳定区分，因此只给 advisory，交给语义复核。
+  const window = [];
+  for (const { text, lineNo } of proseLines) {
+    const trimmed = text.trim();
+    if (!trimmed) continue;
+    if (isDivider(trimmed) || isStructural(trimmed)) {
+      window.length = 0;
+      continue;
+    }
+    if (window.length && lineNo - window[window.length - 1].lineNo > 2) window.length = 0;
+    window.push({ text: maskQuoted(trimmed), original: trimmed, lineNo });
+    if (window.length > 3) window.shift();
+    if (window.length !== 3) continue;
+    if (!CROSS_NEGATION_START.test(window[0].text)
+      || !CROSS_NEGATION_MIDDLE.test(window[1].text)
+      || !CROSS_NEGATION_END.test(window[2].text)) continue;
+    findings.push({
+      line: window[0].lineNo,
+      column: 1,
+      type: 'formulaic-parallelism',
+      severity: 'advisory',
+      message: '跨段「不是… / 也不是… / 只是…」可能是工整否定铺排，也可能承担辩解或悬念排除；通读语境，只在重复细纲或拖慢画面时改写。',
+      excerpt: compact(window.map((entry) => entry.original).join(' / ')),
+    });
   }
 
   return findings;
@@ -510,8 +773,20 @@ function findTrailerEnding(proseLines) {
         column: match.index + 1,
         type: 'trailer-ending',
         severity: 'blocking',
-        message: '预告式总结收尾：「没人知道/才刚刚开始/正朝着…压了过去」是 AI 章尾预告腔；结尾停在具体动作、画面或一句台词上，悬念让事件自己挂住，别替读者预告下一章。',
+        message: '预告式总结收尾：「没人知道/才刚刚开始/正朝着…压了过去」是 AI 章尾预告腔；结尾停在具体决定、动作、画面或一句台词上，悬念让事件自己挂住，别替读者预告下一章。',
         excerpt: compact(text.slice(match.index, match.index + match[0].length)),
+      });
+    }
+    TRAILER_SUMMARY_PATTERN.lastIndex = 0;
+    let summaryMatch;
+    while ((summaryMatch = TRAILER_SUMMARY_PATTERN.exec(masked)) !== null) {
+      findings.push({
+        line: lineNo,
+        column: summaryMatch.index + 1,
+        type: 'trailer-summary',
+        severity: 'blocking',
+        message: '章尾状态总结体：「这一夜注定…/这一切都结束了/新的人生才刚刚开始/命运的齿轮」是把细纲的结尾设定原样写成了总结句；结尾设定要落成最后一个具体决定、动作、画面或台词，别替读者盖章。',
+        excerpt: compact(text.slice(summaryMatch.index, summaryMatch.index + summaryMatch[0].length)),
       });
     }
   }
@@ -541,10 +816,11 @@ function findQuoteEmphasisTic(proseLines) {
       const inner = text.slice(start + 1, end - 1);
       const visible = visibleLength(inner);
       if (visible < 1 || visible > QUOTE_EMPHASIS_MAX_VISIBLE) continue;
-      if (/[。！？!?…，,；;：:]/.test(inner)) continue; // 含句读的是台词/播报，不是强调
-      const before = text.slice(Math.max(0, start - 6), start);
-      const after = text.slice(end, end + 3);
+      if (/[。！？!?…，,；;：:—]|\.{2,}/.test(inner)) continue; // 含句读/省略/破折的是台词或播报，不是强调
+      const before = text.slice(Math.max(0, start - 8), start);
+      const after = text.slice(end, end + 6);
       if (QUOTE_EMPHASIS_SPEECH_VERB_PATTERN.test(before) || QUOTE_EMPHASIS_SPEECH_VERB_PATTERN.test(after)) continue; // 引语动词邻接=极短台词
+      if (/^(?:的|地)?一?[声下响]/.test(after)) continue; // 「“唰”的一声」类拟声词不是强调滥用
       hits += 1;
       if (firstLine === null) firstLine = lineNo;
       if (samples.length < 6 && !samples.includes(inner)) samples.push(inner);
@@ -558,8 +834,71 @@ function findQuoteEmphasisTic(proseLines) {
     column: 1,
     type: 'quote-emphasis-tic',
     severity: 'advisory',
-    message: `引号强调滥用：叙述里 1-4 字短词加引号强调 ${hits} 处；只留真正反讽/转述必要的一两处，其余去掉引号直接写，或换成具体动作让读者自己品。`,
+    message: `引号强调滥用：叙述里 1-4 字短词加引号强调 ${hits} 处；只留真正反讽/转述必要的一两处，其余去掉引号直写原意，或把话里的反讽直接点明。`,
     excerpt: compact(samples.join(' ')),
+  }];
+}
+
+// 否定对偶：统计引号外叙述里「没A，也没B」式句子，全文只报一条。
+function findNegationPairTic(proseLines) {
+  let hits = 0;
+  let firstLine = null;
+  const samples = [];
+  for (const { text, lineNo } of proseLines) {
+    const trimmed = text.trim();
+    if (!trimmed || isDivider(trimmed) || isStructural(trimmed)) continue;
+    const narrative = stripQuoted(trimmed);
+    NEGATION_PAIR_PATTERN.lastIndex = 0;
+    let match;
+    while ((match = NEGATION_PAIR_PATTERN.exec(narrative)) !== null) {
+      hits += 1;
+      if (firstLine === null) firstLine = lineNo;
+      if (samples.length < 4) samples.push(match[0]);
+    }
+  }
+  if (hits < NEGATION_PAIR_MIN_HITS) return [];
+  return [{
+    line: firstLine,
+    column: 1,
+    type: 'negation-pair-tic',
+    severity: 'advisory',
+    message: `否定对偶偏多：「没A，也没B」式叙述 ${hits} 处；写人物没做什么是英文式节奏，改成他做了什么（留一两处真正要强调的）。`,
+    excerpt: compact(samples.join(' | ')),
+  }];
+}
+
+function findEllipsisDensityTic(proseLines) {
+  let hits = 0;
+  let narrativeChars = 0;
+  let firstLine = null;
+  const samples = [];
+
+  for (const { text, lineNo } of proseLines) {
+    const trimmed = text.trim();
+    if (!trimmed || isDivider(trimmed) || isStructural(trimmed)) continue;
+    const narrative = stripQuoted(trimmed).replace(/[“「『"][^”」』"]*$/, '');
+    narrativeChars += visibleLength(narrative);
+    ELLIPSIS_DENSITY_PATTERN.lastIndex = 0;
+    let match;
+    while ((match = ELLIPSIS_DENSITY_PATTERN.exec(narrative)) !== null) {
+      hits += 1;
+      if (firstLine === null) firstLine = lineNo;
+      const sample = sentenceAround(narrative, match.index);
+      if (samples.length < 5 && sample && !samples.includes(sample)) samples.push(sample);
+    }
+  }
+
+  if (narrativeChars === 0 || hits < ELLIPSIS_DENSITY_MIN_HITS) return [];
+  const perKilo = (hits / narrativeChars) * 1000;
+  if (perKilo < ELLIPSIS_DENSITY_PER_KILO) return [];
+
+  return [{
+    line: firstLine,
+    column: 1,
+    type: 'ellipsis-density-tic',
+    severity: 'advisory',
+    message: `叙述省略号过密：引号与面板外省略号 ${hits} 处（${perKilo.toFixed(1)}/千字）；保留关键思绪留白，其余改成逗号承接、直白判断或具体动作，别几句一刷。`,
+    excerpt: compact(samples.join(' | ')),
   }];
 }
 
@@ -596,6 +935,47 @@ function findMicroActionTic(proseLines) {
     severity: 'advisory',
     message: `微动作复读：「了下/了一下」式轻量补语 ${hits} 处（${perKilo.toFixed(1)}/千字）；同一反应模板高密度复现是机械指纹，合并动作 beat、换具体细节，别每个动作都补一个轻反应尾巴。`,
     excerpt: compact(samples.join(' ')),
+  }];
+}
+
+// 套式反应细节：统计引号外叙述中通用的部位/声线反应与固定语气比喻。
+// 这是删除测试的候选集，不是身体描写黑名单；全篇只报一条，保留有动作后果、
+// 伤势、人物习惯或情节功能的细节。
+function findStockReactionTic(proseLines) {
+  let hits = 0;
+  let narrativeChars = 0;
+  let firstLine = null;
+  const samples = [];
+
+  for (const { text, lineNo } of proseLines) {
+    const trimmed = text.trim();
+    if (!trimmed || isDivider(trimmed) || isStructural(trimmed)) continue;
+    const narrative = stripQuoted(trimmed);
+    narrativeChars += visibleLength(narrative);
+
+    for (const pattern of STOCK_REACTION_PATTERNS) {
+      pattern.lastIndex = 0;
+      let match;
+      while ((match = pattern.exec(narrative)) !== null) {
+        hits += 1;
+        if (firstLine === null) firstLine = lineNo;
+        const sample = sentenceAround(narrative, match.index);
+        if (samples.length < 6 && sample && !samples.includes(sample)) samples.push(sample);
+      }
+    }
+  }
+
+  if (narrativeChars === 0 || hits < STOCK_REACTION_MIN_HITS) return [];
+  const perKilo = (hits / narrativeChars) * 1000;
+  if (perKilo < STOCK_REACTION_PER_KILO) return [];
+
+  return [{
+    line: firstLine,
+    column: 1,
+    type: 'stock-reaction-tic',
+    severity: 'advisory',
+    message: `套式反应细节：指尖/指腹/喉结/眼圈/拢住按住/视线停顿等套式微动作或“平静得像在念”式语气比喻 ${hits} 处（${perKilo.toFixed(1)}/千字）；逐处做删除测试，只标注情绪、不改变选择、关系或物理结果的直接删掉，或改成直白情绪与利害判断，不要换部位或换道具继续演。`,
+    excerpt: compact(samples.join(' | ')),
   }];
 }
 
@@ -666,7 +1046,7 @@ function findClicheDensityTic(proseLines) {
     column: 1,
     type: 'cliche-density-tic',
     severity: 'advisory',
-    message: `套词密度过高：高危 AI 套词 ${hits} 处（${perKilo.toFixed(1)}/千字）；不要同义词轮换，改成角色当下可见的动作、物件、对话和具体后果。`,
+    message: `套词密度过高：高危 AI 套词 ${hits} 处（${perKilo.toFixed(1)}/千字）；不要同义词轮换，直接删或改成直白情绪、角色利害判断、对话或具体后果，别硬塞手眼小动作。`,
     excerpt: compact(samples.join(' ')),
   }];
 }
@@ -714,16 +1094,17 @@ function findMetaphorDensityTic(proseLines) {
     column: 1,
     type: 'metaphor-density-tic',
     severity: 'advisory',
-    message: `比喻密度过高：像/好像/仿佛/如同等比喻标记 ${hits} 处（${perKilo.toFixed(1)}/千字）；保留最有叙事功能的少数比喻，其余回到具体动作、物件、声音或后果，不要换成新比喻。`,
+    message: `比喻密度过高：像/好像/仿佛/如同等比喻标记 ${hits} 处（${perKilo.toFixed(1)}/千字）；保留最有叙事功能的少数比喻，其余回到直白情绪、角色判断、对话或具体后果，不要换成新比喻或小动作。`,
     excerpt: compact(samples.join(' | ')),
   }];
 }
 
-// 解释链密度：统计引号外叙述中“知道/明白/这意味着/必须需要”等判断链。
-// 全篇只报一条；修法不是补结构虚词，而是把判断落到动作、物件、对话和现场反馈。
+// 解释链密度：统计引号外叙述中“知道/明白/这意味着/必须需要”等论文式推导链。
+// 角色正常算利害、讲因果保留；同一行内去重重叠区间，且至少出现 3 处连接词/情态推导链才报。
 function findReasoningChainTic(proseLines) {
   let hits = 0;
   let coreHits = 0;
+  let linkHits = 0;
   let narrativeChars = 0;
   let firstLine = null;
   const samples = [];
@@ -734,13 +1115,19 @@ function findReasoningChainTic(proseLines) {
     if (!trimmed || isDivider(trimmed) || isStructural(trimmed)) continue;
     const narrative = stripQuoted(trimmed);
     narrativeChars += visibleLength(narrative);
+    const acceptedSpans = [];
 
     for (const { pattern, key, core } of REASONING_CHAIN_PATTERNS) {
       pattern.lastIndex = 0;
       let match;
       while ((match = pattern.exec(narrative)) !== null) {
+        const start = match.index;
+        const end = start + match[0].length;
+        if (acceptedSpans.some(([a, b]) => start < b && end > a)) continue;
+        acceptedSpans.push([start, end]);
         hits += 1;
         if (core) coreHits += 1;
+        if (key === 'connector' || key === 'modal') linkHits += 1;
         buckets.add(key);
         if (firstLine === null) firstLine = lineNo;
         const sample = compact(match[0]);
@@ -751,6 +1138,7 @@ function findReasoningChainTic(proseLines) {
 
   if (narrativeChars === 0 || hits < REASONING_CHAIN_MIN_HITS) return [];
   if (coreHits < REASONING_CHAIN_CORE_MIN_HITS || buckets.size < REASONING_CHAIN_MIN_BUCKETS) return [];
+  if (linkHits < REASONING_CHAIN_MIN_LINKS) return [];
   const perKilo = (hits / narrativeChars) * 1000;
   if (perKilo < REASONING_CHAIN_PER_KILO) return [];
 
@@ -759,7 +1147,7 @@ function findReasoningChainTic(proseLines) {
     column: 1,
     type: 'reasoning-chain-tic',
     severity: 'advisory',
-    message: `解释链密度过高：知道/明白/这意味着/必须/需要等判断链 ${hits} 处（${perKilo.toFixed(1)}/千字）；像逻辑报告时，把判断落到角色当下可见的动作、物件、对话和现场反馈。`,
+    message: `解释链密度过高：知道/明白/这意味着/必须/需要等论文式推导 ${hits} 处（${perKilo.toFixed(1)}/千字）；删掉“这意味着/按照这个逻辑”式公文腔，保留角色自己的利害算账与因果判断，或落到对话与选择后果，别全改成手眼小动作。`,
     excerpt: compact(samples.join(' | ')),
   }];
 }
@@ -940,7 +1328,7 @@ function findAbstractSummaryTic(proseLines) {
     column: 1,
     type: 'abstract-summary-tic',
     severity: 'advisory',
-    message: `抽象总结复读：命运/棋局/这一刻终于明白/才刚刚开始等作者总结 ${hits} 处（${perKilo.toFixed(1)}/千字）；回到角色当下可见的文件、动作、对话或物理后果，别替读者盖章。`,
+    message: `抽象总结复读：命运/棋局/这一刻终于明白/才刚刚开始等作者总结 ${hits} 处（${perKilo.toFixed(1)}/千字）；删掉作者盖章，回到角色当下的具体处境、利害盘算、对话或实际后果，别拿微动作顶替。`,
     excerpt: compact(samples.join(' | ')),
   }];
 }
@@ -1000,8 +1388,8 @@ function isDivider(trimmed) {
 
 // markdown 结构行（标题/列表/引用/表格）不是叙述正文，长段落/碎句号/破折号检测都跳过。
 function isStructural(trimmed) {
-  return /^(#{1,6}\s|>\s?|[-*+]\s|\d+[.)]\s|\|)/.test(trimmed)
-    || /^第[零一二三四五六七八九十百千万\d]+章(?:\s|_|$)/.test(trimmed);
+  return /^(#{1,6}(?:\s|\d)|>\s?|[-*+]\s|\d+[.)]\s|\|)/.test(trimmed)
+    || /^第[零〇一二三四五六七八九十百千万两\d]+[章节回](?:$|[\s_：:——\-]+[^\n。；;]{0,28}$)/.test(trimmed);
 }
 
 // 去掉成对引号内的片段（台词/系统播报），只留引号外叙述。碎句号判定用：纯对话/弹幕成片短句
@@ -1012,15 +1400,27 @@ function stripQuoted(text) {
   return out;
 }
 
-// 把成对引号片段（含引号）替换为等长句号占位：既豁免引号内台词/播报，又保住原文
+// 把成对引号片段（含引号）替换为等长问号占位：既豁免引号内台词/播报，又保住原文
 // 偏移量，供逐处 blocking 规则定位与截取原文摘录（stripQuoted 会移位，不适合定位）。
-// 句号占位天然截断各规则的 [^。…] 字符类，规则不会跨引号拼出假命中。
+// 占位字符用「？」而不是「。」：占位既要截断各规则的 [^。！？!?…] 否定类（？与句号在每条
+// 规则的否定类里等效），又不能落在任何规则的接受位。句号占位会替 trailer-summary 的句末
+// [。！] 伪造出终止符，让「这一战注定是「血屠」的开端，…」这类引号里放代号/绰号的叙述行
+// 被误报，且报出的『这一战注定是。』在原文里 grep 不到。占位长度不变，故偏移与摘录窗口不漂移。
 function maskQuoted(text) {
   let out = text;
   for (const src of QUOTE_SOURCES) {
-    out = out.replace(new RegExp(src, 'g'), (m) => '。'.repeat(m.length));
+    out = out.replace(new RegExp(src, 'g'), (m) => '？'.repeat(m.length));
   }
   return out;
+}
+
+// 与 normalize-punctuation.js 的 quoteSpans 对齐：闭合引号/面板先等长占位，行末未收口的开引号
+// （如 `他猛地抬头：“你敢——` 或 `"等等——`）算到行尾，同时保留开引号前的旁白文本参与扫描。
+function maskQuotedWithUnclosed(text) {
+  const out = maskQuoted(text);
+  const unclosed = /[“「『"]/.exec(out);
+  if (!unclosed) return out;
+  return out.slice(0, unclosed.index) + '？'.repeat(out.length - unclosed.index);
 }
 
 // 返回引号内片段（含引号本身）的 [start, end) 区间，供 not-is 对比句豁免台词用。
@@ -1068,6 +1468,38 @@ function countTerms(text, terms) {
     }
   }
   return count;
+}
+
+// 把行内 HTML 注释（含 `<!--`、`-->` 本身）换成等长空格；openBefore 表示上一行留下未闭合注释。
+// unclosedOpenings 里的 `<!--` 到文末都没闭合：只抹掉这四个字符，后面照常当正文。
+// openedAt 是本行最后一个开始注释的 `<!--` 位置（"行号:列号"），没有则为 null。
+function maskHtmlComments(line, openBefore, lineIndex = 0, unclosedOpenings = new Set()) {
+  let out = '';
+  let open = openBefore;
+  let cursor = 0;
+  let openedAt = null;
+  while (cursor < line.length) {
+    if (open) {
+      const close = line.indexOf('-->', cursor);
+      const end = close === -1 ? line.length : close + 3;
+      out += ' '.repeat(end - cursor);
+      cursor = end;
+      if (close !== -1) open = false;
+      continue;
+    }
+    const start = line.indexOf('<!--', cursor);
+    if (start === -1) {
+      out += line.slice(cursor);
+      break;
+    }
+    out += line.slice(cursor, start) + '    ';
+    cursor = start + 4;
+    const key = `${lineIndex}:${start}`;
+    if (unclosedOpenings.has(key)) continue;
+    open = true;
+    openedAt = key;
+  }
+  return { text: out, open, openedAt };
 }
 
 function parseFenceMarker(trimmedLine) {
@@ -1162,7 +1594,7 @@ function findNotIsComparisons(text, getPosition) {
         column: position.column,
         type: 'not-is-comparison',
         severity: 'blocking',
-        message: '高频 AI 对比句式；删掉否定铺垫，直接写后项，或改成动作/细节呈现。',
+        message: '高频 AI 对比句式；删掉否定铺垫，直接写后项（直白情绪、判断、对话或具体细节皆可）。',
         excerpt: compact(raw),
       });
     }

@@ -1,47 +1,60 @@
-## Description: <br>
-Story Import turns an existing Chinese-language novel or short story into a structured writing project that can be continued with related story-writing skills. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+逆向导入已有小说，将半成品或完本解析为标准项目结构，供后续写作流程续写。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and writing-workflow agents use this skill to import an existing manuscript, analyze it by length, and rebuild it as a long-form or short-form project with settings, outlines, tracking files, benchmark references, and continuation-ready context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can copy, create, or overwrite manuscript-derived project files in local writing-project directories. <br>
-Mitigation: Invoke it explicitly, point it only at intended manuscript sources, and review overwrite notices and generated files before continuing the writing workflow. <br>
-Risk: Importing a directory that contains unrelated private material could expose that material to the analysis workflow. <br>
-Mitigation: Use a dedicated manuscript file or clean project directory, and avoid selecting folders that contain unrelated sensitive files. <br>
+## Use Case:
 
+小说作者可将已有的半成品或完本整理成设定、大纲、正文和追踪文件，并从导入进度继续写作。
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/worldwonderer/skills/story-import) <br>
-- [Metadata Source](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Length Routing Rules](references/length-routing.md) <br>
-- [Long-Form Structure Mapping](references/structure-mapping-long.md) <br>
-- [Short-Form Structure Mapping](references/structure-mapping-short.md) <br>
-- [Character State Reverse Rules](references/character-state-reverse.md) <br>
-- [State Tracking Protocol](references/state-tracking.md) <br>
-- [Text Format and Structure Rules](references/format-and-structure.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with file paths, project-structure plans, status summaries, and command-style workflow handoffs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces or updates local manuscript-derived project files under directories such as 拆文库/, the book project directory, 对标/, 追踪/, and .active-book.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release evidence) <br>
+Risk: The inspected behavior may not fully match the advertised novel-import workflow, and the security scan was partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill's outline-viewing and validation behavior and inspect any incompletely scanned or missing files before installation.
+
+Risk: The skill has file and shell capabilities and a broad activation trigger, as noted in the security guidance.
+
+Mitigation: Check that the requested file access, shell actions, and activation scope match your needs before enabling it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-import)
+- [Length routing guide](artifact/references/length-routing.md)
+- [Deep analysis workflow](artifact/references/deep-analysis.md)
+- [Long-form structure mapping](artifact/references/structure-mapping-long.md)
+- [Short-form structure mapping](artifact/references/structure-mapping-short.md)
+- [Outline reverse workflow](artifact/references/outline-reverse.md)
+- [Import tracking guide](artifact/references/import-tracking.md)
+- [Import report guide](artifact/references/import-report.md)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Markdown, JSON, Configuration instructions, Guidance]
+
+**Output Format:** [A novel project directory containing Markdown project documents and JSON tracking data, plus a Markdown import report.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Project files and tracking scope depend on the author's confirmed source range, novel length, and import choices.]
+
+## Skill Version(s):
+
+1.0.46 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

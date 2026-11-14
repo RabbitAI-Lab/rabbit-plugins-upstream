@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/skill-sediment",
   "slug": "skill-sediment",
   "ownerHandle": null,
-  "version": null,
-  "updatedAt": 1783948597575,
-  "contentHash": "01065e7765a23e8c916850974b5e64a1c0001d74256dd85f6bed9d9f766ab6ad",
-  "fetchedAt": "2026-07-26T18:15:08.483Z"
+  "version": "1.0.2",
+  "updatedAt": 1794347652016,
+  "contentHash": "ef215479d1a5a6f0a89c7a44ddf7bd7b01338b752b8ee9d696006eb4f40e463c",
+  "fetchedAt": "2026-11-14T14:27:13.908Z"
 }

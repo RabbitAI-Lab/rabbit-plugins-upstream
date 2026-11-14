@@ -1,44 +1,55 @@
-## Description: <br>
-Submits problem reports such as bugs, incidents, hazards, scams, UX friction, policy violations, and improvement proposals to CleanApp through its quarantine-first Fetcher Key System. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Submit an observed physical or digital problem to CleanApp for private review, or check its receipt.
 
-## Publisher: <br>
-[borisolver](https://clawhub.ai/user/borisolver) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[borisolver](https://clawhub.ai/user/borisolver)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to submit structured issue reports to CleanApp, either in bulk from JSON or as single manual reports. It is suited for report intake workflows that need dry-run checks, idempotency keys, and optional location or media minimization. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Report submissions are sent to an external CleanApp service and may include sensitive report text, optional location, or optional media metadata. <br>
-Mitigation: Run with --dry-run before sending, use --approx-location or --no-location for location minimization, and use --no-media unless media metadata is necessary. <br>
-Risk: The skill requires a CleanApp API token for live submissions. <br>
-Mitigation: Store CLEANAPP_API_TOKEN through the platform secret manager and revoke or rotate the token if it is exposed. <br>
-Risk: Retries or repeated agent actions can submit duplicate or unwanted reports if source identifiers are not managed carefully. <br>
-Mitigation: Provide stable source_id values for bulk submissions and review dry-run payloads before live execution. <br>
+## Use Case:
 
+External users and agents use the skill to prepare and submit a user-approved observation of a hazard, access barrier, waste, broken infrastructure, software bug, scam, or service failure, then check its private intake receipt.
 
-## Reference(s): <br>
-- [CleanApp Skill Page](https://clawhub.ai/borisolver/cleanapp) <br>
-- [CleanApp Ingest API Reference](references/API_REFERENCE.md) <br>
-- [CleanApp Swagger UI](https://live.cleanapp.io/v1/docs) <br>
-- [CleanApp OpenAPI YAML](https://live.cleanapp.io/v1/openapi.yaml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON payload examples, and command output from report submission or dry-run execution.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces report-submission instructions and may execute helper scripts that print dry-run payloads or CleanApp API responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release metadata) <br>
+Risk: The security review reports medium confidence and incomplete reference coverage, leaving uncertainty about the skill's tool scope and the information it may send over the network.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill's network destinations and sent fields before installing; use the offline preview to inspect report content before any submission.
+
+Risk: A submitted description and optional report context leave the user's environment, and the private receipt file contains a bearer tracking token.
+
+Mitigation: Submit only the approved report content, omit unneeded or unapproved context, and keep the receipt file private.
+
+## Reference(s):
+
+- [CleanApp agent onboarding](https://www.cleanapp.io/agents)
+- [CleanApp agent intake API reference](references/API_REFERENCE.md)
+- [CleanApp MCP server](https://live.cleanapp.io/openai/mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [Factual report preview and JSON receipt or status]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A report is submitted only after approval; receipts remain private and confirm intake status only.]
+
+## Skill Version(s):
+
+0.2.0 (source: manifest.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

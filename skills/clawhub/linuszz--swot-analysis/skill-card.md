@@ -1,38 +1,49 @@
-## Description: <br>
-Conduct a comprehensive SWOT analysis to audit organizational position. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Conduct a comprehensive SWOT analysis to audit organizational position. Use when assessing strategic fit, evaluating competitive position, or informing strategic direction.
 
-## Publisher: <br>
-[linuszz](https://clawhub.ai/user/linuszz) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linuszz](https://clawhub.ai/user/linuszz)
 
-## Use Case: <br>
-Strategists, founders, product teams, and consultants use this skill to structure SWOT analyses for a company, business unit, or product and turn the findings into strategic implications and priority actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The server security review marked the release suspicious and reports a bundled review helper that may bypass normal sandbox protections. <br>
-Mitigation: Install only if you trust the publisher, and confirm any moderation, publishing, deployment, credential-using, or sandbox-bypass command before execution. <br>
+## Use Case:
 
+Employees, consultants, and strategy teams use this skill to structure SWOT analyses for companies, business units, or products and convert the findings into prioritized strategic actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linuszz/swot-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Analysis, Guidance] <br>
-**Output Format:** [Markdown report with SWOT quadrants, strategic implications, and priority actions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires enough context and evidence about the subject to support specific findings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: SWOT analysis may include confidential business, market, or operational details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide only information appropriate for the analysis context and review generated recommendations before sharing or acting on them.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linuszz/skills/swot-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces a SWOT report with scope, ranked quadrant findings, strategic implications, and priority actions.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,51 @@
-## Description: <br>
-servicepack helps developers build Go service or daemon projects from a clone-and-own template with concurrent service management, dependency-ordered startup, readiness gating, retries, CLI commands, logging, and graceful shutdown. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers in building Go services with the servicepack clone-and-own framework, including service lifecycle, retries, dependencies, readiness, and graceful shutdown.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and engineers use this skill when starting or extending a Go service project that needs long-running workers, dependency-aware startup, retry behavior, readiness signaling, service-specific commands, and graceful shutdown. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Running make own rewrites the module, removes the existing git history for that clone, and initializes a new repository. <br>
-Mitigation: Run make own only once, at the start, in a fresh clone that does not contain work you need to preserve. <br>
-Risk: The template owns framework files and update commands can overwrite framework-managed paths. <br>
-Mitigation: Keep custom service logic in user-owned service and command files, and avoid hand-editing framework-owned paths described by the skill. <br>
-Risk: Generated or custom services may introduce their own network surfaces, credentials, or environment variables. <br>
-Mitigation: Review generated services, configuration variables, and deployment-specific behavior before building or deploying the resulting service. <br>
+## Use Case:
 
+Developers use this skill to start or extend Go services that run concurrent long-lived workers, with coordinated startup, retry and readiness behavior, service commands, and graceful shutdown. It is intended for projects built from the servicepack template rather than as a library added to an existing application.
 
-## Reference(s): <br>
-- [Setup Guide](references/setup.md) <br>
-- [ClawHub servicepack skill page](https://clawhub.ai/psyb0t/skills/servicepack) <br>
-- [servicepack repository](https://github.com/psyb0t/servicepack) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code examples and shell command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Go toolchain and is intended to guide changes in a user-owned servicepack clone.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.8 (source: server release metadata) <br>
+Risk: The security scan marked the release suspicious because setup instructions were reported to exceed declared shell and filesystem permissions; scan coverage was partial because referenced paths were missing from the bundled artifact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup instructions and referenced material before use. Inspect the effects of `make own` and run it only in a fresh clone whose repository metadata and files can be replaced.
+
+## Reference(s):
+
+- [Setup and module guide](artifact/references/setup.md)
+- [servicepack project homepage](https://github.com/psyb0t/servicepack)
+- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/servicepack)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with Go code and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.10.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

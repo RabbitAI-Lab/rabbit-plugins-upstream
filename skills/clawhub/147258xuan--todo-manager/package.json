@@ -1,0 +1,8 @@
+{
+  "name": "todo-manager",
+  "version": "1.0.0",
+  "description": "Scan workspace for TODO/FIXME/HACK comments and manage them as tasks",
+  "main": "index.js",
+  "scripts": { "scan": "node scripts/scan.js" },
+  "license": "MIT"
+}

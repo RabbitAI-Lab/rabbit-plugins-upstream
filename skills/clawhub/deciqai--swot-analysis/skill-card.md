@@ -1,45 +1,55 @@
-## Description: <br>
-Guides an agent through SWOT and TOWS strategic analysis to produce a bounded strategic audit with strengths, weaknesses, opportunities, threats, strategy options, priorities, and review triggers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides users through a comparative SWOT analysis and TOWS matrix to prioritize actionable strategic options.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external consultants, and strategy teams use this skill to structure business planning, market-entry review, investor-prep analysis, crisis mapping, or competitive audits into an evidence-backed SWOT and TOWS strategic audit. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate for broad strategic planning, market-entry, or investor-prep requests where the user did not explicitly ask for SWOT. <br>
-Mitigation: Confirm the decision context and bounded analysis unit before producing the audit, and redirect to a better-fit strategy tool when the request needs financial modeling, industry-structure mapping, or growth-direction selection. <br>
-Risk: Strategic recommendations can be misleading if subjective SWOT entries are treated as evidence or if internal strengths are confused with external opportunities. <br>
-Mitigation: Require named competitors, measurable comparative strengths, external opportunities, probability and impact ratings for threats, TOWS cross-pairs, and explicit deprioritization before presenting top strategies. <br>
+## Use Case:
 
+Business leaders, strategists, and teams use this skill to assess a company, product, or decision through internal strengths and weaknesses and external opportunities and threats, then turn the findings into prioritized strategic options.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/swot-analysis) <br>
-- [Primary sources](references/sources.md) <br>
-- [SWOT Analysis for Management Consulting](https://www.sri.com/hoi/sriaa.html) <br>
-- [The TOWS Matrix - A Tool for Situational Analysis](https://doi.org/10.1016/0024-6301(82)90120-0) <br>
-- [Netflix annual reports](https://ir.netflix.net/ir/doc/annual-reports) <br>
-- [Skill machine-readable metadata](https://www.deciqai.com/s/swot-analysis.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown strategic audit with SWOT quadrants, TOWS cross-matrix, prioritized actions, deprioritized options, and verification checklist] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run interactively in coach mode, pausing for user input before advancing through the audit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: Strategic conclusions may be misleading when business information is incomplete or evidence is unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only business information you are authorized to use, and verify evidence before acting on recommendations.
+
+## Reference(s):
+
+- [SWOT Analysis source references](artifact/references/sources.md)
+- [Humphrey's SRI account of SWOT origins](https://www.sri.com/hoi/sriaa.html)
+- [Weihrich, The TOWS Matrix](https://doi.org/10.1016/0024-6301(82)90120-0)
+- [Netflix Annual Reports and Shareholder Letters](https://ir.netflix.net/ir/doc/annual-reports)
+- [Introducing the Model Context Protocol](https://www.anthropic.com/news/model-context-protocol)
+- [Stanford AI Index Report 2025](https://hai.stanford.edu/ai-index)
+- [SWOT Analysis skill page](https://clawhub.ai/deciqai/skills/swot-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown]
+
+**Output Format:** [Markdown strategic audit with SWOT quadrants, a TOWS cross-matrix, priorities, and deprioritized options]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Comparative, evidence-based findings with explicit prioritization and a review trigger]
+
+## Skill Version(s):
+
+1.0.7 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

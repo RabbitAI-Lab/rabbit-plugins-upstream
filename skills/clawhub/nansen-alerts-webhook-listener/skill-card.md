@@ -1,43 +1,58 @@
-## Description: <br>
-Set up a local webhook server to receive Nansen smart alerts in real-time with HMAC signature verification and public tunneling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Set up a local webhook server to receive Nansen smart alerts in real-time with HMAC signature verification and public tunneling. Use when a user wants to listen for alerts on their local machine.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-External developers and crypto operations teams use this skill to create a local listener for Nansen smart alert webhook payloads, verify those payloads with HMAC signatures, and optionally forward verified alerts into OpenClaw. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The listener is reachable through a public tunnel, so unsigned requests can still reach the local machine. <br>
-Mitigation: Use the required webhook secret and HMAC-SHA256 signature verification, keep the server bound to localhost, and stop the tunnel when finished. <br>
-Risk: Tunnel URLs and webhook secrets can expose the endpoint if shared or logged. <br>
-Mitigation: Treat the tunnel URL and webhook secret as sensitive, rotate the secret if exposed, and update Nansen alert configuration when a tunnel URL changes. <br>
-Risk: Optional OpenClaw forwarding can trigger agent turns from verified alert payloads. <br>
-Mitigation: Enable OpenClaw forwarding only when intentional and protect the gateway with the configured bearer token when auth is required. <br>
+## Use Case:
 
+Developers using Nansen smart alerts can set up a local receiver to verify incoming webhook signatures and view alert payloads, with optional forwarding of verified events to a local OpenClaw Gateway.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nansen-devops/nansen-alerts-webhook-listener) <br>
-- [Publisher profile](https://clawhub.ai/user/nansen-devops) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown instructions with inline bash commands and a Node.js server script] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates a local webhook listener script, setup commands, and alert configuration guidance; optional OpenClaw forwarding is user-controlled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The security assessment flags the optional unversioned `npx localtunnel` command as a medium-confidence concern, and the scan is partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the documented ngrok option, or review the package before running localtunnel; consider the security assessment a review signal rather than proof of malicious intent.
+
+Risk: The public tunnel exposes a reachable URL, so requests can reach the local listener even though unsigned requests are rejected.
+
+Mitigation: Keep HMAC-SHA256 signature verification enabled, retain the localhost-only binding, and stop the tunnel when finished.
+
+Risk: Optional OpenClaw forwarding sends verified alert contents to a local Gateway and may include an authorization token.
+
+Mitigation: Enable forwarding only when needed and configure the Gateway URL and token deliberately.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/nansen-devops/skills/nansen-alerts-webhook-listener)
+- [Nansen CLI browser login platform scope](https://github.com/nansen-ai/nansen-cli/blob/main/docs/browser-login.md#preview-platform-scope)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown setup instructions with JavaScript server code and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes a local webhook server template and optional OpenClaw forwarding setup.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
