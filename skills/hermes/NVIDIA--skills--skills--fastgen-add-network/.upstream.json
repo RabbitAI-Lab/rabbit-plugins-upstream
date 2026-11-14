@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/fastgen-add-network",
+  "identifier": "NVIDIA/skills/skills/fastgen-add-network",
+  "repo": "NVIDIA/skills",
+  "path": "skills/fastgen-add-network",
+  "branch": "main",
+  "pushedAt": "2026-11-14T00:20:26Z",
+  "contentHash": "cf956a1b042656eb8873b421ebcd66bcaa62eb54201d817581542ca304b40434",
+  "fetchedAt": "2026-11-14T14:14:50.856Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/fastgen-inference",
+  "identifier": "NVIDIA/skills/skills/fastgen-inference",
+  "repo": "NVIDIA/skills",
+  "path": "skills/fastgen-inference",
+  "branch": "main",
+  "pushedAt": "2026-11-14T00:20:26Z",
+  "contentHash": "57475081e4a6208b45758117b6f2ce51e70373f9cfc4b47304edad86508f0872",
+  "fetchedAt": "2026-11-14T14:14:50.858Z"
+}

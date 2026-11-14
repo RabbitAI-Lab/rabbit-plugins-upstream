@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/Airtable/skills/tree/main/plugins/airtable/skills/product-ops",
+  "identifier": "Airtable/skills/plugins/airtable/skills/product-ops",
+  "repo": "Airtable/skills",
+  "path": "plugins/airtable/skills/product-ops",
+  "branch": "main",
+  "pushedAt": "2026-07-21T18:20:59Z",
+  "contentHash": "57103a4eb561a234fdd9e38811db107fbad5ac7d952f5abb88aa22fbd96a2f08",
+  "fetchedAt": "2026-11-14T14:14:47.801Z"
+}

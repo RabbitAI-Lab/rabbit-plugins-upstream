@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/Airtable/skills/tree/main/plugins/airtable/skills/airtable-overview",
+  "identifier": "Airtable/skills/plugins/airtable/skills/airtable-overview",
+  "repo": "Airtable/skills",
+  "path": "plugins/airtable/skills/airtable-overview",
+  "branch": "main",
+  "pushedAt": "2026-07-21T18:20:59Z",
+  "contentHash": "d01787998d3139119aaf3b945dff47f1f2ed3caf974ecc1cb995638acc4e270b",
+  "fetchedAt": "2026-11-14T14:14:47.800Z"
+}

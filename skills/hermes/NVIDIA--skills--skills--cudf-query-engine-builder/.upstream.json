@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cudf-query-engine-builder",
+  "identifier": "NVIDIA/skills/skills/cudf-query-engine-builder",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cudf-query-engine-builder",
+  "branch": "main",
+  "pushedAt": "2026-11-14T00:20:26Z",
+  "contentHash": "5fe9fcd0154dda43c2b5c4ff3b928e0b6249a7f978ab10a480c89fcf64a6b777",
+  "fetchedAt": "2026-11-14T14:14:50.780Z"
+}

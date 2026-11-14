@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/qdrant/skills/tree/main/skills/qdrant-version-upgrade",
+  "identifier": "qdrant/skills/skills/qdrant-version-upgrade",
+  "repo": "qdrant/skills",
+  "path": "skills/qdrant-version-upgrade",
+  "branch": "main",
+  "pushedAt": "2026-11-13T10:14:02Z",
+  "contentHash": "1a5442b9051adaa9534789f7bf4b4abf34063d5851adb25f925ed84afeb218e3",
+  "fetchedAt": "2026-11-14T14:14:47.935Z"
+}

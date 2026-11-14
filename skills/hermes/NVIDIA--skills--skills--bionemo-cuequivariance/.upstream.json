@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-cuequivariance",
+  "identifier": "NVIDIA/skills/skills/bionemo-cuequivariance",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-cuequivariance",
+  "branch": "main",
+  "pushedAt": "2026-11-14T00:20:26Z",
+  "contentHash": "c74b894e8148550a10006ea45d6bbc9abe1258e97c338bc8160a161bb5d8e5bf",
+  "fetchedAt": "2026-11-14T14:14:50.781Z"
+}
