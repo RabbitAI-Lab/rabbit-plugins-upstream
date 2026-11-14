@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/security/oss-forensics",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "fecceec0df7bc9881b8b16bb47bb60f3d5611c67cae77c49c3252fabb77abfd1",
-  "fetchedAt": "2026-07-26T17:03:57.005Z"
+  "pushedAt": "2026-11-14T14:14:45Z",
+  "contentHash": "b5d378b8c51527f76c4bb000689a2aea380430ce8ecde81544629fb3fc4d3c8e",
+  "fetchedAt": "2026-11-14T14:15:13.992Z"
 }

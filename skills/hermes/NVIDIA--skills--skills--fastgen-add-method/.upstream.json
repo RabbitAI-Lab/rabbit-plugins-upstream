@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/fastgen-add-method",
+  "identifier": "NVIDIA/skills/skills/fastgen-add-method",
+  "repo": "NVIDIA/skills",
+  "path": "skills/fastgen-add-method",
+  "branch": "main",
+  "pushedAt": "2026-11-14T00:20:26Z",
+  "contentHash": "d9eafbe0056d775a5a57f21eb73bce82f1bee29d972c8f9d8bfa004a98485018",
+  "fetchedAt": "2026-11-14T14:14:50.854Z"
+}

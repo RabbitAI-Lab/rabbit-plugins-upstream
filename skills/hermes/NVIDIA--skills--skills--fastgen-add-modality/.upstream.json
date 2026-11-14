@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/fastgen-add-modality",
+  "identifier": "NVIDIA/skills/skills/fastgen-add-modality",
+  "repo": "NVIDIA/skills",
+  "path": "skills/fastgen-add-modality",
+  "branch": "main",
+  "pushedAt": "2026-11-14T00:20:26Z",
+  "contentHash": "1811b67fd2ff4e77b1f9af5bdaf0c5185397ad7c1bcb4e36c7ff859206b16e85",
+  "fetchedAt": "2026-11-14T14:14:50.855Z"
+}

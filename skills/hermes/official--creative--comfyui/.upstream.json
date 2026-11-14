@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/comfyui",
+  "identifier": "official/creative/comfyui",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/comfyui",
+  "branch": "main",
+  "pushedAt": "2026-11-14T14:14:45Z",
+  "contentHash": "df154cdf3f3747a2a6e465d8567b78ffe5f0e9e0f1e444cab374e4202158dffe",
+  "fetchedAt": "2026-11-14T14:15:13.976Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/isaac-humanoid-cloud-control",
+  "identifier": "NVIDIA/skills/skills/isaac-humanoid-cloud-control",
+  "repo": "NVIDIA/skills",
+  "path": "skills/isaac-humanoid-cloud-control",
+  "branch": "main",
+  "pushedAt": "2026-11-14T00:20:26Z",
+  "contentHash": "6fb457823270e63fdd0f699255ea699843e174adaf039171852f85763743520b",
+  "fetchedAt": "2026-11-14T14:14:50.874Z"
+}
