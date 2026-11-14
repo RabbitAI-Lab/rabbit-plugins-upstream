@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/compute-on-demand-reservations",
+  "repo": "google/skills",
+  "skillId": "compute-on-demand-reservations",
+  "branch": "main",
+  "pushedAt": "2026-11-14T14:08:14Z",
+  "contentHash": "8178414bdaf6d1edee20eb5ed097e96f09c73b66c0887bc460a49f7262de124f",
+  "fetchedAt": "2026-11-14T14:16:43.084Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/cloud-monitoring-alert-configuration",
+  "repo": "google/skills",
+  "skillId": "cloud-monitoring-alert-configuration",
+  "branch": "main",
+  "pushedAt": "2026-11-14T14:08:14Z",
+  "contentHash": "ba5438c382a143d04cd6b06b6aca42d1de789b6b2666812d51277b8ff07b73ff",
+  "fetchedAt": "2026-11-14T14:16:43.077Z"
+}

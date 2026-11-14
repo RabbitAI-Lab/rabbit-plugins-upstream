@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/cloud-operator",
+  "repo": "google/skills",
+  "skillId": "cloud-operator",
+  "branch": "main",
+  "pushedAt": "2026-11-14T14:08:14Z",
+  "contentHash": "5013f036addbc10d265026bb0179958d3e3a87c93c6b0cc7d742a4e91d56672b",
+  "fetchedAt": "2026-11-14T14:16:43.044Z"
+}
