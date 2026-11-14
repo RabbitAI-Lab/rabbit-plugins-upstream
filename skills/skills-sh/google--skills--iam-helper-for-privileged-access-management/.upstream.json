@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/iam-helper-for-privileged-access-management",
+  "repo": "google/skills",
+  "skillId": "iam-helper-for-privileged-access-management",
+  "branch": "main",
+  "pushedAt": "2026-11-14T14:08:14Z",
+  "contentHash": "e549ac7466e6d1eb7d8ab25a23383e8599ef234a923b4f57d3c986dc547ca958",
+  "fetchedAt": "2026-11-14T14:16:42.466Z"
+}

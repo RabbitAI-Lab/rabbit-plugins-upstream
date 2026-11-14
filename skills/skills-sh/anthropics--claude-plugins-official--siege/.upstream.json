@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/siege",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "siege",
+  "branch": "main",
+  "pushedAt": "2026-11-14T07:27:28Z",
+  "contentHash": "18886d55cb6cf478af9ebfcfe5cb1fc0edbb2bbfeb86fa826b9b31b4fdac6563",
+  "fetchedAt": "2026-11-14T14:16:54.952Z"
+}
