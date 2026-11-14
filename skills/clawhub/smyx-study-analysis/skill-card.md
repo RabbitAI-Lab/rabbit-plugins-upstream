@@ -1,46 +1,59 @@
-## Description: <br>
-Analyzes child or student study-session images and videos to identify focus, posture, study habit, and risk signals, then returns structured reports and family education suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Conducts video analysis of learning behavior for children and students, identifies poor learning habits, and provides structured reports and family education suggestions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and caregivers use this skill through an agent to submit local or URL-based study-session media, receive behavior analysis, and query cloud-stored historical reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive child or student media and identifiers are sent to remote cloud services for analysis. <br>
-Mitigation: Use only media the user is authorized to process, verify the service's privacy, retention, and account controls before use, and avoid highly sensitive videos when those controls are insufficient. <br>
-Risk: The skill silently creates or reuses account identity and stores service tokens in the workspace data directory. <br>
-Mitigation: Treat the workspace data directory as sensitive, restrict access to it, and remove stored tokens or identity records when the skill is no longer needed. <br>
-Risk: Historical report queries retrieve cloud-stored records linked to the current identity. <br>
-Mitigation: Confirm the active identity and workspace before querying reports, and avoid sharing report output or report links with unauthorized users. <br>
+## Use Case:
 
+Parents and caregivers use the skill to review a child's learning behavior video and receive structured observations about attention, posture, and study habits, along with family education suggestions. Reports are for educational reference and do not replace assessment by a teacher or mental health professional.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-study-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON analysis reports with report links and optional shell command examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save report output to a local file when --output is supplied; accepts local mp4/avi/mov files up to 10 MB or a public video URL.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release evidence; artifact frontmatter says 1.0.7) <br>
+Risk: The security evidence reports that local video may be sent for remote analysis without clear notice, and that analysis may continue despite an export-only request.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before submitting a child's video, verify the service's video handling and export-only behavior, explain the remote analysis to the relevant people, and obtain appropriate consent.
+
+Risk: The security evidence reports undeclared account and credential handling, possible credential transmission, and identity or credential data used in remote account requests.
+
+Mitigation: Review account and credential data flows before use, and avoid providing sensitive identity or credential information until those flows are understood.
+
+Risk: The security assessment is incomplete: Skillspector marked analysis partial because a local reference was missing, although AIG completed without findings.
+
+Mitigation: Treat the suspicious verdict as unresolved and complete a security review before installing or sending sensitive content.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-study-analysis)
+- [API interface documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured analysis results in JSON or text, with Markdown report lists and education suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include attention and behavior observations, risk notices, suggestions, and report links; intended for family education reference.]
+
+## Skill Version(s):
+
+1.0.21 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

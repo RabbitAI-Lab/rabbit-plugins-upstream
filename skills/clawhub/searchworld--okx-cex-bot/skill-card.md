@@ -1,43 +1,58 @@
-## Description: <br>
-Manage Grid bots (spot/contract/coin-margined) and DCA Martingale bots (Spot DCA / Contract DCA) on OKX, including create, stop, amend, P&L monitoring, TP/SL, margin or investment adjustment, and AI-recommended parameters. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Grid bots (spot/contract/coin-margined) and DCA Martingale bots (Spot DCA 现货马丁 / Contract DCA 合约马丁) on OKX. Covers create, stop, amend, monitor P&L, TP/SL, margin/investment adjustment, and AI-recommended parameters. Requires API credentials. Not for regular orders (okx-cex-trade), market data (okx-cex-market), or account info (okx-cex-portfolio).
 
-## Publisher: <br>
-[searchworld](https://clawhub.ai/user/searchworld) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[searchworld](https://clawhub.ai/user/searchworld)
 
-## Use Case: <br>
-Developers and trading operators use this skill to guide an agent through OKX grid and DCA bot workflows, including credential checks, live versus demo mode selection, bot creation, updates, monitoring, and stop procedures. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write commands can create, amend, stop, or close OKX bots and may move real funds. <br>
-Mitigation: Confirm live versus demo mode and review all write-command parameters before execution. <br>
-Risk: Contract grid or DCA actions can leave leveraged positions open or expose the user to liquidation risk. <br>
-Mitigation: Use demo mode first, review liquidation and margin inputs, and verify bot state after create, amend, stop, or close-position commands. <br>
-Risk: Credential misuse could expose OKX account access. <br>
-Mitigation: Do not collect credentials in chat; guide users through the OKX CLI configuration flow and verify credential status locally. <br>
+## Use Case:
 
+External users and developers use this skill to manage OKX grid and DCA trading bots through the OKX CLI, including creating, amending, stopping, listing, and monitoring bot positions. It is intended for bot workflows only, not regular orders, market data, or account portfolio tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/searchworld/skills/okx-cex-bot) <br>
-- [OKX homepage](https://www.okx.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include live or demo mode annotations and JSON-output command variants.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill can give an agent live financial trading authority for OKX Grid and DCA bots, including leveraged bot creation and stop actions that can sell assets or close positions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use demo mode first, grant only limited API permissions, start with small sizes, and require explicit confirmation of live/demo mode, leverage, stopType, and whether assets or positions will be sold or closed before every create, amend, or stop action.
+
+Risk: API credentials could be exposed if users paste secrets into chat during setup or troubleshooting.
+
+Mitigation: Do not accept credentials in chat; guide users to `okx config init` and verify authentication with the documented local status commands.
+
+Risk: Incorrect bot identifiers, bot types, TP/SL pairs, or insufficient-balance handling can cause failed commands or unintended trading outcomes.
+
+Mitigation: List existing bots before acting, use `algoId` and `algoOrdType` from OKX command output, respect mutually exclusive TP/SL parameters, and report funding shortfalls instead of transferring funds automatically.
+
+## Reference(s):
+
+- [OKX](https://www.okx.com)
+- [ClawHub skill page](https://clawhub.ai/searchworld/skills/okx-cex-bot)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, API Calls]
+
+**Output Format:** [Markdown with inline shell commands and JSON CLI outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include live or demo trading mode annotations, OKX bot identifiers, and command verification steps.]
+
+## Skill Version(s):
+
+1.4.8 (source: server release metadata and skill metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

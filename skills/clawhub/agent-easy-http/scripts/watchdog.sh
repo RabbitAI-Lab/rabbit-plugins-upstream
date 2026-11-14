@@ -98,7 +98,7 @@ ensure_hooks_and_sync_token() {
     # 任一关键配置缺失就触发 setup-hooks（init_wizard 会一并补写）
     if [ -z "$enabled" ] || [ "$enabled" = "False" ] || [ "$enabled" = "false" ] || [ -z "$token" ] \
        || [ "$allow_session_key" != "True" ] || [ "$allowed_prefixes" != "True" ]; then
-        log "⚠️  hooks 配置缺失（enabled=$enabled token_set=$([ -n "$token" ] && echo Y || echo N) allowSession=$allow_session_key hookPrefix=$allowed_prefixes），运行 setup-hooks..."
+        log "⚠️  hooks 配置缺失（enabled=$enabled token_set=$([ -n "$token" ] && echo Y || echo N) allowSession=$allow_session_key hookPrefix=${allowed_prefixes}），运行 setup-hooks..."
         echo "Y" | python3 "$(dirname "$SERVER_PY")/init_wizard.py" --setup-hooks-only >> "$LOG_FILE" 2>&1 || true
         # 重新读 token
         token=$(python3 -c "import json; d=json.load(open('$openclaw_json')); print(d.get('hooks',{}).get('token',''))" 2>/dev/null || echo "")

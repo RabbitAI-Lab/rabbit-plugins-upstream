@@ -1,44 +1,55 @@
-## Description: <br>
-proxq helps agents operate a Go, Redis-backed async HTTP proxy queue by submitting HTTP requests as jobs, polling status, fetching replayed upstream responses, and canceling named jobs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Proxq queues HTTP requests for asynchronous delivery to configured upstreams, then lets callers poll job status and retrieve responses.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and operators use this skill to interact with a proxq instance they control: submit async HTTP proxy jobs, poll job status, retrieve completed upstream responses, and cancel jobs the user identified. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: proxq can make outbound requests from its own network position and has no built-in authentication. <br>
-Mitigation: Operate only a proxq instance you control, keep it behind authentication or loopback/internal networking, and configure upstreams only to trusted services. <br>
-Risk: Headers and bodies submitted through proxq may be forwarded to configured upstreams. <br>
-Mitigation: Avoid sending secrets to untrusted destinations and verify the upstream target before submitting a job. <br>
-Risk: Job cancellation is best-effort, has no undo, and has no built-in ownership check. <br>
-Mitigation: Cancel only jobs you submitted or jobs the user explicitly named. <br>
+## Use Case:
 
+Developers and operators use Proxq to queue requests to trusted backends when callers need a quick response, then poll for completion and fetch the upstream result. It is suited to deferred API work and webhook delivery where real-time streaming is not required.
 
-## Reference(s): <br>
-- [proxq setup](references/setup.md) <br>
-- [proxq ClawHub page](https://clawhub.ai/psyb0t/skills/proxq) <br>
-- [asynq](https://github.com/hibiken/asynq) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, HTTP examples, and YAML configuration] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires PROXQ_URL for job operations; setup examples also use curl, Docker, and Docker Compose.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.10.3 (source: ClawHub release evidence) <br>
+Risk: ClawScan marks the release suspicious because setup uses an unpinned Docker image and includes commands beyond the declared shell permissions; scan coverage is partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the flagged concerns and incomplete scan before installing, verify setup commands, and pin the Docker image to a trusted version.
+
+Risk: The documented service has no built-in authentication and can make outbound requests to configured upstreams, so exposed instances can be misused to submit, inspect, or cancel jobs and reach unintended services.
+
+Mitigation: Restrict access with an authentication proxy or an internal-only network, and configure only trusted upstreams that untrusted callers cannot select.
+
+## Reference(s):
+
+- [Setup and configuration guide](references/setup.md)
+- [Project homepage](https://github.com/psyb0t/docker-proxq)
+- [ClawHub release page](https://clawhub.ai/psyb0t/skills/proxq)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, HTTP API calls, Guidance]
+
+**Output Format:** [Markdown with shell commands, YAML examples, and HTTP request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a configured Proxq instance and reachable Redis service; examples use PROXQ_URL.]
+
+## Skill Version(s):
+
+0.11.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -8,6 +8,11 @@
 import os
 import sys
 import json
+from html import escape
+
+# 默认不注入作者品牌；需要署名时用 --brand/--handle 或环境变量。
+BRAND = os.environ.get("STOCK_REPORT_BRAND", "")
+HANDLE = os.environ.get("STOCK_REPORT_HANDLE", "")
 
 # 字体取自兄弟 skill hekouwang-content-factory（两者同在 ~/.claude/skills/ 下）。
 # 动态推算 skills 目录 → 拼兄弟 skill，换机/改用户名都不断；可用环境变量覆盖；对外发布改相对内嵌。
@@ -15,12 +20,12 @@ _SKILLS_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__
 FONTS = os.environ.get("HEKOUWANG_FONTS_DIR") or os.path.join(
     _SKILLS_DIR, "hekouwang-content-factory", "assets", "fonts")
 
-HEAD = """<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+HEAD_TPL = """<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
+<!-- 字体仅用本地 @font-face 与系统字体；截图环境不拉远程字体。 -->
 <style>
 @font-face{font-family:'Anthropic Sans';src:url('FONTS/anthropicSans.woff2') format('woff2');font-weight:300 800;font-display:swap}
 @font-face{font-family:'Anthropic Mono';src:url('FONTS/anthropicMono.woff2') format('woff2');font-weight:300 800;font-display:swap}
+@font-face{font-family:'Noto Sans SC';src:local('Noto Sans SC'),local('PingFang SC'),local('Microsoft YaHei');font-weight:400 900;font-display:swap}
 :root{--bg:#faf9f5;--surface:#fff;--surface2:#f4f2eb;--line:rgba(20,20,19,.10);--line2:rgba(20,20,19,.17);--line3:rgba(20,20,19,.26);
 --text:#1a1a18;--read:#3a3833;--text2:#56544e;--text3:#8a877e;--text4:#b3afa6;
 --hot:#c15f3c;--hot2:#d07a52;--cool:#5c6b7a;--cool2:#4a5763;--ochre:#a07a3c;--warn:#c0392b;
@@ -57,19 +62,47 @@ h1{font-size:88px;line-height:1.06;font-weight:900;letter-spacing:-.03em;margin-
 .ghost{position:absolute;top:130px;right:-26px;z-index:1;font-family:var(--mono);font-weight:800;font-size:400px;line-height:.8;color:var(--text);opacity:.05;letter-spacing:-.06em}
 .pn{position:absolute;right:76px;bottom:120px;z-index:3;font-family:var(--mono);font-size:22px;color:var(--text3)}
 .ft{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;height:104px;border-top:1px solid var(--line);margin-top:14px}.brand{font-family:var(--brand);font-size:30px;font-weight:800;color:var(--text)}.handle{font-family:var(--mono);font-size:23px;color:var(--text3)}
-</style></head><body>""".replace("FONTS", FONTS)
+</style></head><body>"""
+
+HEAD = HEAD_TPL.replace("FONTS", FONTS)
+
+def head_for(theme="v2"):
+    h = HEAD
+    if theme == "v3":
+        h = (h.replace("--bg:#faf9f5", "--bg:#fbfcfe")
+               .replace("--hot:#c15f3c", "--hot:#111111")
+               .replace("--hot2:#d07a52", "--hot2:#333333")
+               .replace("background:radial-gradient(1300px 1050px at 50% -12%,#fffdf8,#faf9f5 46%,#f4f1ea)",
+                        "background:radial-gradient(900px 600px at 20% -5%,rgba(147,197,253,.15),transparent 50%),"
+                        "radial-gradient(700px 500px at 85% 10%,rgba(196,181,253,.12),transparent 55%),#fbfcfe"))
+    return h
 
 FIT = """<script>(function(){function fit(){var bd=document.querySelector('.bd'),el=document.querySelector('.fit');if(!bd||!el)return;var W=bd.clientWidth,H=bd.clientHeight,k=1;for(var i=0;i<7;i++){el.style.width=(W/k)+'px';var vis=el.scrollHeight*k;var nk=k*(H/vis);nk=Math.max(0.5,Math.min(1.08,nk));if(Math.abs(nk-k)<0.004){k=nk;break;}k=nk;}el.style.width=(W/k)+'px';el.style.transform='scale('+k+')';var fh=el.scrollHeight*k;el.style.top=(fh<H?(H-fh)/2:0)+'px';}if(document.fonts&&document.fonts.ready){document.fonts.ready.then(fit);}fit();setTimeout(fit,300);})();</script></body></html>"""
 
 
-def card(idx, n, code, right, inner):
-    return (HEAD + '<div class="c"><div class="mesh"></div><div class="orb a"></div><div class="orb b"></div>'
+def card(idx, n, code, right, inner, theme="v2"):
+    ft = ""
+    if BRAND or HANDLE:
+        ft = ('<div class="ft"><div class="brand">' + escape(BRAND)
+              + '</div><div class="handle">' + escape(HANDLE) + '</div></div>')
+    return (head_for(theme) + '<div class="c"><div class="mesh"></div><div class="orb a"></div><div class="orb b"></div>'
             + '<div class="hud"><i></i><i></i><i></i><i></i></div>'
             + ('<div class="ghost">%02d</div>' % idx)
             + '<div class="sysbar"><div class="l"><span class="dot"></span>财经观察 / 公开数据速读</div><div class="r">' + right + '</div></div>'
             + '<div class="bd"><div class="fit">' + inner + '</div></div>'
             + '<div class="pn">' + code + ' · %02d/%d</div>' % (idx, n)
-            + '<div class="ft"><div class="brand">会勇禾口王的AI笔记</div><div class="handle">@huiyonghkw</div></div></div>' + FIT)
+            + ft + '</div>' + FIT)
+
+
+def escape_tree(v):
+    """analysis.json 里的字符串会拼进 HTML 再被 Chrome 渲染，统一转义。"""
+    if isinstance(v, str):
+        return escape(v)
+    if isinstance(v, list):
+        return [escape_tree(x) for x in v]
+    if isinstance(v, dict):
+        return {k: escape_tree(x) for k, x in v.items()}
+    return v
 
 
 # ───────── SVG（黏土=主角 / 石板蓝=对照 / 砖红=流出·风险）─────────
@@ -155,11 +188,11 @@ def svg_struct(st):
     return "".join(s)
 
 
-def main(outdir, name=None):
+def main(outdir, name=None, theme="v2"):
     with open(os.path.join(outdir, "analysis.json"), encoding="utf-8") as f:
-        A = json.load(f)
+        A = escape_tree(json.load(f))
     code = A.get("code", "")
-    nm = name or code
+    nm = escape(name) if name else code
     p = A.get("price"); ff = A.get("fundflow"); q = A.get("profit_quality"); st = A.get("structure")
     lhb = A.get("lhb"); bal = A.get("balance")
     DISC = '<div class="disc"><b>风险提示：</b>本文为基于公开数据的事后复盘与行业科普，不构成任何投资建议，不预测股价涨跌。市场有风险，决策需独立判断。数据来源：akshare、公司年报季报。</div>'
@@ -243,12 +276,23 @@ def main(outdir, name=None):
     for i, (right, inner) in enumerate(cards, 1):
         fn = "%02d-%s.html" % (i, SLUG.get(right, "card"))
         with open(os.path.join(outdir, fn), "w", encoding="utf-8") as fobj:
-            fobj.write(card(i, n, code, right, inner))
-        print("✓", fn)
+            fobj.write(card(i, n, code, right, inner, theme))
+        print("✓", fn, "(%s)" % theme)
     print("done:", n, "cards →", outdir, "（数字已对；中立文案请按 report-structure.md 润色后截图）")
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        sys.exit("用法：python3 build_report.py <out目录> [公司简称]")
-    main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None)
+    import argparse
+    ap = argparse.ArgumentParser(description="个股报告贴图初稿")
+    ap.add_argument("outdir", help="analyze.py 输出目录")
+    ap.add_argument("name", nargs="?", default=None, help="公司简称")
+    ap.add_argument("--theme", choices=("v2", "v3"), default=os.environ.get("STOCK_REPORT_THEME", "v2"),
+                    help="v2=米白(默认) v3=Readdy财经白")
+    ap.add_argument("--brand", default=None, help="页脚署名（默认取 STOCK_REPORT_BRAND）")
+    ap.add_argument("--handle", default=None, help="页脚账号（默认取 STOCK_REPORT_HANDLE）")
+    args = ap.parse_args()
+    if args.brand is not None:
+        BRAND = args.brand
+    if args.handle is not None:
+        HANDLE = args.handle
+    main(args.outdir, args.name, args.theme)

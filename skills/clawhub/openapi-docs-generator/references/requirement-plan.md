@@ -25,25 +25,25 @@ Evidence coverage: 12 signals across 3 source families.
 Scoring rationale:
 
 - Evidence count: 12; required minimum: 3.
-- Distinct source families: 3; sources: csdn, github, segmentfault.
+- Distinct source families: 3; sources: csdn, github, hacker-news.
 - Demand score: 70/70 based on corroboration, source diversity, and professional/community signal.
 - Local feasibility score: 30/30.
 - Implementation is a documentation, workflow, code, or analysis skill that can run on ordinary CPU hardware.
 
 ## Evidence
 
-- csdn-search (2026-03-13T00:00:00+00:00): [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- csdn-search (2025-09-05T00:00:00+00:00): [Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- github-issues (2026-07-12T05:32:50+00:00): [Add OpenAPI Documentation Examples](https://github.com/nensii21/devlink/issues/252)
-- github-issues (2026-07-25T08:25:57+00:00): [[FEAT] Generate dynamic interactive OpenAPI 3.1 documentation endpoint at /api-docs for REST integration](https://github.com/PRODHOSH/ossfolio/issues/577)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
-- github-issues (2026-07-26T05:12:50+00:00): [Make AWS HTTP API throttling configurable and cost-aware](https://github.com/haya-inc/hayasend/issues/44)
+- csdn-search (2026-03-13T00:00:00+00:00): [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=6d260d49a9aa4f67bf4d4cbb1a1feb95&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-159013081-null-null.142^v102^pc_search_result_base6&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- github-issues (2026-11-08T17:25:25+00:00): [MIGRATE: demo roll browser-called routes to Rust v2](https://github.com/JoshCLWren/comic-pile/issues/4855)
+- github-issues (2026-11-11T09:53:27+00:00): [feat(service): serve a read-only roadmap API with OpenAPI](https://github.com/dan-petty/devops-cli/issues/4586)
+- github-issues (2026-11-14T00:51:50+00:00): [Ports client: Search Assets across all Drones/systems (games, movies, music), remove Reference ROMs, gamepad UX pass](https://github.com/Batocera-Fleet-Federation/batocera.drone/issues/722)
+- hacker-news-search (2026-11-03T16:29:42+00:00): [Nvidia – open-source auto-ontology](https://news.ycombinator.com/item?id=50354084)
+- hacker-news-search (2026-11-02T17:38:42+00:00): [Ask HN: Who wants to be hired? (November 2026)](https://news.ycombinator.com/item?id=50340463)
+- hacker-news-search (2026-11-05T00:34:59+00:00): [Images 2.6](https://news.ycombinator.com/item?id=50373429)
+- hacker-news-search (2026-11-11T18:44:04+00:00): [Launch HN: Pomerado (YC F26) – Turn any website into an MCP for agents](https://news.ycombinator.com/item?id=50456925)
+- hacker-news-search (2026-11-11T12:11:01+00:00): [Grok API text watermarking is now 'off' be default](https://news.ycombinator.com/item?id=50452505)
+- github-issues (2026-11-14T04:03:40+00:00): [Suggest source-linked Chinese crypto news metadata API](https://github.com/DROOdotFOO/awesome-web3-data/issues/58)
+- github-issues (2026-11-14T03:54:45+00:00): [[Core] Introduce an OTP-scoped, versioned observation and metadata read contract](https://github.com/datalife-ehealth/datalife-datalake-core/issues/17)
+- github-issues (2026-11-14T03:15:00+00:00): [Suggest API: 链小知区块链 (Lianxiaozhi)](https://github.com/stormlive-ai/mcp-bridge-docs/issues/26)
 
 ## How The Skill Meets The Requirement
 

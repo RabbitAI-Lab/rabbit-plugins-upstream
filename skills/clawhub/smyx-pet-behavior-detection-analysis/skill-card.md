@@ -1,45 +1,50 @@
-## Description: <br>
-Identifies common abnormal pet behaviors in uploaded or linked pet video, including scratching, biting, destructive chewing, jumping, digging, chasing, and separation anxiety, and returns structured behavior reports and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies common pet behaviors such as scratching, biting, destructive chewing, jumping, digging, chasing, and separation anxiety from video and returns a structured analysis report.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Pet owners, trainers, and agents assisting them use this skill to submit pet monitoring videos or URLs for behavior recognition and to retrieve cloud-hosted report history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet videos or video URLs are sent to lifeemergence.com cloud services for processing. <br>
-Mitigation: Install and use the skill only where that cloud processing model is acceptable for the video content and workspace. <br>
-Risk: The skill may silently create or reuse an external account identity and store authentication state in a local SQLite database. <br>
-Mitigation: Review the identity linkage and local state behavior before deployment, and use it only where persistent service tokens and report association are acceptable. <br>
-Risk: The scanner verdict is suspicious because the cloud analysis purpose is coherent but account and token handling provide limited user control. <br>
-Mitigation: Review the skill before installing and restrict it to environments where the external account linkage and cloud report history model have been approved. <br>
+## Use Case:
 
+Pet owners use the skill to review pet video for common behaviors and receive a structured report with observations, suggestions, and report links. It can also retrieve prior reports from the service.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-behavior-detection-analysis) <br>
-- [Pet Behavior Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [Markdown or JSON report text with optional saved output file and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts a pet video file path or video URL, and can list cloud report history linked to the workspace identity.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence; artifact frontmatter says 1.0.9) <br>
+Risk: The security review rates this release suspicious because account, credential, and network behaviors are not clearly explained; scan coverage was partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, ask the publisher to explain account creation, identity and token handling, remote video processing, and required permissions. Avoid submitting sensitive footage until these points are clear.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-behavior-detection-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured analysis report in JSON or text; Markdown table for report history]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include behavior observations, suggestions, risk notes, and report links; results are informational.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

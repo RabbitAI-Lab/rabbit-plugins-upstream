@@ -50,11 +50,11 @@ case "$PRECHECK_RC" in
     fi
     ;;
   2|4)
-    echo "❌ precheck 前置条件不满足（rc=$PRECHECK_RC：CLI 未装或网络异常），终止。" >&2
+    echo "❌ precheck 前置条件不满足（rc=${PRECHECK_RC}：CLI 未装或网络异常），终止。" >&2
     exit 2
     ;;
   *)
-    echo "❌ precheck 未知退出码 $PRECHECK_RC，终止。" >&2
+    echo "❌ precheck 未知退出码 ${PRECHECK_RC}，终止。" >&2
     exit 2
     ;;
 esac

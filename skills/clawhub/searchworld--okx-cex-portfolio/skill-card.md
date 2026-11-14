@@ -1,43 +1,54 @@
-## Description: <br>
-Provides OKX account balance, positions, P&L, bills, fees, account configuration, withdrawal limit, position-mode, and internal transfer guidance through the OKX CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent in using the OKX CLI to review OKX account balances, positions, P&L, bills, fees, account configuration, withdrawal availability, fund transfers, and position mode changes.
 
-## Publisher: <br>
-[searchworld](https://clawhub.ai/user/searchworld) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[searchworld](https://clawhub.ai/user/searchworld)
 
-## Use Case: <br>
-External users and developers use this skill to inspect OKX portfolio state, review account activity, check fees and limits, and prepare or confirm internal fund transfers. It is suited for account operations, not market data, order placement, or trading bot workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive OKX account data and may expose credential details if configuration output is shared. <br>
-Mitigation: Use a dedicated OKX sub-account with limited permissions and avoid displaying or summarizing `okx config show --json` output. <br>
-Risk: Some supported actions can perform internal fund transfers or change position mode. <br>
-Mitigation: Confirm live versus demo mode and the exact transfer or position-mode parameters before executing write commands, then verify account state afterward. <br>
-Risk: The npm install may download and retain an additional OKX executable under the user's home directory. <br>
-Mitigation: Review the package and installed executable before enabling the skill in an agent environment. <br>
+## Use Case:
 
+External users and agents use this skill to operate the OKX CLI for authenticated portfolio and account workflows, including balance review, position review, account ledger checks, and carefully confirmed account changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/searchworld/skills/okx-cex-portfolio) <br>
-- [OKX homepage](https://www.okx.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and CLI output interpretation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses should state whether live or demo mode was used and avoid exposing credential configuration output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The skill requires sensitive OKX financial-account access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only when OKX CLI account access is intended, prefer demo mode first, and do not paste credentials into chat.
+
+Risk: Live transfers or position-mode changes can affect real funds or account behavior.
+
+Mitigation: Carefully review and confirm live transfer or position-mode commands before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/searchworld/skills/okx-cex-portfolio)
+- [OKX homepage](https://www.okx.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and CLI output guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include JSON-oriented command guidance when the OKX CLI is invoked with JSON output flags.]
+
+## Skill Version(s):
+
+1.4.8 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

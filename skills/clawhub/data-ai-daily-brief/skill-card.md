@@ -1,45 +1,53 @@
-## Description: <br>
-Turns any industry into a daily intelligence briefing by searching, filtering, writing, and delivering structured briefs to configured channels with formatting checks and a business review gate. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turn any industry into a daily intelligence briefing by searching, filtering, writing, and delivering structured reports to nine channels with machine-checked formatting and a business review gate.
 
-## Publisher: <br>
-[haiyangchenbj](https://clawhub.ai/user/haiyangchenbj) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[haiyangchenbj](https://clawhub.ai/user/haiyangchenbj)
 
-## Use Case: <br>
-Practitioners, analysts, and teams use this skill to generate sourced daily industry intelligence briefs and distribute them through configured collaboration, email, or publishing channels. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send generated brief content outside the workspace through configured delivery channels. <br>
-Mitigation: Enable only intended delivery targets and review the configured recipients or webhooks before use. <br>
-Risk: GitHub Pages delivery can publish report output to the public internet. <br>
-Mitigation: Use GitHub Pages only for content intended for public release and review the generated report before publishing. <br>
-Risk: Channel credentials and tokens are needed for delivery integrations. <br>
-Mitigation: Store credentials in environment variables or a secret store rather than committing them in configuration files. <br>
+## Use Case:
 
+Industry analysts and business teams use the skill to produce recurring, source-linked daily briefings for a chosen industry. The workflow includes a business review gate before delivery to configured channels.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/haiyangchenbj/skills/data-ai-daily-brief) <br>
-- [README](README.md) <br>
-- [Changelog](CHANGELOG.md) <br>
-- [CodeBuddy](https://www.codebuddy.ai/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown daily brief, HTML report, and channel-specific delivery content.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can write brief files and publish to configured external channels, including public GitHub Pages when enabled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.0 (source: frontmatter, changelog, server release metadata) <br>
+Risk: Reports deployed through GitHub Pages may be publicly visible.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review report contents and intended visibility before enabling GitHub Pages deployment.
+
+Risk: The security evidence reports an SMTP certificate-verification weakness for email delivery.
+
+Mitigation: Review certificate verification before enabling email delivery; use another channel for sensitive reports until it is addressed.
+
+## Reference(s):
+
+- [Industry Daily Brief on ClawHub](https://clawhub.ai/haiyangchenbj/skills/data-ai-daily-brief)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, HTML, Files]
+
+**Output Format:** [Structured daily industry brief in Markdown and HTML, with channel-ready summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Source links, summaries, and impact judgments; machine-checked formatting and a business review gate]
+
+## Skill Version(s):
+
+5.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

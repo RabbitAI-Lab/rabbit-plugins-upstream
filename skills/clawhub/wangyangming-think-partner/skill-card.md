@@ -1,41 +1,53 @@
-## Description: <br>
-Helps users apply Wang Yangming's philosophy to identify barriers to action, clarify conscience-based decisions, and choose practical next steps in difficult situations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses Wang Yangming's philosophy to help people identify barriers to action, reflect on their values, and find practical next steps.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Users seeking reflective coaching use this skill to apply Wang Yangming's mind philosophy to procrastination, moral uncertainty, lack of direction, workplace frustration, fear of failure, and interpersonal or organizational stress. The skill frames the problem, asks conscience- and action-oriented questions, and recommends a practical first step. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat reflective philosophy coaching as professional advice for mental-health, legal, medical, HR, or safety-critical decisions. <br>
-Mitigation: Use it only for reflection and motivation; seek qualified professional support for crisis, legal, medical, HR, or safety-critical matters. <br>
-Risk: The Wang Yangming/心学 framing may be inappropriate for some user goals or contexts. <br>
-Mitigation: Ask the agent to switch frameworks when a philosophy-based reflection lens does not fit the task. <br>
+## Use Case:
 
+External users can use this skill to reflect on procrastination, difficult choices, workplace challenges, and personal direction through Wang Yangming's ideas, then define a small practical action.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/wangyangming-think-partner) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-style structured reflective guidance with prompts, questions, quotes, and action recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only; no code execution or system access] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release metadata and artifact SKILL.md) <br>
+Risk: Reflective prompts could be mistaken for a definitive answer to a high-impact personal, business, or investment decision.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the output as a draft for reflection; check facts and have qualified, authorized people review consequential decisions before acting.
+
+Risk: Prompts about personal, financial, health, or confidential business matters may involve sensitive information.
+
+Mitigation: Share only the minimum necessary details and redact identifying or sensitive information, as the skill recommends.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/wangyangming-think-partner)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Primarily Simplified Chinese text with structured Markdown headings, questions, and action steps; English or bilingual output can be requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reflective prompts and practical next steps; no files or actions are performed by the skill.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

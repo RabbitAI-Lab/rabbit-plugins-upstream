@@ -1,43 +1,58 @@
-## Description: <br>
-One-install associative memory graph for any OpenClaw workspace: stage, migrate markdown memory, rewire, verify with a seeded battery, and revert. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides local associative memory and task tracking for OpenClaw workspaces through commands for storing, migrating, and retrieving information.
 
-## Publisher: <br>
-[wstienstra](https://clawhub.ai/user/wstienstra) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wstienstra](https://clawhub.ai/user/wstienstra)
 
-## Use Case: <br>
-Developers and engineers use Engram to install and manage a local associative memory system for OpenClaw workspaces, including migration from markdown memory files, workspace rewiring, verification, and rollback. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can modify workspace memory files and agent-instruction files. <br>
-Mitigation: Review the migration dry-run report, require human approval before applying changes, and retain the backup manifest for restoration. <br>
-Risk: The skill can add scheduled local jobs for backup, sleep, and verification workflows. <br>
-Mitigation: Inspect scheduled job changes before install and use the uninstall path to remove ENGRAM-MANAGED cron entries. <br>
-Risk: The submitted package references installer and engine scripts that are not included in the artifact evidence. <br>
-Mitigation: Inspect the actual source repository and install scripts before running external installation commands. <br>
+## Use Case:
 
+Developers and OpenClaw users can use Engram to migrate workspace notes into a local memory graph, retrieve relevant context, and track ongoing tasks.
 
-## Reference(s): <br>
-- [Server-resolved GitHub repository](https://github.com/WStienstra/engram) <br>
-- [ClawHub skill page](https://clawhub.ai/wstienstra/skills/engram) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with inline shell commands and configuration details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces installation, migration, verification, and rollback guidance for a local workspace memory system.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: The security scan reports default Ollama network activity.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the effective Ollama settings and disable Ollama if it is not needed.
+
+Risk: Task evidence commands run through the shell with the agent's privileges.
+
+Mitigation: Only add evidence commands you wrote and reviewed; do not use commands supplied by untrusted sources.
+
+Risk: The security scan flags changes to memory, scheduled tasks, and files, including possible state changes during preview runs.
+
+Mitigation: Use a disposable workspace for an initial run, inspect affected files and scheduled tasks, and keep backups before applying changes.
+
+## Reference(s):
+
+- [Engram on ClawHub](https://clawhub.ai/wstienstra/skills/engram)
+- [Measurement methodology](docs/measurement.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Retrieved context text, Markdown reports, shell commands, and JSON configuration]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Retrieved content depends on the local workspace and its stored memories.]
+
+## Skill Version(s):
+
+1.2.3 (source: frontmatter, changelog)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

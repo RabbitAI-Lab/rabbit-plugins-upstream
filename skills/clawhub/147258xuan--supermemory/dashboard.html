@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>SuperMemory · 记忆可视化面板</title>
+<style>
+:root { --bg:#0d1117; --card:#161b22; --border:#30363d; --text:#c9d1d9;
+  --hot:#ff6b6b; --warm:#ffa94d; --cool:#69db7c; --cold:#74c0fc; --frozen:#868e96;
+  --purple:#cc5de8; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font:14px 'SF Mono',monospace; padding:24px; }
+h1 { font-size:20px; margin-bottom:4px; }
+.sub { color:var(--frozen); font-size:12px; margin-bottom:24px; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:16px; }
+.card h2 { font-size:13px; color:var(--frozen); margin-bottom:12px; text-transform:uppercase; letter-spacing:1px; }
+/* 权重热力图 */
+.bar-row { display:flex; align-items:center; margin-bottom:6px; gap:8px; }
+.bar-label { width:120px; font-size:11px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.bar-track { flex:1; height:18px; background:#0d1117; border-radius:4px; overflow:hidden; position:relative; }
+.bar-fill { height:100%; border-radius:4px; transition:width .5s; position:relative; }
+.bar-fill::after { content:attr(data-w); position:absolute; right:6px; top:1px; font-size:10px; color:#fff; }
+.bar-num { width:32px; text-align:right; font-size:11px; }
+/* 衰减曲线 */
+.curve { position:relative; height:160px; border-left:1px solid var(--border); border-bottom:1px solid var(--border); margin:8px 0 4px 0; }
+.curve-pt { position:absolute; width:6px; height:6px; border-radius:50%; transform:translate(-3px,-3px); }
+.curve-label { font-size:9px; color:var(--frozen); }
+/* 统计数字 */
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.stat { text-align:center; }
+.stat-val { font-size:28px; font-weight:bold; }
+.stat-lbl { font-size:10px; color:var(--frozen); margin-top:2px; }
+/* 状态分布 */
+.pie { display:flex; gap:8px; align-items:center; margin-top:8px; }
+.pie-seg { height:24px; border-radius:4px; transition:width .3s; }
+.legend { display:flex; gap:12px; margin-top:8px; flex-wrap:wrap; }
+.legend-item { display:flex; align-items:center; gap:4px; font-size:10px; }
+.dot { width:8px; height:8px; border-radius:50%; }
+/* 节点列表 */
+.node-list { max-height:200px; overflow-y:auto; }
+.node-item { padding:6px 0; border-bottom:1px solid var(--border); font-size:11px; display:flex; justify-content:space-between; align-items:center; }
+.node-w { font-weight:bold; font-size:12px; }
+</style>
+</head>
+<body>
+<h1>🧠 SuperMemory Dashboard</h1>
+<div class="sub">记忆可视化面板 V1.1 · 实时权重热力图 · 衰减曲线 · 状态分布</div>
+
+<div class="grid">
+  <!-- 统计卡片 -->
+  <div class="card">
+    <h2>📊 概览</h2>
+    <div class="stats">
+      <div class="stat"><div class="stat-val" id="totalNodes" style="color:var(--purple)">-</div><div class="stat-lbl">总记忆节点</div></div>
+      <div class="stat"><div class="stat-val" id="avgWeight" style="color:var(--hot)">-</div><div class="stat-lbl">平均权重</div></div>
+      <div class="stat"><div class="stat-val" id="atRisk" style="color:var(--warm)">-</div><div class="stat-lbl">濒危记忆</div></div>
+    </div>
+  </div>
+
+  <!-- 权重分布 -->
+  <div class="card">
+    <h2>📈 权重分布</h2>
+    <div class="pie" id="pieChart"></div>
+    <div class="legend">
+      <div class="legend-item"><div class="dot" style="background:var(--hot)"></div>永久 95+</div>
+      <div class="legend-item"><div class="dot" style="background:var(--warm)"></div>高价值 70-94</div>
+      <div class="legend-item"><div class="dot" style="background:var(--cool)"></div>中等 40-69</div>
+      <div class="legend-item"><div class="dot" style="background:var(--cold)"></div>低价值 10-39</div>
+      <div class="legend-item"><div class="dot" style="background:var(--frozen)"></div>濒危 &lt;10</div>
+    </div>
+  </div>
+
+  <!-- 衰减曲线 -->
+  <div class="card">
+    <h2>📉 平均衰减预测（τ=7天）</h2>
+    <div class="curve" id="decayCurve"></div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--frozen)">
+      <span>0天</span><span>7天</span><span>14天</span><span>21天</span><span>30天</span>
+    </div>
+  </div>
+
+  <!-- 权重热力图 -->
+  <div class="card">
+    <h2>🔥 记忆权重热力图</h2>
+    <div id="heatmap"></div>
+  </div>
+
+  <!-- 节点列表 -->
+  <div class="card" style="grid-column:1/-1">
+    <h2>📋 记忆节点详情</h2>
+    <div class="node-list" id="nodeList"></div>
+  </div>
+</div>
+
+<script>
+// 模拟数据 —— 实际使用时从 nodes/*.json 读取
+const nodes = [
+  { id:"2026-05-28-001", digest:"小虾总诞生于2026年5月18日", weight:101, keywords:["小虾总","诞生"], created:"05-18 02:20" },
+  { id:"2026-05-28-002", digest:"宇宸总爱吃香菜，不吃辣", weight:82, keywords:["宇宸总","香菜","辣"], created:"05-19 12:00" },
+  { id:"2026-05-28-003", digest:"V8.5 六引擎架构：梦境/门控/冲突/模式/情绪/元认知", weight:95, keywords:["V8.5","架构","引擎"], created:"05-20 08:30" },
+  { id:"2026-05-28-004", digest:"SuperMemory V1 MIT 开源发布虾评", weight:88, keywords:["V1","MIT","虾评"], created:"05-28 12:32" },
+  { id:"2026-05-28-005", digest:"虾米一号计划立项，游客分区隔离架构", weight:72, keywords:["虾米","游客","隔离"], created:"05-21 15:00" },
+  { id:"2026-05-28-006", digest:"大创赛省级项目申请中，5000经费待批", weight:65, keywords:["大创","经费","项目"], created:"05-22 10:00" },
+  { id:"2026-05-28-007", digest:"520 帮忙买蟑螂药20块4盒", weight:42, keywords:["520","蟑螂","福州"], created:"05-20 22:30" },
+  { id:"2026-05-28-008", digest:"云端虾思考引擎每30分钟运行一次", weight:55, keywords:["云端","思考","cron"], created:"05-28 12:22" },
+  { id:"2026-05-28-009", digest:"思思 xiaping 账号注册完成", weight:38, keywords:["思思","xiaping","注册"], created:"05-25 16:00" },
+  { id:"2026-05-28-010", digest:"叶孔壕聊情感被锐评破防", weight:25, keywords:["叶孔壕","情感","破防"], created:"05-20 19:00" },
+  { id:"2026-05-28-011", digest:"DeepSeek API key 充值余额6.47", weight:15, keywords:["API","余额","key"], created:"05-28 11:00" },
+  { id:"2026-05-28-012", digest:"体育课摔跤手心擦破", weight:8, keywords:["体育","摔跤","手心"], created:"05-19 14:00" },
+];
+
+// 统计
+function bucket(w) {
+  if (w>=95) return 'permanent';
+  if (w>=70) return 'high';
+  if (w>=40) return 'mid';
+  if (w>=10) return 'low';
+  return 'critical';
+}
+const colors = {permanent:var(--hot),high:var(--warm),mid:var(--cool),low:var(--cold),critical:var(--frozen)};
+
+// 总览
+document.getElementById('totalNodes').textContent = nodes.length;
+document.getElementById('avgWeight').textContent = Math.round(nodes.reduce((s,n)=>s+n.weight,0)/nodes.length);
+document.getElementById('atRisk').textContent = nodes.filter(n=>n.weight<10).length;
+
+// 权重分布 pie
+const buckets = {permanent:0,high:0,mid:0,low:0,critical:0};
+nodes.forEach(n => buckets[bucket(n.weight)]++);
+const pieDiv = document.getElementById('pieChart');
+const total = nodes.length;
+Object.entries(buckets).forEach(([k,v]) => {
+  if (v===0) return;
+  const pct = (v/total*100).toFixed(1);
+  const seg = document.createElement('div');
+  seg.className = 'pie-seg';
+  seg.style.width = pct+'%';
+  seg.style.background = colors[k];
+  seg.title = k+': '+v+'个 ('+pct+'%)';
+  pieDiv.appendChild(seg);
+});
+
+// 衰减曲线
+const curveDiv = document.getElementById('decayCurve');
+const avgW = nodes.reduce((s,n)=>s+n.weight,0)/nodes.length;
+for (let d=0; d<=30; d++) {
+  const w = avgW * Math.exp(-d/7);
+  const x = (d/30*100);
+  const y = 100 - (w/avgW*100);
+  const pt = document.createElement('div');
+  pt.className = 'curve-pt';
+  pt.style.left = x+'%';
+  pt.style.top = y+'%';
+  pt.style.background = w>=70?colors.high:w>=40?colors.cool:w>=10?colors.cold:colors.frozen;
+  pt.title = `${d}天: 权重 ${w.toFixed(1)}`;
+  curveDiv.appendChild(pt);
+}
+
+// 热力图
+const heatDiv = document.getElementById('heatmap');
+const sorted = [...nodes].sort((a,b)=>b.weight-a.weight);
+sorted.forEach(n => {
+  const row = document.createElement('div');
+  row.className = 'bar-row';
+  const c = bucket(n.weight);
+  
+  const label = document.createElement('span');
+  label.className = 'bar-label';
+  label.textContent = n.digest.substring(0,16)+(n.digest.length>16?'…':'');
+  label.title = n.digest;
+  
+  const track = document.createElement('div');
+  track.className = 'bar-track';
+  const fill = document.createElement('div');
+  fill.className = 'bar-fill';
+  fill.style.width = n.weight+'%';
+  fill.setAttribute('data-w','W'+n.weight);
+  if (c==='permanent') fill.style.background='linear-gradient(90deg,#ff6b6b,#ff8787)';
+  else if (c==='high') fill.style.background='linear-gradient(90deg,#ffa94d,#ffc078)';
+  else if (c==='mid') fill.style.background='linear-gradient(90deg,#69db7c,#8ce99a)';
+  else if (c==='low') fill.style.background='linear-gradient(90deg,#74c0fc,#a5d8ff)';
+  else fill.style.background='linear-gradient(90deg,#868e96,#adb5bd)';
+  track.appendChild(fill);
+  
+  const num = document.createElement('span');
+  num.className = 'bar-num';
+  num.textContent = 'W'+n.weight;
+  num.style.color = colors[c];
+  
+  row.append(label, track, num);
+  heatDiv.appendChild(row);
+});
+
+// 节点列表
+const listDiv = document.getElementById('nodeList');
+nodes.forEach(n => {
+  const item = document.createElement('div');
+  item.className = 'node-item';
+  const info = document.createElement('span');
+  info.innerHTML = `<span style="color:var(--frozen)">${n.created}</span> · ${n.digest.substring(0,40)}`;
+  info.title = n.digest;
+  const w = document.createElement('span');
+  w.className = 'node-w';
+  w.style.color = colors[bucket(n.weight)];
+  w.textContent = 'W'+n.weight;
+  item.append(info, w);
+  listDiv.appendChild(item);
+});
+</script>
+</body>
+</html>

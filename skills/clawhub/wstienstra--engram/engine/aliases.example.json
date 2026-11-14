@@ -1,0 +1,29 @@
+{
+  "_README": [
+    "Curated aliases. Copy this file to aliases.json in your Engram install dir,",
+    "replace the examples with your own nodes, then:",
+    "  python3 engram/engram-aliases.py engram/engram.db --spec engram/aliases.json",
+    "  (add --apply to write; without it you get a preview)",
+    "",
+    "An alias is new vocabulary for a node whose real name uses your jargon while",
+    "the question uses the asker's words. 'owner contact details' and a node named",
+    "'Alice Johnson' share no word, so no amount of ranking finds it; one alias does.",
+    "",
+    "It costs nothing to carry. props is already in the FTS index, embeddings.py",
+    "embeds aliases with the name, and the name channel treats each alias as an",
+    "alternative name — which makes the node pin-eligible whatever its type.",
+    "",
+    "Rule: no alias repeats a word the node's name already has. That is a ranking",
+    "hack, not a vocabulary fix. Keys are node ids; 'name' is checked against the",
+    "database before writing, so a spec aimed at the wrong DB is refused, not applied.",
+    "Keys starting with _ are ignored, so this block can stay in your own file."
+  ],
+  "18": {
+    "name": "Alice Johnson",
+    "aliases": ["owner", "founder", "business owner"]
+  },
+  "1202": {
+    "name": "Staging Server SSH",
+    "aliases": ["webshop login", "website hosting login", "shop server access"]
+  }
+}

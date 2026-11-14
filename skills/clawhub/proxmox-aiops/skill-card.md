@@ -1,47 +1,61 @@
-## Description: <br>
-Proxmox Aiops helps agents manage and diagnose Proxmox VE VMs, containers, clusters, storage, backups, snapshots, and related operations through governed CLI and MCP workflows with audit, budget, undo, and risk-tier controls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage and diagnose Proxmox VE virtual machines, containers, storage, and cluster health with audited operations and recovery support.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and infrastructure operators use this skill to inspect, administer, and troubleshoot Proxmox VE environments, including VM/container lifecycle actions, snapshots, backups, storage, HA, firewall inspection, and read-only RCA for node or guest pressure. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform destructive Proxmox administration actions such as stopping, deleting, rolling back, restoring, or migrating guests. <br>
-Mitigation: Install only for intended Proxmox administration workflows, use least-privilege Proxmox API tokens, prefer read-only roles unless writes are required, and use the documented dry-run and confirmation paths before write actions. <br>
-Risk: Credentials and audit or undo state are stored under ~/.proxmox-aiops/ and could expose sensitive operational data if file permissions are weak. <br>
-Mitigation: Protect ~/.proxmox-aiops/ with restrictive permissions, keep secrets in the per-target .env file, avoid password authentication where possible, and review local audit and undo storage practices before enabling MCP write workflows. <br>
-Risk: Agent mistakes could repeat operations or act on the wrong Proxmox object if tool results are ignored or inferred. <br>
-Mitigation: Require agents to call the actual tool, report real errors, treat null or truncated data explicitly, poll asynchronous task UPIDs instead of reissuing writes, and cite returned IDs and measured values when diagnosing. <br>
+## Use Case:
 
+Proxmox administrators and infrastructure engineers use this skill to inspect cluster and guest health, manage VM and container lifecycles, work with snapshots and backups, and review storage and cluster resources.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/proxmox-aiops) <br>
-- [Project Homepage](https://github.com/AIops-tools/Proxmox-AIops) <br>
-- [Capabilities Reference](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text, markdown] <br>
-**Output Format:** [Markdown guidance with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent to call proxmox-aiops CLI or MCP tools and to report task UPIDs, audit details, diagnostics, and tool results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.0 (source: server release metadata) <br>
+Risk: Proxmox credentials and audit data are kept in local configuration and state files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Protect the per-target secret file and local audit data with restrictive permissions, and use a least-privilege Proxmox token for each target.
+
+Risk: VM, container, snapshot, and backup operations can change or remove workload state.
+
+Mitigation: Check the target and preview supported changes with dry-run; take a snapshot or backup before significant changes where appropriate.
+
+Risk: Disabling TLS verification for a Proxmox target weakens server identity checks.
+
+Mitigation: Keep TLS verification enabled except when connecting to a self-signed lab endpoint.
+
+## Reference(s):
+
+- [Setup guide](artifact/references/setup-guide.md)
+- [CLI reference](artifact/references/cli-reference.md)
+- [Capabilities](artifact/references/capabilities.md)
+- [Agent guardrails](artifact/references/agent-guardrails.md)
+- [Project homepage](https://github.com/AIops-tools/Proxmox-AIops)
+
+## Skill Output:
+
+**Output Type(s):** [Text, API Calls, Analysis, Shell commands, Configuration instructions]
+
+**Output Format:** [Structured tool results and concise text, with CLI commands and configuration examples in Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may include Proxmox task identifiers and diagnostic findings with measured values.]
+
+## Skill Version(s):
+
+0.16.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

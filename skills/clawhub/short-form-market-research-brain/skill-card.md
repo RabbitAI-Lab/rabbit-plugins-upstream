@@ -1,46 +1,55 @@
-## Description: <br>
-Short-form video market research via the Virlo API for viral niche research, trend tracking, creator vetting, hashtag intelligence, and sound intelligence across TikTok, YouTube Shorts, and Instagram Reels. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Short-form video market research via the Virlo API: viral niche research, trend tracking, creator vetting, hashtag, sound, and hook intelligence across TikTok, YouTube Shorts, and Instagram Reels. Use when the user wants to research what's working in a niche, find rising creators, monitor trends, get viral hooks (opening lines) to model, or analyze social video performance.
 
-## Publisher: <br>
-[virlo-ai](https://clawhub.ai/user/virlo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[virlo-ai](https://clawhub.ai/user/virlo-ai)
 
-## Use Case: <br>
-External users, marketers, creators, and research teams use this skill to ask an agent for short-form video market research, trend discovery, creator analysis, and recurring niche monitoring across TikTok, YouTube Shorts, and Instagram Reels through the Virlo API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Virlo API key and sends research topics, creator handles, video URLs, and related prompts to Virlo. <br>
-Mitigation: Configure the key through the VIRLO_API_KEY environment variable and avoid pasting secrets into chat; use the skill only for data you are comfortable sending to Virlo. <br>
-Risk: Virlo API calls can consume prepaid balance, especially one-shot searches, recurring monitor runs, tracking cycles, and data intelligence add-ons. <br>
-Mitigation: Check account balance before paid requests, review estimated costs, and ask for confirmation before setting recurring cadence or optional paid add-ons. <br>
-Risk: Recurring monitors and autopilot settings can continue changing or running after initial setup. <br>
-Mitigation: Confirm before creating monitors, enabling autopilot, applying proposals, pausing, deleting, or changing tracked resources. <br>
+## Use Case:
 
+Marketing teams, creators, and researchers use this agent to investigate short-form video niches, track topics and formats, assess creator and hashtag performance, and develop content ideas from cross-platform video data.
 
-## Reference(s): <br>
-- [Virlo API Documentation](https://dev.virlo.ai/docs) <br>
-- [Virlo API LLM Reference](https://dev.virlo.ai/llms-full.txt) <br>
-- [Virlo Agent Playbook](https://dev.virlo.ai/agent-playbook.txt) <br>
-- [Virlo Pricing](https://dev.virlo.ai/pricing) <br>
-- [ClawHub Skill Page](https://clawhub.ai/virlo-ai/skills/short-form-market-research-brain) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API calls, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with curl examples, JSON API payloads, and concise research summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May summarize Virlo API results and may guide setup of paid one-shot searches, recurring monitors, tracking, or autonomy settings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.4 (source: server release metadata, artifact/SKILL.md frontmatter, artifact/clawhub.json) <br>
+Risk: Using the skill sends the configured API key and submitted research goals or keywords to Virlo.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installation, decide whether you trust Virlo to receive the key and submitted research inputs; avoid sending sensitive goals or keywords.
+
+Risk: The security scan was partial, covering 10 of 11 components, and flagged a timeout and missing privacy disclosure for review.
+
+Mitigation: Review the uncovered component and privacy information before installation, and keep submitted research inputs non-sensitive.
+
+## Reference(s):
+
+- [Virlo API Documentation](https://dev.virlo.ai/docs)
+- [Virlo Agents API Reference](https://dev.virlo.ai/llms-full.txt)
+- [Virlo Pricing](https://dev.virlo.ai/pricing)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown]
+
+**Output Format:** [Markdown reports with summaries, comparisons, metrics, and content guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings and recommendations are based on available platform data and API coverage.]
+
+## Skill Version(s):
+
+1.34.0 (source: frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

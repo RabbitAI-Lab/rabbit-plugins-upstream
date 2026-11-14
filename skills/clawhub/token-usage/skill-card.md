@@ -1,45 +1,50 @@
-## Description: <br>
-Track, aggregate, and report OpenClaw token usage and costs across sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Track, aggregate, and report OpenClaw token usage and costs across sessions.
 
-## Publisher: <br>
-[space-cadet](https://clawhub.ai/user/space-cadet) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[space-cadet](https://clawhub.ai/user/space-cadet)
 
-## Use Case: <br>
-Developers and operators use this skill to review OpenClaw token usage, estimate costs, compare model or session activity, and monitor budget trends from local session logs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads local OpenClaw session logs to compute usage and cost reports. <br>
-Mitigation: Install and run it only in environments where reading local session logs is acceptable. <br>
-Risk: Session archive commands can compress or move local session files. <br>
-Mitigation: Review archive commands before execution and keep backups or retention requirements in mind. <br>
-Risk: The pricing updater and SQLite ingestion helper can update local pricing files or usage.db. <br>
-Mitigation: Run those maintenance helpers only when local pricing data or the usage database should be updated. <br>
+## Use Case:
 
+OpenClaw users and developers can review token usage, model and session breakdowns, and approximate costs over selected time periods, including daily and weekly reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/space-cadet/skills/token-usage) <br>
-- [Skill Homepage](https://github.com/space-cadet/openclaw-tools/tree/main/skills/token-usage) <br>
-- [OpenRouter Models API](https://openrouter.ai/api/v1/models) <br>
-- [Kimi Pricing Documentation](https://platform.kimi.com/docs/pricing/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown reports, terminal summaries, and optional JSON exports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Cost values are estimates based on local pricing data and may differ from actual billing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.4 (source: server release evidence) <br>
+Risk: The scanner flagged copying a whole protected agent database to a temporary location, beyond the usage information the reports need.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review this snapshot behavior before use. If you proceed, limit access to the temporary copy and remove it when processing is complete.
+
+## Reference(s):
+
+- [Token Usage Tracker on ClawHub](https://clawhub.ai/space-cadet/skills/token-usage)
+- [Project homepage](https://github.com/space-cadet/openclaw-token-usage)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Token usage summaries and cost reports as Markdown or JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Per-turn processing volume; cached reads are reported separately and cost estimates are approximate.]
+
+## Skill Version(s):
+
+2.5.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

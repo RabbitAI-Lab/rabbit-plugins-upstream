@@ -98,7 +98,7 @@ else
   # ─── 交互模式 ────────────────────────────
   echo "🪪 opensource-skill-to-github 首次引导"
   echo "===================================================="
-  echo "将写入：$PROFILE（chmod 600）"
+  echo "将写入：${PROFILE}（chmod 600）"
   echo "这个文件跨 agent 跨 skill 重装都不丢；只属于你的 \$HOME"
   echo ""
 

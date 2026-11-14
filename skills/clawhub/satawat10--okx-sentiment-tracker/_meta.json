@@ -1,0 +1,14 @@
+{
+  "description" : "Use this skill when the user asks about: 'any crypto news', 'latest news', 'market update', 'daily briefing', 'BTC news', 'ETH news', 'news on SOL', 'search SEC ETF', 'regulation news', 'Bitcoin halving', 'is BTC bullish or bearish', 'coin sentiment', 'sentiment trend', 'trending coins', 'top bullish coins', 'bearish sentiment', 'social buzz', 'market mood', 'fear and greed', 'full article', 'read more', 'economic calendar', '经济日历', 'macro data', '宏观数据', 'NFP', 'nonfarm', '非农', 'CPI', 'GDP', 'FOMC', '利率决议', 'interest rate decision', 'PMI', 'unemployment rate', '失业率', 'economic events', '经济事件', or any request for crypto news, market intelligence, sentiment analysis, social trend data, or macro-economic calendar. Requires API credentials. Do NOT use for market prices/candles (okx-cex-market), placing orders (okx-cex-trade), or account info (okx-cex-portfolio).",
+  "name" : "okx-sentiment-tracker",
+  "signing" : {
+    "files" : {
+      "SKILL.md" : "sha256:170cfd45348854b710608f3dc45163d725ba6fb8c043a421f554f9848feb7774",
+      "references/workflows.md" : "sha256:05989b72fe08ccbc9f8d8594b0da52d0fd0e49ebb9964712a8e5cf9888022e9a"
+    },
+    "public_key_id" : "okx-skill-signing-key-2026",
+    "signature" : "zsQj70040xFaOpKtA+2ob9vaX8BV3vEkcNq1j4vNZxGliCWlMMQXL//Tp+RJYg8IGxVAsfgSW0O1IHdV+jznAQ=="
+  },
+  "title" : "okx-sentiment-tracker",
+  "version" : "1.4.1"
+}

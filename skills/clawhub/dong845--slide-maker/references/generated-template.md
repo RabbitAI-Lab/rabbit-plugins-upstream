@@ -17,7 +17,7 @@ and Q4's density + tone, which the visual identity does not decide) still runs n
   - 2 — Generate the template image(s)
   - 3 — Derive a matching `style.py` (treat the image as a style example)
   - 4 — Render a sample and get feedback (hard gate)
-  - 5 — Continue the interview, then build to the template
+  - 5 — Continue the interview, run Step 2 (design plan + 🔴 design checkpoint), then build
 - Legibility & fidelity guardrails (busy styles fight text)
 - Checklist
 - Style library — well-known starting styles (seed, then tailor)
@@ -113,7 +113,17 @@ later in the normal interview):
   This gate is about **STYLE, chosen for the TOPIC + CONTENT**: pick the **3 best-fit named styles for
   what this deck is actually about** from the **Style library** at the end of this file, and make them
   **deliberately DIVERSE** — three different visual *languages* (e.g. Swiss vs Manga vs Glassmorphism;
-  Ink-wash vs Blueprint vs Claymorphism), never three moods of one language. For each candidate,
+  Ink-wash vs Blueprint vs Claymorphism), never three moods of one language.
+  🔴 **Shortlist by the TOPIC-DOMAIN contest, not by reflex — `references/design-by-topic.md` governs
+  the generated branch too** (its parenthetical says so): read the domain → apt styles → **ANTI-PICK**,
+  apply the guardrail vetoes and the **CLICHÉ GUARD** (never reflex a neon/HUD sci-fi hero for "AI/tech",
+  a gradient-orb mesh for every SaaS, ink-wash for every "Chinese" topic), then let the 3 candidates be
+  the apt registers — at least one may be a **bespoke register invented for the subject**
+  (`references/bespoke-registers.md`), the image analogue of the clean branch's bespoke direction. And
+  the anti-pick applies to the generated **hero art-direction** itself (`image-generation.md` CLICHÉ
+  GUARD), not just the style name. **Record the pick as `design_plan.style_pick`** — `<the generated
+  register> for <domain> · beat <nearest rival> · anti-pick avoided: <the image cliché>` — the same
+  required field every other branch fills (the hand-off gate checks it here too). For each candidate,
   **GENERATE 1 real template image (2 for the front-runner) in that style, on this topic** — a
   text-free hero/cover-grade plate with a calm title zone, exactly what the winner's cover will be —
   then compose **ONE self-contained HTML gallery** (the images beside the file, one `<img>` card per
@@ -275,9 +285,9 @@ Study the generated image the way you'd study a provided style example
 
   | Identity family | Latin register | CJK pairing note |
   |---|---|---|
-  | Comic / hand-drawn / doodle | rounded humanist or comic-adjacent display (Comic Neue if installed → Trebuchet MS/Verdana fallback) | a rounded 圆体-class face if installed → Hiragino Sans GB fallback; never a brush Kai (reads formal, not playful) |
+  | Comic / hand-drawn / doodle | rounded humanist or comic-adjacent display (Comic Neue if installed → Trebuchet MS/Verdana fallback) | a rounded gothic (yuanti-class) face if installed → Hiragino Sans GB fallback; never a brush Kai (reads formal, not playful) |
   | Blueprint / technical / terminal | technical sans + mono labels (Consolas/Menlo class) | Hiragino Sans GB · mono digits |
-  | Ink-wash / brush / 东方 | serif Latin (Georgia class) | Kai/Song per `east-asian-aesthetic.md`; lining digits beside CJK |
+  | Ink-wash / brush / Eastern | serif Latin (Georgia class) | Kai/Song per `east-asian-aesthetic.md`; lining digits beside CJK |
   | Pixel / retro / arcade | geometric sans or mono, square terminals | Hiragino Sans GB; avoid rounded faces |
   | Painterly / organic / botanical | humanist serif or light humanist sans | Songti or Hiragino by warmth |
   | Editorial / magazine / collage | high-contrast serif display + grotesque body | Songti display + Hiragino body |
@@ -293,7 +303,20 @@ Study the generated image the way you'd study a provided style example
   Set `deckkit.FONT`/`EAFONT` from the chosen pair; define `title_bar`/`footer` to the template's
   chrome in the same register.
 - Put all of this in the deck's `style.py` (copy `references/examples/style_example.py` as the
-  starting shape) — **and record the four-line IDENTITY-PROPAGATION CONTRACT in the Design plan**:
+  starting shape). 🔴 **The `geometry:` and `surface:` lines below are CARRIED BY CODE, not by
+  intention** — `deckkit.set_geometry(radius=…, rule_w=…)` and `deckkit.set_ground(<bg>)`, both
+  in the scaffold. `radius=0` squares every box-based component and `node()`, which is the only
+  way a hard-edged generated identity reaches the library; `rule_w` scales card borders,
+  dividers and node outlines; `set_ground` makes `add_slide()` paint the derived ground, so a
+  dark identity is dark from slide one rather than from wherever a rectangle got drawn. This
+  branch used to name `geometry:` in a contract and have no mechanism behind it: the scaffold
+  carried colour and type only, so a generated identity propagated two of its four lines and
+  every card, node and outline in the deck kept the library's stock shape. A contract with no
+  carrier is the same defect the preset path had, one branch over.
+  **Record `look_source: "generated"` in the Design plan too** — `check_style_applied.py` uses it
+  to tell this branch apart from the preset path, since the topic contest runs here as well and
+  a generated pick legitimately names the preset that art-directed the hero.
+  **And record the four-line IDENTITY-PROPAGATION CONTRACT in the Design plan**:
   `palette: extracted from hero` · `type: <register — faces + CJK pair>` · `geometry:
   <outline/corner/shadow/fill read off the image>` · `surface: <frosted / tint / outlined>`. These
   four lines accompany the hero + sample-content renders at the 🔴 hero checkpoint (or its
@@ -322,11 +345,30 @@ them, and show both. The content slide is essential: it proves the blocks actual
   original mood baked into the picture, and the hero then fights the feeling the user asked for. If it's
   unclear whether they mean a tweak or a new atmosphere, ask in one line before spending a generation.
 
-### 5 — Continue the interview, then build to the template
+### 5 — Continue the interview, run Step 2 (design plan + 🔴 design checkpoint), then build
 - The look is decided → **skip the direction gate** and any LOOK question; the rest of the
   normal interview still runs — purpose & audience & time, source material, language, AND Q4's
   density (text-per-point) and tone: those are content/register choices a generated visual
   identity does not decide (density stays an ALWAYS-surfaced choice per SKILL.md Q4).
+- **Then run SKILL.md Step 2 IN FULL — the design plan + 🔴 DESIGN CHECKPOINT. The hero checkpoint
+  (§4 above) is NOT the design checkpoint: it confirmed the LOOK (the four-line identity contract),
+  not the per-slide DESIGN.** SKILL.md treats the two as *distinct* stops — the per-deck auto-waiver
+  names "the design checkpoint" AND "the Q1=d hero checkpoint" separately — so skipping Step 2 here
+  ships a deck whose layout, rhythm, and forms were never planned or reviewed (only the imagery was).
+  The generated identity **FEEDS** the plan — palette / motif / surface / type are its *inputs*,
+  recorded as the four-line IDENTITY-PROPAGATION CONTRACT (§3) — it does **not** replace it. Produce
+  the full design plan (per-slide **form ledger** + **deck rhythm** map + **signature move** under a
+  `boldness` dial + the **3 design musts** builds/icons/formats + **semantic colour** + **density** +
+  **logo / motif** line) and post the compact 🔴 DESIGN CHECKPOINT artifact
+  (`references/checkpoint-convention.md` spec) **with its required `style gate:` line** — a branch-(d)
+  design checkpoint with no gate line is NOT READY. Record it in `.deck-gates.json` as `design_plan` +
+  `design_plan.checkpoint` (`{"mode": "approved"|"auto", "record": …}`). **Only after it — approval,
+  or its FYI under a per-deck auto directive — do you build.** This is enforced, not just asked:
+  `render_deck.py` REFUSES a full render until the design plan + checkpoint are recorded (a `--slides`
+  probe stays exempt), so the plan cannot be reconstructed post-hoc at hand-off. On this branch the
+  plan's protagonists still sit on the one frosted/plate system (the form-family diversity gate and
+  architecture-rotation rule apply fully — don't let every slide become one panel), and Step 2's
+  material probe is satisfied by §4's already-rendered sample content slide.
 - **Build (step 4 of SKILL.md):**
   - **Cover, section dividers, and the closing / ending page** → the generated image full-bleed (`picture(..., fit="cover")`),
     with the **title and badges native on top**, placed in the image's calm zone (add a soft
@@ -344,8 +386,9 @@ them, and show both. The content slide is essential: it proves the blocks actual
     genuinely fits the template (palette, motifs, components consistent), whether **every interior
     page carries the shallow background** (none left flat), whether the **logo is present and
     consistently placed** where the deck calls for one, and that everything stays legible.
-- **Save the confirmed template to the registry** (`~/.codex/slide-templates/<name>/` in
-  Codex, or `~/.claude/slide-templates/<name>/` in Claude Code): the `style.py`, the
+- **Save the confirmed template to the registry** (`<root>/<name>/`, where `<root>` is what
+  `python3 scripts/registry.py` reports as the write target — Claude/Codex root if one exists,
+  host-neutral `~/.slide-maker/slide-templates/` on every other runtime): the `style.py`, the
   generated `assets/`, and a `profile.md` — so it's a reusable choice next time (it shows up
   under Q1's registered templates). **Under a per-deck auto directive the hero checkpoint was an
   FYI, not a confirmation — defer the save to Step 6's save-this-look offer (explicit yes
@@ -418,12 +461,17 @@ them, and show both. The content slide is essential: it proves the blocks actual
       interchangeable filler (abstract mesh, random gradient, stock swoosh) that would sit under any deck.
       An image that is beautifully on-style but topically generic **fails** — regenerate with the deck's
       own subject motifs folded into the prompt (the REFERENT RULE, `image-generation.md`). This is the
-      user's requirement: 生成图要融合风格且与 topic/内容强相关.
+      user's requirement: a generated image must carry the style AND be strongly tied to the topic.
 - [ ] `style.py` derived: palette **extracted from the image**, motif helpers, component helpers,
       fonts/chrome, a **`content_bg(slide)`** for the shallow interior background, and a
       **`brand(slide)`** logo helper if the deck is about a company/institution/product.
 - [ ] Sample **cover + content slide** rendered and **confirmed by the user** (🔴 checkpoint).
 - [ ] Direction gate **skipped**; rest of the interview (incl. density/tone) completed.
+- [ ] **SKILL.md Step 2 run IN FULL** — the design plan (form ledger · rhythm · signature move ·
+      3 musts · semantic colour · density · logo/motif) posted as the 🔴 DESIGN CHECKPOINT **with its
+      `style gate:` line**, and approved (or FYI'd under an auto directive) **before building**. The
+      hero checkpoint (§4) is the LOOK gate, NOT this. (`render_deck.py` refuses the full render until
+      `design_plan` + `design_plan.checkpoint` are recorded.)
 - [ ] Built: dividers use the image; content is native and **on-system** with the **GENERATED shallow-
       background plate on every interior page** (🔴 MUST — no flat single-colour or merely-gradient
       interior, except a deliberately minimal/flat style) + frosted blocks; the **real logo present and
@@ -505,7 +553,7 @@ pick (palette, energy, brand colours) before generating. Each entry gives the *p
   a hand-lettered accent. Great for youth/community/launch energy.
 - **Ukiyo-e / woodblock** — timeless, crafted, Japanese. *Palette:* indigo, vermilion, cream, seafoam.
   *Motifs:* flat colour planes, bold keylines, stylised waves/clouds, washi grain. *Type:* serif/brush accent.
-- **Ink wash / 水墨** — contemplative, literati. *Palette:* ink blacks on paper + one vermilion seal-red.
+- **Ink wash** — contemplative, literati. *Palette:* ink blacks on paper + one vermilion seal-red.
   *Motifs:* brush strokes, mist gradients, negative space. *Type:* see `east-asian-aesthetic.md` (`ink_wash`).
 - **Flat vector illustration** — friendly product/explainer. *Palette:* 4–6 cheerful mids on white.
   *Motifs:* geometric characters/scenes, simple shadows, spot illustrations. *Type:* rounded geometric sans.
@@ -553,7 +601,8 @@ pick (palette, energy, brand colours) before generating. Each entry gives the *p
   *Type:* humanist serif + sans. (Studio credentials, architecture/interior, craft brands.)
 - **Chalkboard / blackboard** — the teaching register. *Palette:* deep slate/green board + chalk
   white + one pastel chalk accent. *Motifs:* hand-chalked rules/arrows/diagrams, dust texture.
-  *Type:* chalk hand + clean sans. (Lectures, workshops, explainers.)
+  *Type:* chalk hand + clean sans. (Lectures, workshops, explainers.) → with no image tool, the native
+  `chalkboard` language draws this register with editable chalk strokes (`references/visual-languages.md`).
 - **Maximalist pattern-clash** — loud, dense, fashion-editorial. *Palette:* many saturated hues,
   clashing on purpose. *Motifs:* layered patterns, oversized type over imagery, stickers/badges.
   *Type:* mixed display weights. (Use with discipline — legibility guardrails below apply doubly.)

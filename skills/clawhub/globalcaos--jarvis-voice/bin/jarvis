@@ -1,0 +1,79 @@
+#!/bin/bash
+# jarvis — offline TTS with JARVIS-style metallic processing.
+#
+# SCOPE (this script does exactly this and nothing else):
+#   - reads the text you pass as arguments
+#   - runs sherpa-onnx OFFLINE TTS locally to make a wav
+#   - runs ffmpeg locally to apply the metallic effect chain
+#   - plays it through your default ALSA device, then deletes the temp files
+#
+# It makes NO network calls, reads NO credentials, writes NO files outside
+# $TMPDIR, and never posts anything to a chat, an API or a log. Earlier
+# versions could inject a chat bubble over a gateway RPC; that path was removed
+# in 3.2.0 and is not present in this file. Read it top to bottom — it is short.
+
+set -uo pipefail
+
+TTS_DIR="${SHERPA_ONNX_TTS_DIR:-$HOME/.openclaw/tools/sherpa-onnx-tts}"
+MODEL_DIR="$TTS_DIR/models/vits-piper-en_GB-alan-medium"
+# Temp files are created with mktemp in a private 0700 directory. Do NOT use predictable
+# names here ($$ is guessable): another process running as the same user could pre-create or
+# symlink the path and have us overwrite a file of their choosing.
+WORKDIR="$(mktemp -d "${TMPDIR:-/tmp}/jarvis.XXXXXXXXXX")" || exit 6
+chmod 700 "$WORKDIR"
+RAW="$WORKDIR/raw.wav"
+FINAL="$WORKDIR/final.wav"
+
+# --- OFF SWITCH (checked first, before anything runs) -----------------------
+# Silence the voice permanently:  touch ~/.openclaw/jarvis-voice.mute
+# Silence it for one command:     JARVIS_MUTE=1 jarvis "..."
+# Re-enable:                      rm ~/.openclaw/jarvis-voice.mute
+MUTE_FILE="${JARVIS_MUTE_FILE:-$HOME/.openclaw/jarvis-voice.mute}"
+if [ -n "${JARVIS_MUTE:-}" ] || [ -f "$MUTE_FILE" ]; then
+  exit 0
+fi
+
+# --- CHANNEL GATE -----------------------------------------------------------
+# Speaking is for an interactive session at the machine. If the caller marks the
+# turn as belonging to a messaging channel, a cron or a subagent, stay silent —
+# audio there is either useless or leaks the reply to a room you did not choose.
+# Opt out with JARVIS_ALLOW_ANY_CHANNEL=1.
+if [ -z "${JARVIS_ALLOW_ANY_CHANNEL:-}" ]; then
+  case "${JARVIS_CHANNEL:-}" in
+    whatsapp|telegram|sms|discord|slack|email|cron|subagent) exit 0 ;;
+  esac
+fi
+
+[ "$#" -gt 0 ] || { echo "usage: jarvis \"text to speak\"" >&2; exit 2; }
+
+for bin in ffmpeg aplay; do
+  command -v "$bin" >/dev/null 2>&1 || { echo "jarvis: missing '$bin'" >&2; exit 3; }
+done
+[ -x "$TTS_DIR/bin/sherpa-onnx-offline-tts" ] || {
+  echo "jarvis: sherpa-onnx not found at $TTS_DIR (set SHERPA_ONNX_TTS_DIR)" >&2; exit 3; }
+
+cleanup(){ rm -rf "$WORKDIR"; }
+trap cleanup EXIT INT TERM
+
+export LD_LIBRARY_PATH="$TTS_DIR/lib:${LD_LIBRARY_PATH:-}"
+
+"$TTS_DIR/bin/sherpa-onnx-offline-tts" \
+  --vits-model="$MODEL_DIR/en_GB-alan-medium.onnx" \
+  --vits-tokens="$MODEL_DIR/tokens.txt" \
+  --vits-data-dir="$MODEL_DIR/espeak-ng-data" \
+  --vits-length-scale=0.5 \
+  --output-filename="$RAW" \
+  "$@" >/dev/null 2>&1 || { echo "jarvis: TTS failed" >&2; exit 4; }
+
+[ -s "$RAW" ] || { echo "jarvis: TTS produced no audio" >&2; exit 4; }
+
+ffmpeg -y -i "$RAW" -af "asetrate=22050*1.05,aresample=22050,\
+flanger=delay=0:depth=2:regen=50:width=71:speed=0.5,\
+aecho=0.8:0.88:15:0.5,highpass=f=200,treble=g=6" "$FINAL" -v error || exit 5
+
+[ -s "$FINAL" ] || exit 5
+# Default to the system default device; override with e.g.
+#   JARVIS_ALSA_DEVICE=plughw:0,0 jarvis "..."
+aplay_args=(-q)
+[ -n "${JARVIS_ALSA_DEVICE:-}" ] && aplay_args+=(-D "$JARVIS_ALSA_DEVICE")
+aplay "${aplay_args[@]}" "$FINAL"

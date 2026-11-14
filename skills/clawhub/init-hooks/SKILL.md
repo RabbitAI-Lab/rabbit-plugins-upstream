@@ -7,11 +7,12 @@ description: >
   触发词：init-hooks、启动钩子、startup hook、重启初始化、pod重启执行、开机自启。
   安装触发词：帮我安装 init-hooks、初始化 init-hooks、设置 init-hooks、执行 init-hooks 安装。
   配置变更触发词：修改 openclaw.json、改 gateway 配置、改配置文件 → 执行后自动调用 sync_openclaw_config.py。
+  能力边界：不主动修改任何配置项，不预设默认值；只把用户明确给出的 patch 原样写入，并把配置复制到用户配置的持久化路径。
 ---
 
 # init-hooks
 
-- **Version**: 1.0.0
+- **Version**: 1.0.4
 - **License**: MIT
 - **Author**: Evan Song · [github.com/Songhonglei](https://github.com/Songhonglei)
 - **Repository**: https://github.com/Songhonglei/better-agent-skills (skills/init-hooks)
@@ -98,15 +99,31 @@ python3 $SCRIPT add \
 
 ### CDN URL（zip/tar.gz 自动下载解压）
 
+> ⚠️ **安全模型**：URL 钩子会**下载并执行远程代码**。v1.0.1 起强制完整性校验，v1.0.2 起补齐"失败关闭"与解包防护：
+> - `--sha256` 必填（`shasum -a 256` 的 64 位 hex 输出）。下载后立即校验，不匹配拒绝执行；缓存每次使用前也会复核校验标记
+> - 校验或解包任一步失败，**一律不执行**，并且会先删掉上一轮留下的可执行入口（不会拿旧脚本顶替）
+> - 解包**不创建任何链接**：压缩包内的符号链接 / 硬链接 / 设备文件 / FIFO 一律拒绝；绝对路径与 `..` 穿越同样拒绝；文件以 `O_NOFOLLOW` 落盘
+> - 确实无法提供校验值时，加 `--allow-unverified` 显式豁免（不推荐，dispatcher 日志会持续警告）
+> - 生成的 dispatcher.sh 内置相同校验与解包规则，启动时同样强制
+
 ```bash
+# 先算校验值
+curl -fsSL "https://cdn.example.com/my-init.zip" -o /tmp/pkg
+shasum -a 256 /tmp/pkg        # → 64 位 hex
+
 python3 $SCRIPT add \
   --name "远程初始化包" \
   --type script \
   --url "https://cdn.example.com/my-init.zip" \
-  --entry "run.sh"         # 压缩包内入口文件名（不指定则自动找第一个 .sh/.py）
+  --sha256 "abc123..." \
+  --entry "run.sh"
+# --sha256 = 上一步 shasum 输出（必填，除非加 --allow-unverified 显式豁免）
+# --entry  = 压缩包内入口文件名（不指定则自动找第一个 .sh/.py）
 ```
 
 首次执行（启动或 `run` 命令）时自动下载解压到 `downloads/hook_<id>/`，缓存存在则直接使用，pod 重建后缓存丢失会自动重新下载。
+
+> 解压按**文件内容**判断格式，不依赖 URL 后缀。zip 需要 Info-ZIP 版 `unzip`（要能 `unzip -Z` 枚举成员）；容器里若只有 busybox 的 unzip，会明确拒绝并建议改用 tar.gz。
 
 ### 追加 --order 控制执行顺序（默认步进 10）
 
@@ -133,13 +150,16 @@ python3 $SCRIPT edit 1 --url https://... --entry run.sh
 
 **触发场景：** 用户说「修改 openclaw.json」「改 gateway 配置」「给我改配置」，或者用户直接提供了修改 openclaw.json 的脚本/内容。
 
+> **能力边界**：`sync_openclaw_config.py` 只做两件事——把 `openclaw.json` 复制到 `INIT_HOOKS_SYNC_PATHS` 指定的持久化路径、把**用户明确给出的** patch 原样写进配置。它没有任何预置默认值，不会自己开启、关闭或"顺手"改动任何配置项；改什么完全由用户指定。
+
 **必须在改完后立即执行：**
 
 ```bash
 SYNC="$HOME/.openclaw/workspace/skills/init-hooks/scripts/sync_openclaw_config.py"
 
-# 场景1：Agent 直接 patch（最常用）
-python3 $SYNC --patch '{"acp": {"enabled": true}}'
+# 场景1：按用户明确要求 patch 某个字段 —— patch 内容由用户给出（写成文件），
+#         Agent 不自己造字段、不预设默认值
+python3 $SYNC --patch "$(cat ~/user-patch.json)"
 
 # 场景2：用户提供了修改脚本，执行完后自动同步
 python3 $SYNC --run ~/scripts/patch_config.py

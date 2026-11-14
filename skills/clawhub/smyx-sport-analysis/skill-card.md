@@ -1,44 +1,64 @@
-## Description: <br>
-Conducts video safety risk analysis for outdoor sports and endurance events, identifying injuries and sudden health risks and producing structured reports with warnings and recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes videos of outdoor sports events for possible injuries and health risks, then returns a structured report and alerts.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and event operators use this skill to submit outdoor sports videos or URLs for cloud analysis, receive structured risk reports, and query prior reports for follow-up. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Videos, URLs, and report queries may be sent to the lifeemergence.com cloud service for processing. <br>
-Mitigation: Install and use only when that service relationship and media data flow are approved; avoid submitting sensitive media unless policy allows it. <br>
-Risk: The skill may silently create or reuse an identity and store service tokens in a local SQLite database. <br>
-Mitigation: Run it in an isolated workspace, restrict workspace sharing, and remove local identity or token files when deprovisioning. <br>
-Risk: Generated safety reports can influence medical or emergency decisions. <br>
-Mitigation: Treat outputs as decision support only and escalate urgent participant health concerns to qualified medical personnel. <br>
+## Use Case:
 
+Event organizers and safety teams use the skill to review participant video for possible falls, injuries, discomfort, posture concerns, and environmental hazards, and receive risk reports and first-aid suggestions.
 
-## Reference(s): <br>
-- [Outdoor sports analysis API documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-sport-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports and JSON-formatted structured analysis, with optional result files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cloud report links and history-query tables; local video uploads are limited to supported video formats and size limits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.9) <br>
+Risk: The security evidence flags unclear remote account creation and data handling for uploaded video and reports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid installation until the publisher explains what data is sent, how accounts are created, and what consent or authorization is required; obtain appropriate consent before uploading participant footage.
+
+Risk: The security evidence reports a mismatch between the stated sports-safety purpose and some observed behavior, and gaps between promised and observed capabilities.
+
+Mitigation: Review the implementation and its data flows with the publisher before relying on it for event operations, and independently verify any high-risk alert.
+
+Risk: The scan is incomplete because a referenced local path was missing.
+
+Mitigation: Resolve the missing path and review the complete release before installation or use.
+
+Risk: Visual analysis may mistake signs of injury or illness and could be mistaken for a medical diagnosis.
+
+Mitigation: Treat results as preliminary safety indicators; stop activity and seek qualified medical help when someone appears unwell or injured.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-sport-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [API reference](references/api_doc.md)
+- [Analysis API details](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, JSON, Markdown]
+
+**Output Format:** [Structured JSON or a text report with risk findings, safety warnings, suggestions, and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include risk levels, abnormal behavior records, and first-aid suggestions. Results are for safety reference and do not replace medical diagnosis.]
+
+## Skill Version(s):
+
+1.0.19 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
