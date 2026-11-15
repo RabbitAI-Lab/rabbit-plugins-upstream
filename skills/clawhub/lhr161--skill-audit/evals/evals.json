@@ -1,0 +1,23 @@
+{
+  "skill_name": "skill-audit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我检查一下这个 skill 符不符合规范，能不能发布：./skills/docx",
+      "expected_output": "运行 scripts/audit.py 对目标目录打分，返回 0-100 分、A-F 等级、四维分项、失分项清单与带文件行号的问题清单；结论明确说明是否可以发布，并给出优先修复项。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "这个第三方 skill 有没有安全问题？我准备装到内网环境：./vendor/some-skill",
+      "expected_output": "重点输出安全维度与阻塞项：硬编码凭据、危险命令、网络调用、提示注入、交互式脚本、越权路径逐项给出结论；若无阻塞项则明确说明可放行及残留风险。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "把 ./skills 下所有 skill 跑一遍，按分数从低到高排序给我",
+      "expected_output": "批量调用检查器，输出每个 skill 的名称、分数、等级；按分数升序排列；末尾汇总最低分与共性失分项。",
+      "files": []
+    }
+  ]
+}

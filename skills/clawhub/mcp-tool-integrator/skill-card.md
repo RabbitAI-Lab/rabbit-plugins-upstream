@@ -1,41 +1,48 @@
-## Description: <br>
-AI-powered Model Context Protocol integration assistant for scaffolding MCP servers, connecting agent tools, debugging MCP connections, and building custom tool chains. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers through scaffolding, configuring, and troubleshooting MCP server integrations for AI agents and external tools.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers, agent builders, and DevOps engineers use this guide to plan, scaffold, configure, and troubleshoot MCP server integrations with external tools. It provides integration patterns, sample code and configuration, and security guidance for credentials and write operations.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The security assessment is partial, with some references unresolved and behavior evidence incomplete.
+
+Mitigation: Review installation details and unresolved references before enabling an integration; keep credentials user-managed, use least privilege, and require explicit approval for write operations.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers, agent builders, and DevOps engineers use this skill to plan MCP architectures, generate server scaffolds and runtime configuration, connect tools such as GitHub, Slack, Notion, databases, and filesystems, and troubleshoot failed MCP integrations. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Generated MCP configurations and tool chains can grant agents access to production services, data stores, or collaboration tools. <br>
-Mitigation: Use least-privilege credentials, read-only database connections where possible, explicit approval workflows for write access, and audit logging before deployment. <br>
-Risk: Outdated, over-broad, or untested MCP server settings can cause failed integrations, excessive API calls, or unintended tool behavior. <br>
-Mitigation: Pin server versions, test connections with an MCP inspector or development CLI, apply rate limits and budgets, and review generated commands and configuration before use. <br>
+**Output Format:** [Markdown with code and configuration examples]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/mcp-tool-integrator) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+**Other Properties Related to Output:** [Examples and recommendations only; connections, credentials, and changes are managed and confirmed by the user.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with code blocks, shell commands, JSON configuration snippets, diagnostic tables, and setup guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include MCP architecture recommendations, generated Python or TypeScript server scaffolds, runtime configuration examples, debugging reports, and operational best practices.] <br>
+4.0.4 (source: frontmatter)
 
-## Skill Version(s): <br>
-4.0.2 (source: release evidence and SKILL.md frontmatter) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

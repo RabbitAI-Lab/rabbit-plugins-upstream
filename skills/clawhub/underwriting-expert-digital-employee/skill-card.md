@@ -1,45 +1,53 @@
-## Description: <br>
-Supports insurance professionals with health disclosure review, medical underwriting assessment, underwriting decision explanation, follow-up outreach, and sales recording quality review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+覆盖健康审核、医学评估、核保结论解读、回访跟进、双录质检全流程。帮助核保人员提升健康风险评估准确性和工作效率。
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance underwriting, operations, and quality teams use this skill to structure applicant risk review, interpret underwriting outcomes, prepare follow-up communications, and produce review-ready reports that require qualified human approval before business use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may support live customer contact through phone or message workflows. <br>
-Mitigation: Require explicit human approval before outreach, confirm the intended recipient and contact channel, and respect opt-out or no-contact signals. <br>
-Risk: The skill references external systems and MCP tools for customer data, underwriting rules, OCR, ASR, calling, and messaging. <br>
-Mitigation: Enable only intentionally authorized tools and pause workflows when required systems or rule sources are unavailable. <br>
-Risk: Audit logs and reports may include sensitive customer, health, financial, or recording data. <br>
-Mitigation: Redact personal data, define retention limits, and review logs before storage or sharing. <br>
-Risk: Underwriting, medical, compliance, and customer-intent outputs can be incomplete or incorrect if source data or rules are missing. <br>
-Mitigation: Treat outputs as advisory, require qualified human review, and mark missing evidence before business use. <br>
+## Use Case:
 
+Insurance underwriting staff use this skill as a workflow reference to review health disclosures, structure medical assessments, explain draft underwriting outcomes, prepare follow-up guidance, and check sales-recording compliance. Outputs are advisory drafts for qualified human review and execution.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/underwriting-expert-digital-employee) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Structured Markdown reports, templates, checklists, and follow-up guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are advisory and require human review before real-world insurance, compliance, or customer-contact decisions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The security review is benign with medium confidence, but its Skillspector analysis was partial because two linked references were missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the review as incomplete; check available supporting guidance and confirm the skill's underwriting scope before relying on it.
+
+Risk: The workflow may involve sensitive health and identity data and may produce draft underwriting recommendations.
+
+Mitigation: Minimize and redact personal data before input, and require an authorized qualified reviewer to verify recommendations before use; keep customer contact and institutional actions with authorized personnel.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/underwriting-expert-digital-employee)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured Markdown reports, checklists, explanations, and draft communication text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory drafts require qualified human review; the skill does not contact customers or execute institutional workflows.]
+
+## Skill Version(s):
+
+2.0.9 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -28,9 +28,10 @@ vast breathing room. Reach for it on 中文 cultural / 文化 / 人文 / 传统 
 - **Brush / serif CJK display.** Set `deckkit.EADISPLAY = "Kaiti SC"` (楷体 — the macOS family name;
   on Windows the same face is named `"KaiTi"`; `presets.py`'s `_KAITI` resolves this per platform) or
   `"Songti SC"` (宋体) for titles — a calligraphic/serif face carries the register. For body use
-  **Hiragino Sans GB** (render-loop-safe) or Heiti — **PingFang SC is final-deck-only**: the macOS
-  LibreOffice render loop substitutes it with a handwriting face, blinding the render self-check (the
-  render-loop trap in `multilingual.md`; the ink presets ship `ea="Hiragino Sans GB"` for this reason).
+  **Hiragino Sans GB** — it sits in `/System/Library/Fonts` on every Mac, so the build machine
+  always has it (the ink presets ship `ea="Hiragino Sans GB"` for that reason). PingFang SC and
+  Heiti SC also measure and render correctly where installed — verified; see *CJK faces on macOS*
+  in `multilingual.md`.
   (Flag the font dependency at hand-off — a render machine without the face falls back, though the
   `.pptx` still tags it. See `font-guidance.md` / `multilingual.md`.)
 - **Generous emptiness (留白).** Negative space is a *positive* element here — a near-empty slide with
@@ -52,7 +53,7 @@ import deckkit as dk
 p = preset("ink_wash")
 dk.EAFONT = p["ea"]; dk.EADISPLAY = p["ea_display"]; dk.DISPLAY = p["display"]
 BG, INK, RED = p["bg"], p["ink"], p["accents"][0]
-dk.box(s, 0, 0, 10, 5.625, fill=BG)                       # warm paper
+dk.slide_background(s, BG)                                # warm paper, as the real <p:bg>
 dk.seal(s, 8.7, 0.45, 0.7, "藏拙", fill=RED)               # the one red seal
 dk.text(s, 0.7, 0.55, 7, 0.7, [[("木秀于林，风必摧之", 30, INK, True, False, dk.EADISPLAY)]])
 for i,(head,body) in enumerate(items):                    # 壹·贰·叁 markers

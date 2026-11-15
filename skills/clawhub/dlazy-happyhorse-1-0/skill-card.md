@@ -1,40 +1,56 @@
-## Description: <br>
-Happy Horse 1.0 video model covers text-to-video, first-frame-to-video, reference-to-video, and video editing through the dLazy CLI and hosted API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Happy Horse 1.0 supports text-to-video, first-frame-to-video, reference-to-video, and video editing, routing each selected mode to its matching sub-model.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to generate or edit video with Happy Horse 1.0 from prompts and optional image or video inputs. It is useful when an agent needs to call a cloud video-generation service and return generated media URLs or asynchronous task status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-happyhorse-1-0) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+Developers and agents use this skill to send prompts, reference images, or source video to dLazy's Happy Horse 1.0 service and request generated or edited video content.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [JSON result payloads and Markdown command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses @dlazy/cli pinned to 1.2.3; prompts and selected parameters are sent to api.dlazy.com, and local media inputs may be uploaded to files.dlazy.com. Mitigate credential and upload risk by reviewing the pinned package/source, using npx or DLAZY_API_KEY for less persistent setup, passing only media suitable for upload, and rotating or revoking API keys from the dLazy dashboard when needed.] <br>
+Global
 
-## Skill Version(s): <br>
-1.3.4 (source: evidence.json release.version and SKILL.md frontmatter) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The security review is incomplete and the external CLI package's behavior was not verified, so the advertised video features may not be confirmed by the available evidence.
+
+Mitigation: Review the CLI package and decide whether to trust it before installing it or entering dLazy API credentials.
+
+Risk: Prompts and local media provided to the skill are sent to dLazy's hosted API and media storage.
+
+Mitigation: Submit only prompts and media that are appropriate to share with the hosted service.
+
+## Reference(s):
+
+- [Happy Horse 1.0 skill release](https://clawhub.ai/dlazyai/skills/dlazy-happyhorse-1-0)
+- [CLI repository (listed in the skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Video/media assets]
+
+**Output Format:** [Structured JSON response with hosted media URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may include hosted media URLs; asynchronous requests can return a task ID before results are ready.]
+
+## Skill Version(s):
+
+1.3.41 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,38 +1,55 @@
-## Description: <br>
-思维梯度训练师 helps agents guide middle-school math learners through level-based diagnostics, tailored gradient exercises, growth journaling, and weekly progress checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+为初中和高中学生提供五级数学进阶练习，帮助定位当前练习层级并逐步提升。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and tutoring agents use this skill to identify a learner's current math ceiling, generate staged practice for weak areas, and summarize progress over time. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create ongoing learning profiles, record student mistakes and progress, update other learning-history skills, and trigger reminder workflows. <br>
-Mitigation: Use it with explicit student or parent consent and provide clear controls to disable, delete, or limit stored progress data. <br>
+## Use Case:
 
+供初中和高中学生在已掌握某个数学知识点后练习更高难度题目，逐层定位当前练习层级并记录阶段性成长。
 
-## Reference(s): <br>
-- [Initial Math Module Gradient Level Reference](references/gradient-levels.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-style tutoring prompts, problem sequences, progress records, and summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include learner progress records, weak-area summaries, and reminder guidance for recurring math growth checks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The security review is medium-confidence and partial: Skillspector could not resolve a path-like reference in SKILL.md and flagged Unicode content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the unresolved reference and Unicode flags before installing, and consider the partial scan when evaluating the benign verdict.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-gradient-trainer)
+- [初中数学各知识模块梯度分层参考](references/gradient-levels.md)
+- [高一衔接段各知识模块梯度分层参考](references/math-hs1-gradient-levels.md)
+- [高中必修后半各知识模块梯度分层参考](references/math-hs2-gradient-levels.md)
+- [高中选择性必修各知识模块梯度分层参考](references/math-hs3-gradient-levels.md)
+- [提示阶梯与完整示例出口](shared/hint-ladder.md)
+- [AI 出题自检协议](shared/ai-item-check.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language exercises, hints, and Markdown progress summaries; structured handover JSON when supported.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Training records and reminders depend on platform capabilities and student consent; without cross-session storage, report only the current session's results.]
+
+## Skill Version(s):
+
+2.12.7 (source: server-resolved release evidence, frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

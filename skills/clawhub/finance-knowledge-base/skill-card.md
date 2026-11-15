@@ -1,41 +1,53 @@
-## Description: <br>
-Manages internal financial knowledge bases with document organization, knowledge graph structure, semantic search, and intelligent Q&A guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Designs document organization, knowledge graphs, semantic search, version governance, and Q&A quality review for financial institutions’ internal knowledge bases.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Financial institution employees and knowledge managers use this skill to plan internal knowledge-base organization, retrieval workflows, knowledge graph structure, and Q&A patterns. It provides advisory reference material that requires human review before real-world application. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat generated knowledge-base guidance as financial, legal, or insurance advice. <br>
-Mitigation: Use the output as reference material only and require review by qualified professionals before applying it to real financial workflows. <br>
-Risk: Knowledge-base structure or retrieval guidance could introduce incorrect or misleading information into internal documentation. <br>
-Mitigation: Review proposed structures, search behavior, and Q&A content against authoritative internal policies before deployment. <br>
+## Use Case:
 
+Financial institution teams responsible for internal knowledge management can use it to plan document taxonomies, knowledge-graph schemas, retrieval evaluations, metric registries, and version-governance processes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/finance-knowledge-base) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with structured guidance and illustrative Python examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory-only reference output; no executable code, network calls, persistent storage, or credential collection are included in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.2 (source: server release metadata) <br>
+Risk: Security inspection is incomplete and has medium confidence, despite no reported findings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill’s purpose and requested access before installing it.
+
+Risk: Knowledge-management guidance may not reflect an institution’s current policies or controls.
+
+Mitigation: Have qualified staff review recommendations against authoritative sources and institutional requirements; do not use the skill for financial, legal, or compliance advice.
+
+## Reference(s):
+
+- [Finance Knowledge Base on ClawHub](https://clawhub.ai/gechengling/skills/finance-knowledge-base)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown, Code]
+
+**Output Format:** [Markdown with tables, checklists, and illustrative Python snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory outputs require human review; code snippets are illustrative.]
+
+## Skill Version(s):
+
+5.0.5 (source: artifact/SKILL.md frontmatter, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

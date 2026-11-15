@@ -1,40 +1,49 @@
-## Description: <br>
-PLCnext and virtualized-PLC edition of iaiops that guides agents through read-first OPC-UA and Modbus diagnostics, cross-protocol analysis, and industrial data workflows for Phoenix Contact PLCnext environments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in read-only diagnosis and analysis of PLCnext Control and virtual PLC process data over OPC-UA and Modbus.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and industrial automation engineers use this skill to route agents toward read-first PLCnext Control and vPLC diagnostics over built-in OPC-UA and Modbus-TCP services. It is suited for connection diagnosis, dataflow triage, downtime root cause analysis, predictive maintenance, OEE, alarm, baseline, and compliance workflows using existing iaiops tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unintended access to PLCnext endpoints or operational data destinations. <br>
-Mitigation: Before installation or use, confirm the iaiops MCP tools are configured only for intended PLCnext endpoints and that export, historian, streaming, baseline, and alias-map destinations are approved for the operational data involved. <br>
-Risk: Write-capable profiles could enable controlled changes outside this read-first edition. <br>
-Mitigation: Keep write-capable profiles disabled unless controlled changes are explicitly required; when enabled, apply the documented approval, dry-run, undo, and change-management controls. <br>
+## Use Case:
 
+Industrial automation engineers and plant operations teams use this skill to inspect PLCnext Control and virtual PLC process data and investigate data flow, alarms, downtime, equipment health, and OEE. It supports read-only diagnosis and analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-plcnext) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown instructions with tool names and command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-first PLCnext OPC-UA and Modbus workflow guidance; no new connector or PLCnext vendor SDK is introduced by the skill text.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release metadata) <br>
+Risk: Process and alarm data may expose sensitive operational details about a site.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Restrict access to authorized operators and protect diagnostic results or exports according to site data-handling rules.
+
+## Reference(s):
+
+- [Industrial-AIOps Plcnext on ClawHub](https://clawhub.ai/zw008/skills/iaiops-plcnext)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, API Calls]
+
+**Output Format:** [Text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only diagnostic results and operational guidance based on available OPC-UA and Modbus data.]
+
+## Skill Version(s):
+
+0.34.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

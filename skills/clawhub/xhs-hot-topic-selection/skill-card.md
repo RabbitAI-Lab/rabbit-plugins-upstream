@@ -1,43 +1,50 @@
-## Description: <br>
-用于小红书热榜选题、小红书热点选题、小红书热榜分析、小红书热点分析和趋势选题参考，帮助把当前热榜信号和热门笔记样本整理成可执行选题。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于分析小红书热榜和相关热门笔记样本，并将趋势信号整理为可执行的选题建议。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-Content creators, marketers, and social media operators use this skill to review current Xiaohongshu / XHS / RedNote hot-list signals, inspect related public note samples, and turn those signals into topic candidates, title hooks, content angles, and next-step planning guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a SocialDataX API key for data access. <br>
-Mitigation: Confirm the user is comfortable providing the API key through the SOCIALDATAX_API_KEY environment variable before use. <br>
-Risk: Returned full note URLs can be sensitive sharing artifacts. <br>
-Mitigation: Preserve note URLs exactly when needed, and avoid forwarding or storing them outside the user's intended workflow. <br>
-Risk: Hot-list and note-sample analysis may be incomplete or time-bound. <br>
-Mitigation: Present findings as current signals from returned public results, not as complete platform coverage or guaranteed traffic outcomes. <br>
+## Use Case:
 
+内容创作者和社媒运营人员可用它查看当前小红书热榜、结合热门笔记样本分析趋势，并整理候选选题、标题钩子和内容角度。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/xhs-hot-topic-selection) <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with optional shell command examples and structured topic analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include current hot-list signals, topic candidates, public note samples, title hooks, content angles, hotspots to avoid, next-step recommendations, and full note URLs returned by the data source.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.5 (source: server release evidence) <br>
+Risk: The security guidance flags CLI authentication setup, credential persistence, and an npx package reference as setup risks; the scan was partial, so its evidence is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the package version being executed, use the documented private local credential flow, keep API keys out of chat and project files, and review the resolved package before use.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/devinchen2014/skills/xhs-hot-topic-selection)
+- [SocialDataX API access and management](https://socialdatax.com/ai?from=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Guidance]
+
+**Output Format:** [Markdown text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Summarizes current hot-list signals, topic candidates, note samples, title hooks, content angles, and next steps; conclusions are limited to the returned public results.]
+
+## Skill Version(s):
+
+0.1.15 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

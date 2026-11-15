@@ -1,48 +1,54 @@
-## Description: <br>
-Analyzes gecko and lizard tail images or video to detect abnormal tail shortening, visible tail-tip wounds or scabs, and tail-loss event reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Through fixed enclosure cameras, the system periodically captures tail images of geckos and lizards and uses AI visual analysis to detect tail length, tail-tip wounds, scabs, or abnormal shortening.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External reptile keepers, breeders, and smart-vivarium developers use this skill to analyze supplied reptile tail images or videos, query historical reports, and receive structured tail-loss alerts with care-oriented guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends reptile images or media URLs to Life Emergence cloud APIs. <br>
-Mitigation: Use only with media the user is allowed to upload, and disclose that analysis is cloud-connected rather than local-only. <br>
-Risk: The skill silently creates or reuses an internal account identity and queries cloud history. <br>
-Mitigation: Review account and history behavior before deployment, especially for shared workspaces or regulated environments. <br>
-Risk: The skill stores account tokens in a local workspace SQLite database. <br>
-Mitigation: Restrict workspace access, rotate or clear credentials when decommissioning, and avoid running it in untrusted shared directories. <br>
-Risk: Visual analysis may produce unreliable or overstated tail-loss findings when images are incomplete, low resolution, poorly lit, or lack SVL/reference context. <br>
-Mitigation: Require clear full-tail imagery and keep the documented unreliable-signal path for low-quality inputs instead of forcing a diagnosis. <br>
-Risk: Care guidance could be mistaken for veterinary diagnosis or treatment. <br>
-Mitigation: Keep outputs limited to visual observations and non-prescriptive guidance, and direct suspected infection or severe injury cases to a qualified reptile veterinarian. <br>
+## Use Case:
 
+Reptile keepers use the skill to review gecko and lizard tail images, track changes against historical measurements, and receive structured tail-loss alerts and reports.
 
-## Reference(s): <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-reptile-tail-loss-detection-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and JSON-like structured analysis reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links, alert levels, tail-length measurements, wound indicators, and historical report tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter reports 1.0.6) <br>
+Risk: The scanner flags account and credential handling, remote media uploads, and export-only behavior as insufficiently explained for the skill’s stated purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Clarify and review these behaviors before installation; follow the scanner guidance to avoid installing until they are understood.
+
+Risk: The security scan was partial because a referenced local path was missing, so it did not cover every referenced behavior.
+
+Mitigation: Review the missing referenced material and the uncovered behavior before relying on the skill.
+
+## Reference(s):
+
+- [API interface and input guidance](references/api_doc.md)
+- [Skill introduction demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Report links]
+
+**Output Format:** [Structured analysis reports in JSON or concise text, with Markdown tables for history queries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May report image-based tail measurements, event classifications, alert levels, and keeper guidance.]
+
+## Skill Version(s):
+
+1.0.16 (source: server-resolved ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

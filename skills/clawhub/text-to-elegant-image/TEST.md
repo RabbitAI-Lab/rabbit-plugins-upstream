@@ -4,7 +4,7 @@
 
 ```yaml
 skill_name: text-to-elegant-image
-version: "1.0.0"
+version: "1.2.0"
 maintainer: "text-to-elegant-image"
 ```
 
@@ -36,7 +36,7 @@ script_cmd: |
   "
 expected_output: "SCREENSHOT_OK"
 expected_output_mode: contains
-expected_agent_response: "生成长图，包含对风格的说明，提供图片或CDN链接，不报错"
+expected_agent_response: "生成长图，包含对风格的说明，提供图片本地路径，不报错"
 ```
 
 ### Case 2: 指定极简风格

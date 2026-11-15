@@ -2,10 +2,10 @@
 name: dlazy-pdf-to-video
 version: 1.0.3
 description: "PDF 转视频、PDF 转讲解视频、PDF 生成视频——解析 PDF、大纲、分镜、配音、合成、校验。当用户给一份 PDF、想要讲解视频 / 报告解读 / 课件 / 培训视频时使用。"
-metadata: {"clawdbot":{"emoji":"📄","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，新任务运行 'dlazy chat --skill file-to-video --prompt ...'，继续已有项目用 'dlazy chat --project <id> --prompt ...'（用 'dlazy projects list' 查 id）；不要同时传 --skill 和 --project。"}}
+metadata: {"clawdbot":{"emoji":"📄","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，新任务运行 'dlazy chat --skill file-to-video --prompt ...'，继续已有项目用 'dlazy chat --project <id> --prompt ...'（用 'dlazy projects list' 查 id）；不要同时传 --skill 和 --project。"}}
 ---
 
-# pdf-to-video
+# PDF 转视频 PDF to Video
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 
@@ -51,7 +51,7 @@ CLI 会把 key 保存在你的用户配置目录（macOS/Linux 上为 `~/.dlazy/
 
 ## 关于与来源 (Provenance)
 
-- **CLI 源代码**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI 源代码**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **维护者**: dlazyai
 - **npm 包名**: `@dlazy/cli`（本技能 install 字段固定到 `1.2.3` 版本）
 - **官网**: [dlazy.com](https://dlazy.com)

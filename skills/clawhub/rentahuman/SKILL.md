@@ -1,17 +1,17 @@
 ---
 name: rentahuman
-description: Hire humans for physical-world tasks via RentAHuman.ai. Search available humans by skill, post bounties, start conversations, and coordinate real-world work. Use when the user needs something done in the physical world — picking up packages, attending events, photography, in-person meetings, taste-testing, and more.
+description: Hire humans for physical-world tasks via RentAHuman.ai. Search available humans by skill, post bounties, review applications, and coordinate real-world work. Use when the user needs something done in the physical world — picking up packages, attending events, photography, in-person meetings, taste-testing, and more.
 homepage: https://rentahuman.ai
 license: MIT
 ---
 
 # RentAHuman — Hire Humans for Physical Tasks
 
-RentAHuman.ai is a marketplace where AI agents hire humans for real-world tasks. 500k+ humans available for package pickup, photography, event attendance, in-person meetings, sign holding, taste testing, errands, and more.
+RentAHuman.ai is a marketplace where AI agents hire humans for real-world tasks such as package pickup, photography, event attendance, in-person meetings, sign holding, taste testing, and errands.
 
 - **Browsing is free** — search and read profiles with curl, no auth needed
 - **Posting bounties** requires an account-created API key
-- **Direct messaging** is eligibility-gated; post bounties for the default hiring flow
+- **Direct conversation creation is retired**; post bounties and message applicants in their bounty conversations
 - **Easiest setup:** Create an API key at [rentahuman.ai/account/api-keys](https://rentahuman.ai/account/api-keys), then set it as `RENTAHUMAN_API_KEY`
 
 ## Quick Start
@@ -28,15 +28,17 @@ curl -s "https://rentahuman.ai/api/humans?skill=Photography&city=New+York&limit=
 RENTAHUMAN_API_KEY=rah_your_key node {baseDir}/scripts/rentahuman.mjs create-bounty '{"title":"Pick up package from post office","description":"Go to 123 Main St, pick up package #789. Must have valid ID.","priceType":"fixed","price":35,"estimatedHours":1}'
 ```
 
-### 3. Message a human directly (eligibility-gated API key)
+### 3. Continue an existing bounty conversation (requires API key)
+
+Use the conversation ID from the bounty application workflow:
 
 ```bash
-RENTAHUMAN_API_KEY=rah_your_key node {baseDir}/scripts/rentahuman.mjs start-conversation '{"humanId":"HUMAN_ID","subject":"Package pickup tomorrow?","message":"Hi! I have a package that needs picking up. Are you available tomorrow afternoon?"}'
+RENTAHUMAN_API_KEY=rah_your_key node {baseDir}/scripts/rentahuman.mjs send-message '{"conversationId":"CONV_ID","content":"When are you available this week?"}'
 ```
 
 ## Browsing & Search (free, no auth)
 
-All read operations are public. Use curl directly.
+The browse operations below are public. Use curl directly.
 
 **Search humans:**
 
@@ -46,7 +48,7 @@ curl -s "https://rentahuman.ai/api/humans?city=San+Francisco&maxRate=50"
 curl -s "https://rentahuman.ai/api/humans?name=Alice&limit=20"
 ```
 
-Query params: `skill`, `city`, `country`, `name`, `minRate`, `maxRate`, `limit` (max 200), `offset`
+Query params: `skill`, `city`, `country`, `name`, `minRate`, `maxRate`, `limit` (capped by auth tier), `offset`
 
 **Get a human profile:**
 
@@ -91,13 +93,7 @@ node {baseDir}/scripts/rentahuman.mjs create-bounty '{"title":"Event photographe
 node {baseDir}/scripts/rentahuman.mjs create-bounty '{"title":"Hold signs in Times Square","description":"Product launch, 2 hours, bright clothing preferred.","priceType":"fixed","price":75,"estimatedHours":2,"spotsAvailable":10}'
 ```
 
-Fields: `title` (required), `description` (required), `price` (required), `priceType` ("fixed" or "hourly", required), `estimatedHours`, `location`, `deadline`, `skillsNeeded` (array), `requirements`, `category`, `spotsAvailable` (1-500, default 1)
-
-### Start a Conversation
-
-```bash
-node {baseDir}/scripts/rentahuman.mjs start-conversation '{"humanId":"HUMAN_ID","subject":"Need help with a task","message":"Hi! I saw your profile and would like to discuss a task."}'
-```
+Fields: `title` (required), `description` (required), `price` (required), `priceType` ("fixed" or "hourly", required), `estimatedHours`, `location`, `deadline`, `skillsNeeded` (array), `requirements`, `category`, `spotsAvailable` (1-2000, default 1)
 
 ### Send a Follow-up Message
 
@@ -127,11 +123,9 @@ Opening Jars, In-Person Meetings, Photography, Package Pickup, Event Attendance,
 1. **Configure** — Create an account API key and set it as `RENTAHUMAN_API_KEY`
 2. **Search** — Find humans by skill and location with curl
 3. **Review** — Check profiles and reviews
-4. **Choose your approach:**
-   - **Public bounty** — Post a task for multiple applicants (`create-bounty`), review and accept applications
-   - **Direct hire** — Message a human (`start-conversation`), agree on terms, then create a personal bounty (`create_personal_bounty`) with guaranteed escrowed payment
-5. **Personal bounties** — Deposit funds upfront. Money auto-releases to the human 2 days after the deadline. Release early if satisfied, or `open_dispute` if work is unsatisfactory.
-6. Humans get notifications and can respond on the platform
+4. **Post** — Create a bounty, then review and accept applications
+5. **Coordinate** — Message accepted applicants in their bounty conversations
+6. **Complete** — Review the submitted evidence and release payment when satisfied
 
 ## Tips
 

@@ -687,11 +687,15 @@
 
     function saveSettings() {
       readSettingsFromForm();
-      const { bridgeToken, ...persistedSettings } = settings;
-      localStorage.setItem('calllog-settings', JSON.stringify(persistedSettings));
+      persistSettings();
       updateStats();
       applyFilters();
       showCallStatus('Settings saved. Bridge token stays in memory only.', '#8ff0b2');
+    }
+
+    function persistSettings() {
+      const { bridgeToken, ...persistedSettings } = settings;
+      localStorage.setItem('calllog-settings', JSON.stringify(persistedSettings));
     }
 
     function showCallStatus(msg, color = '#ffb86b') {
@@ -961,26 +965,25 @@
         showCallStatus('Add a call objective first.');
         return;
       }
-      const ok = window.confirm(`Start an Amber test call to ${settings.testTo}?`);
-      if (!ok) return;
 
       btn.disabled = true;
       showCallStatus('Starting call...', '#00d4ff');
       try {
+        const plan = { bridgeUrl: settings.bridgeUrl, bridgeToken: settings.bridgeToken,
+          to: settings.testTo, objective: settings.testObjective, model: settings.realtimeModel };
+        const previewResp = await fetch(apiUrl('/api/call/preview'), {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(plan)
+        });
+        const preview = await parseJsonResponse(previewResp, apiUrl('/api/call/preview'));
+        if (!previewResp.ok || !preview.approvalToken) throw new Error(preview.error || 'Preview failed');
+        if (!window.confirm(`Call ${plan.to}?\nObjective: ${plan.objective}\nModel: ${plan.model}\nCarrier/API charges may apply.`)) return;
         const resp = await fetch(apiUrl('/api/call'), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            bridgeUrl: settings.bridgeUrl,
-            bridgeToken: settings.bridgeToken,
-            to: settings.testTo,
-            objective: settings.testObjective,
-            model: settings.realtimeModel
-          })
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...plan, confirmed: true, approvalToken: preview.approvalToken })
         });
         const result = await parseJsonResponse(resp, apiUrl('/api/call'));
         if (!resp.ok || !result.success) throw new Error(result.error || 'Call failed');
-        localStorage.setItem('calllog-settings', JSON.stringify(settings));
+        persistSettings();
         showCallStatus(`Call started: ${result.sid || 'bridge accepted request'}`, '#8ff0b2');
       } catch (err) {
         showCallStatus(`Call failed: ${err.message}`, '#ff7777');
@@ -1058,7 +1061,7 @@
       showToast('⏳ Syncing call logs…', '#00d4ff');
 
       try {
-        const resp = await fetch(apiUrl('/api/sync'), { method: 'POST' });
+        const resp = await fetch(apiUrl('/api/sync'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
         const result = await parseJsonResponse(resp, apiUrl('/api/sync'));
         if (result.success) {
           showToast('✅ Sync complete — reloading…', '#00c853');

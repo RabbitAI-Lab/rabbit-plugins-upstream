@@ -1,41 +1,53 @@
-## Description: <br>
-Import Figma content into a HyperFrames composition, including rendered assets, brand tokens, components, storyboard sections, connector-assisted motion when available, and shaders from a connector or native export. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bring Figma into a HyperFrames video - rendered assets, brand tokens, components, storyboard frames as reconstructed motion (frames read as states, not slides), shaders and connector-assisted motion. Use when the person pastes a figma.com link or asks to use a Figma design, frame, logo or brand.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and motion designers use this skill to bring Figma designs, frames, logos, brand tokens, components, storyboards, animations, and shader assets into HyperFrames compositions while keeping render inputs local and repeatable. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks the agent to silently update the skill package and related core skills before use. <br>
-Mitigation: Require explicit user approval before updating installed skills or dependencies, and review the updated package before relying on it. <br>
-Risk: Connector-assisted phases include telemetry or beacon behavior. <br>
-Mitigation: Make telemetry clearly opt-in and explain when events are sent before running connector-assisted motion, shader, or storyboard workflows. <br>
-Risk: Imported assets and raw connector responses can be stored locally in the project. <br>
-Mitigation: Use a Figma token with only documented read-only scopes and avoid importing sensitive Figma content into projects where local storage is not acceptable. <br>
+## Use Case:
 
+Developers use this skill to bring Figma designs into HyperFrames video compositions. It guides them through importing visual assets and brand tokens, building editable components, and translating storyboard or connector-provided motion into video.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Code, Files] <br>
-**Output Format:** [Markdown guidance with inline shell commands, generated local files, HTML components, JSON sidecars, and GSAP timeline code] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Imports freeze Figma-derived assets locally; motion verification may use MP4 references and render outputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release evidence) <br>
+Risk: The security assessment reports unpinned package commands and a Windows executable lookup weakness.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the commands and executable lookup behavior before running the skill; pin package versions and use a controlled environment.
+
+Risk: The scan is incomplete and does not establish that the skill is safe.
+
+Mitigation: Review the skill files before installation and treat the suspicious verdict as unresolved until a complete assessment is available.
+
+## Reference(s):
+
+- [Figma skill release on ClawHub](https://clawhub.ai/heygen-com/skills/figma)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Files, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance, shell commands, and generated design assets or component and motion code]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Imported Figma material is used in video compositions as local assets, editable components, or motion instructions.]
+
+## Skill Version(s):
+
+1.0.21 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

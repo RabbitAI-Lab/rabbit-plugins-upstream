@@ -1,44 +1,55 @@
-## Description: <br>
-A Chinese-language physics problem-solving coach that guides students through diagramming, physical modeling, calculation, and reflection instead of giving full answers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+以读题画图、物理建模、列式计算和检验反思四步法，引导初中及高中学生逐步解决当前的物理题。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and tutors use this skill to work through physics exercises by first establishing a physical diagram, then selecting a model, writing equations, checking units, and reflecting on errors. It is especially oriented toward mechanics, circuits, optics, and common middle-school physics problem types. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may persist or sync detailed student learning records, including mistakes, answers, weak points, and recovery state. <br>
-Mitigation: Use it only when the platform provides clear consent, local-only storage when promised, deletion and export controls, and a no-storage mode; confirm these controls before using it with students, especially minors. <br>
-Risk: Image-based problem intake depends on multimodal vision or OCR and can misread unclear problem statements. <br>
-Mitigation: When image recognition is unavailable or uncertain, ask the student to type the problem and known conditions, then confirm the interpretation before continuing. <br>
+## Use Case:
 
+面向初中和高中学生，在一道题的范围内提供循序渐进的物理辅导：先建立或描述物理图景，再选择模型、列式计算并检查结果。长期档案读取、错题交接和回看提醒分别需要明确同意。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-problem-coach) <br>
-- [physics-4step-statemachine.md](artifact/references/physics-4step-statemachine.md) <br>
-- [physics-socrates-guide.md](artifact/references/physics-socrates-guide.md) <br>
-- [physics-diagram-guide.md](artifact/references/physics-diagram-guide.md) <br>
-- [claw-templates-physics.md](artifact/references/claw-templates-physics.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Conversational Markdown guidance with prompts, checks, and step-by-step tutoring structure] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask the student to provide text descriptions or drawings when image/OCR support is unavailable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The security review notes scope concerns around broader revision and experimental-method coaching, plus one unresolved local reference.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep use to the skill's stated problem-solving scope, route experiment-design and data-analysis requests to the designated experiment coach, and confirm referenced files are present in the release package.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-problem-coach)
+- [Publisher profile (qizhitang)](https://clawhub.ai/user/qizhitang)
+- [Four-step problem-solving guide](artifact/references/physics-4step-statemachine.md)
+- [Physics diagram guide](artifact/references/physics-diagram-guide.md)
+- [Socratic physics coaching guide](artifact/references/physics-socrates-guide.md)
+- [Worked examples for high school physics](artifact/references/physics-hs1-worked-examples.md; artifact/references/physics-hs2-worked-examples.md; artifact/references/physics-hs3-worked-examples.md)
+- [Crisis response guidance](artifact/shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Chinese conversational explanations with equations and simple text diagrams; structured steps may use Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Interactive, stepwise help for one physics problem; may offer a similar practice problem after a worked example.]
+
+## Skill Version(s):
+
+2.12.7 (source: ClawHub release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

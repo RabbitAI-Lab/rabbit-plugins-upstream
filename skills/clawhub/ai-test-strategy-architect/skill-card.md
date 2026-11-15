@@ -1,40 +1,57 @@
-## Description: <br>
-AI-powered test strategy and automation assistant that designs testing strategies, generates unit, integration, and end-to-end test cases, implements web, mobile, and API test automation, and supports CI/CD testing pipelines. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Designs test strategies, generates test cases, and provides automation and CI/CD testing guidance for web, mobile, and API projects.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-QA engineers, software developers, test leads, and DevOps teams use this skill to design practical test strategies, generate test cases, scaffold automation, and plan CI/CD quality gates for software projects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated API and browser test examples may include placeholder URLs, login values, tokens, or payment details that are unsafe to use directly in production. <br>
-Mitigation: Use sandbox or staging environments, provider-approved test payment data, and secret managers or environment variables for real test credentials. <br>
-Risk: Generated tests and quality gates may not fully match the target application behavior or risk profile. <br>
-Mitigation: Review generated test cases, automation code, and CI/CD thresholds before adopting them in a release workflow. <br>
+## Use Case:
 
+Developers, QA engineers, test leads, and DevOps teams use the skill to plan risk-based testing, draft unit, integration, and end-to-end cases, and shape automation and CI/CD quality gates.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/ai-test-strategy-architect) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with code blocks, checklists, tables, and structured testing guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include sample test code, CI/CD configuration guidance, test strategy documents, and framework comparisons.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The security review notes a mismatch between the stated testing purpose and reported pricing logic, which may make examples confusing to reuse.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the examples and confirm their assumptions fit the project before adapting them.
+
+Risk: The order confirmation example may not actually verify that confirmation occurred, creating false assurance.
+
+Mitigation: Check that adapted end-to-end tests assert a visible confirmation and a concrete order identifier.
+
+Risk: The security verdict has medium confidence and the analysis was partial, with a static analysis limitation and a missing local reference.
+
+Mitigation: Review the skill contents and examples before installing, as advised by the security guidance.
+
+## Reference(s):
+
+- [AI Test Strategy Architect on ClawHub](https://clawhub.ai/gechengling/skills/ai-test-strategy-architect)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Configuration]
+
+**Output Format:** [Markdown with code and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft strategies, test cases, and examples for human review; the skill does not run tests or access repositories or CI.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,54 @@
-## Description: <br>
-用于微博创作者数据、微博创作者内容列表、近期发布、内容调研和创作者内容分析。覆盖 Weibo creator posts，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于微博创作者数据、微博创作者内容列表、近期发布、内容调研和创作者内容分析。覆盖 Weibo creator posts，来自 SocialDataX 社媒数据助手。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and developers use this skill to fetch and summarize Weibo creator post lists for recent publishing review, creator benchmarking, content research, and account tracking through SocialDataX. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses SOCIALDATAX_API_KEY for data access. <br>
-Mitigation: Keep the API key private and provide it only through the expected environment variable. <br>
-Risk: Unbounded pagination can increase API credit use. <br>
-Mitigation: Prefer bounded options such as --pages or --max-items before using --all. <br>
-Risk: Returned Weibo creator-post data may be incomplete or depend on API availability and input identifiers. <br>
-Mitigation: Check returned errors, verify user IDs or profile URLs, and retry once for non-balance network or API failures when appropriate. <br>
+## Use Case:
 
+External users and developers can retrieve Weibo creator posts for recent publishing reviews, content research, style analysis, creator benchmarking, and account tracking.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo-creator-posts) <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration guidance, JSON, Markdown] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON data from SocialDataX responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY, supports bounded pagination with pages or max-items, and can summarize returned Weibo post fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: The skill runs an unpinned npm package that may change, including during login when an API key is entered.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and trust the package source before running its commands, especially before entering credentials.
+
+Risk: Security scan coverage is partial, so its suspicious verdict does not establish malicious intent and the available scan evidence is incomplete.
+
+Mitigation: Use the scan as a prompt for review and assess whether the package source is trusted before installation.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo-creator-posts)
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Guidance]
+
+**Output Format:** [JSON creator-post data with natural-language summaries when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only creator content; available fields depend on the returned records.]
+
+## Skill Version(s):
+
+0.1.23 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

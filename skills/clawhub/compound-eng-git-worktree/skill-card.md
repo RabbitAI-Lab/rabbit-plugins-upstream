@@ -1,42 +1,58 @@
-## Description: <br>
-Manage Git worktrees for isolated parallel development, including creating, listing, switching, and cleaning up worktrees for concurrent reviews or feature work. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Git worktrees for isolated parallel development, including creating, listing, switching, and cleaning up worktrees for concurrent reviews or feature work.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill to manage isolated Git worktrees for parallel implementation, branch review, and cleanup workflows without switching the main working tree in place. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The helper can duplicate local .env files containing secrets into newly created worktrees. <br>
-Mitigation: Review or edit the helper before use on repositories with real credentials, require opt-in or an allowlist for env copying, prefer .env.example, and verify copied env files stay ignored and are cleaned up with discarded worktrees. <br>
+## Use Case:
 
+Developers use this tool to create, inspect, switch among, and clean up isolated Git worktrees for parallel feature work and code review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-git-worktree) <br>
-- [Workflow Examples](references/workflow-examples.md) <br>
-- [Troubleshooting & Technical Details](references/troubleshooting.md) <br>
-- [Hooks and Local Excludes](references/hooks-and-excludes.md) <br>
-- [Worktree Manager Script](scripts/worktree-manager.sh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and command output summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or run Git worktree helper commands and may summarize branch, worktree, and cleanup status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release metadata) <br>
+Risk: Creating a worktree from a trusted base can copy .env files into it.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use --no-env for untrusted bases and review copied environment files before using the new worktree.
+
+Risk: Setup may install dependencies or run project-specific setup actions.
+
+Mitigation: Inspect the base repository and follow the skill's trust-specific setup guidance before running installs.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/iliaal/skills/compound-eng-git-worktree)
+- [Workflow examples](artifact/references/workflow-examples.md)
+- [Troubleshooting](artifact/references/troubleshooting.md)
+- [Worktree integration](artifact/references/worktree-integration.md)
+- [Commit ownership](artifact/references/commit-ownership.md)
+- [Hooks and local excludes](artifact/references/hooks-and-excludes.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Git worktree lifecycle instructions and safety guidance.]
+
+## Skill Version(s):
+
+5.1.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -29,7 +29,7 @@ Dedicated email verification. **One credits-based action, 0.1 credits** — same
 ```bash
 # Only on rows where the first verifier returned catch-all / ambiguous
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"zeroBounce","actionSlug":"verifyEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"zeroBounce","actionSlug":"verifyEmail"}' \
   --records '[{"email":"alice@acme.com"},{"email":"bob@globex.com"}]' \
   --wait-until-finished
 ```
@@ -40,7 +40,7 @@ Keep an email when either verifier passes it cleanly; drop it only when both agr
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"zeroBounce","actionSlug":"verifyEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"zeroBounce","actionSlug":"verifyEmail"}' \
   --data '{"email":"alice@acme.com"}' \
   --wait-until-finished
 ```
@@ -68,9 +68,15 @@ Read `status` + `sub_status` for the verdict, `catchall_domain` / `free_email` f
 
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"zeroBounce","actionSlug":"verifyEmail","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"zeroBounce","actionSlug":"verifyEmail"}`. **No `connectorUuid` in `config`.**
 
 ## Pairs with
 
 - [`../recipes/outreach-activation.md`](../recipes/outreach-activation.md) — the verify step before personalization; never sequence unverified emails.
 - [`../recipes/prospecting.md`](../recipes/prospecting.md) — the verify rung of the find → enrich → verify → sync spine.
+
+## Recurring use
+
+- **Re-verify before the send wave, not on a timer** — deliverability decays as people change jobs, so the recurring shape is a verify node inside each send play, gated to rows whose last verdict is missing or stale; a blanket cron over the whole model re-bills 0.1/row on addresses nobody is about to email.
+- **In-play gate:** filter on empty/stale `status` — plus the first verifier's ambiguous verdicts, per Pattern A — so play re-evaluation never re-bills freshly-verified rows.
+- **Second-opinion discipline holds on a schedule too:** recurring double-verification of rows waterfall already passed cleanly is the "double-verifying everything" pitfall above, compounding every cycle.

@@ -1,0 +1,40 @@
+name: vibecheck
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # vibecheck is zero-dependency: plain Python 3 is enough.
+      - name: Run vibecheck (SARIF for code scanning)
+        run: |
+          python3 vibecheck.py ./src \
+            --min-score 80 --fail-on high \
+            --baseline .vibecheck-baseline.json \
+            --format sarif > vibecheck.sarif
+
+      - name: Upload SARIF to GitHub code scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: vibecheck.sarif
+
+      # Optional: keep a human-readable report as a private artifact.
+      # Reports may contain source context; credential values are redacted,
+      # but do not publish reports to public summaries or PR comments.
+      - name: Save human-readable report
+        if: always()
+        run: python3 vibecheck.py ./src --format md > vibecheck-report.md || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vibecheck-report
+          path: vibecheck-report.md
+          retention-days: 7

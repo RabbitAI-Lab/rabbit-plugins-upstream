@@ -1,50 +1,58 @@
-## Description: <br>
-Story Setup deploys a web-fiction writing toolbox across Claude Code, OpenCode, Codex, ZCode, OpenClaw, Reasonix, and generic agent environments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+网文写作工具集基础设施部署与检查。为 Claude Code / OpenCode / Codex / Google Antigravity / ZCode / OpenClaw / Reasonix 提供内置适配；Web AI / 通用 Agent 可走 skills + AGENTS.md 文件模式。触发方式：/story-setup、$story-setup、「准备写书」「帮我搭一下环境」「配置写作项目」「检查写作环境」。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers, writing teams, and developers use this skill to set up project-level story-writing agents, commands, rules, hooks, and reference material for supported CLI and file-based agent environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill installs persistent project-level automation that can change future agent behavior. <br>
-Mitigation: Install only when the project needs this writing toolbox, review the selected target platforms, and inspect hook and configuration changes before trusting them. <br>
-Risk: Browser-CDP features can interact with an existing logged-in Chrome session. <br>
-Mitigation: Disable or avoid browser-CDP use unless the user explicitly accepts authenticated browser control in that environment. <br>
-Risk: Automatic update behavior and managed hooks can introduce unexpected changes after setup. <br>
-Mitigation: Consider disabling the automatic update check and re-review managed hooks, commands, and config files after upgrades. <br>
+## Use Case:
 
+面向使用 AI 编程助手的网文作者和项目维护者，用于部署、检查或修复写作项目所需的智能体配置、助手和钩子。
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/worldwonderer/skills/story-setup) <br>
-- [OpenClaw Metadata Source](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Skill Definition](SKILL.md) <br>
-- [Upgrade Notes](UPGRADING.md) <br>
-- [Agent Reference Bundle](references/agent-references/) <br>
-- [Hook Templates](references/templates/hooks/) <br>
-- [Codex Hook Configuration](references/codex/hooks/hooks.json) <br>
-- [OpenCode Plugin Template](references/opencode/plugin.ts) <br>
-- [ZCode Hook Configuration](references/zcode/hooks/hooks.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code, shell, and configuration file instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or merge project-level agent, hook, rule, command, and reference files depending on the selected target environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.14 (source: ClawHub release metadata; artifact frontmatter reports 1.2.7) <br>
+Risk: ClawScan flags an unescaped URL-to-shell command risk and risky installation guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review install commands and their sources before running them; prefer pinned, verified installers.
+
+Risk: Setup may delete existing backup data.
+
+Mitigation: Back up the project separately and review cleanup targets before deployment.
+
+Risk: Installed hooks may inspect or restrict manuscript operations.
+
+Mitigation: Review hook registrations and scope before enabling them.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/worldwonderer/skills/story-setup)
+- [Project link listed in skill metadata](https://github.com/zenstory-ai/oh-story-claudecode)
+
+## Skill Output:
+
+**Output Type(s):** [Configuration files, Code, Shell commands, Guidance]
+
+**Output Format:** [Project configuration and support files, with Markdown guidance and a deployment report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates or updates host-specific writing-agent setup files and reports deployment checks.]
+
+## Skill Version(s):
+
+1.2.15 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

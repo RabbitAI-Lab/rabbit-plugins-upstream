@@ -1,44 +1,59 @@
-## Description: <br>
-Analyzes respiratory symptom videos or URLs with a cloud vision API to detect coughing, phlegm, and wheezing frequency, then returns structured health-monitoring results and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses computer vision to detect and count coughing, phlegm, and wheezing in images or videos and provide early health alerts.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and health-monitoring agents use this skill to analyze respiratory symptom videos or URLs, retrieve cloud-generated monitoring reports, and view historical report records. Results are for health reference and early anomaly awareness, not medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive respiratory or health-related videos or URLs are sent to the publisher's cloud service. <br>
-Mitigation: Obtain explicit user confirmation before uploads and avoid patient-identifying media unless the workspace and service terms are appropriate. <br>
-Risk: The skill creates or reuses a local identity and stored API tokens for report history. <br>
-Mitigation: Use isolated workspaces for shared environments and review identity and token handling before enabling history queries. <br>
-Risk: Health-monitoring analysis may be misleading if treated as diagnosis. <br>
-Mitigation: Present results as reference information only and direct users to medical professionals for diagnosis or urgent respiratory symptoms. <br>
+## Use Case:
 
+People monitoring respiratory symptoms can submit videos for symptom counts and structured monitoring reports. Results are for health monitoring and early alerts; they do not replace a clinician's diagnosis or medical examination.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-respiratory-symptom-recognition-analysis) <br>
-- [Respiratory symptom recognition API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands] <br>
-**Output Format:** [Markdown text with structured JSON analysis results and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a local file when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: ClawHub release evidence) <br>
+Risk: The security scan flags privacy and permission concerns, automatic account and data-handling side effects, and a mismatch between the respiratory-health description and some analyzed code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid installation until the publisher clearly explains remote data handling, account creation, and tool scope and the reported concerns are resolved.
+
+Risk: The security scan was partial because a local reference was missing, so that reference was not covered.
+
+Mitigation: Review the missing reference and obtain a complete security assessment before relying on the scan.
+
+Risk: Automated symptom counts and risk labels may be mistaken for a medical diagnosis.
+
+Mitigation: Treat results as preliminary monitoring only; do not use them to diagnose or delay care, and seek urgent help for severe breathing difficulty.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-respiratory-symptom-recognition-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis results, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured JSON or Markdown monitoring reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports can include symptom counts, risk levels, health warnings, care suggestions, and cloud report links; they are not medical diagnoses.]
+
+## Skill Version(s):
+
+1.0.22 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

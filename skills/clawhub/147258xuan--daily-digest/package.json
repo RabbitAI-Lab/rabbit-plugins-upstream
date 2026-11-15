@@ -1,0 +1,9 @@
+{
+  "name": "daily-digest",
+  "version": "1.0.0",
+  "description": "Compile a daily digest from memory files and recent workspace activity",
+  "main": "index.js",
+  "scripts": {
+    "test": "node -e \"const s = require('./index.js'); console.log(Object.keys(s))\""
+  }
+}

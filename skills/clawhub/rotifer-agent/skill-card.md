@@ -1,46 +1,57 @@
-## Description: <br>
-End-to-end guide for building AI Agents from Genes: intent decomposition, Gene selection, Genome composition, Agent creation, and testing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build a Rotifer Agent from Genes — decompose intent into capability units, pick Genes by Arena F(g), compose a Rotifer Genome, create the Agent and test it. Use when the user is working with Rotifer specifically: "Rotifer Agent", "compose Genes", "Rotifer Genome", "Gene composition", "rotifer agent create". Do NOT use for general agent frameworks, or when the words Seq / Par / Cond / Try appear as ordinary programming terms — in Rotifer those name Genome composition strategies, and this Skill applies only when the user is composing Rotifer Genes.
 
-## Publisher: <br>
-[xiaoba-dev](https://clawhub.ai/user/xiaoba-dev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xiaoba-dev](https://clawhub.ai/user/xiaoba-dev)
 
-## Use Case: <br>
-Developers and engineers use this skill to decompose a desired Rotifer agent into capability units, select Genes, choose a Genome composition strategy, create the agent, and validate its run behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation wording may cause the skill to be used for general agent-building requests. <br>
-Mitigation: Use explicit Rotifer-specific requests and review the skill guidance before relying on generated plans. <br>
-Risk: Seq compositions can fail at runtime when adjacent Gene schemas are incompatible. <br>
-Mitigation: Manually compare adjacent Gene inputSchema and outputSchema fields before creating or running a Seq agent. <br>
+## Use Case:
 
+Developers use this skill when they want to design a Rotifer Agent for a specific task. It helps decompose the task into Genes, select and compose them, then create and validate the Agent through Rotifer workflows.
 
-## Reference(s): <br>
-- [Rotifer Protocol](https://rotifer.dev) <br>
-- [Rotifer Documentation](https://rotifer.dev/docs) <br>
-- [Rotifer Protocol Specification](https://github.com/rotifer-protocol/rotifer-spec) <br>
-- [Rotifer Playground Repository](https://github.com/rotifer-protocol/rotifer-playground) <br>
-- [Rotifer Guide Skill](https://clawhub.ai/skills/rotifer-guide) <br>
-- [Rotifer Arena Skill](https://clawhub.ai/skills/rotifer-arena) <br>
-- [Rotifer Self-Evolving Agent Skill](https://clawhub.ai/skills/rotifer-self-evolving-agent) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with tables, checklists, JSON snippets, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Rotifer CLI commands, MCP configuration snippets, and agent composition plans for user review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and clawhub.json) <br>
+Risk: The security guidance notes that CLI bootstrap may write to the npm cache and related metadata or logs outside the project.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review those npm cache and metadata writes before bootstrapping; configure a cache location that fits the user's workspace expectations if needed.
+
+Risk: The security analysis is partial because three local path-like references did not match bundled artifacts.
+
+Mitigation: Review the unmatched references and relevant release files before relying on the scan coverage.
+
+## Reference(s):
+
+- [Rotifer documentation](https://rotifer.dev/docs)
+- [Rotifer Protocol](https://rotifer.dev)
+- [Rotifer Playground repository](https://github.com/rotifer-protocol/rotifer-playground)
+- [Rotifer Protocol specification](https://github.com/rotifer-protocol/rotifer-spec)
+- [ClawHub release page](https://clawhub.ai/xiaoba-dev/skills/rotifer-agent)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions, JSON]
+
+**Output Format:** [Markdown with inline tables, shell commands, and Rotifer composition examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance for composing an Agent from 2–6 Genes; Agent configuration is created through the Rotifer CLI.]
+
+## Skill Version(s):
+
+1.2.9 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

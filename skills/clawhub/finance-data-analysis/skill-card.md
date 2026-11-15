@@ -1,41 +1,57 @@
-## Description: <br>
-Provides educational financial data analysis guidance for financial statements, KPI tracking, trend analysis, data visualization, and automated reporting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides financial statement, KPI, trend, data quality, attribution, visualization, and reporting methodology for financial analysts, especially in regulated financial institutions.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is for demonstration purposes and not for production usage.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users, financial analysts, CFO offices, and data practitioners can use this skill for educational frameworks and templates for financial reporting, KPI analysis, dashboard design, and trend analysis. Outputs require qualified human review before real-world business, financial, legal, insurance, or compliance use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial or regulatory conclusions may be incorrect, outdated, or unsuitable for a specific real-world context. <br>
-Mitigation: Treat outputs as educational guidance and verify conclusions with current official sources and a qualified human reviewer. <br>
-Risk: Broad trigger terms may activate the skill for non-finance data analysis tasks. <br>
-Mitigation: Confirm that the requested task is finance-related before applying the skill's templates or conclusions. <br>
-Risk: Illustrative Python examples could be mistaken for automatically executed or production-ready code. <br>
-Mitigation: Use the examples only as reference material; review, test, and adapt any code before execution in a controlled environment. <br>
+## Use Case:
 
+Financial analysts and finance teams at licensed financial institutions can use it to structure KPI definitions, data-quality checks, variance attribution, dashboards, and report drafts. Outputs require qualified human review; the skill does not fetch data, execute queries, or provide investment advice.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+China (mainland); the documented methodology does not cover overseas regulatory statistics.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown guidance with illustrative Python code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only; no executable files, tools, persistence, credential handling, hidden data access, or automatic data processing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.2 (source: frontmatter and server release evidence) <br>
+Risk: The security review is benign but incomplete, so it does not establish that every part of the skill was assessed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the review as limited; inspect the skill and any referenced material before relying on it.
+
+Risk: Illustrative analysis examples could be mistaken for executable procedures or authoritative financial guidance.
+
+Mitigation: Keep examples educational and have qualified finance and compliance reviewers validate assumptions and current official reporting definitions before applying them.
+
+Risk: Adapting analysis examples to sensitive customer or account data could expose information beyond the intended scope.
+
+Mitigation: Use only approved, minimum-necessary aggregated or de-identified data, and do not include personal identifiers, account details, or credentials.
+
+## Reference(s):
+
+- [Finance Data Analysis on ClawHub](https://clawhub.ai/gechengling/skills/finance-data-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code]
+
+**Output Format:** [Markdown with tables and illustrative Python or SQL snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Primarily Chinese with English terminology; code examples are educational and require human review.]
+
+## Skill Version(s):
+
+5.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

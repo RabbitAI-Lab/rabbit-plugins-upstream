@@ -1,43 +1,57 @@
-## Description: <br>
-Delegate coding tasks to Codex, Claude Code, OpenCode, or Pi agents through acpx and related command-line workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Delegates coding work to Codex, Claude Code, Pi, and related coding agents through acpx and the Agent Client Protocol.
 
-## Publisher: <br>
-[seanford](https://clawhub.ai/user/seanford) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[seanford](https://clawhub.ai/user/seanford)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to delegate feature work, code review, refactoring, and longer coding workflows to coding agents while preserving session and working-directory context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Delegated coding agents may receive broad authority over the selected working directory. <br>
-Mitigation: Use read-only or narrowly approved modes where possible, isolate the repository before delegation, and review the task before granting write or execution authority. <br>
-Risk: Auto-approval, permission bypass, and background runs can modify code or run commands without enough user control. <br>
-Mitigation: Avoid `--approve-all` and permission-bypass modes unless the workspace has been isolated and the requested changes are well understood. <br>
-Risk: Running the skill near sensitive credentials or live production code could cause accidental exposure or modification. <br>
-Mitigation: Do not use it in workspaces containing sensitive credentials or live production code unless those files are protected and the delegated agent's permissions are constrained. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to delegate feature work, PR review, refactoring, and codebase exploration to coding agents while managing sessions and fallbacks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/seanford/skills/coding-agent) <br>
-- [Publisher profile](https://clawhub.ai/user/seanford) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Code, Markdown, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell command examples and workflow guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce delegated agent prompts, command invocations, review summaries, code changes, or follow-up instructions depending on the selected agent and task.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill describes broad unattended agent permissions, including auto-approval, bypass-permission modes, and background execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use isolated workspaces with least-privilege credentials, avoid auto-approval or bypass modes unless the risk is explicitly accepted, and monitor long-running sessions.
+
+Risk: The skill relies on third-party agent adapters and command-line tools that may not be pinned in the artifact.
+
+Mitigation: Prefer pinned or preinstalled adapters and review tool versions before using the skill in sensitive repositories.
+
+Risk: Credential-bearing sessions could expose private repositories or API access when used on untrusted code.
+
+Mitigation: Limit available credentials, avoid broad private-repo or API access, and do not run unattended agents on untrusted repositories.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/seanford/skills/coding-agent)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance is oriented around installed coding-agent CLIs and session workflows.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

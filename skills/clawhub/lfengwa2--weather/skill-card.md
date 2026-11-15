@@ -1,42 +1,59 @@
-## Description: <br>
-Query current conditions and 1-10 day weather forecasts for cities, counties, districts, or coordinates in China, including temperature, apparent temperature, humidity, precipitation, wind, UV, sunrise, and sunset. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Query current conditions and 1-10 day forecasts for cities, counties, districts, or coordinates in mainland China, Hong Kong, Macao, and Taiwan, including temperature, humidity, precipitation, wind, UV, sunrise, and sunset.
 
-## Publisher: <br>
-[lfengwa2](https://clawhub.ai/user/lfengwa2) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lfengwa2](https://clawhub.ai/user/lfengwa2)
 
-## Use Case: <br>
-External users and agents use this skill to answer Chinese or English weather questions for locations in mainland China, Hong Kong, Macao, or Taiwan. It resolves place names or coordinates, retrieves Open-Meteo data, and guides the agent to summarize current conditions and requested forecasts without fabricating missing values. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queried place names or precise coordinates are sent to Open-Meteo. <br>
-Mitigation: Avoid entering highly sensitive exact locations when that privacy tradeoff is not acceptable. <br>
-Risk: Forecasts may be mistaken for official safety warnings during severe weather. <br>
-Mitigation: Treat results as model forecasts and verify active alerts with the China Meteorological Administration or relevant local authority for safety-critical conditions. <br>
+## Use Case:
 
+External users and agents use this skill to answer weather questions in Chinese or English for China-region locations, using Open-Meteo current conditions and 1-10 day forecasts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/lfengwa2/skills/weather) <br>
-- [Open-Meteo geocoding API endpoint](https://geocoding-api.open-meteo.com/v1/search) <br>
-- [Open-Meteo forecast API endpoint](https://api.open-meteo.com/v1/forecast) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands; script output is plain text or JSON] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Weather summaries include source and retrieval time when returned by the script.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: City names, districts, or coordinates requested by the user are sent to Open-Meteo over HTTPS.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid exact private coordinates unless needed, and use broader place names when that is sufficient.
+
+Risk: Weather forecasts are not official warnings or guarantees.
+
+Mitigation: For severe weather, verify active alerts with the China Meteorological Administration or the relevant local authority.
+
+Risk: The external weather API can be unavailable or return incomplete data.
+
+Mitigation: Report failures plainly and do not substitute fabricated values.
+
+## Reference(s):
+
+- [Weather skill page](https://clawhub.ai/lfengwa2/skills/weather)
+- [Open-Meteo Geocoding API](https://geocoding-api.open-meteo.com/v1/search)
+- [Open-Meteo Forecast API](https://api.open-meteo.com/v1/forecast)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Guidance]
+
+**Output Format:** [Plain text weather summary or JSON from the bundled script, typically incorporated into a Markdown response.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes resolved location, retrieval time, Open-Meteo source, and official-warning caveat when relevant.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

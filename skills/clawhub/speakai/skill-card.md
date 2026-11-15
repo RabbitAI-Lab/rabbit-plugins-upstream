@@ -1,47 +1,56 @@
-## Description: <br>
-Capture meetings, search thousands of recordings, run async voice and video surveys, create clips, and automate workflows with Speak AI through MCP. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an agent to Speak AI and guides it through MCP setup and workflows for transcribing, searching, analyzing, and managing recordings and workspace tools.
 
-## Publisher: <br>
-[speakai](https://clawhub.ai/user/speakai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[speakai](https://clawhub.ai/user/speakai)
 
-## Use Case: <br>
-Developers and external users connect an agent to a Speak AI workspace to search, summarize, analyze, clip, export, and automate work across meeting recordings, transcripts, surveys, and media libraries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access or change media, transcripts, exports, share links, webhooks, automations, recorders, and meeting assistant schedules in a Speak AI workspace. <br>
-Mitigation: Use OAuth or the narrowest available API key scope, require explicit confirmation for destructive or persistent actions, preview bulk operations, and provide rollback guidance after persistent changes. <br>
-Risk: Transcript, caption, insight, or chat content may contain text that looks like agent instructions. <br>
-Mitigation: Treat workspace content as untrusted data, act only on instructions from the active user conversation, and surface suspected embedded directives or credentials before proceeding. <br>
-Risk: Broad searches or library enumeration could expose recordings unrelated to the user's current task. <br>
-Mitigation: Scope reads with folder, date, media type, and include filters, and fetch the smallest set of records needed to answer the request. <br>
-Risk: Unpinned local stdio installs could pull an unreviewed upstream package update. <br>
-Mitigation: Pin the MCP server package version to 1.16.4 for local installs and verify the package source before use. <br>
+## Use Case:
 
+Developers and agents use this skill to connect to Speak AI with OAuth or an API key, then choose workflows for transcription, transcript search, analysis, clips, exports, surveys, meeting capture, and workspace management.
 
-## Reference(s): <br>
-- [ClawHub Speak AI skill](https://clawhub.ai/speakai/skills/speakai) <br>
-- [Speak AI MCP installation guide](https://mcp.speakai.co) <br>
-- [Speak AI API reference](https://docs.speakai.co) <br>
-- [Speak AI MCP server package](https://www.npmjs.com/package/@speakai/mcp-server) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON configuration examples, shell commands, and MCP tool recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose MCP tool calls, resource reads, confirmations, and rollback notes for Speak AI workspace operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.16.4 (source: frontmatter and release evidence) <br>
+Risk: The documented local installation command does not pin a package version, and the security review notes that scan coverage was incomplete because two references could not be resolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the unresolved references and package release details before installing; pin a reviewed version when using the local package.
+
+Risk: Connecting to the remote MCP server gives the agent access to the recordings and workspace actions available to the authorized account.
+
+Mitigation: Use the documented OAuth flow and review the requested workspace action before creating, sharing, scheduling, or changing workspace items.
+
+## Reference(s):
+
+- [Speak AI MCP documentation](https://docs.speakai.co/mcp)
+- [Setup guide](https://docs.speakai.co/mcp/setup/)
+- [Authentication guide](https://docs.speakai.co/mcp/authentication)
+- [MCP tool reference](https://docs.speakai.co/mcp/tools/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration, Shell commands, API calls]
+
+**Output Format:** [Markdown guidance with configuration snippets, shell commands, and MCP tool workflows]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provides setup and workflow guidance for the connected Speak AI workspace.]
+
+## Skill Version(s):
+
+2.0.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

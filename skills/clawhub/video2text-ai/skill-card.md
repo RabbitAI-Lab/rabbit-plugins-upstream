@@ -1,43 +1,51 @@
-## Description: <br>
-Helps agents turn video URLs, local video files, or prior task IDs into transcripts, summaries, rewritten copy, meeting notes, course breakdowns, and other structured video-derived text through an external Guaikei/Qianwen-backed service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Transcribes local MP4 files or direct MP4 links into polished text and can generate summaries, rewrites, quotes, storyboards, or translations from a prompt.
 
-## Publisher: <br>
-[um-why](https://clawhub.ai/user/um-why) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[um-why](https://clawhub.ai/user/um-why)
 
-## Use Case: <br>
-External users, content teams, and agents use this skill to process online or local videos into cleaned transcripts, summaries, rewrites, interview notes, course outlines, livestream recaps, and other reusable content assets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uploads user videos to an external service while making retention and privacy claims that local code does not enforce. <br>
-Mitigation: Use only videos that are acceptable to send to the provider, and verify the provider's retention, deletion, and training policy outside the skill text before sensitive use. <br>
-Risk: Broad file, URL, and prior task ID handling can trigger unintended paid processing. <br>
-Mitigation: Require explicit user confirmation before processing local paths, remote URLs, previous task IDs, or any action that may incur charges. <br>
-Risk: The skill requires a provider API token to operate. <br>
-Mitigation: Keep GUAIKEI_API_TOKEN in the environment or a managed secret store and avoid placing it in prompts, command history, logs, or shared files. <br>
+## Use Case:
 
+External users and content creators use the skill to turn spoken video into cleaned transcripts, notes, summaries, social copy, quote selections, storyboards, and translations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/um-why/skills/video2text-ai) <br>
-- [Guaikei website](https://www.guaikei.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [CLI stdout containing generated video text, with shell command invocations for file, URL, task ID, and prompt-based workflows.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js 16.14.0 or newer and GUAIKEI_API_TOKEN; processing can use --file, --id, and --prompt inputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release metadata, package.json, constants.js) <br>
+Risk: The security review marked the release suspicious because its third-party token requirement and download cleanup behavior need clarification; code analysis is incomplete and does not establish malicious intent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Clarify token handling and review the download cleanup behavior and code before installation or execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/um-why/skills/video2text-ai)
+- [Service website](https://www.guaikei.com)
+- [Changelog](artifact/references/changelog.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown]
+
+**Output Format:** [Text content returned on standard output, shaped by the requested prompt.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A single MP4 video per run; supports transcript cleanup and prompt-directed summaries, rewrites, quote extraction, storyboards, or translations.]
+
+## Skill Version(s):
+
+1.1.1 (source: SKILL.md frontmatter, changelog)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

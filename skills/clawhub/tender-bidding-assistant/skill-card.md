@@ -1,41 +1,57 @@
-## Description: <br>
-Tender Bidding Assistant helps agents analyze tender and RFP documents, draft bid materials, develop bidding strategy, run compliance checks, and plan post-bid follow-up for China government procurement and commercial projects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered assistant for analyzing, planning, drafting, and reviewing bid documents for China mainland government procurement and commercial projects.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Procurement, commercial, and legal reviewers use this skill to analyze bid requirements, prepare tender response materials, review elimination risks, and produce bid strategy guidance. Outputs should be reviewed by qualified procurement or legal staff before submission. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global; outputs are tailored primarily to China procurement and tender workflows. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender materials can contain confidential prices, client data, identity details, technical secrets, and authorization information. <br>
-Mitigation: Redact sensitive data before use, limit file access to project-scoped documents, and process only procurement material the organization permits an AI assistant to handle. <br>
-Risk: Generated bid strategy, regulatory claims, and bid documents may be incomplete or incorrect for a specific procurement. <br>
-Mitigation: Have qualified procurement or legal staff verify generated documents, compliance claims, and strategy before submission. <br>
+## Use Case:
 
+Employees and bid professionals use this skill to review solicitation requirements, plan a response, prepare draft bid materials, and check compliance risks. Outputs are reference drafts for review by qualified staff.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/tender-bidding-assistant) <br>
-- [Bid document templates](references/bid-document-templates.md) <br>
+### Deployment Geography for Use:
 
+China mainland
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance, bid-document templates, shell commands, Python code, and optional JSON analysis reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read user-provided tender documents and produce checklists, draft bid sections, compliance risk reports, and strategy recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.2.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Bid documents may contain confidential pricing, customer, technical, or personnel information, and uploaded documents are not guaranteed to be deleted or anonymized.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Redact sensitive details, confirm organizational authorization and data-handling policies, or use an offline workflow for highly sensitive projects.
+
+Risk: The security scan had medium confidence and partial coverage because referenced template and analysis-script contents were not assessed.
+
+Mitigation: Review the skill's behavior and data handling before installation, particularly before providing sensitive bid documents.
+
+Risk: Bid rules and platform practices vary by jurisdiction and may change; generated analysis can be incomplete or inaccurate.
+
+Mitigation: Check current official rules for the project location and have qualified professionals independently review all outputs and decisions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/gechengling/skills/tender-bidding-assistant)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Text, Markdown]
+
+**Output Format:** [Markdown reports, checklists, tables, and draft bid materials]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference drafts only; sanitize confidential information and have qualified staff verify outputs before use.]
+
+## Skill Version(s):
+
+3.2.5 (source: server-resolved release and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

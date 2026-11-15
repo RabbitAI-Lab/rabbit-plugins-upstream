@@ -1,48 +1,57 @@
-## Description: <br>
-This skill lets an agent search SmartLib's Chinese and global literature indexes, review article metadata and source links, and retrieve authorized Chinese journal PDFs or open-access full text through supported channels. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches and retrieves Chinese and international academic literature through the SmartLib Open Platform, including bibliographic details and available full-text downloads.
 
-## Publisher: <br>
-[j-levee](https://clawhub.ai/user/j-levee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[j-levee](https://clawhub.ai/user/j-levee)
 
-## Use Case: <br>
-External researchers, students, librarians, and other knowledge workers use this skill to find academic literature, inspect citation metadata, trace source database links, and request full-text downloads when available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill creates and uses an external SmartLib account and stores the user's email in local configuration. <br>
-Mitigation: Ask for only the email needed for SmartLib registration and quota management, and keep local configuration private. <br>
-Risk: The skill sends literature queries to SmartLib Gateway and related open-access services. <br>
-Mitigation: Avoid submitting sensitive, confidential, or unpublished research details unless the user accepts those external service dependencies. <br>
-Risk: The skill supports paid quota flows and may present payment QR codes or gateway-provided links. <br>
-Mitigation: Verify the destination, plan, amount, and order details before paying or clicking links. <br>
-Risk: Gateway-provided notices and links may be forwarded into the chat. <br>
-Mitigation: Treat forwarded notices as external service messages and review links before acting on them. <br>
+## Use Case:
 
+Researchers, students, and other literature users can search Chinese and international publications, patents, standards, and theses, review bibliographic details, and request available full text. Account registration and quota use may apply.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/j-levee/skills/global-biblio-base) <br>
-- [README.md](README.md) <br>
-- [PIPELINE.md](PIPELINE.md) <br>
-- [SmartLib account and billing reference](references/account.md) <br>
-- [SmartLib website](https://www.vipslib.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown search results with article metadata, source links, quota notices, and optional PDF or full-text download outputs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on SmartLib account status, available quota, network access, and whether the requested document is authorized or open access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.9.3 (source: SKILL.md frontmatter and server release metadata, released 2026-07-22) <br>
+Risk: The security evidence reports an authentication secret in the package.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not expose or reuse a credential shipped with the package; remove it from shared copies and rotate it if it is active.
+
+Risk: The security evidence raises concerns about cross-session persistence and external sharing of research terms.
+
+Mitigation: Review what query and account data the service retains or receives, and avoid sending sensitive research terms until those practices are understood.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/j-levee/skills/global-biblio-base)
+- [Publisher profile](https://clawhub.ai/user/j-levee)
+- [SmartLib website](https://www.vipslib.com/)
+- [Account and quota guide](artifact/references/account.md)
+- [Search and retrieval pipeline guide](artifact/PIPELINE.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files, Links]
+
+**Output Format:** [Markdown literature results, bibliographic details, and available PDF download links or files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require email registration; metered API searches and downloads can use account quotas. Full text is available only where supported, including open-access sources.]
+
+## Skill Version(s):
+
+3.10.10 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,12 @@
+{
+  "skillVersion": "2.1.1",
+  "protocol": 2,
+  "cli": {
+    "package": "@whobot/cli",
+    "channel": "latest"
+  },
+  "legal": {
+    "privacy": "https://work.whobot.com/legal/privacy",
+    "terms": "https://work.whobot.com/legal/terms"
+  }
+}
