@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/reproduce-and-fix-issues",
+  "repo": "cursor/plugins",
+  "skillId": "reproduce-and-fix-issues",
+  "branch": "main",
+  "pushedAt": "2026-11-15T03:36:21Z",
+  "contentHash": "709e1d35f7b8a063a104a168f07b2f52a8cc53a3a9ce2608cc51501c97b89ee0",
+  "fetchedAt": "2026-11-15T14:49:57.090Z"
+}
