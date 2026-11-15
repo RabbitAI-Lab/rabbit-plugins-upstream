@@ -10,7 +10,7 @@ Application messages use this envelope in both directions:
 {"event_type": "<MessageType>", "payload": {}}
 ```
 
-Input events are not JSON messages. WebRTC input arrives through NVST's native input channel as binary `InputEvent` structs and reaches `streaming-server` `on_input`. SHM Python clients must use `ovstream.ShmClient.send_input_event()`; C clients use `ovstream_shm_client_send_input_event()`. Do not use JSON `mouseInput`. In-process clients should call the local Python/C++ APIs directly. Read `viewer-input-routing` for button normalization, viewport ownership, and click-vs-drag dispatch.
+Input events normally are not JSON messages. WebRTC input arrives through NVST's native input channel as binary `InputEvent` structs and reaches `streaming-server` `on_input`. SHM Python clients must use `ovstream.Client(ovstream.ClientType.SHM, stream_name="...").send_input_event(event)`; C clients use `ovstream_client_send_input_event(client, event)`. In-process clients should call the local Python/C++ APIs directly. A browser-only JSON `mouseInput` fallback is allowed only after `viewer-input-routing`'s explicit native-callback failure diagnostic; it must be mutually exclusive with native input.
 
 ## ovstream Callback Split
 
@@ -18,44 +18,41 @@ Keep the StreamSDK callback responsibilities separate:
 
 | Callback | Payload | Use it for |
 |---|---|---|
-| Server `on_message` | JSON strings, bytes, dicts, or the browser library wrapper `{messageType,data}` | App protocol messages: stage switching, tree requests, property requests, prim count, AOV changes, variants, settings, and UI state queries. |
+| Server `on_app_message` (WebRTC/native) | Inner JSON text, already unwrapped by the SDK | App protocol messages: stage switching, tree requests, property requests, prim count, AOV changes, variants, settings, and UI state queries. |
+| Server `on_message` (SHM/raw) | Raw message text; SDK stream controls are not app commands | Local SHM app protocol or explicitly supported raw messages. |
 | Browser `onCustomEvent` | Parsed app events from the server | React state updates: `openStageResult`, `getChildrenResult`, `stageSelectionChanged`, `availableAOVsResult`, `activeAOVState`, and errors. |
 | Server `on_input` | Raw `ovstream.InputEvent` objects | Mouse, keyboard, wheel, and gamepad input for camera orbit/pan/zoom and click-to-pick. |
 | Server `on_unicode` | Composed text input | IME, on-screen keyboard, paste, and other text events when a viewer needs text entry. |
 
-The browser does not implement camera math and must not forward pointer movement as app JSON. The WebRTC streaming library forwards raw input through NVST/ovstream; the Python server handles orbit, pan, zoom, drag-threshold click detection, and picking.
+The browser does not implement camera math. Normally the WebRTC streaming library forwards raw input through NVST/ovstream; the Python server handles orbit, pan, zoom, drag-threshold click detection, and picking. The verified fallback only serializes normalized pointer intent to that same server path.
 
-Golden-style server routing:
+Use the [transport contract](../dependencies/ovstream.md) and the
+[server adapter](server-handler-map.md) for encoding, dispatch, and replies.
+Put application correlation fields inside `payload`, and echo them there in
+both success and error responses. The browser SDK rebuilds the outer envelope,
+so custom top-level fields are not a reliable roundtrip contract:
+
+```json
+{"event_type":"getPropertiesRequest","payload":{"request_id":"properties-17","prim_path":"/World/Cube"}}
+```
+
+Resolve pending work from `event.payload.request_id`; keep any legacy top-level
+ID support inside the app adapter. Preserve stage/session generation checks when
+settling the request so delayed results cannot update a replaced scene.
+
+WebRTC server routing:
 
 ```python
 stream_server.on_connection = message_handler.on_connection
-stream_server.on_message = message_handler.on_message
+stream_server.on_app_message = message_handler.on_message
 stream_server.on_input = message_handler.on_input
 # Optional for composed text input:
 # stream_server.on_unicode = message_handler.on_unicode
 ```
 
-```python
-def on_input(self, event):
-    import ovstream
-    if event.type == ovstream.InputEventType.MOUSE:
-        mouse = event.mouse
-        if mouse.type == ovstream.MouseEventType.MOVE:
-            server.camera.on_mouse_move(mouse.x, mouse.y)
-        elif mouse.type == ovstream.MouseEventType.BUTTON:
-            button = camera_button_from_ovstream(mouse.data, ovstream)
-            if button is None:
-                return
-            is_down = mouse.button_state == ovstream.KeyState.DOWN
-            if is_down:
-                server.camera.on_mouse_button_down(mouse.x, mouse.y, button)
-            else:
-                was_click = server.camera.on_mouse_button_up(mouse.x, mouse.y, button)
-                if button == 0 and was_click:
-                    self._handle_click(mouse.x, mouse.y)
-        elif mouse.type == ovstream.MouseEventType.WHEEL:
-            server.camera.on_scroll(mouse.scroll_y or mouse.data)
-```
+Route native input through [viewer input routing](../viewer-input-routing/README.md)
+to the runtime queue, where camera motion and picking share the displayed frame's
+coordinates. Keep this path separate from JSON app commands.
 
 ## Message Reference
 
@@ -76,14 +73,31 @@ def on_input(self, event):
 | AOV change | `changeAOVRequest {aov}` | `activeAOVState {active,available,result?,previous?,requested?,reason?}` | Server switches the render var copied into the video stream |
 | AOV query | `getAvailableAOVs {}` | `availableAOVsResult {aovs,available}` | Server returns runtime-discovered displayable AOVs |
 | Viewport input | `setViewportInputActive {active}` | no required response | Server gates native WebRTC input so DOM controls do not drive camera or picking |
+| Verified browser input fallback | `mouseInput {kind,x,y,button?,down?,delta_y?,modifiers?}` | no required response | Browser-only contingency after data-channel works but native `on_input` is proven absent; server dispatches it through the normal camera/pick queue and ignores native input in this mode |
 | Render/settings | `toggleSegView`, `setCameraGizmo`, viewer-specific settings | implementation-specific result or state push | Server updates renderer/view state |
+| Runtime transform | `runtimeTransformRequest {request_id?,paths,...}` | `runtimeTransformResult {request_id?,result,error?,applied?}` and/or `stageSelectionChanged` | Optional capability: server writes accepted live transform updates through the runtime owner |
+| Pick effect | `pickEffectRequest {request_id?,paths,effect,value?}` | `pickEffectResult {request_id?,result,error?,applied?}` | Optional capability: server applies a verified selection-driven material, visibility, or effect change |
+| Physics impulse | `physicsImpulseRequest {request_id?,path,impulse,angular_impulse?,steps?,dt?}` | `physicsImpulseResult {request_id?,result,error?,samples?,summary?}` | Optional capability: server enqueues an impulse for its configured physics owner and reports accepted work/results |
 
 Exact event names matter. Current apps route `getChildrenResult` and `getPropertiesResponse`; older notes may say `getChildrenResponse` or `getPropertiesResult`. Accept old aliases when practical, but emit and document `getPropertiesResponse` for selected-prim properties.
+
+`mouseInput` is not a general extension point. When the documented fallback is active, use `kind: "mouse_move"`, `"mouse_button"`, or `"mouse_wheel"`; `x` and `y` are render-product pixels, `button` uses the shared `0/1/2` convention, `down` is present for button events, and `delta_y` is present for wheel events. Reject malformed or out-of-bounds fallback messages, cancel state on mode changes, and never process both `mouseInput` and native `on_input` for one gesture.
 
 `getPropertiesResponse.prim_path` is the response correlation key. Browser
 inspectors should compare it against the current selected prim path stored in a
 ref or resolver map, not against stale React state captured when the message
 handler was registered.
+
+Feature-specific messages should follow the same envelope and compatibility
+rules, but they are opt-in. Advertise support through render/settings
+capabilities, backend feature flags, or an app-specific `getCapabilities`
+response before showing controls. Keep names semantic and transport-neutral:
+`runtimeTransformRequest`, `pickEffectRequest`, and `physicsImpulseRequest` are
+better extension points than commands named after one delivery path or one
+library call.
+
+Physics commands target the configured simulator owner; see
+[physics integration](../physics-simulation/README.md) for the stage handoff.
 
 ## Payload Shapes
 
@@ -108,11 +122,11 @@ handler was registered.
 ```
 
 ```json
-{"event_type":"activeAOVState","payload":{"active":"NormalSD","available":["LdrColor","HdrColor","NormalSD","InstanceSegmentationSD","SemanticSegmentationSD","DepthSD","DiffuseAlbedoSD"],"result":"success","previous":"LdrColor"}}
+{"event_type":"activeAOVState","payload":{"active":"NormalSD","available":["LdrColor","HdrColor","NormalSD","InstanceSegmentationSD","SemanticSegmentationSD","DistanceToImagePlaneSD","DiffuseAlbedoSD"],"result":"success","previous":"LdrColor"}}
 ```
 
 ```json
-{"event_type":"availableAOVsResult","payload":{"aovs":["LdrColor","HdrColor","NormalSD","InstanceSegmentationSD","SemanticSegmentationSD","DepthSD","DiffuseAlbedoSD"],"available":["LdrColor","HdrColor","NormalSD","InstanceSegmentationSD","SemanticSegmentationSD","DepthSD","DiffuseAlbedoSD"]}}
+{"event_type":"availableAOVsResult","payload":{"aovs":["LdrColor","HdrColor","NormalSD","InstanceSegmentationSD","SemanticSegmentationSD","DistanceToImagePlaneSD","DiffuseAlbedoSD"],"available":["LdrColor","HdrColor","NormalSD","InstanceSegmentationSD","SemanticSegmentationSD","DistanceToImagePlaneSD","DiffuseAlbedoSD"]}}
 ```
 
 `paths: []` in `selectPrimsRequest` clears selection.
@@ -121,8 +135,7 @@ handler was registered.
 {"event_type":"setViewportInputActive","payload":{"active":false}}
 ```
 
-Use `setViewportInputActive` only as an app UI ownership hint. Mouse, keyboard,
-wheel, and touch events still travel through the native input channel, not JSON.
+Use `setViewportInputActive` only as an app UI ownership hint. In native mode, mouse, keyboard, wheel, and touch events travel through the native input channel; the verified `mouseInput` fallback replaces that path only after its diagnostic passes.
 The server should cancel active camera gestures when the flag changes to false.
 
 ## Server Handler Map
@@ -312,8 +325,14 @@ full geometry dump or paginated array viewer.
 
 If a project has `server/config.py`, add a message constant there; otherwise a literal string is acceptable. If generating code files, include these parts:
 
-1. `server/message_handler.py`: handler function, dictionary entry, payload validation, send helper call.
-2. USD worker module: a pure query/mutation function when the handler needs stage data.
+1. Your app's message router (suggested `server/message_router.py`, or an
+   existing handler module): handler function, dictionary entry, payload
+   validation, and guarded send helper call. Build this adapter using
+   [server-handler-map.md](server-handler-map.md); no Python router is shipped
+   with this package.
+2. Runtime or worker module: a render-thread command for live viewer state, a
+   USD query worker for OpenUSD reads, or the configured physics owner
+   when the handler needs those capabilities.
 3. `frontend/src/types/usd.ts`: TypeScript payload interfaces and discriminated event type.
 4. `frontend/src/App.tsx` or the relevant component: `sendMessage({ event_type, payload })` and response routing in `onCustomEvent`.
 
@@ -334,6 +353,8 @@ sendMessage({ event_type: 'myFeatureRequest', payload: { some_param: 'value' } }
 - Accept known aliases (`makePrimsPickable`/`makePrimsSelectable`, `resetStage`/`resetStageRequest`, `aov`/`name`) and normalize internally.
 - Unknown request fields should be ignored, not treated as fatal.
 - Unknown event types should log a warning and return an error response only if the frontend expects one.
+- Optional feature messages should fail closed when the backend capability is
+  absent or when the selected runtime cannot verify a safe apply path.
 - Keep request/response names stable across server and frontend; verify the active `onCustomEvent` router before changing names.
 - Send current state on connect for browser clients that attach after startup.
 
