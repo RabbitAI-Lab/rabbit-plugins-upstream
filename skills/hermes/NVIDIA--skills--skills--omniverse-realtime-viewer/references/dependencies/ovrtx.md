@@ -4,7 +4,7 @@
 
 Purpose: NVIDIA RTX renderer used by local and streaming Omniverse Realtime Viewers.
 
-Read `nvidia-runtime.md` for the latest-version acquisition command. This file
+Read `nvidia-runtime.md` for acquisition and compatible package selection. This file
 documents renderer environment and validation behavior.
 
 For ovrtx-owned skills, renderer samples, Python/C API examples, stage
@@ -13,14 +13,20 @@ release-specific behavior, read `nvidia-runtime.md` for the current
 ovrtx repository pointer and inspect that repo's `skills/`, samples, and
 release notes.
 
+For current OVStage-backed viewer architectures, verify the OVRTX/OVStage attach
+or update path from the supplemental docs before copying older renderer-owned
+stage/query/write examples. The parent viewer runtime should own OVRTX, OVStage
+stage lifetime, ordinals, write floors, and renderer publication.
+
 Install through the project server requirements when available:
 
 ```bash
 python3 -m pip install -r server/requirements.txt
 ```
 
-If a project manifest pins an exact `ovrtx` version, keep that pin. Otherwise,
-use the latest available package from `nvidia-runtime.md`.
+Preserve the project manifest's compatible package set. For a new app or requested
+upgrade, resolve OVRTX together with OVStage and the selected consumers using
+`nvidia-runtime.md`; record that set before installation.
 
 Verify import:
 
@@ -39,7 +45,8 @@ Set renderer environment variables:
 ```bash
 export OVRTX_SKIP_USD_CHECK=1
 export OVRTX_BIN_PATH="$(python3 -c 'import ovrtx, os; print(os.path.join(os.path.dirname(ovrtx.__file__), "bin"))')"
-export LD_LIBRARY_PATH="$OVRTX_BIN_PATH/plugins${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+export OVRTX_CUDA_RUNTIME_DIR="$(find "$OVRTX_BIN_PATH/plugins" -type f -name 'libcudart.so.12' -printf '%h\n' -quit)"
+export LD_LIBRARY_PATH="${OVRTX_CUDA_RUNTIME_DIR:+$OVRTX_CUDA_RUNTIME_DIR:}$OVRTX_BIN_PATH/plugins${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 ```
 
 Verify renderer construction:
@@ -55,4 +62,7 @@ Common failure modes:
 - `CRenderApi not found`: set `OVRTX_BIN_PATH` and put ovrtx plugin libraries on the dynamic library path.
 - Magenta materials: `OVRTX_BIN_PATH` or plugin library path is missing, so MDL libraries cannot resolve.
 - Duplicate `SDF_ASSET` debug symbol errors: two USD builds are being loaded; isolate `pxr` queries in a subprocess.
+- OVStage/OVPhysX bridge or attach errors: verify the selected package set and
+  keep physics USD population in a bounded worker unless the exact ABI is known
+  good.
 - Stale renderer hangs after a crash: inspect `nvidia-smi` and terminate only stale Python Omniverse Realtime Viewer processes that still hold GPU state.
