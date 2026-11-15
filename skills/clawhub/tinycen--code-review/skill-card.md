@@ -1,49 +1,65 @@
-## Description: <br>
-Automates code review by retrieving repositories, running code quality checks, and generating structured Markdown review reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automates code quality reviews across GitHub and other repositories, then generates structured review reports for delivery in different workflows.
 
-## Publisher: <br>
-[tinycen](https://clawhub.ai/user/tinycen) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tinycen](https://clawhub.ai/user/tinycen)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to review local or remote codebases, run language-specific quality checks, and produce Markdown issue reports with severity levels and remediation guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can modify repositories, write review reports, and commit or push report files in remote workflows. <br>
-Mitigation: Use a disposable workspace or read-only repository access unless publishing behavior is explicitly desired; review git changes before any commit or push. <br>
-Risk: The skill can install analysis tools and interact with SSH key setup while preparing checks. <br>
-Mitigation: Review commands before execution and use scoped credentials that grant only the repository access needed for the review. <br>
-Risk: Scheduled workflows can clean local repository state before reviewing updates. <br>
-Mitigation: Avoid scheduled runs unless destructive cleanup behavior is understood and limited to disposable clones or controlled workspaces. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to review local or remote repositories, check code quality across several languages, and produce structured Markdown reports. It can also compare explicitly paired frontend and backend repositories for interface consistency.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tinycen/skills/code-review) <br>
-- [Review Process](references/review_process.md) <br>
-- [Report Template](references/report_template.md) <br>
-- [Repository Access](references/repository_access.md) <br>
-- [Installation](references/installation.md) <br>
-- [Python Type Checks](references/language_checks/python_type_check.md) <br>
-- [Python Dependency Checks](references/language_checks/python_dependency.md) <br>
-- [TypeScript and JavaScript Checks](references/language_checks/typescript_javascript_check.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown review report with issue details, severity levels, remediation guidance, and optional inline shell commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports may be saved under docs/code_reviews/ and, in remote workflows, may be committed and pushed when configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: frontmatter and server release metadata) <br>
+Risk: Review workflows may delete or move local files, including resetting changes or archiving reports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use disposable, uniquely identified sandbox checkouts without personal credentials, and require explicit authorization before destructive cleanup.
+
+Risk: Review workflows may execute repository-controlled code or install external tools and project dependencies.
+
+Mitigation: Keep review tools separate from development environments, use repository-scoped read-only access where possible, and verify downloaded installers before use.
+
+Risk: Remote review workflows may commit or publish changes, configure access, or update project files.
+
+Mitigation: Require explicit authorization for remote publication and configuration changes; use read-only repository access when write access is unnecessary.
+
+## Reference(s):
+
+- [Manual review workflow](workflows/manual_workflow.md)
+- [Scheduled review workflow](workflows/scheduled_workflow.md)
+- [Cross-repository review workflow](workflows/cross_repo_integration_workflow.md)
+- [Review process and checks](references/review_process.md)
+- [Repository access guidance](references/repository_access.md)
+- [Report delivery guidance](references/report_delivery.md)
+- [ClawHub skill page](https://clawhub.ai/tinycen/skills/code-review)
+- [ModelScope release archive](https://modelscope.cn/skills/tinycen/code-review/archive/zip/master.zip)
+- [Volta Node version manager](https://volta.sh)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Structured Markdown review reports and concise review summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include issue severity, repository and commit details, report paths, and cross-repository consistency findings.]
+
+## Skill Version(s):
+
+1.4.0 (source: SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

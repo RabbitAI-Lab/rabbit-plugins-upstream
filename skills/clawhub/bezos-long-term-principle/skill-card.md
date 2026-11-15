@@ -1,38 +1,57 @@
-## Description: <br>
-基于贝索斯长期主义和客户至上理念，分析战略决策、创业取舍，助力形成可持续的长期价值与创新方案。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a Chinese-first strategic analysis framework based on Jeff Bezos's long-term thinking, customer focus, and innovation principles.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, founders, product leaders, and business strategists use this Chinese-first skill to apply a Bezos/Amazon-style long-term strategy lens to customer value, entrepreneurship, career, and investment tradeoffs. Treat its dated market and AI commentary as framing prompts rather than verified current facts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dated market and AI commentary may be mistaken for verified current facts. <br>
-Mitigation: Use the commentary as strategic framing and verify time-sensitive claims against authoritative current sources before relying on them. <br>
+## Use Case:
 
+Business leaders, founders, and individuals can use the skill to examine strategy, career, and innovation decisions through long-term value, customer benefit, reversibility, and regret-minimization questions. It provides a decision framework rather than investment, legal, or business outcome advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/bezos-long-term-principle) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or structured text in Chinese with strategy analysis prompts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompt-only guidance; no code execution, data access, persistence, or hidden privileged behavior per security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.1 (source: server release evidence and artifact metadata) <br>
+Risk: The skill prefers Chinese-first output, which may not suit every user or workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Specify the preferred response language when using the skill.
+
+Risk: Strategic discussions may involve sensitive business, customer, or financial information.
+
+Mitigation: Share only the minimum necessary context; redact customer identities and non-public financial details, and do not provide credentials or keys.
+
+Risk: Examples and claims about current companies, markets, or regulations may become outdated or need independent confirmation.
+
+Mitigation: Check decision-critical facts against current official sources and treat the framework's conclusions as analysis rather than a promise or professional advice.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/bezos-long-term-principle)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Text, Markdown]
+
+**Output Format:** [Chinese-first prose with structured Markdown frameworks, tables, and decision questions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May retain English key terms; includes decision prompts and illustrative examples. Not investment, legal, or commercial outcome advice.]
+
+## Skill Version(s):
+
+2.1.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

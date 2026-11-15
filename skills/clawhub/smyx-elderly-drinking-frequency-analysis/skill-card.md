@@ -1,45 +1,54 @@
-## Description: <br>
-Analyzes fixed-camera video of an elder's water-cup area to count cup pickups, estimate drinking frequency, and surface dehydration-risk reminders for caregivers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes video of a water-cup area to count cup pickups as an indirect measure of drinking frequency and flag counts below a preset threshold.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External caregivers, family members, and elder-care operators use this skill to analyze home or care-facility video of a water-cup area, review cup-pickup frequency, and receive directional reminders when the pattern suggests possible dehydration risk. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Home video or video URLs may be sent to external services, and cloud report history may be queried. <br>
-Mitigation: Require explicit consent from monitored people, avoid unrelated household footage, and confirm cloud processing is acceptable before use. <br>
-Risk: The skill may create or reuse local and remote identity records and tokens. <br>
-Mitigation: Review or clear the workspace data directory if identity or token reuse is not desired. <br>
-Risk: Cup-pickup counts are only an indirect proxy for water intake and may be inaccurate in shared or unstable scenes. <br>
-Mitigation: Treat alerts as caregiver prompts rather than medical diagnosis, verify with the elder or caregiver, and seek medical care if symptoms are present. <br>
+## Use Case:
 
+Family caregivers and elder-care staff can use this skill to review video from a fixed camera aimed at a cup area, track pickup frequency, and receive low-frequency reminders. Pickup counts are only an indirect proxy for water intake and are not a clinical assessment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-elderly-drinking-frequency-analysis) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [SMYX analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON analysis report with optional report links and local file output.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured drinking-frequency metrics, dehydration-risk alerts, recommended caregiver actions, and cloud report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter reports 1.0.6) <br>
+Risk: ClawScan rates the release suspicious because it reports remote account registration and video submission; the scan was partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not install until the remote service, identity data sent, video-processing behavior, and export-only behavior are explained and reviewed.
+
+Risk: Camera footage may include identifiable people in private homes or care settings.
+
+Mitigation: Obtain informed consent before use and handle footage securely, as the skill documentation advises.
+
+## Reference(s):
+
+- [API interface documentation](references/api_doc.md)
+- [Skill demonstration page](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown, JSON]
+
+**Output Format:** [Structured drinking-frequency report in JSON or a Markdown summary]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Pickup counts are an indirect proxy for water intake; camera coverage and shared-cup use can affect counts.]
+
+## Skill Version(s):
+
+1.0.16 (source: server-resolved release metadata; embedded SKILL.md frontmatter states 1.0.21)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

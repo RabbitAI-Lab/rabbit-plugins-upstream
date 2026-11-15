@@ -1,42 +1,57 @@
-## Description: <br>
-AI assistant for China insurance live streaming that generates compliant scripts, explains products, engages audiences, and optimizes sales conversion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Drafts mainland China insurance live-stream scripts, product explanations, audience replies, compliance self-checks, and sales follow-up wording.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance companies, agents, and supervised marketing teams use this skill to draft live-stream scripts, product explanations, audience responses, and sales conversion content for China-focused insurance marketing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Insurance sales and marketing content may be regulated and may require review before use. <br>
-Mitigation: Use only in licensed or supervised insurance marketing workflows and route outputs through approved compliance review. <br>
-Risk: Outputs could be mistaken for compliance, investment, underwriting, or claims decisions. <br>
-Mitigation: Do not use the skill as a substitute for compliance review, investment advice, underwriting, or claims decisions. <br>
-Risk: Lead-generation and audience interaction workflows may involve sensitive customer information. <br>
-Mitigation: Collect and process customer information only with clear consent and approved data-handling procedures. <br>
+## Use Case:
 
+Insurance teams, agents, and compliance reviewers use it to draft and review mainland China live-stream sales scripts, disclosures, customer replies, and follow-up content before institutional approval.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/insurance-digital-live) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or structured text templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces insurance live-streaming scripts, compliance language, audience interaction responses, and sales conversion guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The security review was incomplete, and its guidance recommends reviewing the skill and referenced material for higher assurance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill contents and referenced material before installation or use in higher-assurance settings.
+
+Risk: Insurance product and regulatory wording may be outdated, inaccurate, or unsuitable for a specific institution or product.
+
+Mitigation: Check current official requirements and product terms, then have the institution's qualified compliance reviewers approve all material before use.
+
+Risk: Sales drafts or examples could expose personal data or imply unsupported guarantees or customer outcomes.
+
+Mitigation: Use fictional or properly redacted examples, avoid unsubstantiated promises, and obtain required authorization before using customer materials.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/insurance-digital-live)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with sample wording, tables, checklists, and script templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts for user review; content requires institutional compliance review before use. The skill does not publish content or access customer data or live-stream platforms.]
+
+## Skill Version(s):
+
+5.0.3 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

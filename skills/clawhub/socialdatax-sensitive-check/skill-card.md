@@ -1,39 +1,58 @@
-## Description: <br>
-用于敏感词检测、违禁词检测、文案发布前检查、内容安全检查、文案合规审核、能不能发判断、平台风险提示和改写建议，支持小红书、抖音、快手和通用文本场景。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于敏感词检测、违禁词检测、文案发布前检查、内容安全检查、文案合规审核、能不能发判断、平台风险提示和改写建议。支持小红书、抖音、快手和通用文本场景，来自 SocialDataX 社媒数据助手。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-Content creators, marketers, and agents use this skill to check draft Chinese social content for sensitive or prohibited wording before publishing. It returns risk status, risk level, matched issue types, highlighted text, and safer rewrite suggestions for generic, Xiaohongshu, Douyin, and Kuaishou contexts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided draft text is sent to SocialDataX and may be retained with analysis results for disclosed operational purposes. <br>
-Mitigation: Avoid submitting secrets or highly confidential drafts unless the user's SocialDataX account and policies permit that use. <br>
+## Use Case:
 
+面向需要发布社交媒体文案的内容创作者与运营人员，检查文本在小红书、抖音、快手或通用场景中的敏感词和风险，并获取风险提示与改写建议。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-sensitive-check) <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, guidance] <br>
-**Output Format:** [Markdown summary for agent responses; CLI and MCP calls return JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY; avoid echoing the full submitted draft unless the user explicitly asks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.8 (source: server release evidence) <br>
+Risk: The security evidence flags an unpinned CLI package, creating supply-chain risk around credentials and other available data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package source and use a trusted, pinned release; enter API credentials only through the documented local authentication flow.
+
+Risk: The security scan is incomplete because some local references could not be resolved.
+
+Mitigation: Review the complete package and the unresolved references before use.
+
+Risk: The service stores submitted text and structured results for history, billing, and troubleshooting.
+
+Mitigation: Submit only text approved for processing by the service.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/devinchen2014/skills/socialdatax-sensitive-check)
+- [SocialDataX skill and API key information](https://socialdatax.com/ai?from=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Concise text or Markdown with risk findings and rewrite suggestions; the CLI response is JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Checks text for a selected platform context and provides findings and suggestions when available. The documented v1 supports text only.]
+
+## Skill Version(s):
+
+0.1.14 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

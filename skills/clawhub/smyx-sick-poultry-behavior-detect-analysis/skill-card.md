@@ -1,45 +1,59 @@
-## Description: <br>
-Detects morbid behavioral cues in poultry and pigs from continuous barn videos, including difficulty standing, ruffled feathers or piloerection, isolation, drowsiness, and appetite loss, and returns behavior type and risk level for early screening. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects morbid behavioral cues in poultry and pigs from continuous barn videos — such as difficulty standing, ruffled feathers/piloerection, isolation, drowsiness and appetite loss — and outputs behavior type with risk level up to 2-3 days ahead of visible clinical signs. | 识别站立困难、羽毛蓬松、离群、嗜睡等病态行为，比人工观察提前2-3天。
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Farm operators, animal-health teams, and developers use this skill to screen poultry or swine barn images and videos for abnormal behavior, produce structured risk reports, and retrieve prior cloud analysis reports. The output is for early behavior screening and does not provide disease diagnosis or treatment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan reports under-disclosed identity, token, account, history, and local persistence behavior. <br>
-Mitigation: Review the publisher's documentation for identity creation, token storage, account reuse, and history retrieval before installation or execution. <br>
-Risk: The skill may upload barn media or submit media URLs to cloud-backed Lifeemergence endpoints. <br>
-Mitigation: Confirm endpoint ownership, media retention, deletion controls, and authorization requirements before processing sensitive farm footage. <br>
-Risk: The skill can query prior reports associated with a local or internal identity. <br>
-Mitigation: Limit use to trusted workspaces and verify that report history access is scoped to the intended user or farm identity. <br>
+## Use Case:
 
+Livestock operators and farm teams can screen poultry or pig barn images and videos for unusual behavior, review risk levels and affected locations, and query prior reports. Results support early screening and do not provide a veterinary diagnosis or treatment recommendation.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-sick-poultry-behavior-detect-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown reports and tables with JSON-backed analysis results and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include behavior categories, abnormal subject locations, group morbidity ratio, risk level, analysis time, and cloud report URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release metadata; artifact frontmatter says 1.0.1) <br>
+Risk: The security review marks this release suspicious and incomplete, citing reported account and credential handling, unexpected remote and file activity, and video uploads that do not match the stated behavior-screening purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review these behaviors before installing; avoid providing credentials or sensitive footage until the findings are understood.
+
+Risk: Barn images and videos are sent to a remote analysis service, which may expose sensitive farm or bystander information.
+
+Mitigation: Use only footage approved for remote processing and remove unrelated sensitive content where practical.
+
+Risk: Behavior screening can be mistaken for a veterinary diagnosis or treatment recommendation.
+
+Mitigation: Treat results as an early screening aid and consult a veterinarian for diagnosis or treatment decisions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-sick-poultry-behavior-detect-analysis)
+- [API reference](references/api_doc.md)
+- [Skill introduction and demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown, JSON]
+
+**Output Format:** [Structured behavior screening report with behavior observations, risk level, affected locations and group statistics; historical report lists use a Markdown table with links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts image or video input. Screening results are for reference and are not a disease diagnosis or treatment advice.]
+
+## Skill Version(s):
+
+1.0.12 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

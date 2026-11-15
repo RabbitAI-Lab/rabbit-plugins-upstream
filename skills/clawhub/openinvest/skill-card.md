@@ -1,51 +1,57 @@
-## Description: <br>
-openInvest helps agents monitor multi-asset investment portfolios, review live prices and strategy history, adjust positions, and run a four-role LLM investment committee for asset verdicts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent review a multi-asset portfolio, track market data and transactions, and run a role-based investment committee for a symbol.
 
-## Publisher: <br>
-[longsizhuo](https://clawhub.ai/user/longsizhuo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[longsizhuo](https://clawhub.ai/user/longsizhuo)
 
-## Use Case: <br>
-External users and agents use openInvest for daily portfolio monitoring, market-price checks, strategy and decision-history review, asset tracking, trade logging, and investment committee analysis before making investment decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access private portfolio records, wealth context, local investment history, and committee transcripts. <br>
-Mitigation: Install only when that data access is acceptable, use a dedicated INVEST_HOME data directory, and review stored data under INVEST_HOME and memory/.committee. <br>
-Risk: The skill can mutate portfolio records, trade-status records, configuration, and remote-hub state. <br>
-Mitigation: Require explicit user confirmation before buy, sell, deposit, withdraw, record-execution, config, or remote-hub write operations. <br>
-Risk: The skill may collect or rely on LLM, email, or remote-hub credentials. <br>
-Mitigation: Avoid pasting secrets into chat and store credentials only in the intended local or hub configuration locations. <br>
+## Use Case:
 
+Portfolio owners use the skill to review holdings, performance and decision history, track assets, record transactions, and request structured investment analysis across stocks, funds, ETFs, crypto and commodities.
 
-## Reference(s): <br>
-- [openInvest ClawHub Skill Page](https://clawhub.ai/longsizhuo/skills/openinvest) <br>
-- [Full Skill Protocol](SKILL.md) <br>
-- [Project Architecture Wiki](https://github.com/longsizhuo/openInvest/tree/main/docs/wiki) <br>
-- [Committee Protocol](references/committee-protocol.md) <br>
-- [Committee Protocol - Hermes and Delegating Agents](references/committee-protocol-hermes.md) <br>
-- [Dual Execution Paths](references/two-paths.md) <br>
-- [Tool Catalog](references/tools.md) <br>
-- [Adding a New Asset](references/adding-assets.md) <br>
-- [Onboarding](references/onboarding.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON or Markdown backend outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read private portfolio state and may guide CLI or MCP operations that mutate local or remote investment records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.20.1 (source: server release metadata, SKILL.md frontmatter, CHANGELOG.md released 2026-07-17) <br>
+Risk: Investment or portfolio information may be sent to an external model during model-backed workflows, and the security scan reports that privacy disclosures are missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before using those workflows, decide whether you are comfortable sharing the information and review the selected model provider's data handling.
+
+Risk: The suspicious security assessment is based on partial coverage and degraded tool-misuse analysis, so it does not resolve the skill's full risk profile.
+
+Mitigation: Review the skill and its permissions carefully before installation; do not treat the partial scan as proof that the skill is safe or malicious.
+
+## Reference(s):
+
+- [ClawHub openInvest release](https://clawhub.ai/longsizhuo/skills/openinvest)
+- [Committee protocol](references/committee-protocol.md)
+- [Two analysis paths](references/two-paths.md)
+- [Adding assets](references/adding-assets.md)
+- [Project documentation](https://github.com/longsizhuo/openInvest/tree/main/docs/wiki)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown, JSON]
+
+**Output Format:** [JSON results and Markdown reports, with plain-text guidance where appropriate]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results vary by command and depend on user-provided portfolio data, available market data, configured credentials and selected model provider.]
+
+## Skill Version(s):
+
+0.34.5 (source: server-resolved release metadata, SKILL.md frontmatter, CHANGELOG, released 2026-11-09)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

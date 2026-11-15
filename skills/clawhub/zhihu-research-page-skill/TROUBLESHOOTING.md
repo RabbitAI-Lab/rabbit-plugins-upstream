@@ -108,3 +108,32 @@
 **方案**：
 - 必须加 `-X utf8`：`python -X utf8 scripts/scan_html.py`
 - 或设 `PYTHONIOENCODING=utf-8`
+
+---
+
+## 13. 单文件打包时图片缺失
+**现象**：`inline_images.py` 打印「缺失 M 张」，单文件里仍留着 `./images/xxx.png` 原路径
+**根因**：`./images/` 下没有对应文件（curl 下载失败 / 文件名大小写或拼写与 HTML 引用不一致 / 扩展名被改名）
+**方案**：
+- 按「缺失清单」逐条核对 `./images/` 真实文件名，改 HTML 引用或补下载后重跑
+- 只差 1-2 张且补不回来：可接受（其余已内嵌），但必须在交付通报里说明「N 张图片未能内嵌」
+- 不要手工在单文件 HTML 里贴 base64——重跑脚本更可靠
+
+---
+
+## 14. 单文件 HTML 体积超 100 MiB
+**现象**：base64 内嵌后文件 > 100 MiB，WorkBuddy 资料库提示体积超限
+**根因**：图片总量大（高清截图/多张大图），base64 编码膨胀约 33%
+**方案**：
+- 交付本身不受影响，只是跳过资料库上传，如实告知用户
+- 如需上传：先压缩 `./images/`（转 webp / 降分辨率 / 减质量）→ 重跑 `inline_images.py`
+- 大版本（200%+）建议在阶段 4.5 就控制图片数量与单图体积
+
+---
+
+## 15. 删除 index.html 后又要改内容
+**现象**：已交付单文件，发现要改文字或补章节，但 `index.html` 已删除
+**方案**：
+- 骨架在 `./other/index_skeleton.html`，章节草稿在 `./other/_draft_*.html`
+- 恢复流程：`cp ./other/index_skeleton.html index.html` → 重跑 `assemble.py` → 重跑 `inline_images.py`
+- **不要**直接在单文件 HTML 上编辑——满屏 base64 会干扰定位，且改动无法回流到草稿

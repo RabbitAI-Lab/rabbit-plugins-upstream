@@ -1,38 +1,57 @@
-## Description: <br>
-AI-powered API design and documentation assistant that generates RESTful and OpenAPI specs, API documentation, mock-server guidance, validation feedback, and SDK code snippets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers design, validate, document, and mock APIs using OpenAPI, AsyncAPI, GraphQL SDL, and code examples.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, API product managers, DevOps engineers, and technical writers use this skill to design APIs, produce OpenAPI or related specifications, write developer-facing documentation, create examples, and validate API designs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated code samples, authentication examples, or mock-server snippets may not match a project's security requirements. <br>
-Mitigation: Review and harden generated examples before using them with real services. <br>
+## Use Case:
 
+Backend developers, API product managers, DevOps engineers, and technical writers use it to draft and review API specifications, documentation, mocks, and SDK examples.
 
-## Reference(s): <br>
-- [Api Design Documentation on ClawHub](https://clawhub.ai/gechengling/api-design-documentation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown, YAML or JSON specifications, code snippets, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include OpenAPI, AsyncAPI, GraphQL SDL, API reference pages, tutorials, request and response examples, mock-server setup guidance, and SDK snippets.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and frontmatter) <br>
+Risk: API specifications and examples may contain credentials or personal data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use placeholders and synthetic data, and provide only the minimum necessary input.
+
+Risk: Generated specifications, documentation, mock configurations, and code are drafts that may need correction for the target API and toolchain.
+
+Mitigation: Review and validate outputs against the API contract and the tools used before relying on or publishing them.
+
+Risk: The security scan was benign but partial, with medium confidence and some unresolved references.
+
+Mitigation: Review examples and relevant references for the intended use case; the scan did not establish that every part was fully inspected.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/gechengling/skills/api-design-documentation)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance]
+
+**Output Format:** [Markdown documentation, YAML or JSON API specifications, mock configurations, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft outputs for review; format depends on the requested API artifact.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

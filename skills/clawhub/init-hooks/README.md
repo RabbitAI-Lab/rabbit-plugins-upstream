@@ -84,6 +84,28 @@ Evan Song · [github.com/Songhonglei](https://github.com/Songhonglei)
 
 ## Changelog
 
+### v1.0.4 (2026-11-14)
+
+- **Fix（文档示例，真问题）**：`best-practices.md` 的 python 示例原本对每个持久化目标**各自打补丁**，目标文件里的旧值不会消失，重建后会把过期配置带回来——等于假同步。改为"只改 runtime，然后把 runtime 整份复制到各目标"，与 `sync_openclaw_config.py` 的实际语义一致
+- **Fix（文档示例）**：示例里的 patch 不再写死键值，改由调用方通过环境变量传入，脚本本身不预设任何改动
+- SKILL.md / 脚本 docstring 的 `--patch` 示例统一改成从用户给的文件读取，不再出现字面 JSON
+- 无运行时逻辑变更
+
+### v1.0.3 (2026-11-14)
+
+- **Docs**：去掉 `acp` 相关示例（`--patch '{"acp": {"enabled": true}}'`、`enable-acp.py` 样例），改成中性的 `<section>/<field>/<value>` 占位写法。此前安全扫描据此判定"skill 主动开启 ACP 且未披露"（`TP4` HIGH），实际脚本只是原样透传用户给的 patch
+- **Docs**：SKILL.md 与脚本 docstring 都写明能力边界——不预设默认值、不主动开启/关闭任何配置项，只写用户明确给出的字段并复制到配置的持久化路径
+- 无代码逻辑变更
+
+### v1.0.2 (2026-11-14)
+
+- **Fix（安全）**：URL 钩子在 sha256 校验失败后不再执行上一轮遗留的脚本 —— dispatcher 的下载 / 解包 / 执行改为单条 `&&` 条件链，并在每次执行前删掉旧入口，任一步失败即"失败关闭"（此前会静默跑旧脚本，还把结果记成"成功"）
+- **Fix（安全）**：解包不再调用 `tarfile.extractall` / `zipfile.extractall`，改为逐成员落盘：拒绝符号链接、硬链接、设备文件与 FIFO，拒绝绝对路径与 `..` 穿越，文件以 `O_NOFOLLOW` 写入，父目录逐级校验不跟随链接
+- **Fix**：解包按内容识别格式（`zipfile.is_zipfile` / `tarfile.is_tarfile`），修复下载文件无扩展名导致压缩包被当成普通脚本拷贝、`*.zip` / `*.tar.gz` 分支永远走不到的问题
+- 入口文件解析后校验必须仍在解压目录内
+- `references/best-practices.md` 的环境变量示例改为写独立 env 文件，不再演示追加 `~/.bashrc`
+- 新增 `tests/test_init_hooks_security.py`：覆盖校验失败失败关闭、链接/穿越/绝对路径/残留链接越界写入等 12 条用例
+
 ### v1.0.0 (2026-07-13)
 
 - Initial public release

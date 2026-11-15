@@ -1,45 +1,50 @@
-## Description: <br>
-Riffkit helps an agent turn one source video, TikTok link, or analyzed template into a post-ready short-form or UGC-style ad video by reusing the source's emotion formula with optional character, product, language, and creative-direction settings. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates short AI videos by adapting a source video's emotional formula, swapping people or products while preserving its shots, or generating a video from a creative direction.
 
-## Publisher: <br>
-[riffkit](https://clawhub.ai/user/riffkit) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[riffkit](https://clawhub.ai/user/riffkit)
 
-## Use Case: <br>
-External creators, marketers, and agent users use Riffkit to plan, submit, monitor, and retrieve AI-generated riff videos based on a TikTok link, uploaded source video, or existing analyzed template. The skill guides source selection, optional product or character setup, user confirmation before paid submission, progress polling, and delivery of download links, captions, hashtags, and strategy recap. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The heartbeat can replace the installed SKILL.md from the vendor site without a signed or reviewed update channel. <br>
-Mitigation: Disable or remove the heartbeat, or route updates through a reviewed install process before allowing the skill to overwrite local instructions. <br>
-Risk: The skill can initiate paid video-generation requests through the Riffkit API. <br>
-Mitigation: Require the documented pre-submit confirmation before calling generation endpoints and do not retry failed or insufficient-balance requests automatically. <br>
-Risk: Generated videos may depend on third-party source URLs, uploaded media, product data, and account credentials. <br>
-Mitigation: Use only trusted source links and uploads, keep session tokens out of task or content fields, and review generated output before publishing it outside the agent workflow. <br>
+## Use Case:
 
+External creators and marketers use Riffkit to make short-form videos and UGC-style ads from a source clip, product imagery, or a written idea.
 
-## Reference(s): <br>
-- [Riffkit homepage](https://riffkit.ai) <br>
-- [Riffkit skill source](https://riffkit.ai/SKILL.md) <br>
-- [Riffkit ClawHub skill page](https://clawhub.ai/riffkit/skills/riffkit) <br>
-- [Riffkit publisher profile](https://clawhub.ai/user/riffkit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, Shell commands, Markdown, Configuration] <br>
-**Output Format:** [Markdown guidance with API request instructions, shell commands, and user-facing status or delivery text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces plans, confirmation prompts, progress updates, video download links, captions, hashtags, strategy recaps, and heartbeat update guidance; paid generation requires explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.2 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: ClawScan rates this release suspicious, citing automatic replacement of its instructions with remote content and behavior beyond the stated purpose; its analysis was partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Follow the scanner guidance and do not install unless the full release is reviewed, including remote instruction updates, retained session-token handling, and the API reference it could not fully evaluate.
+
+## Reference(s):
+
+- [Riffkit homepage](https://riffkit.ai)
+- [Riffkit on ClawHub](https://clawhub.ai/riffkit/skills/riffkit)
+
+## Skill Output:
+
+**Output Type(s):** [Video, Guidance]
+
+**Output Format:** [AI-generated short-form video asset with a shareable link]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can adapt a source video, preserve its shots while changing people or products, or create an original video; optional character, product placement, and language settings are available.]
+
+## Skill Version(s):
+
+1.10.10 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

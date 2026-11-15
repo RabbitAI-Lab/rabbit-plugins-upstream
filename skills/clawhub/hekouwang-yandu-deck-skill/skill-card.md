@@ -1,46 +1,58 @@
-## Description: <br>
-YanDu DECK turns article topics into swipeable, auto-playing keynote-style web decks with self-hosted fonts and Cloudflare Pages publishing support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns articles into interactive, auto-playing keynote-style web decks, with self-hosted fonts and optional publishing to Cloudflare Pages.
 
-## Publisher: <br>
-[huiyonghkw](https://clawhub.ai/user/huiyonghkw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huiyonghkw](https://clawhub.ai/user/huiyonghkw)
 
-## Use Case: <br>
-Content creators and developers use this skill to convert articles or topics into immersive one-screen-per-idea web decks, update the YanDu DECK site, adjust deck themes, and prepare Cloudflare Pages releases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish to a live Cloudflare Pages site and change local project files during build and release work. <br>
-Mitigation: Run with --build-only first, review generated files and Cloudflare settings, then deploy only after confirming the target project. <br>
-Risk: Deployment and comment-board setup depend on site-specific Cloudflare, D1, analytics, and Wrangler configuration. <br>
-Mitigation: Review CF_PROJECT, wrangler.toml, database identifiers, comment behavior, and analytics tokens before publishing. <br>
-Risk: The security scan guidance warns against allowing the script to perform an unreviewed global Wrangler installation. <br>
-Mitigation: Install and authenticate Wrangler separately, then run the publishing workflow from a reviewed local environment. <br>
+## Use Case:
 
+Developers and content producers use this skill to turn article content into responsive, slide-based presentations, then build a local preview or optionally publish it to Cloudflare Pages.
 
-## Reference(s): <br>
-- [Hekouwang Yandu Deck Skill on ClawHub](https://clawhub.ai/huiyonghkw/skills/hekouwang-yandu-deck-skill) <br>
-- [YanDu DECK live site](https://hekouwang.pages.dev) <br>
-- [Token Flip Reference](references/换肤-token-flip.md) <br>
-- [Comment Board D1 Reference](references/留言板-D1.md) <br>
-- [System Notes](references/系统说明.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code, shell commands, and configuration edits] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or modify HTML templates, Python scripts, Cloudflare Pages configuration, D1 schema, and deployment-ready site files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: frontmatter and server evidence) <br>
+Risk: The publishing workflow can invoke Wrangler and publish the built site publicly when --deploy is used.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the publishing script's environment and network permissions, then confirm the Cloudflare project and content before deployment.
+
+Risk: If the optional comments board is enabled, it stores visitor names, comment text, and a salted IP hash in D1.
+
+Mitigation: Leave comments disabled unless needed; when enabling them, use your own D1 database and IP_SALT and disclose the collection to visitors.
+
+## Reference(s):
+
+- [Project homepage and installation](https://github.com/huiyonghkw/hekouwang-yandu-deck-skill)
+- [Live YanDu DECK example](https://hekouwang.pages.dev)
+- [System overview and deployment setup](references/系统说明.md)
+- [Optional D1 comments board](references/留言板-D1.md)
+- [Mobile layout and comments options](references/mobile-and-comments.md)
+- [Theme conversion guide](references/换肤-token-flip.md)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [HTML/CSS/JavaScript deck files, Markdown guidance, shell commands, and TOML/SQL configuration]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responsive, slide-based web decks with optional autoplay, analytics, comments, and Cloudflare Pages deployment.]
+
+## Skill Version(s):
+
+1.3.5 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

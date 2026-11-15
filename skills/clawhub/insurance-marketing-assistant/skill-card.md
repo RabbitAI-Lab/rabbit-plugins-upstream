@@ -1,41 +1,57 @@
-## Description: <br>
-A conversational assistant for drafting insurance marketing copy, compliance review notes, and image-generation prompts for insurance promotion workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps insurance professionals create marketing materials by identifying trends, drafting copy, reviewing compliance considerations, and preparing image-generation prompts.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance agents, brokers, and marketing teams use this skill to draft social posts, campaign copy, product disclaimers, image prompts, and compliance review notes for insurance promotion across Chinese social and messaging channels. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China-focused <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Compliance review or regulatory summaries may be mistaken for legal approval. <br>
-Mitigation: Use generated compliance checks as drafting support and have company compliance or legal reviewers approve materials before publishing. <br>
-Risk: Generated marketing copy may include outdated, incomplete, or product-specific claims that do not match current terms. <br>
-Mitigation: Verify product terms, disclaimers, and current regulatory requirements against authoritative company and regulator sources before use. <br>
+## Use Case:
 
+Insurance agents, brokers, and insurance organization marketing staff use the skill to draft campaign materials and image prompts, then review copy for common compliance concerns before institutional approval.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/insurance-marketing-assistant) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown responses with copy drafts, compliance review findings, tables, checklists, and image-generation prompt templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Conversational output only; no scripts or executable files are produced.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.1 (source: server release metadata and SKILL.md; package.json lists 1.0.0) <br>
+Risk: Broad activation triggers may cause the skill to respond to requests outside the user's intended insurance-marketing task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the trigger list and invoke the skill for relevant insurance marketing or compliance-review requests.
+
+Risk: Insurance coverage examples and regulatory claims may be inaccurate, misleading, or out of date.
+
+Mitigation: Verify coverage, pricing, benefits, and regulatory statements against current policy terms and authoritative sources, and obtain institutional compliance or legal review before publication.
+
+Risk: Marketing examples could expose sensitive customer information if real personal details are provided.
+
+Mitigation: Use only the minimum necessary product, audience, and topic details; use fictional or anonymized examples instead of real customer identifiers or sensitive data.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/insurance-marketing-assistant)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Image-generation prompts]
+
+**Output Format:** [Conversational text and Markdown; image-generation prompts as text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts require full preview and explicit user confirmation before saving or sharing; external marketing requires institutional compliance or legal review.]
+
+## Skill Version(s):
+
+2.1.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

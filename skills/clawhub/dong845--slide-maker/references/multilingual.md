@@ -58,6 +58,66 @@ deckkit.EAFONT = "Hiragino Sans GB"  # CJK glyphs (macOS render-loop-safe; or "M
 and numbers stay on `FONT`. Mixed "中文 + English 28%" text then looks intentional and
 travels correctly. (Without `EAFONT`, CJK falls back to an uncontrolled default.)
 
+🔴 **A run tuple's font slot is the LATIN face — the CJK face is the SEVENTH slot.** This is the
+one place where following the documented call shape produces a silent no-op, so it is worth the
+sentence: `text()` takes runs as `(text, size, colour, bold, italic, latin_face, ea_face)`, the
+sixth element writes `<a:latin>`, and **CJK glyphs render from `<a:ea>`**. So
+
+```python
+dk.text(s, x, y, w, h, [[("认识 LUMC", 40, INK, True, False, "Songti SC")]])          # ✗
+dk.text(s, x, y, w, h, [[("认识 LUMC", 40, INK, True, False, "Helvetica Neue", "Songti SC")]])  # ✓
+```
+
+the first line sets the Latin face of a run whose only Latin content is the acronym, and every
+Chinese character in it renders in `EAFONT`. *(Measured: on a real build this made 6 of 14 slides
+carry a title in a face nobody chose, for the whole build, while the deck looked plausible because
+`EADISPLAY` happened to hold the intended face for the components that read it. Swapping `EAFONT`
+moved 25,570 px of a rendered title; swapping the run tuple's font moved none of the CJK glyphs.)*
+Omitting the seventh slot keeps the old behaviour exactly — `EAFONT` still applies — so this is an
+addition, not a change. **`CJK_FACE_UNREACHED`** reports the mistake: a CJK-capable face named in
+slot 6 on a run that contains CJK, where `<a:ea>` says something else.
+
+🔴 **Setting `EAFONT` never fixes a deck already built** — `lint_layout` runs at the END of the
+build script, so by the time `CJK_NO_EA` tells you about it the runs exist. The remedy for the deck
+in hand is one line, just above the lint:
+
+```python
+deckkit.retrofit_ea(prs, "Hiragino Sans GB")   # or set EAFONT above and call retrofit_ea(prs)
+deckkit.lint_layout(prs, strict=True)
+prs.save(out)
+```
+
+**Pass the face unless `EAFONT` is already set** — with no face resolvable anywhere it raises
+rather than returning 0, because a silent no-op would clear the lint line without fixing a glyph.
+It returns the count of runs it stamped.
+
+**Two different causes, two different follow-ups.** If the runs came from deckkit helpers and you
+simply forgot `EAFONT`, setting it makes the next build clean. If they never went through
+`set_font()` at all — a **redesign / surgical fix-pass** on a deck this skill did not author, or raw
+`python-pptx` in the build script — `EAFONT` will not help next time either, because nothing on that
+path reads it; keep calling `retrofit_ea`. (`open_template()` is *not* a source: it drops every
+slide and python-pptx clones layout placeholders empty, so no template-owned run ever lands on a
+slide. What a template really contributes is layout chrome — below.)
+
+**What it reaches:** every CJK run under each slide, **including groups, table cells and
+date/footer `<a:fld>` fields**, plus each **chart's** `c:txPr/a:defRPr` — a chart's category and
+axis text lives in another part with no runs of its own. `CJK_NO_EA` can see none of those (it walks
+`slide.shapes` and tests `has_text_frame`, false for a group, a table and a graphic frame), so the
+fix is deliberately wider than the finding.
+
+🔴 **It never overwrites a face the run already resolves**, its own or one INHERITED from the
+paragraph's `defRPr` or the shape's `lstStyle` — which is where a supplied CJK template normally
+keeps it. That is why the two agree by construction: the CRITICAL asks the same inheritance
+question, so on a template deck neither the finding nor the fix touches 思源黑体 / 方正黑体 /
+whatever the template chose. An `EADISPLAY` cover stays too. (`<a:ea typeface=""/>` is *not* such a
+face — that is OOXML's way of writing "none", and it gets filled.)
+
+🔴 **Layouts and masters are the one real gap, and it is loud.** Both the finding and the fix stop
+at the slide, so a CJK shape sitting on a *layout* — which composites onto every slide that uses it
+— is invisible to `CJK_NO_EA`, to `lint_deck.py`, and to `retrofit_ea`'s default pass. So the
+default pass **counts them and says so**. When it does, re-run with `layouts=True` (it edits the
+template's own parts, which is why it is opt-in), or set the face in the template.
+
 **Translate the component CHROME too.** A few components ship English chrome words baked in;
 on a non-English deck, pass the translated label so no stray English leaks onto an otherwise
 Chinese slide: `eval_matrix(..., recommend_label="推荐方案", scale_label="评分")`,
@@ -68,15 +128,15 @@ the render for any stray English chrome.
 ### Font choices
 | Role | Portable (recommended) | macOS | Windows |
 |---|---|---|---|
-| CJK sans (default) | Noto Sans CJK SC / Source Han Sans | **Hiragino Sans GB** (render-loop-safe), PingFang SC (final deck only — see warning) | Microsoft YaHei |
+| CJK sans (default) | Noto Sans CJK SC / Source Han Sans | **Hiragino Sans GB** (in /System/Library/Fonts on every Mac); PingFang SC / Heiti SC also measure and render correctly where installed | Microsoft YaHei |
 | CJK serif (formal) | Noto Serif CJK SC / Source Han Serif | Songti SC | SimSun |
 | CJK brush/handwritten | — | Kaiti SC | KaiTi |
 | Japanese / Korean | Noto Sans JP / KR | Hiragino Sans / Apple SD Gothic | Yu Gothic / Malgun Gothic |
 
 Pick the CJK font to match the *purpose* the same way as Latin (`design-by-purpose.md`):
-sans (Heiti/PingFang) for modern/corporate/talks, serif (Songti) for formal/defense.
+sans (Hiragino Sans GB, PingFang SC or Heiti SC on macOS) for modern/corporate/talks, serif (Songti) for formal/defense.
 
-**Render-loop trap (macOS):** in the LibreOffice render used for self-checks and the critic, **PingFang SC gets substituted with a handwriting-style face** — the QC loop then judges pixels that PowerPoint will never show. Default to **Hiragino Sans GB** on macOS (renders identically in LibreOffice and PowerPoint/Keynote); PingFang SC is fine for the final deck itself, but verify with a font that the render loop displays faithfully.
+**CJK faces on macOS — measured, not assumed:** on LibreOffice 26.2 / macOS 26.5, **PingFang SC** and **Heiti SC** both render as themselves (the PDF embeds `PingFangSC-Regular`/`-Semibold` and `STHeitiSC-Light`/`-Medium`) and deckkit measures those same faces, so the ruler and the render agree. Both used to be measured in DejaVu Sans, which has no CJK glyphs — 24 characters at 60% of their true width, and text that overflows passing every geometry check — because PingFang lives in macOS's downloadable-asset store (`/System/Library/AssetsV2/…`), which matplotlib never scans, and `STHeiti Light.ttc` registers "Heiti SC" only in its name table; deckkit now reads both. The handwriting substitution this page used to warn about did not reproduce on that setup. **Hiragino Sans GB** stays the default because it sits in `/System/Library/Fonts` on every Mac, while PingFang is an asset a given Mac may not have. Do not trust a face list — it is true of one machine: `preflight_check.py` item 10 and `check_fonts_resolve.py` name every East-Asian face that does not resolve on THIS machine, including one inherited from a template's theme or picked per script by `lang`.
 
 **Pair CJK fonts by role too — don't set the whole deck in one face** (see the "Type pairing"
 section of `font-guidance.md`). Use a CJK **display** face for titles and a CJK **body** face for
@@ -105,8 +165,8 @@ similar visual weight and spacing:
   together form the deck's text pairing; the CJK/EA and mono faces are *functional* roles under
   the ≤2-text-families rule, `font-guidance.md`; weights ≤3):
   *cross-platform / safest* → **Noto Sans + Noto Sans CJK SC** (or Source Han Sans); *macOS build
-  loop* → **Helvetica Neue (or Inter, if installed) + Hiragino Sans GB** (PingFang SC only for the
-  final deck, per the render-loop trap above); *Windows/Office* → **Aptos/Segoe UI + Microsoft
+  loop* → **Helvetica Neue (or Inter, if installed) + Hiragino Sans GB** (PingFang SC also measures and
+  renders correctly where installed — see *CJK faces on macOS* above); *Windows/Office* → **Aptos/Segoe UI + Microsoft
   YaHei or DengXian**; *technical* → **IBM Plex Sans + Source Han Sans**; *warm / friendly /
   teaching* → a rounded-humanist Latin (**Trebuchet MS / Verdana**, or Nunito if installed) +
   **LXGW WenKai / LXGW Bright** (free, OFL — warm Kai-flavoured without full brush formality; NOT
@@ -147,8 +207,8 @@ similar visual weight and spacing:
 
 ### Portability caveat (say this in step 6)
 PowerPoint can embed fonts, but python-pptx can't, so the recipient's machine needs the
-CJK font installed — or PowerPoint substitutes. Prefer a widely-installed font (PingFang
-on macOS, Microsoft YaHei on Windows) or **Noto Sans/Serif CJK** for maximum portability,
+CJK font installed — or PowerPoint substitutes. Prefer a widely-installed font (Hiragino
+Sans GB or PingFang on macOS, Microsoft YaHei on Windows) or **Noto Sans/Serif CJK** for maximum portability,
 and tell the user which font the deck expects.
 
 ## CJK typography habits (so it reads like a native deck, not translated)
@@ -178,6 +238,18 @@ and tell the user which font the deck expects.
   **widening the box / lowering the size a touch / rebreaking the line** so punctuation stays attached
   to its character; for a hard case, hand-place the break. Same idea in Latin: don't let a lone ")" or
   "." wrap to its own line.
+  `measure_text` and lint count lines the way LibreOffice sets them under the deck default
+  `hangingPunct="1"` (probed and checked against renders): in pure-CJK text ONE closing mark
+  (`，。、；：！？．`) hangs past the measure instead of wrapping; a closing bracket (`）」』》】〉〕`) or
+  a second mark takes the character before it down to the next line; an opening bracket never ends a
+  line. Text that also carries Latin or digits never hangs — the renderer's autospace between the
+  scripts is not modelled, so such lines are counted conservatively.
+  Korean wraps at SPACES: a Hangul word that fits a line is measured whole; a word wider than the whole
+  line breaks between syllables ("인공지능기반의 / 료영상재구성"), as LibreOffice sets it.
+- **The gap before a comma in a preview is the renderer, not your text.** LibreOffice's autospace puts a
+  visible gap between Hangul/CJK and ASCII punctuation or Latin (`고맙습니다 .`, `토스터 ,`, `87% 。`) —
+  it is not in the file, and language tags on the run do not remove it (probed 2026-10-04). Do not edit the
+  copy to chase it. (PowerPoint was not available to check; it has no such autospace setting for slides.)
 - **Density.** A CJK character carries more meaning per glyph, so for a **presented** deck terse
   points matter even more — resist filling the line just because it fits. *(A read-alone / reference
   CJK deck may run denser like any read-alone deck — then keep the script-aware leading (never below ~1.25× font size — `line_spacing` ≈1.04 — for CJK body) and the

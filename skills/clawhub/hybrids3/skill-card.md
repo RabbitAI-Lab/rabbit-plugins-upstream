@@ -1,44 +1,61 @@
-## Description: <br>
-hybrids3 helps agents and developers use a self-hosted object store through S3-compatible, plain HTTP, and MCP interfaces for uploading, downloading, listing, deleting, and presigning objects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connect an agent to a self-hosted object store through its S3, HTTP, or MCP interface to manage objects and create presigned access links.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and agents use this skill to interact with an already-running hybrids3 object-storage service, manage objects with scoped bucket credentials, generate presigned links, and connect MCP-aware agents to storage workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Public buckets are world-readable to anyone who can reach the service. <br>
-Mitigation: Keep sensitive data in private buckets and bind the service to loopback or place it behind an authenticated proxy unless remote access is deliberate. <br>
-Risk: Bucket keys, master keys, and active presigned URLs are bearer credentials. <br>
-Mitigation: Prefer per-bucket keys over the master key, keep credentials out of shared prompts and logs, and limit presigned URLs to the intended object and expiration window. <br>
-Risk: Deletes, overwrites, and presigned PUT uploads can irreversibly remove or replace object data. <br>
-Mitigation: Require explicit user confirmation for the exact bucket and key before destructive operations, and avoid enumerate-then-bulk-delete workflows. <br>
+## Use Case:
 
+Developers and agents use Hybrids3 to upload, download, list, and manage objects in an existing self-hosted store. It can also create time-limited links for a specific object and connect storage tools over MCP.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/hybrids3) <br>
-- [hybrids3 homepage](https://github.com/psyb0t/docker-hybrids3) <br>
-- [setup.md](references/setup.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell, Python, JSON, and configuration examples; API and tool calls may return text, JSON, object bytes, or headers.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires HYBRIDS3_URL and scoped bucket or master credentials; MCP object downloads are capped at 50 MB.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.3 (source: server release metadata) <br>
+Risk: Deletion confirmation weakness
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit authorization for the exact bucket and key before deletion, and avoid bulk deletion.
+
+Risk: Credential handling over HTTP and MCP
+
+Mitigation: Use HTTPS for remote connections, limit credentials to the needed bucket, and keep keys and live presigned URLs out of shared prompts and logs.
+
+Risk: Unpinned Docker images
+
+Mitigation: Pin the container image to a reviewed version or digest before installation.
+
+Risk: Incomplete scan coverage
+
+Mitigation: Review the uninspected component and instruction text before installation; the scan covered 2 of 3 components.
+
+## Reference(s):
+
+- [Setup guide](references/setup.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Files, Shell commands, Text]
+
+**Output Format:** [S3, HTTP, or MCP requests and responses; shell command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Transfers object data, returns object or bucket details and presigned links, and can delete or overwrite objects when requested. MCP downloads are limited to 50 MB.]
+
+## Skill Version(s):
+
+0.3.10 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

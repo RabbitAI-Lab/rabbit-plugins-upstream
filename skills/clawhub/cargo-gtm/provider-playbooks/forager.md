@@ -29,7 +29,7 @@ Contact-info lookup keyed **exclusively on LinkedIn URL** — three actions, one
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"forager","actionSlug":"findPersonalEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"forager","actionSlug":"findPersonalEmail"}' \
   --records '[
     {"linkedinUrl":"https://linkedin.com/in/alicesmith"},
     {"linkedinUrl":"https://linkedin.com/in/bobjones"}
@@ -44,7 +44,7 @@ cargo-ai orchestration action execute-batch \
 ```bash
 # Only on rows where prospeo.findPhone (3) missed
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"forager","actionSlug":"findPhone","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"forager","actionSlug":"findPhone"}' \
   --data '{"linkedinUrl":"https://linkedin.com/in/alicesmith"}' \
   --wait-until-finished
 ```
@@ -53,7 +53,7 @@ cargo-ai orchestration action execute \
 
 - **LinkedIn URL is the only key.** Every action takes exactly one field, `linkedinUrl`. No email/name/domain fallback — records missing the URL must go through URL lookup first.
 - **`validation_status` is the provider grading its own homework.** Run found emails through the VERIFY stage (`waterfall.verifyEmail`, 0.1) regardless — see [`../references/waterfall-strategy.md`](../references/waterfall-strategy.md).
-- **Fixed cost on miss.** All three are fixed-price per execution; a `findPhone` miss still costs 5. Gate the expensive rungs on prior-rung misses only ([`../references/cost-discipline.md`](../references/cost-discipline.md)).
+- **Fixed cost per hit.** All three are fixed-price; a hit costs the full 2 or 5 whatever it returns. A miss returns no data and bills nothing on credits. Gate the expensive rungs on prior-rung misses only ([`../references/cost-discipline.md`](../references/cost-discipline.md)).
 - **Personal email ≠ outreach consent.** Route personal mailboxes per your compliance rules; they're best for re-engagement of known contacts, not cold sends.
 
 ## Position in the waterfall
@@ -63,9 +63,17 @@ cargo-ai orchestration action execute \
 
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"forager","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"forager","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**
 
 ## Pairs with
 
 - [`../recipes/re-engagement.md`](../recipes/re-engagement.md) — personal email revives contacts whose work address went stale (CONTACT step after the SIGNAL).
 - [`../recipes/job-change-monitoring.md`](../recipes/job-change-monitoring.md) — the job-change signal that makes personal-email lookup worth 2 credits.
+
+## Recurring use
+
+No scheduled fit — per-record enrichment only, priced too high (2–5) to re-pull on a timer.
+
+- **Natural trigger:** downstream of the job-change monitor ([`../recipes/job-change-monitoring.md`](../recipes/job-change-monitoring.md), every-2-weeks cadence per [`../recipes/save-as-play.md`](../recipes/save-as-play.md)) — run `findPersonalEmail` only on rows newly entering the "changed jobs" segment.
+- **In-play gate: attempt timestamp, not empty output.** Misses bill nothing on credits, but "run where `personal_email` is empty" re-calls the same uncoverable rows on every re-evaluation — stamp a lookup-attempted-at column and gate on it.
+- **Stable data:** a found personal mailbox doesn't decay on a schedule; re-verify it before each send wave (VERIFY chain, 0.1) instead of re-finding.

@@ -1,0 +1,9 @@
+{
+  "name": "video-summarizer",
+  "version": "0.1.0",
+  "description": "Extract keyframes and metadata from videos using ffmpeg scene detection",
+  "main": "index.js",
+  "scripts": {
+    "extract-frames": "node scripts/extract-frames.js"
+  }
+}

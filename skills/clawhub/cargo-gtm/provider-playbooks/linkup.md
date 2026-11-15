@@ -6,7 +6,7 @@ last-reviewed: 2026-07-09
 
 # linkup (Linkup)
 
-Natural-language web research with synthesized answers. Two actions: `search` (0.5 standard / **2 deep**) returns search results for a question, and `instruct` (flat 1) returns either a **sourced answer** or a **structured object matching a JSON schema you supply**. It sits above `firecrawl.search` (0.05, raw SERP + scrape) and alongside `serper.search` (1, Google results): pick linkup when you want an *answer* — especially a schema-shaped one you can write straight into a column — rather than pages to parse. See [`../references/stage-action-map.md`](../references/stage-action-map.md), Web research.
+Natural-language web research with synthesized answers. Two actions: `search` (0.5 standard / **2 deep**) returns search results for a question, and `instruct` (flat 1) returns either a **sourced answer** or a **structured object matching a JSON schema you supply**. It sits above `firecrawl.search` (0.05 per result, raw SERP + scrape) and alongside `serper.search` (0.05, Google results): pick linkup when you want an *answer* — especially a schema-shaped one you can write straight into a column — rather than pages to parse. See [`../references/stage-action-map.md`](../references/stage-action-map.md), Web research.
 
 ## Credits-based actions
 
@@ -20,7 +20,7 @@ Natural-language web research with synthesized answers. Two actions: `search` (0
 - ✅ **Structured per-record research** — `instruct` with `outputType: "structured"` turns "what's this company's pricing model?" into a typed object per row, no parsing step.
 - ✅ **Sourced answers** — `outputType: "sourcedAnswer"` returns the answer plus source links for auditable enrichment.
 - ✅ **Deep questions on a budget** — `instruct` costs a flat 1 even at `depth: "deep"`, *cheaper* than `search` deep (2). If you want a deep answer rather than deep results, `instruct` wins on price.
-- ❌ **Plain SERP lookups** — `firecrawl.search` (0.05) is 10× cheaper when you just need result URLs to scrape.
+- ❌ **Plain SERP lookups** — `firecrawl.search` (0.05 per result) or `serper.search` (0.05 flat) is far cheaper when you just need result URLs to scrape.
 - ❌ **Structured-data lookups a provider already covers** — firmographics, tech stack, emails: the dedicated providers are cheaper and more reliable than web research.
 
 ## Patterns
@@ -29,7 +29,7 @@ Natural-language web research with synthesized answers. Two actions: `search` (0
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"linkup","actionSlug":"instruct","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"linkup","actionSlug":"instruct"}' \
   --data '{
     "q": "What pricing model does acme.com use for its main product?",
     "depth": "standard",
@@ -47,11 +47,11 @@ cargo-ai orchestration action execute \
 
 The schema root **must** be `type: "object"`. Keep it small — a few well-described fields extract far better than a sprawling one.
 
-### Pattern B — Quick sourced answer
+### Pattern B — Quick search results
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"linkup","actionSlug":"search","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"linkup","actionSlug":"search"}' \
   --data '{"q": "Who is the current CTO of Acme Corp?", "depth": "standard"}' \
   --wait-until-finished
 ```
@@ -67,11 +67,19 @@ Escalate to `depth: "deep"` only when standard came back empty or shallow — de
 
 ## Position in the waterfall
 
-**RESEARCH / fallback SOURCE.** Web research chain: `firecrawl` (0.05) for raw pages → **linkup** (0.5–2) for synthesized/structured answers → `serper` (1) for Google-shaped results. As a people/company source it's a fallback (0.5) when no structured provider has the data — see [`../references/stage-action-map.md`](../references/stage-action-map.md).
+**RESEARCH / fallback SOURCE.** Web research chain: `firecrawl` (0.05 per result) for raw pages → **linkup** (0.5–2) for synthesized/structured answers → `serper` (0.05) for Google-shaped results. As a people/company source it's a fallback (0.5) when no structured provider has the data — see [`../references/stage-action-map.md`](../references/stage-action-map.md).
+
+## Recurring use
+
+Research answers are point-in-time — **recur only when the question itself moves**.
+
+- **Scheduled fit:** narrow. A weekly `instruct` re-ask over an account segment works for genuinely time-sensitive questions (pricing changes, launches); for static facts a re-run re-bills the same answer. Cadence defaults: [`../recipes/save-as-play.md`](../recipes/save-as-play.md).
+- **In-play gate:** write the structured output to a dedicated column and run only where it's still empty — or where a refreshed-at timestamp is older than the cadence — since `instruct` bills a flat 1 per row on every re-evaluation.
+- **Keep `depth: "standard"` in recurring nodes** — the deep-by-default trap above compounds on a schedule.
 
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"linkup","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"linkup","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**
 
 ## Pairs with
 

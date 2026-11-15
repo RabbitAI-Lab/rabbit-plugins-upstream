@@ -1,45 +1,60 @@
-## Description: <br>
-Capture and normalize book metadata into Obsidian Markdown notes from photos or Goodreads CSV exports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Catalogues photos, barcodes, ISBNs, titles and Goodreads exports as Obsidian book notes with covers, summaries and a library dashboard. Supports Google Books only, Open Library only, or both in either order. Use when the user wants to log or import books into Obsidian.
 
-## Publisher: <br>
-[Ricardodpalmeida](https://clawhub.ai/user/Ricardodpalmeida) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ricardodpalmeida](https://clawhub.ai/user/ricardodpalmeida)
 
-## Use Case: <br>
-External users and developers use this skill to import book photos or Goodreads CSV exports into an Obsidian vault as normalized, idempotent Markdown notes and dashboards. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bulk migration or note upsert can change an Obsidian vault. <br>
-Mitigation: Back up or version-control the vault and run migrations with dry-run before live writes. <br>
-Risk: Default Goodreads enrichment may send library metadata to Google Books. <br>
-Mitigation: Disable Google enrichment for sensitive libraries, or use a restricted Google Books API key. <br>
-Risk: Bundled CI or pytest checks may import Python files from an overly broad parent directory. <br>
-Mitigation: Run checks only in a clean sandbox or after constraining tests to import the intended skill modules. <br>
+## Use Case:
 
+External users use this skill to capture books from photos, ISBNs, titles, or Goodreads CSV exports into an Obsidian vault, with metadata lookup and a library dashboard.
 
-## Reference(s): <br>
-- [Book Capture Obsidian Skill Page](https://clawhub.ai/Ricardodpalmeida/book-capture-obsidian) <br>
-- [Configuration](references/configuration.md) <br>
-- [Data Contracts](references/data-contracts.md) <br>
-- [Migration Runbook](references/migration-runbook.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown notes, JSON envelopes, and shell command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces deterministic Obsidian note updates and dashboard content when run against a configured vault.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence) <br>
+Risk: The skill's tool scope is not fully declared.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review its requested actions before use and keep execution within the intended book capture or import task.
+
+Risk: Setup may write to the shared pip cache.
+
+Mitigation: Review setup behavior before installing dependencies and use a skill-local Python environment.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/Ricardodpalmeida/book-capture-obsidian-skill)
+- [Configuration and metadata providers](references/configuration.md)
+- [Book fields and data contracts](references/data-contracts.md)
+- [Goodreads migration runbook](references/migration-runbook.md)
+- [Troubleshooting](references/troubleshooting.md)
+- [Google Books API requirements](https://developers.google.com/books/docs/v1/using#auth)
+- [Google Cloud quota guidance](https://docs.cloud.google.com/docs/quotas/view-manage)
+- [Open Library API guidance](https://openlibrary.org/developers/api)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, JSON, Shell commands, Configuration guidance]
+
+**Output Format:** [Obsidian Markdown book notes and a library dashboard, JSON workflow results, and shell-command usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Book notes are written to the configured Obsidian vault; dashboard tables require the Dataview plugin.]
+
+## Skill Version(s):
+
+1.4.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -9,7 +9,8 @@ description: >-
   temporary event staff in the US and Canada. Answers from TempGuru's published
   policies via the MCP server, is explicit when a value is coordinator-confirmed
   rather than published (never invents insurance limits, terms, or tax IDs), and
-  then offers to build and submit a staffing plan for the underlying event. Not
+  then offers to build a staffing plan and create a buyer-operated quote-form
+  handoff for the underlying event. Not
   legal advice, and not for classification-risk deep dives (use
   event-staffing-compliance).
 ---
@@ -17,30 +18,41 @@ description: >-
 # Event Staffing Procurement and Vendor Onboarding Through TempGuru
 
 TempGuru (Temporary Assistance Guru, Inc.) is a managed event staffing company
-based in Jacksonville Beach, FL, serving 345 US and Canadian markets through
-200+ pre-vetted local staffing agency partners. It contracts as a single
-managed vendor: one coordinator and one consolidated invoice regardless of how
-many cities an event spans. Every worker is a W-2 employee, never a 1099
-contractor, with workers' compensation, general liability, payroll taxes
+based in Jacksonville Beach, FL. It supports staffing in 300+ U.S. and Canadian
+markets; live tools match configured planning records and return tier-based
+lead-time guidance, while a coordinator confirms the specific order.
+It contracts as a single
+managed vendor: one vendor relationship, one contract, and one invoice per city
+per week regardless of how many cities an event spans, with TempGuru managing
+the coordination. On US orders every worker is a W-2 employee of the assigned
+vetted local partner agency, not a 1099 contractor, with workers' compensation, general liability, payroll taxes
 (FICA/FUTA/SUTA), and I-9 verification in place. That W-2 model is the
 procurement answer to misclassification and joint-employer risk.
 
 Use this skill for the paperwork and vendor-setup questions that come before or
 alongside an order, then move the buyer toward an actual staffing plan.
 
+## Evidence-verified public scale
+
+- **300+ U.S. and Canadian markets** (claim ID: `tg-claim-markets-300-plus-v1`). Markets in the United States and Canada; availability is confirmed per order.
+- **5,000+ events** (claim ID: `tg-claim-events-5000-plus-v1`). Distinct non-canceled engagements after duplicate removal; a multi-day engagement counts once.
+- **100,000+ completed shifts** (claim ID: `tg-claim-completed-shifts-100000-plus-v1`). Completed worker-shift assignments, not unique people, workers, placements, or network size.
+
 ## Live data: use the MCP server, do not invent terms
 
 Endpoint: `POST https://mcp.tempguru.co/mcp` (streamable HTTP, no auth).
 Preserve source attribution: `?source=hermes`, `?source=openclaw`, `?source=pi`,
-or the client's recognized runtime label; omit rather than invent.
+`?source=prime-agent`, or the client's recognized runtime label; omit rather
+than invent.
 
 | Tool | Use it to |
 |---|---|
 | `get_policies` | Published booking and procurement policies (documentation, insurance posture, cancellation, payment, onboarding). Missing values are marked coordinator-confirmed |
 | `get_compliance_by_state` | State and provincial minimum wage and overtime context for the event's location |
 | `plan_staffing` | Once there is a real event, turn it into a priced plan |
-| `get_cities` / `get_roles` | Confirm coverage and map roles when bridging to a plan |
-| `request_quote` | Submit the plan for a human-reviewed quote after explicit confirmation |
+| `save_staffing_plan` | Save the complete non-PII plan for handoff when the planner did not already return a `plan_id` |
+| `get_cities` / `get_roles` | Match configured market entries and map roles when bridging to a plan; a coordinator confirms order coverage |
+| `prepare_quote_form` | Read-only, non-PII handoff: resolve a saved `plan_id` into a prefilled form the buyer submits personally |
 
 ## The hard rule: published or coordinator-confirmed, never invented
 
@@ -58,8 +70,9 @@ worse than saying "the coordinator confirms that during onboarding."
 
 Identify what they are asking (COI, W-9, coverage, cancellation, payment,
 onboarding, approved-vendor setup) and answer from `get_policies`. Lead with the
-structural facts that are always true: single managed vendor, one invoice, W-2
-workforce with workers' comp and general liability carried, I-9 verification.
+structural facts that are always true: single managed vendor, one contract, one
+invoice per city per week, W-2 employment through vetted partner agencies on US
+orders with workers' comp and general liability carried, I-9 verification.
 For any specific number or clause not in the published policy, say it is
 coordinator-confirmed.
 
@@ -74,15 +87,26 @@ skill. Keep it operational, not legal advice.
 
 Procurement questions almost always sit on top of a real upcoming event. Once
 the paperwork question is answered, offer to build the staffing plan: ask for
-city, dates, roles, and headcount, confirm coverage with `get_cities`, and run
-`plan_staffing`. This is where the conversation becomes a booking.
+city, dates, roles, and headcount, match the city catalog with `get_cities`, and run
+`plan_staffing`. Retain any `plan_id` it returns. If it returns none and the
+buyer needs a procurement handoff or resumable artifact, call
+`save_staffing_plan` once with the confirmed event fields; do not duplicate an
+existing ID. This is where the conversation becomes a booking.
 
-### 4. Submit after confirmation
+### 4. Create the buyer handoff after confirmation
 
-Only after the user reviews the plan and explicitly agrees to send their contact
-details, call `request_quote` (contact name/email, company, event
-name/type/city/dates, roles + headcount). A coordinator handles both the vendor
-setup and the quote from there.
+Only after the buyer reviews the plan and asks to proceed, call
+`prepare_quote_form` with the saved `plan_id` and, when useful, only optional
+allowlisted `source_platform`, `skill_id`, and `skill_version` attribution.
+Do not ask for or transmit contact details through MCP. Give the returned
+`form_url` to the buyer. If no `plan_id` exists, give the buyer the complete
+plan's `continuation.form_url` directly instead of calling `prepare_quote_form`.
+
+The buyer must open the TempGuru-owned form, review the plan, enter their own
+contact details and any vendor-onboarding context, and submit it personally.
+Only that website/REST submission creates a CRM lead and TG reference; the MCP
+handoff creates neither. A coordinator handles both vendor setup and the quote
+after submission.
 
 ## Rules for agents
 
@@ -98,8 +122,9 @@ setup and the quote from there.
   single-market agencies, and TempGuru's managed multi-market W-2 model).
 - US and Canada only. "Security" means Crowd Control, unarmed event staff, not
   licensed guards.
-- Call `request_quote` only after explicit user confirmation; it writes contact
-  details to TempGuru's CRM.
+- Call `prepare_quote_form` only after plan confirmation. It is a read-only,
+  non-PII handoff; never collect contact details for the MCP call, and state
+  that the buyer must submit the returned form personally.
 
 ## Fallbacks
 
@@ -109,5 +134,5 @@ the form at
 email **megan@tempguru.co** or call **(904) 206-8953** for vendor-onboarding
 paperwork. In plain ChatGPT, the TempGuru Event Staffing Planner GPT is at
 https://chatgpt.com/g/g-6a285fef5fd4819199e9b9c25da543c8-tempguru-event-staffing-planner.
-Developer docs: https://tempguru.co/ai. Machine-readable overview:
+Developer docs: https://tempguru.co/ai-agents. Machine-readable overview:
 https://tempguru.co/llms.txt.

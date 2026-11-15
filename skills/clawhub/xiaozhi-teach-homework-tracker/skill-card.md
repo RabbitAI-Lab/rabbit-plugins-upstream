@@ -1,48 +1,53 @@
-## Description: <br>
-作业跟进管家 helps independent teachers manage the full homework lifecycle from assignment tracking through completion status, error reflow, persistent weakness flags, next-lesson diagnosis, and student homework profiles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮独立教师记录课上练习和学员带来的学校作业、整理错因与完成状态，并据此准备下一节课的关注重点。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Independent teachers use this skill to track homework status, route errors back into teaching decisions, and prepare next-lesson diagnostic guidance from homework evidence. The skill supports pseudonymous student records and coordinates with related teaching workspace skills for assignment design, student analysis, lesson logs, dashboards, and parent communication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Homework tracking can expose student privacy if real names, contact details, full answers, or family supervision details are entered. <br>
-Mitigation: Use pseudonymous records, avoid unnecessary sensitive details, and confirm workspace consent settings before profile creation or cross-skill sharing. <br>
-Risk: Automated homework chasing or grading could create inappropriate teacher, student, or parent interactions. <br>
-Mitigation: Keep reminder and parent-contact actions teacher-led, and keep scoring decisions with the teacher rather than the skill. <br>
-Risk: Shared workspace records can carry incorrect or overly sensitive status information into other teaching workflows. <br>
-Mitigation: Record only low-sensitivity progress fields and use the documented view, correct, delete, pause-recording, and cross-skill sharing controls when records need adjustment. <br>
+## Use Case:
 
+独立教师用它跟踪课上练习和学员带来的学校作业、考试错题，归纳可跟进的错因，并整理下一节课的教学关注点。它保留判分和面向学员或家长的沟通给老师处理。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-homework-tracker) <br>
-- [作业状态追踪模板](references/homework-status-template.md) <br>
-- [作业完成度追踪视图模板](references/completion-tracking-views.md) <br>
-- [错题回流清单模板](references/error-reflow-checklist-template.md) <br>
-- [顽固弱项档案模板](references/persistent-weakness-file-template.md) <br>
-- [下节课预诊断输出模板](references/pre-diagnosis-output-template.md) <br>
-- [学员作业画像模板](references/student-homework-profile-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Configuration, Guidance] <br>
-**Output Format:** [Markdown reports and structured workspace update guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses templates for homework status, completion tracking, error reflow, pre-diagnosis, persistent weakness records, and student homework profiles.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: ClawScan reports two moderate scope mismatches, and Skillspector coverage is partial because three local references could not be resolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the reported scope mismatches and check the unresolved references before installing; the benign verdict has medium confidence and the evidence is incomplete.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-homework-tracker)
+- [错误原因词表与弱项阈值](artifact/shared/vocab.md)
+- [完成度追踪视图模板](artifact/references/completion-tracking-views.md)
+- [错题回流清单模板](artifact/references/error-reflow-checklist-template.md)
+- [危机例外处置](artifact/shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration]
+
+**Output Format:** [Text summaries and Markdown reports, with structured workspace fields represented in JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses aliases and records completion status, error dimensions, knowledge points, and follow-up actions; does not store assignment text or answers.]
+
+## Skill Version(s):
+
+2.12.7 (source: frontmatter, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

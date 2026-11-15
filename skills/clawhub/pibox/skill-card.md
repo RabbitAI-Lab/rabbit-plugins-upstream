@@ -1,48 +1,64 @@
-## Description: <br>
-pibox lets agents and developers run pi-coding-agent in a Docker container through shell, REST, OpenAI-compatible chat, MCP, Telegram, or cron interfaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Install, configure, or run pi-coding-agent through the pibox wrapper, or connect to its HTTP, MCP, Telegram, or cron surfaces.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and automation teams use pibox to expose pi-coding-agent as a containerized coding agent that can be driven from scripts, HTTP clients, OpenAI-compatible clients, MCP-aware agents, Telegram, or scheduled cron jobs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unauthenticated API or MCP surfaces can allow remote agent execution and workspace file access when bearer tokens are empty. <br>
-Mitigation: Set non-empty API and MCP bearer tokens, bind services to localhost, or place them behind an authenticating proxy. <br>
-Risk: Workspace mounts expose files to the coding agent and to network surfaces enabled by the deployment. <br>
-Mitigation: Mount only the workspace intended for agent access and avoid shared unauthenticated deployments. <br>
-Risk: Delete and cancel routes can remove files or interrupt runs without undo. <br>
-Mitigation: Treat delete and cancel actions as admin-only operations and confirm the specific target before use. <br>
+## Use Case:
 
+Developers use pibox to run pi-coding-agent in a workspace interactively or for one-off tasks, and to expose it through HTTP, OpenAI-compatible, MCP, Telegram, or scheduled interfaces.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/pibox) <br>
-- [Publisher profile](https://clawhub.ai/user/psyb0t) <br>
-- [Setup reference](references/setup.md) <br>
-- [docker-pibox repository](https://github.com/psyb0t/docker-pibox) <br>
-- [pi-coding-agent](https://github.com/earendil-works/pi-mono/tree/main/packages/coding-agent) <br>
-- [docker-aicodebox](https://github.com/psyb0t/docker-aicodebox) <br>
-- [Model Context Protocol](https://modelcontextprotocol.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline code blocks, shell commands, JSON examples, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides setup and use of a high-power networked coding-agent surface; generated commands and configuration should be reviewed before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.15.3 (source: server release evidence) <br>
+Risk: The setup guide installs a host wrapper by piping a remote installer directly to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and verify its source before running it on the host.
+
+Risk: Examples use mutable container image tags and host networking.
+
+Mitigation: Pin a reviewed image digest and restrict network exposure to the required interfaces and ports.
+
+Risk: An unset API or MCP token leaves the corresponding agent and workspace access unauthenticated.
+
+Mitigation: Set explicit API and MCP bearer tokens and limit access to trusted clients.
+
+Risk: A Telegram bot with an empty or missing chat allowlist responds to every chat.
+
+Mitigation: Configure and verify an explicit allowed_chats list before enabling the bot.
+
+## Reference(s):
+
+- [Setup and configuration guide](artifact/references/setup.md)
+- [pibox project homepage](https://github.com/psyb0t/docker-pibox)
+- [pi-coding-agent](https://github.com/earendil-works/pi-mono/tree/main/packages/coding-agent)
+- [aicodebox container project](https://github.com/psyb0t/docker-aicodebox)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions, API calls]
+
+**Output Format:** [Markdown with inline shell commands, configuration examples, and API examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Usage depends on Docker, a configured LLM endpoint, and a target workspace.]
+
+## Skill Version(s):
+
+0.21.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

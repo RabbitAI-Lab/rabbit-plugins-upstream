@@ -1,43 +1,52 @@
-## Description: <br>
-Run AEO audits, preview branch audits, changed-page sitemap audits, local/private preview audits with explicit opt-in, sitemap origin rewriting, static-output audits, regression comparisons, site fixes, schema validation, and llms.txt generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Renamed to agent-readiness. This skill no longer runs audits; it tells the user how to install the agent-readiness skill that replaces it.
 
-## Publisher: <br>
-[arberx](https://clawhub.ai/user/arberx) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[arberx](https://clawhub.ai/user/arberx)
 
-## Use Case: <br>
-Developers, site owners, and marketing teams use Aeo to audit public, staging, local, or static websites for answer-engine optimization, schema quality, AI access files, and regressions, then generate prioritized fixes and related files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run a networked npm audit tool against public, staging, localhost, private, or static site targets. <br>
-Mitigation: Audit local or private targets only for systems the user controls, and require explicit opt-in before using local/private access. <br>
-Risk: The skill can propose or apply AEO-related file and code changes. <br>
-Mitigation: Review proposed fixes before allowing writes, preserve existing site behavior, and rerun the audit when practical. <br>
-Risk: Untrusted target URLs, paths, or flags could make shell execution unsafe if passed through directly. <br>
-Mitigation: Validate URLs or local paths, quote each argument, pass flags as literal tokens, and reject shell metacharacters or newlines. <br>
+## Use Case:
 
+Developers use this legacy skill to find the replacement agent-readiness skill and learn how to install it or run an audit from the command line.
 
-## Reference(s): <br>
-- [Aeo homepage](https://ainyc.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/arberx/skills/aeo) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown summaries with JSON or agent-format audit results, shell commands, code/configuration changes, and generated llms.txt or robots.txt files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call a networked npm audit tool and may write llms.txt, llms-full.txt, or robots.txt when the user requests generation or fixes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.0 (source: server release metadata) <br>
+Risk: A user may expect this legacy skill to run an audit even though it only explains the rename.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install agent-readiness from ClawHub or run npx @canonry/agent-readiness@8 with the target URL.
+
+## Reference(s):
+
+- [agent-readiness on ClawHub](https://clawhub.ai/arberx/skills/agent-readiness)
+- [agent-readiness changelog](https://github.com/Canonry/agent-readiness/blob/main/CHANGELOG.md#800-2026-11-07)
+- [agent-readiness project](https://github.com/Canonry/agent-readiness)
+- [Canonry homepage](https://canonry.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Shell commands]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Migration and installation instructions; does not perform audits.]
+
+## Skill Version(s):
+
+7.6.3 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

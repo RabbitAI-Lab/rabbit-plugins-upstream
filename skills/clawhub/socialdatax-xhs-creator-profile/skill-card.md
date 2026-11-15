@@ -1,42 +1,56 @@
-## Description: <br>
-用于小红书博主数据、小红书博主信息、账号资料、达人画像、主页信息和粉丝规模查询，覆盖 Xiaohongshu / XHS / RedNote creator profiles，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于小红书博主数据、小红书博主信息、账号资料、达人画像、主页信息和粉丝规模查询。覆盖 Xiaohongshu / XHS / RedNote creator profiles，来自 SocialDataX 社媒数据助手。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+用户可使用此技能，按小红书博主的用户 ID、主页链接或分享文本查询账号资料和受众规模。它返回可用的个人资料字段，便于将资料事实与后续分析分开。
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill uses a changeable CLI package for local authentication and lookups, creating supply-chain risk.
+
+Mitigation: Review the CLI package and version before installing or using the skill.
+
+Risk: Profile identifiers or URLs are sent to SocialDataX for lookup.
+
+Mitigation: Consider whether you are comfortable sharing the supplied identifiers or URLs with SocialDataX.
+
+Risk: The security scan was partial because two local references could not be resolved, so its evidence is incomplete.
+
+Mitigation: Review the skill and package before use, taking the incomplete scan evidence into account.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External users and agents use this skill to look up Xiaohongshu / XHS / RedNote creator profile facts through SocialDataX, including account basics, creator positioning, audience scale, and profile metadata. It is intended for read-only profile information retrieval using the user's SocialDataX API key. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [API Calls, JSON, Text]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends lookup requests through the SocialDataX npm package using the user's SOCIALDATAX_API_KEY. <br>
-Mitigation: Install only if you trust the SocialDataX package and provide only an API key intended for these read-only lookups. <br>
-Risk: API errors, malformed profile links, or insufficient account balance can prevent profile data retrieval. <br>
-Mitigation: Check the API key, request parameters, and returned error message; avoid repeated retries on insufficient-balance errors and use the recharge URL returned by the service. <br>
+**Output Format:** [JSON profile data with a concise text summary]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-xhs-creator-profile) <br>
-- [SocialDataX API access page](https://socialdatax.com/ai?from=clawhub) <br>
-- [Publisher profile](https://clawhub.ai/user/devinchen2014) <br>
+**Other Properties Related to Output:** [Available profile fields depend on the service response; keep profile facts separate from strategic interpretation.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, API calls] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY and node/npm; reports available creator profile fields while separating profile facts from strategic interpretation.] <br>
+0.1.19 (source: server-resolved release metadata)
 
-## Skill Version(s): <br>
-0.1.14 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
