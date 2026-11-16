@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/garrytan/gstack/tree/main/verify",
+  "identifier": "garrytan/gstack/verify",
+  "repo": "garrytan/gstack",
+  "path": "verify",
+  "branch": "main",
+  "pushedAt": "2026-11-16T16:34:00Z",
+  "contentHash": "d214de96a2040147bca42cbcba0da37ee6b956b6969a9d586eb83d5bc6029e29",
+  "fetchedAt": "2026-11-16T17:07:24.297Z"
+}
