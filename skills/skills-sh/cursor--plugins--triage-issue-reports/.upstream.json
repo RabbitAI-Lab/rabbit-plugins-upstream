@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/triage-issue-reports",
+  "repo": "cursor/plugins",
+  "skillId": "triage-issue-reports",
+  "branch": "main",
+  "pushedAt": "2026-11-17T09:50:31Z",
+  "contentHash": "7a84d5e2774dcaa268df75fbbbb70049e8e3fbd5110a9ae4ff4e29508ee77e78",
+  "fetchedAt": "2026-11-17T16:56:33.418Z"
+}
