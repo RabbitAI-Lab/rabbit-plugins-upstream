@@ -1,45 +1,54 @@
-## Description: <br>
-Manages persistent OpenClaw startup hooks that run inline commands, local shell or Python scripts, or downloaded URL packages across gateway, pod, and container restarts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage persistent startup hooks for OpenClaw containers and hosts, including inline commands, local scripts, and CDN-hosted archives.
 
-## Publisher: <br>
-[songhonglei](https://clawhub.ai/user/songhonglei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[songhonglei](https://clawhub.ai/user/songhonglei)
 
-## Use Case: <br>
-Developers and OpenClaw agent operators use this skill to install, manage, test, and audit startup hooks that should persist across restarts or rebuilds. It is intended for initialization, configuration repair, credential restoration, and other boot-time workspace setup tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent startup hooks can run arbitrary code on every OpenClaw boot. <br>
-Mitigation: Install only when persistent boot-time execution is intended, review each hook before enabling it, and audit post-init.sh, start.sh, and workspace/.init-hooks during removal or incident review. <br>
-Risk: Remote URL hooks can download and execute code from external sources. <br>
-Mitigation: Avoid remote URL hooks unless the source is fully trusted and pinned; prefer reviewed local scripts for sensitive initialization tasks. <br>
-Risk: Credential-restoration or configuration hooks can affect sensitive local state. <br>
-Mitigation: Review credential-handling scripts carefully before use and verify openclaw.json changes and sync targets after execution. <br>
+## Use Case:
 
+OpenClaw developers and operators use this skill to register, manage, test, and review scripts that run during startup, and to keep explicitly changed configuration synchronized to configured persistence paths.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/songhonglei/skills/init-hooks) <br>
-- [README.md](README.md) <br>
-- [SKILL.md](SKILL.md) <br>
-- [Hook authoring best practices](references/best-practices.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, Python command examples, and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operational instructions for managing persistent startup hooks; it may also direct the agent to run bundled management scripts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact documentation) <br>
+Risk: ClawScan rates this release suspicious with medium confidence, citing a mismatch between stated limits and a preset configuration path plus broad triggers and execution capabilities; its analysis is partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review startup behavior, downloaded hooks, and configuration paths, and inspect or limit what runs before installing.
+
+Risk: Configured inline commands, local scripts, and downloaded URL hooks can run during startup.
+
+Mitigation: Use only hooks you trust, inspect their contents and effects, and require a matching SHA-256 for downloaded archives unless you explicitly accept the documented unverified exception.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/songhonglei/skills/init-hooks)
+- [Best practices](references/best-practices.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Examples may operate startup hooks and user-selected configuration paths.]
+
+## Skill Version(s):
+
+1.0.4 (source: README changelog, released 2026-11-14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

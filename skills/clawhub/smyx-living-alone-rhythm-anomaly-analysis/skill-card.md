@@ -1,47 +1,55 @@
-## Description: <br>
-Analyzes indoor night video from a fixed camera to detect lights-off timing and early-morning movement, compare them against a 7-14 day personal baseline, and produce a sleep-rhythm anomaly reminder for a person living alone. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes overnight bedroom or living-room video to estimate lights-off time and early-morning movement, compare them with a 7–14 day personal baseline, and report possible sleep-rhythm anomalies.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External caregivers, family members, community workers, and developers use this skill to analyze consented night video for deviations from an individual sleep-rhythm baseline. It supports structured reports and follow-up reminders, not medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill processes highly sensitive indoor night video through cloud services. <br>
-Mitigation: Use only with explicit consent from the monitored person or authorized guardian, confirm where video is sent, and avoid submitting footage unless the cloud processing path is acceptable. <br>
-Risk: Historical reports and export links may expose sensitive health, behavior, or home-environment information. <br>
-Mitigation: Limit access to report links, define retention expectations before deployment, and periodically remove reports that are no longer needed. <br>
-Risk: The skill silently creates or reuses local identity and token state. <br>
-Mitigation: Review how the local identity/token database is stored, clear it between users or environments, and restrict filesystem access for shared machines. <br>
-Risk: Sleep-rhythm anomaly output can be mistaken for a medical conclusion. <br>
-Mitigation: Present results as visual activity and baseline-deviation signals only, and route concerning patterns to family, community staff, or clinicians for human follow-up. <br>
+## Use Case:
 
+Family members and community care workers use it to review a person living alone’s overnight routine and follow up when changes from their baseline suggest a need to check in. It reports visual routine indicators and does not provide medical diagnoses.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-living-alone-rhythm-anomaly-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON-like structured analysis text with optional report links and saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can query historical report lists and can write the returned analysis text to a user-specified output path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Overnight camera footage is highly sensitive, and the security assessment rates this release suspicious, citing video handling, account and credential activity, and behavior that may continue despite export-only options; the scan was partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain informed consent and limit footage exposure; review upload destinations, HTTP configuration, account registration, and export-only behavior before installation or use with real footage or credentials.
+
+Risk: A change in sleep timing or overnight movement can be mistaken for a health problem.
+
+Mitigation: Treat alerts as prompts for a personal check-in, consider ordinary causes and repeated patterns, and do not use the report as a medical diagnosis.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-living-alone-rhythm-anomaly-analysis)
+- [Skill introduction](https://lifeemergence.com/sample.html)
+- [API reference](artifact/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured JSON analysis with Markdown summaries and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include lights-off time, early-morning activity metrics, baseline comparisons, anomaly categories, and follow-up suggestions; no medical diagnosis.]
+
+## Skill Version(s):
+
+1.0.16 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

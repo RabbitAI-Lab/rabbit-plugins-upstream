@@ -1,42 +1,54 @@
-## Description: <br>
-Manages context overflow by handing off to a fresh subagent at 80% usage. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages context overflow by handing off to a fresh subagent at 80% usage
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and coding agents use this skill to preserve task state and continue long-running work when context pressure reaches critical levels. It is intended for context handoffs that save a session checkpoint, delegate continuation to a fresh subagent, and resume work with documented state. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Continuation agents may preserve unattended or dangerous execution modes and continue work without fresh user confirmation. <br>
-Mitigation: Install only when automated context handoffs are intentional, and rely on runtime approval checks for destructive or public side effects. <br>
-Risk: Session checkpoints may expose sensitive task context if used in repositories or sessions containing secrets, credentials, or sensitive business plans. <br>
-Mitigation: Avoid using the skill on sensitive sessions unless the runtime and repository policies prevent secret capture and restrict access to checkpoint files. <br>
+## Use Case:
 
+Developers use this skill when a long-running task approaches context limits to checkpoint progress and hand continuation to a fresh agent.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/athola/skills/nm-conserve-clear-context) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/athola) <br>
-- [Source homepage from metadata](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Configuration, Shell commands] <br>
-**Output Format:** [Markdown with inline code blocks and checkpoint templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces agent handoff instructions, session-state templates, threshold guidance, and environment variable configuration notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Handoff guidance can carry forward settings that suppress permission checks and confirmations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review inherited execution settings and require normal permission and confirmation checks before a continuation agent acts.
+
+Risk: Security analysis is incomplete because some local references could not be resolved.
+
+Mitigation: Resolve and review the referenced modules, then rerun a complete security scan before installation.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-conserve-clear-context)
+- [Plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown session-state checkpoint and continuation instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May hand off task continuation to a fresh agent.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

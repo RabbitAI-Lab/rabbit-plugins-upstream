@@ -1,43 +1,51 @@
-## Description: <br>
-A professional pipeline for building everything from a core mark to a complete brand visual system, ensuring creative quality, execution consistency, and shippable delivery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A professional pipeline for building everything from a core mark to a complete brand visual system, ensuring creative quality, execution consistency, and shippable delivery.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, designers, and creative agents use this skill to plan and execute a stepwise logo and brand identity workflow, from requirement gathering through core mark design, derivatives, and brand system delivery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and referenced local media files may be sent to dLazy's cloud service. <br>
-Mitigation: Avoid submitting sensitive brand assets unless cloud processing is acceptable for the project. <br>
-Risk: The dLazy CLI can save an API key under ~/.dlazy/config.json. <br>
-Mitigation: Use npx or DLAZY_API_KEY for temporary use, and rotate or revoke keys when they are no longer needed. <br>
+## Use Case:
 
+Brand designers, creative teams, and marketers use this skill to plan a logo and develop consistent visual identity assets. It guides concept review and iterative creation of logo variants and brand applications.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-logo-branding-system) <br>
-- [dLazy CLI Homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands, phased design rationale, confirmation prompts, and generated asset URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Stepwise execution with user confirmation before image generation and downstream brand derivatives.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.3 (source: frontmatter and server release evidence) <br>
+Risk: The workflow uses a third-party CLI and authentication, and its security review had partial coverage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI package and authentication flow before installing, and send brand materials to dLazy-hosted services only when approved for external processing.
+
+## Reference(s):
+
+- [dLazy CLI repository (metadata link; release provenance unavailable)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Images, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance and generated image assets, with shell commands or configuration instructions when needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Progressive, phase-confirmed workflow; generated assets can include logo variants and brand identity applications.]
+
+## Skill Version(s):
+
+1.2.37 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

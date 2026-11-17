@@ -1,45 +1,55 @@
-## Description: <br>
-Runs dLazy's HeyGen Lipsync Speed workflow through the dLazy CLI for fast lip-sync generation from user-supplied media. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides access to HeyGen Lipsync Speed for fast lip-sync generation.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to run a hosted lip-sync generation workflow when rapid video and audio synchronization is needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The dLazy CLI stores an API key in a local user configuration file when authenticated. <br>
-Mitigation: Use per-invocation DLAZY_API_KEY where appropriate, and rotate or revoke organization keys from the dLazy dashboard if access changes. <br>
-Risk: Video and audio inputs supplied to the command are uploaded to dLazy's hosted service for processing. <br>
-Mitigation: Confirm the selected media is appropriate for third-party cloud processing before invoking the skill. <br>
-Risk: A persistent global install adds a pinned third-party CLI binary to the user's environment. <br>
-Mitigation: Use the pinned npx invocation when a temporary execution path is preferred. <br>
+## Use Case:
 
+Developers and creators use the skill to submit video and audio for rapid lip synchronization, with optional captions, speech enhancement, and duration adjustment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-heygen-lipsync-speed) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files] <br>
-**Output Format:** [JSON with generated media URLs or async task status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted files.dlazy.com media URLs; async mode returns a generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: frontmatter and server release evidence) <br>
+Risk: The scan verdict is benign with medium confidence; Skillspector reported a mismatch between the advertised lip-sync purpose and visible authentication-focused content, and its inspection was partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the installed CLI and lip-sync command match the intended use before relying on the skill.
+
+Risk: Video and audio supplied as local paths are uploaded to dLazy media storage, and authentication stores an API key in the user's CLI configuration.
+
+Mitigation: Use media you are authorized to upload, protect the API key, and rotate or revoke it if exposed.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-heygen-lipsync-speed)
+- [dLazy](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Generated media, JSON]
+
+**Output Format:** [JSON containing generated media URLs or asynchronous task status]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media can be downloaded to a local path; asynchronous requests may first return a task ID.]
+
+## Skill Version(s):
+
+1.3.44 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

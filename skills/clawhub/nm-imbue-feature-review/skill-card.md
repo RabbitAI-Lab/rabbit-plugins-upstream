@@ -1,47 +1,55 @@
-## Description: <br>
-Scores backlog items with RICE/WSJF/Kano and files GitHub issues for top candidates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scores backlog items with RICE/WSJF/Kano and files GitHub issues for top candidates.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and product teams use this skill to inventory implemented features, score roadmap or backlog items with RICE, WSJF, and Kano criteria, identify gaps, and prepare prioritized suggestions or GitHub issues. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may run a local deferred-capture script for skipped high-scoring suggestions without a separate prompt. <br>
-Mitigation: Install it only in repositories where the deferred-capture script is understood, and review or disable deferred capture before using suggestion workflows. <br>
-Risk: The issue creation workflow can publish recommendations to GitHub when --create-issues is used. <br>
-Mitigation: Use --create-issues only after reviewing accepted suggestions, labels, target repository permissions, and any local backlog persistence. <br>
+## Use Case:
 
+Developers and product teams use the skill during roadmap reviews, sprint planning, and retrospectives to inventory features, compare priorities, analyze tradeoffs, and propose backlog items. It can prepare GitHub issues for suggestions the user accepts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-feature-review) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
-- [Classification System](modules/classification-system.md) <br>
-- [Configuration](modules/configuration.md) <br>
-- [Multi-Metric Evaluation Methodology](modules/multi-metric-evaluation-methodology.md) <br>
-- [Research Enrichment](modules/research-enrichment.md) <br>
-- [Scoring Framework](modules/scoring-framework.md) <br>
-- [Tradeoff Dimensions](modules/tradeoff-dimensions.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown tables, suggestion reports, GitHub issue drafts, shell commands, and YAML configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can optionally enrich scores with research evidence and can create GitHub issues when the user selects that workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: External research may share project details, and skipped suggestions may be stored automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Consider privacy needs before using external research. Review the capture script's behavior and storage destination before allowing automatic capture; the supplied scan was incomplete and left that script unresolved.
+
+## Reference(s):
+
+- [Claude Night Market plugin page (listed in skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/imbue)
+- [Classification system](modules/classification-system.md)
+- [Scoring framework](modules/scoring-framework.md)
+- [Multi-metric evaluation methodology](modules/multi-metric-evaluation-methodology.md)
+- [Tradeoff dimensions](modules/tradeoff-dimensions.md)
+- [Configuration](modules/configuration.md)
+- [Research enrichment](modules/research-enrichment.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration instructions, GitHub issue drafts]
+
+**Output Format:** [Markdown tables and recommendations, with optional issue content and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Research enrichment requires the tome plugin; the skill also requires the night-market.imbue:scope-guard configuration. Issue creation follows user confirmation.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

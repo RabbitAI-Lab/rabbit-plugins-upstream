@@ -1,39 +1,54 @@
-## Description: <br>
-Transforms project briefs into testable specifications with user stories and acceptance criteria for use after brainstorming and before planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Transforms project briefs into testable specifications with user stories and acceptance criteria. Use after brainstorming, before planning
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and project teams use this skill to turn project briefs and business requirements into implementation-ready specifications with acceptance criteria, scope boundaries, and validation strategy before planning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow may automatically continue into planning after the specification is saved. <br>
-Mitigation: Use --standalone or explicitly ask to stop after specification when only docs/specification.md is desired. <br>
+## Use Case:
 
+Product teams and developers use the skill after brainstorming to turn a project brief into a structured specification with user stories, testable acceptance criteria, scope boundaries, and validation guidance before planning.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-project-specification) <br>
-- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance] <br>
-**Output Format:** [Markdown specification document with checkpoint guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save docs/specification.md and continue into the planning phase unless run with --standalone or explicitly told to stop.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
+Risk: After specification quality checks pass, the skill automatically continues into project planning without waiting for confirmation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the completed specification and use a documented bypass condition or interrupt the workflow when planning should wait for a decision.
+
+Risk: The security review is partial because the scanner could not resolve several local path references.
+
+Mitigation: Inspect referenced workflows and dependencies before installation or use.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-attune-project-specification)
+- [Attune project homepage listed in skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/attune)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text, Guidance]
+
+**Output Format:** [Structured project specification in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include requirements, user stories, testable acceptance criteria, scope boundaries, and validation strategy.]
+
+## Skill Version(s):
+
+1.10.3 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -9,12 +9,13 @@
 <meta property="og:title" content="只管一个人的 CEO · 演示版（偷师 AI 大佬 EP01）">
 <meta property="og:description" content="Dario 把执行交给妹妹，你可以把执行交给 AI。一屏一镜、带动画的演示版。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23faf9f5'/%3E%3Ctext x='16' y='24' font-size='20' text-anchor='middle'%3E🧭%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800;900&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
+<!-- 字体自托管：本地预览用下方 @font-face；publish.py localize() 再注入 /fonts/ 思源子集。勿加第三方字体 CDN。 -->
 <style>
   @font-face{font-family:'Anthropic Sans';src:url('{{SKILL_DIR}}/assets/fonts/anthropicSans.woff2') format('woff2');font-weight:300 800;font-style:normal;font-display:swap;font-feature-settings:'dlig' 0}
   @font-face{font-family:'Anthropic Mono';src:url('{{SKILL_DIR}}/assets/fonts/anthropicMono.woff2') format('woff2');font-weight:300 800;font-style:normal;font-display:swap}
+  @font-face{font-family:'Noto Sans SC';src:url('/fonts/NotoSansSC-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'Noto Sans SC';src:url('/fonts/NotoSansSC-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+  @font-face{font-family:'Noto Serif SC';src:url('/fonts/NotoSerifSC.woff2') format('woff2');font-weight:600 900;font-style:normal;font-display:swap}
   :root{
     /* V2 米白编辑风（亮色，沿用偷师栏目视觉）：黏土主色 + 石板蓝对比 + 赭石类比 */
     --bg:#faf9f5;--surface:#ffffff;--surface2:#f4f2eb;--surfaceHi:#efece3;
@@ -286,7 +287,7 @@
     </div>
   </section>
 
-  <!-- 03 §1 一个数字 -->
+  <!-- 03 第1节 一个数字 -->
   <section class="slide" data-g="01">
     <div class="stage">
       <div class="sec-label an" style="--i:0">一个数字</div>
@@ -301,7 +302,7 @@
     </div>
   </section>
 
-  <!-- 04 §2 谁在管 -->
+  <!-- 04 第2节 谁在管 -->
   <section class="slide" data-g="02">
     <div class="stage">
       <div class="sec-label an" style="--i:0">那公司谁在管？</div>
@@ -324,7 +325,7 @@
     </div>
   </section>
 
-  <!-- 05 §3 为什么 -->
+  <!-- 05 第3节 为什么 -->
   <section class="slide" data-g="03">
     <div class="stage">
       <div class="sec-label an" style="--i:0">为什么这么干</div>
@@ -339,7 +340,7 @@
     </div>
   </section>
 
-  <!-- 06 §3 note -->
+  <!-- 06 第3节 note -->
   <section class="slide" data-g="03">
     <div class="stage">
       <div class="sec-label an" style="--i:0">管理学里的一句老话</div>
@@ -351,7 +352,7 @@
     </div>
   </section>
 
-  <!-- 07 §4 跟你的关系 -->
+  <!-- 07 第4节 跟你的关系 -->
   <section class="slide" data-g="04">
     <div class="stage">
       <div class="sec-label an" style="--i:0">这跟你有什么关系</div>
@@ -363,7 +364,7 @@
     </div>
   </section>
 
-  <!-- 08 §4 金句 -->
+  <!-- 08 第4节 金句 -->
   <section class="slide" data-g="04">
     <div class="stage">
       <div class="sec-label an" style="--i:0">本期核心论点</div>

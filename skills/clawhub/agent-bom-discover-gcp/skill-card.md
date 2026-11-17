@@ -1,42 +1,55 @@
-## Description: <br>
-Discovers GCP-hosted AI agent and MCP-relevant assets from operator-approved projects, emits canonical agent-bom inventory JSON, and can scan that inventory when requested. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover GCP-hosted AI agent and MCP-relevant assets from the operator's environment, emit canonical agent-bom inventory JSON, and scan it without giving agent-bom long-lived GCP credentials.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers, cloud engineers, and security reviewers use this skill to inventory Vertex AI, Cloud Run, Cloud Functions, GKE, and related agentic GCP infrastructure with operator-controlled credentials. It helps produce canonical agent-bom inventory and optional scan findings without handing agent-bom long-lived GCP credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Overbroad GCP credentials could expose more project inventory than intended. <br>
-Mitigation: Use read-only or short-lived GCP credentials, confirm the selected project, and avoid broad production credentials unless they are necessary for the inventory. <br>
-Risk: Inventory output may contain sensitive resource or environment metadata. <br>
-Mitigation: Write inventory only to an operator-selected path, review the JSON before sharing it, and rely on the skill's credential redaction behavior for credential-like values. <br>
+## Use Case:
 
+Developers and cloud security engineers use this skill to inventory AI and workload resources in operator-approved GCP projects, producing schema-valid agent-bom inventory JSON for optional local scanning.
 
-## Reference(s): <br>
-- [agent-bom GitHub repository](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-discover-gcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, json] <br>
-**Output Format:** [Markdown with bash command blocks and JSON file paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operator-selected inventory JSON and optional agent-bom scan findings JSON; credentials remain in the operator environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: ClawScan marks this release suspicious: its partial scan found a referenced local Python path missing from the bundle and references to credential paths.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, verify the missing Python example from a source you trust and review the skill's credential use and the permissions granted.
+
+Risk: The skill makes authenticated read-only calls to inventory resources in the configured GCP project.
+
+Mitigation: Use only operator-approved projects and scoped read-only credentials; keep private keys and tokens out of chat, and choose the inventory output path yourself.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/msaad00/skills/agent-bom-discover-gcp)
+- [agent-bom project homepage](https://github.com/koda-ai-studio/agent-bom)
+- [agent-bom on PyPI](https://pypi.org/project/agent-bom/)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown instructions and canonical JSON inventory files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Inventory is written to an operator-selected path; discovery is read-only, and scanning is optional.]
+
+## Skill Version(s):
+
+0.115.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

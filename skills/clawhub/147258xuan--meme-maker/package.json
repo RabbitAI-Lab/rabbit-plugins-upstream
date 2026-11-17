@@ -1,0 +1,10 @@
+{
+  "name": "meme-maker",
+  "version": "1.0.0",
+  "description": "Generate memes using web APIs",
+  "main": "index.js",
+  "scripts": {
+    "list": "node scripts/list-templates.js",
+    "generate": "node scripts/generate.js"
+  }
+}

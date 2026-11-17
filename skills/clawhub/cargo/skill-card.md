@@ -1,49 +1,64 @@
-## Description: <br>
-Routes agents to the right Cargo CLI skill and explains setup, workflows, UUID conventions, async polling, use cases, and common gotchas for Cargo workspaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Routes Cargo CLI tasks to the right Cargo skill and explains the shared setup, execution, and troubleshooting conventions.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and GTM operators use this router when working with Cargo CLI skills to choose the right capability skill, bootstrap workspaces, stitch tasks together, and manage Cargo workspace workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks agents to refresh tools and skills and may use lifecycle hooks that affect local tooling or session records. <br>
-Mitigation: Prefer the npm or OpenClaw install path, inspect any curl-to-shell installer before use, and confirm the active workspace before writes. <br>
-Risk: The skill can send session or report data to Cargo services when the user consents. <br>
-Mitigation: Ask before sharing, omit secrets and record-level data, and skip reporting when the user declines. <br>
-Risk: Cargo CLI access can affect workspace resources through token creation, deploys, removals, deletes, or paid actions. <br>
-Mitigation: Watch prompts carefully and require explicit user confirmation before sensitive, destructive, or paid operations. <br>
+## Use Case:
 
+Developers and agents use this entry point to choose the right Cargo skill, set up the CLI, and follow shared conventions for runs, batches, polling, and common failure modes.
 
-## Reference(s): <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Cargo skill on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo) <br>
-- [Glossary](references/glossary.md) <br>
-- [Interaction conventions](references/interaction.md) <br>
-- [Cargo CLI prerequisites](references/prerequisites.md) <br>
-- [End-to-end use cases](references/use-cases.md) <br>
-- [UUID flow between skills](references/uuid-flow.md) <br>
-- [Common gotchas](references/gotchas.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and CLI guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires @cargo-ai/cli and a Cargo account; Cargo commands generally return JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.15.0 (source: frontmatter and release evidence) <br>
+Risk: The security assessment reports unpinned install and update paths.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and update path, and confirm the package version before installing or updating.
+
+Risk: Diagnostic reports may disclose sensitive information.
+
+Mitigation: Review diagnostic report contents and obtain approval before submission.
+
+Risk: Run, batch, account, or workflow actions may go beyond the skill's routing purpose.
+
+Mitigation: Inspect the proposed action and its scope, and require approval before running it.
+
+## Reference(s):
+
+- [Cargo prerequisites](references/prerequisites.md)
+- [Cargo use cases](references/use-cases.md)
+- [Interaction conventions](references/interaction.md)
+- [Common gotchas](references/gotchas.md)
+- [Glossary](references/glossary.md)
+- [UUID flow](references/uuid-flow.md)
+- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills)
+- [Cargo ClawHub skill page](https://clawhub.ai/cargo-ai/skills/cargo)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown guidance with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.37.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

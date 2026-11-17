@@ -1,45 +1,55 @@
-## Description: <br>
-Dlazy Script To Video helps agents turn a script or scene breakdown into a storyboarded, shot-by-shot video workflow using the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+script to video, screenplay to video, shot list to video — turn a script into a storyboarded, shot-by-shot video: break down scenes, generate shots, assemble, validate. Use when the user gives a script or scene breakdown and wants a video.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and creative teams use this skill when they want an agent to start or continue dLazy storyboard projects that convert scripts, screenplay material, or shot lists into multi-shot video plans and generated video assets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends prompts and options to the external dLazy API. <br>
-Mitigation: Review prompts for sensitive information before use and only run the skill with an approved dLazy account and API key. <br>
-Risk: Files attached with --files are uploaded to dLazy media storage. <br>
-Mitigation: Attach only files that are approved for upload to dLazy and omit private or regulated content unless the user has confirmed it is permitted. <br>
-Risk: A global CLI install persists the dLazy package on the local system. <br>
-Mitigation: Use the pinned npx invocation when a temporary, non-global execution path is preferred. <br>
+## Use Case:
 
+Developers and creators use this skill to turn a script or scene breakdown into a storyboarded, multi-shot video, including character-consistent animation, audio, subtitles, and assembly.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-script-to-video) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and CLI guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May stream responses from the dLazy CLI and may reference uploaded user-provided files when the user explicitly attaches files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and ClawHub release evidence) <br>
+Risk: The security review had medium confidence and partial Skillspector coverage; it noted a purpose mismatch around CLI authentication setup and organization project listing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup and authentication instructions, inspect the whitespace-flagged section, and confirm you are comfortable configuring the CLI and listing organization projects before installing.
+
+Risk: Messages and any attached local files are sent to dLazy services; attached files are uploaded to its media storage.
+
+Mitigation: Review the service terms and avoid attaching material you do not want sent to the hosted service.
+
+## Reference(s):
+
+- [dLazy CLI repository](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Video files, Text, Guidance]
+
+**Output Format:** [Rendered video and CLI text responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Video generation runs through the dLazy storyboard project workflow.]
+
+## Skill Version(s):
+
+1.0.38 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

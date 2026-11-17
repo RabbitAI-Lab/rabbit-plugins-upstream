@@ -1,45 +1,60 @@
-## Description: <br>
-Converts Markdown or plain text into polished, high-resolution long images and share posters using built-in visual styles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns Markdown or plain text into polished high-resolution long images, share cards, or posters using 18 built-in visual styles.
 
-## Publisher: <br>
-[songhonglei](https://clawhub.ai/user/songhonglei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[songhonglei](https://clawhub.ai/user/songhonglei)
 
-## Use Case: <br>
-Agents and developers use this skill to transform supplied Markdown or plain text into styled local PNG posters or long images for sharing, documentation, notes, and presentation-style summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The setup workflow may install npm dependencies automatically. <br>
-Mitigation: Review the dependency installation behavior before first use and install only in environments where npm package installation is acceptable. <br>
-Risk: The export workflow launches headless Chrome and renders supplied HTML. <br>
-Mitigation: Avoid rendering remote URLs or untrusted HTML, and run the skill in a constrained workspace when handling external content. <br>
-Risk: The skill writes PNG outputs locally and may persist an output-directory setting through shell configuration. <br>
-Mitigation: Choose an explicit output directory and do not allow changes to shell startup files unless persistent configuration is intended. <br>
+## Use Case:
 
+External users, developers, and AI-agent operators use this skill to convert Markdown or plain text into styled local PNG images for reports, knowledge cards, posters, and social sharing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/songhonglei/skills/text-to-elegant-image) <br>
-- [README.md](artifact/README.md) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
-- [styles_reference.md](artifact/resources/styles_reference.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with HTML/CSS generation steps, shell commands, and local PNG file paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local HTML and PNG artifacts; supports configurable output directories, footer options, and style selection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact package.json) <br>
+Risk: The setup flow can download npm packages during installation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the visible install output and prefer pinned dependencies with a lockfile before using the skill in managed environments.
+
+Risk: The renderer runs headless Chrome over generated local HTML with weakened browser protections.
+
+Mitigation: Render only trusted local HTML, review or change the browser flags before deployment, and avoid using the skill as a general web fetcher.
+
+Risk: Persisting output configuration in shell startup files can have lasting effects outside a single run.
+
+Mitigation: Use explicit per-run output paths or temporary environment variables unless persistent output configuration is intended.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/songhonglei/skills/text-to-elegant-image)
+- [README](artifact/README.md)
+- [Render Verification and Options](artifact/docs/VERIFICATION.md)
+- [Changelog](artifact/CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown guidance with HTML/CSS snippets, bash commands, and local PNG file paths]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generates local HTML and PNG files; default long-image width is 560 px, poster and cover modes use fixed 600 x 800 output.]
+
+## Skill Version(s):
+
+1.2.1 (source: evidence release metadata and SKILL.md; CHANGELOG released 2026-07-28)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

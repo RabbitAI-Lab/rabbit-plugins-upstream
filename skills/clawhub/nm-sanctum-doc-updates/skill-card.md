@@ -1,44 +1,50 @@
-## Description: <br>
-Updates documentation after code changes with quality gates, slop detection, and accuracy checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Updates documentation after code changes with quality gates, slop detection, and accuracy checks
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and technical writers use this skill to update README files, plans, wikis, ADRs, and docstrings after code changes. It helps identify documentation targets, apply grounded edits, run style and accuracy checks, and preview the resulting changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Documentation edits or consolidation steps may remove or change useful content. <br>
-Mitigation: Review proposed deletions, merges, staged changes, and previews before accepting the workflow output. <br>
-Risk: Broad activation triggers such as writing may invoke the workflow outside focused documentation tasks. <br>
-Mitigation: Invoke the skill explicitly or narrow activation to documentation update work when broad triggers are inconvenient. <br>
+## Use Case:
 
+Developers and maintainers use this skill to update project documentation after code changes, check documentation quality and accuracy, and review proposed edits before previewing them.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-doc-updates) <br>
-- [Declared homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
-- [Accuracy scanning module](modules/accuracy-scanning.md) <br>
-- [Capabilities sync module](modules/capabilities-sync.md) <br>
-- [Directory style rules module](modules/directory-style-rules.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and file-edit guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose documentation edits, validation warnings, consolidation actions, and change previews.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The security review marks the skill suspicious with medium confidence, citing plugin-registration checks and instructions that may expand documentation work into functional changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review whether plugin registration changes are appropriate before installation; the scanner analysis is partial, so assess the skill directly.
+
+## Reference(s):
+
+- [Sanctum project homepage listed in skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum)
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-sanctum-doc-updates)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Files, Shell commands, Guidance]
+
+**Output Format:** [Markdown documentation edits, shell commands, and review summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs depend on the documentation targets and checks selected for each change.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

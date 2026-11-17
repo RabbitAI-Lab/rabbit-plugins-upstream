@@ -1,40 +1,50 @@
-## Description: <br>
-Generates a Mermaid class diagram showing types, inheritance, and composition. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates a Mermaid class diagram showing types, inheritance, and composition.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to inspect a scoped codebase and generate a Mermaid class diagram of public types, inheritance, composition, and key relationships. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A broad prompt can cause unnecessary repository-wide context review. <br>
-Mitigation: Use an explicit bounded scope, such as a specific module or path. <br>
-Risk: Generated diagrams can omit details or simplify relationships because the artifact limits diagrams to about 12-15 classes. <br>
-Mitigation: Review the Mermaid output and analysis notes against the target code before using the diagram as documentation. <br>
+## Use Case:
 
+Developers use this skill to understand class hierarchies, composition, and public APIs in a codebase. It produces a Mermaid class diagram with a brief structural analysis.
 
-## Reference(s): <br>
-- [Cartograph plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/cartograph) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with Mermaid classDiagram code and concise analysis notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Mermaid class diagrams are scoped to public methods, key attributes, relationships, and approximately 12-15 classes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter lists 1.9.8) <br>
+Risk: Codebase-derived details may be sent to Mermaid Chart during rendering without users being warned or checking whether sharing is allowed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before rendering, check repository sharing rules and Mermaid Chart's data-handling practices.
+
+## Reference(s):
+
+- [Class Diagram skill on ClawHub](https://clawhub.ai/athola/skills/nm-cartograph-class-diagram)
+- [Cartograph plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/cartograph)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Analysis]
+
+**Output Format:** [Mermaid class diagram source with concise Markdown analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Shows public methods and key attributes; the skill specifies a limit of 12–15 classes.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

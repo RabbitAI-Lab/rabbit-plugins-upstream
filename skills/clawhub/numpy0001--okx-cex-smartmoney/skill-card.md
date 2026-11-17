@@ -1,44 +1,58 @@
-## Description: <br>
-Provides OKX Smart Money analytics for leaderboard traders, trader positions, trade and closed-position history, aggregate consensus signals, and signal trends through the OKX CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides OKX Smart Money leaderboard, trader analytics, position tracking, trade-record, closed-position, consensus-signal, and signal-history guidance.
 
-## Publisher: <br>
-[numpy0001](https://clawhub.ai/user/numpy0001) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[numpy0001](https://clawhub.ai/user/numpy0001)
 
-## Use Case: <br>
-External users and developers use this skill for read-only OKX Smart Money analysis, including finding top traders, reviewing trader performance and positions, and summarizing long/short consensus across selected crypto instruments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OKX OAuth session or API-key profile for read-only Smart Money analytics. <br>
-Mitigation: Use the OKX CLI authentication flow or an existing least-privileged profile; do not paste OKX credentials into chat, and review account permissions before use. <br>
-Risk: Smart Money signal aggregation covers USDT- and USDS-margined linear contracts, so coin-margined exposure can be absent from consensus views. <br>
-Mitigation: Cross-check a trader's full position book with trader position commands before treating signal output as complete. <br>
+## Use Case:
 
+Developers and agents use this skill to answer user questions about OKX Smart Money traders, rankings, positions, trade history, closed-position performance, and aggregated long/short signals. It helps route read-only OKX CLI queries and format results as human-readable analysis.
 
-## Reference(s): <br>
-- [OKX](https://www.okx.com) <br>
-- [Trader Commands Reference](references/trader-commands.md) <br>
-- [Signal Commands Reference](references/signal-commands.md) <br>
-- [Smart Money Workflows](references/workflows.md) <br>
-- [Templates and Formatting Reference](references/templates.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, markdown, configuration] <br>
-**Output Format:** [Markdown with OKX CLI command snippets and tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only analytics commands should be run with --json and rendered as concise Markdown tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.8 (source: server release metadata) <br>
+Risk: The skill asks the agent to inspect OKX credential profile and authentication status output.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only, least-privilege OKX credentials, avoid sharing secrets in chat, and confirm profile/status output redacts sensitive values before use.
+
+Risk: The skill installs and uses a persistent npm OKX CLI for live OKX analytics workflows.
+
+Mitigation: Install only after reviewing the OKX CLI dependency and avoid API keys with trading or withdrawal permissions for this analytics workflow.
+
+## Reference(s):
+
+- [OKX homepage](https://www.okx.com)
+- [ClawHub skill page](https://clawhub.ai/numpy0001/skills/okx-cex-smartmoney)
+- [Trader Commands Reference](references/trader-commands.md)
+- [Signal Commands Reference](references/signal-commands.md)
+- [Smart Money Workflows](references/workflows.md)
+- [Templates & Formatting Reference](references/templates.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Markdown, Configuration]
+
+**Output Format:** [Markdown responses with inline shell commands and tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses JSON-formatted OKX CLI command output as input and presents read-only analytics results as Markdown tables.]
+
+## Skill Version(s):
+
+1.3.8 (source: server release metadata; artifact frontmatter and npm package reference list 1.3.7)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

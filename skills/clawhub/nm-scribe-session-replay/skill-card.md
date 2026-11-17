@@ -1,41 +1,50 @@
-## Description: <br>
-Nm Scribe Session Replay converts a Claude Code session JSONL file into an animated GIF terminal replay. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts a Claude Code session JSONL file into an animated GIF terminal replay.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to turn past Claude Code sessions into GIF replays for pull request evidence, demos, tutorials, or internal sharing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose sensitive local Claude session history by listing previews and rendering full transcripts into shareable GIFs. <br>
-Mitigation: Use a narrow turn range, exclude tool output unless needed, and review the generated GIF for secrets or confidential context before sharing. <br>
-Risk: Generated session replays may carry confidential development context into pull requests, chat, or tutorials. <br>
-Mitigation: Treat generated GIFs as sensitive until redacted and share them only in destinations appropriate for the underlying session content. <br>
+## Use Case:
 
+Developers use this skill to turn saved Claude Code conversations into terminal-style animated replays for workflow demos, pull request evidence, and tutorials.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-session-replay) <br>
-- [Project homepage from metadata](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Files, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [GIF file path and concise text status, with optional shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can filter turn ranges and visible layers before rendering; GIF output should be reviewed for sensitive session content before sharing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Session replays can expose private messages, credentials, personal information, or proprietary content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and redact session content before creating or sharing a replay.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-scribe-session-replay)
+- [Scribe plugin page](https://github.com/athola/claude-night-market/tree/master/plugins/scribe)
+
+## Skill Output:
+
+**Output Type(s):** [Animated GIF, VHS tape file]
+
+**Output Format:** [Animated GIF terminal replay, generated from a VHS tape]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can limit the replay by turn range, visible layers, playback speed, and maximum duration.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

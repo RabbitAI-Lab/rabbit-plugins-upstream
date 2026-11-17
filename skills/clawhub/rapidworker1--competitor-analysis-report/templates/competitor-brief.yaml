@@ -1,0 +1,31 @@
+# Competitive Analysis Report - starting point
+# Copy this file, replace every empty value with your own data, keep the field names.
+company: ""
+prepared_by: ""
+as_of_date: ""
+market_definition: ""
+competitors:
+  - name: ""
+    website: ""
+    pricing_model: ""
+    price_points:
+      - plan: ""
+        price_usd: ""
+        unit_basis: ""
+        captured_on: ""
+    target_segment: ""
+    positioning_line: ""
+    channels:
+      - ""
+    recent_announcements:
+      - date: ""
+        note: ""
+        source_url: ""
+    our_gap: ""
+    sources:
+      - ""
+pricing_notes: ""
+unverified_items:
+  - ""
+open_questions:
+  - ""

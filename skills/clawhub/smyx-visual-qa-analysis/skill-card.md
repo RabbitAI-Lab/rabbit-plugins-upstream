@@ -1,44 +1,54 @@
-## Description: <br>
-Conducts open-ended visual question answering on image content using computer vision and large language models to produce natural-language responses. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Conducts open-ended Q&A on image content based on computer vision and large language models, supporting any questions to receive natural language responses. | 大模型视觉问答（VQA）技能，基于计算机视觉和大语言模型对图片内容进行开放式问答，支持任意提问得到自然语言回答
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and agents use this skill to answer natural-language questions about local or URL-based images and to retrieve prior visual question-answering reports from the associated cloud service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Media, URLs, questions, report history, and an automatically managed identity are handled by the lifeemergence cloud service. <br>
-Mitigation: Use the skill only when the publisher and service are trusted; avoid private images, internal URLs, and sensitive documents until retention, deletion, and token storage practices are confirmed. <br>
-Risk: The skill can reuse local identity and token state while retrieving cloud history or running analyses. <br>
-Mitigation: Run it in a controlled environment, review stored token and identity state before shared use, and clear credentials between users or tenants. <br>
-Risk: The model-generated visual answers may be incomplete or incorrect for important decisions. <br>
-Mitigation: Treat outputs as advisory and verify important facts or extracted details against the original image or another trusted source. <br>
+## Use Case:
 
+Developers and users can ask open-ended questions about images and receive natural-language answers. The skill also supports querying previously stored visual analysis reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-visual-qa-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON analysis responses, including report links or history tables when returned by the service.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can process local image paths or public image URLs with a required user question; history-list output is fetched from the cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata; artifact frontmatter lists 1.0.7) <br>
+Risk: ClawScan rates the skill suspicious because reported behavior extends beyond image question answering, including video analysis, history access, persistent account handling, and credential and data handling concerns.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the scripts and remote service behavior before installation, and confirm the additional capabilities are expected.
+
+Risk: The scanner guidance identifies remote media processing, identity transmission, persistent account data, and credential handling as concerns; the scan was partial and evidence is incomplete.
+
+Mitigation: Avoid sending sensitive media or credentials until you have independently reviewed what data is sent, how identity and account data are used, and how credentials are handled.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-visual-qa-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files]
+
+**Output Format:** [Natural-language answers and structured visual analysis, optionally saved to a file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a report link; important answers should be verified.]
+
+## Skill Version(s):
+
+1.0.22 (source: server-resolved release metadata; SKILL.md declares 1.0.24)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,68 @@
-## Description: <br>
-Expose installed agent Skills as HTTP(S) REST APIs through a persistent FastAPI service that auto-generates endpoints, supports sync and async runs, webhook callbacks, multiple agent executors, and a bilingual web console. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+skill-to-http exposes installed agent Skills as HTTP(S) REST API services through a persistent FastAPI server that auto-generates endpoints, supports sync/async execution with webhook callbacks, and includes a bilingual web management console.
 
-## Publisher: <br>
-[songhonglei](https://clawhub.ai/user/songhonglei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[songhonglei](https://clawhub.ai/user/songhonglei)
 
-## Use Case: <br>
-Developers and platform engineers use this skill to turn installed agent Skills into network-callable HTTP(S) endpoints for automation, integrations, and remote execution. It is best suited for trusted local or private-network deployments unless the service is explicitly hardened for broader exposure. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make local agent skills broadly callable over a network, and default broad exposure can include skills with side effects. <br>
-Mitigation: Install only in trusted local or private networks, replace wildcard exposure with a small explicit allowlist, and deny skills that send messages, modify accounts, delete data, deploy code, or access secrets. <br>
-Risk: HTTP, public documentation routes, or command-line API keys can expose service metadata or credentials when the service is reachable beyond localhost. <br>
-Mitigation: Bind to 127.0.0.1 unless remote access is required, enable HTTPS for non-local use, disable public docs on exposed deployments, and provide API keys through configuration or environment variables instead of command-line arguments. <br>
-Risk: High-capability executors may run agent skills with tool access that can affect files, services, external systems, or secrets. <br>
-Mitigation: Use least-capability executors where possible, review each exposed skill before deployment, and avoid full-auto or high-capability execution for sensitive workflows. <br>
+## Use Case:
 
+Developers and engineers use this skill to expose locally installed agent Skills as REST endpoints for internal tools, remote callers, and external systems. It helps configure and operate skill execution, async jobs, webhook callbacks, TLS, API key authentication, and management-console workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/songhonglei/skills/skill-to-http) <br>
-- [Skill Documentation](SKILL.md) <br>
-- [README](README.md) <br>
-- [HTTPS Deployment Guide](references/https-deployment.md) <br>
-- [Params Schema](references/params-schema.md) <br>
-- [TLS Auth Standard](references/tls-auth-standard.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON configuration, and HTTP API examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce service configuration guidance and expose skill execution through HTTP(S) endpoints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release metadata, SKILL.md, CHANGELOG.md) <br>
+Risk: The service can expose locally installed Skills as remotely callable HTTP endpoints, widening access to file, shell, network, credential, or other host capabilities available to those Skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Bind the service and console to 127.0.0.1 unless network access is required, set a strong API key, enable HTTPS for cross-host use, replace wildcard exposure with an explicit allowlist, and deny side-effecting Skills.
+
+Risk: Default HTTP transport can send API keys, prompts, and Skill outputs in cleartext.
+
+Mitigation: Use localhost or trusted networks only for HTTP, and enable HTTPS before cross-host or production use.
+
+Risk: Wildcard exposure and fully automated executor paths can give untrusted callers broad ability to trigger powerful local actions.
+
+Mitigation: Avoid wildcard exposure for shared environments, deny high-impact Skills, require confirmation in high-risk Skill frontmatter, and avoid the full-auto Codex path for untrusted callers.
+
+Risk: A remotely reachable unauthenticated management console, speed mode, or doctor fix path can change service state or configuration.
+
+Mitigation: Require authentication, keep management surfaces local when possible, and do not enable speed mode or doctor fixes through a remotely reachable unauthenticated console.
+
+Risk: The optional LLM fallback and parameter extraction path can send SKILL.md content to an external chat-completions endpoint when configured.
+
+Mitigation: Leave the LLM path off unless needed, use only trusted endpoints, and keep exposed SKILL.md files free of secrets, internal addresses, or sensitive content.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/songhonglei/skills/skill-to-http)
+- [HTTPS Deployment Guide](references/https-deployment.md)
+- [params.json Schema Reference](references/params-schema.md)
+- [HTTP Skill TLS and Auth Standard](references/tls-auth-standard.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with JSON examples and shell command blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Persistent service behavior depends on local configuration, exposed skill allowlists, executor availability, and TLS/API key settings.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and CHANGELOG, released 2026-07-28)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

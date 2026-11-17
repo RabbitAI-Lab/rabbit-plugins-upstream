@@ -1,44 +1,63 @@
-## Description: <br>
-Analyzes adult front-facing facial images or short videos to estimate visual fatigue and stress indicators, returning a 0-100 fatigue/stress index with contributing features and directional suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes adult facial images or short videos to estimate a fatigue/stress index and return a structured feature report with directional suggestions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, employees, and developers can use this skill to assess adult facial fatigue or stress indicators from clear face images or short videos for personal status monitoring, workplace wellness displays, smart mirrors, or health-management applications. Results are directional visual assessments and do not replace medical diagnosis or clinical stress evaluation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Facial images, videos, derived fatigue/stress reports, and persistent user identifiers are sent to the publisher cloud service. <br>
-Mitigation: Use the skill only with explicit consent from the person depicted, avoid unnecessary or third-party face media, and confirm retention and deletion options before deployment. <br>
-Risk: The skill may silently create or reuse a persistent user identity for analysis and history lookup. <br>
-Mitigation: Separate identities between users, review local identity and token storage, and document how users can clear or rotate the stored identity. <br>
-Risk: A face-based fatigue/stress score can be mistaken for a medical or clinical assessment. <br>
-Mitigation: Present outputs as directional visual indicators only, preserve the non-diagnostic warning, and advise professional follow-up for persistent high scores or symptoms. <br>
+## Use Case:
 
+Individuals and workplace wellness teams can use adult facial images or short videos to get a facial-feature-based fatigue/stress score, feature summary, and directional suggestions. The result is an informational status indicator, not a medical diagnosis or clinical stress assessment.
 
-## Reference(s): <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-adult-facial-fatigue-stress-index-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, API Calls, Markdown, JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis report with fatigue/stress score, level, contributing features, suggestions, and optional report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save results to an output file and may return historical report lists from the publisher cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter and changelog text state 1.0.4) <br>
+Risk: The security summary flags privacy and consent concerns around remote processing of facial media.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain the subject's consent before submitting facial media, and review how images and reports are handled and protected.
+
+Risk: Registration and identity/token handling are flagged for review.
+
+Mitigation: Review the service's identity and token handling before installation and use.
+
+Risk: The security summary raises concern that analysis may run despite an export-only option.
+
+Mitigation: Treat the export-only behavior as unverified; avoid using sensitive media until the behavior is confirmed.
+
+Risk: The security scan is partial because it could not resolve a local path-like reference, so its evidence is incomplete.
+
+Mitigation: Review the unresolved reference and the package before use.
+
+## Reference(s):
+
+- [API reference](references/api_doc.md)
+- [Skill introduction](https://lifeemergence.com/sample.html)
+- [ClawHub skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-adult-facial-fatigue-stress-index-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Guidance, Markdown]
+
+**Output Format:** [Structured analysis report (JSON or text); history results as a Markdown table]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes a fatigue/stress score from 0 to 100, feature metrics, a level, and directional suggestions; it is not a medical diagnosis or clinical stress assessment.]
+
+## Skill Version(s):
+
+1.0.14 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,63 @@
-## Description: <br>
-Professional Figma design analysis and asset export for extracting design data, exporting assets, auditing accessibility and design systems, and generating design documentation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Professional Figma design analysis and asset export. Use for extracting design data, exporting assets in multiple formats, auditing accessibility compliance, analyzing design systems, and generating comprehensive design documentation. Read-only analysis of Figma files with powerful export and reporting capabilities.
 
-## Publisher: <br>
-[maddiedreese](https://clawhub.ai/user/maddiedreese) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[maddiedreese](https://clawhub.ai/user/maddiedreese)
 
-## Use Case: <br>
-Developers, designers, and design-system teams use this skill to inspect Figma files, export assets and design tokens, and generate accessibility, style, and handoff reports from read-only Figma API data. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: A Figma token may allow access to every file and team resource available to that token. <br>
-Mitigation: Use the least-privileged token available, pass it through an environment variable or secret manager, and keep it out of source control and logs. <br>
-Risk: Exports and reports write local files and may overwrite existing output if paths are reused. <br>
-Mitigation: Send exports and reports to a dedicated output directory and review output paths before running commands. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Figma API Reference](references/figma-api-reference.md) <br>
-- [Design Patterns and Component Best Practices](references/design-patterns.md) <br>
-- [Accessibility Guidelines for Figma Design](references/accessibility-guidelines.md) <br>
-- [Export Formats and Specifications](references/export-formats.md) <br>
+## Use Case:
 
+Developers, designers, and design-system teams use this skill to inspect Figma files, export assets, audit accessibility and style consistency, extract design tokens, and generate design documentation from read-only Figma API data.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands; generated reports and export artifacts may be JSON, HTML, CSS, SCSS, JavaScript, PNG, SVG, PDF, or WEBP.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads Figma API data through a user-provided token and writes exports or reports to user-selected output paths.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-2.1.0 (source: server-resolved release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Generated HTML reports can include unescaped Figma content that may run active browser content when opened.
+
+Mitigation: Treat generated HTML reports as unsafe unless the Figma file and its collaborators are trusted; review reports before sharing or opening them in privileged browser contexts.
+
+Risk: Figma access tokens can expose design files beyond the intended task scope if mishandled.
+
+Mitigation: Use a least-privileged Figma token from a secret store or environment variable and avoid passing tokens through command-line arguments.
+
+Risk: Asset export workflows can write many generated files into the local workspace.
+
+Mitigation: Run exports into a dedicated output directory and review generated files before reuse or publication.
+
+Risk: Dependencies are specified with lower bounds rather than fully pinned versions.
+
+Mitigation: Install dependencies in an isolated environment and prefer pinned dependency versions for reviewed deployments.
+
+## Reference(s):
+
+- [Figma API Reference](references/figma-api-reference.md)
+- [Design Patterns & Component Best Practices](references/design-patterns.md)
+- [Accessibility Guidelines for Figma Design](references/accessibility-guidelines.md)
+- [Export Formats and Specifications](references/export-formats.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, generated reports, JSON design data, design-token files, and exported image or document assets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses read-only Figma API access; generated files may include asset exports, manifests, reports, and documentation.]
+
+## Skill Version(s):
+
+2.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

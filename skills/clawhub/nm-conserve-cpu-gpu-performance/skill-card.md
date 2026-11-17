@@ -1,41 +1,50 @@
-## Description: <br>
-Establishes CPU/GPU baselines before resource-intensive operations and guides agents to scope, instrument, throttle, and document heavy builds, tests, or training runs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Establishes CPU/GPU baselines before resource-intensive operations.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering agents use this skill before CPU- or GPU-intensive work to capture baseline utilization, choose narrower validation scopes, profile resource use, throttle shared compute, and record follow-up work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Profiling and resource-check commands can expose host utilization details or affect shared systems when run in quota-managed environments. <br>
-Mitigation: Review commands such as uptime, process listings, and GPU monitoring before execution on shared hosts, and apply local policies for access to utilization data. <br>
-Risk: The skill may still recommend heavy builds, tests, or training runs when narrower validation is not enough. <br>
-Mitigation: Set CPU/GPU budgets first, prefer targeted smoke or module-level runs, and document why any full-suite or long training run is necessary. <br>
+## Use Case:
 
+Developers and engineers use the skill before resource-intensive builds, training, or tests to record baseline load, narrow work, profile performance, throttle execution, and log resource costs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-cpu-gpu-performance) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Markdown] <br>
-**Output Format:** [Markdown summary with inline shell commands and resource notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes baseline metrics, selected scope, instrumentation captured, throttling tactics, and follow-up items.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: ClawScan's review is incomplete because one local path-like reference could not be resolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the relevant local path reference before relying on the affected guidance; the benign verdict does not remove this uncertainty.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve)
+- [ClawHub release](https://clawhub.ai/athola/skills/nm-conserve-cpu-gpu-performance)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Markdown]
+
+**Output Format:** [Markdown with inline shell commands and a concise run summary]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Summarizes baseline metrics, chosen scope, instrumentation, throttling, resource costs, and follow-up items.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
