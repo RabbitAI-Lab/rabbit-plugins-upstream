@@ -1,54 +1,72 @@
-## Description: <br>
-Query biomedical databases for drug repurposing, target discovery, clinical trials, literature research, genetic associations, safety data, and compound bioactivity through a unified MCP endpoint. <br>
+## Description:
 
-This skill is for research and development only. <br>
+Query 14+ biomedical databases through a unified MCP endpoint for drug repurposing, target discovery, clinical trials, literature research, genetic associations, and compound bioactivity analysis.
 
-## Publisher: <br>
-[pascalwhoop](https://clawhub.ai/user/pascalwhoop) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[pascalwhoop](https://clawhub.ai/user/pascalwhoop)
 
-## Use Case: <br>
-External biomedical researchers, developers, and analysts use this skill to build evidence-oriented workflows for drug repurposing, target discovery, clinical evidence review, literature mining, and safety checks across public biomedical data sources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Medical research outputs may be incomplete, outdated, or unsuitable for diagnosis, treatment, drug safety, or clinical decisions. <br>
-Mitigation: Have qualified medical professionals validate any drug, diagnosis, safety, or treatment-related conclusions before use. <br>
-Risk: Queries to the hosted endpoint could expose patient identifiers, PHI, confidential study details, or proprietary hypotheses. <br>
-Mitigation: Do not submit sensitive or regulated information unless the operator is trusted and appropriate data-handling approval is in place. <br>
-Risk: OMIM and optional higher-rate-limit services require API keys that could be exposed through prompts, shared logs, or examples. <br>
-Mitigation: Keep API keys out of shared prompts and logs, and use secret-management practices when running workflows locally. <br>
-Risk: Artifact testing indicates some databases and workflows were not fully tested and some reference examples may need updates. <br>
-Mitigation: Verify database-specific examples and cross-check results against primary biomedical sources before relying on them. <br>
+## Use Case:
 
+Biomedical researchers and developers use this skill to query public and credentialed biomedical databases, assemble evidence for drug repurposing or target discovery, review literature and clinical trials, and draft research workflows.
 
-## Reference(s): <br>
-- [PubMed & PubTator3 Guide](references/pubmed.md) <br>
-- [ClinicalTrials.gov Guide](references/clinical-trials.md) <br>
-- [ChEMBL Guide](references/chembl.md) <br>
-- [OpenTargets Platform Guide](references/opentargets.md) <br>
-- [OpenFDA Guide](references/openfda.md) <br>
-- [OMIM Guide](references/omim.md) <br>
-- [Additional Biomedical Databases](references/other-apis.md) <br>
-- [Drug Repurposing Workflow](scripts/drug-repurposing-workflow.md) <br>
-- [Unified MCP Endpoint](https://mcp.cloud.curiloo.com/tools/unified/mcp) <br>
-- [OMIM API Access](https://omim.org/api) <br>
-- [OpenFDA API](https://open.fda.gov) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, API calls, Configuration] <br>
-**Output Format:** [Markdown guidance with curl and JSON-RPC examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces research workflow suggestions and request examples; API responses are returned by the selected biomedical data services.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Sensitive biomedical queries, patient-identifying details, or private research plans could be sent to a third-party MCP service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not submit patient-identifying information or private research plans; review the service's logging, caching, and retention practices before use.
+
+Risk: Credentialed sources such as OMIM may require API keys that could be routed through the production proxy.
+
+Mitigation: Avoid sending real OMIM or OpenFDA keys through the proxy unless the service is trusted; prefer a pinned isolated local install or direct official APIs for credentialed sources.
+
+Risk: Drug, trial, safety, and diagnosis-related outputs could be misused as clinical advice.
+
+Mitigation: Treat outputs as research support only and validate findings with primary sources and qualified clinical review before clinical or patient-facing use.
+
+Risk: Some database workflows and examples are not fully tested and the artifact notes known ID-format issues.
+
+Mitigation: Test intended workflows end to end, verify database identifier formats, and confirm returned evidence against source databases before relying on results.
+
+## Reference(s):
+
+- [PubMed & PubTator3 Guide](./references/pubmed.md)
+- [ClinicalTrials.gov Guide](./references/clinical-trials.md)
+- [ChEMBL Guide](./references/chembl.md)
+- [OpenTargets Platform Guide](./references/opentargets.md)
+- [OpenFDA Guide](./references/openfda.md)
+- [OMIM Guide](./references/omim.md)
+- [Additional Biomedical Databases](./references/other-apis.md)
+- [Drug Repurposing Workflow](./scripts/drug-repurposing-workflow.md)
+- [Production MCP Endpoint](https://mcp.cloud.curiloo.com/tools/unified/mcp)
+- [OMIM API](https://omim.org/api)
+- [OpenFDA API](https://open.fda.gov)
+- [NCI Clinical Trials API](https://clinicaltrialsapi.cancer.gov)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, API calls, Configuration]
+
+**Output Format:** [Markdown with JSON-RPC examples and inline bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include database query recipes, workflow steps, API-key notes, and research synthesis guidance.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

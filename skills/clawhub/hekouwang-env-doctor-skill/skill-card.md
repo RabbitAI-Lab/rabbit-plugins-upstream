@@ -1,46 +1,53 @@
-## Description: <br>
-env-doctor audits developer-tool disk usage on macOS and Linux, identifies likely leftover tools and caches, and guides user-confirmed cleanup while distinguishing data that should not be deleted. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scans macOS and Linux developer storage, identifies likely unused toolchains and caches, and guides users through a confirmation-based cleanup.
 
-## Publisher: <br>
-[huiyonghkw](https://clawhub.ai/user/huiyonghkw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[huiyonghkw](https://clawhub.ai/user/huiyonghkw)
 
-## Use Case: <br>
-Developers and engineers use this skill in Claude Code to understand which local development tools, package caches, containers, simulators, and model caches are consuming disk space. It helps them review evidence-based classifications and choose whether to run user-confirmed cleanup actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Cleanup can remove version-manager directories or caches that the user may later need. <br>
-Mitigation: Start with the dry-run cleanup selector, review each listed command and cost, and select only entries the user recognizes. <br>
-Risk: Deleting version-manager directories without updating shell initialization files can cause future terminal startup errors. <br>
-Mitigation: After removing a version manager, manually review shell configuration for the corresponding initialization lines. <br>
-Risk: Developer caches, package stores, model weights, and container data can be expensive or unsafe to delete indiscriminately. <br>
-Mitigation: Keep data-class items locked out of cleanup and prefer official cache commands for cache-class entries. <br>
+## Use Case:
 
+Developers use this skill to understand which development tools, runtimes, caches, and AI-related directories are using disk space on macOS or Linux. It groups findings into data, cache, and likely leftovers, then helps users review cleanup choices.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/huiyonghkw/skills/hekouwang-env-doctor-skill) <br>
-- [Publisher profile](https://clawhub.ai/user/huiyonghkw) <br>
-- [Rule library](references/rules.md) <br>
-- [Report format and conversation flow](references/report.md) <br>
-- [Safety boundaries](references/safety.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown reports with inline bash command blocks and plain-text scan summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill classifies findings as leftover, cache, data, or uncertain and emphasizes user review before cleanup.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: release evidence and changelog, released 2026-07-18) <br>
+Risk: Cleanup choices may remove active language toolchains or Homebrew versions beyond their descriptions; two scripts were only partially inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each target and command, start with `bash scripts/clean.sh --dry-run`, and leave any unclear toolchain or Homebrew item unselected.
+
+## Reference(s):
+
+- [Cleanup classification rules](references/rules.md)
+- [Report workflow](references/report.md)
+- [Safety boundaries](references/safety.md)
+- [Source repository](https://github.com/huiyonghkw/hekouwang-env-doctor-skill)
+- [ClawHub release page](https://clawhub.ai/huiyonghkw/skills/hekouwang-env-doctor-skill)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown report with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Disk usage findings grouped as data, cache, and likely leftovers, with reasons and cleanup tradeoffs.]
+
+## Skill Version(s):
+
+1.2.4 (source: frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

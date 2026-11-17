@@ -1,42 +1,58 @@
-## Description: <br>
-Build, modify, or troubleshoot Sentio projects across processors, Sentio SQL in Data Studio, alerting, and dashboards. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build, modify, or troubleshoot Sentio projects across processors, Sentio SQL in Data Studio, alerting, and dashboards.
 
-## Publisher: <br>
-[sentioxyz](https://clawhub.ai/user/sentioxyz) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sentioxyz](https://clawhub.ai/user/sentioxyz)
 
-## Use Case: <br>
-Developers and engineers use this skill to manage Sentio projects, run SQL and data queries, configure alerts and endpoints, work with dashboards, inspect processors, retrieve price data, and run transaction simulations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate on real Sentio projects using account credentials. <br>
-Mitigation: Use a least-privilege Sentio credential and avoid pasting secrets into chat or shared terminals. <br>
-Risk: Generated commands may delete, import, pause, stop, or otherwise change Sentio resources. <br>
-Mitigation: Require explicit user confirmation before destructive or state-changing operations, imports, simulations, account linking, or AI-generated query execution. <br>
-Risk: Using the latest CLI version can change behavior over time. <br>
-Mitigation: Pin the Sentio CLI version for sensitive or repeatable workflows. <br>
+## Use Case:
 
+Developers and engineers use this skill to manage Sentio projects, processors, SQL/data queries, alerts, endpoints, dashboards, price data, and transaction simulations through the Sentio CLI and related API schemas.
 
-## Reference(s): <br>
-- [Sentio API OpenAPI specification](references/openapi.swagger.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Code] <br>
-**Output Format:** [Markdown with inline shell commands, JSON examples, and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Sentio CLI commands and JSON or YAML payloads for project, alert, endpoint, dashboard, processor, price, and simulation workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill can guide live Sentio administration tasks that affect projects, processors, alerts, endpoints, dashboards, SQL sharing, simulations, and account links.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before deletes, processor activation, pause or stop actions, public SQL sharing, and account-link changes; preview the target project and command before execution.
+
+Risk: The skill may involve Sentio API keys or bearer tokens.
+
+Mitigation: Use narrowly scoped credentials, avoid pasting secrets into chat or command lines, prefer safer login or secret handling mechanisms when available, and rotate credentials after use.
+
+Risk: Using an unpinned Sentio CLI can change behavior across runs.
+
+Mitigation: Pin the Sentio CLI version for repeatable production workflows and review command output before applying changes.
+
+## Reference(s):
+
+- [Sentio Platform Skill Page](https://clawhub.ai/sentioxyz/skills/sentio-platform)
+- [Sentio OpenAPI Swagger Reference](references/openapi.swagger.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, configuration snippets, JSON examples, and operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce commands that operate on live Sentio projects and require user-provided credentials.]
+
+## Skill Version(s):
+
+1.0.0 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

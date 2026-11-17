@@ -1,45 +1,52 @@
-## Description: <br>
-Close the loop on long-running remote work: pick the right completion signal per platform (CI, EAS, deploy, releases), run monitoring in the background, notify on finish, and never treat trigger as success. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Close the loop on long-running remote work by choosing a platform-appropriate completion signal, monitoring in the background, notifying on finish, and verifying the outcome, including with Wander scripts for GitHub Actions.
 
-## Publisher: <br>
-[erergb](https://clawhub.ai/user/erergb) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[erergb](https://clawhub.ai/user/erergb)
 
-## Use Case: <br>
-Developers and agents use Wander to monitor long-running CI, build, deploy, and release tasks through the platform that owns the terminal status, then verify success or collect failure details before proceeding. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: External Wander scripts are cloned and executed outside the skill package. <br>
-Mitigation: Verify the cloned Wander repository and scripts before installing or running them. <br>
-Risk: GitHub CLI authentication may expose CI status and failed logs from repositories the user can access. <br>
-Mitigation: Confirm the active GitHub account and repository scope before starting background monitoring. <br>
-Risk: Background monitors can keep reading CI state until the watched job reaches a terminal status. <br>
-Mitigation: Stop monitors that are no longer needed and review their terminal output before acting on the result. <br>
+## Use Case:
 
+Developers and engineers use this skill to monitor long-running CI, mobile builds, deployments, and releases through the system that owns each task's status, then inspect the terminal result and failure details.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/erergb/wander) <br>
-- [Wander repository](https://github.com/ERerGB/wander) <br>
-- [Wander v1 scope: GitHub Actions today](https://github.com/ERerGB/wander/blob/main/README.md#v1-scope-github-actions-today) <br>
-- [Wander edge cases](https://github.com/ERerGB/wander/blob/main/EDGE_CASES.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May start background monitors and inspect CI status or failed logs through the user's authenticated tooling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata) <br>
+Risk: The security review marks the skill suspicious because reported GitHub Actions reruns and remote repository pushes may exceed its described monitoring purpose; the scan evidence is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the reported rerun and push behavior and resolve the missing referenced paths before installing. Install only if you understand and accept that use may trigger remote jobs or publish repository changes.
+
+## Reference(s):
+
+- [Wander repository](https://github.com/ERerGB/wander)
+- [Wander v1 scope: GitHub Actions today](https://github.com/ERerGB/wander/blob/main/README.md#v1-scope-github-actions-today)
+- [Wander edge cases](https://github.com/ERerGB/wander/blob/main/EDGE_CASES.md)
+- [Wander coffee break guide](https://github.com/ERerGB/wander/blob/main/COFFEE_BREAK.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown with inline shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Platform-aware monitoring steps and examples for checking terminal status and retrieving failure details.]
+
+## Skill Version(s):
+
+1.0.8 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

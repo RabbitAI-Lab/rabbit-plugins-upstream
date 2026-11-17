@@ -1,44 +1,51 @@
-## Description: <br>
-Assesses frog skin moisture from clear images or videos by analyzing glossiness, wrinkles, white film, species humidity context, and image quality to produce structured alerts and care recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses visible frog skin gloss, wrinkles, and white-film cues from images or video to produce skin-moisture risk reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External keepers, amphibian farms, animal hospitals, and developers integrating vivarium cameras use this skill to analyze frog skin media for moisture status, dehydration risk alerts, and historical report lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends frog images, videos, URLs, identity values, and report-history requests to configured lifeemergence.com services. <br>
-Mitigation: Review before installing, prefer non-sensitive media, and confirm cloud retention, account deletion, and token revocation practices before use. <br>
-Risk: The skill persists service tokens in the workspace data directory. <br>
-Mitigation: Use only in trusted workspaces, protect workspace storage, and revoke or rotate tokens if the workspace is shared or compromised. <br>
-Risk: The security verdict is suspicious because the skill automatically handles identity, uploads media or URLs, queries cloud history, and lacks sufficient user control or disclosure. <br>
-Mitigation: Require user review of cloud-backed behavior and disclosures before deployment, and avoid using sensitive animal hospital or farm media unless approved. <br>
+## Use Case:
 
+Frog keepers and amphibian care teams use image or video assessments to review visible skin-moisture cues, check possible dehydration risk, and follow up on reports. The result is visual screening and does not diagnose disease.
 
-## Reference(s): <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-frog-skin-moisture-assessment-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown and JSON-backed structured reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links and historical report tables; input media can be local files or URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter says 1.0.6) <br>
+Risk: The security review reports account, credential, network, and media-upload behavior beyond the stated image-assessment purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before use, review why persistent account and credential data is handled, how it is protected, and where image, video, and identity data are sent.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/18072937735/skills/smyx-frog-skin-moisture-assessment-analysis)
+- [API documentation](artifact/references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown, JSON]
+
+**Output Format:** [Structured skin-moisture assessment report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports visible moisture indicators, a risk level, suggested follow-up, and report links; visual screening only.]
+
+## Skill Version(s):
+
+1.0.15 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

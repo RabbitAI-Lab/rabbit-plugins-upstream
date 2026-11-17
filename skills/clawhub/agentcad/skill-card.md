@@ -1,43 +1,59 @@
-## Description: <br>
-agentcad is a CAD tool for AI agents that executes build123d or CadQuery Python scripts and produces STEP files, PNG renders, mesh exports, and geometric metrics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AgentCAD helps agents design, inspect, validate, and export 3D models using build123d Python scripts.
 
-## Publisher: <br>
-[jdilla1277](https://clawhub.ai/user/jdilla1277) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[jdilla1277](https://clawhub.ai/user/jdilla1277)
 
-## Use Case: <br>
-Developers, designers, and AI agents use agentcad to create, inspect, iterate on, and export 3D CAD models from build123d or CadQuery scripts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on local code execution through the agentcad CLI to generate and modify CAD models. <br>
-Mitigation: Review generated CAD scripts before execution and keep backups of important Fusion or CAD documents before using the workflow. <br>
-Risk: Installation or setup commands may run code from external package or repository sources. <br>
-Mitigation: Install from trusted package sources and review installer commands before running them. <br>
+## Use Case:
 
+Developers and engineers use AgentCAD to create or revise 3D geometry from a written specification, then inspect and validate the result. It can deliver STEP models, rendered previews, mesh exports, and geometry metrics.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/jdilla1277/skills/agentcad) <br>
-- [agentcad documentation](https://agentcad.dev) <br>
-- [agentcad PyPI package](https://pypi.org/project/agentcad/) <br>
-- [agentcad CLI source](https://github.com/jdilla1277/agentcad) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Code, Shell commands, Files, Analysis, Configuration instructions] <br>
-**Output Format:** [Markdown guidance with Python and shell command examples; agentcad commands return JSON and produce CAD artifacts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python 3.10-3.12 and the agentcad CLI on PATH.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.0 (source: frontmatter and server release metadata) <br>
+Risk: The feedback workflow may send task details and session diagnostics to the vendor without user approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review feedback contents before sending; use `agentcad feedback --local-only` to save feedback without uploading it.
+
+Risk: The installation instructions use an unpinned AgentCAD package version.
+
+Mitigation: Pin a reviewed AgentCAD version in the installation environment.
+
+Risk: The security analysis is incomplete because many local references could not be resolved.
+
+Mitigation: Review the complete skill materials and referenced documentation before installation or execution.
+
+## Reference(s):
+
+- [AgentCAD documentation and project site](https://agentcad.dev)
+- [AgentCAD ClawHub release](https://clawhub.ai/jdilla1277/skills/agentcad)
+- [Publisher profile](https://clawhub.ai/user/jdilla1277)
+
+## Skill Output:
+
+**Output Type(s):** [Code, 3D model files, Images, Metrics, Guidance]
+
+**Output Format:** [Python scripts; STEP, PNG, STL, GLB, and OBJ files; structured geometry metrics]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Artifacts and formats depend on the requested model and selected exports.]
+
+## Skill Version(s):
+
+0.8.0 (source: frontmatter, release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -177,6 +177,42 @@ DELIVERY_PATTERNS: tuple[Pattern, ...] = (
     ),
 )
 
+# Final-body candidates for negative wrap-up tails.  Loaded only in body-only and
+# body-with-suggestions modes so that quoted materials, review output and the
+# suggestion section are never scanned as final-body text.  Findings are candidates
+# for semantic review; genuine research limits and necessary boundaries are kept.
+FINAL_BODY_PATTERNS: tuple[Pattern, ...] = (
+    (
+        "medium",
+        "semantic-review",
+        "unresolved-state-tail",
+        r"(?:尚未|仍未|暂未|还未|尚不|未(?![对就经按在]))[^。！？；\n]{0,24}"
+        r"(?:形成|作出|达成)[^。！？；\n]{0,28}"
+        r"(?:结论|定论|共识|一致意见)(?=[。！？]|\s|$)",
+        "若为泛化未决状态：保留未决含义，直接写具体研究事项与当前研究状态；"
+        "无论证作用则删除。针对具体对象的真实研究限制应保留。",
+    ),
+    (
+        "medium",
+        "semantic-review",
+        "protective-negative-inference",
+        r"(?:尚|仍|还|目前)?(?:不能|无法|不足以)(?:仅凭|单凭|据此|直接据此|由此)?[^。！？；\n]{0,70}"
+        r"(?:推定|判定|认定|判断|说明|证明|得出|确定)"
+        r"|(?:尚|仍|还|目前)?(?:不能|无法|不足以)[^。！？；\n]{0,40}形成[^。！？；\n]{0,24}(?:结论|定论|共识)"
+        r"|(?:尚|仍|还|目前)?(?:不能|无法|不足以)[^。！？；\n]{0,40}作为[^。！？；\n]{0,20}依据",
+        "回读前文与材料：针对具体对象的真实研究限制应保留；只在无对象泛化、"
+        "成簇复现或段末兜底时考虑改为事项与状态的直接陈述。",
+    ),
+    (
+        "low",
+        "semantic-review",
+        "negative-boundary-tail",
+        r"[，；](?:但|但这|这|也|并|同时|并且|而且)?(?:也|并)?不(?:直接)?"
+        r"(?:代表|等同于|意味着|构成)[^。！？\n]{2,70}(?=[。！？]|\s|$)",
+        "相关不等于因果等真实边界应保留；只复核无对象泛化或成簇复现的句末否定收束。",
+    ),
+)
+
 FORMAT_PATTERNS: tuple[Pattern, ...] = (
     (
         "medium",
@@ -247,6 +283,23 @@ POST_REFERENCE_HEADING = re.compile(
 )
 SUGGESTION_HEADING = re.compile(r"^\s*(?:#{1,6}\s*)?补充与修改建议\s*$")
 LIST_OR_HEADING = re.compile(r"^\s*(?:#{1,6}\s+|[-*+]\s+|\d+[.)、]\s+|[一二三四五六七八九十]+、)")
+# Each gap starts with punctuation or whitespace, never a digit.  Requiring a
+# gap between digit runs avoids ambiguous partitions on malformed long markers.
+NUMERIC_CITATION_GAP = r"(?:[-–—,，]\s*|\s+(?:[-–—,，]\s*)?)"
+LATEX_ENVIRONMENT = re.compile(r"\\(?P<action>begin|end)\{(?P<name>[A-Za-z]+\*?)\}")
+LATEX_LITERAL_ENVIRONMENTS = frozenset(
+    {"verbatim", "verbatim*", "Verbatim", "BVerbatim", "LVerbatim", "SaveVerbatim", "lstlisting", "minted", "comment"}
+)
+LATEX_PROTECTED_ENVIRONMENTS = LATEX_LITERAL_ENVIRONMENTS | frozenset(
+    {
+        "math", "displaymath", "equation", "equation*", "eqnarray", "eqnarray*",
+        "align", "align*", "alignat", "alignat*", "flalign", "flalign*",
+        "gather", "gather*", "multline", "multline*", "aligned", "alignedat",
+        "gathered", "split", "cases", "matrix", "pmatrix", "bmatrix", "Bmatrix",
+        "vmatrix", "Vmatrix", "smallmatrix", "array", "tabular", "tabular*",
+        "tikzpicture", "quote", "quotation", "thebibliography",
+    }
+)
 PROTECTED_INLINE = tuple(
     re.compile(pattern, re.IGNORECASE)
     for pattern in (
@@ -258,7 +311,7 @@ PROTECTED_INLINE = tuple(
         r"https?://[^\s<>，。；：！？、“”‘’（）【】]+",
         r"\b(?:doi:\s*)?10\.\d{4,9}/[-._;()/:A-Z0-9]+",
         r"\b[\w.+-]+@[\w.-]+\.[A-Z]{2,}\b",
-        r"\[(?:\d+\s*[-–—,，]?\s*)+\]",
+        rf"\[\d+(?:{NUMERIC_CITATION_GAP}\d+)*{NUMERIC_CITATION_GAP}?\]",
         r"[（(][^()（）\n]{0,36}(?:19|20)\d{2}[a-z]?[^()（）\n]{0,16}[）)]",
         r"[A-Za-z]:\\[^\s，。；：！？<>]+|(?<![\w\u4e00-\u9fff])/(?:[^/\s，。；：！？<>]+/)+[^/\s，。；：！？<>]+",
     )
@@ -336,7 +389,7 @@ def protected_masks(lines: list[str]) -> list[list[bool]]:
 
     in_fence = False
     in_display_math = False
-    in_latex_environment = False
+    latex_environments: list[str] = []
     in_references = False
     for line_index, line in enumerate(lines):
         stripped = line.strip()
@@ -356,30 +409,51 @@ def protected_masks(lines: list[str]) -> list[list[bool]]:
             mark(masks[line_index], 0, len(line))
             continue
 
-        if "\\begin{" in line:
-            in_latex_environment = True
-        if in_latex_environment:
-            mark(masks[line_index], 0, len(line))
-            if "\\end{" in line:
-                in_latex_environment = False
+        # Body containers (document, abstract, lists, etc.) leave their prose
+        # visible.  Only known non-prose environments protect their contents.
+        position = 0
+        for environment in LATEX_ENVIRONMENT.finditer(line):
+            action = environment.group("action")
+            name = environment.group("name")
+            if latex_environments:
+                mark(masks[line_index], position, environment.end())
+                if action == "end" and name == latex_environments[-1]:
+                    latex_environments.pop()
+                elif (
+                    action == "begin"
+                    and name in LATEX_PROTECTED_ENVIRONMENTS
+                    and latex_environments[-1] not in LATEX_LITERAL_ENVIRONMENTS
+                ):
+                    latex_environments.append(name)
+            else:
+                mark(masks[line_index], environment.start(), environment.end())
+                if action == "begin" and name in LATEX_PROTECTED_ENVIRONMENTS:
+                    latex_environments.append(name)
+            position = environment.end()
+        if latex_environments:
+            mark(masks[line_index], position, len(line))
+        if masks[line_index] and all(masks[line_index]):
             continue
 
+        # Formula and quote delimiters inside an already protected environment
+        # must not open or close a protection span in the surrounding prose.
+        available = visible_line(line, masks[line_index])
         if in_display_math:
             mark(masks[line_index], 0, len(line))
-            if "$$" in line:
+            if "$$" in available:
                 in_display_math = False
             continue
-        if line.count("$$") % 2 == 1:
-            first = line.find("$$")
+        if available.count("$$") % 2 == 1:
+            first = available.find("$$")
             mark(masks[line_index], first, len(line))
             in_display_math = True
-        elif "$$" in line:
+        elif "$$" in available:
             position = 0
             while True:
-                left = line.find("$$", position)
+                left = available.find("$$", position)
                 if left == -1:
                     break
-                right = line.find("$$", left + 2)
+                right = available.find("$$", left + 2)
                 if right == -1:
                     break
                 mark(masks[line_index], left, right + 2)
@@ -390,10 +464,11 @@ def protected_masks(lines: list[str]) -> list[list[bool]]:
     for line_index, line in enumerate(lines):
         if masks[line_index] and all(masks[line_index]):
             continue
+        available = visible_line(line, masks[line_index])
         index = 0
         while index < len(line):
             if active_close is not None:
-                right = line.find(active_close, index)
+                right = available.find(active_close, index)
                 if right == -1:
                     mark(masks[line_index], index, len(line))
                     break
@@ -402,21 +477,20 @@ def protected_masks(lines: list[str]) -> list[list[bool]]:
                 active_close = None
                 continue
 
-            openings = [(line.find(symbol, index), symbol) for symbol in quote_pairs]
+            openings = [(available.find(symbol, index), symbol) for symbol in quote_pairs]
             openings = [(position, symbol) for position, symbol in openings if position != -1]
             if not openings:
                 break
             left, symbol = min(openings)
             close = quote_pairs[symbol]
-            right = line.find(close, left + 1)
+            right = available.find(close, left + 1)
             if right != -1:
                 mark(masks[line_index], left, right + 1)
                 index = right + 1
                 continue
             future_close = any(
-                close in future
-                for future in lines[line_index + 1 : line_index + 9]
-                if future.strip()
+                close in visible_line(lines[future_index], masks[future_index])
+                for future_index in range(line_index + 1, min(len(lines), line_index + 9))
             )
             if future_close:
                 mark(masks[line_index], left, len(line))
@@ -653,6 +727,117 @@ def structure_findings(
     return findings
 
 
+SIGNIFICANCE_TAIL_RE = re.compile(
+    r"为[^。！？；\n]{2,52}提供(?:了)?[^。！？；\n]{0,10}"
+    r"(?:理论支撑|实践支撑|实证支撑|支撑|依据|基础|参考|借鉴|启示|条件)[。！？]?$"
+)
+MIN_SUBSTANTIVE_PARAGRAPH = 45
+SIGNIFICANCE_WINDOW = 5
+SIGNIFICANCE_CLUSTER_MIN = 3
+
+
+def significance_tail_cluster_findings(
+    path_label: str,
+    lines: list[str],
+    visible: list[str],
+    line_limit: int,
+) -> list[Finding]:
+    """Report windows where significance-support tails cluster as paragraph closers."""
+    findings: list[Finding] = []
+    window: list[tuple[int, str | None]] = []
+    section = None
+    for line_no, text, block_section in paragraph_blocks(visible, line_limit):
+        if block_section != section:
+            section = block_section
+            window = []
+        compact = re.sub(r"\s+", "", text)
+        if len(compact) < MIN_SUBSTANTIVE_PARAGRAPH:
+            continue
+        tail = SIGNIFICANCE_TAIL_RE.search(text.rstrip())
+        window.append((line_no, tail.group(0) if tail else None))
+        if len(window) > SIGNIFICANCE_WINDOW:
+            window.pop(0)
+        hits = [(hit_line, hit_text) for hit_line, hit_text in window if hit_text]
+        if len(hits) >= SIGNIFICANCE_CLUSTER_MIN:
+            hit_line, hit_text = hits[-1]
+            hit_lines = ", ".join(str(item[0]) for item in hits)
+            findings.append(
+                Finding(
+                    path=path_label,
+                    line=hit_line,
+                    column=1,
+                    severity="low",
+                    category="structure-review",
+                    pattern_id="significance-tail-cluster",
+                    match=hit_text,
+                    count=len(hits),
+                    excerpt=lines[hit_line - 1].strip()[:56],
+                    advice=(
+                        f"近窗口 {len(window)} 个实质段中 {len(hits)} 段以同类意义支撑句尾收束"
+                        f"（约第 {hit_lines} 行）；结合章节功能核对是否拔高或凑意义，"
+                        "单次命中不构成问题。"
+                    ),
+                )
+            )
+            window = []
+    return findings
+
+
+EXTERNAL_NOTE_TITLES = (
+    "待确认事项",
+    "需确认事项",
+    "待补充事项",
+    "需补充信息",
+    "待补充材料",
+    "风险提醒",
+    "核验提示",
+    "写作说明",
+    "材料缺口",
+)
+EXTERNAL_NOTE_PREFIX = re.compile(
+    r"^(?:#{1,6}\s*|[一二三四五六七八九十]+、|\d+[.、．]|第[一二三四五六七八九十百\d]+[章节部分]|[（(][一二三四五六七八九十\d]+[)）])\s*"
+)
+EXTERNAL_NOTE_BOUNDARY = "：:，,。（()）【】 \t"
+
+
+def unexpected_external_note_findings(
+    path_label: str,
+    visible: list[str],
+    delivery_mode: str,
+    line_limit: int,
+) -> list[Finding]:
+    """Flag production-note headings inside a final body delivered without them."""
+    if delivery_mode not in ("body-only", "body-with-suggestions"):
+        return []
+    for line_index, line in enumerate(visible[:line_limit]):
+        stripped = line.strip()
+        if not stripped:
+            continue
+        remainder = EXTERNAL_NOTE_PREFIX.sub("", stripped, count=1).strip()
+        remainder = re.sub(r"^[（(][一二三四五六七八九十\d]+[)）]\s*", "", remainder)
+        for title in EXTERNAL_NOTE_TITLES:
+            if not remainder.startswith(title):
+                continue
+            tail = remainder[len(title) :].strip()
+            if tail and tail[0] not in EXTERNAL_NOTE_BOUNDARY:
+                continue
+            return [
+                Finding(
+                    path=path_label,
+                    line=line_index + 1,
+                    column=1,
+                    severity="high",
+                    category="production-residue",
+                    pattern_id="unexpected-external-note",
+                    match=stripped,
+                    count=1,
+                    excerpt=stripped[:56],
+                    advice="只交付正文的终稿不应附带待确认、需补充、风险提醒等制作性说明；移出正文或并入正文后建议。",
+                )
+            ]
+    return []
+
+
 def unbalanced_findings(
     path_label: str,
     lines: list[str],
@@ -704,6 +889,11 @@ def scan(
     if delivery_mode != "review-only":
         add_pattern_findings(findings, path_label, lines, visible, SEMANTIC_PATTERNS, line_limit)
         findings.extend(frequency_findings(path_label, lines, visible, line_limit))
+    if delivery_mode in ("body-only", "body-with-suggestions"):
+        add_pattern_findings(findings, path_label, lines, visible, FINAL_BODY_PATTERNS, line_limit)
+        findings.extend(
+            unexpected_external_note_findings(path_label, visible, delivery_mode, line_limit)
+        )
     add_pattern_findings(findings, path_label, lines, visible, DELIVERY_PATTERNS, len(lines))
 
     if include_format:
@@ -711,6 +901,7 @@ def scan(
         findings.extend(unbalanced_findings(path_label, lines, visible, len(lines)))
     if include_structure and delivery_mode != "review-only":
         findings.extend(structure_findings(path_label, lines, visible, line_limit))
+        findings.extend(significance_tail_cluster_findings(path_label, lines, visible, line_limit))
 
     unique: list[Finding] = []
     seen: set[tuple[str, int, int, str, str]] = set()
@@ -742,7 +933,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--encoding", help="Encoding for plain-text inputs.")
     parser.add_argument("--json", action="store_true", help="Emit a JSON array of findings.")
     parser.add_argument("--format", action="store_true", help="Also report punctuation and format candidates.")
-    parser.add_argument("--structure", action="store_true", help="Also report repeated starts, overlap, and uniform rhythm.")
+    parser.add_argument(
+        "--structure",
+        action="store_true",
+        help="Also report repeated starts, overlap, uniform rhythm, and clustered significance tails.",
+    )
     parser.add_argument(
         "--delivery-mode",
         choices=DELIVERY_MODES,

@@ -2259,6 +2259,9 @@
     },
     "common.Organization": {
       "properties": {
+        "banned": {
+          "type": "boolean"
+        },
         "createdAt": {
           "format": "int64",
           "type": "string"
@@ -4752,6 +4755,10 @@
             "type": "object"
           },
           "type": "array"
+        },
+        "timeseriesSchemaVersion": {
+          "format": "int32",
+          "type": "integer"
         },
         "uploadedAt": {
           "format": "date-time",

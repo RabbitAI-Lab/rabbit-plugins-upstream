@@ -1,41 +1,50 @@
-## Description: <br>
-Compresses verbose responses by removing filler and framing to save 200-400 tokens. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Compresses verbose responses by removing filler and framing to save 200-400 tokens.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agent users use this skill to make assistant replies shorter by removing filler, redundant framing, and unnecessary closings while preserving clarity and critical details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Compressed responses may omit nuance, uncertainty, or detail that matters for education, debugging, or high-stakes advice. <br>
-Mitigation: Use the skill for routine concise communication, and explicitly preserve or request fuller detail for medical, legal, security, educational, or complex debugging contexts. <br>
-Risk: Removing hedging or framing can make uncertain guidance sound more definitive than the evidence supports. <br>
-Mitigation: Keep factual uncertainty markers and safety warnings when they affect correctness or user risk. <br>
+## Use Case:
 
+Agents and developers use this skill to make verbose responses more concise while retaining useful information. It is intended for routine answers where brevity helps; the skill advises keeping detail for educational explanations and step-by-step setup instructions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-response-compression) <br>
-- [claude-night-market conserve source](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Concise Markdown or plain text responses following response-compression rules.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Focuses on shorter wording while preserving safety warnings, exact errors, technical precision, and necessary context.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: Compression can make an uncertain explanation sound definite and overstate confidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep uncertainty and confidence markers from the original response when shortening it; review compressed wording for changes in certainty.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve)
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-conserve-response-compression)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Concise natural-language responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Removes filler and framing while preserving clarity and necessary context.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

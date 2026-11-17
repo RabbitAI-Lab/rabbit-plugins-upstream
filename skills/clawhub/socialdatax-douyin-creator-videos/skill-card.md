@@ -1,41 +1,48 @@
-## Description: <br>
-Helps agents retrieve and summarize Douyin creator works, image/text posts, short-drama series, and recent publishing activity using SocialDataX. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于抖音达人数据、抖音达人作品、作品列表、图文列表、短剧/合集列表、近期发布、内容调研和创作者内容分析。覆盖 Douyin creator works and series，来自 SocialDataX 社媒数据助手。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External users and analysts use the skill to retrieve Douyin creator videos, image/text posts, and short-drama series for recent content research, content-style analysis, benchmarking, and account tracking.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill repeatedly invokes an unpinned latest CLI package that could change between releases; the partial scan rated the skill suspicious but did not establish malicious intent.
+
+Mitigation: Review the package before use and prefer a reviewed fixed version if available. Confirm what profile information is sent to SocialDataX before entering an API key.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to inspect Douyin creator content lists and short-drama series for content research, creator benchmarking, recent publishing review, and account tracking. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [API data, JSON, Analysis]
 
-## Known Risks and Mitigations: <br>
-Risk: Unbounded pagination with --all can trigger large data pulls or unexpected API usage. <br>
-Mitigation: Use bounded options such as --max-items, --pages, or --since-days unless complete retrieval is explicitly needed. <br>
-Risk: The skill uses a user-provided SocialDataX API key at runtime. <br>
-Mitigation: Provide SOCIALDATAX_API_KEY through the environment only when intending to use SocialDataX; do not store API keys in skill files. <br>
+**Output Format:** [Structured JSON records with concise content summaries when requested]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin-creator-videos) <br>
+**Other Properties Related to Output:** [Results may include creator posts or series, metadata, interaction counts, and pagination tokens.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands; SocialDataX data calls return JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY at runtime and supports bounded pagination options such as --max-items, --pages, and --since-days.] <br>
+0.1.23 (source: server-resolved release metadata)
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

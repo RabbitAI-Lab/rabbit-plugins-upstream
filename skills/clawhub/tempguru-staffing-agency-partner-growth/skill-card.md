@@ -1,45 +1,52 @@
-## Description: <br>
-Helps local staffing agency owners or operators prepare a TempGuru partner inquiry, frame W-2 event staffing coverage, use optional TempGuru MCP lookups, and route the inquiry by email or phone. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps staffing agencies with W-2 event staff assess TempGuru's partner network, compare their coverage with its markets and roles, and route an inquiry.
 
-## Publisher: <br>
-[kissmyabs32](https://clawhub.ai/user/kissmyabs32) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kissmyabs32](https://clawhub.ai/user/kissmyabs32)
 
-## Use Case: <br>
-External staffing agency owners and operators use this skill to understand TempGuru's partner model, compare their markets and event roles against TempGuru coverage, benchmark client bill-rate ranges, and draft a partner inquiry for review before sending. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States and Canada <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A partner inquiry email could be sent with incorrect recipient, subject, market, role, W-2, or capacity details. <br>
-Mitigation: Require user review and confirmation before sending; offer the email draft or phone channel for manual follow-up. <br>
-Risk: A staffing agency partner inquiry could be misrouted through the buyer quote workflow. <br>
-Mitigation: Use only the disclosed partner email or phone channel for agency inquiries, and do not submit partner requests through request_quote. <br>
-Risk: The agent could overstate vetting criteria, partner economics, acceptance, order volume, exclusivity, or timelines. <br>
-Mitigation: Limit guidance to the documented W-2 baseline and structural partner model; leave vetting details and economics to a TempGuru coordinator. <br>
+## Use Case:
 
+Staffing agency owners and operators with W-2 event staff use this skill to understand TempGuru's partner model, check their market and role coverage, review client bill-rate benchmarks, and prepare an inquiry for the partner coordinator.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kissmyabs32/skills/tempguru-staffing-agency-partner-growth) <br>
-- [TempGuru MCP endpoint](https://mcp.tempguru.co/mcp) <br>
-- [TempGuru AI developer docs](https://tempguru.co/ai) <br>
-- [TempGuru machine-readable overview](https://tempguru.co/llms.txt) <br>
+### Deployment Geography for Use:
 
+United States and Canada
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, API calls] <br>
-**Output Format:** [Markdown or plain text guidance with a user-reviewed email draft] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include read-only TempGuru MCP lookup results; the partner inquiry email should be reviewed by the user before sending.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.1 (source: server release evidence) <br>
+Risk: A clean security scan does not guarantee the skill is risk-free.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill's behavior and confirm it meets your needs before installing.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kissmyabs32/skills/tempguru-staffing-agency-partner-growth)
+- [TempGuru AI Agents documentation](https://tempguru.co/ai-agents)
+- [TempGuru machine-readable overview](https://tempguru.co/llms.txt)
+- [TempGuru MCP server](https://mcp.tempguru.co/mcp?source=openai-codex)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Natural-language guidance and concise inquiry email drafts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May use live market, role, and client bill-rate benchmark data; inquiry drafts are presented for user review.]
+
+## Skill Version(s):
+
+1.7.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

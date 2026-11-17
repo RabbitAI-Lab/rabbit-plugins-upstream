@@ -1,49 +1,62 @@
-## Description: <br>
-Smart Message Plus is a cross-platform enterprise messaging skill for sending user-provided DingTalk, Feishu/Lark, and WeCom webhook messages with aliases, templates, media, recall, onboarding, and configurable safety gates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cross-platform enterprise messaging skill for sending user-provided messages through DingTalk, Feishu/Lark enterprise apps, and WeCom group robot webhooks with aliases, templates, media, recalls where supported, onboarding, and configurable approval gates.
 
-## Publisher: <br>
-[songhonglei](https://clawhub.ai/user/songhonglei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[songhonglei](https://clawhub.ai/user/songhonglei)
 
-## Use Case: <br>
-Developers, operations teams, and agent users use this skill to configure enterprise messaging providers and send user-supplied P2P, group, media, card, and broadcast messages through a unified CLI. It is suited for controlled operational notifications where dry-run previews, contact aliases, and approval gates are needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send and recall enterprise messages, create some chat groups, and perform broad broadcasts through configured messaging providers. <br>
-Mitigation: Use dry-run before broad sends, keep safety_gate enabled, configure approval admins carefully, and require force or approval codes above the configured thresholds. <br>
-Risk: Messaging credentials, local configuration, approval codes, and send logs with message previews may be sensitive. <br>
-Mitigation: Protect the data directory, restrict filesystem access to credential and log files, and avoid placing secrets or confidential message content in shared workspaces. <br>
-Risk: Approval workflows can expose message previews to configured administrators. <br>
-Mitigation: Send confidential content through approval workflows only when those administrators are authorized to view the preview, or reduce message sensitivity before requesting approval. <br>
-Risk: AI-generated or modified outbound message content could create unauthorized communications. <br>
-Mitigation: Require the user to provide message content explicitly; allow autonomous test content only when the user authorizes self-testing to the user's own account. <br>
+## Use Case:
 
+Employees, IT operators, and developers use this skill to configure enterprise messaging accounts and send user-provided messages across DingTalk, Feishu/Lark, and WeCom from an agent-controlled CLI. It is suited for operational notices, group messaging, department broadcasts, media delivery, and account or contact setup where enterprise credentials and approval controls are managed by the workspace operator.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/songhonglei/skills/smart-message-plus) <br>
-- [Provider Capability Matrix](references/provider-matrix.md) <br>
-- [Console Setup Guide](references/console-setup.md) <br>
-- [Org Lookup Contract](references/org-lookup-contract.md) <br>
-- [Design Document](docs/design.md) <br>
-- [Add Channel Guide](docs/add-channel.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI command examples, configuration snippets, terminal text, and JSONL send or audit logs when executed.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill can execute messaging API actions through configured provider credentials; dry-run previews are available before broad sends.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.0 (source: server release metadata, target metadata, and SKILL.md) <br>
+Risk: Outbound messages, local file uploads, send logs, recipient identifiers, or webhook secrets could be disclosed beyond the intended scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in trusted workspaces, store credentials with least privilege, treat send logs as sensitive, and review recipient, file, and message content before sending.
+
+Risk: Untrusted aliases, templates, or custom organization lookup services could redirect messages or expose directory data.
+
+Mitigation: Use trusted aliases and templates, prefer official HTTPS endpoints for organization lookup, and avoid non-HTTPS or untrusted custom lookup services.
+
+Risk: Large broadcasts can reach many recipients quickly if approval controls are bypassed or disabled.
+
+Mitigation: Keep the configurable safety gate enabled, use dry runs for broadcast previews, and require force-send or content-bound admin approval codes above configured thresholds.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/songhonglei/skills/smart-message-plus)
+- [Provider Matrix](references/provider-matrix.md)
+- [Console Setup](references/console-setup.md)
+- [Org Lookup Contract](references/org-lookup-contract.md)
+- [Design Notes](docs/design.md)
+- [Add Channel Guide](docs/add-channel.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and CLI-oriented text with shell commands, configuration snippets, and structured send results from the bundled Python scripts.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill requires user-provided message content and may create local configuration, contact alias, token cache, and send log files in its runtime data directory.]
+
+## Skill Version(s):
+
+2.1.0 (source: server release metadata and target metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

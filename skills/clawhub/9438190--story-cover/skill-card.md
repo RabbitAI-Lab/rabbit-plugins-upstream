@@ -1,41 +1,59 @@
-## Description: <br>
-Generates professional Chinese web-novel cover images by analyzing a title, author name, platform, and genre style, then preparing GPT-Image-2 prompts and image-generation commands. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates Chinese web-novel cover prompts and shell commands that call a configured image API to create covers with title and author text.
 
-## Publisher: <br>
-[9438190](https://clawhub.ai/user/9438190) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[9438190](https://clawhub.ai/user/9438190)
 
-## Use Case: <br>
-External users and developers use this skill to create Chinese online-fiction cover art, including genre selection, platform-specific visual style, prompt construction, optional reference-image editing, and local file output. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Book titles, author names, generated prompt details, and optional reference images are sent to the configured image API. <br>
-Mitigation: Use only an image API endpoint you trust, and avoid confidential manuscripts or private images unless that endpoint is acceptable. <br>
-Risk: Generated files are saved under the configured BOOK_DIR path. <br>
-Mitigation: Set BOOK_DIR deliberately before execution and review the output path before sharing generated covers or sidecar prompt files. <br>
+## Use Case:
 
+Authors, editors, and publishing-support agents use this skill to turn book metadata, platform style, and optional reference images into structured cover prompts and API commands for generating web-novel cover art.
 
-## Reference(s): <br>
-- [Cover Style Reference](references/cover-styles.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/9438190/skills/story-cover) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance, Shell commands, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with prompt text and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces prompts, API call commands, PNG cover files, and prompt/reference sidecar text files when executed by an agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Cover prompts, book metadata, and optional reference images are sent to the configured image API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only trusted API providers or proxies, and avoid sending sensitive or rights-restricted source material.
+
+Risk: Changing GPT_IMAGE_BASE_URL or using remote reference-image URLs can route content through untrusted services.
+
+Mitigation: Keep the trusted default API endpoint unless a trusted proxy is intentional, and prefer local or trusted HTTPS reference images.
+
+Risk: Generated covers may contain text, layout, or style errors that are unsuitable for publication.
+
+Mitigation: Review saved images and prompt copies before use, then iterate on composition, typography, color, or platform style as needed.
+
+## Reference(s):
+
+- [Cover Style Reference](references/cover-styles.md)
+- [ClawHub Skill Page](https://clawhub.ai/9438190/skills/story-cover)
+- [OpenClaw Metadata Source Link](https://github.com/worldwonderer/oh-story-claudecode)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, files]
+
+**Output Format:** [Markdown guidance with bash command blocks and prompt text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save generated PNG covers and prompt or reference text files under BOOK_DIR.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

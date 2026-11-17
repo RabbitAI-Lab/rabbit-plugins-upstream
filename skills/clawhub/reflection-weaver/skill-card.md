@@ -1,38 +1,50 @@
-## Description: <br>
-Turn a reflection, draft essay, or voice-note transcript into a woven knowledge object by preserving the voice, extracting stable concepts, and strengthening backlinks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turn a reflection, draft essay, or voice-note transcript into a woven knowledge object by preserving the voice, extracting stable concepts, and strengthening backlinks.
 
-## Publisher: <br>
-[jjjhenriksen](https://clawhub.ai/user/jjjhenriksen) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jjjhenriksen](https://clawhub.ai/user/jjjhenriksen)
 
-## Use Case: <br>
-Writers and knowledge-management users use this skill to turn reflections, draft essays, or voice-note transcripts into linked notes while preserving voice and extracting reusable concepts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Suggested backlinks, extracted concepts, or split notes could change the user's intended meaning or over-structure private reflections. <br>
-Mitigation: Review proposed links, extracted concepts, and note splits before applying edits to a knowledge vault. <br>
+## Use Case:
 
+Knowledge-base authors use the skill to preserve reflections and essays while extracting stable concepts and adding useful links and backlinks.
 
-## Reference(s): <br>
-- [Reflection Weaver on ClawHub](https://clawhub.ai/jjjhenriksen/skills/reflection-weaver) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown prose with embedded links and backlink suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May suggest split reflection, concept, or synthesis notes while preserving the original writing as canonical.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: An incorrect or duplicate concept link could misrepresent the reflection or fragment the knowledge base.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Resolve candidate concepts against existing notes and stable IDs; leave ambiguous targets unresolved and review edits within the authorized scope.
+
+## Reference(s):
+
+- [Reflection Weaver on ClawHub](https://clawhub.ai/jjjhenriksen/skills/reflection-weaver)
+- [Reusing an existing concept across two passes](references/rerun-example.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Files, Guidance]
+
+**Output Format:** [Markdown knowledge notes with inline links and backlinks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Preserves source wording and updates canonical notes within the authorized knowledge scope.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

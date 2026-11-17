@@ -1,0 +1,52 @@
+{
+  "name": "hekouwang-terminal-lite-skill",
+  "displayName": "会勇禾口王 · 终端工作台（免费版）",
+  "version": "3.0.0",
+  "tagline": "一份色板穿透 iTerm2 与整条命令行工具链",
+  "description": "免费版 macOS 终端工作台：配好的 iTerm2（3 套社区主题、毛玻璃、4 条 Triggers、语义 Cmd-click、Shift+Enter），加安装 / 迁移 / 换肤 / 体检 / 卸载脚本。何时用：终端配色、接管 .zshrc、命令行工具链同色、终端体检。多终端同步、光学校准、场景与工作区属付费版 hekouwang-terminal-skill。不用于与终端配色无关的普通编码。",
+  "author": "会勇禾口王",
+  "license": "MIT",
+  "category": "developer-tools",
+  "tags": [
+    "终端配色",
+    "iTerm2",
+    "主题",
+    "zsh",
+    "开发环境",
+    "macOS",
+    "Nerd Font",
+    "终端体检"
+  ],
+  "requires_api_key": false,
+  "scripts": [
+    "scripts/demo-scene-reel.sh",
+    "scripts/doctor.sh",
+    "scripts/install.sh",
+    "scripts/migrate.sh",
+    "scripts/node-mgr.sh",
+    "scripts/release.sh",
+    "scripts/setup-cli.sh",
+    "scripts/setup-gui.sh",
+    "scripts/sync.sh",
+    "scripts/theme.sh",
+    "scripts/uninstall.sh",
+    "scripts/unlock.sh",
+    "scripts/update.sh"
+  ],
+  "references": [
+    "references/cli-themes.md",
+    "references/cli-themes.zh-CN.md",
+    "references/first-run.md",
+    "references/first-run.zh-CN.md",
+    "references/i18n.md",
+    "references/i18n.zh-CN.md",
+    "references/iterm2-gui-settings.md",
+    "references/iterm2-gui-settings.zh-CN.md",
+    "references/shortcuts.md",
+    "references/shortcuts.zh-CN.md",
+    "references/tips.md",
+    "references/tips.zh-CN.md",
+    "references/zshrc-explained.md",
+    "references/zshrc-explained.zh-CN.md"
+  ]
+}

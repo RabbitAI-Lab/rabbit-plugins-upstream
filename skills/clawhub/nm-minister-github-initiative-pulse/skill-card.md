@@ -1,44 +1,58 @@
-## Description: <br>
-Generates markdown digests and CSV exports for GitHub initiative health. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates markdown digests and CSV exports for GitHub initiative health
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers, project maintainers, and coordination teams use this skill to turn GitHub tracker and board data into initiative status digests, blocker summaries, and CSV-ready reporting outputs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated GitHub status text could be outdated, incomplete, or misleading if tracker data is stale. <br>
-Mitigation: Review the generated markdown and confirm source tracker or GitHub board data before posting to issues, pull requests, or Discussions. <br>
-Risk: The skill may activate on broad GitHub or status-reporting requests. <br>
-Mitigation: Confirm the intended reporting context before using its snippets or summaries. <br>
-Risk: Separate Claude Code plugin or tracker.py tooling referenced by the skill is outside this release's security evidence. <br>
-Mitigation: Evaluate any external plugin or tracker tooling independently before installing or running it. <br>
+## Use Case:
 
+Project and engineering teams use this skill to summarize GitHub initiative progress, surface blockers and risks, and prepare status updates for issues, pull requests, or Discussions. It can also export initiative health metrics as CSV.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-minister-github-initiative-pulse) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/athola) <br>
-- [OpenClaw Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/minister) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, text, guidance] <br>
-**Output Format:** [Markdown digests, GitHub comment snippets, and CSV export guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Review generated markdown before posting it to GitHub issues, pull requests, or Discussions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: release evidence) <br>
+Risk: The `status` trigger could conflict with a built-in command in the host agent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check for a command-name conflict in the target agent before enabling the skill.
+
+Risk: Tracker-derived or GitHub content may be stale or unsuitable for the intended audience when included in a published digest.
+
+Mitigation: Review the source data, linked issues and pull requests, and intended GitHub audience before publishing.
+
+Risk: The security scan was partial because a local reference could not be resolved.
+
+Mitigation: Review the skill and unresolved reference before installation or use.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-minister-github-initiative-pulse)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/minister)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, CSV, Text]
+
+**Output Format:** [Markdown digests and CSV exports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Initiative status summaries, progress metrics, blockers, risks, and milestone information.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter and server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

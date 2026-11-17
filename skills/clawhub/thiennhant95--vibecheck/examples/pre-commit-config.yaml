@@ -1,0 +1,11 @@
+# .pre-commit-config.yaml - pre-commit hook for vibecheck (https://pre-commit.com)
+repos:
+  - repo: local
+    hooks:
+      - id: vibecheck
+        name: vibecheck (audit AI-generated code)
+        entry: python3 vibecheck.py
+        language: system
+        args: ["--fail-on", "high", "--min-score", "70", "--baseline", ".vibecheck-baseline.json"]
+        pass_filenames: true
+        types: [python, javascript, typescript]

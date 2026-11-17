@@ -2,11 +2,11 @@
 slug: awesome-poetize-open-blog-automation
 displayName: POETIZE 博客自动化
 name: poetize-blog-automation
-description: 让 AI 帮你运营 POETIZE 博客：写文章并一键发布、更新或隐藏已有文章、管理分类和标签、管理评论、上传图片、翻译管理、切换博客主题、查看访问数据和趋势、配置 SEO、处理付费文章支付配置；含认证持久化、配置生成、测试等辅助能力。仅支持 awesome-poetize-open（POETIZE 的开源 fork），不适用于闭源版 POETIZE 或其他博客系统，也不用于与 POETIZE 无关的通用写作或 SEO 咨询。开源仓库：https://github.com/LeapYa/awesome-poetize-open
-summary: POETIZE 博客运营助手：写文章、发布、管理分类标签与评论、上传图片、翻译管理、切换主题、查看数据、配置 SEO、处理付费文章支付配置。
+description: 让 AI 帮你运营 POETIZE 博客：写文章并一键发布、更新、隐藏或删除已有文章（删除进回收站，保留期内可恢复）、管理分类和标签、管理评论、上传图片、翻译管理、切换博客主题、查看访问数据和趋势、配置 SEO、处理付费文章支付配置；含认证持久化、配置生成、测试等辅助能力。仅支持 awesome-poetize-open（POETIZE 的开源 fork），不适用于闭源版 POETIZE 或其他博客系统，也不用于与 POETIZE 无关的通用写作或 SEO 咨询。开源仓库：https://github.com/LeapYa/awesome-poetize-open
+summary: POETIZE 博客运营助手：写文章、发布、管理分类标签与评论、上传图片、翻译管理、切换主题、查看数据、配置 SEO、处理付费文章支付配置；误删误改可进回收站恢复（文章版本历史/资源回收站，需后端 v5.2.7+）。
 license: MIT
 homepage: https://github.com/LeapYa/awesome-poetize-open/tree/main/skills/poetize-blog-automation
-version: 2.1.8
+version: 2.5.2
 primaryEnv: POETIZE_API_KEY
 requires:
   anyBins:
@@ -78,12 +78,34 @@ disable-model-invocation: false
 Read [references/strategy-playbook.md](references/strategy-playbook.md) before deciding whether to create, refresh, or hide content.
 Read [references/decision-matrix.md](references/decision-matrix.md) before setting publish posture, search posture, or paywall posture.
 Read [references/creativity-workflow.md](references/creativity-workflow.md) before drafting article copy.
+Read [references/writing-cases.md](references/writing-cases.md) only when revising copy that failed review — the cases calibrate the rules below but must not enter the prompt.
 Run `poetize-blog.sh eval` to verify the local strategy layer before shipping skill changes.
 
 ## Writing Voice
 
 - Use first-person plural (`我们`) when writing about this project. Sound like an experienced developer talking with a friend: clear, practical, not academic.
 - Avoid thesis-style setup lines and formulaic transitions. Do not use `说白了`/`不得不说`/`众所周知`/`接下来我们将探讨`/`不是...而是` in article copy.
+
+## Writing Rules
+
+总纲：读者是没参与过项目的外部人，看不到内部记录，也不知道任何约定背景。只有内部能懂的指代、进度汇报、自我保证，写出来对读者都是负担。以下每条能用“是／否”判断。
+
+1. **读者设定统一**：假定读者没参与过项目、看不到内部记录，只有内部能懂的指代一律展开（不写“老办法”“上次那版”，写具体做法名）。
+2. **数据可追溯**：数量带总量、分项和统计范围，他人的数据、代码、结论带名称与标识（编号、链接、版本都行）；只给片段数量和“我们自己标的”都算没写完。
+3. **步骤可复现**：交付物写清它现在是什么状态、拿到之后第一步做什么、不做会怎样；参数和步骤能让人照着跑通，拿不到的信息写获取方式，不拿占位符代替说明（写“从页面 load 请求里复制 captcha_id”，不写“你的 gt”）。
+4. **原因先于做法**：先写为什么这么做、为什么不那么做，再给步骤；只给做法，读者无法判断什么时候该改。
+5. **结果可核查**：跑通、通过、完成这类词后面带对象或数字，否则不算证据；样本有局限就直接写条件——跑了多少次、成功几次、失败没放，辩解式说明读起来像掩饰。
+6. **不写元话语**：不汇报进度、不预告结构、不总结自己刚说的话（删掉“到这里整套流程就完整了”“本文分三部分”）。
+7. **不替读者下判断**：只写方法成立或不成立，不写谁“第一反应”怎么做，也不写“很多人都会”。
+8. **篇幅随信息量**：重要的展开，次要的一句带过；章节长度由内容多少决定，不要为凑篇幅把短内容抻长；单句成段全篇不超过两处，只用在真正的转折或结论上。
+9. **标点跟语义走**：时间、因果、递进用逗号连写；分号只在真正并列对照时用且全文少量；冒号只引出清单、定义、直接引语；引号只给直接引语和需强调的原话。
+10. **术语先解释后用**：专业词首次出现给一句白话解释，之后直接用；通用术语（过拟合、mAP 这类）不替换，换掉反而不准确。
+11. **不用比喻描述结构**：串起来、打通、闭环、抓手一律不用，写具体关系——因果、并列、递进、对照；圈内压缩词（收口、对齐、过一遍、落地）换成说清动作、对象和程度。
+12. **格式不影响语义**：标题只标真正的话题切换，强调用加粗不用标题；分隔线前后各留一个空行，需要视觉分隔时用 `***`。
+
+体裁差异：默认体裁是**技术教程**，第 3、5、12 条是硬要求（交付格式、参数获取、复现步骤、失效引用）。写**报告与公文**时第 2 条优先，责任归属和口径比可读性重要，第 8 条放宽。写**社媒与口播**时第 8 条的短段落是对的，要禁的是空行过多和广告腔，第 3 条可以弱化。换体裁按此换权重。
+
+第 2、3、5 条要求的是信息完备性，起草前必须先盘点事实，见 Workflow step 4。改稿自查处见 [assets/fast-check.md](assets/fast-check.md)：成稿后对照其中七行逐条确认再提交。
 
 ## Pre-Writing Topic Validation
 
@@ -100,17 +122,19 @@ If web search or article-list access is unavailable, record that limitation in `
 - Use comparison tables when they clarify choices, tradeoffs, version differences, or troubleshooting paths. Comment code only where intent is non-obvious.
 - Keep H1 out of article bodies: set the title in front matter, use `##` for top-level sections, and do not skip heading levels. For section edits, preserve the stored heading level by default and keep descendant levels relative to it.
 - Use blockquotes (`>`) for tips, notes, and quotations; add relevant legal, security, or compatibility disclaimers.
+- Chinese quoting conventions: wrap titles of works in `《》`, wrap file and column names in quotation marks, and use single quotes only inside double quotes.
 
 ## Workflow
 
 1. Classify intent and safety posture.
    Determine the target operation, article, taxonomy, visibility, and monetization (defaults to free). Honor explicit visibility intent; when absent, stage a new article as a draft for review. Run Pre-Writing Topic Validation only when applicable.
-   A strategy brief is required for `publish` and these `manage` mutations: `update-article`, `hide-article`, `update-section`, `save-translation`, `delete-translation`, and `regenerate-translation`. Other commands do not consume a brief.
+   A strategy brief is required for `publish` and these `manage` mutations: `update-article`, `hide-article`, `delete-article`, `update-section`, `save-translation`, `delete-translation`, and `regenerate-translation`. Other commands do not consume a brief. `delete-article` accepts an ops brief (`taskType: delete_article`) so deletion carries an explicit strategy/audit record even though it stays reversible within the retention window; `delete-resource` remains brief-free.
 2. Create the matching brief.
    Use `{baseDir}/assets/article-brief.template.json` for `publish` and `{baseDir}/assets/ops-brief.template.json` for strategy-validated `manage` commands. Article briefs require `taskType`, `primaryGoal`, `targetAudience`, `publishIntent`, `reasoning`, `selectedAngle`, and `alternativesConsidered`; `monetizationIntent` defaults to `free_default`. Ops briefs require `taskType`, `primaryGoal`, `reasoning`, and `expectedOutcome`. Infer strategy fields from the user's goal and explain them in `reasoning`. Ask only when missing information would materially change the target, visibility, monetization, or taxonomy.
 3. Diverge, then converge.
    Consider 2-4 plausible directions, choose one as `selectedAngle`, and record 1-3 rejected directions in `alternativesConsidered`. Even when one direction is strongly preferred, include at least one plausible rejected alternative.
 4. Write the article in Markdown following Content Layout Rules and Writing Voice.
+   Inventory facts before drafting: list the numbers, sources, and retrievable parameters you actually have. Anything missing is either written as how to obtain it or left out — never estimated, rounded up, or filled with a plausible-looking figure. A vague gap the reader can see beats a precise number that is invented.
    For images: either reference local files (CLI auto-uploads at publish time) or upload first via `poetize-blog.sh upload-image` and embed the URL. When the task is maintenance, prefer revising existing articles over creating duplicates.
 5. Add front matter for the article title, routing, and publishing metadata.
    New articles require `title`, `sort`/`sortId`, and `label`/`labelId`; content updates require `title` and may omit unchanged taxonomy. With inline `_brief`, omit `viewStatus` (derived from `publishIntent`) and omit `payType` for `free_default` (forced to `0`); `paid_explicit` requires `primaryGoal: conversion`, non-empty `whyPaid`, and `payType > 0`. Use existing taxonomy names when IDs are unknown (close matches are suggestions only); set `coverBlank: true` when no cover is needed.
@@ -122,6 +146,8 @@ If web search or article-list access is unavailable, record that limitation in `
    | `title` | Yes | — | Article title; do not repeat it as H1 in body |
    | `sort` / `sortName` / `sortId` | Yes for new | — | Category name or ID |
    | `label` / `labelName` / `labelId` | Yes for new | — | Tag name or ID |
+   | `sortDescription` / `sortDesc` | No | sort name | Description used when auto-creating a category via `--allow-create-sort`; if omitted, the category name is used as the description |
+   | `labelDescription` / `labelDesc` | No | label name | Description used when auto-creating a tag via `--allow-create-label`; if omitted, the tag name is used as the description |
    | `articleSlug` / `slug` | No | auto | SEO-friendly URL slug |
    | `commentStatus` | No | new: `true`; update: unchanged | Enable comments |
    | `recommendStatus` | No | new: `false`; update: unchanged | Feature in recommendations |
@@ -129,6 +155,7 @@ If web search or article-list access is unavailable, record that limitation in `
    | `viewStatus` | No | from `_brief.publishIntent` | Omit when using inline `_brief` |
    | `cover` / `coverFile` / `coverBlank` | No | platform default | Cover image URL, local path, or `coverBlank: true` to skip |
    | `coverStoreType` / `storeType` | No | — | Override cover storage type |
+   | `uploadLocalImages` / `uploadMarkdownImages` | No | `true` | Set `false` to skip publish-time auto-upload of local image references (assets already deployed). Site-absolute paths like `/media/x.png` are never treated as local files either way — see [Image Upload Boundaries](#image-upload-boundaries) |
    | `video` | No | — | Video URL |
    | `password` / `tips` | No | auto for drafts | Password and preview tip for private articles |
    | `payType` | No | free: `0`; paid: `> 0` | Omit for `free_default`; required for `paid_explicit` |
@@ -140,20 +167,26 @@ If web search or article-list access is unavailable, record that limitation in `
 6. Write the Markdown file locally, then run `poetize-blog.sh publish --markdown-file <file>`; inline `_brief` removes the need for `--brief-file`.
    `_brief.publishIntent` determines visibility; `--draft` and `--publish` are optional consistency checks and must agree with it. For draft-first creation, start with `taskType: create_article` and `publishIntent: draft`, run with `--draft --wait`, and verify the returned ID. To promote, change the same file to `taskType: refresh_article` and `publishIntent: public`, then rerun with `--article-id <id> --publish --wait`.
    Runtime auth requires `POETIZE_BASE_URL` and `POETIZE_API_KEY`. Referenced local images are uploaded automatically. Paid publishing checks `/api/api/payment/plugin/status` and fails closed if the plugin is not ready; it never silently publishes as free.
-7. Use `manage <subcommand>` for existing content, comments, themes, analytics, and SEO.
-   - Use `update-section` for localized source edits, `save-translation` for a manual translation correction, `regenerate-translation` only when all translations are stale, and `publish --article-id` for full rewrites. Article deletion is unsupported; use `hide-article`.
+7. Use `manage <subcommand>` for existing content, comments, themes, analytics, SEO, and taxonomy (categories/tags).
+   - Use `update-section` for localized source edits, `save-translation` for a manual translation correction, `regenerate-translation` only when all translations are stale, and `publish --article-id` for full rewrites. `delete-article` moves an article to the recycle bin (recoverable for the retention window reported in the response, 30 days by default, via `restore-article`); permanent deletion is unsupported. Use `hide-article` to keep it registered but invisible.
+   - Use `list-sorts`/`list-labels` to inspect taxonomy, and `create-sort`/`update-sort`/`delete-sort`/`create-label`/`update-label`/`delete-label` to manage categories and tags independently of article publishing. When creating taxonomy, always provide a meaningful `--description`.
    - Comment writes are opt-in: run them only when the user requests comment work or accepts a specific proposal. Use `--as-ai` for the configured AI persona; omit it for the Blog Owner.
    - Comment, translation, and section commands require backend `v5.1.0`+. On a version-mismatch error, ask the user to upgrade; other commands remain available.
 8. Return the final result. For async commands, prefer running **without** `--wait` so the CLI returns the task id immediately; then poll status yourself (`manage task-status --task-id <id>` for article tasks, `manage list-translation-languages --article-id <id>` for translation tasks) with a sleep between checks. Reserve `--wait` for simple one-shot waits.
 
 ## Guardrails
 
+- Backend compatibility: recycle-bin and version-history commands require **awesome-poetize-open v5.2.7+**
+  (skill v2.5.0). No proactive capability probe is needed: on older backends the CLI itself detects the
+  missing endpoint (HTTP 404 or 500) and returns a clear upgrade hint — show that message to the user
+  instead of retrying.
 - Free content is the default; never introduce a paywall without an explicit monetization request. New articles default to draft when visibility is unspecified.
 - Strategy-validated commands require a matching, non-contradictory brief. Other writes require explicit user intent but no fabricated brief.
 - Never invent taxonomy IDs or silently accept fuzzy matches. Use names when IDs are unknown; create taxonomy only after confirmation via `--allow-create-*`.
+- When auto-creating taxonomy (`--allow-create-sort`/`--allow-create-label`), always provide `sortDescription`/`labelDescription` in front matter with a meaningful one-sentence description of what the category or tag covers. If omitted, the backend falls back to using the name itself as the description — acceptable but less informative.
 - Preserve unspecified fields on updates. The only exception is `submitToSearchEngine` (see front matter table); hide flows force it to `false`.
 - Every article brief **must** include `alternativesConsidered` — a non-empty list of 1–3 rejected angles. Never submit a `publish` brief without it, even when one angle is clearly preferred.
-- Article deletion is unsupported — use `hide-article`. A requested paid publish fails closed when payment is unavailable; a separate free publish requires fresh user intent and a `free_default` brief.
+- `delete-article`/`delete-resource` only move to the recycle bin (retention window from the API response, 30 days by default; `restore-article`/`restore-resource` to undo); permanent purge is never exposed to the API. Recover a bad image replacement with `list-resource-backups` + `restore-resource-backup` (the overwritten current file is backed up first, so restores are reversible). Recover a bad update with `list-versions` + `restore-version` (the pre-restore state is auto-snapshotted, so restores are reversible). A requested paid publish fails closed when payment is unavailable; a separate free publish requires fresh user intent and a `free_default` brief.
 - Prefer `coverBlank: true` over a fabricated cover. Stop on a missing local image rather than dropping or guessing it.
 - Comment writes remain opt-in; publishing alone is not permission to inspect or create comments.
 - With `list-comments --floor-comment-id <id>`, `"root_comment_missing": true` means the root fell outside the newest 50 top-level comments. Fetch additional pages before replying when root context matters.
@@ -163,6 +196,9 @@ If web search or article-list access is unavailable, record that limitation in `
 1. **Size Limit**: Nginx/OpenResty allows up to **2048MB** per request (aligned with Spring Boot `max-file-size`). Normal user-facing image uploads (comments, love wall) are limited to **5MB** by the frontend; admin uploads (fonts, resources) can use the full 2048MB.
 2. **Formats**: SVG is strictly forbidden (XSS risk). Use JPEG, PNG, GIF, BMP, WEBP, TIFF, ICO.
 3. **Filenames**: No encoding restrictions (Chinese names fully supported). Server auto-renames to UUIDs.
+4. **Which references count as local files**: at publish time the CLI uploads the body's **local file** references automatically. A reference is local only when it looks like a filesystem path — relative (`img/a.png`, `./a.png`), `file://…`, or a Windows drive/UNC path. Everything else is left untouched: `http(s)://` URLs, protocol-relative `//cdn…`, `data:` URIs, and **site-absolute URL paths such as `/media/x.png` or `/static/…`** (a leading `/` is a route on the site, not a file on your disk). Never rewrite a body's `/media/…` links into absolute `https://…` URLs just to get a publish through.
+5. **Skipping upload entirely**: set `uploadLocalImages: false` (alias `uploadMarkdownImages: false`) in front matter when the assets are already deployed — the CLI then neither uploads nor validates, and publish time drops. Note this is a blanket switch: a genuinely missing local file is not reported either.
+6. **Missing local file**: with uploading enabled, a reference classified as local that cannot be found on disk aborts the publish with `Local article asset was referenced but not found`. Fix the path (or move the file next to the Markdown); if the reference is actually a site URL, item 4 explains why it should not have been classified as local.
 
 ## Monetization & Payment Settings
 
@@ -268,12 +304,27 @@ poetize-blog.sh manage save-comment --article-id 123 --content "欢迎留言交�
 
 | Subcommand | Purpose | Key flags |
 |---|---|---|
-| `list-articles` | List/filter articles | `--search-key`, `--sort-name`, `--label-name`, `--exact-title`, `--current`, `--size` |
+| `list-articles` | List/filter articles | `--search-key` (title fragment), `--article-search` (title+content full-text; `/.../` = regex), `--sort-name`, `--label-name`, `--exact-title`, `--recommend-only`, `--created-between` / `--updated-between` / `--published-between` (repeatable `START~END` time ranges, see note below), `--order` / `--asc` (sort by create-time/update-time/publish-time), `--current`, `--size`, `--orphan-only` (only broken articles with missing/deleted category or tag, for data repair) |
 | `get-article` | Fetch one article | `--article-id` / `--article-slug` / `--article-title-exact` |
 | `update-article` | Update metadata via raw JSON; use `publish` or `update-section` for content | `--payload-file` / `--stdin-payload`, `--brief-file` / `--stdin-brief`, `--wait` |
 | `hide-article` | Set `viewStatus=false` | `--brief-file` / `--stdin-brief`, `--password`, `--tips`, `--wait` |
+| `delete-article` | Move to recycle bin (recoverable for the retention window) (v5.2.7+) | article target only, `--brief-file` / `--stdin-brief` |
+| `restore-article` | Restore from recycle bin (v5.2.7+) | `--article-id <id>` (from `list-trash`) |
+| `list-trash` | List recycle bin articles (v5.2.7+) | `--search-key`, `--current`, `--size` |
+| `list-versions` | List version snapshots (newest first) (v5.2.7+) | `--article-id <id>` |
+| `restore-version` | Restore a version (auto-snapshots current) (v5.2.7+) | `--article-id <id>`, `--version-id <id>` |
+| `trash-detail` | Fetch a trashed article's full content + translations, to decide what to restore (v5.2.7+) | `--article-id <id>` (from `list-trash`) |
+| `version-detail` | Fetch a version snapshot's full content + translations, to decide what to roll back to (v5.2.7+) | `--version-id <id>` (from `list-versions`) |
+| `list-resources` | List resources (excludes trashed) (v5.2.7+) | `--search-key`, `--current`, `--size` |
+| `delete-resource` | Move resource to recycle bin (recoverable for the retention window) (v5.2.7+) | `--resource-id <id>` or `--path <path>` |
+| `restore-resource` | Restore resource from recycle bin (v5.2.7+) | `--resource-id <id>` (from `list-resource-trash`) |
+| `list-resource-trash` | List resource recycle bin (v5.2.7+) | `--search-key`, `--current`, `--size` |
+| `list-resource-backups` | List pre-replacement old versions (v5.2.7+) | `--resource-id <id>` (optional), `--current`, `--size` |
+| `restore-resource-backup` | Restore pre-replacement version (current file backed up first) (v5.2.7+) | `--backup-id <id>` |
+| `resource-trash-detail` | Fetch a trashed resource's metadata + preview URL, to decide what to restore (v5.2.7+) | `--resource-id <id>` (from `list-resource-trash`) |
+| `resource-backup-detail` | Fetch a replacement backup's metadata + preview URL, to decide which old version to restore (v5.2.7+) | `--backup-id <id>` (from `list-resource-backups`) |
 | `article-analytics` | Get article stats | article target only |
-| `site-visits` | Site visit trends | `--days 7` or `--days 30` |
+| `site-visits` | Site visit trends with bot/human split and region breakdown | `--days 7` or `--days 30` |
 | `theme-status` / `activate-theme` | Theme info / switch | `--plugin-key <key>` (required for activate) |
 | `seo-status` / `seo-get-config` / `seo-set-config` | SEO status / read / update config | `--config-file <path>` (required for set) |
 | `sitemap-update` | Refresh sitemap | none |
@@ -285,8 +336,18 @@ poetize-blog.sh manage save-comment --article-id 123 --content "欢迎留言交�
 | `delete-translation` | Delete one translation (v5.1.0+) | article/language, `--brief-file` / `--stdin-brief` |
 | `regenerate-translation` | Delete all translations and re-run AI (v5.1.0+) | article, `--brief-file` / `--stdin-brief`, `--wait` / `--poll-interval` / `--timeout` |
 | `update-section` | Edit one section (v5.1.0+) | article/action, optional heading/content/`--new-heading-level`/`--skip-ai-translation`/`--heading-index`/`--dry-run`, brief, `--wait` / `--poll-interval` / `--timeout` |
+| `list-sorts` | List all categories | none |
+| `list-labels` | List all tags | `--sort-id <id>` (filter by category) |
+| `create-sort` | Create a new category | `--name`, `--description`, `--sort-type 0\|1` (default 1), `--priority` (default 99) |
+| `update-sort` | Update an existing category | `--id`, optional `--name`/`--description`/`--sort-type`/`--priority` |
+| `delete-sort` | Delete a category | `--id` |
+| `create-label` | Create a new tag | `--name`, `--description`, `--sort-id` (required) |
+| `update-label` | Update an existing tag | `--id`, optional `--name`/`--description`/`--sort-id` |
+| `delete-label` | Delete a tag | `--id` |
 
 For `update-article`, do not combine `--stdin-payload` with `--stdin-brief`: both read the same stream sequentially. Put at least one JSON object in a file.
+
+> **Time-range filters (`--created-between` / `--updated-between` / `--published-between`).** Each value is `START~END` with either side omittable (`~2024-05-01` = before, `2024-05-01~` = after); time points accept `yyyy-MM-dd`, `yyyy-MM-dd HH:mm`, or `yyyy-MM-dd HH:mm:ss`, and date-only values are inclusive whole days. Repeat a flag to OR-combine multiple ranges of the same field; different fields AND-combine. `--published-between` uses the first-public-publish time (RSS pubDate semantics; never-published drafts are excluded). These filters, `--order`, and `--asc` require backend `v5.2.0`+ — **older backends silently ignore them and return unfiltered results**, so verify the backend version before trusting filtered output. Example: `manage list-articles --created-between "2024-01-01~2024-03-31" --created-between "2025-01-01~" --recommend-only --order publish-time --asc`.
 
 > `--floor-comment-id` behaves differently across commands. In `list-comments` it is a real query filter that selects which floor's replies to page through. In `save-comment` it is a no-op: the backend always recomputes `floorCommentId` from `parentCommentId` server-side and only logs a warning if the client value disagrees. Omit it when replying — just pass `--parent-comment-id` and `--parent-user-id`.
 
@@ -390,6 +451,15 @@ poetize-blog.sh manage save-translation --article-id 123 \
 | Metadata-only update (viewStatus, password, tips, etc.) | `manage update-article` |
 
 > Mutating translation and section commands require `--stdin-brief` (or `--brief-file`) with the matching `taskType`. Read-only commands (`get-translation`, `list-translation-languages`) do not need a brief. All commands in this section require backend `v5.1.0`+; on older backends the CLI returns an explicit version-mismatch error instead of a raw HTTP 404/500.
+
+### When a publish ends as `partial_success`
+
+Long bodies are translated in chunks, so the AI step can stop half-way (provider error, truncated response, timeout on one language), and summary generation can time out too. The publish task then finishes with status **`partial_success`**. Read it precisely: **the article itself published successfully** — only the translation and/or summary side-tasks did not finish everywhere. The response `message` says which side failed; the CLI also adds a `translation_recovery` block with the exact next steps.
+
+1. **Verify what is missing** — `manage list-translation-languages --article-id <id>` lists the languages that exist. Treat a language's `get-translation` `status: success` as "a record exists", not as "the text is complete": long bodies can be stored truncated, so compare the translated body against the source before trusting it. If a stored translation looks cut off mid-sentence (e.g. stopping inside a table), regenerate or overwrite it.
+2. **Re-run the publish with `skipAiTranslation: true`** in front matter (`publish --markdown-file <file> --article-id <id> --wait`). This bypasses the AI step entirely — no partial-success risk — and refreshes the static pages.
+3. **Write each translation yourself** with `manage save-translation` (title plus `--content-file`). Saving a translation refreshes the article and its language pages by itself, so no extra publish is needed just to make it visible.
+4. **Never retry a `partial_success` publish as a new create** — the article already exists. Always recover with `--article-id`, the same rule as an async timeout in [Failure Recovery & Safe Retry](#failure-recovery--safe-retry).
 
 ## Failure Recovery & Safe Retry
 

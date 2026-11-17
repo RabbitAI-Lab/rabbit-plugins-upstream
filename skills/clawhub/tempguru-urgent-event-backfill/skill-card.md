@@ -1,44 +1,56 @@
-## Description: <br>
-Recover from a same-week or day-of event staffing emergency through TempGuru in 345 US and Canadian markets by capturing urgent staffing requirements, checking rush lead time, and submitting a quote request after explicit confirmation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent triage urgent event staffing gaps, assess rush timing, and guide a buyer through TempGuru’s quote handoff.
 
-## Publisher: <br>
-[kissmyabs32](https://clawhub.ai/user/kissmyabs32) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kissmyabs32](https://clawhub.ai/user/kissmyabs32)
 
-## Use Case: <br>
-External event operators and staffing coordinators use this skill when staff no-show, a vendor cancels, or an event within roughly 72 hours needs emergency staffing. It guides the agent through one-pass requirement capture, rush classification, explicit confirmation, urgent quote submission, and appropriate no-guarantee framing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States and Canada <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow may send event details and contact information to TempGuru through MCP tools. <br>
-Mitigation: Tell the user what will be submitted and require explicit confirmation before calling request_quote. <br>
-Risk: Urgent staffing requests can be mistaken for guaranteed coverage. <br>
-Mitigation: Frame rush and very-rush requests as attempts, not guarantees, and preserve the instruction to call TempGuru immediately for starts within 48 hours. <br>
-Risk: Users may request licensed or armed security that TempGuru does not provide through this workflow. <br>
-Mitigation: State that TempGuru provides unarmed crowd-control event staff only and redirect licensed or armed security needs. <br>
+## Use Case:
 
+External event organizers use this skill to respond to same-week or day-of staffing shortfalls in the United States and Canada. It gathers event requirements, checks rush guidance, and prepares a quote handoff for the buyer to submit.
 
-## Reference(s): <br>
-- [TempGuru MCP endpoint](https://mcp.tempguru.co/mcp) <br>
-- [TempGuru AI developer docs](https://tempguru.co/ai) <br>
-- [ClawHub skill page](https://clawhub.ai/kissmyabs32/skills/tempguru-urgent-event-backfill) <br>
+### Deployment Geography for Use:
 
+United States and Canada
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Text, API Calls] <br>
-**Output Format:** [Markdown or plain text with MCP tool calls] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Collects event details and contact information, requires explicit confirmation before quote submission, and returns a TempGuru reference when submission succeeds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.1 (source: server release evidence) <br>
+Risk: Event details sent to TempGuru may be retained without advance disclosure to the user.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Tell the user before sending event details to TempGuru, and keep contact information out of MCP calls so the buyer can enter it on the form.
+
+Risk: The security scan had partial coverage because one local reference could not be resolved.
+
+Mitigation: Review the supplied package and resolve the missing local reference before relying on the skill.
+
+## Reference(s):
+
+- [TempGuru AI agent documentation](https://tempguru.co/ai-agents)
+- [TempGuru staffing MCP service](https://mcp.tempguru.co/mcp)
+- [TempGuru staffing request form](https://tempguru.co/get-staffing?utm_source=ai-agent&utm_medium=skill)
+- [TempGuru Event Staffing Planner GPT](https://chatgpt.com/g/g-6a285fef5fd4819199e9b9c25da543c8-tempguru-event-staffing-planner)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, API Calls, Text, Links]
+
+**Output Format:** [Conversational guidance with staffing estimates, rush status, and buyer-operated quote handoff links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Planning estimates and lead-time guidance are not reservations or guarantees; the buyer submits the quote form personally.]
+
+## Skill Version(s):
+
+1.7.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

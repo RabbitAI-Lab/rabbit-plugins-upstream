@@ -1,39 +1,50 @@
-## Description: <br>
-Guides a new developer through five staged challenge sets covering architecture, domain, patterns, and hardening. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides a new developer through five staged challenge sets covering architecture, domain, patterns, and hardening
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and maintainers use this skill to guide new contributors through staged codebase onboarding challenges covering architecture, domain logic, interfaces, patterns, and hardening. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agent-proposed file changes during onboarding may be incorrect or unsuitable for the target codebase. <br>
-Mitigation: Review any proposed file changes separately before applying or relying on them. <br>
+## Use Case:
 
+Developers use this skill to onboard to a codebase through staged challenges on its architecture, domain, interfaces, patterns, and hardening, with hints and progress tracking.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-gauntlet-onboard) <br>
-- [Skill homepage](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance and progress prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; prompts the agent to load, present, and report onboarding progress.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Challenge feedback or mastery tracking could misjudge a learner's understanding.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review challenge answers and stage advancement against the codebase and stated criteria; let learners revisit or correct progress when needed.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-gauntlet-onboard)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Challenge prompts, hints, progress summaries, and onboarding guidance.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

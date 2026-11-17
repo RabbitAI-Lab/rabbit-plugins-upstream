@@ -1,0 +1,26 @@
+name: workbuddy-checkin
+display_name: WorkBuddy 每日签到领积分
+version: 1.6.0
+author: oracis
+category: 办公效率
+license: MIT
+homepage: https://github.com/oracis/workbuddy-checkin
+description: 自动领取 WorkBuddy（原 CodeBuddy）每日签到积分，客户端没打开也能签到。合并 SkillHub 1.5.3 安全骨架（官方域名硬白名单 / 禁重定向 / JWT 脱敏 / 守卫路径加固）与 1.2.0 的 buildkey_direct.js（免调试端口、免 GUI、客户端不运行也能取 build key）；支持显式 token 与本机凭据双入口、多账号固定（--uid / WB_UID / checkin-config.json）、漏签告警、签到周报、token 自动续期与安全写回。接口新增 checkin_dates / is_streak_day / streak_bonus_* / claim_button_text / action_button 已同步。脚本幂等、零依赖（仅 Python 标准库）。
+triggers:
+  - 领积分
+  - 自动领积分
+  - 签到
+  - 每日礼包
+  - checkin
+  - 领取今日积分
+  - 今天领了吗
+  - 签到周报
+  - 漏签
+  - WorkBuddy 签到
+tags:
+  - 签到
+  - 积分
+  - 自动化
+  - WorkBuddy
+  - 定时任务
+  - 多账号

@@ -1,41 +1,49 @@
-## Description: <br>
-Prepares pull requests by running quality gates, drafting descriptions, and validating tests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Prepares pull requests by running quality gates, drafting descriptions, and validating tests.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and maintainers use this skill to prepare pull requests by reviewing workspace state, running quality gates, self-reviewing changes, documenting testing, and drafting a PR description. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may prepare GitHub-facing PR text or review evidence from local repository state. <br>
-Mitigation: Review generated PR descriptions, comments, and any public GitHub writes before posting or publishing them. <br>
-Risk: The workflow asks the agent to run project-specific formatting, linting, and test commands. <br>
-Mitigation: Run commands only in a trusted workspace, inspect command intent first, and document skipped or failed checks with a mitigation plan. <br>
+## Use Case:
 
+Developers use this skill when preparing their own changes for review. It helps run project quality gates, summarize changes, document testing, and draft a pull request description.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-pr-prep) <br>
-- [Night Market Sanctum plugin](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and checklist items] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a PR description path and contents, with validation commands, testing notes, and checklist items.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: The security review had partial coverage because referenced local paths were missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill instructions and referenced materials before installing when those details affect your setup or use.
+
+## Reference(s):
+
+- [Sanctum plugin page](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown pull request description with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a change summary, testing results, a test plan, and a checklist.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

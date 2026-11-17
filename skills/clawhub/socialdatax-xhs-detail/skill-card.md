@@ -1,42 +1,50 @@
-## Description: <br>
-Helps agents retrieve and summarize Xiaohongshu / XHS / RedNote note details, metrics, content, author, media, and related note data through SocialDataX. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves structured details and engagement metrics for Xiaohongshu (XHS/RedNote) notes through SocialDataX.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-Developers, analysts, and agents use this skill to fetch read-only XHS note details by note ID or URL, then return structured facts such as title, content, author, publish time, interaction counts, images, and media summary. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Returned XHS note URLs can include xsec_token query parameters that may appear in chat outputs, saved references, or forwarded results. <br>
-Mitigation: Review where outputs are shared or stored before use, and only run the skill when preserving full tokenized note URLs is acceptable for the workspace. <br>
-Risk: The skill sends note IDs or full note URLs to SocialDataX using SOCIALDATAX_API_KEY. <br>
-Mitigation: Use a scoped SocialDataX API key from the user's environment and avoid submitting note URLs that should not be shared with the SocialDataX service. <br>
+## Use Case:
 
+External users and developers can retrieve structured details for a Xiaohongshu note, including available content and engagement metrics, for content research and analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-xhs-detail) <br>
-- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub) <br>
-- [Publisher profile](https://clawhub.ai/user/devinchen2014) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses with factual note summaries, optional shell commands, and JSON returned by the SocialDataX CLI or MCP tools.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY for data calls and node/npm for the direct CLI path; optional media saving writes only to a requested local output path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.14 (source: server release evidence) <br>
+Risk: The CLI resolves a mutable package release, creating supply-chain risk around local permissions and credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the resolved package before running it, use a least-privilege environment, and keep credentials in the documented private credential store or existing secret injection.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/devinchen2014/skills/socialdatax-xhs-detail)
+- [SocialDataX API access and key management](https://socialdatax.com/ai?from=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text]
+
+**Output Format:** [JSON note details with factual text summaries when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only detail data; fields depend on the source response.]
+
+## Skill Version(s):
+
+0.1.20 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

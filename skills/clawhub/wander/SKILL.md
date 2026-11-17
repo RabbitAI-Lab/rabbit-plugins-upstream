@@ -30,7 +30,7 @@ The Agent should:
 
 1. **Read the monitor output** (terminal log, JSON summary, dashboard link + status scrape — whatever the backend provides).
 2. **Act on the result** — do not consider the task "done" until the terminal state is confirmed:
-   - ✅ success → proceed (e.g. merge PR, deploy, tag)
+   - ✅ success → proceed to the next already authorized step (e.g. merge PR, deploy, tag)
    - ❌ failure / cancelled → surface failure, pull logs, propose fix
 3. **Never assume success** — "monitor started" ≠ "job succeeded".
 
@@ -53,7 +53,7 @@ The Agent should:
 2. **Vendor-native CLI/API** — e.g. poll build ID until `finished` / `errored` when there is **no** CI wrapper and the vendor is authoritative.
 3. **Dashboard + explicit handoff** — Acceptable when automation is impossible; still require a **named status** from the user or a single checked URL — not vibes.
 
-**Step C — Run the monitor in the background** unless the user asked to block the session.
+**Step C — Monitor through the active task or a supported background process.** Keep the task open until the requested terminal condition is verified; starting a monitor is not delivery. Use a scheduled automation only for a separately requested recurring report, not to abandon a single run.
 
 **Step D — After completion, fetch failure detail** from that same system of record (failed step logs, EAS error page, deploy logs).
 
@@ -63,7 +63,15 @@ Do **not** default to "must be GitHub Actions" at Step A. Default to: **whatever
 
 ## Reference adapter: GitHub Actions via Wander
 
-When the authoritative run **is** a GitHub Actions workflow (push, `workflow_run`, `workflow_dispatch`, etc.), use the Wander scripts as the monitor:
+When the authoritative run **is** a GitHub Actions workflow, first resolve its
+exact run ID. The current Wander scripts select a recent run by workflow and
+branch; inspect that candidate's `headSha` and event before accepting it. For
+concurrent pushes or ambiguous candidates, use `gh run watch <RUN_ID> --exit-status`
+on the verified ID instead of assuming the newest run is yours. After a new push,
+resolve the new head's run again. A workflow success is evidence for that run,
+not automatic permission to merge or deploy.
+
+Read the verified run's result:
 
 ```bash
 # After Wander background process exits, check result:
@@ -194,7 +202,7 @@ workflows:
     category: "deploy"
 ```
 
-**`check_window`** = if the workflow already finished before monitoring starts, how far back we still accept the run as "ours". Often ~**6×** `expected_duration`.
+**`check_window`** is only a search window for recently completed runs. It does not establish that a run belongs to this request. Match repository, workflow, event, branch and exact `headSha` (plus dispatch identity when available), then pin the `databaseId`. A matching recent timestamp alone is insufficient.
 
 **Auto-generate** for a repo:
 

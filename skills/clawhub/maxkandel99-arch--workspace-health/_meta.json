@@ -1,0 +1,14 @@
+{
+  "name": "workspace-health",
+  "version": "1.0.0",
+  "description": "OpenClaw工作目录健康检测与修复",
+  "triggers": [
+    "工作目录异常",
+    "嵌套目录",
+    ".openclawworkspace",
+    "workspace问题",
+    "路径错误",
+    "openclaw doctor",
+    "openclaw init"
+  ]
+}

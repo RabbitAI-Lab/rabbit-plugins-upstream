@@ -4,6 +4,13 @@
 
 **内置金融合规护栏**：不荐股、不预测涨跌、不给买卖点，自动套风险提示条。是 Claude Code / Claude Agent 的可复用 Skill，也是「3 天一只·公开数据速读」财经栏目的发动机。
 
+## 30 秒验收
+
+```bash
+bash scripts/bootstrap.sh && source .venv/bin/activate
+python3 scripts/fetch.py --probe
+```
+
 <p align="center">
   <img src="examples/demo.gif" width="760" alt="hekouwang-stock-data-reader-skill 安装与使用演示">
   <br><sub>↑ 真实 Claude Code 会话：对它说一句，自动跑完「取数 → 算内核 → 出报告」</sub>
@@ -64,7 +71,7 @@ pip install -r requirements.txt    # akshare + pandas，建议 venv
 > 💬 「给我 **600519** 做个资金面复盘，要发公众号那版」
 > 💬 「**3 天一只**，这次拆 **002415**，出头条三件套」
 
-Claude 认出代码后，自动完成 `fetch → analyze → build_report → screenshot`，再按 `references/report-structure.md` 润色中立文案、套合规风险条，产出可直接发布的贴图 / 长文。**全程你只说一句话。**
+Claude 认出代码后，先跟你确认股票代码和输出目录（取数会联网访问 akshare 的公开行情源，并在该目录写文件），再完成 `fetch → analyze → build_report → screenshot`，按 `references/report-structure.md` 润色中立文案、套合规风险条，产出可直接发布的贴图 / 长文。
 
 <details>
 <summary>▸ 底层流水线（Claude 自动执行；想手动跑 / 接 CI 时才用得到）</summary>
@@ -73,7 +80,7 @@ Claude 认出代码后，自动完成 `fetch → analyze → build_report → sc
 python3 scripts/fetch.py  603629  out/603629     # 取数 → CSV + _report.json
 python3 scripts/analyze.py        out/603629     # 算指标 → analysis.json
 python3 scripts/build_report.py   out/603629 公司简称   # 出 8 贴图初稿（数字已对）
-node    templates/screenshot.js   out/603629     # 截图 output/，出图即删 HTML
+node    templates/screenshot.js   out/603629     # 截图 output/；加 --clean 才删 HTML
 ```
 
 `build_report.py` 出的是**数字正确的初稿**；中立复盘文案按 `references/report-structure.md` 润色后再截图交付。
@@ -116,8 +123,8 @@ node    templates/screenshot.js   out/603629     # 截图 output/，出图即删
 | `SKILL.md` | Skill 入口（Claude 读这个） |
 | `scripts/fetch.py` | 取数引擎（任意代码） |
 | `scripts/analyze.py` | 指标计算 → analysis.json |
-| `scripts/build_report.py` | 据指标出 8 贴图初稿（V2 米白） |
-| `templates/screenshot.js` | 1080×1350 @2x 截图，出图即删 |
+| `scripts/build_report.py` | 据指标出 8 贴图初稿（`--theme v2` 米白 / `v3` 财经白） |
+| `templates/screenshot.js` | 1080×1350 @2x 截图（`--clean` 才删 HTML） |
 | `references/compliance.md` | 金融合规护栏 |
 | `references/report-structure.md` | 栏目固定报告结构 |
 

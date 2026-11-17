@@ -1,41 +1,49 @@
-## Description: <br>
-Tracks per-agent token usage and flags waste in parallel dispatch. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tracks per-agent token usage and flags waste in parallel dispatch.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill after multi-agent runs to review per-agent token expenditure, identify duplicated work, and decide whether future dispatches should use fewer or more focused agents. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may lead users to inspect agent activity or file-access logs after parallel work. <br>
-Mitigation: Use it only in environments where those logs are appropriate for review. <br>
-Risk: The skill provides advisory judgments about token waste and duplicated work. <br>
-Mitigation: Treat findings as review guidance and confirm them against the actual agent outputs before changing dispatch practices. <br>
+## Use Case:
 
+Developers and agent orchestrators use this skill after parallel agent runs to review token expenditure, duplication, and coordination overhead. It helps identify waste signals and produce a recommendation about future agent counts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-agent-expenditure) <br>
-- [Conserve plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Guidance, Markdown] <br>
-**Output Format:** [Markdown guidance and review checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No code execution, credentials, MCP tools, or privileged access are included in the skill artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
+Risk: Waste estimates and dispatch recommendations depend on having token, findings, and file-access data for comparison; incomplete records can skew the assessment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check which evidence is available and identify unmeasured signals before changing future dispatch sizes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-agent-expenditure)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown review with per-agent checklist findings and a dispatch recommendation]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Post-dispatch assessment based on token use, findings, file access, and coordination evidence.]
+
+## Skill Version(s):
+
+1.10.3 (source: server-resolved release, frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

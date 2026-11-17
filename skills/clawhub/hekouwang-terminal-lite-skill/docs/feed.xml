@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>会勇禾口王·终端工作台 · 更新日志</title>
+  <subtitle>公开版更新日志：只记你用得到的变化</subtitle>
+  <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/</id>
+  <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html"/>
+  <link rel="self" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/feed.xml"/>
+  <updated>2026-11-17T00:00:00Z</updated>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#3.0.0</id>
+    <title>3.0.0 · 专业版首发</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#3.0.0"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;<li>专业版走平台购买：支付宝 SkillPay 按年（¥59.9/年，不自动续费）、腾讯 SkillHub 按次（¥2.99/次）</li><li>购买入口改为平台渠道，不再以微信发货为主路径</li><li>免费版更名为 Lite（`hekouwang-terminal-lite-skill`）</li><li>官网重设计：能力对照表 + 场景故事，说清免费版与专业版差异</li>&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.13.0</id>
+    <title>2.13.0 · 视觉层与 P3（2026-11-13）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.13.0"/>
+    <updated>2026-11-13T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;<li>品牌主题改用英文名：Ember（暖黑暗）、Voltage（霓虹科技黑）、Parchment（暖纸亮）、Ledger（财经白）；旧名仍作为别名可用</li><li>视觉审计新增选区 / 搜索命中 / 光标 / 亮底中性槽 / 暗字 / 色相区分度：不再只审 16 个 ANSI 槽</li><li>视觉审计新增 diff 新增/删除底的明度差与红绿色盲分离度；diff 底改成 19%/10% 不对称配方，灰度/色盲下也能分开</li><li>iTerm2 Triggers 改用语义表面：error / warn / success 的背景按主题解算，文字 ≥4.5:1，不再直接拿 raw ANSI 红黄绿当底</li><li>中性梯：`neutral_ramp` 解出 surface / overlay / border / muted 四档，预览标题栏和代码块改用设计过的 surface；审计新增 `neu` 列</li><li>iTerm2 Cursor Guide 启用，颜色取中性梯 `border`；daily / focus / remote 开，present / record 关</li><li>社区主题补签名 accent：Catppuccin peach、Gruvbox orange、Rose Pine rose、Tokyo cyan；cursor / badge / tab 不再等于前景色</li><li>P3 广色域：`./theme.sh &lt;主题&gt; --p3` 把 iTerm2 Profile 转成 Display P3；彩色槽扩彩度，背景/前景/中性色只做 P3 等价表示</li><li>审计新增「语法色 × diff 行底」≥3:1 检查（comment 除外）；新增 `tests/test-p3.sh` 覆盖打开/回退</li><li>Ember 取消专用字体覆盖，九套主题统一按 `font.conf` 优先级取字体</li><li>9 套色板提彩：只放大 OKLab 彩度、不动色相，主题列表和投屏里更容易一眼分开</li><li>`claude-code-light` 的 ANSI 7 从 1.19:1 提到 3.04:1，ANSI 0 与 15 不再是同一个颜色</li><li>亮色主题选区从 1.19–1.29 提到 1.40 左右；v1 / tokyo 选区也补到 1.5</li><li>搜索命中改成按「对背景可见、对正文可读」解算，catppuccin / tokyo 的 3.07 / 3.81 提到 4.5+</li><li>`./setup-cli.sh`：检查 CodeBuddy / Claude Code 是否在用 ANSI 主题，并可带备份切到非 ANSI 的 Dark / Light</li><li>`./setup-gui.sh` 新增复制即选、三击选折行、标签页新输出指示</li>&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.12.0</id>
+    <title>2.12.0 · 色板视觉地板</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.12.0"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;<li>社区色板生成时统一过视觉地板：只调 OKLab 明度、保住色相，catppuccin-mocha 与 tokyo-night 各 6 对 normal / bright 同色已分开，`ls` 与 `git diff` 的强调层恢复可辨</li><li>gruvbox-dark 的 red 从 2.69:1 提到 4.55:1，错误提示不再糊在背景里</li><li>新增 `./theme.sh --audit`：只读体检对比度地板 / 明暗分档 / 暗字槽，换肤前先看色板站不站得住；`./doctor.sh --status` 与 `./release.sh --check` 同步接入</li><li>`./setup-gui.sh` 补上 iTerm2 全局窗格边距——左右 10pt / 上下 8pt，运行前需先退出 iTerm2</li><li>付费档同期：光学档新增 CJK 等宽层（中文与图标同字号，CJK 正好两格），`font.sh verify` 按真实字体度量打分；场景补 Ghostty 窗口内边距，自动补全的幽灵文字改跟主题暗字槽</li>&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.11.0</id>
+    <title>2.11.0 · 换肤可回滚、结果可验收</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.11.0"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;<li>换肤前可用 `--plan` 看管理范围；正式切换自动留快照，失败自动恢复</li><li>`--rollback / --history` 可恢复或查看最近 5 次换肤快照</li><li>`doctor.sh --parity` 对照源主题验收 iTerm2；付费版扩展到六终端与工具链</li><li>付费 zip 更新增加版本门、更新前快照与失败恢复</li>&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.8</id>
+    <title>2.10.8 · 六终端说明页（公开可见）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.8"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.7</id>
+    <title>2.10.7 · README 主 CTA 指向产品主页（公开可见）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.7"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.6</id>
+    <title>2.10.6 · 标题字重对齐（公开可见）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.6"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.5</id>
+    <title>2.10.5 · 落地页徽章归位（公开可见）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.5"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.4</id>
+    <title>2.10.4 · 落地页 Hero + 功能卡（公开可见）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.4"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.3</id>
+    <title>2.10.3 · README 对齐文档站简介（公开可见）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.3"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.2</id>
+    <title>2.10.2 · 四终端说明进文档（公开可见）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.2"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.1</id>
+    <title>2.10.1 · 选肤预览进文档（公开可见）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.1"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.0</id>
+    <title>2.10.0 · 体验小改（公开可见）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.10.0"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;<li>`./theme.sh`：fzf 模糊选 + ANSI 预览（无 fzf 仍出画廊）</li><li>`./doctor.sh --fix`：按组问修</li><li>`./sync.sh --state-export` / `--state-import`：换机钉住状态</li>&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.9.4</id>
+    <title>2.9.4 · 脚本完整操作手册（公开可见）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.9.4"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.9.3</id>
+    <title>2.9.3 · 文档站语言跟链（公开可见）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.9.3"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.9.2</id>
+    <title>2.9.2 · 文档站导航修复（公开可见）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.9.2"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.9.1</id>
+    <title>2.9.1 · 货架名 OneLook（公开可见）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.9.1"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.9.0</id>
+    <title>2.9.0 · 语义交互层 v1 · doctor 状态机（公开版可见的变化）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.9.0"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.8.0</id>
+    <title>2.8.0 · Node 自选 · 跟随系统默认关 · 备份归目录（公开版可见的变化）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.8.0"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.7.1</id>
+    <title>2.7.1 · 窗口水印可自定义（公开版可见的变化）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.7.1"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;<li>付费档场景引擎新增 `./scene.sh badge &lt;文字&gt;`：iTerm2 窗口右上角的水印写自己的名字或项目名，</li><li>开源版行为不变：`scene.sh` / `config/scenes/` 仍只在付费包里</li>&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.7.0</id>
+    <title>2.7.0 · 场景美学引擎（公开版可见的变化）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.7.0"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;<li>付费第二柱落地：**场景美学引擎**（`./scene.sh`）</li><li>开源版不包含 `scene.sh` / `config/scenes/`（与 `font.sh` 同分档）</li>&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.6.0</id>
+    <title>2.6.0 · 产品三柱定位（公开版可见的变化）</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.6.0"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;<li>付费产品正式立名三柱：**终端光学校准引擎**、**场景美学引擎**、**语义交互层**</li><li>开源版行为：仍是完整 iTerm2 换肤；光学校准 / `font.sh` / 光学档目录只在付费包</li><li>主题生成器与社区三套默认视觉不变</li><li>仓根 README（中/英）恢复完整主故事：对比图 → 痛点 → 差异 → 分档 → 安装 → 颜值 → 日常命令 → 换肤 → 维护（约 280–320 行）</li><li>`docs/manual*` 保留进阶、FAQ、设计原则、文件级分档与长说明；不再要求路人先读手册</li><li>付费实现（Skill / 品牌色板 / 多终端生成器等）仍不进公开仓</li>&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.5.1</id>
+    <title>2.5.1 · 主题生成器支持状态层字段</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.5.1"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;<li>色板可选 `bold` / `matchbg` / `faint_text_alpha` / `surfaces`：自定义主题可单独定粗体、搜索命中、弱化字透明度、diff 表面色</li><li>社区三套默认视觉不变；品牌主题的可读性微调在付费包</li>&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.5.0</id>
+    <title>2.5.0 · 标签页改成「一块画布 + 一个圆点」</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.5.0"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;<li>**变更：标签页不再按项目染底色**，改成在标题前挂一个彩色圆点（像 VS Code / Zed</li><li>🐞 修：安装那一节的 `doctor.sh` 截图拍的是**付费档**的机器（第 5 节「全生态同色」</li><li>🐞 修：安装流程那行写着「主题与**全生态配色**」—— 全生态同色是付费能力，</li><li>剔掉一张公开仓用不上的截图（付费功能的项目工作区图，只有付费版首页在用）</li><li>顶部两个 badge（四终端 / 一份色板管全工具链）改成明标「付费档」，</li><li>付费包 zip 现在把 `VERSION` 一并打进去：以前老版本免费仓解压新付费包之后，</li><li>发版脚本新增 `--release`：GitHub Release 的发布说明直接取自这份更新日志的同名小节，</li>&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.4.0</id>
+    <title>2.4.0 · Claude Code Skill 归付费档</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.4.0"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;<li>发版脚本新增 `--tag`：版本号从 `VERSION` 取，母版与两个子仓一条命令打齐并推送。</li><li>**变更：Claude Code Skill 归付费档。** 开源版不再带 `SKILL.md`，</li><li>新增仓根 `VERSION` 文件当版本号唯一真相源。以前版本号读的是 `SKILL.md` 的</li>&lt;/ul&gt;</content>
+  </entry>
+  <entry>
+    <id>https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.3.0</id>
+    <title>2.3.0 · 项目主页与「怎么买」</title>
+    <link rel="alternate" href="https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html#2.3.0"/>
+    <updated>2026-11-17T00:00:00Z</updated>
+    <content type="html">&lt;ul&gt;<li>新增项目主页 &lt;https://huiyonghkw.github.io/hekouwang-terminal-kit/&gt;：</li><li>🐞 修：主页中文标题字重是假的 —— 系统的 PingFang SC 最粗只到 Semibold，</li><li>`theme.sh` / `doctor.sh` / `install.sh` 在开源版下各多打一行，说明付费档在哪儿。</li><li>🐞 修：发版脚本 `--update` 用的 `rsync -a` 会静默漏发**等长**改动</li><li>🐞 修：**这份更新日志以前根本没进过公开仓**（导出脚本的 `.gitignore` 把它自己</li><li>🐞 修：`install.sh` 装完的收尾写着「换肤（连 bat/fzf/git diff 一起换）」，</li><li>全线脚本、生成器、模板的对外文案默认英文；`--lang zh` 或 `HKW_LANG=zh` 切中文</li><li>`install.sh` 首次交互安装时问一次语言并记住（`~/.config/hekouwang-terminal/lang`），</li><li>文档双语并列：`README.md` / `README.zh-CN.md`、`SKILL.md` / `SKILL.zh-CN.md`</li><li>`.zshrc` 模板分语言（`config/zshrc.template` / `.zh`），落进你家目录的注释是你选的那种语言</li><li>主题显示名分中英两套：产物里烧英文名，中文名在部署那一刻注入 ——</li><li>英文版模板里的 Homebrew 国内镜像改为默认注释掉（在国外网络上它只会更慢）</li><li>`migrate.sh` 自动回滚现在真的还原 `~/.zshrc.local`：以前 `$LOCAL_BAK` 从没被赋值，</li><li>`uninstall.sh --dry-run` 不再谎报「已还原 ~/.zshrc」——它一个字节都没动</li><li>`uninstall.sh` / `install.sh` 认 Ghostty config 与自带终端 Profile 时中英两种标记都认，</li><li>`install.sh` 里 `setup-gui.sh` 失败不再把整个安装带走</li><li>换肤回执改成分组（终端 / 工具链），一眼看清哪些真生效了、哪些跳过了</li><li>`./theme.sh --preview &lt;名字&gt;` 出一整块「假终端」：提示符、文件列表、git diff、</li><li>`./theme.sh --gallery` 把全部主题挨个渲一遍</li><li>标题栏默认与背景同色，整窗一块画布</li><li>主题生成器新增旧产物清理：移除一套色板后，它留下的文件会一并清掉，</li><li>修 iTerm2 在 GUI 里编辑过 Dynamic Profile 后，文件被回写成存根导致换肤失效</li><li>修 `Send text at start` 被 GUI 手滑写入后，每开一个 tab 都自动敲一行命令，</li><li>**Minimal 窗口形态**：无标题栏 · 无边框 · 无滚动条 · 无限回滚</li><li>**配色**：3 套社区主题（catppuccin-mocha / tokyo-night / gruvbox-dark），</li><li>**质感层**：毛玻璃 · 透明度 · 光标形态</li><li>**Triggers**（随 Profile 交付，不用手点 GUI）：ERROR / WARN / SUCCESS 自动标色，</li><li>**`Shift+Enter` 换行不提交**：给 AI CLI 写多行 prompt 用</li><li>**现代 CLI 全家桶**：eza / bat / fzf / fd / zoxide / ripgrep / atuin / delta</li><li>**`./migrate.sh`**：接管已有 `.zshrc`（搬进 `.zshrc.local`，**不是覆盖**）。</li><li>**`./doctor.sh`**：只读自检；`--fix` 逐项修；`--profile` 用 zprof 点名慢插件</li><li>**`./uninstall.sh`**：一键还原，`--dry-run` 先看清单。</li><li>全部写操作都能 `--dry-run` 预演</li>&lt;/ul&gt;</content>
+  </entry>
+</feed>

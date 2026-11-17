@@ -1,46 +1,52 @@
-## Description: <br>
-Plans and prices multi-city TempGuru event staffing programs across US and Canadian markets with consolidated estimates and quote-request guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Plans multi-city event staffing programs with city-by-city estimates and one buyer-operated quote form handoff.
 
-## Publisher: <br>
-[kissmyabs32](https://clawhub.ai/user/kissmyabs32) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kissmyabs32](https://clawhub.ai/user/kissmyabs32)
 
-## Use Case: <br>
-External buyers and agents use this skill to plan tours, roadshows, brand activations, festival circuits, and other multi-city staffing programs that need one consolidated TempGuru estimate and quote request. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States and Canada <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Security review was a low-confidence clean pass because detailed artifact inspection was unavailable in the supplied evidence. <br>
-Mitigation: Install only when the marketplace listing and package contents match the expected TempGuru multi-city staffing capability, and review the artifact before deployment. <br>
-Risk: Planning estimates may be mistaken for binding quotes or legal compliance advice. <br>
-Mitigation: Label estimates as non-binding, use request_quote for confirmed quotes, and treat compliance notes as operational guidance rather than legal advice. <br>
-Risk: The MCP service may be unavailable or may not cover a requested city. <br>
-Mitigation: Do not guess coverage or rates; use the listed TempGuru form or contact path when live tools are unavailable. <br>
+## Use Case:
 
+Event producers and staffing buyers use this skill to plan tours, roadshows, and other programs spanning multiple U.S. or Canadian cities. It compares each city's staffing estimates and compliance considerations, then prepares a buyer-reviewed handoff for one consolidated quote.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/kissmyabs32/skills/tempguru-multi-city-activation-planner) <br>
-- [TempGuru MCP endpoint](https://mcp.tempguru.co/mcp) <br>
-- [TempGuru developer docs](https://tempguru.co/ai) <br>
-- [TempGuru machine-readable overview](https://tempguru.co/llms.txt) <br>
-- [TempGuru staffing request form](https://tempguru.co/get-staffing?utm_source=ai-agent&utm_medium=skill) <br>
+### Deployment Geography for Use:
 
+United States and Canada
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown planning guidance with structured per-city estimates and quote-request steps] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses TempGuru MCP tools when available; estimates are not binding quotes and compliance notes are operational guidance, not legal advice.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.0 (source: server release evidence) <br>
+Risk: Itinerary details may be sent to TempGuru or saved without advance disclosure.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the city, date, and staffing details before using the skill, and avoid sensitive information in special requirements.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kissmyabs32/skills/tempguru-multi-city-activation-planner)
+- [TempGuru AI Agents](https://tempguru.co/ai-agents)
+- [TempGuru machine-readable overview](https://tempguru.co/llms.txt)
+- [TempGuru Event Staffing Planner GPT](https://chatgpt.com/g/g-6a285fef5fd4819199e9b9c25da543c8-tempguru-event-staffing-planner)
+
+## Skill Output:
+
+**Output Type(s):** [Staffing estimates, Operational guidance, Buyer-operated form handoff]
+
+**Output Format:** [Markdown summary with city-by-city estimates and a form link]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Estimates are for planning; coverage and the final quote require TempGuru confirmation.]
+
+## Skill Version(s):
+
+1.7.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

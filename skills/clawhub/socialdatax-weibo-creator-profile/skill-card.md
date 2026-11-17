@@ -1,43 +1,54 @@
-## Description: <br>
-Looks up read-only Weibo creator profile details through SocialDataX, including account identifiers, biography, verification, audience counts, and other profile fields when available. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Looks up Weibo creator profile information, including account details, creator positioning, homepage information, and follower scale.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and agents use this skill to retrieve Weibo creator profile information for creator research, account basics, audience scale checks, and profile reporting. It is intended for read-only lookup workflows using a SocialDataX API key. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A SocialDataX API key is required in the runtime environment. <br>
-Mitigation: Provide SOCIALDATAX_API_KEY only in trusted agent environments and avoid embedding API keys in skill files, prompts, or shared logs. <br>
-Risk: Weibo profile IDs, profile URLs, or share text are sent to the SocialDataX service for lookup. <br>
-Mitigation: Use the skill only for intended read-only profile retrieval and avoid submitting unnecessary or sensitive identifiers. <br>
-Risk: API, network, parameter, or account-balance errors can interrupt profile retrieval. <br>
-Mitigation: Preserve the returned error, verify the API key and lookup parameter, retry once for non-balance transient failures, and do not repeatedly retry insufficient-balance responses. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Weibo creator profile information by user ID or profile URL, including account details and audience scale.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo-creator-profile) <br>
-- [SocialDataX API access page](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON data returned by the SocialDataX CLI or MCP tools.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY from the runtime environment and requires node and npm for the direct CLI path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: The unpinned `@latest` package can change between runs and may access credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and pin the package version before use, and keep the API key in a protected credential source without exposing it in logs or output.
+
+Risk: The security analysis is incomplete because two local references could not be resolved.
+
+Mitigation: Resolve the missing references and review the completed security analysis before relying on the release.
+
+## Reference(s):
+
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill release](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo-creator-profile)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Profile data]
+
+**Output Format:** [JSON profile response containing platform, tool, arguments, and returned data.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Available profile fields may include name, platform IDs, bio, verification, follower and following counts, received likes, IP location, and gender.]
+
+## Skill Version(s):
+
+0.1.23 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

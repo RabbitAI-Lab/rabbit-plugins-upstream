@@ -1,0 +1,25 @@
+# 会勇禾口王·终端工作台 / Hekouwang Terminal
+
+> 一份色板穿透 macOS 终端与命令行工具链：iTerm2、Ghostty、bat、fzf、eza、git diff、tmux、VS Code 用同一套颜色。本身是一个 Claude Code Agent Skill，AI 能直接调用。免费版（MIT）配好一个完整的 iTerm2；专业版把这份色板走到更多终端、工具链与场景。
+
+## 分档与覆盖
+
+- [免费版 Lite（MIT）](https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/pricing.html)：3 套社区主题（tokyo-night / gruvbox-dark / catppuccin-mocha），配好的 iTerm2 + 基础 Skill
+- [专业版](https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/pricing.html)：7 套主题 + 多终端 + 工具链同色 + 光学校准 + 场景引擎 + 项目工作区
+- 终端覆盖矩阵：iTerm2 / Ghostty / Terminal.app 7/7；Warp / Tabby 5/7；cmux 侧栏
+- 定价：SkillPay ¥59.9/年（不自动续费）· SkillHub ¥2.99/次（无免费次数）
+
+## 页面
+
+- [首页](https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/index.html)：产品一句话、对比图、安装命令
+- [定价](https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/pricing.html)：三档价格、能力对照表、场景故事、FAQ
+- [文档](https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/guide/index.html)：安装、换肤、终端覆盖、语义层、体检
+- [CLI 与脚本](https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/tools/index.html)：每个脚本的命令、参数与行为
+- [主题画廊](https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/themes/index.html)：全部主题的实拍效果
+- [更新日志](https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/changelog.html)：公开版逐版本变化
+
+## 参考
+
+- [手册（简体中文）](https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/manual.zh-CN.md)
+- [Manual (English)](https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/manual.md)
+- [更新日志 Atom 订阅](https://huiyonghkw.github.io/hekouwang-terminal-lite-skill/feed.xml)
