@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvidia-ontology-setup",
+  "identifier": "NVIDIA/skills/skills/nvidia-ontology-setup",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvidia-ontology-setup",
+  "branch": "main",
+  "pushedAt": "2026-11-17T14:59:47Z",
+  "contentHash": "4a0cb14e648cf0993ae4b16bd2e7b3cfb529ceead01045576d6a83fa0da1a87e",
+  "fetchedAt": "2026-11-17T16:56:36.011Z"
+}
