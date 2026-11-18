@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/python-sdk",
+  "repo": "inference-sh/skills",
+  "skillId": "python-sdk",
+  "branch": "main",
+  "pushedAt": "2026-11-17T12:53:05Z",
+  "contentHash": "253916a5ab0e4ed8ea3074b2ac4a2ffca5b8abffef958c59f1d5ca3b3ce63d9b",
+  "fetchedAt": "2026-11-18T16:31:43.057Z"
+}
