@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/garrytan/gstack/tree/main/runaway-stopper",
+  "identifier": "garrytan/gstack/runaway-stopper",
+  "repo": "garrytan/gstack",
+  "path": "runaway-stopper",
+  "branch": "main",
+  "pushedAt": "2026-11-18T16:26:21Z",
+  "contentHash": "fa55cd9a040e5dad30802ad1544525080c07b499042d2119ed6c237f0237db21",
+  "fetchedAt": "2026-11-18T16:32:14.573Z"
+}
