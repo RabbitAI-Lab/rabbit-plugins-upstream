@@ -1,43 +1,57 @@
-## Description: <br>
-Generate exquisite images with the Kling o1 model, supporting text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate images with the Kling o1 model from text prompts or reference images.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to invoke the dLazy CLI for Kling o1 image generation from prompts and optional reference images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and referenced local image files are sent to dLazy services for image generation. <br>
-Mitigation: Install and invoke the skill only when this data transfer is intended; use dry-run when available to review payload and cost before calling the API. <br>
-Risk: The skill stores a dLazy API key locally, and scanner evidence notes that inspected CLI code may not enforce the restricted file permissions claimed by the skill. <br>
-Mitigation: Prefer per-invocation DLAZY_API_KEY in sensitive environments, or check and restrict permissions on ~/.dlazy/config.json after login or auth set. <br>
+## Use Case:
 
+External users and agents use this skill to generate or edit images with Kling o1 using a text prompt and optional reference images.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-kling-image-o1) <br>
-- [dLazy publisher profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the dLazy CLI to return hosted image output URLs or asynchronous task status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: The scanner reported partial coverage, including an unresolved CLI package, and could not clearly connect the login step to the image-generation purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing or signing in, verify that the CLI and login flow are from the expected provider and are needed for this skill.
+
+Risk: Prompts and supplied local image files are sent to dLazy's hosted API and media storage.
+
+Mitigation: Avoid sending sensitive prompts or images unless your organization's policies allow processing them by this service.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-kling-image-o1)
+- [dLazy CLI project (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Images, JSON]
+
+**Output Format:** [Image URLs or saved image files with structured JSON result metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports text-to-image and image-to-image generation; results can be returned asynchronously.]
+
+## Skill Version(s):
+
+1.3.40 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

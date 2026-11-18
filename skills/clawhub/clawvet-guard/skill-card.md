@@ -1,42 +1,54 @@
-## Description: <br>
-Vet any OpenClaw skill for prompt injection, credential theft, and RCE before you install it. Runs a clawvet scan and blocks risky installs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scan a third-party agent skill with ClawVet and act on its grade before installing, enabling, or running it. Use when the user asks to scan, vet, or check a skill they did not write, or whether a skill from ClawHub or another untrusted source is safe to install.
 
-## Publisher: <br>
-[mohibshaikh](https://clawhub.ai/user/mohibshaikh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mohibshaikh](https://clawhub.ai/user/mohibshaikh)
 
-## Use Case: <br>
-Developers and agent users use this skill to scan OpenClaw skills before installation, review risk grades and findings, and block skills that show high-risk behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can ask the agent to run Bash commands with npx to execute clawvet scans. <br>
-Mitigation: Install only when that execution model is acceptable, and review the exact command and target before running scans. <br>
-Risk: Scanner results may miss issues in unknown third-party skills or be treated as stronger assurance than they provide. <br>
-Mitigation: Treat scan results as evidence for review, surface high and critical findings, and require user approval before proceeding on moderate risk results. <br>
+## Use Case:
 
+Developers and agents use this skill to assess third-party agent skills before installing, enabling, or running them. It guides local and remote ClawVet scans and explains how to interpret scan coverage, recommendations, and findings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mohibshaikh/skills/clawvet-guard) <br>
-- [Server-resolved GitHub provenance](https://github.com/MohibShaikh/clawvet/tree/master/skills/clawvet-guard) <br>
-- [Source repository](https://github.com/MohibShaikh/clawvet) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON scan-result interpretation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May invoke npx clawvet scans that return riskGrade, riskScore, findingsCount, and findings details.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: release evidence) <br>
+Risk: An unpinned ClawVet invocation could use a changing upstream version.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the dependency before installation and use an installed, verified ClawVet version as the skill directs.
+
+Risk: The supplied scan had partial coverage because two local path-like references were unresolved, so its evidence is incomplete.
+
+Mitigation: Resolve the references and confirm complete scan coverage before relying on the result to install or enable a skill.
+
+## Reference(s):
+
+- [ClawVet repository](https://github.com/MohibShaikh/clawvet)
+- [ClawHub skill page](https://clawhub.ai/mohibshaikh/skills/clawvet-guard)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands]
+
+**Output Format:** [Markdown with inline bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.7 (source: server-resolved release, frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

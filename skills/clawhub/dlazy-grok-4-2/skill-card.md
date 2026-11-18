@@ -1,45 +1,59 @@
-## Description: <br>
-Efficient text generation, dialogue QA, and logical reasoning using the Grok 4.2 text model through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Efficient text generation, dialogue QA, and logical reasoning using the Grok 4.2 text model.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to invoke dLazy's Grok 4.2 text model for prompt-driven text generation, chat-style question answering, and logical reasoning. It is suited to agent workflows that can call a pinned npm CLI and handle cloud API responses. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and referenced local files may be sent to dLazy-hosted services for inference and media handling. <br>
-Mitigation: Use explicit invocations, review prompts and file paths before execution, and avoid sending sensitive data unless that transfer is intended. <br>
-Risk: The CLI can persist an API key in the local user configuration file. <br>
-Mitigation: Protect access to ~/.dlazy/config.json, prefer per-invocation credentials where appropriate, and rotate or revoke the key if it may have been exposed. <br>
-Risk: Broad trigger terms such as chat, QA, and text generation may invoke the skill in contexts where a cloud call was not expected. <br>
-Mitigation: Prefer explicit commands such as dlazy grok-4.2 and confirm cloud use before invoking the skill on sensitive tasks. <br>
+## Use Case:
 
+Developers and other users can use the skill to send prompts to dLazy for text generation, dialogue question answering, and logical reasoning. It requires a dLazy API key and returns generated content through the hosted API.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-grok-4-2) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return asynchronous task identifiers when no-wait mode is used; generated result URLs are hosted on files.dlazy.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release metadata) <br>
+Risk: Prompts may be sent to dLazy for inference, and using the service may incur charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Invoke the skill only for requests you intend to send to dLazy, avoid including sensitive material unless approved, and review applicable service terms and charges.
+
+Risk: Broad triggers may route ordinary text or chat requests through the external provider; the security scan was partial and did not establish the documented model features through the reported login operation.
+
+Mitigation: Confirm each invocation is intended for dLazy and check the CLI's available command and response for the capability you need.
+
+Risk: Authentication requires a dLazy API key, which the CLI can save in local user configuration.
+
+Mitigation: Review the CLI before installation, protect the local configuration and key, and rotate or revoke the key if it may have been exposed.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/dlazyai/skills/dlazy-grok-4-2)
+- [dLazy homepage](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [JSON API response containing generated content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prompt-driven; the API supports synchronous and asynchronous task responses.]
+
+## Skill Version(s):
+
+1.3.41 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,54 @@
-## Description: <br>
-Applies layered n-tier architecture with enforced boundaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Layered n-tier architecture for moderate systems that need presentation, domain, and persistence layers.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and software architects use this skill to decide when layered or n-tier architecture fits moderate systems and to plan layer responsibilities, dependency rules, ADRs, diagrams, and architecture checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generic architecture and domain triggers may activate this guidance in broad design conversations where layered architecture is not the right fit. <br>
-Mitigation: Confirm the system context matches the skill's stated layered or n-tier use cases before following recommendations. <br>
-Risk: Strict layering can create pass-through code or latency for features that naturally cross layers. <br>
-Mitigation: Use the documented facade or exception guidance and review tradeoffs before enforcing strict layer boundaries. <br>
-Risk: Layer boundary recommendations may be applied without project-specific validation. <br>
-Mitigation: Have developers or architects review proposed ADRs, dependency diagrams, and automated checks before adopting them. <br>
+## Use Case:
 
+Developers and architects use this skill to decide when a layered design fits a moderate system and to plan layer responsibilities, dependency direction, and architecture checks.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-layered) <br>
-- [Publisher Profile](https://clawhub.ai/user/athola) <br>
-- [Project Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with architecture recommendations, deliverable outlines, and example tooling suggestions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable behavior; outputs are advisory and should be reviewed before applying to architecture decisions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter lists 1.9.8) <br>
+Risk: Strict layer boundaries can add pass-through code and latency for features that cross several layers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a façade to provide a more direct interface where appropriate.
+
+Risk: Bypassing layer rules can erode the intended architecture.
+
+Mitigation: Make architectural violations fail automated checks or treat them as critical code review issues.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-layered)
+- [Project information](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

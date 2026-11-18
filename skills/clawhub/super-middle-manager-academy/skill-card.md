@@ -1,41 +1,49 @@
-## Description: <br>
-Provides middle managers with structured guidance, tools, and methods for self-management, team management, work management, and strategic management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+提供中层管理者自我、团队、工作及战略管理能力提升的实用工具和方法，助力90%以上管理情境高效应对。
 
-## Publisher: <br>
-[yjkj999999](https://clawhub.ai/user/yjkj999999) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yjkj999999](https://clawhub.ai/user/yjkj999999)
 
-## Use Case: <br>
-Middle managers and management coaches use this skill to get practical guidance for communication, mindset, cross-department collaboration, execution, planning, team leadership, role development, and work methodology. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The content is book-derived static reference material, and provenance for the release is unavailable. <br>
-Mitigation: Confirm content provenance, attribution, and reuse rights before commercial deployment or redistribution. <br>
-Risk: License signals differ between server evidence and artifact files. <br>
-Mitigation: Verify the authoritative license terms before publication or installation. <br>
+## Use Case:
 
+Managers and team leads can use this skill to improve communication, team coordination, work planning, execution, and people management. It provides practical frameworks, questions, and steps for common middle-management situations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yjkj999999/super-middle-manager-academy) <br>
-- [Publisher profile](https://clawhub.ai/user/yjkj999999) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-style management guidance, checklists, tables, and structured methods] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Static reference content derived from a structured middle-management training framework] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and package.json) <br>
+Risk: General management recommendations may not fit a specific employee situation or organizational policy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Have a responsible manager review and adapt recommendations to the people involved and applicable workplace policies.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/yjkj999999/skills/super-middle-manager-academy)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Chinese text and Markdown with management frameworks, plans, checklists, and practical recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Covers self, team, work, and strategy management.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

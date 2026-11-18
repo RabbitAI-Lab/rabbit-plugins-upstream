@@ -1,36 +1,47 @@
-## Description: <br>
-Provides a 7-step debugging protocol plus language-specific commands to systematically identify, verify, and fix software bugs across multiple environments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a 7-step debugging protocol plus language-specific commands to systematically identify, verify, and fix software bugs across multiple environments.
 
-## Publisher: <br>
-[cmanfre7](https://clawhub.ai/user/cmanfre7) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[cmanfre7](https://clawhub.ai/user/cmanfre7)
 
-## Use Case: <br>
-Developers and engineers use this skill as a practical debugging reference for reproducing failures, isolating causes, testing hypotheses, instrumenting code, applying minimal fixes, and adding regression tests. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Diagnostic commands may expose process, network, filesystem, or system details if run on systems outside the user's authority. <br>
-Mitigation: Run commands only in projects and systems the user controls or is authorized to inspect, and review diagnostic output before sharing it. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
+## Use Case:
+
+Developers and engineers use this skill as a compact checklist and command reference for reproducing, isolating, diagnosing, and fixing software bugs across JavaScript/TypeScript, Python, Swift, CSS/layout, network, and Git workflows.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Diagnostic commands can expose local environment details or contact the host named by the user.
+
+Mitigation: Review each command before running it, replace placeholders deliberately, and only probe systems you are authorized to inspect.
+
+## Reference(s):
 
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline command examples and diagnostic tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes example commands for JavaScript/TypeScript, Python, Swift, CSS/layout, networking, git bisect, and common system diagnostics.] <br>
+## Skill Output:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+**Output Type(s):** [guidance, shell commands, code]
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+**Output Format:** [Markdown with command and code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes debugging checklists, diagnostic command examples, and common error pattern guidance.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,50 @@
-## Description: <br>
-Helps API developers, backend teams, developer-experience teams, and maintainers generate, improve, and validate OpenAPI or Swagger documentation for REST APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps backend, platform, and API teams generate, improve, and validate OpenAPI or Swagger documentation for REST APIs.
 
-## Publisher: <br>
-[kyro-ma](https://clawhub.ai/user/kyro-ma) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kyro-ma](https://clawhub.ai/user/kyro-ma)
 
-## Use Case: <br>
-API developers, backend teams, developer-experience teams, and maintainers use this skill to create practical OpenAPI or Swagger documentation workflows, artifacts, checklists, code changes, and validation notes for REST APIs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad routing text may activate the skill on general API or developer-experience requests where OpenAPI documentation help is not intended. <br>
-Mitigation: Use explicit invocation or narrow trigger phrasing when routing matters, and confirm the user's API documentation goal before producing artifacts. <br>
+## Use Case:
 
+API developers, backend and platform teams, developer-experience teams, and maintainers use this skill to plan, write, improve, or validate REST API documentation with OpenAPI or Swagger. It can produce tailored guidance, workflows, checklists, analysis, or implementation support based on the user's API context.
 
-## Reference(s): <br>
-- [Openapi Docs Generator on ClawHub](https://clawhub.ai/kyro-ma/skills/openapi-docs-generator) <br>
-- [Requirement Plan](references/requirement-plan.md) <br>
-- [OpenAPI RESTful API Design Signal](https://blog.csdn.net/2501_94476825/article/details/159013081) <br>
-- [Dynamic OpenAPI 3.1 Documentation Request](https://github.com/PRODHOSH/ossfolio/issues/577) <br>
-- [OpenAPI Interface Specification Signal](https://segmentfault.com/a/1190000043968971) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with optional code blocks, shell commands, checklists, and validation notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are tailored to the user's API documentation task and should include assumptions, limits, and verification steps when relevant.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.20260726.70315 (source: server evidence release.version) <br>
+Risk: Broad software and developer-experience trigger terms may activate the skill for requests unrelated to API documentation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it for explicit OpenAPI, Swagger, or REST API documentation tasks, and clarify the requested documentation outcome when the request is ambiguous.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kyro-ma/skills/openapi-docs-generator)
+- [Requirement Plan](references/requirement-plan.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown, Code]
+
+**Output Format:** [Markdown, with code, workflows, or checklists when appropriate]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tailored to the user's API context; may include a reusable workflow, checklist, implementation artifact, and verification steps.]
+
+## Skill Version(s):
+
+0.20261117.40425 (source: server-resolved ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

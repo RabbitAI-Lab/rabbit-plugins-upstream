@@ -1,44 +1,54 @@
-## Description: <br>
-Generate coherent transition videos using Jimeng's first and tail frame models. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate coherent transition videos using Jimeng's first and tail frame models.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative users use this skill to call dLazy's hosted Jimeng first-and-last-frame video workflow from an agent, providing a prompt plus first and last frame images to generate transition video output. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local first or last frame images are sent to dLazy's hosted service for generation. <br>
-Mitigation: Use the skill only when cloud processing by dLazy is intended, and avoid sending sensitive prompts or media unless that use is acceptable for the user's environment. <br>
-Risk: Broad trigger wording could make the skill run for generic transition-video requests. <br>
-Mitigation: Confirm that the user intends to use dLazy's Jimeng video service before invoking the command. <br>
-Risk: Authentication can persist a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use per-invocation DLAZY_API_KEY or npx when a less persistent setup is preferred, and rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+External creators and developers use this skill to generate a transition video from a prompt and supplied first and last frame images.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-i2v-first-tail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, json, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return generated media URLs or an asynchronous task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release metadata) <br>
+Risk: The security review had medium confidence and partial coverage, and flagged a mismatch between the video-generation description and the reported authentication steps.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the dLazy CLI authentication and API-key setup before use, and inspect instructions that may be obscured by formatting.
+
+Risk: Prompts and local image or media files supplied to the skill are sent to dLazy-hosted services for processing.
+
+Mitigation: Submit only content approved for processing by dLazy, and consult the service terms before sending sensitive material.
+
+## Reference(s):
+
+- [dLazy](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video files, Hosted media URLs, JSON]
+
+**Output Format:** [Generated video asset with JSON result or task metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Videos are 5 or 10 seconds; generation can return immediately with an asynchronous task identifier.]
+
+## Skill Version(s):
+
+1.3.41 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

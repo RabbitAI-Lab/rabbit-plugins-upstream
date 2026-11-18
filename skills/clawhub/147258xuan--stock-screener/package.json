@@ -1,0 +1,13 @@
+{
+  "name": "stock-screener",
+  "version": "1.0.0",
+  "description": "A-share stock screener with valuation, volume, and trend filters.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js --limit 5"
+  },
+  "dependencies": {
+    "iconv-lite": "^0.7.2",
+    "minimist": "^1.2.8"
+  }
+}

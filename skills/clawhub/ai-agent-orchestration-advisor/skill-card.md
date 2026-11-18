@@ -1,40 +1,53 @@
-## Description: <br>
-AI-powered advisor that helps developers compare multi-agent frameworks, design orchestration architectures, and generate Python starter code for agent workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Compares multi-agent frameworks and provides architecture recommendations, starter-code scaffolds, and evaluation guidance.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, AI engineers, data scientists, and product managers use this skill to select an agent orchestration framework, plan multi-agent architectures, and draft implementation scaffolds for agent workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Framework, benchmark, and cost claims may become stale in a rapidly changing agent ecosystem. <br>
-Mitigation: Verify recommendations and numeric claims against current official framework and provider documentation before making architecture or spending decisions. <br>
-Risk: Broad agent-framework discussions may trigger the advisor even when the user has not provided enough constraints for a reliable recommendation. <br>
-Mitigation: Confirm the use case, hosting constraints, state requirements, team experience, and review gates before applying generated architecture or code. <br>
+## Use Case:
 
+Developers, AI engineers, and product teams use this skill to compare multi-agent frameworks, design orchestration architectures, and prepare starter code, evaluation plans, and cost estimates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/ai-agent-orchestration-advisor) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown with comparison tables, architecture recommendations, checklists, and Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include framework trade-off analysis, starter code, production checklist items, and human review checkpoints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Security evidence notes the skill may run a CrewAI research workflow and use external web search when dependencies and credentials are available.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sharing sensitive information and review whether external research is appropriate before use.
+
+Risk: Security analysis is incomplete because a local reference could not be resolved.
+
+Mitigation: Review the unresolved reference before relying on the security assessment.
+
+## Reference(s):
+
+- [ClawHub release: AI Agent Orchestration Advisor 3.0.4](https://clawhub.ai/gechengling/skills/ai-agent-orchestration-advisor)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Configuration]
+
+**Output Format:** [Markdown with comparison tables, architecture diagrams, evaluation checklists, and Python starter code]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations and starter code are for review; framework capabilities and version details require verification.]
+
+## Skill Version(s):
+
+3.0.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

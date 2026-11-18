@@ -1,40 +1,53 @@
-## Description: <br>
-Provides a Chinese-language reference handbook for Shanghai Stock Exchange listed-company operations, regulatory compliance, disclosure, financing, restructuring, delisting, and market-value management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+上交所上市公司规则理解与实务操作全能手册，覆盖上市规则、信息披露、公司治理与合规运作。
 
-## Publisher: <br>
-[yjkj999999](https://clawhub.ai/user/yjkj999999) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yjkj999999](https://clawhub.ai/user/yjkj999999)
 
-## Use Case: <br>
-Developers, compliance teams, investor-relations teams, and advisors use this skill as a reference handbook for Shanghai Stock Exchange listed-company procedures, disclosure duties, corporate actions, accounting regulatory cases, and related compliance workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Securities, accounting, and exchange rules may change after the handbook content was compiled. <br>
-Mitigation: Verify guidance against current SSE, CSRC, legal, accounting, and exchange sources before using it for filings, governance actions, or investment-related decisions. <br>
-Risk: The skill summarizes complex listed-company compliance material and may omit context needed for a specific transaction or issuer. <br>
-Mitigation: Use it as a reference aid and involve qualified legal, securities, accounting, or exchange advisers for case-specific decisions. <br>
+## Use Case:
 
+上市公司相关的 CGMA 专业人士、董事会秘书及合规从业者可用本技能查询上交所上市规则、信息披露、公司治理与合规操作要点。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yjkj999999/sse-listed-company-mastery) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown reference guidance in Chinese] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only handbook; verify current SSE, CSRC, legal, accounting, and exchange requirements before regulatory use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact package.json) <br>
+Risk: A clean scan does not guarantee zero risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill and decide whether it suits your needs before installing.
+
+Risk: Regulatory rules and deadlines can change, and their application depends on the issuer's circumstances.
+
+Mitigation: Confirm current requirements against official exchange or regulator materials and consult qualified professionals before acting.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/yjkj999999/skills/sse-listed-company-mastery)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Analysis]
+
+**Output Format:** [Chinese-language text, typically Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.1 (source: package.json, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,20 @@
+{
+  "name": "gateway-watchdog",
+  "version": "1.2.0",
+  "author": "yingke",
+  "createdAt": "2026-10-10T06:44:31.520Z",
+  "updatedAt": "2026-10-27T03:31:00.000Z",
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "CHANGELOG.md",
+    "scripts/watchdog.ps1",
+    "scripts/watchdog-maintenance.ps1",
+    "scripts/run_gateway_silent.vbs",
+    "scripts/gateway.cmd",
+    "scripts/gateway.vbs",
+    "scripts/install_watchdog_admin.bat",
+    "scripts/install_watchdog_admin.ps1",
+    "scripts/uninstall_watchdog_admin.bat"
+  ]
+}

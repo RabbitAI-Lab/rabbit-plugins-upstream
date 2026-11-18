@@ -1,0 +1,10 @@
+{
+  "accountUrl": "https://www.douyin.com/user/mock-account",
+  "browserId": "mock-browser",
+  "mode": "mock",
+  "capturedAt": "2026-09-08T10:00:00+08:00",
+  "works": [
+    {"url":"https://www.douyin.com/video/1","title":"自动化工作流","likes":100,"comments":10,"shares":5,"views":2000},
+    {"url":"https://www.douyin.com/video/2","title":"浏览器工具","likes":80,"comments":8,"shares":3,"views":1500}
+  ]
+}

@@ -13,8 +13,58 @@ Create API checks, browser checks, and multi-step checks.
 |------------|----------|------------|
 | **API Check** | HTTP endpoints, REST APIs | HTTP requests + assertions |
 | **Browser Check** | Web applications, user flows | Playwright/Puppeteer |
-| **Multi-Step Check** | Complex browser workflows | Playwright (legacy) |
+| **Multi-Step Check** | Sequential API workflows | Playwright request API |
 | **Playwright Check Suite** | Full test suites | Playwright projects |
+
+## Structured check intent
+
+`ApiCheck`, `BrowserCheck`, `MultiStepCheck`, and `PlaywrightCheck` accept an `intent` property for durable root-cause-analysis and check-repair guidance:
+
+```typescript
+new ApiCheck('dashboard-api', {
+  name: 'Dashboard API',
+  intent: {
+    goal: 'Verify that authenticated users can open the dashboard.',
+    constraints: [
+      {
+        type: 'REQUIRED_OUTCOME',
+        statement: 'The dashboard displays the account overview.',
+      },
+      {
+        type: 'MUST_PRESERVE',
+        statement: 'Do not weaken the authentication assertion.',
+      },
+    ],
+  },
+  request: {
+    method: 'GET',
+    url: 'https://example.com/api/dashboard',
+    assertions: [AssertionBuilder.statusCode().equals(200)],
+  },
+})
+```
+
+Intent is separate from the check description and executable assertions. Provide an object to set or update intent; omit it or set `intent: null` to have none. Both omission and `null` clear any web-authored intent on deployment. The CLI trims values and rejects unknown fields. `goal` is required and limited to 2,000 characters. Constraint types are exact uppercase `REQUIRED_OUTCOME` or `MUST_PRESERVE`, with at most 20 of each type and 1,000 characters per statement.
+
+## Automatic check repair
+
+`BrowserCheck` and `MultiStepCheck` can manage their automatic-repair override with `aiAutoRepairEnabled`:
+
+```typescript
+new BrowserCheck('checkout-browser', {
+  name: 'Checkout browser flow',
+  code: { entrypoint: './checkout.spec.ts' },
+  aiAutoRepairEnabled: true,
+})
+```
+
+- Omit the property to reset the check to account-level inheritance on deployment.
+- Use `true` or `false` to override the account default for that check.
+- Use `null` to make the check inherit the account-level setting explicitly.
+
+Only `true`, `false` or `null` are accepted; other values fail validation. Use this property only on `BrowserCheck` and `MultiStepCheck`. Do not infer support from `intent`, which has a wider construct surface. Deployment resets omitted overrides to account inheritance; preserve a desired per-check web setting by declaring it in code.
+
+On unsupported constructs such as `ApiCheck`, `PlaywrightCheck`, and monitors, TypeScript rejects `aiAutoRepairEnabled`, but plain JavaScript (or a type assertion) can pass it without a diagnostic. The unsupported input is ignored; synthesis sends the base account-inheritance value, not the requested override. A clean local validation, test, or deployment therefore does not prove automatic repair was enabled. This is different from the explicit diagnostics for removed properties.
 
 ## API Checks
 
@@ -58,7 +108,7 @@ new ApiCheck('authenticated-api-check', {
     assertions: [
       AssertionBuilder.statusCode().equals(200),
       AssertionBuilder.jsonBody('$.user.id').isNotNull(),
-      AssertionBuilder.jsonBody('$.user.email').matches(/^.+@.+\..+$/),
+      AssertionBuilder.jsonBody('$.user.email').contains('@'),
     ],
   },
   environmentVariables: [
@@ -85,7 +135,7 @@ new ApiCheck('create-user-api', {
     assertions: [
       AssertionBuilder.statusCode().equals(201),
       AssertionBuilder.jsonBody('$.id').isNotNull(),
-      AssertionBuilder.header('Location').matches(/\/users\/\d+/),
+      AssertionBuilder.headers('Location', '(/users/[0-9]+)').notEmpty(),
     ],
   },
 })
@@ -107,11 +157,11 @@ new ApiCheck('advanced-assertions', {
       AssertionBuilder.responseTime().lessThan(1000),
       
       // Headers
-      AssertionBuilder.header('Content-Type').contains('application/json'),
-      AssertionBuilder.header('X-RateLimit-Remaining').greaterThan(0),
+      AssertionBuilder.headers('Content-Type').contains('application/json'),
+      AssertionBuilder.headers('X-RateLimit-Remaining').greaterThan(0),
       
       // JSON body (JSONPath)
-      AssertionBuilder.jsonBody('$.products').isArray(),
+      AssertionBuilder.jsonBody('$.products[0].id').isNotNull(),
       AssertionBuilder.jsonBody('$.products.length').greaterThan(0),
       AssertionBuilder.jsonBody('$.products[0].name').isNotNull(),
       AssertionBuilder.jsonBody('$.products[*].price').greaterThan(0),
@@ -163,7 +213,7 @@ new ApiCheck('with-setup-teardown', {
       AssertionBuilder.statusCode().equals(200),
     ],
   },
-  teardownScript: {
+  tearDownScript: {
     content: `
       // Teardown: Log result
       console.log('Check completed:', response.status)
@@ -275,40 +325,37 @@ new BrowserCheck('homepage-browser-check', {
 
 ## Multi-Step Checks
 
-Complex browser workflows (legacy, prefer Browser Checks).
+Sequential API workflows use Playwright's request fixture. Use a Browser Check when the workflow needs a browser page.
 
 ```typescript
 // __checks__/multi-step.check.ts
 import { MultiStepCheck } from 'checkly/constructs'
 
 new MultiStepCheck('multi-step-check', {
-  name: 'Multi-Step Flow',
-  code: {
-    entrypoint: './multi-step-script.js',
-  },
+  name: 'Multi-Step API Flow',
+  locations: ['us-east-1'],
+  code: { entrypoint: './multi-step.spec.ts' },
   runtimeId: '2025.04',
 })
+```
 
-// multi-step-script.js
-const { chromium } = require('playwright')
+```typescript
+// __checks__/multi-step.spec.ts
+import { test, expect } from '@playwright/test'
 
-async function run() {
-  const browser = await chromium.launch()
-  const page = await browser.newPage()
-  
-  await page.goto('https://example.com')
-  await page.click('text=Login')
-  // ... more steps
-  
-  await browser.close()
-}
-
-run()
+test('API status and catalog', async ({ request }) => {
+  const health = await request.get('https://api.example.com/status')
+  expect(health.ok()).toBeTruthy()
+  const catalog = await request.get('https://api.example.com/products')
+  expect(catalog.ok()).toBeTruthy()
+})
 ```
 
 ## Check configuration
 
 ### Schedule configuration
+
+Retired `me-south-1` is invalid in check locations, including inherited defaults and test-only checks. Choose a supported location before validation or deployment.
 
 ```typescript
 new ApiCheck('scheduled-check', {
@@ -324,6 +371,14 @@ new ApiCheck('scheduled-check', {
 })
 ```
 
+### Response-time validation
+
+`degradedResponseTime` and `maxResponseTime` are top-level `ApiCheck` properties. Omitted values are sent explicitly as 5000 ms degraded and 20000 ms maximum, matching existing backend defaults. They control check-state thresholds and are separate from `AssertionBuilder.responseTime()` request assertions.
+
+The standard client-side ceiling for both API-check properties is 30 seconds. When the authenticated account advertises extended response-time limits, the CLI skips that fixed ceiling and lets the Checkly API enforce the account-specific limit. Do not assume that entitlement is present: run `npx checkly test` with the target account and treat its validation or API response as authoritative. Older or self-hosted APIs that do not expose account feature flags keep the standard ceiling.
+
+`ApiCheck` checks ordering only when both values are explicit: degraded must not exceed maximum. For example, only `degradedResponseTime: 25000` produces no ordering diagnostic, but synthesis still sends the default maximum of 20000 ms. Absence of that diagnostic is not proof of total project validity or live API acceptance. Set both thresholds to an ordered pair.
+
 ### Tags and organization
 
 ```typescript
@@ -335,23 +390,46 @@ new ApiCheck('tagged-check', {
 
 ### Alert configuration
 
+`SlackAppAlertChannel.slackChannels` accepts real `#channel` names, channel IDs such as `C0123456789`, or `@handles`. Invite the Checkly app to private channels. With nonempty destinations, `validate`, `deploy`, `test` and `pw-test` fail if the account reports the app as disconnected, even for a previously deployed channel. Connect the app at the account's integration settings or remove the channel. Missing integration state in an older API response skips this check; it does not prove alerts can be delivered.
+
 ```typescript
-import { EmailAlertChannel, SlackAppAlertChannel } from 'checkly/constructs'
+import {
+  EmailAlertChannel,
+  SlackAppAlertChannel,
+  TelegramAlertChannel,
+} from 'checkly/constructs'
 
 const emailChannel = new EmailAlertChannel('email-alerts', {
   address: 'team@example.com',
 })
 
 // For new Slack notifications, prefer the Checkly Slack App channel.
-// Use project-discovered #channel names or @user handles; do not invent them.
+// Use project-discovered #channels, channel IDs or @handles; do not invent them.
 const slackAppChannel = new SlackAppAlertChannel('slack-app-alerts', {
   name: 'Slack App alerts',
   slackChannels: ['#alerts'],
 })
 
+// Keep bot credentials in the environment. messageThreadId routes alerts to
+// one forum topic inside a Telegram group; omit it for the main chat.
+function requireEnv(name: string): string {
+  const value = process.env[name]
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`)
+  }
+  return value
+}
+
+const telegramChannel = new TelegramAlertChannel('telegram-alerts', {
+  name: 'Telegram topic alerts',
+  chatId: requireEnv('CHECKLY_TELEGRAM_CHAT_ID'),
+  apiKey: requireEnv('CHECKLY_TELEGRAM_BOT_TOKEN'),
+  messageThreadId: process.env.CHECKLY_TELEGRAM_TOPIC_ID,
+})
+
 new ApiCheck('check-with-alerts', {
   name: 'Check with Alerts',
-  alertChannels: [emailChannel, slackAppChannel],
+  alertChannels: [emailChannel, slackAppChannel, telegramChannel],
 })
 ```
 
@@ -364,7 +442,7 @@ new ApiCheck('check-with-retries', {
   name: 'Check with Retries',
   retryStrategy: RetryStrategyBuilder.fixedStrategy({
     baseBackoffSeconds: 60,
-    maxAttempts: 2,
+    maxRetries: 2,
     maxDurationSeconds: 600,
     sameRegion: true,
   }),
@@ -443,6 +521,38 @@ new ApiCheck('api-check', {
 })
 ```
 
+## Run deployed checks now
+
+`checks run` starts live check sessions immediately for already deployed checks, using their configured locations and alerting rules. It is not the same as `checkly test`, which evaluates project definitions. It has no `--dry-run`, no `--force`, and no confirmation prompt. A live run consumes account usage and may alert real on-call recipients. Require explicit user approval before running it.
+
+Never run `checks run` without a `--check-id` or `--tags` selector because no selector targets every activated deployed check in the account. Use one selector type at a time; combining `--check-id` and `--tags` has unverified server-side selection semantics.
+
+```bash
+# Preview tag matches before running. checks list uses singular --tag,
+# while checks run uses plural --tags.
+npx checkly checks list --tag production --output json
+
+# Run one or more deployed checks by ID
+npx checkly checks run --check-id <check-id>
+npx checkly checks run --check-id <check-id-1>,<check-id-2> --output json
+
+# Match all tags in one filter; repeat --tags to OR multiple filters
+npx checkly checks run --tags production,api
+npx checkly checks run --tags production,api --tags staging,browser
+
+# Start the selected sessions and exit without waiting for results
+npx checkly checks run --check-id <check-id> --detach
+```
+
+Useful controls:
+
+- `--refresh-cache` refreshes the selected-check cache before the run.
+- `--timeout <seconds>` controls how long the CLI waits for sessions (default `600`); a timeout does not cancel sessions still running in Checkly.
+- `--output table|json|md` selects the result format.
+- A completed failed, timed-out, or cancelled session produces a non-zero exit status. A `DEGRADED` session exits `0`, so green CI does not prove every check was fully healthy.
+- No matches fail by default. Use `--no-fail-on-no-matching` only when an empty selection is intentionally acceptable.
+- `--detach` exits after the sessions start instead of polling for their results; trigger-request failures still return non-zero.
+
 ## Inspect deployed checks
 
 Use these commands when you need to inspect checks that are already deployed in Checkly.
@@ -480,13 +590,13 @@ npx checkly api /v1/checks/<check-id>
 npx checkly alert-channels list --output json --limit 100
 ```
 
-If a selected check has `groupId`, fetch groups once and locate the matching group:
+If the raw REST check payload has a non-null `groupId`, fetch groups once and match that ID:
 
 ```bash
 npx checkly api /v1/check-groups
 ```
 
-Analyze only confirmed fields: `activated`, `muted`, `groupId`, `alertSettings`, `useGlobalAlertSettings`, `alertChannelSubscriptions`, `retryStrategy`, and `doubleCheck`. For channels, explain whether subscriptions are check-local, group-scoped, active, inactive, or unrelated. Do not use write methods, trigger checks, mutate incidents, or probe guessed account/global alerting endpoints. If output only shows `useGlobalAlertSettings: true`, report that global alert settings are selected but their policy details were not available in the inspected CLI/API output.
+Analyze only fields actually returned: `activated`, `muted`, `groupId`, `alertSettings`, `useGlobalAlertSettings`, `alertChannelSubscriptions`, `doubleCheck`, and `retryStrategy`. These are REST payload fields, not construct properties: `groupId` and the legacy `doubleCheck` remain API fields even though authoring those properties on constructs is rejected. Inspect both retry fields on existing checks; do not infer that the legacy toggle is absent or disabled merely because it was removed from construct inputs. For channels, explain whether subscriptions are check-local, group-scoped, active, inactive, or unrelated. Do not use write methods, trigger checks, mutate incidents, or probe guessed account/global alerting endpoints. If output only shows `useGlobalAlertSettings: true`, report that global alert settings are selected but their policy details were not available in the inspected CLI/API output.
 
 ### Drill into a result or error group
 
@@ -562,9 +672,14 @@ await page.click('button[data-testid="submit"]')
 await page.click('text=Submit')
 ```
 
+## Rocky AI disabled
+
+When `rca run` is refused because Rocky AI is disabled, the CLI reports `Rocky AI is disabled for this account.`, links the account's Rocky AI settings, and exits 1. With `--output json`, inspect `code: "ERR_ROCKY_AI_DISABLED"`. An account owner must enable the feature; changing check definitions or retrying the request does not resolve this account setting.
+
 ## Related Skills
 
 - See `checkly-test` to test checks locally
 - See `checkly-deploy` to deploy checks
+- See `checkly-usage` to inspect the contract-credit usage consumed by deployed `checks run` sessions
 - See `checkly-playwright` for full test suites
 - See `checkly-advanced` for retry strategies

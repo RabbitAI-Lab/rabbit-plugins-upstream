@@ -1,46 +1,52 @@
-## Description: <br>
-Helps agents analyze delegated relationships where incentives diverge and actions are hard to observe, then identify agency costs and structural alignment mechanisms. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes delegated relationships where differing interests and unobservable actions create agency costs, and helps identify structural ways to reduce them.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, executives, founders, operators, and analysts use this skill to diagnose principal-agent problems in compensation, outsourcing, governance, fund management, platform design, and autonomous AI delegation. It guides the agent to name the principal and agent, identify hidden actions or incentive gaps, estimate agency cost, and recommend incentive, observability, and selection mechanisms. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat the skill's business, AI-governance, legal, financial, or compliance analysis as authoritative decision advice. <br>
-Mitigation: Use it as an analytical framing aid and require qualified review before relying on the output for high-stakes decisions. <br>
-Risk: A poor fit assessment can lead to incentive or governance recommendations for a relationship that is not actually a material principal-agent problem. <br>
-Mitigation: Confirm that interests differ, relevant actions or information are hard to observe, and the expected agency cost exceeds the cost of designing controls. <br>
+## Use Case:
 
+Employees, executives, board members, and operators use this skill to diagnose incentive misalignment in delegated relationships and consider incentive, monitoring, and selection mechanisms. It can also help structure oversight decisions for autonomous AI agents.
 
-## Reference(s): <br>
-- [Sources - principal-agent](references/sources.md) <br>
-- [Jensen-Meckling 1976 and the Enron Collapse, 2001](examples/jensen-meckling-1976-and-the-enron-collapse-2001.md) <br>
-- [Delegating to an Autonomous AI Agent, 2024-2026](examples/deploying-autonomous-ai-agents-2024-2026.md) <br>
-- [Theory of the Firm: Managerial Behavior, Agency Costs and Ownership Structure](https://www.sciencedirect.com/science/article/pii/0304405X7690026X) <br>
-- [Specification gaming: the flip side of AI ingenuity](https://deepmind.google/discover/blog/specification-gaming-the-flip-side-of-ai-ingenuity/) <br>
-- [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) <br>
-- [Practices for Governing Agentic AI Systems](https://openai.com/index/practices-for-governing-agentic-ai-systems/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown analysis template with concise diagnostic guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No code execution, shell commands, or configuration changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: One referenced example was only partially inspected, so the scan does not establish that every component is risk-free.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the referenced example before relying on its claims.
+
+## Reference(s):
+
+- [Jensen and Meckling (1976), Theory of the Firm](https://www.sciencedirect.com/science/article/pii/0304405X7690026X)
+- [DeepMind, Specification Gaming](https://deepmind.google/discover/blog/specification-gaming-the-flip-side-of-ai-ingenuity/)
+- [Anthropic, Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)
+- [OpenAI, Practices for Governing Agentic AI Systems](https://openai.com/index/practices-for-governing-agentic-ai-systems/)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured Markdown principal–agent analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes qualitative diagnosis and order-of-magnitude agency cost estimates.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

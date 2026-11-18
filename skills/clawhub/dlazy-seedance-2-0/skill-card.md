@@ -1,43 +1,59 @@
-## Description: <br>
-ByteDance's Seedance 2.0 video generation skill supports text-to-video, first/last-frame generation, and multi-modal image, video, and audio references through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ByteDance's latest video generation model. Supports multi-modal reference (images, video, audio) to generate videos, as well as first/last frame and text-to-video modes.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to generate videos with ByteDance Seedance 2.0 through dLazy's hosted API, using prompts plus optional image, video, audio, or first/last-frame inputs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected media files are sent to dLazy's cloud service for generation. <br>
-Mitigation: Review prompts and media for sensitive content before use, and avoid submitting data that should not leave the user's environment. <br>
-Risk: Using dlazy login stores an API key in the local dLazy configuration file. <br>
-Mitigation: Use DLAZY_API_KEY for temporary sessions when persistent credentials are not desired, and rotate or revoke keys from the dLazy dashboard if exposure is suspected. <br>
+## Use Case:
 
+Developers and creators can use an agent to generate videos from text prompts, reference images, video or audio, or first and last frame images, with selectable duration, resolution, aspect ratio, and audio generation.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [Dlazy Seedance 2.0 on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-seedance-2-0) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [CLI command guidance and JSON responses containing generated media URLs or asynchronous task status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include hosted media URLs from files.dlazy.com or a generateId for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server-resolved release metadata) <br>
+Risk: The security review is benign but medium confidence and partial; it flagged a mismatch involving a reported login command and unresolved references.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the login flow and unresolved skill sections, and inspect the CLI package before installing or authenticating.
+
+Risk: Prompts and local reference media are sent to dLazy-hosted services for generation.
+
+Mitigation: Only submit prompts and media permitted for external processing, and review the service terms before use.
+
+Risk: The CLI requires an API key and stores it in a user-level configuration file.
+
+Mitigation: Keep the key private, use the account controls to rotate or revoke it when needed, and avoid placing it in prompts or shared logs.
+
+## Reference(s):
+
+- [CLI project page (linked in skill metadata)](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli package on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Video and media assets, JSON]
+
+**Output Format:** [Generated media files or hosted media URLs, with a JSON result envelope]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Media varies by prompt and generation mode; results may be returned as URLs or saved files.]
+
+## Skill Version(s):
+
+1.3.39 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
