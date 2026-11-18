@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/compileiq-search-space",
+  "identifier": "NVIDIA/skills/skills/compileiq-search-space",
+  "repo": "NVIDIA/skills",
+  "path": "skills/compileiq-search-space",
+  "branch": "main",
+  "pushedAt": "2026-11-18T14:06:32Z",
+  "contentHash": "2451d7e5985343c94269eaaae8569fe9019c4efaf85622767831c0f29d5c80d5",
+  "fetchedAt": "2026-11-18T16:32:12.661Z"
+}
