@@ -1,47 +1,54 @@
-## Description: <br>
-Creates marketing, promotional, advertising, and ecommerce product videos from a product, brand, listing, or brief through the dLazy hosted service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates marketing, promotional, or advertising videos for social media or campaigns from a product, brand, or brief.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to start or continue dLazy product-to-ecommerce-video projects that turn product details, storefront listings, briefs, and optional reference files into marketing videos for social, ecommerce, or campaign use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, product details, and attached files may be sent to dLazy's hosted API and file storage. <br>
-Mitigation: Use the skill only with data appropriate for the dLazy service, avoid confidential attachments unless approved, and review service terms before use. <br>
-Risk: API keys are required and may be stored in the local dLazy CLI config. <br>
-Mitigation: Prefer per-invocation credentials when needed, protect the local config, and rotate or revoke organization-scoped keys from the dLazy dashboard if exposure is suspected. <br>
-Risk: Continuing the wrong project id may send prompts into an unintended existing project session. <br>
-Mitigation: List and verify project ids before continuing prior work, and clear or compact sessions when needed. <br>
-Risk: A global CLI install persists the dLazy binary on the machine. <br>
-Mitigation: Use the pinned npx command for on-demand execution when a persistent global install is not desired. <br>
+## Use Case:
 
+External sellers, marketers, and brand teams use the skill to turn product information or a campaign brief into ecommerce and promotional videos, with optional multilingual voiceover or a virtual host.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-marketing-video) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and streamed CLI text from the hosted service.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference generated video project state and uploaded-file URLs managed by the dLazy service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: SKILL.md frontmatter and server release evidence, created 2026-07-21T02:25:12Z) <br>
+Risk: The skill relies on the dLazy CLI and hosted service, and local files attached to a request are uploaded to dLazy media storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and trust the CLI and service before installing; attach only files approved for upload.
+
+Risk: The security assessment reports incomplete coverage and recommends reviewing the skill text for content that a whitespace finding may obscure.
+
+Mitigation: Review the skill text before use, especially around whitespace findings and external CLI or API references.
+
+## Reference(s):
+
+- [dLazy](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Marketing video, Text, Shell commands]
+
+**Output Format:** [Generated marketing video media and streamed text responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Video creation is based on a product, brand, or brief; attached local files may be uploaded to dLazy media storage.]
+
+## Skill Version(s):
+
+1.0.37 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,55 @@
-## Description: <br>
-Detects likely time and space complexity hotspots in project code using static analysis with optional enrichment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects time and space complexity hotspots via AST scan.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill before merges or during performance triage to scan target code paths for likely time and space complexity hotspots and receive ranked findings with suggested validation steps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Static-analysis findings may be false positives or may not reflect real runtime impact. <br>
-Mitigation: Confirm important findings with profiling, benchmark reruns, or manual review before applying or claiming a performance fix. <br>
-Risk: Optional gauntlet and kuva integrations may read additional project data or require separate tool installation. <br>
-Mitigation: Review optional integrations and tool installs separately in environments with network, package, or source-code access restrictions. <br>
+## Use Case:
 
+Developers use the skill to review code for likely time and space complexity hotspots before performance-sensitive merges or when investigating code that feels slow. It returns severity-ranked findings and suggestions for further verification.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-performance-review) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown report with inline code and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Findings are informational and should be validated with profiling or benchmarks before fixes are treated as proven.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The security assessment rates the skill suspicious with medium confidence, citing a mismatch between its code-analysis purpose and some described capabilities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the full skill and its execution steps, and confirm its described behavior matches your intended use before installing.
+
+Risk: The workflow instructs users to run project code and install a visualization tool, and the scanner assessment is incomplete because linked local references were missing.
+
+Mitigation: Use it with trusted project files, inspect commands and dependencies before running them, and review the missing references before relying on the assessment.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/athola/skills/nm-pensive-performance-review)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+- [Kuva visualization project](https://github.com/Psy-Fer/kuva)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown performance review with severity-ranked findings and suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings include file and line locations, severity, category, and suggested actions; tier coverage may be reported.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

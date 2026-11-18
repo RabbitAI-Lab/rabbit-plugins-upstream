@@ -1,44 +1,59 @@
-## Description: <br>
-Early monitoring of plant wilting based on hyperspectral imaging and computer vision, capturing early wilting signs before visible symptoms and providing early warning for precision irrigation and disease control. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes plant images and video for early signs of wilting and provides early warnings to support precision irrigation and disease control.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Developers and agents use this skill to analyze plant image or video inputs, distinguish environmental wilting from pathological wilt, quantify wilting severity, and return early-warning reports with recommendations. It can also retrieve cloud-hosted historical plant wilting monitoring reports associated with the internally resolved identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Plant image or video inputs may be sent to lifeemergence.com services for analysis. <br>
-Mitigation: Use only with plant media approved for external service processing, and avoid sensitive local files or shared workspaces unless that data flow is acceptable. <br>
-Risk: The skill silently creates or reuses an internal identity and ties cloud report history to that identity. <br>
-Mitigation: Review the identity behavior before installation and run it only where automatic identity association and cloud history retrieval are acceptable. <br>
-Risk: Token-like credentials and user records may be stored locally in a workspace SQLite database. <br>
-Mitigation: Avoid environments where local token storage is unacceptable, and isolate or clean the workspace data directory when testing or uninstalling the skill. <br>
+## Use Case:
 
+Growers, agronomists, and agricultural teams can submit plant images or video to screen for early wilting, assess possible causes, and support irrigation or disease-control decisions. Treat results as early-warning guidance and check them against field conditions and expert judgment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-wilting-monitoring-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis text, with optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include plant wilting analysis, severity and cause indicators, recommendations, report links, and cloud report-history listings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: The security summary flags account creation and credential handling beyond the stated monitoring purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review identity initialization and credential use before installation and execution; use only an approved API credential.
+
+Risk: The security summary notes possible video uploads and incomplete scanner coverage.
+
+Mitigation: Avoid sending sensitive media until the receiving service and retention terms are understood, and review the skill because scan coverage was partial.
+
+Risk: The security summary also flags export-only behavior and weakly scoped triggers and execution controls.
+
+Mitigation: Inspect any generated environment-variable commands and keep execution limited to plant-monitoring tasks.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-wilting-monitoring-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured analysis report with monitoring results, warnings, recommendations, and report links; JSON content may be presented in Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Early-warning reference; final plant-health decisions should account for field conditions and expert judgment.]
+
+## Skill Version(s):
+
+1.0.20 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

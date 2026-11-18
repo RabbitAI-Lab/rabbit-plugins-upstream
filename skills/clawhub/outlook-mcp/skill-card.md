@@ -1,50 +1,58 @@
-## Description: <br>
-Production-grade MCP server for personal Outlook (Outlook.com / Hotmail / Live). 62 typed Graph tools across mail, calendar, contacts, to-do, drafts, attachments, folders, threading, batch ops, delta-sync. Granular permissions, OS-keyring auth, /$batch-optimized triage and bulk read. Built for agents that need real Outlook coverage, not a CLI wrapper. BYO Azure app; zero telemetry. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects AI agents to personal Outlook accounts through typed Microsoft Graph tools for mail, calendar, contacts, tasks, attachments, and related workflows.
 
-## Publisher: <br>
-[mpalermiti](https://clawhub.ai/user/mpalermiti) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mpalermiti](https://clawhub.ai/user/mpalermiti)
 
-## Use Case: <br>
-Agent builders and MCP client users use this skill to let agents read, triage, write, and organize personal Outlook mail, calendar, contacts, and tasks through typed Microsoft Graph tools. It is intended for personal Microsoft accounts, with work or school Entra ID accounts out of scope. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Agents can access sensitive Outlook mailbox, calendar, contact, and task data. <br>
-Mitigation: Install only for trusted agents and begin with read_only enabled. <br>
-Risk: Write-capable tools can send, delete, move, or modify Outlook data. <br>
-Mitigation: Enable only the needed allow_categories and toolsets, and gate destructive operations in the MCP client. <br>
-Risk: Attachment tools can interact with local file paths. <br>
-Mitigation: Avoid exposing attachment tools unless the agent is trusted with local file access. <br>
-Risk: Authentication uses persistent token storage. <br>
-Mitigation: Use OS keyring-backed token storage and configure encrypted keyring support on Linux before authenticating. <br>
+## Use Case:
 
+Agent builders use it to read and manage personal Outlook mail, calendars, contacts, tasks, and attachments from an MCP host. It requires a user-configured Azure app and prior CLI authentication.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mpalermiti/skills/outlook-mcp) <br>
-- [Publisher profile](https://clawhub.ai/user/mpalermiti) <br>
-- [Project homepage](https://github.com/mpalermiti/outlook-mcp) <br>
-- [PyPI package](https://pypi.org/project/outlook-graph-mcp/) <br>
-- [MCP Registry listing](https://registry.modelcontextprotocol.io/v0/servers?search=mpalermiti) <br>
-- [Security policy](SECURITY.md) <br>
-- [Release changelog](CHANGELOG.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, configuration, shell commands, guidance] <br>
-**Output Format:** [MCP tool responses with structured text and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can read or modify Outlook data through Microsoft Graph and can save downloaded attachments to local file paths when attachment tools are enabled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.12.0 (source: server evidence, pyproject.toml, CHANGELOG, server.json) <br>
+Risk: The security evidence reports a document-parser isolation weakness for attachment reading.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the opt-in documents toolset disabled unless needed, treat extracted attachment text as untrusted, and verify requested actions with the user.
+
+Risk: The security evidence reports a calendar notification permission gap.
+
+Mitigation: Review granted calendar permissions and require user confirmation before attendee-facing invitations, updates, or cancellations.
+
+Risk: Security scanner coverage was partial, so the assessment may not cover every file or behavior.
+
+Mitigation: Review the installation source, permissions, and release independently before connecting an Outlook account.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/mpalermiti/skills/outlook-mcp)
+- [PyPI package](https://pypi.org/project/outlook-graph-mcp/)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Text, Configuration instructions, Guidance]
+
+**Output Format:** [MCP tool calls with structured or text responses, plus setup guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses depend on the selected Outlook operation and account data.]
+
+## Skill Version(s):
+
+1.33.0 (source: pyproject.toml, CHANGELOG, release evidence; released 2026-11-16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

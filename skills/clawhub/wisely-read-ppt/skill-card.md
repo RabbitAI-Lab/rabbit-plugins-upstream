@@ -1,44 +1,55 @@
-## Description: <br>
-Converts PPTX and PDF files into page-by-page structured DOCX parsing documents with full-page screenshots, editable text organization, and inline image descriptions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Parses PowerPoint presentations and PDF files into structured, page-by-page Word documents containing screenshots, editable text, and descriptions of embedded images.
 
-## Publisher: <br>
-[sedey999](https://clawhub.ai/user/sedey999) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Proprietary <br>
+## Publisher:
 
+[sedey999](https://clawhub.ai/user/sedey999)
 
-## Use Case: <br>
-Developers, analysts, and document-review agents use this skill to transform complex PPTX or PDF presentations into reviewable Word documents with extracted text, screenshots, and structured descriptions of embedded visuals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The runtime dependency installer can silently modify the Python environment. <br>
-Mitigation: Run the skill in an isolated virtual environment or container, preinstall dependencies, and use the --no-install option. <br>
-Risk: Input decks and PDFs may be retained as screenshots, extracted images, text JSON, and working DOCX files in the workspace. <br>
-Mitigation: Avoid highly sensitive documents unless retention is acceptable, and manually remove ppt-parse-working, retained assets, and intermediate outputs when processing is complete. <br>
-Risk: The generated parsing document can contain missed text, incorrect ordering, or incomplete image transcription if visual review is skipped. <br>
-Mitigation: Complete the documented full-page visual review and main-agent final review before delivering the final DOCX. <br>
+## Use Case:
 
+External users and developers can convert PPTX presentations or PDFs into editable, page-by-page Word documents for reviewing and working with slide content, including text and visual references.
 
-## Reference(s): <br>
-- [Wisely Read PPT ClawHub Skill Page](https://clawhub.ai/sedey999/skills/wisely-read-ppt) <br>
-- [README.md](artifact/README.md) <br>
-- [subagent-workflow.md](artifact/reference/subagent-workflow.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Files, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [DOCX document with page screenshots, structured text, inline image markers, and retained PNG/JSON asset files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a vision-capable model for page review; PPTX rendering requires LibreOffice, and PDF rendering requires poppler or PyMuPDF.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Automatic dependency setup may change or bypass protections in the Python environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review dependency installation steps before running the skill, and use an isolated Python environment where practical.
+
+Risk: Installation guidance includes elevated or system-wide changes, and the security scan reports incomplete evidence.
+
+Mitigation: Review installation commands and referenced files before execution; avoid elevated or system-wide changes unless they are necessary and understood.
+
+## Reference(s):
+
+- [Wisely Read PPT on ClawHub](https://clawhub.ai/sedey999/skills/wisely-read-ppt)
+- [macOS LibreOffice installation guide](reference/macos-install.md)
+- [PPT/PDF subagent workflow guide](reference/subagent-workflow.md)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Text, Images]
+
+**Output Format:** [DOCX (.docx) page-by-page documents with editable text and embedded page screenshots; a paired image-free DOCX is also produced.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Each page contains organized text and image descriptions; embedded visuals can be retained in the full version or removed in the paired image-free version.]
+
+## Skill Version(s):
+
+1.5.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

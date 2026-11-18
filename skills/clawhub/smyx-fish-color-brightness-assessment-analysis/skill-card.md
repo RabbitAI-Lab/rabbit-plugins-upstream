@@ -1,45 +1,59 @@
-## Description: <br>
-Assesses ornamental fish color vibrancy from aquarium images or videos by extracting HSV saturation and brightness signals, comparing them with species-specific baselines, and returning a structured vibrancy report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses ornamental fish coloration from images or video and reports a vibrancy score against species-specific color ranges.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers use this skill to analyze ornamental fish footage from aquarium cameras or uploaded files, estimate color vibrancy, review HSV and baseline-comparison signals, and query prior cloud reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Fish images, videos, and report queries may be sent to LifeEmergence cloud APIs. <br>
-Mitigation: Use the skill only with footage approved for cloud processing, and confirm retention, authorization, and sharing expectations before deployment. <br>
-Risk: The skill may silently create or reuse an internal identity and store user or token records in the workspace data directory. <br>
-Mitigation: Run it in a dedicated workspace, restrict access to local data files, and review or clear stored identity and token records in shared environments. <br>
-Risk: The security evidence reports incomplete disclosure around cloud uploads, report history queries, and local token handling. <br>
-Mitigation: Review the ClawHub security summary and the relevant artifact behavior before using the skill with sensitive aquarium footage or production accounts. <br>
+## Use Case:
 
+Aquarium keepers, aquaculture operators, and developers can use the skill to assess fish coloration from a suitable image or video and review a structured report with color trends and husbandry suggestions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fish-color-brightness-assessment-analysis) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Structured JSON or Markdown text with report links and optional file output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include vibrancy scores, HSV values, species baseline comparisons, trend summaries, alert levels, recommended actions, and cloud report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Account identity and credential handling warrant review before use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review how identity and credentials are handled, and use only the access needed for the analysis.
+
+Risk: The local-media upload and data-handling behavior is not clearly disclosed.
+
+Mitigation: Before submitting fish images or videos, verify where they are sent and how they are retained; obtain the aquarium owner's consent where applicable.
+
+Risk: The reported behavior may be limited to exporting analysis results.
+
+Mitigation: Treat scores and reports as informational, check results against the fish and capture conditions, and do not use them as a diagnosis or to trigger equipment changes automatically.
+
+## Reference(s):
+
+- [API reference](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub release page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fish-color-brightness-assessment-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Text, Guidance]
+
+**Output Format:** [Structured JSON report or text summary, with report links when supplied]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Per-fish vibrancy score (0–100), color status, species baseline comparison, and optional 7-day and 30-day trends]
+
+## Skill Version(s):
+
+1.0.16 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,55 @@
-## Description: <br>
-Analyzes fixed-camera pre-school drop-off videos to identify crying expressions, clinging or resistance behaviors, and produce a mild, moderate, or severe separation-anxiety level with supportive guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pre-school drop-off video for crying, clinging, and resistance behaviors and estimates a child's separation-anxiety level with supportive guidance.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Parents, teachers, and operators of child-care monitoring workflows use this skill to analyze home-entrance or kindergarten-gate video and generate behavior observations, trend alerts, and calming recommendations. It is intended as supportive visual analysis, not a clinical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill processes highly sensitive child-related video or video URLs through a cloud service. <br>
-Mitigation: Use only with appropriate guardian and school consent, review the remote service and retention practices, and prefer privacy-preserving capture such as masking where practical. <br>
-Risk: The security evidence says the skill automatically creates or reuses persistent identities with locally stored tokens. <br>
-Mitigation: Install only in environments where that identity behavior is acceptable, restrict local token access, and clear stored credentials when the workflow is no longer needed. <br>
-Risk: The security verdict is suspicious because the data flow combines sensitive media upload with persistent identity binding. <br>
-Mitigation: Review the skill carefully before deployment, limit use to the intended child-care monitoring scenario, and avoid using outputs as clinical diagnosis or prescription. <br>
+## Use Case:
 
+Parents and early-childhood educators use it to review drop-off videos, summarize observable distress behaviors, and decide when to offer support. It provides behavioral analysis rather than a psychological diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-separation-anxiety-detection-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Files] <br>
-**Output Format:** [Markdown or JSON analysis report with behavior metrics, anxiety level, recommendations, and optional report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can write the report to a user-specified output file and can list historical cloud reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: The security review flags unclear remote video processing, account handling, identity transmission, and token storage; child video is highly sensitive.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the service and account data handling before use, obtain explicit parent or guardian consent, and use privacy masking with encrypted, access-controlled storage where possible.
+
+Risk: Video-based behavior estimates may misread crying or distress and could be mistaken for a clinical diagnosis.
+
+Mitigation: Treat results as observational guidance only; consult a child mental-health professional for persistent or severe concerns.
+
+## Reference(s):
+
+- [API reference](references/api_doc.md)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-separation-anxiety-detection-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, JSON, Report links]
+
+**Output Format:** [Structured JSON analysis with a text summary and report link]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Summarizes observed behaviors and an estimated separation-anxiety level with supportive guidance.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

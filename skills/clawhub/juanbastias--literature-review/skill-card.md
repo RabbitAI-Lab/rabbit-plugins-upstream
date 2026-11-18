@@ -1,39 +1,49 @@
-## Description: <br>
-Assistance with writing literature reviews by searching for academic sources via Semantic Scholar, OpenAlex, Crossref and PubMed APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Plan and document academic literature searches, verify source identifiers, and synthesize a cited review using available research tools.
 
-## Publisher: <br>
-[juanbastias](https://clawhub.ai/user/juanbastias) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[juanbastias](https://clawhub.ai/user/juanbastias)
 
-## Use Case: <br>
-Researchers, students, and developers use this skill to find academic papers, inspect DOI-based metadata, compare sources, and draft literature review sections with citations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill documents workflows for a local lit_search.py script that is not included in the release. <br>
-Mitigation: Use only a local script you trust, review it before execution, and adjust commands to the reviewed script path. <br>
-Risk: Academic API searches may send queries, optional API keys, and email identifiers to external academic data providers. <br>
-Mitigation: Avoid sensitive search terms, use approved API credentials, and configure email identifiers according to your organization or institution's policy. <br>
+## Use Case:
 
+Researchers use this skill to plan literature searches, document screening decisions, verify bibliographic identifiers, and prepare a cited synthesis from evidence they actually accessed.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Text, Markdown] <br>
-**Output Format:** [Markdown guidance with shell command examples and structured literature metadata] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a trusted local lit_search.py script, Python 3, requests, and optional academic API keys.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release evidence; artifact frontmatter lists 1.2.0) <br>
+Risk: The security scan was marked partial because a local reference could not be resolved, leaving the evidence incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the complete package and resolve the missing reference before installation.
+
+## Reference(s):
+
+- [ClawHub literature-review release](https://clawhub.ai/juanbastias/skills/literature-review)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Files, Guidance]
+
+**Output Format:** [Markdown search log, screened source table, and cited draft]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Records searched sources, evidence accessed, inclusion decisions, and limitations.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

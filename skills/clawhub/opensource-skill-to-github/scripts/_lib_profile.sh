@@ -136,7 +136,7 @@ require_osg_identity() {
 
 请用以下任一方式之一配置（推荐第一种，一次设置永久使用）：
 
-  ① 跑首次引导脚本（推荐，写到 $profile）:
+  ① 跑首次引导脚本（推荐，写到 ${profile}）:
        bash $(dirname "${BASH_SOURCE[0]}")/setup_profile.sh
 
   ② 临时环境变量（仅当前 shell 生效）:

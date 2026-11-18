@@ -1,47 +1,54 @@
-## Description: <br>
-Analyzes pet hospital waiting-area video or image inputs through server-side APIs to identify anxiety-related behavior signals, assign a 1-5 anxiety level, and return a structured report without diagnosing disease or recommending treatment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet videos from veterinary waiting areas for visible anxiety-related behaviors and returns a 1–5 anxiety level to support triage; it does not diagnose illness or recommend treatment.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External veterinary clinic staff and pet care operators use this skill to screen waiting-area media for pet anxiety indicators, prioritize high-stress pets for care or comfort, and review generated assessment reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Waiting-area media is uploaded to lifeemergence.com services and may include pets, owners, staff, or bystanders. <br>
-Mitigation: Use only media that the clinic is authorized to share, avoid unnecessary bystander footage, and confirm provider retention and endpoint trust before deployment. <br>
-Risk: The skill automatically creates or reuses an internal user identity and ties cloud history/report records to that identity. <br>
-Mitigation: Deploy with clear account ownership expectations and review cloud report access controls before enabling history queries. <br>
-Risk: Service tokens are stored in a local workspace SQLite database. <br>
-Mitigation: Restrict workspace access, avoid sharing generated local state, and rotate or clear tokens according to the provider's operational guidance. <br>
-Risk: Anxiety scoring may be affected by video quality, occlusion, camera angle, breed traits, or individual pet differences. <br>
-Mitigation: Treat the output as workflow support only and require staff to combine results with direct observation and clinical judgment. <br>
+## Use Case:
 
+Veterinary clinic staff can use video-based behavior observations and an anxiety level to identify pets that may need earlier attention or comfort while waiting. The result supports workflow decisions and is not a veterinary diagnosis or treatment plan.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-hospital-waiting-anxiety-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis report with observed signals, anxiety level, recommendations, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can list cloud history reports and can write the analysis output to a local file when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: ClawScan rates this release suspicious and reports possible account-profile, token-storage, report-history, and broad network access, as well as uncertainty about whether export-only prevents video analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, verify why these accesses are needed and confirm where video uploads go, how they are retained, and which services receive them; do not rely on export-only to prevent analysis.
+
+Risk: The security guidance leaves video handling and retention to be confirmed, which may matter when videos contain sensitive information.
+
+Mitigation: Use only videos you are authorized to share, minimize identifying material where practical, and confirm handling and retention before upload.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured analysis report with an anxiety level, behavior observations, and a report link; available in JSON or Markdown detail formats.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Behavior-based estimates can be affected by individual and breed differences; use alongside direct observation.]
+
+## Skill Version(s):
+
+1.0.19 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

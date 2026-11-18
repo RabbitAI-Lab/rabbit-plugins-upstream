@@ -1,42 +1,49 @@
-## Description: <br>
-Valuation Mastery provides a Chinese-language valuation knowledge system that combines global valuation theory, China Securities Association 2025 guidance, financial modeling methods, and practical case-based valuation analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+融合全球估值理论、中国证券业协会官方指引与建模实战的企业估值全流程体系，涵盖DCF、可比公司、资产基础法等估值方法与A股监管实务。
 
-## Publisher: <br>
-[yjkj999999](https://clawhub.ai/user/yjkj999999) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yjkj999999](https://clawhub.ai/user/yjkj999999)
 
-## Use Case: <br>
-Finance professionals, founders, investors, and advisors use this skill to reason through non-listed company valuation methods, including market, income, and cost approaches. It supports valuation learning, framework selection, modeling steps, and practical analysis under Chinese regulatory and global valuation references. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Server security evidence marks the release suspicious and says installation should be limited to cases where the publisher is trusted. <br>
-Mitigation: Install only after reviewing the publisher, release evidence, and local artifact contents for the intended environment. <br>
-Risk: Valuation outputs may be incomplete, stale, or unsuitable for a specific transaction, jurisdiction, or reporting requirement. <br>
-Mitigation: Treat generated valuation guidance as analytical support and have qualified finance, legal, or compliance reviewers validate assumptions and conclusions before use. <br>
+## Use Case:
 
+External analysts and finance professionals use this skill to structure company valuations, select methods such as DCF and market multiples, build assumptions, and consider China A-share and private-company valuation guidance.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/yjkj999999/valuation-mastery) <br>
-- [README.md](artifact/README.md) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global; includes China A-share regulatory practice.
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Analysis, Markdown, Configuration] <br>
-**Output Format:** [Markdown guidance with formulas, tables, and step-by-step valuation workflows] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include valuation frameworks, financial formulas, scenario analysis, and China regulatory considerations; not a substitute for professional financial advice.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and package.json) <br>
+Risk: A low-probability Unicode warning leaves some source text uncertain.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review flagged text against authoritative valuation references before relying on it.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/yjkj999999/skills/valuation-mastery)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Financial valuation frameworks]
+
+**Output Format:** [Text or Markdown with formulas, tables, and worked examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May summarize valuation methods, modeling steps, assumptions, and example calculations.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

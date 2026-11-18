@@ -1,0 +1,4 @@
+interface:
+  display_name: "抖音账号诊断"
+  short_description: "分析抖音公开账号和近期作品样本，生成可复核诊断与选题建议"
+  default_prompt: "使用 $douyin-account-diagnosis 读取我指定的抖音账号公开资料，输出有证据的诊断和今日选题。"

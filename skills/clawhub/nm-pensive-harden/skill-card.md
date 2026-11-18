@@ -1,47 +1,58 @@
-## Description: <br>
-Applies NIST/CWE security hardening to Python and Rust code. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies NIST/CWE security hardening to Python and Rust code
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and security engineers use this skill to audit repositories for Python, Rust, supply-chain, CI/CD, container, and frontier security hardening gaps. It produces citation-backed findings and concrete remediation proposals for user approval, filing, deferral, or rejection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad security-hardening audits may trigger from generic Python, Rust, or security language and produce noisy findings. <br>
-Mitigation: Review findings and proposals before acting, and use the report-only and approval-gate workflow to decide whether to apply, file, defer, or reject each item. <br>
-Risk: Approved fixes can modify source code, CI configuration, dependency policy, or container settings. <br>
-Mitigation: Apply changes as discrete, reviewable units, rerun project gates after each change, and revert any change that fails validation. <br>
+## Use Case:
 
+Developers and security engineers use this skill to audit Python and Rust repositories for security weaknesses and produce citation-backed findings with concrete remediation proposals for review.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-pensive-harden) <br>
-- [Source Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
-- [NIST and CWE Citation Backbone](modules/nist-controls.md) <br>
-- [Python Hardening Checks](modules/python-checks.md) <br>
-- [Rust Hardening Checks](modules/rust-checks.md) <br>
-- [Cross-Cutting Hardening Checks](modules/cross-cutting.md) <br>
-- [Frontier Hardening Checks](modules/frontier-checks.md) <br>
-- [Proposal Shape](modules/proposal-shape.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports with findings tables, remediation proposals, diff snippets, shell commands, and configuration snippets.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [First run is report-only; applying remediations requires user approval or an explicit auto-apply flag.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence; artifact frontmatter says 1.9.8) <br>
+Risk: The security scan was partial, and some referenced paths could not be resolved, so the available review does not cover everything the skill refers to.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Resolve and review the referenced paths before relying on the findings as a complete assessment.
+
+Risk: Security details could be exposed through pull requests or issues, and dependency metadata could be sent to external services.
+
+Mitigation: Review and redact sensitive details before posting findings; check external-service destinations before submitting dependency metadata.
+
+Risk: The skill is marked suspicious with medium confidence because scanners report possible disclosure risks and concerns about whether its guidance matches its hardening purpose.
+
+Mitigation: Review the skill's guidance and proposed changes before execution or adoption.
+
+## Reference(s):
+
+- [Skill release on ClawHub](https://clawhub.ai/athola/skills/nm-pensive-harden)
+- [Project homepage (skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Code, Configuration instructions, Shell commands]
+
+**Output Format:** [Markdown security report with findings and proposed code or configuration changes, including shell commands where useful]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Repository-specific results; proposed changes are presented for user approval before application.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

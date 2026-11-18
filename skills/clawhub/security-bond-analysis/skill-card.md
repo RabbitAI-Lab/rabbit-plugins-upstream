@@ -1,41 +1,54 @@
-## Description: <br>
-AI-powered bond analysis for the China market, including valuation, yield analysis, duration and convexity calculation, credit spread analysis, and bond portfolio management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered bond analysis for China's onshore market, covering bond pricing and yield, duration and convexity, DV01, credit spreads, LGFV regional review, convertible bonds, and portfolio rate scenarios.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Fixed income analysts, bond traders, and portfolio managers use this skill to structure China bond valuation, yield, duration, convexity, credit spread, interest-rate risk, and portfolio analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bond analysis outputs may be incorrect or outdated if market, issuer, rating, or regulatory inputs are stale. <br>
-Mitigation: Verify current market, issuer, rating, and regulatory information from trusted sources before relying on outputs. <br>
-Risk: The skill provides educational finance analysis and may be mistaken for investment advice. <br>
-Mitigation: Treat outputs as analytical support only and apply professional review before making investment decisions. <br>
-Risk: Broad trigger keywords could invoke the skill for prompts that are only loosely related to bond analysis. <br>
-Mitigation: Use narrower triggers when deployments should limit activation to explicit bond-analysis requests. <br>
+## Use Case:
 
+Fixed-income analysts, bond traders, credit researchers, and portfolio managers use it to structure paper-based analysis of China onshore bond pricing and yield, duration, credit spreads, LGFV exposures, convertible bond terms, and portfolio rate scenarios. It provides reference methods and draft checklists that require qualified human review and do not constitute investment advice.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with tables, formulas, and Python code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Provides educational finance analysis frameworks and templates; users should verify market, issuer, rating, and regulatory inputs before relying on outputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The security verdict is benign with medium confidence, and inspection of the only listed file was partial, leaving evidence incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the complete skill contents before installation and treat the verdict as limited assurance, not a guarantee of safety.
+
+Risk: Illustrative calculations, market examples, and thresholds may not match current data, bond terms, or institutional conventions.
+
+Mitigation: Verify data sources and dates, instrument terms, and calculation assumptions, then have a qualified reviewer check draft analysis before use.
+
+## Reference(s):
+
+- [ClawHub release: Security Bond Analysis](https://clawhub.ai/gechengling/skills/security-bond-analysis)
+- [Publisher profile: gechengling](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown, Code]
+
+**Output Format:** [Markdown analysis with tables, checklists, and illustrative code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference methods and illustrative examples; market data, assumptions, and conclusions require independent verification.]
+
+## Skill Version(s):
+
+3.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

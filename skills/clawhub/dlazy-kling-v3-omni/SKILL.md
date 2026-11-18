@@ -1,14 +1,13 @@
 ---
 name: dlazy-kling-v3-omni
 version: 1.3.4
-description: Versatile video generation with Kling v3 Omni. Supports multi-modal inputs to generate stunning dynamic videos. 使用可灵 (Kling) v3 Omni 全能视频生成模型，支持多模态输入（图片、提示词）生成震撼的动态视频。
-metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy kling-v3-omni -h for help."}}
+description: "Versatile video generation with Kling v3 Omni. Supports multi-modal inputs to generate stunning dynamic videos. 使用可灵 (Kling) v3 Omni 全能视频生成模型，支持多模态输入（图片、提示词）生成震撼的动态视频。"
+metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy kling-v3-omni -h for help."}}
 ---
 
-# dlazy-kling-v3-omni
+# 全能视频生成 可灵 Kling V3 Omni
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 Versatile video generation with Kling v3 Omni. Supports multi-modal inputs to generate stunning dynamic videos.
@@ -49,7 +48,7 @@ Each key is scoped to your dLazy organization and can be **rotated or revoked at
 
 ## About & Provenance
 
-- **CLI source code**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI source code**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **Maintainer**: dlazyai
 - **npm package**: `@dlazy/cli` (pinned to `1.2.3` in this skill's install spec)
 - **Homepage**: [dlazy.com](https://dlazy.com)
@@ -84,7 +83,6 @@ Options:
   --prompt [prompt]                    Prompt
   --generation_mode [generation_mode]  Generation Mode（frames=Frames; components=Components） [default: frames] (choices: "frames", "components")
   --images [images...]                 Images [image: url or local path] (max 7)
-  --subjects [subjects...]             Subjects (max 3) [only when !(generation_mode="frames")]
   --videos [videos...]                 Videos [video: url or local path] (max 1) [only when !(generation_mode="frames")]
   --video_refer_type [video_refer_type]Video Refer Type [default: feature] (choices: "feature", "base") [only when videos non-empty]
   --keep_original_sound [keep_original_sound]Keep Original Sound [default: false] [only when videos non-empty]
@@ -95,6 +93,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 

@@ -1,18 +1,24 @@
 ---
 name: spec-workflow-guide
 description: Use when medium-to-large changes need explicit requirements, technical design, and task planning before implementation, especially for multi-module work, unclear acceptance criteria, or architecture-heavy requests.
-version: 2.24.1
+version: 2.37.8
+license: MIT
 alwaysApply: false
 ---
 
-## Standalone Install Note
+## Sibling skills (local only)
 
-If this environment only installed the current skill, start from the CloudBase main entry and use the published `cloudbase/references/...` paths for sibling skills.
+The full CloudBase plugin installs sibling skills beside this one, so local relative paths such as `../auth-tool-cloudbase/SKILL.md` resolve there. A standalone install from a skill marketplace packages only this skill; those paths do not exist, and any "Then also read" link starting with `../` cannot be opened.
 
-- CloudBase main entry: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md`
-- Current skill raw source: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/spec-workflow/SKILL.md`
+When a sibling file is missing, or the task needs CloudBase backend capabilities, give the user this prompt to paste into their AI IDE:
 
-Keep local `references/...` paths for files that ship with the current skill directory. When this file points to a sibling skill such as `auth-tool` or `web-development`, use the standalone fallback URL shown next to that reference.
+```text
+帮我把 CloudBase 接好，按下面做：
+1. 打开 https://docs.cloudbase.net/skill.md，按说明完成接入。
+2. 接入完成后告诉我，并建议最相关的下一步。
+```
+
+Do **not** HTTP-fetch remote skill or protocol markdown into the agent context.
 
 # Spec Workflow
 
@@ -31,8 +37,10 @@ Keep local `references/...` paths for files that ship with the current skill dir
 
 ### Then also read
 
-- Frontend page or visual design work -> `../ui-design/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/ui-design/SKILL.md`)
-- Advanced data-model work -> `../data-model-creation/SKILL.md` (standalone fallback: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/data-model-creation/SKILL.md`)
+In a standalone install, use the setup prompt above instead of these `../` paths.
+
+- Frontend page or visual design work -> `../ui-design/SKILL.md`
+- Advanced data-model work -> `../postgresql-development-cloudbase/SKILL.md`
 
 ### Do NOT use for
 

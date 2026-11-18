@@ -1,42 +1,51 @@
-## Description: <br>
-Detects camera image or video quality problems such as black screens, white screens, color casts, stripes, snow noise, and blur for surveillance self-check and maintenance workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects camera image-quality issues such as black or white screens, color casts, stripes, noise, and blur for surveillance and camera self-check scenarios.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, developers, and camera operations teams use this skill to analyze uploaded camera images, videos, or image URLs for common visual quality defects and to review structured reports and report history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Camera images, videos, or URLs may be sent to configured lifeemergence.com services for analysis. <br>
-Mitigation: Confirm that users understand remote processing before analysis and avoid submitting confidential footage unless the configured service is approved for that data. <br>
-Risk: Report history is tied to an automatically managed identity, with user records and tokens stored locally. <br>
-Mitigation: Review identity creation, token storage, and report-history behavior before deployment; prefer a version that documents retention and asks for confirmation before history lookup or account creation. <br>
+## Use Case:
 
+Security camera operators and developers can analyze camera images or video frames for common quality problems and review historical analysis reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-image-quality-detection-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands] <br>
-**Output Format:** [Markdown and JSON analysis reports with optional report links and saved text output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can query cloud report history and can save analysis output to a user-specified file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: The security scan rates the skill suspicious because scanners report account and credential handling, broad network requests, and behavior that may not clearly fit its image-quality purpose; the scan is partial and evidence is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, verify that its account and credential handling, network destinations, and media-upload behavior fit your environment. Avoid submitting sensitive footage until those details are clear.
+
+## Reference(s):
+
+- [API Reference](references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-image-quality-detection-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [JSON analysis results and Markdown report lists with links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts image or video files and network URLs; documented formats are JPG, JPEG, PNG, MP4, AVI, and MOV, up to 10 MB. Results support equipment maintenance and do not replace professional hardware inspection.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
