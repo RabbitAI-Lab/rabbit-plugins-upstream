@@ -1,43 +1,57 @@
-## Description: <br>
-Helps bank credit-risk professionals structure credit-risk information, generate industry risk rules, analyze credit policies, monitor post-loan risk, manage exposures, and produce VLM-assisted validation workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides bank credit-risk staff with reference workflows for risk analysis, large-exposure management, policy review, post-loan monitoring, and image validation.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Bank credit-risk managers, risk analysts, and credit officers use this skill to prepare structured credit-risk reports, rule-generation outputs, policy analyses, exposure-monitoring workflows, post-loan management checks, and anti-fraud validation materials. Outputs are reference materials for professional review, not automated credit approval or financial advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, where permitted by institutional policy and local financial-services regulation. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill under-discloses sensitive bank-system access, external lookups, and multi-year audit-log retention. <br>
-Mitigation: Use only in a controlled banking environment after approving external data sources, internal API scopes, credit-bureau authorization flow, audit-log contents, retention period, and access controls. <br>
-Risk: Outputs could be mistaken for credit approval, financial advice, or compliance assurance. <br>
-Mitigation: Require qualified human review and treat outputs as reference materials before any real-world banking, credit, legal, or compliance action. <br>
-Risk: The top capability notice does not accurately summarize what the skill asks the agent to do. <br>
-Mitigation: Review the full skill behavior and security guidance before installation instead of relying on the capability notice alone. <br>
+## Use Case:
 
+Bank credit-risk professionals use it to structure corporate borrower information, review exposures and policies, and prepare monitoring or due-diligence drafts for qualified human review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/credit-risk-manager-digital-employee) <br>
-- [Artifact skill definition](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Markdown reports, structured tables, JSON audit records, and workflow guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires human review before use; may reference user-uploaded banking documents, approved external data sources, and approved internal system/API data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Analysis inputs or drafts may contain sensitive customer, financial, or personal information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove direct identifiers and use only the minimum necessary data before providing materials; handle records in approved institutional systems.
+
+Risk: Draft risk assessments, calculations, policy interpretations, or image reviews may be incomplete or time-sensitive and could be mistaken for decisions.
+
+Mitigation: Have qualified risk staff verify source data, current requirements, and conclusions, and obtain required approval before recording or acting.
+
+Risk: The security review was incomplete: one static check reached a parser limit and several local references could not be resolved.
+
+Mitigation: Review the skill before installing it; the scanner guidance treats its benign verdict as a positive signal, not a guarantee.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/gechengling/skills/credit-risk-manager-digital-employee)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown]
+
+**Output Format:** [Markdown reports, tables, checklists, and structured draft guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts require qualified human review and explicit confirmation before action; the skill does not perform institutional system operations.]
+
+## Skill Version(s):
+
+2.0.11 (source: frontmatter, server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

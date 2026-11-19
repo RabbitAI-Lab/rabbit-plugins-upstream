@@ -1,44 +1,55 @@
-## Description: <br>
-Publish HTML, markdown, text, files, or multi-file sites to brewpage.app and return an instant public URL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Prepare BrewPage drafts, publish supplied content or new pages, and update a specific publication.
 
-## Publisher: <br>
-[kochetkov-ma](https://clawhub.ai/user/kochetkov-ma) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[kochetkov-ma](https://clawhub.ai/user/kochetkov-ma)
 
-## Use Case: <br>
-Developers and agent users use this skill to publish selected text, files, built static directories, or zip archives to brewpage.app for temporary public sharing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish content to a public hosting service, which may expose files or text more broadly than intended. <br>
-Mitigation: Use it only for content intended to become public, avoid secrets and private files, and review the selected content before upload. <br>
-Risk: Broad invocation triggers may cause the skill to be selected for publishing requests where the user has not clearly chosen public hosting. <br>
-Mitigation: Require an explicit confirmation step before calling brewpage.app and confirm namespace, password, TTL, and content type. <br>
-Risk: Publishing a directory can accidentally include source files or generated artifacts. <br>
-Mitigation: Publish built static output only and keep the documented exclusions for secrets, VCS data, dependencies, sourcemaps, logs, and editor files. <br>
+## Use Case:
 
+OpenClaw users can prepare BrewPage content locally, publish pages or files, and update an existing publication. It supports hosted sites, visitor response forms, and custom domains when the requested workflow and owner access allow them.
 
-## Reference(s): <br>
-- [BrewPage homepage](https://brewpage.app) <br>
-- [ClawHub listing](https://clawhub.ai/kochetkov-ma/brewpage-publish) <br>
-- [OpenClaw skills documentation](https://docs.openclaw.ai/tools/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell command blocks and a final public URL] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or append a workspace-local brewpage-history.md file containing private owner tokens.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: ClawScan flags ownership recovery and reconciliation workflows beyond the stated publishing purpose, and reports that its scan was incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the ownership and recovery behavior and confirm the required host permissions before installing; treat the skill as unverified until the remaining components are inspected.
+
+## Reference(s):
+
+- [BrewPage](https://brewpage.app)
+- [ClawHub release page](https://clawhub.ai/kochetkov-ma/skills/brewpage-publish)
+- [Publishing guide](references/publishing.md)
+- [Ownership and receipts](references/ownership.md)
+- [Page data guide](references/page-data.md)
+- [Custom domains guide](references/custom-domain.md)
+- [BrewPage hosting API](https://brewpage.app/api#hosting)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Markdown, HTML, JSON, Guidance]
+
+**Output Format:** [Local content artifacts and concise text describing a confirmed publication or update]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The output depends on the request and may be a local draft or a confirmed reader link with publication status.]
+
+## Skill Version(s):
+
+1.1.0 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -14,9 +14,12 @@ You are a book translation assistant. You translate entire books from one langua
 ### 1. Collect Parameters
 
 Determine the following from the user's message:
-- **file_path**: Path to the input file (PDF, DOCX, or EPUB) — REQUIRED
+- **file_path**: Path to the input file (PDF, DOCX, EPUB, or Markdown) — REQUIRED
 - **target_lang**: Target language code (default: `zh`) — e.g. zh, en, ja, ko, fr, de, es
 - **concurrency**: Number of parallel sub-agents per batch (default: `8`)
+- **temp_root**: Optional directory under which `{filename}_temp/` should be created
+- **epub_cover**: Optional explicit cover image path for EPUB output
+- **export_name**: Optional filename stem for user-facing output aliases
 - **custom_instructions**: Any additional translation instructions from the user (optional)
 
 If the file path is not provided, ask the user.
@@ -29,24 +32,54 @@ Run the conversion script to produce chunks:
 python3 {baseDir}/scripts/convert.py "<file_path>" --olang "<target_lang>"
 ```
 
+If the user provided `temp_root`, add `--temp-root "<temp_root>"`. The temp
+directory leaf name remains `{filename}_temp/`; only the parent directory
+changes.
+
+For PDFs, Calibre reflows text by coordinate heuristics, which shatters math
+formulas, flattens tables, and interleaves multi-column layouts before
+translation starts. If the PDF is an academic or technical document and a
+layout-aware parser is already installed — or the user asks for one — extract
+the PDF with it first, then pass the resulting Markdown file to `convert.py`
+instead of the PDF. Markdown input (`.md` / `.markdown`) skips Calibre:
+
+- MinerU >= 4: `mineru-kit parse "<file_path>" -o "<name>.md"`
+- Marker: `marker_single "<file_path>" --output_dir "<dir>"`, then use `<dir>/<name>/<name>.md`
+
+Keep the PDF's file name stem for the Markdown file, because the temp
+directory is named after it. These CLIs change between versions; check the
+parser's `--help` if a flag is rejected. Do not install a parser without the
+user's consent, because they download large models. Images next to the
+Markdown file and base64 images inlined in it are copied into the temp
+directory. `--strip-page-numbers` does not apply to Markdown input.
+
+Page-number lines are detected and dropped for PDF input only; EPUB and DOCX
+keep every standalone number (chapter, verse or exercise numbers). If an EPUB
+prints its page numbers as text and they show up in the chunks, delete the
+temp directory before translating and re-run with `--detect-page-numbers`.
+
 This creates a `{filename}_temp/` directory containing:
-- `input.html`, `input.md` — intermediate files
+- `input.html` (Calibre input only), `input.md` — intermediate files
 - `chunk0001.md`, `chunk0002.md`, ... — source chunks for translation
 - `manifest.json` — chunk manifest for tracking and validation
+- `source_fingerprint.json` — SHA-256 identity of the source bytes this temp dir was built from
 - `config.txt` — pipeline configuration with metadata
 
-### 3. Discover Chunks
+If `convert.py` aborts because the temp dir was created from different source
+bytes, do not reuse it — delete the temp directory or pass a fresh
+`--temp-root`, then re-run. Temp dirs created before fingerprinting existed
+are adopted with a warning and fingerprinted on the next successful run.
 
-Use Glob to find all source chunks and determine which still need translation:
+### 3. Discover Source Chunks
+
+Use Glob to find all source chunks:
 
 ```
 Glob: {filename}_temp/chunk*.md
-Glob: {filename}_temp/output_chunk*.md
 ```
 
-Calculate the set of chunks that have a source file but no corresponding `output_` file. These are the chunks to translate.
-
-If all chunks already have translations, skip to step 5.
+Exclude `output_chunk*.md` from the source list. The selective re-translation
+plan below decides which chunks actually need work.
 
 ### 3.5. Build Glossary (term consistency)
 
@@ -84,7 +117,39 @@ Otherwise:
 
    This scans every `chunk*.md` (excluding `output_chunk*.md`), updates each term's `frequency` field, and writes back atomically.
 
-The glossary is hand-editable. If the user edits a `target` field after a partial run, that's fine for this commit — affected chunks won't auto-re-translate yet (commit 3 adds precise re-translation).
+The glossary is hand-editable. If the user edits a `target`, `aliases`, or
+`category` field after a partial run, the run-state planner in the next step
+will re-translate only chunks whose recorded term set or term hashes are
+affected.
+
+### 3.7. Plan Selective Re-translation
+
+Run:
+
+```bash
+python3 {baseDir}/scripts/run_state.py plan "<temp_dir>"
+```
+
+If the user explicitly asks to apply glossary edits to outputs produced before
+`run_state.json` existed, add `--retranslate-untracked`; otherwise keep the
+default so old temp dirs remain resumable without mass re-translation.
+
+Capture stdout JSON:
+- `translation_chunk_ids` — chunks to translate in this run.
+- `record_only_chunk_ids` — existing valid outputs that need `run_state.json`
+  records but do not need translation.
+- `unchanged_chunk_ids` — existing outputs already consistent with the current
+  source chunks and glossary.
+
+If `record_only_chunk_ids` is non-empty, record them before launching
+sub-agents:
+
+```bash
+python3 {baseDir}/scripts/run_state.py record "<temp_dir>" chunk0001 chunk0002 ...
+```
+
+Use `translation_chunk_ids` as the work queue for Step 4. If it is empty, skip
+to Step 5.
 
 ### 4. Parallel Translation with Sub-Agents
 
@@ -106,6 +171,7 @@ Each sub-agent receives:
 - The target language
 - The translation prompt (see below)
 - A per-chunk term table (see "Term table assembly" below)
+- Read-only neighboring chunk excerpts (see "Neighbor context assembly" below)
 - Any custom instructions
 
 **Term table assembly** — before spawning a sub-agent, run:
@@ -115,6 +181,19 @@ python3 {baseDir}/scripts/glossary.py print-terms-for-chunk "<temp_dir>" "chunk<
 ```
 
 Capture stdout. The CLI emits a 3-column markdown table (`原文 | 别名 | 译文`) of every term that either appears in this chunk (by source OR any alias) OR is in the top-N most-frequent terms book-wide. Inject the table as `{TERM_TABLE}` in rule #13 of the translation prompt. **If stdout is empty (no glossary, or no relevant terms), omit rule #13 from this chunk's prompt entirely** — do not leave a dangling `{TERM_TABLE}` placeholder.
+
+**Neighbor context assembly** — before spawning a sub-agent, run:
+
+```bash
+python3 {baseDir}/scripts/chunk_context.py "<temp_dir>" "chunk<NNNN>.md"
+```
+
+Capture stdout. The CLI emits prompt-ready read-only excerpts: the last ~300
+characters of the previous chunk and the first ~300 characters of the next
+chunk when those files exist. Inject this block as `{NEIGHBOR_CONTEXT}`. If
+stdout is empty, omit the neighbor-context block entirely. The sub-agent must
+not translate neighboring excerpts or copy them into the output; they are only
+for pronoun, gender, and entity-resolution context.
 
 **Each sub-agent's task**:
 1. Read the source chunk file (e.g. `chunk0001.md`)
@@ -163,16 +242,19 @@ Include this translation prompt in each sub-agent's instructions (replace `{TARG
 IMPORTANT REQUIREMENTS:
 1. 严格保持 Markdown 格式不变，包括标题、链接、图片引用等
 2. 仅翻译文字内容，保留所有 Markdown 语法和文件名
+   - 数学公式（行内 `$...$`、公式块 `$$...$$`）内的 LaTeX 原样保留，不要翻译、改写或删除其中任何字符
+   - 表格（Markdown `| ... |` 表格或 HTML `<table>`）保持行列结构不变，只翻译单元格中的文字
+   - 脚注：正文中的引用标记 `[^12]` 与行首的定义标记 `[^12]:` 原样保留，不要改编号、不要删除、不要移动位置，只翻译定义后面的注释文字；定义的续段保持行首四个空格的缩进
 3. 删除空链接、不必要的字符和如: 行末的'\\'。页码已由 convert.py 上游处理，不要再删除独立的数字行（可能是年份 1984、章节编号、引用编号等正文内容）。
 4. 保证格式和语义准确翻译内容自然流畅
 5. 只输出翻译后的正文内容，不要有任何说明、提示、注释或对话内容。
 6. 表达清晰简洁，不要使用复杂的句式。请严格按顺序翻译，不要跳过任何内容。
 7. 必须保留所有图片引用，包括：
-   - 所有 ![alt](path) 格式的图片引用必须完整保留
-   - 图片文件名和路径不要修改（如 media/image-001.png）
+   - 所有 `![alt](path)` 格式的图片引用必须完整保留
+   - 图片文件名和路径不要修改（如 `media/image-001.png`）
    - 图片alt文本可以翻译，但必须保留图片引用结构
    - 不要删除、过滤或忽略任何图片相关内容
-   - 图片引用示例：![Figure 1: Data Flow](media/image-001.png) -> ![图1：数据流](media/image-001.png)
+   - 图片引用示例：`![Figure 1: Data Flow](media/image-001.png)` -> `![图1：数据流](media/image-001.png)`
    - **原始 HTML 标签（如 `<img alt="..." />`、`<a title="...">`）必须保持合法**：翻译 `alt`、`title` 等属性值内部文本时，下列字符会破坏 HTML 结构，必须替换为安全形式（仅适用于**原始 HTML 标签的属性值内部**；普通 Markdown 正文、代码块、URL 不要主动转义）：
 
      | 字符 | 在属性值内的危险 | 替换为 |
@@ -213,15 +295,27 @@ IMPORTANT REQUIREMENTS:
 
 {TERM_TABLE}
 
+邻居上下文（只读，不要翻译，不要写入输出，只用于判断代词、性别、别名和跨 chunk 指代；为空则省略）:
+
+{NEIGHBOR_CONTEXT}
+
 markdown文件正文:
 
 ---
 
 ### 4.5. Merge Sub-Agent Meta Into Glossary (after each batch)
 
-Each sub-agent emitted an `output_chunk<NNNN>.meta.json` alongside its translated chunk. After every batch completes, the main agent merges these observations into the canonical glossary so subsequent batches see an enriched glossary.
+Each sub-agent emitted an `output_chunk<NNNN>.meta.json` alongside its translated chunk. After every batch completes, first record the completed chunk outputs in `run_state.json` while the glossary is still the one used for that batch, then merge observations into the canonical glossary so subsequent batches see an enriched glossary.
 
-1. Run prepare-merge:
+1. Record successfully translated chunks from this batch before mutating the glossary:
+
+   ```bash
+   python3 {baseDir}/scripts/run_state.py record "<temp_dir>" chunk0001 chunk0002 ...
+   ```
+
+   If this fails, fix the missing/empty output or state error before continuing.
+
+2. Run prepare-merge:
 
    ```bash
    python3 {baseDir}/scripts/merge_meta.py prepare-merge "<temp_dir>"
@@ -239,11 +333,11 @@ Each sub-agent emitted an `output_chunk<NNNN>.meta.json` alongside its translate
    - `consumed_chunk_ids` — every meta file scanned this round (regardless of whether it produced a finding). These hashes get recorded in `applied_meta_hashes` on apply.
    - `malformed_meta_chunk_ids` — meta files that failed validation. Quarantined: not consumed, not crashing the run. Surface them in your batch progress.
 
-2. **If `consumed_chunk_ids` is empty** → nothing was scanned; skip to Step 5.
+3. **If `consumed_chunk_ids` is empty** → nothing was scanned; skip to Step 5.
 
-3. **If `consumed_chunk_ids` is non-empty but both `auto_apply` and `decisions_needed` are empty** → still pipe `{"auto_apply": [], "decisions": [], "consumed_chunk_ids": [...]}` into `apply-merge` so the hashes get recorded. **Skipping this is the bug** — no-op metas would re-scan forever otherwise.
+4. **If `consumed_chunk_ids` is non-empty but both `auto_apply` and `decisions_needed` are empty** → still pipe `{"auto_apply": [], "decisions": [], "consumed_chunk_ids": [...]}` into `apply-merge` so the hashes get recorded. **Skipping this is the bug** — no-op metas would re-scan forever otherwise.
 
-4. **Otherwise, resolve each decision**:
+5. **Otherwise, resolve each decision**:
    - Read its evidence quotes inline.
    - Pick one option from its `options` array.
    - Build a `decisions` entry that round-trips the original decision plus your choice. The entry MUST include the original `kind` and (for `conflicting_new_entity_proposals`) the `variants` array, so apply-merge can validate and act:
@@ -252,7 +346,7 @@ Each sub-agent emitted an `output_chunk<NNNN>.meta.json` alongside its translate
      {"id": "d1", "kind": "alias", "variant": "Taig", "candidate_source": "Tai", "choice": "yes_alias"}
      ```
 
-5. Pipe the decisions JSON into apply-merge:
+6. Pipe the decisions JSON into apply-merge:
 
    ```bash
    echo '{"auto_apply": [...], "decisions": [...], "consumed_chunk_ids": [...]}' \
@@ -275,12 +369,18 @@ If any are missing, retry them — each missing chunk as its own sub-agent. Maxi
 
 Also read `manifest.json` and verify:
 - Every chunk id has a corresponding output file
-- No output file is empty (0 bytes)
+- No output file is empty (0 bytes) or blank (whitespace-only)
 
 Then run the meta-merge observability snapshot:
 
 ```bash
 python3 {baseDir}/scripts/merge_meta.py status "<temp_dir>"
+```
+
+Also run the selective re-translation state snapshot:
+
+```bash
+python3 {baseDir}/scripts/run_state.py status "<temp_dir>"
 ```
 
 Surface a one-line summary in the verification report:
@@ -298,6 +398,8 @@ Report any chunks that failed translation after retry.
 ### 6. Translate Book Title
 
 Read `config.txt` from the temp directory to get the `original_title` field.
+If it is missing (e.g. Markdown input with neither front matter nor a leading
+`#` title), use the source file name instead.
 
 Translate the title to the target language. For Chinese, wrap in 书名号: `《translated_title》`.
 
@@ -306,10 +408,18 @@ Translate the title to the target language. For Chinese, wrap in 书名号: `《
 Run the build script with the translated title:
 
 ```bash
-python3 {baseDir}/scripts/merge_and_build.py --temp-dir "<temp_dir>" --title "<translated_title>" --cleanup
+python3 {baseDir}/scripts/merge_and_build.py --temp-dir "<temp_dir>" --title "<translated_title>"
 ```
 
-The `--cleanup` flag removes intermediate files (chunks, input.html, etc.) after a fully successful build. If the user asked to keep intermediates, omit `--cleanup`.
+If the user provided `epub_cover`, add `--cover "<epub_cover>"`. If the user
+provided `export_name`, add `--export-name "<export_name>"`.
+
+Keep the intermediate files. The chunks, `manifest.json`, and `run_state.json`
+are what make spot fixes and selective re-translation possible after the build
+(see Step 9). Add `--cleanup` only when the user explicitly asks to delete
+intermediates, and tell them first that it permanently deletes `chunk*.md`,
+`output_chunk*.md`, `input.html`, and `input.md`: after that, fixing a single
+chunk means converting and translating the whole book again.
 
 The script reads `output_lang` from `config.txt` automatically. Optional overrides: `--lang`, `--author`.
 
@@ -327,3 +437,55 @@ Tell the user:
 - The translated title
 - List generated output files with sizes
 - Any format generation failures
+
+### 9. Spot Fixes After the Build
+
+If the user finds problems in a few places after the build, fix the affected
+chunks rather than `output.md`: whenever a chunk changes, the build re-merges
+`output.md` from the chunks and discards edits made there.
+
+1. Find the chunk: search `<temp_dir>/output_chunk*.md` for the passage.
+2. Either edit `output_chunk<NNNN>.md` directly, or have it re-translated.
+
+   **Edit.** `record` stamps the chunk as matching the current source and
+   glossary, so first check what the planner still expects from it:
+
+   ```bash
+   python3 {baseDir}/scripts/run_state.py plan "<temp_dir>"
+   ```
+
+   If chunk<NNNN> appears in `chunks[]` with action `translate`, recording
+   would hide that. Handle it by reason:
+
+   - `glossary_term_hash_changed` (its `detail` lists the term ids) or
+     `glossary_term_selection_changed`: bring those terms in line with
+     `glossary.py print-terms-for-chunk "<temp_dir>" "chunk<NNNN>.md"` in the
+     same edit.
+   - `manifest_source_hash_changed`: the source chunk was edited after
+     splitting. Re-run the Step 2 `convert.py` command first, leaving out
+     page-number flags such as `--strip-page-numbers`: once chunks exist,
+     those flags abort and suggest deleting the cached files or the whole
+     temp dir, which would also delete the translations. Without them it
+     keeps the existing chunks and writes their new hashes to
+     `manifest.json`. Skip this and the merge stops with "Source changed
+     since splitting" even after re-translating. Plan again: the chunk is
+     then queued with `source_hash_changed_since_record`.
+   - `source_hash_changed_since_record` or any other reason: re-translate the
+     chunk instead of editing it.
+
+   Then record the edited output:
+
+   ```bash
+   python3 {baseDir}/scripts/run_state.py record "<temp_dir>" chunk<NNNN>
+   ```
+
+   **Re-translate.** Delete `output_chunk<NNNN>.md` and run Steps 3.7–4.5 again. The planner
+   re-checks the whole book, so `translation_chunk_ids` can also list chunks
+   the user did not mention, typically ones whose glossary terms changed after
+   they were translated (`glossary_term_selection_changed` or
+   `glossary_term_hash_changed` in the plan's `chunks[].reasons`). Translate
+   only the chunks the user asked for; if the plan lists others, show the user
+   those chunk ids with their reasons and ask before re-translating them.
+3. Re-run the Step 7 build command with the same flags. It re-merges because
+   the chunk is newer than `output.md`, then regenerates the HTML and the other
+   formats.

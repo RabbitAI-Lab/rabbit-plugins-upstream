@@ -1,45 +1,59 @@
-## Description: <br>
-Weekly Review helps an agent turn collected AI usage, prompt review, session cleanup, and weekly retrospective data into a structured report with dashboard tables and charts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Weekly Review helps an agent turn selected weekly AI usage, prompt quality, project, action, open-session, and automation facts into a structured review report with optional charts.
 
-## Publisher: <br>
-[testman2025](https://clawhub.ai/user/testman2025) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[testman2025](https://clawhub.ai/user/testman2025)
 
-## Use Case: <br>
-Developers, operators, and agent users use this skill to summarize weekly AI usage, review prompt quality, identify efficient and inefficient work patterns, align open sessions, and generate a weekly report. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Weekly review inputs may contain sensitive usage, conversation, project, or session details. <br>
-Mitigation: Provide or approve the review_input data explicitly and keep collection limited to the relevant project folders. <br>
-Risk: The legacy analyzer can read a local SQLite session database when intentionally pointed at one. <br>
-Mitigation: Use the public review-input rendering path by default; only configure a database path or related environment variables when that local analysis is intended. <br>
-Risk: Attribution and cleanup recommendations can be misleading if the calling agent skips file-system verification. <br>
-Mitigation: Follow the skill workflow by checking relevant paths with Glob or ls before attributing work patterns or recommending cleanup. <br>
+## Use Case:
 
+External users and developers use this skill to produce weekly AI-usage retrospectives, prompt-improvement notes, inefficiency analysis, action ledgers, open-session cleanup lists, and automation summaries from agent-collected review-input data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/testman2025/skills/weekly-review) <br>
-- [Homepage](https://github.com/testman2025/weekly-review-skill) <br>
-- [Review input schema](schema/README.md) <br>
-- [Skill README](README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Configuration, Guidance] <br>
-**Output Format:** [Markdown report with optional SVG chart files, or JSON when requested] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can be used through a CLI or lightweight MCP tool with a review_input object supplied by the calling agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.5 (source: frontmatter and server release metadata) <br>
+Risk: The skill can lead an agent to collect AI session data and inspect local workspace folders without clear built-in scope limits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for intentionally selected sessions and workspaces, and prefer a user-supplied review-input JSON file.
+
+Risk: The legacy analyzer can read a SQLite session database when explicitly pointed at one.
+
+Mitigation: Use the documented public path where the agent supplies structured review-input data, and avoid scanning arbitrary session history.
+
+Risk: Server-resolved import provenance is unavailable for this release.
+
+Mitigation: Pin or verify the installer source before running npx or other install commands.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/testman2025/skills/weekly-review)
+- [Project homepage](https://github.com/testman2025/weekly-review-skill)
+- [Review input schema](schema/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, files, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown report with tables and optional SVG chart files; JSON can be returned when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires user- or agent-supplied review-input JSON; chart files are generated locally from charts_data.]
+
+## Skill Version(s):
+
+1.2.5 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

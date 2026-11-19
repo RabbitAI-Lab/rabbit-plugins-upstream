@@ -1,55 +1,58 @@
-## Description: <br>
-Manage and automate DuoPlus Android cloud phones through the official OpenAPI and the synchronous HTTP Gateway. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage and automate DuoPlus Android cloud phones through the official OpenAPI and the synchronous HTTP Gateway. Use when an AI needs to discover cloud phones, inspect status/details, initialize a proxy, start/stop/restart a phone, wait until it is controllable, read UI state or screenshots, complete Android UI actions, or run an explicitly authorized shell command on a cloud phone.
 
-## Publisher: <br>
-[duoplusofficial](https://clawhub.ai/user/duoplusofficial) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[duoplusofficial](https://clawhub.ai/user/duoplusofficial)
 
-## Use Case: <br>
-Developers and operators use this skill to manage DuoPlus cloud-phone lifecycle state, configure proxy access, inspect device status, and automate Android UI tasks on a selected cloud phone. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate DuoPlus cloud phones with a user-provided API key, including power, proxy, account, payment, or destructive actions. <br>
-Mitigation: Provide an API key only for the task at hand and explicitly confirm device power, proxy, account, payment, or destructive actions before execution. <br>
-Risk: Screenshots and UI state may reveal private app data from the controlled Android device. <br>
-Mitigation: Review screen observations carefully, avoid exposing screenshots unnecessarily, and treat captured UI state as sensitive task data. <br>
-Risk: Powering on temporary cloud-phone compute can start billing. <br>
-Mitigation: Track phones powered on by the workflow and restore the initial stopped state with power-off unless the user asked to leave the phone running. <br>
-Risk: Unsupported or not-ready phones can cause failed automation or unintended lifecycle changes. <br>
-Mitigation: Use list/status/ready checks first, require http_status=1 for Gateway automation, and verify UI state after each action rather than relying on HTTP 200 alone. <br>
+## Use Case:
 
+External developers and operators use this agent skill to manage DuoPlus cloud-phone lifecycle and perform explicitly authorized Android UI automation on running phones.
 
-## Reference(s): <br>
-- [DuoPlus AI Skill](https://clawhub.ai/duoplusofficial/skills/duoplus-ai) <br>
-- [DuoPlus control API and routing reference](references/control-api.md) <br>
-- [HTTP Gateway automation actions](references/automation-actions.md) <br>
-- [DuoPlus interface introduction](https://help.duoplus.cn/docs/introduction) <br>
-- [DuoPlus cloud phone list](https://help.duoplus.cn/docs/cloud-phone-list) <br>
-- [DuoPlus cloud phone status](https://help.duoplus.cn/docs/cloud-phone-status) <br>
-- [DuoPlus cloud phone detail](https://help.duoplus.cn/docs/huo-qu-yun-ji-xiang-qing) <br>
-- [DuoPlus batch power on](https://help.duoplus.cn/docs/batch-power-on) <br>
-- [DuoPlus batch power off](https://help.duoplus.cn/docs/pi-liang-guan-ji) <br>
-- [DuoPlus batch restart](https://help.duoplus.cn/docs/pi-liang-chong-qi) <br>
-- [DuoPlus proxy list](https://help.duoplus.cn/docs/proxy-list) <br>
-- [DuoPlus proxy initialization](https://help.duoplus.cn/docs/proxy-init) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Code, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write screenshot image files when ui-state or action commands include screenshot output paths.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: API keys may be exposed when supplied in conversation or command-line arguments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a protected credential method when available, and do not echo or persist the key.
+
+Risk: The security scan is partial, flags broad environment and network capabilities, and could not resolve three local references.
+
+Mitigation: Review the unresolved references before installation and limit use to explicitly requested phone operations.
+
+## Reference(s):
+
+- [Automation actions](references/automation-actions.md)
+- [DuoPlus control API and routing](references/control-api.md)
+- [DuoPlus interface introduction](https://help.duoplus.cn/docs/introduction)
+- [DuoPlus cloud phone list API](https://help.duoplus.cn/docs/cloud-phone-list)
+- [DuoPlus cloud phone status API](https://help.duoplus.cn/docs/cloud-phone-status)
+- [DuoPlus proxy initialization](https://help.duoplus.cn/docs/proxy-init)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, API calls, Shell commands, JSON, UI observations and screenshots]
+
+**Output Format:** [Command-line invocations, JSON responses, and Android UI observations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include screenshots when requested for visual verification.]
+
+## Skill Version(s):
+
+1.0.7 (source: SKILL.md frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

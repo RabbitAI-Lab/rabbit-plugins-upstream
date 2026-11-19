@@ -1,40 +1,58 @@
-## Description: <br>
-Renovation 143m helps users plan renovation decisions for a fixed 143 sqm three-bedroom apartment, including inspection, style research, space planning, storage, utilities, lighting, appliances, materials, budgets, risk avoidance, and AI visual mockups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A home renovation planning assistant for a fixed 143 m² three-bedroom apartment, covering inspection, layout, storage, utilities, budgeting, materials, and visual concepts.
 
-## Publisher: <br>
-[z-zihan](https://clawhub.ai/user/z-zihan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[z-zihan](https://clawhub.ai/user/z-zihan)
 
-## Use Case: <br>
-Homeowners and renovation planners use this skill to evaluate renovation options for one specific 143 sqm apartment layout, from handover inspection through move-in optimization. It is intended for planning guidance and visual exploration, not construction drawings, structural calculations, or site-ready specifications. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is scoped to one fixed 143 sqm apartment and could be misapplied to a different property. <br>
-Mitigation: Confirm that the user wants advice for this exact layout before applying its fixed room structure, orientation, and estimated dimensions. <br>
-Risk: Planning estimates, web results, budgets, and AI images could be mistaken for construction documents or final quotes. <br>
-Mitigation: Treat them as planning references and require site measurement, formal CAD drawings, load-bearing wall information, property rules, contractor confirmation, and final vendor quotes before execution. <br>
+## Use Case:
 
+Homeowners planning this 143 m² apartment can use it to organize renovation requirements, compare layout and furnishing options, plan budgets and utilities, and identify measurements or building conditions that need verification.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/z-zihan/skills/renovation-143m) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with structured checklists, recommendations, search summaries, and AI image prompts or tool commands when relevant.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are bound to the fixed apartment layout and should label dimensions, budgets, search results, and AI images as planning references.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.0 (source: frontmatter and server release evidence) <br>
+Risk: Household layout details may be shared with an image-generation provider, whose processing and retention practices are unknown, and layout files may be stored in Git history.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid including identifying or security-sensitive details, review the provider's privacy terms before sharing layouts, and check repository history before committing them.
+
+Risk: The security evidence says three referenced images were not fully inspected, so image-based layout details may be incomplete or uncertain.
+
+Mitigation: Review source images and verify dimensions and building conditions against measured plans or an on-site survey before relying on a layout.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/z-zihan/skills/renovation-143m)
+- [House geometry model](references/house-geometry.json)
+- [Geometry validation rules](references/geometry-validation.md)
+- [Design pipeline](references/design-pipeline.md)
+- [Renovation requirements registry](references/requirements.md)
+- [Open questions](references/open-questions.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown, Image-generation prompts]
+
+**Output Format:** [Structured natural language, checklists, tables, and image-generation prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Conceptual planning aid; estimated measurements require on-site verification, and generated images are visual references rather than construction documents.]
+
+## Skill Version(s):
+
+1.0.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,50 @@
-## Description: <br>
-ChatDOC Studio--KnowledgeMate uploads PDF, DOC, and DOCX files to ChatDOC Studio through PDRouter, creates knowledge bases from successful uploads, and supports document retrieval and reading commands. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uploads PDF, DOC, and DOCX files to create ChatDOC Studio knowledge bases, then supports document retrieval and inspection through PDRouter.
 
-## Publisher: <br>
-[paodingai](https://clawhub.ai/user/paodingai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[paodingai](https://clawhub.ai/user/paodingai)
 
-## Use Case: <br>
-Developers and agents use this skill to create ChatDOC Studio knowledge bases from local PDF, DOC, or DOCX files and then query, search, inspect, or read documents in those knowledge bases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected PDF, DOC, and DOCX files are uploaded to ChatDOC Studio through PDRouter and may contain sensitive or regulated content. <br>
-Mitigation: Upload only files the user intends to send to ChatDOC Studio and confirm the user is authorized to process those documents with the service. <br>
-Risk: Recursive directory scans can include more documents than intended before the helper reaches its 300-file limit. <br>
-Mitigation: Prefer explicit file paths or narrow directories, review the selected input scope, and keep broad folders below the documented 300 supported-file limit. <br>
-Risk: The skill requires a PAODINGAI_API_KEY bearer token for API access. <br>
-Mitigation: Keep the token in the environment, avoid printing it in prompts or logs, and rotate it if it is exposed. <br>
+## Use Case:
 
+Developers use this skill to create a ChatDOC Studio knowledge base from local PDF, DOC, or DOCX files and then retrieve, search, and inspect its documents.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/paodingai/skills/chatdoc-studio-knowledgemate) <br>
-- [PDRouter platform](https://platform.paodingai.com) <br>
-- [KnowledgeMate helper script](scripts/knowledge-mate.mjs) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, json, guidance] <br>
-**Output Format:** [Markdown or text guidance with shell commands; the helper script prints JSON results and JSON-formatted errors.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires node and PAODINGAI_API_KEY; uploads supported PDF/DOC/DOCX files with fixed concurrency 5 and a 300-file limit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.3 (source: server release evidence) <br>
+Risk: The skill is marked suspicious because its instructions reportedly use an unpinned installer for external skills, and the referenced script was only partially analyzed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and downloaded content, and pin them to verified versions before installing or running the skill.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/paodingai/skills/chatdoc-studio-knowledgemate)
+- [PDRouter platform](https://platform.paodingai.com)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON responses and command-line usage examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses include knowledge-base and upload identifiers, along with per-file success or failure details.]
+
+## Skill Version(s):
+
+1.5.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

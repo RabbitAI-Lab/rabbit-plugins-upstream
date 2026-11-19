@@ -1,94 +1,75 @@
 # brewpage-publish (OpenClaw skill)
 
-Publish HTML, markdown, text, any file, or a whole multi-file site to [brewpage.app](https://brewpage.app) — free hosting with no sign-up. Paste text, share a file, host a temporary page, or upload a site and get an instant public URL to share a link.
+Draft locally, share supplied material, create and publish a page, or update an existing BrewPage publication from OpenClaw. [BrewPage](https://brewpage.app) hosts HTML, Markdown, JSON, downloads, and built static sites. You can publish without an account.
 
-This is an [AgentSkills](https://docs.openclaw.ai/tools/skills)-standard skill for **OpenClaw**.
+## Install
 
-## What It Does
-
-1. **Detects content type** — a directory/ZIP becomes a multi-file site, a single file becomes a file upload, everything else becomes HTML (markdown rendered)
-2. **Asks namespace** — interactive prompt for a short, human-readable namespace (URL slug)
-3. **Asks password** — optional password protection (hides the page from the gallery)
-4. **Calls API** — sends content to brewpage.app
-5. **Returns URL** — public link ready to share
-6. **Saves token** — owner token written to `./brewpage-history.md`
-
-## API Coverage
-
-| Content | Type | Endpoint |
-|---------|------|----------|
-| Text / markdown | HTML | `POST /api/html?format=markdown` |
-| Local file | File | `POST /api/files` |
-| Directory (built static) | Site | `POST /api/sites` (auto-zipped — primary path) |
-| `.zip` archive | Site | `POST /api/sites` (pre-built) |
-
-## Install / Placement
-
-OpenClaw discovers skills from two locations. Drop the `brewpage-publish/` folder (containing `SKILL.md`) into either:
+Copy the entire `brewpage-publish/` folder, including `SKILL.md`, `scripts/`, and `references/`, into one of these OpenClaw skill directories.
 
 ```
 <workspace>/skills/brewpage-publish/SKILL.md     # project-local skill
-~/.openclaw/skills/brewpage-publish/SKILL.md      # user-global skill
+~/.openclaw/skills/brewpage-publish/SKILL.md      # shared by local agents with default settings
 ```
 
-The folder/`name` (`brewpage-publish`) drives the slash command and the allowlist key. The name uses lowercase + a hyphen — colon/uppercase forms like `BrewPage::publish` are **invalid** in OpenClaw.
+Use `brewpage-publish` in the agent's skill allowlist if one is configured. The package includes its own runner. [OpenClaw skill placement and allowlists](https://docs.openclaw.ai/tools/skills)
 
-## How to Invoke
+## Use the skill
 
-Via slash command:
-```
-/brewpage-publish "Hello, world!"
-/brewpage-publish report.md
-/brewpage-publish screenshot.png --ttl 1
-/brewpage-publish ./dist --entry index.html
-/brewpage-publish site.zip
-```
+Type `/brewpage-publish` with your request or ask in plain language.
 
-Or via natural language:
-```
-Publish this to brewpage
-Upload report.md to brewpage.app
-Deploy this directory as a site
-```
+| Goal | Example | Result |
+|---|---|---|
+| Draft | “Draft an RSVP page for BrewPage, local only.” | An artifact prepared locally, without BrewPage calls or tool discovery. |
+| Publish supplied content | `/brewpage-publish report.md --ttl 1` | A reader link to the supplied material. |
+| Compose and publish | “Create and publish an unlisted RSVP page that saves replies.” | A newly authored page with the requested visitor storage. |
+| Update in place | “Update this BrewPage publication with `report.md`,” with the existing reader link and authorized owner access. | The exact publication updated with the requested change. |
 
-The model detects the content type, asks for a namespace and password, calls the brewpage.app API, and returns the public URL.
+The skill preserves your access choices and asks only for information needed to carry out the request. Link-only sharing uses an unlisted namespace, which anyone with the link can open unless password protection applies. Eligible publications in the `public` namespace can appear in the gallery and sitemap. A confirmed write returns the reader link, effective access, and relevant notices. Share the returned link exactly, including any trailing slash, even when BrewPage returns an existing publication. Visitors enter passwords at the BrewPage unlock page.
 
-## Sites
+## How publishing connects
 
-`POST /api/sites` accepts **only a `.zip` archive** — there is no raw-folder upload.
+The skill prefers a compatible BrewPage MCP tool available to the current OpenClaw session. It can use its bundled REST runner when the host permits it and the supplied content and selected owner proof fit that route. The skill chooses the route before the write. An uncertain write is reconciled through the selected owner's inventory or receipt. [Publishing workflow and runner commands](references/publishing.md)
 
-- **Directory (primary):** point at a **built** static directory; the skill auto-zips it and uploads. Archive sealing keeps relative paths intact.
-- **Pre-built `.zip` (alternative):** uploaded as-is.
+An anonymous MCP publish can return the owner key and private management link in tool text. Before any MCP write that can return either, verify an owner-only result channel or an authorized private handoff. Saving the key to a protected file leaves a shared tool transcript exposed. An already verified owner-only session needs no further privacy question. When private delivery is unavailable, choose authorized REST with protected receipt handling before writing, or leave an MCP-only request pending.
 
-The auto-zip **excludes** `.git/`, `.env`/`.env.*`, `node_modules/`, `.DS_Store`, `Thumbs.db`, `.idea/`, `.vscode/`, `.cache/`, `*.map` and `*.log` — only real built assets ship; secrets and VCS data never leak into the public archive.
+A suitable connected account can own the publication. If you explicitly ask to publish to an account, use a compatible MCP connection with `requireAccount: true` and the client's sign-in flow. Signing in on the BrewPage website alone gives the runner no account access. An explicitly fresh anonymous publish uses an unsigned route without a saved owner key.
 
-**Built-static guard:** publish build output, not sources. No `.html` in the directory → the skill fails and tells you to build first. A source tree (`package.json` + `src/`, no top-level `.html`) → the skill asks you to point at the build output (`dist/`, `build/`, `out/`, `_site/`, `public/`).
+## Local files and sites
 
-Entry file: `--entry` override > `index.html` > first `.html` alphabetically.
+Preflight checks local files, built folders, and ZIPs before their bytes go to either route. The directory check excludes reserved credential inputs, hidden files and folders except the root `.well-known/`, dependencies, and symlinks. Selecting a reserved credential file directly or supplying a ZIP that contains one stops the upload. Confirmation cannot override that refusal. For other flagged files, review the manifest and approve its exact `REVIEW_SHA256` digest. [Local input checks and exclusions](references/publishing.md#inspect-local-inputs-before-sending-bytes)
 
-**No trailing slash.** The API returns `https://brewpage.app/public/<id>` without a trailing `/`. Appending `/` routes to brewpage.app's landing page and breaks the link. Site URLs cannot be verified with plain `curl` — verify with a real browser or fetch `<url>/index.html`.
+Use `/brewpage-publish ./dist --entry index.html` for a new built site. If you omit `--entry` on create, the default is the root `index.html` or the shallowest HTML file, breaking ties by name. A replacement needs the complete desired bundle. For a content-only REST replacement, omit `--entry` so the runner verifies the site's current entry and checks that it exists in the replacement. Supply `--entry` to change the entry deliberately.
 
-## TTL
-
-Default time-to-live is **15 days** (max 30). Override with `--ttl N` (days).
-
-## Owner Token & Privacy
-
-The owner token is **never printed in conversation** — the skill's shell blocks curl the API, parse the token, and append it to `./brewpage-history.md` directly. Only the public URL is shown.
-
-`./brewpage-history.md` is a **private file** (keep it out of version control). Use the token to delete a page:
+Use `--ttl N` to request a lifetime in days. The REST runner requests 15 days by default. Use `--delivery-mode path|subdomain` to request an address type for a new publication. Sites and HTML pages outside the `public` namespace use a dedicated subdomain. Check current upload limits with the runner's `limits` command or this read-only request.
 
 ```bash
-# html / json / kv
-curl -X DELETE "https://brewpage.app/api/{ns}/{id}" -H "X-Owner-Token: {token}"
-# site
-curl -X DELETE "https://brewpage.app/api/sites/{ns}/{id}" -H "X-Owner-Token: {token}"
+curl -q -fsS -A "OpenClaw/1.1.0 (+https://brewpage.app)" https://brewpage.app/api/limits
 ```
+
+## Ownership and updates
+
+The skill reuses your selected owner for the workspace and publication. Before creating an anonymous owner, agree on a private storage or delivery destination. OpenClaw's local store is `./brewpage-history.md` in the runner's working directory, kept in an owner-only file with mode `0600` and ignored by Git. An account-owned publication appears in the connected account's publications.
+
+The REST runner's ordinary publish and update output gives reader-facing details and storage status. Use `--private-output` only in a verified owner-only channel. It can include the private management link, owner receipt, or receipt path. `--no-save` requires `--private-output`. A new key is reported as saved only after private readback. If publication succeeds but storage fails, keep the reader link and recover the receipt through a protected channel when available. Keep tokens and passwords out of command arguments and shared output. [Ownership, private storage, and recovery](references/ownership.md)
+
+An in-place update uses the exact publication identity and matching owner proof. Changing only the content in its current format keeps the address, expiry, and existing Page data entries. If the target is missing, read-only, or rejects the update, the skill reports that result and waits for a separate request before any new publication. [Update and owner proof options](references/publishing.md#choose-proof-or-update-a-target)
+
+## Page data and domains
+
+To build an RSVP form, pair the HTML with a private Page data collection and publish both together using the tool's `state` field or the runner's `--state` option. The owner can review responses in the publication's Data tab. [Offline RSVP recipe](references/page-data.md)
+
+For a new eligible HTML page or site without a password, pass a hostname you control with the MCP tool's supported `domain` field or the REST runner's `--domain hostname`. Before creating, the runner checks the selected profile owner proof for domain support with `GET /api/limits`. Use the DNS records, status, and notices BrewPage actually returns. If creation succeeds and the domain is pending or fails, keep the confirmed BrewPage link and report the domain outcome. Share the custom address once BrewPage reports it active and serving. [Custom domain workflow](references/custom-domain.md)
 
 ## Requirements
 
-`curl`, `jq`, and `zip` available on the host shell.
+Inline MCP publishing needs a compatible host tool. The bundled runner uses a POSIX runtime such as macOS, Linux, or WSL. REST uses `bash`, `curl`, and `jq`. Private local storage uses Python 3 with `fcntl` and `git` inside Git checkouts. Local file checks use `node`. Site checks also need `unzip`, and packaging directories needs `zip`.
+
+## Documentation
+
+- [OpenClaw skill instructions](SKILL.md)
+- [Publishing manual for the Brewdoc edition](https://doc-claude.brewcode.app/brewdoc/skills/publish/)
+- [BrewPage hosting API](https://brewpage.app/api#hosting)
 
 ## License
 
-MIT
+The bundled skill and scripts are MIT-licensed. The hosted BrewPage service is proprietary.

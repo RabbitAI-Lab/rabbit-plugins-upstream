@@ -17,7 +17,7 @@ installer:
 argument-hint: "[VM/cluster extId or describe your Nutanix task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["NUTANIX_AIOPS_CONFIG"],"bins":["nutanix-aiops"],"config":["~/.nutanix-aiops/config.yaml","~/.nutanix-aiops/secrets.enc"]},"optional":{"env":["NUTANIX_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"NUTANIX_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Nutanix-AIops","emoji":"🧊","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["nutanix-aiops","uvx"]},"optional":{"env":["NUTANIX_AIOPS_CONFIG","NUTANIX_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Nutanix-AIops","emoji":"🧊","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed Nutanix Prism Central operations. The governance harness (audit, token/runaway budget, undo, descriptive risk-tier labels) is bundled in the package — no external skill-family dependency.
   Connects to Prism Central on HTTPS :9440 with HTTP Basic auth (username + password). The v4 REST API requires an ETag/If-Match on every mutation; nutanix-aiops fetches and sends it automatically. All list tools paginate automatically; vm_list returns both AHV and ESXi VMs.
@@ -31,6 +31,8 @@ compatibility: >
 ---
 
 # Nutanix AIops
+
+> **Audit availability:** Real writes require a durable audit intent. Reads and previews can continue if audit storage fails; check the warning and audit health before relying on their audit trail.
 
 > **Disclaimer**: Community-maintained open-source project, **not affiliated with, endorsed by, or sponsored by Nutanix.** Product and trademark names belong to their owners. Source at [github.com/AIops-tools/Nutanix-AIops](https://github.com/AIops-tools/Nutanix-AIops) under the MIT license.
 
@@ -66,6 +68,15 @@ uv tool install nutanix-aiops
 nutanix-aiops init       # interactive wizard: PC host/port 9440/username + encrypted password
 nutanix-aiops doctor     # connectivity + REST-RBAC preflight
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/nutanix-aiops
+openclaw skills info nutanix-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 
@@ -133,7 +144,7 @@ permitted. That is your agent's judgement, or the permission of the account you 
 (connect with a Prism Central account holding only a read-only (Viewer) role — writes then fail
 at the server). There is no read-only switch, policy file, or approval gate.
 
-- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.nutanix-aiops/audit.db` (relocatable via `NUTANIX_AIOPS_HOME`): params, result, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
+- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.nutanix-aiops/audit.db` (relocatable via `NUTANIX_AIOPS_HOME`): params, outcome summary, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
 - `NUTANIX_AUDIT_APPROVED_BY` / `NUTANIX_AUDIT_RATIONALE` are optional annotations recorded on the audit row (who/why); they are never required and never block.
 - **Runaway guard** — a safety backstop, not authorization: the same call looped in a tight window trips a circuit breaker. Disable with `NUTANIX_RUNAWAY_MAX=0`.
 - Every mutation auto-handles **ETag / If-Match**; every list auto-paginates.

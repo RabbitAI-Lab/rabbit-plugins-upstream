@@ -2,24 +2,43 @@
  * 微信视频搜索模块
  */
 const constants = require("../config/constants");
-const { requestApi } = require("../utils/request");
+const { SkillError } = require("../utils/errors");
+const { requestApi, pollTaskResult } = require("../utils/request");
+const { pickCost } = require("../utils/cost");
+const { formatUnixSeconds } = require("../utils/time");
+
+/**
+ * @param {Array} data
+ * @returns {Array}
+ */
+function processVideoResults(data) {
+  if (!Array.isArray(data)) {
+    throw new SkillError("API_SCHEMA_CHANGED", "视频搜索结果格式异常", true);
+  }
+
+  return data.map((item) => {
+    const processedItem = { ...item };
+    if (
+      typeof item?.pubtime === "number" &&
+      item.pubtime &&
+      !item.pubtime_str
+    ) {
+      processedItem.pubtime_str = formatUnixSeconds(item.pubtime);
+    }
+    return processedItem;
+  });
+}
 
 /**
  * 创建微信视频搜索任务
- * @param {string} token - 技能令牌
- * @param {string} keyword - 搜索关键词
- * @param {number} limit - 搜索数量, 1-100000
- * @returns {Promise<Object>} 搜索任务状态
- * @throws {Error} API调用失败时抛出错误
  */
-async function createSearchTask(token, keyword, limit) {
-  const params = {
-    _: Date.now(),
-    token: token,
-  };
+async function createSearchTask(token, keyword, sort, duration, limit) {
+  const params = { _: Date.now() };
 
   const data = {
     keyword,
+    sort,
+    duration,
     limit,
   };
 
@@ -28,6 +47,7 @@ async function createSearchTask(token, keyword, limit) {
     "/api/wechat/video-search/keyword",
     params,
     data,
+    token,
     constants.CREATE_MAX_ATTEMPTS,
     "创建任务",
   );
@@ -35,34 +55,28 @@ async function createSearchTask(token, keyword, limit) {
 
 /**
  * 获取微信视频搜索任务结果
- * @param {string} token - 技能令牌
- * @param {string} keyword - 搜索关键词
- * @param {number} limit - 搜索数量, 1-100000
- * @returns {Promise<Array>} 搜索结果数组
- * @throws {Error} API调用失败时抛出错误
  */
-async function getSearchTask(token, keyword, limit) {
+async function getSearchTask(token, keyword, sort, duration, limit) {
   const params = {
-    _: Date.now(),
-    token: token,
     keyword: keyword,
+    sort: sort,
+    duration: duration,
     limit: limit,
   };
 
-  const response = await requestApi(
-    "GET",
+  const response = await pollTaskResult(
     "/api/wechat/video-search/info",
     params,
-    null,
-    constants.QUERY_MAX_ATTEMPTS,
+    token,
     "查询任务",
   );
 
+  const cost = pickCost(response);
   if (response.data) {
-    return response.data;
+    return { results: processVideoResults(response.data), cost };
   }
 
-  return [];
+  return { results: [], cost };
 }
 
 module.exports = {

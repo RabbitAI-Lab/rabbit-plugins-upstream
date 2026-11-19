@@ -1,41 +1,55 @@
-## Description: <br>
-用于小红书评论分析、小红书用户反馈、小红书需求挖掘、痛点总结、购买顾虑整理、FAQ 提炼、口碑分析、评论回复观察和内容讨论复盘，基于用户提供的小红书笔记链接或完整 note_id 下的评论结果，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+当用户需要做小红书评论分析、小红书评论洞察、小红书用户反馈分析、小红书需求挖掘、痛点总结、购买顾虑整理、FAQ 提炼、口碑分析、评论回复观察或内容讨论复盘时使用。基于用户提供的小红书笔记链接或 note_id 下的评论结果，面向内容运营、产品调研、品牌调研和创作者。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-Content operations, product research, brand research, and customer-insight teams use this skill to fetch and analyze Xiaohongshu / XHS / RedNote comments and replies for a user-provided note link or complete note_id. It helps turn returned comments into themes, pain points, purchase objections, FAQs, representative quotes, and actionable recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends the provided Xiaohongshu note, URL, or comment identifiers to SocialDataX using the user's API key. <br>
-Mitigation: Confirm the user is comfortable sharing those identifiers with SocialDataX and keep SOCIALDATAX_API_KEY in the runtime environment rather than in skill files. <br>
-Risk: Broad pagination, --all, or reply expansion can increase API usage or credit consumption. <br>
-Mitigation: Use --max-items or --pages when full collection is not required. <br>
+## Use Case:
 
+内容运营人员、产品与品牌研究者、创作者可用它分析指定小红书笔记已获取的评论和回复，归纳主题、痛点、购买顾虑、需求与 FAQ，并形成可执行的内容或产品建议。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/xhs-comment-insights) <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON data returned by SocialDataX CLI or MCP tools] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY and node/npm; output should state whether comments are a partial sample, multi-page result, or include replies.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.3 (source: server release evidence) <br>
+Risk: The CLI resolves an unpinned latest package at run time, and the security review was partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package and resolved version before execution, especially when scanner coverage is incomplete.
+
+Risk: CLI use may involve access to API credentials.
+
+Mitigation: Use a trusted execution environment and keep API keys out of chat, logs, screenshots, and project files.
+
+## Reference(s):
+
+- [SocialDataX API Key information](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill listing](https://clawhub.ai/devinchen2014/skills/xhs-comment-insights)
+- [Publisher profile](https://clawhub.ai/user/devinchen2014)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown, Guidance]
+
+**Output Format:** [Markdown analysis with themes, pain points, purchase concerns, unmet needs, FAQs, comment evidence, and actionable recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings are limited to comments and replies returned for the supplied note URL or full note_id; state whether the result covers only a sample or multiple pages.]
+
+## Skill Version(s):
+
+0.1.12 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

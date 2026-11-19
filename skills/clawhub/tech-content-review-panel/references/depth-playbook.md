@@ -1,39 +1,39 @@
-# Six Depth Moves (G3 evaluation basis)
+# 专业纵深六套路（G3 评估依据）
 
-To judge whether a research/deep-analysis piece has expert-level depth — whether it beats a rewrite of secondary sources — check it against these six moves. Hitting at least three counts as having depth. Each move includes an example drawn from a "Europe AI · open source as sovereignty" piece.
+判断一篇研究/深度文章有没有"专家级纵深"、能不能碾压编译稿，对照这六个套路。至少命中 3 个才算有纵深。每个套路附一个来自"欧洲 AI·开源即主权"篇的实例。
 
-## 1. Puncture a taken-for-granted causal link
+## ① 点破想当然的因果
 
-Find a cause-effect the reader defaults to but that does not actually hold, and break it.
-- Example: most assume "downloadable weights = sovereignty." Puncture: self-hosting a 675B model needs an 8xH200 node plus an ops team; most firms still run it on a US cloud. The weights are free; the substrate running them is not.
+找出读者会默认、但其实不成立的因果链，戳破它。
+- 实例：多数人默认"权重可下载=拿到主权"。点破：自托管 675B 模型需要 8×H200 节点+运维团队，多数企业最后还是跑在美国云上——权重是自由的，跑权重的底座不是。
 
-## 2. Give a layered framework that unpacks an overused concept
+## ② 给分层框架拆解被滥用的概念
 
-Take a word that is treated as a single concept but is actually abused by marketing, and split it into clear layers.
-- Example: "sovereignty" is not one switch. Split into data sovereignty / model sovereignty / operational sovereignty / compute sovereignty, and note that open source only fully delivers the model layer.
+把一个被当成单一概念、其实被营销滥用的词，拆成清晰的层次。
+- 实例："主权"不是一个开关，拆成数据主权/模型主权/运营主权/算力主权四层，指出开源只给足"模型主权"那一层。
 
-## 3. Surface a contradiction inside the subject
+## ③ 找出立论对象自身的矛盾
 
-Find a point the analyzed subject has not resolved or that is self-contradictory. The most credibility-building move.
-- Example: Mistral uses open source to claim an AI Act compliance exemption, yet its flagship — training compute above 10^25 FLOPs — falls into the systemic-risk tier that open source does NOT exempt. The models that actually enjoy the exemption are its small ones.
+在被分析的对象内部，找一个它自己没解决或自相矛盾的点。这是最显专业的一招。
+- 实例：Mistral 靠开源拿 AI Act 合规豁免，但它的旗舰因训练算力超 10²⁵ FLOPs 落进系统性风险区，恰恰不能享开源豁免——真正吃满豁免的是它的小模型。
 
-## 4. Place it in a historical lineage
+## ④ 放进历史脉络
 
-Connect a seemingly new phenomenon to an existing thread, showing it is not an isolated event.
-- Example: Mistral's "open source for adoption, services for revenue" is the same open-source commercialization path Red Hat / MongoDB / Elastic have walked for twenty years — the difference is an added European sovereignty card.
+把一个看似新的现象，接到一条已有的历史线索上，显出它不是孤立事件。
+- 实例：Mistral"开源引流、服务变现"是 Red Hat/MongoDB/Elastic 走了二十年的开源商业化老路，区别是多打了一张欧洲主权牌。
 
-## 5. Add a horizontal comparison
+## ⑤ 给横向参照系
 
-Use a comparison with peers to highlight what is distinctive about the subject.
-- Example: same act, three strategies — Meta open-sources to break OpenAI's business model, China to break an ecosystem blockade, Europe for sovereignty and compliance.
+用同类对象的对比，凸显分析对象的独特性。
+- 实例：同样是开源，Meta 为打 OpenAI 商业模式、中国为突破生态围堵、欧洲为主权合规——同一动作三种战略。
 
-## 6. Name the boundary of the judgment
+## ⑥ 点破判断的边界
 
-After giving the core judgment, proactively state its scope and failure conditions. Refuse absolutes.
-- Example: rule-sovereignty is defensive — it protects the home market but cannot win globally; and it rests on the premise that the compute gap has not yet grown large enough to make "controllable but behind" unacceptable. Once the frontier capability gap widens, the sovereignty premium erodes.
+给出核心判断后，主动指出它的适用边界和失效条件，拒绝绝对化。
+- 实例：规则主权是防御性的，守得住本地市场但抢不了全球；且压在"算力差距还没大到不可接受"的前提上，一旦前沿能力鸿沟拉开，控制权的溢价会失效。
 
-## Usage notes
+## 使用提示
 
-- Not all six are required, but strong depth pieces usually hit three or four.
-- Move 3 (internal contradiction) and move 1 (taken-for-granted causality) create the biggest gap versus secondary-source rewrites — look for these first.
-- Every move must land on concrete facts and data, not spin into "profound-sounding correct filler."
+- 这六招不必全用，但优质深度稿通常命中 3-4 个。
+- ③（自身矛盾）和 ①（想当然因果）最能拉开与编译稿的差距，优先找。
+- 每一招都要落到具体事实和数据，不能空转成"看似深刻的正确废话"。

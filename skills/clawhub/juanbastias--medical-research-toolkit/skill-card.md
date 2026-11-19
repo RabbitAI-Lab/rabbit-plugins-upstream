@@ -1,45 +1,56 @@
-## Description: <br>
-Query 14+ biomedical databases for drug repurposing, target discovery, clinical trials, and literature research. Access ChEMBL, PubMed, ClinicalTrials.gov, OpenTargets, OpenFDA, OMIM, Reactome, KEGG, UniProt, and more through a unified MCP endpoint. Use when researching disease targets, finding approved/investigational drugs, searching clinical evidence, discovering genetic associations, or analyzing compound bioactivity data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search 14+ biomedical databases through a unified MCP endpoint for drug repurposing, target discovery, clinical trials, biomedical literature, genetic associations, and compound activity.
 
-## Publisher: <br>
-[juanbastias](https://clawhub.ai/user/juanbastias) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[juanbastias](https://clawhub.ai/user/juanbastias)
 
-## Use Case: <br>
-External researchers, clinicians, bioinformatics teams, and developers use this skill to query biomedical databases for drug repurposing, target discovery, clinical evidence review, literature mining, safety checks, and compound bioactivity analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hosted biomedical queries can expose patient identifiers, confidential study details, or proprietary drug-discovery terms to the Curiloo MCP service. <br>
-Mitigation: Avoid sensitive terms in hosted queries, or run the tool locally for sensitive work. <br>
-Risk: Biomedical search results may be incomplete, stale, or unsuitable for direct drug, safety, trial, or target decisions. <br>
-Mitigation: Verify results against authoritative sources and qualified professional review before acting on them. <br>
+## Use Case:
 
+Biomedical researchers and developers use the skill to search literature, disease targets, drug activity, clinical trials, and related biomedical records across integrated databases.
 
-## Reference(s): <br>
-- [Medical Research Toolkit on ClawHub](https://clawhub.ai/juanbastias/skills/medical-research-toolkit) <br>
-- [Curiloo unified MCP endpoint](https://mcp.cloud.curiloo.com/tools/unified/mcp) <br>
-- [OMIM API](https://omim.org/api) <br>
-- [OpenFDA](https://open.fda.gov) <br>
-- [NCI Clinical Trials API](https://clinicaltrialsapi.cancer.gov) <br>
-- [Every Cure](https://www.everycure.org) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, API calls, configuration] <br>
-**Output Format:** [Markdown with JSON-RPC curl examples and setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Queries may use the hosted Curiloo MCP endpoint or a local medical-mcps service; some upstream databases may require optional API keys or impose rate limits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Search requests are sent to a third-party hosted MCP endpoint and handled by its operator.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only non-identifying public research terms; do not send patient records, private files, passwords, or API keys.
+
+Risk: The security review had incomplete coverage, so it could not establish that all referenced material was reviewed.
+
+Mitigation: Review the skill and relevant external material before relying on it, and validate response schemas and source records.
+
+## Reference(s):
+
+- [Hosted unified MCP endpoint](https://mcp.cloud.curiloo.com/tools/unified/mcp)
+- [OMIM API](https://omim.org/api)
+- [OpenFDA](https://open.fda.gov)
+- [NCI Clinical Trials API](https://clinicaltrialsapi.cancer.gov)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Research guidance, Shell commands, Biomedical search results]
+
+**Output Format:** [Markdown guidance with inline curl examples and returned research records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the hosted service and selected databases; validate response schemas and source records before reporting findings.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

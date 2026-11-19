@@ -1,48 +1,55 @@
-## Description: <br>
-Stocktoday Data helps agents fetch, clean, compare, screen, and export StockToday-compatible financial market data across equities, funds, futures, options, bonds, macroeconomic data, announcements, and news. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides 276 Tushare-compatible market data interfaces for researching Chinese, Hong Kong, and US equities, funds, derivatives, bonds, and macroeconomic data through StockToday.
 
-## Publisher: <br>
-[usa2046](https://clawhub.ai/user/usa2046) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[usa2046](https://clawhub.ai/user/usa2046)
 
-## Use Case: <br>
-Developers, analysts, and external users use this skill to turn natural-language market research requests into StockToday/Tushare-compatible API calls and concise financial data summaries, comparisons, exports, or reusable Python workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a StockToday API token and sends requests to a StockToday gateway. <br>
-Mitigation: Keep TUSHARE_TOKEN in an environment variable or secret manager, do not paste real tokens into chat or shared files, and use the documented HTTPS gateway by default. <br>
-Risk: The artifact documents an HTTP backup gateway, which can expose traffic to weaker transport security if selected. <br>
-Mitigation: Avoid the HTTP backup gateway unless a user has explicitly accepted that network posture and has a compensating control. <br>
-Risk: Market data analysis can be mistaken for financial advice or treated as a prediction. <br>
-Mitigation: Frame results as data support, include scope and limitations, and avoid claims of guaranteed returns or trading outcomes. <br>
-Risk: Financial data may be empty, delayed, permission-limited, or affected by non-trading days and API limits. <br>
-Mitigation: Report the queried date range, source interface, row count, missing values, and failed segments, and verify important decisions against authoritative sources. <br>
+## Use Case:
 
+Developers, researchers, and analysts can retrieve and compare market, financial, sector, capital flow, news, and macroeconomic data, then prepare summaries, exports, or reusable analysis workflows.
 
-## Reference(s): <br>
-- [Stocktoday Data skill page](https://clawhub.ai/usa2046/skills/stocktoday-data) <br>
-- [Publisher profile](https://clawhub.ai/user/usa2046) <br>
-- [StockToday account and token service](https://stocktoday.cn) <br>
-- [StockToday Tushare-compatible gateway](https://tushare.citydata.club/) <br>
-- [StockToday data interface reference](references/数据接口.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries with tables, inline Python or shell snippets, and optional CSV or Parquet file outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should state data scope, source interface, request parameters, row counts, fields, missing data, and failed segments when files are generated.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.2 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Broad activation phrases may cause the skill to activate for requests outside its intended financial data use, and dependency versions are not fully specified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it for explicit financial data requests and review the selected dependency versions before installation, as advised by the security assessment.
+
+Risk: The security scan was partial because some local references could not be resolved, so its findings may be incomplete.
+
+Mitigation: Review the unresolved references and reassess the skill before relying on the scan as a complete security review.
+
+## Reference(s):
+
+- [StockToday data service](https://stocktoday.cn)
+- [StockToday Tushare-compatible gateway](https://tushare.citydata.club/)
+- [Data interface reference (Chinese)](artifact/references/数据接口.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Code, Files]
+
+**Output Format:** [Markdown summaries and tables, Python workflows, and CSV or Parquet data exports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Data requests require a user-provided TUSHARE_TOKEN.]
+
+## Skill Version(s):
+
+2.1.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

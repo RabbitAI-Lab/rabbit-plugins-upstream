@@ -1,49 +1,54 @@
-## Description: <br>
-GetterDone lets an agent hire paid human workers for physical-world tasks or specialized human work, then review submitted proof before releasing payment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hire a human gig worker via USD bounty for tasks an AI agent cannot do alone — physical presence (storefront photos, deliveries, on-site verification) or remote work (writing, product reviews, design, translation, proofreading, video). Post the bounty, the worker submits photo/text proof, you approve and payment settles to the worker. Paid actions default to in-conversation user confirmation; autonomous review is an explicit opt-in path with server-side per-task and rolling-30-day spending caps. One-time agent setup at https://getterdone.ai/register-agent.
 
-## Publisher: <br>
-[getterdone](https://clawhub.ai/user/getterdone) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[getterdone](https://clawhub.ai/user/getterdone)
 
-## Use Case: <br>
-External users and developers use GetterDone when an AI agent needs human help for physical errands, on-site verification, delivery, photography, or specialized work such as writing, design, translation, proofreading, and video. The skill guides setup, task posting, proof review, approval, dispute, and worker rating flows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid actions can spend user funds or release escrow to a worker. <br>
-Mitigation: Require explicit confirmation for task creation, approval, and dispute actions unless the owner has deliberately opted into autonomous review; keep per-task and daily spending caps low. <br>
-Risk: Task instructions, locations, and attachments may expose sensitive information to workers. <br>
-Mitigation: Review each task and attachment for sensitive details before posting or uploading, and redact or cancel when the user has not approved disclosure. <br>
-Risk: A compromised or floating MCP server dependency could increase supply-chain or credential risk. <br>
-Mitigation: Install only from trusted GetterDone sources, pin the MCP server version for production, and use the scoped, revocable GETTERDONE_API_KEY. <br>
-Risk: Automated proof checks are syntactic and may miss semantic failures. <br>
-Mitigation: Use human review by default; for autonomous review, require strict review criteria and the agent's own proof evaluation before approving or disputing. <br>
-Risk: Webhook tunnels can expose a local development endpoint. <br>
-Mitigation: Avoid tunnels unless intentionally needed for local development, and use stable HTTPS infrastructure for production webhook handling. <br>
+## Use Case:
 
+AI agents use GetterDone when a request needs physical presence or human work such as an errand, verification, writing, design, translation, or proofreading. The skill guides task setup, user approval for paid actions, and review of submitted proof.
 
-## Reference(s): <br>
-- [GetterDone platform](https://getterdone.ai) <br>
-- [Agent registration](https://getterdone.ai/register-agent) <br>
-- [GetterDone MCP server package](https://www.npmjs.com/package/@getterdone/mcp-server) <br>
-- [GetterDone skill document API](https://getterdone.ai/api/docs/spec?doc=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API Calls, Markdown] <br>
-**Output Format:** [Markdown instructions with inline code, shell commands, JSON configuration examples, and MCP tool calls] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires GETTERDONE_API_KEY; paid task creation, approval, and dispute actions default to explicit user confirmation, with an opt-in autonomous review path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.24.1 (source: frontmatter and release evidence) <br>
+Risk: Paid tasks can incur charges and may hire a worker for routine requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep explicit user confirmation for paid actions; use autonomous review only when the owner has opted in and server-side spending caps are in place.
+
+Risk: The security guidance reports a possible public tunnel and credential setup; the provided scan had partial coverage.
+
+Mitigation: Review any public tunnel configuration and keep the dedicated, revocable agent credential private. Prefer the hosted URL connection when headless credentials are unnecessary.
+
+## Reference(s):
+
+- [GetterDone skill release](https://clawhub.ai/getterdone/skills/getterdone)
+- [GetterDone skill and API specification](https://getterdone.ai/api/docs/spec?doc=skill)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Guidance, Text]
+
+**Output Format:** [Structured task requests and status checks with human-readable prompts, task updates, and proof-review guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tasks run asynchronously; workers submit photo or text proof for review.]
+
+## Skill Version(s):
+
+1.42.1 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

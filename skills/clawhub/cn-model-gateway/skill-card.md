@@ -1,42 +1,55 @@
-## Description: <br>
-CN Model Gateway is a local Python gateway that exposes MCP and agent-framework adapters for sending text prompts to configured Chinese model providers such as DeepSeek, Tongyi, Zhipu GLM, Kimi, Hunyuan, Doubao, MiniMax, LingYi, Baichuan, and StepFun. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a standard MCP gateway that lets agent frameworks call ten Chinese large language model providers through a unified interface.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Developers and agent operators use this skill to connect MCP-compatible tools and other agent frameworks to multiple Chinese text model APIs through one local gateway. It supports asking one model, comparing multiple providers, listing available providers, checking health, reading configuration and usage summaries, and using prompt templates for code review and translation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and generated content are sent to the configured third-party model providers. <br>
-Mitigation: Use only providers approved for the data being processed, and avoid compare_models for sensitive prompts unless every selected provider is acceptable. <br>
-Risk: Provider API keys can be exposed if configuration files are shared or committed. <br>
-Mitigation: Keep config.json private, do not commit API keys, and limit access to the local configuration directory. <br>
-Risk: Model calls may consume paid provider quota. <br>
-Mitigation: Monitor usage with the built-in stats functionality and configure provider-side quota or billing alerts. <br>
+## Use Case:
 
+Developers use the gateway to connect MCP-compatible agents and supported agent frameworks to Chinese model providers through a single interface. They can request model responses, multimodal analysis, embeddings, reranking, transcription, and gateway usage reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/cn-model-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [MCP JSON-RPC responses, command-line text, framework adapter outputs, and markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May send user prompts to configured third-party model providers and may record local usage statistics in SQLite.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server evidence and frontmatter) <br>
+Risk: ClawScan reports undeclared capabilities and behavior that conflicts with the gateway's stated purpose, as well as unexpected network access and unsafe troubleshooting advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill carefully before installation, compare its behavior with its advertised purpose, and inspect troubleshooting guidance before following it.
+
+Risk: The security guidance identifies possible model downloads, prompt transmission to providers, and local storage of prompts and votes; scanner coverage is partial because some referenced paths were missing.
+
+Mitigation: Review provider data handling and local storage behavior, and inspect the referenced paths before installation.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/fyniujin/skills/cn-model-gateway)
+- [Project homepage](https://skillhub.cn/skill/cn-model-gateway)
+- [Provider error map](references/error_map.yaml)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Embeddings, Ranked results, Transcriptions, Usage and health reports]
+
+**Output Format:** [MCP JSON-RPC responses and provider-dependent model outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results and supported modalities depend on the selected provider and model.]
+
+## Skill Version(s):
+
+2.1.0 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

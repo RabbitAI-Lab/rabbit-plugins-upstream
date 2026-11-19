@@ -1,45 +1,56 @@
-## Description: <br>
-Generates high-fidelity text-to-vector assets with 4MP-tier quality for production-grade SVG-style assets and detailed illustrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates high-fidelity vector artwork from text prompts with Recraft V4 Pro Vector, for detailed illustrations and production-grade SVG assets.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to call the dLazy hosted Recraft V4 Pro Vector CLI, submit prompts, and receive generated vector or image output URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends prompts and selected local files to dLazy-hosted services. <br>
-Mitigation: Review prompts and files for sensitive data before execution and use the service only when that data transfer is acceptable. <br>
-Risk: Authentication requires a dLazy API key that may be stored in local CLI configuration. <br>
-Mitigation: Use DLAZY_API_KEY per invocation when local persistence is undesirable, and rotate or revoke keys from dLazy when needed. <br>
-Risk: Installing the pinned npm CLI adds third-party executable code to the environment. <br>
-Mitigation: Review the pinned @dlazy/cli package or source before installing, and consider npx @dlazy/cli@1.2.3 to avoid a persistent global install. <br>
+## Use Case:
 
+Designers and developers use this skill to create detailed vector-style illustrations from text prompts through dLazy. It returns generated image assets for use in creative and production workflows.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-pro-vector) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON output containing generated asset URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; generated outputs are returned as files.dlazy.com URLs, with optional async task status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The security review reports a mismatch between the advertised vector-generation purpose and documented authentication steps, with partial review coverage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI package and authentication flow, and confirm its credential handling before installing or signing in.
+
+Risk: Prompts and local media provided to the skill are sent to dLazy-hosted services for processing and storage.
+
+Mitigation: Avoid sending sensitive prompts or media unless their transfer to the service is acceptable.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-pro-vector)
+- [dLazy CLI project page](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Image files, JSON]
+
+**Output Format:** [JSON response with generated image URLs and metadata; optionally a downloaded image file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The documented response example uses PNG; a local save path is optional.]
+
+## Skill Version(s):
+
+1.3.41 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

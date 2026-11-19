@@ -1,42 +1,51 @@
-## Description: <br>
-Provides full-coverage CPA China 2026 exam study guidance across accounting, auditing, financial cost management, strategy, economic law, and tax law. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+提供2026年中国注册会计师六科全覆盖的权威辅导，涵盖会计、审计、财管、税法、经济法、战略等考试知识与实务支持。
 
-## Publisher: <br>
-[yjkj999999](https://clawhub.ai/user/yjkj999999) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yjkj999999](https://clawhub.ai/user/yjkj999999)
 
-## Use Case: <br>
-CPA China candidates and accounting professionals use this skill as a structured study and reference aid for the 2026 CPA exam subjects, chapter outlines, key topics, and problem-solving frameworks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: CPA exam content and accounting, tax, or legal guidance may become outdated or differ from official requirements. <br>
-Mitigation: Verify exam updates and professional guidance against official CPA, accounting, tax, and legal sources before relying on the material. <br>
-Risk: Study guidance may be incomplete or unsuitable for a specific exam or professional decision. <br>
-Mitigation: Use it as a study reference and confirm important conclusions with authoritative materials or qualified professionals. <br>
+## Use Case:
 
+CPA candidates in China can use the skill to review accounting, auditing, financial management, strategy, economic law, and tax, and to work through exam-style calculations and case analyses. It also offers practical accounting and audit guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yjkj999999/cpa-china-2026-pro) <br>
-- [README.md](README.md) <br>
-- [SKILL.md](SKILL.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown study guidance and reference explanations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Static reference material; no code execution or system access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Accounting, audit, tax, and legal guidance may be incomplete or out of date for a particular exam cycle or real-world decision.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check time-sensitive conclusions against current official materials and consult a qualified professional before relying on them in practice.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/yjkj999999/skills/cpa-china-2026-pro)
+- [Publisher profile](https://clawhub.ai/user/yjkj999999)
+- [Repository listed in package metadata](https://github.com/yjkj999999/cpa-china-2026-pro)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Worked calculations, Case analysis]
+
+**Output Format:** [Chinese-language text and Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Exam explanations and practical guidance across six CPA subjects.]
+
+## Skill Version(s):
+
+1.0.1 (source: package.json, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/skill-security-checker",
   "slug": "skill-security-checker",
   "ownerHandle": null,
-  "version": "2.0.0",
-  "updatedAt": 1784712095151,
-  "contentHash": "a166a7ff4781e12c89ab1b41a34a37dc98b66b2c1ca8b69e50aee455d828cd27",
-  "fetchedAt": "2026-07-26T18:08:14.580Z"
+  "version": "3.7.0",
+  "updatedAt": 1794966477765,
+  "contentHash": "790b0d6b33aa06a5e3fd7cc6f487e425ef91ee6f099ac5ec0dcaf7d79050f6ea",
+  "fetchedAt": "2026-11-19T16:45:47.128Z"
 }

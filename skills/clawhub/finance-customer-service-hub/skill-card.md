@@ -1,40 +1,58 @@
-## Description: <br>
-AI-powered unified customer service hub for financial institutions that integrates banking, insurance, securities, and fund support with cross-industry FAQs, intelligent routing, and unified knowledge management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered unified customer service hub for financial industry — unified knowledge base governance, intelligent routing rules, omnichannel service standards, smart-service compliance checks, ticketing and quality metrics across banking/insurance/securities/fund lines. Scope: designing and operating a customer-service centre framework; scripts are drafts requiring business and compliance review.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External customer-service, operations, and fintech platform teams use this skill to structure unified support workflows, cross-industry knowledge bases, and routing patterns across banking, insurance, securities, and fund services. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger coverage can cause the skill to activate in regulated financial-support contexts where account-specific advice or authenticated actions are required. <br>
-Mitigation: Configure narrow activation rules and require approved systems plus human review for regulated financial advice, account-specific support, or customer actions. <br>
-Risk: The skill provides a customer-service framework and may be mistaken for authoritative financial, compliance, or regulatory guidance. <br>
-Mitigation: Treat responses as drafting and workflow guidance, verify against official policy and legal/compliance review, and keep customer-facing knowledge bases current. <br>
+## Use Case:
 
+Financial-sector customer-service platform designers, product and operations teams, and service leads use this skill to draft cross-line knowledge-base structures, routing and human-handoff rules, omnichannel standards, ticket workflows, compliance review checklists, and service quality measures. Treat suggested scripts and operational thresholds as draft references and obtain qualified business and compliance review before use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/finance-customer-service-hub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, configuration] <br>
-**Output Format:** [Markdown with illustrative Python snippets and structured service-design guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only guidance; no executable integration or credential access is bundled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: frontmatter and release evidence) <br>
+Risk: The security review was partial, so its benign verdict does not establish that every part of the artifact is safe.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the artifact and install it only when its publisher and intended use are trusted.
+
+Risk: Customer conversations, identity details, account information, or unmasked tickets could expose sensitive personal or financial data.
+
+Mitigation: Use only necessary inputs and masked or rewritten examples; do not include real customer records in prompts or drafts.
+
+Risk: Financial-service scripts, regulatory summaries, thresholds, or routing criteria may be outdated or unsuitable for a specific institution.
+
+Mitigation: Check current authoritative sources and have qualified business and compliance staff review drafts before operational or external use.
+
+## Reference(s):
+
+- [Finance Customer Service Hub on ClawHub](https://clawhub.ai/gechengling/skills/finance-customer-service-hub)
+- [Publisher profile on ClawHub](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration, Code]
+
+**Output Format:** [Markdown prose and tables, with optional Python-like pseudocode and reusable framework templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft knowledge-base structures, routing rules, service standards, ticket classifications, review checklists, metrics, and script outlines; requires appropriate business and compliance review before operational or external use.]
+
+## Skill Version(s):
+
+3.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -2,13 +2,31 @@
 
 ### Stop paying for AI. Start riding free.
 
-[![ClawHub Downloads](https://api.clawhub-badge.xyz/badge/free-ride/downloads.svg)](https://clawhub.ai/skills/free-ride)
-[![ClawHub Current Installs](https://api.clawhub-badge.xyz/badge/free-ride/installs-current.svg)](https://clawhub.ai/skills/free-ride)
-[![ClawHub Stars](https://api.clawhub-badge.xyz/badge/free-ride/stars.svg)](https://clawhub.ai/skills/free-ride)
-[![ClawHub Version](https://api.clawhub-badge.xyz/badge/free-ride/version.svg)](https://clawhub.ai/skills/free-ride)
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT-0](https://img.shields.io/badge/License-MIT--0-green.svg)](https://opensource.org/license/mit-0)
 [![OpenClaw Compatible](https://img.shields.io/badge/OpenClaw-Compatible-blue.svg)](https://github.com/openclaw/openclaw)
+---
+
+> ## 🚀 Want more than OpenClaw + OpenRouter? Try FreeRide v3
+>
+> This skill (1.x) is a small config writer: it picks OpenRouter free models
+> for OpenClaw and writes them into `openclaw.json`.
+> **[FreeRide v3](https://github.com/Shaivpidadi/FreeRideV3)** is a local
+> gateway on `localhost:11343` that routes every request across free tiers
+> (OpenRouter, Gemini, Groq, Ollama Cloud, Z.ai, NVIDIA NIM, Cloudflare and
+> more) and fails over **inside the same response** when one rate-limits.
+> It works with OpenClaw, Aider, Continue, Hermes, OpenCode, the Claude /
+> Codex / Gemini CLIs, and anything that speaks the OpenAI API.
+>
+> ```bash
+> uv tool install freeride-gateway==0.4.0a28   # or: pipx install freeride-gateway==0.4.0a28
+> freeride init                                  # asks for keys, stores them in ~/.freeride/.env
+> freeride serve
+> freeride bind openclaw                         # points OpenClaw at the gateway
+> ```
+>
+> See [Should I use v3?](#should-i-use-1x-or-v3) below for the differences before you switch.
+> 👉 **Repo:** https://github.com/Shaivpidadi/FreeRideV3 · **Site:** https://free-ride.xyz
+
 ---
 
 **FreeRide** gives you unlimited free AI in [OpenClaw](https://github.com/openclaw/openclaw) by automatically managing OpenRouter's free models.
@@ -47,10 +65,12 @@ That's it. FreeRide:
 ## Installation
 
 ```bash
-npx clawhub@latest install free-ride
-cd ~/.openclaw/workspace/skills/free-ride
+npx clawhub@0.23.3 --workdir ~/.openclaw/workspace install @shaivpidadi/free-ride --version 1.1.0
+cd ~/.openclaw/workspace/skills/@shaivpidadi/free-ride
 pip install -e .
 ```
+
+The command pins the ClawHub CLI version, the skill owner (`@shaivpidadi`), and the skill version. `requests` is capped below 3.
 
 That's it. `freeride` and `freeride-watcher` are now available as global commands.
 
@@ -64,18 +84,15 @@ No credit card. No trial. Actually free.
 
 ### 2. Set Your Key
 
-```bash
-export OPENROUTER_API_KEY="sk-or-v1-..."
+Open `~/.openclaw/.env` in your editor and add a line (OpenClaw reads this file too):
 
-# Or, multiple keys (shown in `freeride status`):
-export OPENROUTER_API_KEY='["sk-or-v1-key1","sk-or-v1-key2"]'
+```
+OPENROUTER_API_KEY=<your key>
 ```
 
-Or add it to your OpenClaw config:
+Several keys are also accepted: `OPENROUTER_API_KEY=["<key 1>","<key 2>"]`. You can export the variable in your shell profile instead.
 
-```bash
-openclaw config set env.OPENROUTER_API_KEY "sk-or-v1-..."
-```
+Don't paste keys into an agent chat or onto a command line, where they end up in history and logs. `freeride status` shows whether a key is set, masked like `sk-or-v1-...abcd`. FreeRide reads keys from the environment, `~/.openclaw/.env`, and the `env` block of `openclaw.json`; it never writes them.
 
 ### 3. Run FreeRide
 
@@ -125,13 +142,19 @@ When you hit a rate limit, OpenClaw automatically tries the next model. You keep
 | `freeride status` | Check your current setup |
 | `freeride fallbacks` | Update fallbacks only |
 | `freeride refresh` | Force refresh model cache |
-| `freeride rotate` | Live-test primary; swap to a working model if it's failing |
+| `freeride rotate` | Live-test primary; swap to a working model if it's failing (only a primary FreeRide set) |
+| `freeride restore` | Put back the primary and fallbacks you had before FreeRide (`--dry-run` to preview) |
 
 ### Pro Tips
 
 ```bash
-# Already have a model you like? Just add fallbacks:
+# Already have a model you like (even a paid one)? Keep it, just add fallbacks.
+# FreeRide marks it as yours and never changes it:
 freeride auto -f
+
+# Changed your mind? Put back what you had before:
+freeride restore --dry-run
+freeride restore
 
 # Want more fallbacks for maximum uptime?
 freeride auto -c 10
@@ -145,6 +168,28 @@ freeride list -n 30
 # Always restart OpenClaw after changes:
 openclaw gateway restart
 ```
+
+## Optional Providers (opt-in)
+
+OpenRouter free models stay the default, and nothing changes unless you opt in. You can add other free tiers to the fallback chain:
+
+```bash
+freeride auto --providers groq,cerebras
+freeride auto --providers groq,gemini --allow-training-providers
+freeride auto --providers openrouter     # back to OpenRouter only
+```
+
+| Provider | Key | What FreeRide adds | Position |
+|----------|-----|--------------------|----------|
+| Groq | `GROQ_API_KEY` | A tool-capable free model, e.g. `groq/openai/gpt-oss-120b` | Right after `openrouter/free` |
+| Gemini | `GEMINI_API_KEY` or `GOOGLE_API_KEY` | A Flash / Flash-Lite / Gemma model, e.g. `google/gemini-3-flash-preview` | After Groq |
+| Cerebras | `CEREBRAS_API_KEY` | A model that passes a live tool-call check | Last |
+
+- **Gemini needs explicit consent** (`--allow-training-providers`). Google may use prompts sent on the unpaid tier to improve its products. EEA/UK/CH accounts are paid-only.
+- FreeRide only writes a `groq/`, `google/` or `cerebras/` ref when the OpenClaw plugin is loaded and OpenClaw already lists that model (`openclaw plugins list`, `openclaw models list --provider ...`). Otherwise it skips the provider and prints the `openclaw plugins install ...` command for you to run.
+- Put the keys in `~/.openclaw/.env` like the OpenRouter key. FreeRide never writes keys or provider blocks.
+- The choice is remembered for later runs and for the watcher. `FREERIDE_PROVIDERS=groq,cerebras` and `FREERIDE_ALLOW_TRAINING=gemini` work the same as the flags.
+- The fallback count (`-c`) is still a total: with `-c 5` and all three enabled you get `openrouter/free`, Groq, Gemini, one OpenRouter free model, Cerebras.
 
 ## How It Ranks Models
 
@@ -168,7 +213,7 @@ After running `freeride auto` and `openclaw gateway restart`:
 openclaw models list
 
 # Validate config
-openclaw doctor --fix
+openclaw config validate
 
 # Open the dashboard and chat
 openclaw dashboard
@@ -212,6 +257,11 @@ For an actual service, point your favorite supervisor (launchd, systemd,
 tmux, pm2) at `freeride-watcher`. There is no PID file — stop it with
 `Ctrl-C` or `kill <pid>`.
 
+The watcher only probes and rotates a primary that FreeRide set. If you set
+your own primary (or kept it with `freeride auto -f`), the watcher logs
+"primary is user-configured, not touching it" once and leaves it alone. It
+never sends test requests to a model you chose.
+
 ## FAQ
 
 **Is this actually free?**
@@ -229,7 +279,29 @@ If you've set multiple keys via `OPENROUTER_API_KEY='["key1","key2"]'`, every la
 
 **Will it mess up my OpenClaw config?**
 
-No. FreeRide only touches `agents.defaults.model` and `agents.defaults.models`. Your gateway, channels, plugins, workspace, customInstructions - all preserved.
+No. FreeRide only touches `agents.defaults.model.primary`, `agents.defaults.model.fallbacks` and entries under `agents.defaults.models`. Your gateway, channels, plugins, workspace, customInstructions - all preserved. Fallbacks you added yourself are kept.
+
+Before every change it saves a copy to `~/.openclaw/openclaw.json.freeride-bak` and writes the new file atomically. If your `openclaw.json` has JSON5 comments or trailing commas, or uses `$include`, FreeRide refuses to write it rather than risk losing anything.
+
+**What exactly does FreeRide write?**
+
+| Path | What |
+|------|------|
+| `~/.openclaw/openclaw.json` | `agents.defaults.model.primary`, `agents.defaults.model.fallbacks`, `agents.defaults.models.<model-ref>`; `auth.profiles["openrouter:default"]` only with `--setup-auth` (shown first, needs your yes or `--yes`) |
+| `~/.openclaw/openclaw.json.freeride-bak` | Copy of your config taken before each write |
+| `~/.openclaw/.freeride-state.json` | Which primary/fallbacks FreeRide set, and what you had before |
+| `~/.openclaw/.freeride-cache.json` | 6-hour cache of OpenRouter's model list |
+| `~/.openclaw/.freeride-watcher-state.json` | Watcher rotation count |
+| `*.freeride-tmp`, `*.tmp` | Short-lived files used for atomic writes |
+
+It never writes API keys, never writes `~/.openclaw/.env`, and never touches `auth-profiles.json`. `--setup-auth` adds `{"provider": "openrouter", "mode": "api_key"}`, which only tells OpenClaw to use your `OPENROUTER_API_KEY`.
+
+**I'm upgrading from 1.0.x. What changes for me?**
+
+- The first time you run any command, FreeRide works out who owns your primary. An OpenRouter `:free` model (or `openrouter/free`) counts as FreeRide's; anything else, including a paid model, counts as yours and is saved for `freeride restore`. If you hand-picked a free model and want it left alone, run `freeride auto -f`.
+- The watcher and `freeride rotate` stop touching a primary you set.
+- If an older FreeRide already replaced your paid primary, it was never saved, so `restore` can't bring it back. Set it again yourself (and then `freeride auto -f` to keep it).
+- Nothing else changes unless you opt into extra providers.
 
 **Which models are free?**
 
@@ -254,6 +326,7 @@ You're welcome.
 - [OpenClaw](https://github.com/openclaw/openclaw) installed (Node ≥22)
 - Python 3.8+
 - Free OpenRouter account ([get key](https://openrouter.ai/keys))
+- Optional: Groq / Gemini / Cerebras keys if you opt into those providers
 
 ## Architecture
 
@@ -281,17 +354,48 @@ You're welcome.
                      └──────────────┘
 ```
 
+## Should I use 1.x or v3?
+
+| | FreeRide 1.x (this skill) | FreeRide v3 |
+|---|---|---|
+| What it is | Writes model refs into `openclaw.json`, then gets out of the way | A local gateway process that serves every request |
+| Agents | OpenClaw | OpenClaw, Aider, Continue, Hermes, OpenCode, Claude / Codex / Gemini CLIs, any OpenAI-compatible client |
+| Providers | OpenRouter free models; Groq, Gemini, Cerebras opt-in | OpenRouter, Gemini, Groq, Ollama Cloud, Z.ai, NVIDIA NIM, Cloudflare, local Ollama and more |
+| When a model fails | OpenClaw walks the fallback list; `freeride-watcher` rotates the primary | The gateway retries the next provider inside the same request |
+| Runs in the background | Nothing (the watcher is optional) | `freeride serve` must be running |
+| Network calls of its own | Only to the model providers | Model providers, plus an hourly aggregate usage beacon that is on by default (`freeride telemetry` shows it, `freeride telemetry off` stops it) |
+
+Stay on 1.x if you only use OpenClaw and want nothing running in the background. Move to v3 if you use other agents, keep hitting OpenRouter's daily limit, or want failover that doesn't depend on a fallback list.
+
+**Switching from 1.x to v3:**
+
+```bash
+freeride restore --dry-run      # optional: see what you had before FreeRide
+freeride restore                # optional: put it back first
+pip uninstall freeride          # v3 installs its own `freeride` and `freeride-watcher` commands
+uv tool install freeride-gateway==0.4.0a28
+freeride init && freeride serve
+freeride bind openclaw
+openclaw gateway restart
+```
+
+Stop `freeride-watcher` from 1.x before you switch. `freeride bind openclaw` adds a `models.providers.freeride` block and an `auth.profiles["freeride:default"]` pointer, and sets the primary to a `freeride/...` ref. FreeRide 1.x treats that primary as yours and never replaces it. v3 also has `freeride auto` / `list` / `switch` for OpenClaw; those follow 1.0.x behavior and don't have 1.1.0's ownership tracking or `restore`.
+
 ## Contributing
 
 Found a bug? Want a feature? PRs welcome.
 
 ```bash
-cd ~/.openclaw/workspace/skills/free-ride
+cd ~/.openclaw/workspace/skills/@shaivpidadi/free-ride   # skills/free-ride for older installs
 
 # Test commands
 freeride list
 freeride status
 freeride auto --help
+
+# Run the test suite (no network needed)
+pip install -e ".[test]"
+python -m pytest -q
 ```
 
 ## Related Projects
@@ -302,7 +406,7 @@ freeride auto --help
 
 ## License
 
-MIT - Do whatever you want.
+[MIT-0](LICENSE) (MIT No Attribution), the license ClawHub uses for every published skill. Do whatever you want; no attribution needed.
 
 ---
 

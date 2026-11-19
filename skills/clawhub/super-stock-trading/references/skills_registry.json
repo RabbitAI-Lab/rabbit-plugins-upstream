@@ -1,7 +1,7 @@
 {
-  "_comment": "超级股票操盘 Skill —— 117 个细粒度 Skill 注册表。每个 Skill 包含 name / category / tier(T1-T4) / data_source / trigger。tier 说明：T1=核心基础，T2=高频常用，T3=按需调用，T4=辅助增强。data_source 取值：akshare / wind_aifin_market / tushare / github / serenity / community / mixed。",
-  "version": "1.0.0",
-  "total": 117,
+  "_comment": "超级股票操盘 Skill —— 137 个细粒度 Skill 注册表。每个 Skill 包含 name / category / tier(T1-T4) / data_source / trigger。tier 说明：T1=核心基础，T2=高频常用，T3=按需调用，T4=辅助增强。data_source 取值：akshare / wind_aifin_market / tushare / github / serenity / community / mixed。短线战法分类沉淀自《短线金手》七册（吴国平主编，2019）。",
+  "version": "1.1.0",
+  "total": 137,
   "categories": [
     { "category": "GitHub开源", "count": 18, "description": "社区开源操盘/选股/分析仓库，作为能力底座" },
     { "category": "Serenity产业链", "count": 4, "description": "产业链图谱与价值链分布分析" },
@@ -17,7 +17,8 @@
     { "category": "日常盘面", "count": 8, "description": "集合竞价、盘中轮动、收盘、情绪" },
     { "category": "周期风控", "count": 2, "description": "周期定位、组合风险监控" },
     { "category": "社区", "count": 1, "description": "社区情绪聚合" },
-    { "category": "辅助", "count": 1, "description": "知识库助手" }
+    { "category": "辅助", "count": 1, "description": "知识库助手" },
+    { "category": "短线战法", "count": 20, "description": "沉淀自《短线金手》七册：私募盈利系统总纲、经典形态(11)、涨停狙击(58)、急速拉升、分时图、T+0、K线精通，主攻短线/超短线决策" }
   ],
   "skills": [
     { "name": "finance-quant-skills", "category": "GitHub开源", "tier": "T1", "data_source": "github", "trigger": "需要量化研究框架与因子库时调用" },
@@ -150,6 +151,27 @@
 
     { "name": "community-sentiment-aggregator", "category": "社区", "tier": "T4", "data_source": "community", "trigger": "社区情绪聚合与极值预警触发" },
 
-    { "name": "knowledge-base-assistant", "category": "辅助", "tier": "T4", "data_source": "mixed", "trigger": "知识库检索与复盘归档触发" }
+    { "name": "knowledge-base-assistant", "category": "辅助", "tier": "T4", "data_source": "mixed", "trigger": "知识库检索与复盘归档触发" },
+
+    { "name": "private-equity-profit-system", "category": "短线战法", "tier": "T1", "data_source": "mixed", "trigger": "短线交易的顶层框架：龙虎榜/F10追踪主力、K线语言、分时盘口、止损体系调用触发" },
+    { "name": "classic-pattern-xuri-dongsheng", "category": "短线战法", "tier": "T2", "data_source": "akshare", "trigger": "旭日东升（多根小阳整齐排列、角度<45°、量能温和）蓄势启动形态识别触发" },
+    { "name": "classic-pattern-meikai-erdu", "category": "短线战法", "tier": "T2", "data_source": "akshare", "trigger": "梅开二度主升浪（堆量→地量洗盘→放量突破）识别触发" },
+    { "name": "classic-pattern-golden-cross-star", "category": "短线战法", "tier": "T2", "data_source": "akshare", "trigger": "黄金十字线（挖坑后三颗缩量十字星+跳空不回补缺口）买点触发" },
+    { "name": "classic-pattern-20day-lifeline", "category": "短线战法", "tier": "T2", "data_source": "akshare", "trigger": "20天线生命线（放量突破有效站稳3天/首次回踩买、放量跌破卖）判断触发" },
+    { "name": "classic-pattern-bollinger", "category": "短线战法", "tier": "T2", "data_source": "akshare", "trigger": "布林线喇叭口（开口/收口/紧口）形态与买卖法触发" },
+    { "name": "classic-pattern-long-upper-shadow", "category": "短线战法", "tier": "T2", "data_source": "akshare", "trigger": "长上影线/仙人指路真假判别（大形态向好+题材+分时量能）触发" },
+    { "name": "classic-pattern-jingtian-nizhuan", "category": "短线战法", "tier": "T3", "data_source": "akshare", "trigger": "惊天逆转（先跌停次日涨停、处上涨态势）识别触发" },
+    { "name": "classic-pattern-gaosongzhuan", "category": "短线战法", "tier": "T3", "data_source": "mixed", "trigger": "年中高送转（预期/预案/除权/填权路线+预测模型）炒作触发" },
+    { "name": "classic-pattern-genzhuang", "category": "短线战法", "tier": "T3", "data_source": "akshare", "trigger": "跟庄/活捉老庄股（精/气/神特征、回踩5/10日线买）识别触发" },
+    { "name": "classic-pattern-longhubang", "category": "短线战法", "tier": "T2", "data_source": "akshare", "trigger": "龙虎榜高成功率战法（攻击形态+机构重金+偏暖大盘+板块效应、识别假机构）触发" },
+    { "name": "limit-up-collection-auction", "category": "短线战法", "tier": "T2", "data_source": "akshare", "trigger": "集合竞价选涨停/巨量高开（高开四档+巨量八档+系统环境/个股质地/趋势闸门）触发" },
+    { "name": "limit-up-sniper-morphology", "category": "短线战法", "tier": "T2", "data_source": "akshare", "trigger": "涨停狙击-形态突破类（双底颈线/三线重叠共振/突破缺口/上升直角/前高/年线）触发" },
+    { "name": "limit-up-sniper-indicator", "category": "短线战法", "tier": "T3", "data_source": "akshare", "trigger": "涨停狙击-指标共振类（金叉共振/MACD低位金叉/KDJ金叉与背离/BOLL）触发" },
+    { "name": "limit-up-sniper-mainforce", "category": "短线战法", "tier": "T3", "data_source": "akshare", "trigger": "涨停狙击-主力行为类（缩量十字星/地量/小连阳/财富之门/倒拔杨柳/芝麻开门/三外有三等）触发" },
+    { "name": "limit-up-sniper-theme", "category": "短线战法", "tier": "T2", "data_source": "mixed", "trigger": "涨停狙击-题材热点类（热点题材/联动/龙头股/领头羊/标的内）触发" },
+    { "name": "rapid-pumping-casebase", "category": "短线战法", "tier": "T3", "data_source": "akshare", "trigger": "急速拉升案例图谱（主升浪/加速段量价齐升、均线首次突破后缩量回踩确认）对照触发" },
+    { "name": "intraday-chart-pankou", "category": "短线战法", "tier": "T2", "data_source": "akshare", "trigger": "分时图盘口语言（三色量柱/冲击波/锯齿波/剪刀波/潜龙出海/45度攻击）买卖点触发" },
+    { "name": "t0-rotational-trading", "category": "短线战法", "tier": "T3", "data_source": "akshare", "trigger": "T+0日内回转（底仓管理、正向/反向T+0、分时高低点降本）触发" },
+    { "name": "kline-mastery-basics", "category": "短线战法", "tier": "T2", "data_source": "akshare", "trigger": "K线从入门到精通（阴阳/十字星/反转与持续形态/黄金分割/时间窗口/大长腿/缺口）触发" }
   ]
 }

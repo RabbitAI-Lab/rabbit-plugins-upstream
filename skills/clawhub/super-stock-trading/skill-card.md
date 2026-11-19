@@ -1,49 +1,57 @@
-## Description: <br>
-A Chinese-language A-share stock research and trading-support skill that coordinates pre-market analysis, intraday decision support, post-market review, stock screening, portfolio checks, and risk-control workflows. <br>
+## Description:
 
-This skill is for research and development only. <br>
+面向 A 股个人投资者，提供盘前分析、选股、持仓与风险检查、交易计划和盘后复盘的研究辅助。
 
-## Publisher: <br>
-[yjkj999999](https://clawhub.ai/user/yjkj999999) <br>
+This skill is for research and development only.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yjkj999999](https://clawhub.ai/user/yjkj999999)
 
-## Use Case: <br>
-External users and developers use this skill to organize A-share market research, generate trading-plan and review reports, evaluate holdings, and apply documented risk gates before any user-confirmed trading decision. It is documented for learning and research use and does not provide direct broker execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China A-share market; review local securities regulations before use in other jurisdictions <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide trading decisions, and the security summary identifies high-impact trading-execution ambiguity. <br>
-Mitigation: Treat all trading outputs as research support only, require manual broker-side confirmation, and do not rely on the skill as investment advice. <br>
-Risk: The installer can add third-party skills and dependencies to the local agent environment. <br>
-Mitigation: Review the listed repositories and dependency installation behavior before running the installer; skip optional installer steps unless needed. <br>
-Risk: API keys may be requested for market data integrations. <br>
-Mitigation: Avoid storing real API keys in config.json or shell startup files; prefer environment-specific secret handling and keep credentials out of public repositories. <br>
+## Use Case:
 
+面向 A 股个人投资者，用于市场与个股研究、组合和风险检查、交易计划及复盘，并生成分析和候选行动建议。内容仅作学习与研究参考；交易前应核验信息并由用户确认。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yjkj999999/skills/super-stock-trading) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/yjkj999999) <br>
-- [Daily workflow](references/daily_workflow.md) <br>
-- [Risk rules](references/risk_rules.md) <br>
-- [Skills registry](references/skills_registry.json) <br>
-- [Experts registry](references/experts_registry.json) <br>
-- [Wealth reports index](references/wealth_reports/README.md) <br>
-- [Agent Skills specification](https://agentskills.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports, JSON configuration, code snippets, and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include financial analysis and trading workflow guidance; trading decisions require explicit manual confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: ClawScan rates the skill suspicious with high confidence because reported trading instructions may exceed its stated research and manual-confirmation scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the order-related workflow carefully, treat outputs as research material, and verify and manually confirm any proposed trade before acting.
+
+Risk: ClawScan reports installation guidance that could run unpinned or remotely fetched code; it places the release in Review and recommends DO_NOT_INSTALL.
+
+Mitigation: Follow the scan guidance and review the installation steps and fetched code before considering installation; limit tools and permissions to those intended.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/yjkj999999/skills/super-stock-trading)
+- [ClawHub publisher profile](https://clawhub.ai/user/yjkj999999)
+- [Daily workflow](references/daily_workflow.md)
+- [Risk rules](references/risk_rules.md)
+- [Short-line trading reference](references/short_line_mastery.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown, Configuration]
+
+**Output Format:** [Chinese-language market and portfolio analysis, checklists, and plans in Markdown; JSON configuration or portfolio/watchlist files when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Research support for user review; verify current information and confirm any trading decision manually.]
+
+## Skill Version(s):
+
+1.1.0 (source: SKILL.md frontmatter, ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

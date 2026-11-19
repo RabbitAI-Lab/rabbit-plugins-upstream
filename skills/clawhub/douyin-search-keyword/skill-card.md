@@ -1,53 +1,55 @@
-## Description: <br>
-抖音公开数据智能获取工具。支持抖音关键词搜索、抖人作品抓取、获取作品评论、实时热榜跟踪，适用于短视频营销、竞品分析、舆情分析和热点监控，助力爆款内容策划与流量追踪。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+读取抖音公开内容，执行关键词与用户搜索、作品和评论查询及热榜跟踪，并返回结构化 JSON，供竞品、舆情与需求分析使用。
 
-## Publisher: <br>
-[um-why](https://clawhub.ai/user/um-why) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[um-why](https://clawhub.ai/user/um-why)
 
-## Use Case: <br>
-Content, marketing, and analysis teams use this skill to retrieve public Douyin search results, creator posts, comments, and hot-list data for content planning, competitor analysis, public-opinion analysis, and trend monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Douyin search terms, profile or video URLs, request limits, and GUAIKEI_API_TOKEN are sent to the guaikei.com API. <br>
-Mitigation: Use the skill only for workflows where sending those values to the third-party API is acceptable, and store the token in an environment variable rather than in prompts or files. <br>
-Risk: Collected public comments, account data, and search results are saved as local JSON logs. <br>
-Mitigation: Review, restrict, or delete generated log files when the collected data is sensitive for the workflow. <br>
-Risk: The skill is limited to public Douyin data and does not support private or hidden content. <br>
-Mitigation: Use it only for public-data retrieval tasks and avoid relying on it for private-account monitoring or complete coverage claims. <br>
+## Use Case:
 
+内容运营、品牌与增长团队可检索抖音公开视频、账号、作品、评论和热榜，并整理竞品、舆情、选题、需求或公域线索分析所需的结构化数据。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/um-why/douyin-search-keyword) <br>
-- [Publisher profile](https://clawhub.ai/user/um-why) <br>
-- [Options reference](references/options.md) <br>
-- [Changelog](references/changelog.md) <br>
-- [Search input schema](assets/search_cli_req.schema.json) <br>
-- [Search output schema](assets/search_cli_resp.schema.json) <br>
-- [Post input schema](assets/post_cli_req.schema.json) <br>
-- [Post output schema](assets/post_cli_resp.schema.json) <br>
-- [Comment input schema](assets/comment_cli_req.schema.json) <br>
-- [Comment output schema](assets/comment_cli_resp.schema.json) <br>
-- [Hot-list output schema](assets/hot_cli_resp.schema.json) <br>
-- [Token and support site](https://www.guaikei.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with command examples; runtime output is structured JSON saved to local log files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js 16.14.0+ and GUAIKEI_API_TOKEN; command outputs are constrained by the documented request and response schemas.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.5 (source: server release metadata, SKILL.md frontmatter, package.json, changelog released 2026-06-18) <br>
+Risk: The security assessment is benign with medium confidence: 22 of 54 components were only partially inspected, and the guidance notes a third-party data-sharing concern.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only non-sensitive public keywords and links; consider whether sending them to guaikei.com and the remaining scan uncertainty are acceptable before use.
+
+## Reference(s):
+
+- [Service and API access](https://www.guaikei.com)
+- [Output contract](artifact/references/contract.md)
+- [Command options](artifact/references/options.md)
+- [Intent routing](artifact/references/routing.md)
+- [Demand mining guidance](artifact/references/demand-mining.md)
+- [Customer acquisition guidance](artifact/references/customer-acquisition.md)
+- [FAQ and setup](artifact/references/faq.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Analysis]
+
+**Output Format:** [Structured JSON results with concise summaries for agent use]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fields vary by Douyin query; a cost estimate may be included. Results are not saved by default.]
+
+## Skill Version(s):
+
+1.5.1 (source: server-resolved release metadata, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,53 @@
-## Description: <br>
-Iaiops Warehouse helps agents inspect and analyze warehouse and intralogistics operations across EtherNet/IP, Profinet, Modbus, OPC-UA, and MQTT-Sparkplug telemetry, including predictive maintenance, downtime triage, OEE/throughput, alarms, bottlenecks, and sortation health. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supports warehouse and intralogistics operations with industrial-protocol monitoring, predictive maintenance, downtime triage, throughput analysis, and alarm review.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, engineers, and operations teams use this skill to guide warehouse and material-handling diagnostics, telemetry analysis, predictive maintenance, throughput/OEE review, alarm analysis, and controlled OT change workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release is flagged suspicious because it presents a read-only posture while exposing write-capable control-system tools. <br>
-Mitigation: Review before installing in any warehouse or industrial network; enable it only where write-capable tools are technically gated, approved, logged, and separated from production unless explicitly authorized. <br>
-Risk: Write-capable OT operations such as EtherNet/IP tag writes and Profinet DCP changes can affect warehouse or industrial equipment if executed without authorization. <br>
-Mitigation: Keep dry-run, approval, audit, and change-management gates enabled; restrict credentials and network access to approved maintenance contexts. <br>
+## Use Case:
 
+Developers and industrial operations engineers use this skill to inspect warehouse PLC, drive, WMS/WCS, and fleet data, then investigate downtime, equipment health, alarms, and throughput. It also guides carefully controlled maintenance or configuration actions where supported.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-warehouse) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, analysis] <br>
-**Output Format:** [Markdown guidance with inline commands, configuration notes, and tool names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include OT diagnostics, read/write gating guidance, and risk notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release metadata) <br>
+Risk: Broad activation wording may invoke the skill in conversations unrelated to warehouse operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it for warehouse and intralogistics tasks, and check that the request is within that context before applying its guidance.
+
+Risk: Some supported tools can write to production control systems or publish MQTT messages.
+
+Mitigation: Keep use read-first; for writes, follow the documented MOC process with dry-run review, named approval, before-value undo, and double confirmation.
+
+## Reference(s):
+
+- [Industrial-AIOps Warehouse on ClawHub](https://clawhub.ai/zw008/skills/iaiops-warehouse)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Configuration, Shell commands, Files]
+
+**Output Format:** [Diagnostic summaries, operational guidance, configuration drafts, and structured reports such as Markdown, JSON, or CSV.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings depend on available site data; unverified mappings and unknown device details should remain explicit.]
+
+## Skill Version(s):
+
+0.34.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

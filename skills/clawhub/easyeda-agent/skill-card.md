@@ -1,52 +1,59 @@
-## Description: <br>
-EasyEDA Agent automates EasyEDA Pro schematic and PCB workflows through the local easyeda-agent CLI, daemon, and connector, including board design, inspection, part placement, routing checks, DRC/layout linting, and artifact export. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the local EasyEDA Pro CLI and connected interfaces to design or refine schematics and PCB layouts, then verify connections, geometry, design-rule checks, and saved results.
 
-## Publisher: <br>
-[zhoushoujianwork](https://clawhub.ai/user/zhoushoujianwork) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhoushoujianwork](https://clawhub.ai/user/zhoushoujianwork)
 
-## Use Case: <br>
-External developers and electronics engineers use this skill to guide agents through EasyEDA Pro schematic and PCB design, inspection, validation, and manufacturing artifact export using the local easyeda-agent tooling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can alter live EasyEDA schematic and PCB projects. <br>
-Mitigation: Work from backups, inspect proposed changes, approve destructive actions explicitly, and review EasyEDA check, DRC, and layout-lint results before accepting outputs. <br>
-Risk: Helper or recovery paths may have weak safeguards. <br>
-Mitigation: Use recovery actions only when the EasyEDA daemon or connector is stuck, and confirm project state is saved before running them. <br>
-Risk: Workflow state and lint baselines can retain local design data. <br>
-Mitigation: Store generated baselines and workflow files in an appropriate local project area and remove sensitive design artifacts before sharing logs or reports. <br>
+## Use Case:
 
+Electronics designers and engineers use this skill to build or safely revise EasyEDA Pro schematics and PCBs, then check connectivity, layout geometry, design-rule results, and saved state.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zhoushoujianwork/skills/easyeda-agent) <br>
-- [EasyEDA Agent Connector Marketplace](https://jlc-ext.com/item/zhoushoujian/easyeda-agent-connector) <br>
-- [EasyEDA Design Flow](artifact/references/design-flow.md) <br>
-- [EasyEDA Schematic](artifact/references/schematic.md) <br>
-- [EasyEDA PCB](artifact/references/pcb.md) <br>
-- [EasyEDA Action Reference](artifact/references/actions.md) <br>
-- [Environment Setup](artifact/references/environment-setup.md) <br>
-- [PCB Design Rules](artifact/references/pcb-design-rules.md) <br>
-- [Part Selection](artifact/references/part-selection.md) <br>
-- [Standard Parts Catalog](artifact/references/standard-parts.json) <br>
-- [JLCPCB Fabrication Rule Fallback](artifact/references/fab-rules-jlcpcb.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON snippets, and file or artifact paths.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include EasyEDA CLI commands, design-check summaries, DRC/layout-lint status, and exported BOM, netlist, or manufacturing artifact paths.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.18.0 (source: server release metadata) <br>
+Risk: The installer is unverified, and scan coverage is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the installer source independently and review its contents before installing.
+
+Risk: Design changes could overwrite existing content or create unintended connections.
+
+Mitigation: Keep a source copy, review proposed edits before applying them, and verify connectivity with fresh readback afterward.
+
+## Reference(s):
+
+- [EasyEDA Agent project homepage](https://github.com/zhoushoujianwork/easyeda-agent)
+- [ClawHub skill page](https://clawhub.ai/zhoushoujianwork/skills/easyeda-agent)
+- [Release notes for 1.18.2](https://github.com/zhoushoujianwork/easyeda-agent/releases/tag/v1.18.2)
+- [Design flow](references/design-flow.md)
+- [Schematic data and validation](references/schematic-data.md)
+- [PCB layout guidance](references/pcb-layout.md)
+- [PCB routing guidance](references/pcb-routing.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, JSON, EasyEDA design files, Validation reports]
+
+**Output Format:** [Markdown guidance, shell commands, and structured EasyEDA project data and reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May update the active EasyEDA project; results should be checked against fresh readback and save evidence.]
+
+## Skill Version(s):
+
+1.18.2 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

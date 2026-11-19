@@ -1,272 +1,62 @@
 ---
 name: brewpage-publish
-description: "Publish HTML, markdown, text, any file, or a multi-file site to brewpage.app — free hosting with no sign-up. Paste text, share a file, upload a site, or host a temporary page and get an instant public URL to share a link. Asks namespace and password, returns the public URL. Triggers: publish, publish HTML, share link, share a link, share a file, upload to brewpage, host page, host a temporary page, host a website, free hosting, paste text, instant public URL, no sign-up, brewpage, publish site, upload site, upload directory, deploy site, сделай публичную ссылку, опубликуй."
+description: "Prepare BrewPage drafts, publish supplied content or a new page, and update a specific BrewPage publication. Supports HTML, Markdown, JSON, files, built sites, and forms with saved visitor answers. Use for BrewPage, share this as a link, publish site, RSVP, poll, черновик BrewPage, опубликуй, обнови страницу."
 homepage: https://brewpage.app
 user-invocable: true
+license: MIT
 ---
 
-# brewpage-publish
+## Prompt contract
 
-Publish content to **brewpage.app** — free instant hosting for HTML pages, files, and multi-file sites. No sign-up required.
+Use the owner’s free-form RU/EN prompt. Keep supplied material intact and resolve selected paths against the workspace.
 
-## Workflow
+Resolve the requested effect before matching keywords. An explicit no-publish or local-only instruction overrides mode words and defaults. Negated, quoted, instructional and incidental publishing words authorize no write. Explanation-only requests, like drafts, make zero BrewPage calls or tool discovery requests.
 
-### Step 1: Parse Arguments
+| Mode | EN keywords | RU keywords | Mutates? |
+|---|---|---|---|
+| `draft` | prepare a draft, preview, local only | подготовь черновик, предпросмотр, только локально | local only |
+| `publish` | publish this, share as a link, upload this | опубликуй это, поделись ссылкой, загрузи этот файл | yes |
+| `compose-and-publish` | create and publish, build and host | создай и опубликуй, сделай и размести | yes |
+| `update` | update this publication, replace the page, edit in place | обнови публикацию, замени страницу, исправь на месте | yes |
 
-Extract from the arguments string:
-- `--ttl N` → TTL in days (default: `15`)
-- `--entry <filename>` → entry file for SITE uploads (default: auto-detect)
-- Remaining text → `content_arg`
+1. Mode: separate flags from the request. An affirmatively requested explicit mode wins. Otherwise score distinct whole-word keywords only within the requested action. A tie with `draft` stays local. For two writing modes, use the first matched keyword. A direct invocation with supplied content defaults to `publish` only without a contrary instruction. An empty or ambiguous request needs scope before any write.
+2. Scope: extract the material, exact requested text, target, changes and options. “Publish this draft” supplies material for a create. “Draft this for BrewPage” requests preparation only. A request to revise an existing local file does not identify a live publication.
+3. Ask: ask once (up to four scope questions) for scope choices that change the work. Ask only for missing material, a missing exact update target, or an unresolved consequential choice. Drafts need no ownership or visibility questions.
 
-### Step 2: Detect Content Type
+Print once before the first action. Redact credentials, private management links and password values.
 
-| Input | Type | API |
-|-------|------|-----|
-| `content_arg` is a directory (`test -d`) | SITE | `POST /api/sites` (dir auto-zipped — primary path) |
-| `content_arg` ends with `.zip` AND file exists (`test -f`) | SITE | `POST /api/sites` (pre-built archive upload) |
-| `content_arg` is a file path AND file exists (`test -f`) | FILE | `POST /api/files` (multipart) |
-| Anything else | HTML | `POST /api/html` (format=markdown) |
-
-Mode rule: directory/ZIP → SITE. Single file → FILE. Everything else → HTML (markdown). `POST /api/sites` accepts ONLY a multipart `archive=@file.zip` — there is no raw-folder upload, so a directory is auto-zipped on the fly (the robust default; archive sealing keeps relative paths intact). Stats per type — SITE (dir): HTML count, total size, entry file. SITE (ZIP): file size, entry override. FILE: size + MIME via `file --mime-type -b`. TEXT: char count.
-
-### Step 3: Show Pre-Publish Stats
-
-For HTML/FILE:
-```
-Content:  <type description> · <size> · <api endpoint>
-TTL:      <N> days
+```text
+PLAN — brewpage-publish
+INPUT:  <request, or (empty)>
+MODE:   <mode> — <explicit | matched keyword: X | default>
+SCOPE:  <artifact or target and requested options>
+DO:     <2–5 actions>
+RESULT: <local artifact or confirmed publication outcome>
 ```
 
-For SITE: detect entry file using priority: 1) `--entry` flag, 2) `index.html` exists, 3) first `.html` file alphabetically.
+## Perform the requested work
 
-**Built-static guard (run BEFORE zipping).** Publish BUILT output, never project sources:
-- If the directory contains no `.html` file at all → **FAIL** with an explicit error: "No `.html` found — build the site first, then point at the build output directory." Do not guess an entry.
-- If the directory looks like un-built sources (has `package.json` + `src/` but no top-level `.html`) → **warn and ask** the user to point at the build output instead (`dist/`, `build/`, `out/`, `_site/`, or `public/`). Do not zip the source tree.
-```
-Content:  site · <N> files · <total_size> · POST /api/sites
-Entry:    <entry_file>
-TTL:      <N> days
-```
+1. **Draft:** prepare the requested local files or inline artifact. For a form, pair HTML with its Page data declaration from the [offline recipe](references/page-data.md). Return the artifact and how to use it. Stop here. Make zero BrewPage calls, tool discovery requests, owner lookups or domain changes.
+2. **Publish or compose and publish:** preserve supplied content and exact requested text, including punctuation (`Ready.` → `<p>Ready.</p>`), unless edits were requested. MCP: explicitly public/listed publication → `namespace:"public"`; ordinary link-only → omit `namespace`. Receipts confirm listing eligibility; public input URLs alone request no listing. Use [publishing](references/publishing.md) for local input, other access choices or REST. Plain inline MCP HTML needs no publishing reference. Read [Page data](references/page-data.md) for requested visitor storage and [custom domains](references/custom-domain.md) for a requested owned hostname.
+3. **Update:** use the exact target and selected owner; inventory only for unknown targets. MCP: a title-only rename of known HTML `notes/Agenda0001` calls `publication_settings({kind:"html",namespace:"notes",id:"Agenda0001",title:"New agenda"})` directly; hostname `domains(action=attach)`; saved entries `read_page_data` (private `manageUrl` alone or owner proof + target; collection if known). Use the supplied source or recover it through a permitted read of that item. Change only the requested fields or content. A full site replacement needs the complete desired file set and verified existing entry unless an entry change was requested; pass that entry explicitly to MCP. Leave replacement pending if it cannot be resolved. A content-only update keeps the address and existing visitor entries. A missing or read-only target requires a separate user decision before any new publication.
 
-### Step 4: Ask Namespace
+## Select one write route
 
-Ask the user:
+Before dispatching MCP that can return an owner key or bearer management link, verify that the tool result reaches only the requesting owner or an authorized private handoff. Anonymous creates can include `ownerToken` and `manageUrl` in tool text; a protected file alone does not make that transcript private. Known owner-only host context can establish this boundary without another privacy question. Otherwise select authorized REST with protected receipt handling **before** writing, or leave an MCP-only request pending. New-owner storage or private recovery is still required.
 
-```
-Namespace determines the URL prefix and gallery visibility on brewpage.app.
+- Prefer a BrewPage tool already exposed to this host session. If the host discovers tools on demand, use that interface once. Verify the BrewPage binding, actual tool schema, input and options, and the selected authority. Use compact `publish` or `update_publication` when supported. An advertised legacy operation is usable within its original schema. Supplied HTML requiring exact source needs preservation support; a legacy shape without it requires another authorized route selected before writing. For an ordinary inline HTML publish, call the suitable tool directly. A similarly named tool, a package install and an endpoint probe cannot establish a usable binding.
+- Before serializing local files into tool arguments or a request, use the packaged local checks in [publishing](references/publishing.md). A local path is never a remote source URL. For unrepresentable bytes, missing MCP capability or absent BrewPage binding, select authorized direct REST **before** any write when the host and the same owner proof permit it. Explicit MCP-only intent requires a capable binding. If there is no authorized route, return the local result and the specific remaining step.
+- Prefer a suitable already connected account when no other owner is chosen. For explicit account publishing, use `requireAccount: true` on the compatible MCP tool and follow the client’s first-party authorization flow. If unavailable or cancelled, leave the write pending. The MCP client alone handles OAuth. Use REST only if it supports the selected owner proof or the requested unsigned operation. Explicit fresh anonymity needs a route with neither bearer nor saved owner token. Setting `requireAccount` to false does not select that route.
+- Honor host restrictions, denials, missing scope and rejected credentials. After a sent write times out, reconcile through the selected owner's inventory or receipt. Never switch transports or owners to repeat a sent or refused write. Use bundled recipes as data. Without a specialized path, compose locally and explain the missing capability. Fetch only a needed first-party guide or template for an authorized hosted workflow.
 
-Options:
-1) public — visible in gallery (default)
-2) {auto-suggested 6-8 char slug}
-3) Enter custom namespace
-4) Skip → use public
+For the bundled runner, substitute this installed path for `{runner}` in the publishing reference. Use the host shell tool only when permitted.
 
-Reply with a number or your custom namespace (alphanumeric, 3-32 chars).
+```text
+{baseDir}/scripts/brewpage-run.sh
 ```
 
-Auto-suggest: generate a **meaningful short slug** (3-16 chars, lowercase alphanumeric + hyphens) from content context:
-- File → topic/purpose of the file (e.g. `api-docs`, `login-page`, `report-q2`)
-- Text/HTML → main subject or title (e.g. `pricing`, `team-intro`, `changelog`)
-- Site → site title or directory name (e.g. `portfolio`, `docs-site`)
-- Fallback → project name or directory name if content is ambiguous
-Never use random strings or truncated filenames — the slug should be human-readable and describe what's being published.
+The runner uses `OpenClaw/1.1.0 (+https://brewpage.app)` for direct REST requests.
 
-Resolution:
-- `1`, `4`, or empty → `public`
-- `2` → suggested slug
-- `3` or any other string → use as-is
+## Return the actual result
 
-### Step 5: Ask Password
-
-Ask the user:
-
-```
-Password protection (if set, page is hidden from gallery):
-
-Options:
-1) No password (default)
-2) Random: {generated 6-char password, e.g. "kx7p2m"}
-3) Enter custom password (min 4 chars)
-4) Skip → no password
-
-Reply with a number or your custom password.
-```
-
-Generate random password — run with the shell tool:
-```bash
-LC_ALL=C tr -dc 'a-z0-9' < /dev/urandom | head -c6 2>/dev/null
-```
-
-Resolution:
-- `1`, `4`, or empty → no password
-- `2` → use generated random password
-- `3` or custom text → use as-is
-
-### Step 6: Publish and Save Token (secure)
-
-> **SECURITY:** The ownerToken MUST NEVER appear in conversation output. The bash blocks below handle curl + token parsing + history save atomically; the model sees only the URL. Each block sets `PASS_H` first (empty array when no password) and uses `"${PASS_H[@]}"` quoted — passwords are never string-interpolated into the command. The site-dir zip excludes (`.git/`, `.env*`, etc.) are also a secret-leak safeguard — they keep credentials and VCS data out of the published archive.
-
-History file is workspace-relative: `./brewpage-history.md`.
-
-**6a. Init history file (run once, before the publish block)** — run with the shell tool:
-```bash
-HISTORY_FILE="./brewpage-history.md"
-if [ ! -f "$HISTORY_FILE" ]; then
-  cat > "$HISTORY_FILE" <<'HEADER'
-# brewpage.app — Published Pages
-
-> PRIVATE FILE — keep this out of version control and never share it.
-> Owner tokens allow delete (no in-place PUT for sites; html/json/kv support PUT).
-> Delete html/json/kv: `curl -s -X DELETE "https://brewpage.app/api/{ns}/{id}" -H "X-Owner-Token: TOKEN"`
-> Delete site:         `curl -s -X DELETE "https://brewpage.app/api/sites/{ns}/{id}" -H "X-Owner-Token: TOKEN"`
-
-| Date | URL | Owner Token | TTL | Type |
-|------|-----|-------------|-----|------|
-HEADER
-fi
-```
-
-Then run ONE of the following publish blocks based on detected type. Each assumes `HISTORY_FILE` already exists from 6a.
-
-**HTML/Markdown text** — run with the shell tool:
-```bash
-HISTORY_FILE="./brewpage-history.md"
-CONTENT=$(cat <<'BREWPAGE_EOF'
-{content}
-BREWPAGE_EOF
-)
-PAYLOAD=$(jq -n --arg c "$CONTENT" '{content: $c}')
-PASS_H=()
-[ -n "$PASSWORD" ] && PASS_H=(-H "X-Password: $PASSWORD")
-RESPONSE=$(curl -s -X POST "https://brewpage.app/api/html?ns={ns}&ttl={days}&format=markdown" \
-  -H "Content-Type: application/json" \
-  "${PASS_H[@]}" \
-  -d "$PAYLOAD")
-
-URL=$(echo "$RESPONSE" | jq -r '.link // empty')
-TOKEN=$(echo "$RESPONSE" | jq -r '.ownerToken // empty')
-
-if [ -n "$URL" ]; then
-  [ -n "$TOKEN" ] && echo "| $(date '+%Y-%m-%d %H:%M') | [$URL]($URL) | \`$TOKEN\` | {ttl}d | html |" >> "$HISTORY_FILE"
-  echo "OK $URL"
-else
-  echo "FAILED: $RESPONSE"
-fi
-```
-
-**File** — run with the shell tool:
-```bash
-HISTORY_FILE="./brewpage-history.md"
-PASS_H=()
-[ -n "$PASSWORD" ] && PASS_H=(-H "X-Password: $PASSWORD")
-RESPONSE=$(curl -s -X POST "https://brewpage.app/api/files?ns={ns}&ttl={days}" \
-  "${PASS_H[@]}" \
-  -F "file=@/absolute/path/to/file")
-
-URL=$(echo "$RESPONSE" | jq -r '.link // empty')
-TOKEN=$(echo "$RESPONSE" | jq -r '.ownerToken // empty')
-
-if [ -n "$URL" ]; then
-  [ -n "$TOKEN" ] && echo "| $(date '+%Y-%m-%d %H:%M') | [$URL]($URL) | \`$TOKEN\` | {ttl}d | file |" >> "$HISTORY_FILE"
-  echo "OK $URL"
-else
-  echo "FAILED: $RESPONSE"
-fi
-```
-
-**Site (directory)** — run with the shell tool:
-```bash
-HISTORY_FILE="./brewpage-history.md"
-PASS_H=()
-[ -n "$PASSWORD" ] && PASS_H=(-H "X-Password: $PASSWORD")
-TMPZIP=$(mktemp /tmp/brewpage-site-XXXXXX.zip)
-# Exclude VCS, secrets, deps, editor + OS junk and sourcemaps — publish only built static assets.
-(cd "{directory_path}" && zip -r "$TMPZIP" . -x '.git/*' '*/.git/*' '.env' '.env.*' '*/.env' '*/.env.*' 'node_modules/*' '*/node_modules/*' '.DS_Store' '*/.DS_Store' 'Thumbs.db' '.idea/*' '*/.idea/*' '.vscode/*' '*/.vscode/*' '.cache/*' '*/.cache/*' '*.map' '*.log')
-RESPONSE=$(curl -s -X POST "https://brewpage.app/api/sites?ns={ns}&ttl={days}&entry={entry}" \
-  -H "User-Agent: OpenClaw/1.0" \
-  "${PASS_H[@]}" \
-  -F "archive=@$TMPZIP")
-rm -f "$TMPZIP"
-
-URL=$(echo "$RESPONSE" | jq -r '.link // empty')
-URL="${URL%/}"  # strip any trailing slash — /public/<id>/ routes to brewpage landing
-TOKEN=$(echo "$RESPONSE" | jq -r '.ownerToken // empty')
-FCOUNT=$(echo "$RESPONSE" | jq -r '.fileCount // "?"')
-
-if [ -n "$URL" ]; then
-  [ -n "$TOKEN" ] && echo "| $(date '+%Y-%m-%d %H:%M') | [$URL]($URL) | \`$TOKEN\` | {ttl}d | site ($FCOUNT files) |" >> "$HISTORY_FILE"
-  echo "OK $URL | Files: $FCOUNT"
-else
-  echo "FAILED: $RESPONSE"
-fi
-```
-
-**Site (ZIP file)** — run with the shell tool:
-```bash
-HISTORY_FILE="./brewpage-history.md"
-PASS_H=()
-[ -n "$PASSWORD" ] && PASS_H=(-H "X-Password: $PASSWORD")
-RESPONSE=$(curl -s -X POST "https://brewpage.app/api/sites?ns={ns}&ttl={days}&entry={entry}" \
-  -H "User-Agent: OpenClaw/1.0" \
-  "${PASS_H[@]}" \
-  -F "archive=@{zip_file_path}")
-
-URL=$(echo "$RESPONSE" | jq -r '.link // empty')
-URL="${URL%/}"  # strip any trailing slash — /public/<id>/ routes to brewpage landing
-TOKEN=$(echo "$RESPONSE" | jq -r '.ownerToken // empty')
-FCOUNT=$(echo "$RESPONSE" | jq -r '.fileCount // "?"')
-
-if [ -n "$URL" ]; then
-  [ -n "$TOKEN" ] && echo "| $(date '+%Y-%m-%d %H:%M') | [$URL]($URL) | \`$TOKEN\` | {ttl}d | site ($FCOUNT files) |" >> "$HISTORY_FILE"
-  echo "OK $URL | Files: $FCOUNT"
-else
-  echo "FAILED: $RESPONSE"
-fi
-```
-
-### Step 7: Output Result
-
-**Success** (bash printed `OK {url}`):
-```
-Published: {url from bash output}
-Owner token saved to ./brewpage-history.md
-```
-
-**Success for SITE** (bash printed `OK {url} | Files: {count}`):
-```
-Published site: {url from bash output}
-Entry: {entry_file} | Files: {count}
-Owner token saved to ./brewpage-history.md
-
-⚠ Share the URL exactly as printed — DO NOT append a trailing slash.
-  brewpage.app routes "/public/<id>/" to its own landing page, and the
-  redirect that saves the no-slash form does not fire for the slash-dir form.
-```
-
-**NEVER print the ownerToken in conversation.** The token lives only in the history file.
-
-**Error** (bash printed `FAILED: ...`):
-```
-Publish failed.
-```
-
-## Notes
-
-- Always use absolute file paths with curl `-F "file=@..."`.
-- Use `jq -n --arg c "$CONTENT" '{content: $c}'` to safely encode text content. **`format` is a query param**, not a body field — `/api/html` ignores any `format` key inside the JSON body and reads only `?format=` from the URL. Wrong location = server applies default `html` and stores your markdown as raw text.
-- TTL default is `15` days. Namespace must be alphanumeric (3-32 chars), default `public`.
-- To **delete** a published page, find the owner token in `./brewpage-history.md` and use the delete command shown in that file's header.
-- **Sites: directory is the primary input** — it is auto-zipped (the only thing `POST /api/sites` accepts), which seals relative paths. A pre-built `.zip` is the alternative input, uploaded as-is. Always publish BUILT output (`dist/`, `build/`, `out/`, `_site/`, `public/`), never project sources.
-- The auto-zip excludes `.git/`, `.env`/`.env.*`, `node_modules/`, editor/OS junk, sourcemaps and logs — a deliberate secret-leak safeguard so credentials and VCS history never reach the public archive.
-- Entry file detection: `--entry` override > `index.html` > first `.html` alphabetically.
-- **SITE URL — NO trailing slash.** API returns `.link = "https://brewpage.app/public/<id>"` without trailing `/`. Appending `/` routes to brewpage.app's own landing page; the JS redirect that rescues the no-slash form does NOT fire for the slash-dir form → site becomes inaccessible.
-- **SITE verification cannot be done via `curl`.** The no-slash URL serves the BrewPage landing HTML with an inline JS redirect that only executes in a real browser. Verify with a real browser, or fetch `<url>/index.html` explicitly.
-
----
-
-## Powered by
-
-| | |
-|-|-|
-| **[brewpage.app](https://brewpage.app)** | Free instant hosting — HTML, files, multi-file sites. No sign-up. |
-| **[brewcode](https://github.com/kochetkov-ma/claude-brewcode)** | Plugin & skill suite — infinite tasks, code review, skills, hooks. |
+Before a first anonymous create, arrange authorized private storage or owner-only delivery of its key. Refer to [ownership and receipts](references/ownership.md) for owner selection, storage and recovery. Report the exact returned reader link, effective access and any consequential notice. Deliver the private management link and owner instructions only through a protected channel. An account-owned result goes to the account’s publications. For anonymous ownership, say “saved” only after private readback. A shared destination receives reader-facing details only. Report a live publication or update only from a confirmed receipt.

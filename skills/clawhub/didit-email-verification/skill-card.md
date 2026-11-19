@@ -1,45 +1,57 @@
-## Description: <br>
-Integrate Didit Email Verification standalone API to verify email addresses via OTP, including sending and checking codes, detecting risky email attributes, and configuring fraud signals and policy-based declines. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides guidance and examples for sending and checking Didit email verification codes and scoring email risk.
 
-## Publisher: <br>
-[rosasalberto](https://clawhub.ai/user/rosasalberto) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[rosasalberto](https://clawhub.ai/user/rosasalberto)
 
-## Use Case: <br>
-Developers and engineers use this skill to add Didit email OTP verification to applications, including send/check flows, command-line testing, and policy decisions for breached, disposable, duplicated, or undeliverable emails. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends email addresses and optional IP, device, or user-agent signals to Didit for verification and risk scoring. <br>
-Mitigation: Use the skill only for intended Didit email verification flows, provide appropriate user notice, and send optional fraud signals only when there is a valid privacy basis. <br>
-Risk: DIDIT_API_KEY is required for API access and could enable unauthorized verification requests if exposed. <br>
-Mitigation: Store DIDIT_API_KEY in an environment variable or secret manager, avoid logging it, and rotate it if exposure is suspected. <br>
-Risk: Sending OTP emails can consume Didit credits or create unintended user-facing messages. <br>
-Mitigation: Confirm before sending OTP emails and monitor Didit usage or credit balance. <br>
+## Use Case:
 
+Developers use this skill to integrate Didit's email OTP verification and email-risk checks into backend services, including handling verification outcomes and optional risk signals.
 
-## Reference(s): <br>
-- [Didit Documentation](https://docs.didit.me) <br>
-- [Didit Email Send API Reference](https://docs.didit.me/standalone-apis/email-send) <br>
-- [Didit Email Check API Reference](https://docs.didit.me/standalone-apis/email-check) <br>
-- [Didit Email Verification Feature Guide](https://docs.didit.me/core-technology/email-verification/overview) <br>
-- [ClawHub Skill Page](https://clawhub.ai/rosasalberto/didit-email-verification) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline code examples and JSON API payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce command-line instructions and API request examples that require DIDIT_API_KEY.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: frontmatter and server release evidence) <br>
+Risk: Email addresses and any supplied IP, device, user-agent, vendor, or metadata fields are sent to Didit, where verification and risk requests create API sessions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm you trust Didit to receive the data and have authorization to share it; send only optional identifying signals needed for your use case.
+
+Risk: API requests require the DIDIT_API_KEY credential.
+
+Mitigation: Store the key in a protected environment variable and avoid exposing it in source code or logs.
+
+## Reference(s):
+
+- [Email Verification Overview](https://docs.didit.me/core-technology/email-verification/overview)
+- [Send Email Code API](https://docs.didit.me/standalone-apis/email-send)
+- [Check Email Code API](https://docs.didit.me/standalone-apis/email-check)
+- [Email Risk API](https://docs.didit.me/standalone-apis/email-risk)
+- [Didit Pricing](https://docs.didit.me/getting-started/pricing)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with Python and TypeScript examples, JSON payloads, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Examples use the DIDIT_API_KEY environment variable; API requests and responses use JSON.]
+
+## Skill Version(s):
+
+1.4.0 (source: SKILL.md frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

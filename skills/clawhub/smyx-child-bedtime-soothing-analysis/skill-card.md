@@ -1,44 +1,55 @@
-## Description: <br>
-Analyzes authorized child bedroom night audio/video for crying, fear-of-dark behavior, nightmare wakeups, and out-of-bed events, then returns structured soothing actions and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes submitted child-bedroom audio and video for signs of bedtime distress and returns a report.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users or developers use this skill to analyze authorized child bedroom or nursery night recordings and review detected unrest events, suggested soothing actions, and report history. It is intended for behavior detection and caregiver support, not medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Highly sensitive child bedroom audio/video may be uploaded to or referenced by remote services. <br>
-Mitigation: Use only with trusted publisher and backend services, confirmed caregiver authorization, and an understood retention and report-access model. <br>
-Risk: The skill may create or reuse local and remote identities and link cloud report history automatically. <br>
-Mitigation: Review identity and token storage before deployment, run in a controlled environment, and clear local identity state between users or households. <br>
-Risk: Behavior detection and soothing recommendations could be mistaken for medical or psychological diagnosis. <br>
-Mitigation: Treat outputs as caregiver support only; repeated or severe sleep events should be referred to appropriate pediatric sleep or child psychology professionals. <br>
+## Use Case:
 
+Parents and caregivers can use reports to review possible bedtime crying, fear-of-dark behavior, or nightmare waking from submitted audio and video. Independently verify any claimed monitoring or soothing behavior; the available security assessment does not establish those functions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-child-bedtime-soothing-analysis) <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown text with structured analysis results, soothing recommendations, and report links; JSON output is available for detailed results.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save results to a file with --output; history queries are retrieved from the remote report service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Child-bedroom recordings and identity data may be handled by a remote service, and the service's data practices are not established here.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the service, what recordings and identity data it receives, and the applicable data handling before submitting media.
+
+Risk: The security assessment reports a mismatch between the claimed bedtime monitoring and soothing functions and the demonstrated capabilities; scanner coverage is partial.
+
+Mitigation: Do not rely on the claimed monitoring or soothing behavior for child safety without independently confirming it; check whether export-only actions process media.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-child-bedtime-soothing-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files]
+
+**Output Format:** [Markdown analysis report, optionally saved to a file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include an export link.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
