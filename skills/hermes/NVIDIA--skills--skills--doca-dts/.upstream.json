@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-dts",
+  "identifier": "NVIDIA/skills/skills/doca-dts",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-dts",
+  "branch": "main",
+  "pushedAt": "2026-11-19T14:26:53Z",
+  "contentHash": "4ff1d4b75e261d2f85d35de301ce6a6dda500eb520c9bc01892e1092efa1edf7",
+  "fetchedAt": "2026-11-19T16:38:24.983Z"
+}

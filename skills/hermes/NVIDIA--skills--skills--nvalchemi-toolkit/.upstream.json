@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvalchemi-toolkit",
+  "identifier": "NVIDIA/skills/skills/nvalchemi-toolkit",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvalchemi-toolkit",
+  "branch": "main",
+  "pushedAt": "2026-11-19T14:26:53Z",
+  "contentHash": "1b7edffc8ddd98f3a86e6a939488a70f7b46efbcc99e02c70f3cda2792aa9f9f",
+  "fetchedAt": "2026-11-19T16:38:25.215Z"
+}

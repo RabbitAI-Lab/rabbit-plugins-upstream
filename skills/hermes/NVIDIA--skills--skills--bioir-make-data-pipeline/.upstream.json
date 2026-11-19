@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bioir-make-data-pipeline",
+  "identifier": "NVIDIA/skills/skills/bioir-make-data-pipeline",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bioir-make-data-pipeline",
+  "branch": "main",
+  "pushedAt": "2026-11-19T14:26:53Z",
+  "contentHash": "0a381e5ef3cbc92c28fdb9ab677c13cf807543c2edd47407bef08e489b4a4e28",
+  "fetchedAt": "2026-11-19T16:38:25.136Z"
+}
