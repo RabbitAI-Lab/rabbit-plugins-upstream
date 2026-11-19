@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/ai-image-generation",
+  "repo": "inference-sh/skills",
+  "skillId": "ai-image-generation",
+  "branch": "main",
+  "pushedAt": "2026-11-17T12:53:05Z",
+  "contentHash": "2ecb3164b15b0755b0eaeccb66931e677b02a740cdda33cf4c08780c95742038",
+  "fetchedAt": "2026-11-19T16:38:04.846Z"
+}
