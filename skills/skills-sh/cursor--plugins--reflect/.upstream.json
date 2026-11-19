@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/reflect",
+  "repo": "cursor/plugins",
+  "skillId": "reflect",
+  "branch": "main",
+  "pushedAt": "2026-11-19T06:52:20Z",
+  "contentHash": "815fa690b21bc4a07d7cd6d6a6623ffa43c22514fe3cc80effb32858080d742f",
+  "fetchedAt": "2026-11-19T16:38:14.246Z"
+}
