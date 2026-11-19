@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/inference/serving-llms-vllm",
+  "identifier": "official/mlops/inference/serving-llms-vllm",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/inference/serving-llms-vllm",
+  "branch": "main",
+  "pushedAt": "2026-11-19T16:35:45Z",
+  "contentHash": "98450a93fdbb951f9e84ad1bf9b6563d209ab127572d369bdcbf0f03f2d14b75",
+  "fetchedAt": "2026-11-19T16:38:35.503Z"
+}

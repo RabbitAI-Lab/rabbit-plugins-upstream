@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/compileiq-bootstrap",
+  "identifier": "NVIDIA/skills/skills/compileiq-bootstrap",
+  "repo": "NVIDIA/skills",
+  "path": "skills/compileiq-bootstrap",
+  "branch": "main",
+  "pushedAt": "2026-11-19T14:26:53Z",
+  "contentHash": "f872d12ba2bc7c383dc02f1f08e88a03b136c1a2e5e2ba58fe9f6de276344c22",
+  "fetchedAt": "2026-11-19T16:38:24.843Z"
+}

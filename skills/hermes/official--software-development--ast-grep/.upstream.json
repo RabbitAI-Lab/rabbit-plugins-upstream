@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/software-development/ast-grep",
+  "identifier": "official/software-development/ast-grep",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/software-development/ast-grep",
+  "branch": "main",
+  "pushedAt": "2026-11-19T16:35:45Z",
+  "contentHash": "74787763317975a7b46d01cfdf2f8a5f3d8f56669f8aa3dbb1b1051d3889dc0f",
+  "fetchedAt": "2026-11-19T16:38:35.371Z"
+}

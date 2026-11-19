@@ -1,7 +1,10 @@
 # DOCA UROM Service — Tasks
 
 **Where to start:** The order is `configure → build → modify →
-run → test → debug`. The `## test` verb is an iterative loop,
+run → test → debug`. `## run` deploys the service and ends with
+the single-operation smoke (`## test` step 1); the remaining
+`## test` steps then run before any production traffic, which is
+the hand-off back to `## run`. The `## test` verb is an iterative loop,
 not a one-shot pass — see the eval-loop overlay in `## test`
 below. For the DOCA UROM Service, `build` and `modify` are
 about *deployment configuration* (container image selection,
@@ -12,7 +15,7 @@ These verbs cover the in-scope service operational workflows
 for an external operator deploying this service on BlueField.
 Every step assumes the operator has consulted the live public
 DOCA UROM Service Guide (reachable through
-[doca-public-knowledge-map ## DOCA services](../../doca-public-knowledge-map/SKILL.md#doca-services))
+doca-public-knowledge-map ## DOCA services (`doca-public-knowledge-map/SKILL.md#doca-services`))
 and is using it as the authoritative reference; this file
 prescribes the *order* and *what to look up where*, not a
 copy-paste runbook.
@@ -38,9 +41,9 @@ substrate before the container starts.
 2. **Confirm DOCA is installed on the BlueField.** This skill
    expects DOCA already on the BlueField Arm. If that has not
    been verified, run
-   [`doca-setup ## test`](../../doca-setup/TASKS.md#test)
+   `doca-setup ## test` (`doca-setup/TASKS.md#test`)
    first. If there is no install yet, route to
-   [`doca-setup ## no-install`](../../doca-setup/TASKS.md#no-install)
+   `doca-setup ## no-install` (`doca-setup/TASKS.md#no-install`)
    for the public NGC DOCA container path.
 3. **Confirm the paired host-library version.** Per the
    version-contract rule in
@@ -54,13 +57,15 @@ substrate before the container starts.
    that host library version. If the user does not know which
    tag to deploy, the right answer is to look it up in the
    live public DOCA UROM Service Guide whose version matches
-   the host library — NOT to memorize a tag. Route any
-   version-mismatch ambiguity to
-   [`doca-version`](../../doca-version/SKILL.md).
+   the host library — NOT to memorize a tag. If neither the
+   Compatibility Policy nor that guide can be reached, stop and
+   report the pairing as unverified; do not deploy on a guessed tag.
+   Route any version-mismatch ambiguity to
+   `doca-version/SKILL.md`.
 4. **Confirm the underlying RDMA transport substrate.** This
    service consumes the BlueField's `doca-rdma` substrate to
    actually move bytes. Walk the substrate bring-up per
-   [`doca-rdma ## configure`](../../libs/doca-rdma/TASKS.md#configure)
+   `doca-rdma ## configure` (`doca-rdma/TASKS.md#configure`)
    — at minimum, confirm the BlueField port the service will
    use is up and the inter-node fabric routes between the
    BlueFields the host fleet will exchange UROM operations
@@ -68,6 +73,10 @@ substrate before the container starts.
    surface as stalled completions at the host (per
    [`CAPABILITIES.md ## Error taxonomy`](CAPABILITIES.md#error-taxonomy)
    layer 3) and the user will incorrectly blame the service.
+   Predeclare the exact memory regions the workload needs to
+   export and the minimum read, write, or atomic permissions
+   each operation requires. Broader exports or permissions are
+   not an acceptable bring-up shortcut.
 5. **Decide the three service-configuration axes.** Per the
    configuration-axes table in
    [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes),
@@ -76,8 +85,9 @@ substrate before the container starts.
       components and collective primitives this service
       instance exposes for host offload. Cap-bound to the
       BlueField generation; cross-check against what the
-      host's `doca_urom_cap_*` query (per
-      [`doca-urom CAPABILITIES.md ## Capabilities and modes`](../../libs/doca-urom/CAPABILITIES.md#capabilities-and-modes))
+      host's `doca_urom_service_get_plugins_list` query (UROM has no cap family;
+      the plugins list is the capability surface; per
+      `doca-urom CAPABILITIES.md ## Capabilities and modes` (`doca-urom/CAPABILITIES.md#capabilities-and-modes`))
       believes is supported.
     - **Enqueue queue depth** — sized to the cluster's
       intended in-flight depth per host. Undersized queues
@@ -85,7 +95,9 @@ substrate before the container starts.
       queues hide service-side handler stalls.
     - **DOCA Comch endpoint pairing** — how the host's
       `doca-urom` library reaches the service (over a DOCA
-      Comch endpoint pair). Access is governed by that Comch
+      Comch endpoint pair). Name the exact intended host
+      endpoint(s) and reject broad, wildcard, ambiguous, or
+      unintended pairing. Access is governed by that Comch
       pairing plus the underlying RDMA permissions; there is
       NO service-side authorization list to author — a
       host-visible `DOCA_ERROR_NOT_PERMITTED` is a Comch /
@@ -102,16 +114,30 @@ substrate before the container starts.
    `doca_urom.yaml` mounts only the `plugins/` directory and
    the log directory — there is no service config file to
    author or place on the filesystem.
-7. **Sanity check before container start.** Confirm with the
+7. **Verify the access boundary before container start.**
+   Use the documented read-only
+   `doca-comm-channel-admin/SKILL.md`
+   scan and the program-side
+   `doca-comch TASKS.md ## test` (`doca-comch/TASKS.md#test`)
+   view to confirm the Comch mapping contains only the intended
+   host endpoint(s). Then walk
+   `doca-rdma TASKS.md ## test` (`doca-rdma/TASKS.md#test`)
+   to confirm the intended peer, healthy transport, narrowly
+   scoped exported regions, and only the permissions required
+   by the workload. Capture both outputs. Any unexpected peer,
+   over-broad export, excess permission, or non-green substrate
+   blocks startup.
+8. **Sanity check before container start.** Confirm with the
    user: which BlueField the service will run on; which
    container tag the operator intends to pull; which host
    library version the deployment is paired against; which
    UCX components / collectives the service will expose; what
    the queue depth is; how the paired hosts reach the service
-   over DOCA Comch. If any of those are unclear, stop and
+   over DOCA Comch; which RDMA regions and permissions are
+   required; and that step 7 passed. If any are unclear, stop and
    ask — do not start the container against an
    underspecified configuration; a deploy that races past
-   step 7 is the canonical source of the layer-4 (paired-version
+   step 8 is the canonical source of the layer-4 (paired-version
    mismatch) debug failures in
    [`CAPABILITIES.md ## Error taxonomy`](CAPABILITIES.md#error-taxonomy).
 
@@ -130,7 +156,7 @@ through `doca-urom`), that is not a service question:
 
 - For host-side `doca-urom` applications, the build is the
   host library's build — route to
-  [`doca-urom ## build`](../../libs/doca-urom/TASKS.md#build).
+  `doca-urom ## build` (`doca-urom/TASKS.md#build`).
   The service's contribution to that conversation is
   *that the service's container tag must be one the DOCA
   Compatibility Policy lists as paired with the host's
@@ -138,14 +164,14 @@ through `doca-urom`), that is not a service question:
   host-library skill.
 - For applications that build directly against `doca-rdma`
   (skipping UROM), the build is the RDMA library's build —
-  route to [`doca-rdma ## build`](../../libs/doca-rdma/TASKS.md#build).
+  route to `doca-rdma ## build` (`doca-rdma/TASKS.md#build`).
 
 If the user is instead asking how to build the **service
 container itself** from source, that is *not* an
 external-operator workflow — the container ships pre-built
 from NGC and rebuilding it is out of scope for this skill.
 Route to the public DOCA UROM Service Guide via
-[doca-public-knowledge-map ## DOCA services](../../doca-public-knowledge-map/SKILL.md#doca-services).
+doca-public-knowledge-map ## DOCA services (`doca-public-knowledge-map/SKILL.md#doca-services`).
 
 ## modify
 
@@ -194,7 +220,7 @@ pinning re-checked on every modification.
    change that the operator validates in isolation may break
    one of the paired hosts' workloads. Coordinate with the
    host-side skill (see
-   [`doca-urom ## test`](../../libs/doca-urom/TASKS.md#test))
+   `doca-urom ## test` (`doca-urom/TASKS.md#test`))
    before scaling a service config change to a fleet that's
    actively offloading.
 
@@ -217,7 +243,12 @@ BEFORE layering any HPC workload on top.
    invent the tag. A wrong tag is the canonical source of
    layer-1 (container runtime) and layer-4 (paired-version
    mismatch) errors simultaneously.
-2. **Start the container per the public Container Deployment
+2. **Re-check the pre-start gate.** Confirm the captured Comch
+   and RDMA verification from [`## configure`](#configure)
+   step 7 is current for this intended host set, export set,
+   and permission set. If it is stale or non-green, do not
+   start the container.
+3. **Start the container per the public Container Deployment
    Guide pattern.** Set the daemon's `SERVICE_ARGS` /
    `UROM_PLUGIN_PATH` and mount the `plugins/` directory as
    the public DOCA UROM Service Guide names (there is no
@@ -225,29 +256,31 @@ BEFORE layering any HPC workload on top.
    command shape (e.g. `docker run` / `crictl` / BlueField
    container manager) is documented in the Container
    Deployment Guide reachable through
-   [`doca-public-knowledge-map ## DOCA services`](../../doca-public-knowledge-map/SKILL.md#doca-services).
-3. **Confirm the container is running, not restart-looping.**
+   `doca-public-knowledge-map ## DOCA services` (`doca-public-knowledge-map/SKILL.md#doca-services`).
+4. **Confirm the container is running, not restart-looping.**
    A restart loop is a layer-1 symptom per
    [`CAPABILITIES.md ## Error taxonomy`](CAPABILITIES.md#error-taxonomy)
    (container runtime / image tag / plugins mount); diagnose
    it before touching service config.
-4. **Watch the service container's logs for startup.** The
+5. **Watch the service container's logs for startup.** The
    container's stdout is the primary observability surface.
    The service should report that it is ready to receive host
    enqueues, name the UCX-component / collective surface it
    exposed, and report its queue sizing. The agent should NOT
    invent log line formats; quote what the live container is
    emitting.
-5. **Confirm at least one paired host can `doca_ctx_start`
+6. **Confirm one intended paired host can `doca_ctx_start`
    against this BlueField.** On a single paired host, walk
-   [`doca-urom ## configure`](../../libs/doca-urom/TASKS.md#configure)
+   `doca-urom ## configure` (`doca-urom/TASKS.md#configure`)
    through `doca_ctx_start`; success here means the service
    accepted the host's connection and the host's library can
    begin enqueueing. Failure here surfaces layer-1 (container
    not reachable, or the DOCA Comch pairing not established) or
    layer-4 (host-library / service version mismatch) — walk
    the layers in [`## debug`](#debug).
-6. **Single-operation smoke (next: `## test` step 1).**
+   An unintended host connecting is a failed access-boundary
+   check, not a successful availability test.
+7. **Single-operation smoke (next: `## test` step 1).**
    Before driving any HPC workload, walk `## test` step 1
    once: one host enqueue → observe the service receive it
    in logs → observe one completion at the host. Only then
@@ -256,7 +289,7 @@ BEFORE layering any HPC workload on top.
 For the runtime version + container-tag cross-checks that
 underlie *"my service behaves differently from what the host
 library expects"*, see
-[`doca-version TASKS.md ## run`](../../doca-version/TASKS.md#run)
+`doca-version TASKS.md ## run` (`doca-version/TASKS.md#run`)
 and apply the host-library + service-version paired-version
 overlay from
 [`CAPABILITIES.md ## Version compatibility`](CAPABILITIES.md#version-compatibility).
@@ -281,7 +314,7 @@ not just one BlueField generation):
 | --- | --- | --- |
 | 1 → 3 → 1 | Step 3 (cluster-pattern check) often reveals an as-deployed gap in queue sizing or in the exposed UCX-component / collective surface; loop back to step 1 | [`## test`](#test) step 3 |
 | 1 → ## debug | When the single-host smoke (step 1) does NOT see the service receive the enqueue, the deployment is non-functional — escalate to `## debug` immediately, do not run later steps | [`## debug`](#debug) |
-| 2 → ## configure → 2 | When the cap-query disagreement smoke (step 2) shows the host's `doca_urom_cap_*` and the service's exposed surface don't match, the service config is wrong — loop back to `## configure` step 5 and re-run | [`## configure`](#configure) |
+| 2 → ## configure → 2 | When the cap-query disagreement smoke (step 2) shows the host's `doca_urom_service_get_plugins_list` result and the service's exposed surface don't match, the service config is wrong — loop back to `## configure` step 5 and re-run | [`## configure`](#configure) |
 | 1..4 → ## run | Each loop iteration ends with a smoke; if all four pass, hand off to live `## run` traffic | [`## run`](#run) |
 
 The agent's rule: every mutation re-opens the sweep. A
@@ -300,9 +333,9 @@ prevent.
    [`CAPABILITIES.md ## Error taxonomy`](CAPABILITIES.md#error-taxonomy)
    before any HPC stack effort is wasted.
 2. **Cap-query agreement smoke.** From a paired host, run the
-   matching `doca_urom_cap_*` queries against the active
-   `doca_devinfo` (per
-   [`doca-urom ## configure`](../../libs/doca-urom/TASKS.md#configure)
+   `doca_urom_service_get_plugins_list` query against a started
+   Service (per
+   `doca-urom ## configure` (`doca-urom/TASKS.md#configure`)
    step 4) and confirm the operation families / collective
    variants the host says are supported are the same set the
    service exposed in its config. A disagreement here means
@@ -310,13 +343,19 @@ prevent.
    knows how to use, or the service is exposing less than the
    host library expects — either way, layer-2 or layer-4
    debugging starts here.
-3. **Cluster-pattern smoke.** With 2 paired hosts on the
-   service, exercise a small batch (e.g. a few hundred puts
-   across two nodes) AND a small collective (e.g. a small
-   all-reduce across the same two nodes). Confirms the
-   service's queue depth supports the in-flight pattern AND
-   that the service's exposed collective surface actually
-   executes end-to-end. A service that passes step 1 but
+3. **Cluster-pattern smoke.** Use the shipped samples, not
+   ad-hoc test code: build `urom_multi_workers_bootstrap` and
+   `urom_ping_pong` from `/opt/mellanox/doca/samples/doca_urom/`
+   (`meson /tmp/build && ninja -C /tmp/build`, per the samples
+   `README.md`), run the bootstrap sample against the service to
+   confirm several workers start, then run the built ping-pong binary from `/tmp/build/`
+   with `-d <IB device>` under the Open MPI launcher across two
+   processes (on the two paired hosts when the cluster has them).
+   Confirms the service's queue depth supports the in-flight pattern
+   and that worker-to-worker traffic executes end-to-end. DOCA ships
+   no collective (all-reduce) sample: a collective smoke runs through
+   the user's own UCC / upstream HPC stack, never through collective
+   code written from memory. A service that passes step 1 but
    fails step 3 most often has a queue-depth (layer 2) or
    collective-variant (layer 4) gap.
 4. **Capability snapshot.** Save the *as-deployed* answer to:
@@ -337,7 +376,7 @@ down without clearing the layer above. The first four layers match
 [`CAPABILITIES.md ## Error taxonomy`](CAPABILITIES.md#error-taxonomy).
 The host-visible `DOCA_ERROR_*` overlay is documented on the
 host side in
-[`doca-urom CAPABILITIES.md ## Error taxonomy`](../../libs/doca-urom/CAPABILITIES.md#error-taxonomy);
+`doca-urom CAPABILITIES.md ## Error taxonomy` (`doca-urom/CAPABILITIES.md#error-taxonomy`);
 this ladder maps the host symptom back to the service-side
 layer the operator must touch.
 
@@ -356,7 +395,7 @@ layer the operator must touch.
    Note: a host-visible `DOCA_ERROR_NOT_PERMITTED` here is a
    DOCA Comch-pairing / RDMA-permission signal (or a host-side
    `doca_dev` access problem fixed per
-   [`doca-setup ## debug`](../../doca-setup/TASKS.md#debug)) —
+   `doca-setup ## debug` (`doca-setup/TASKS.md#debug`)) —
    NOT a service-side authorization rejection; there is no
    such authz layer in the shipped binary.
 2. **Service-side resource layer.** Host enqueues succeed;
@@ -378,18 +417,18 @@ layer the operator must touch.
    errors. Resolution: confirm the BlueField port the service
    is using is up and the inter-node fabric routes correctly;
    route to
-   [`doca-rdma TASKS.md ## debug`](../../libs/doca-rdma/TASKS.md#debug)
+   `doca-rdma TASKS.md ## debug` (`doca-rdma/TASKS.md#debug`)
    layers 5-7 for substrate-layer diagnosis. **Do NOT try to
    fix this from service config; it is a substrate property,
    not a service knob.**
-4. **Paired-version mismatch layer.** Host's `doca_urom_cap_*`
+4. **Paired-version mismatch layer.** The host's plugins list
    claims an operation family / collective is supported, but
    runtime enqueue returns `DOCA_ERROR_NOT_SUPPORTED` (despite
    a healthy container). Resolution:
    cross-check `pkg-config --modversion doca-urom` on the
    host AND this service's container tag against the DOCA
    Compatibility Policy and the four-way-match rule in
-   [`doca-version TASKS.md ## debug`](../../doca-version/TASKS.md#debug)
+   `doca-version TASKS.md ## debug` (`doca-version/TASKS.md#debug`)
    layer 2. The fix is either upgrading the service
    container or downgrading the host library; **do NOT paper
    over with a retry, and do NOT change the service's exposed
@@ -413,7 +452,7 @@ layer the operator must touch.
    debug that is not service-specific (BlueField install,
    BlueField kernel, DOCA library errors the service may
    surface), drop to
-   [`doca-debug TASKS.md ## debug`](../../doca-debug/TASKS.md#debug).
+   `doca-debug TASKS.md ## debug` (`doca-debug/TASKS.md#debug`).
 
 ## Command appendix
 
@@ -426,13 +465,16 @@ guide, not prose recall.
 
 **Infra-aware preamble (every row below).** Per the bundle's
 detect → prefer → fall back → report contract documented in
-[`doca-structured-tools-contract ## The agent behavior contract`](../../doca-structured-tools-contract/SKILL.md#the-agent-behavior-contract),
+`doca-structured-tools-contract ## The agent behavior contract` (`doca-structured-tools-contract/SKILL.md#the-agent-behavior-contract`),
 the agent should:
 
-1. Probe for the matching structured helper FIRST (`doca-env --json`
-   for version + devices + libraries + drivers + hugepages in
-   one shot on the BlueField; the BlueField container manager's
-   structured status output when available).
+1. Check whether your site provides an optional structured helper
+   (for example an env-report script that emits JSON) per
+   `doca-structured-tools-contract`; none ships with public DOCA,
+   so probe it with `command -v <site env-report helper>` if your
+   site has one, and by default use the real commands
+   (`pkg-config --modversion doca-common`, `doca_caps --version`,
+   `cat /opt/mellanox/doca/applications/VERSION`).
 2. If the probe succeeds, the structured tool's output is the
    authoritative answer and the agent SHOULD NOT also run the
    manual command in the row below. Report *"using structured
@@ -440,20 +482,20 @@ the agent should:
 3. If the probe fails, fall back to the manual command in the
    row. Report *"falling back to manual chain"*.
 4. The schemas the structured tools emit are defined in
-   [`doca-structured-tools-contract ## Schemas`](../../doca-structured-tools-contract/SKILL.md#schemas);
+   `doca-structured-tools-contract ## Schemas` (`doca-structured-tools-contract/SKILL.md#schemas`);
    the version-handling semantics (four-way match, NGC,
    headers-win) are owned by
-   [`doca-version`](../../doca-version/SKILL.md).
+   `doca-version/SKILL.md`.
 
 | Purpose | Command (class shape) | Owning step | Reads as healthy when … |
 | --- | --- | --- | --- |
 | Container lifecycle | The BlueField container manager's start / stop / status command for the service container, per the public Container Deployment Guide | [`## run`](#run) | Container `running`, restart count stable. |
-| Container logs | The BlueField container manager's log-stream command for the service container | [`## debug`](#debug) layers 1-2 + 4 | Service-ready line on startup; no queue-saturation / handler-stuck lines repeating; no paired-version warnings. |
+| Container logs | The BlueField container manager's log-stream command for the service container | [`## debug`](#debug) layers 1-2 + 4 | The readiness signal the version-matched guide documents (quote it from the guide; do not assert an exact log string); no queue-saturation / handler-stuck lines repeating; no paired-version warnings. |
 | Container tag in use | The BlueField container manager's image-inspect command for the running service container | [`## run`](#run) step 1; [`## debug`](#debug) layer 4 | Tag matches what the public DOCA UROM Service Guide names for the paired host library version. |
 | Host-library version (on paired host) | `pkg-config --modversion doca-urom` on the host | [`## configure`](#configure) step 3; [`## debug`](#debug) layer 4 | A semver string the DOCA Compatibility Policy lists as compatible with this service's container tag. |
-| BlueField DOCA version | `doca_caps --version` on the BlueField | [`## configure`](#configure) step 2; [`## debug`](#debug) layer 4 | A semver string matching the BlueField's `pkg-config --modversion doca-common`; disagreement = partial install per [`doca-version`](../../doca-version/SKILL.md). |
-| Host-side cap-query agreement | A `doca_urom_cap_*` query from a paired host against the active `doca_devinfo`, then compare to the service's exposed surface | [`## test`](#test) step 2; [`## debug`](#debug) layer 4 | The host's cap-query result is a subset of (or equal to) the service's exposed UCX-component / collective surface. |
-| Substrate port check | `ibv_devinfo` (sudo) for the BlueField port the service is using; OR the substrate-side checks from [`doca-rdma TASKS.md ## debug`](../../libs/doca-rdma/TASKS.md#debug) | [`## configure`](#configure) step 4; [`## debug`](#debug) layer 3 | `PORT_ACTIVE` with a sane MTU; substrate counters not error-spiking. |
+| BlueField DOCA version | `doca_caps --version` on the BlueField | [`## configure`](#configure) step 2; [`## debug`](#debug) layer 4 | A semver string matching the BlueField's `pkg-config --modversion doca-common`; disagreement = partial install per `doca-version/SKILL.md`. |
+| Host-side cap-query agreement | A `doca_urom_service_get_plugins_list` query from a paired host against a started Service, then compare to the service's exposed surface | [`## test`](#test) step 2; [`## debug`](#debug) layer 4 | The host's cap-query result is a subset of (or equal to) the service's exposed UCX-component / collective surface. |
+| Substrate port check | `ibv_devinfo` (sudo) for the BlueField port the service is using; OR the substrate-side checks from `doca-rdma TASKS.md ## debug` (`doca-rdma/TASKS.md#debug`) | [`## configure`](#configure) step 4; [`## debug`](#debug) layer 3 | `PORT_ACTIVE` with a sane MTU; substrate counters not error-spiking. |
 | Single-operation smoke | A single put or get from one paired host through `doca-urom` to a peer, with the service's logs observed in parallel | [`## run`](#run) step 6; [`## test`](#test) step 1 | Service logs show the enqueue received; host's progress engine fires the completion. |
 
 Three cross-cutting rules for this appendix:
@@ -475,7 +517,7 @@ Three cross-cutting rules for this appendix:
 - **Cross-link instead of duplicate.** Cross-cutting env
   commands (port-state, `devlink`, `ip link`, `ethtool`) live
   in
-  [`doca-setup TASKS.md ## Command appendix`](../../doca-setup/TASKS.md#command-appendix);
+  `doca-setup TASKS.md ## Command appendix` (`doca-setup/TASKS.md#command-appendix`);
   this appendix names only the DOCA-UROM-Service-specific
   ones.
 
@@ -483,24 +525,24 @@ Three cross-cutting rules for this appendix:
 
 - **Installing DOCA on the BlueField** — out of scope here.
   Route to
-  [`doca-setup ## configure`](../../doca-setup/TASKS.md#configure)
+  `doca-setup ## configure` (`doca-setup/TASKS.md#configure`)
   for env preparation and
-  [`doca-setup ## test`](../../doca-setup/TASKS.md#test) for
+  `doca-setup ## test` (`doca-setup/TASKS.md#test`) for
   install health verification, or
-  [`doca-setup ## no-install`](../../doca-setup/TASKS.md#no-install)
+  `doca-setup ## no-install` (`doca-setup/TASKS.md#no-install`)
   for the public NGC DOCA container path.
 - **Writing a host-side `doca-urom` application** — not a
   service question. Route to
-  [`doca-urom ## configure`](../../libs/doca-urom/TASKS.md#configure)
+  `doca-urom ## configure` (`doca-urom/TASKS.md#configure`)
   for the host-side bring-up,
-  [`doca-urom ## build`](../../libs/doca-urom/TASKS.md#build)
+  `doca-urom ## build` (`doca-urom/TASKS.md#build`)
   for the build pattern, and
-  [`doca-urom ## test`](../../libs/doca-urom/TASKS.md#test)
+  `doca-urom ## test` (`doca-urom/TASKS.md#test`)
   for the host-side smoke. The host library and the service
   are a paired contract, NOT a single artifact.
 - **Bringing up the RDMA / RoCE / IB substrate between
   BlueFields** — owned by
-  [`doca-rdma ## configure`](../../libs/doca-rdma/TASKS.md#configure).
+  `doca-rdma ## configure` (`doca-rdma/TASKS.md#configure`).
   This service *uses* the substrate; it does not stand it
   up.
 - **Designing the HPC stack (MPI collective algorithms, UCX
@@ -511,12 +553,12 @@ Three cross-cutting rules for this appendix:
 - **Other DOCA services** (DMS / DTS / BlueMan / Firefly /
   Flow-Inspector / HBN / Argus / …) — not this service.
   Route to
-  [doca-public-knowledge-map ## DOCA services](../../doca-public-knowledge-map/SKILL.md#doca-services)
+  doca-public-knowledge-map ## DOCA services (`doca-public-knowledge-map/SKILL.md#doca-services`)
   for the routing table and the matching `services/<service>`
   skill when it exists (e.g.
-  [`doca-firefly ## configure`](../doca-firefly/TASKS.md#configure)
+  `doca-firefly ## configure` (`doca-firefly/TASKS.md#configure`)
   for time synchronization,
-  [`doca-dms ## configure`](../doca-dms/TASKS.md#configure)
+  `doca-dms ## configure` (`doca-dms/TASKS.md#configure`)
   for device management). The container-shaped deployment
   pattern is shared; the per-service domain is different.
 
@@ -541,4 +583,4 @@ Three cross-cutting rules for this appendix:
   and the cap-query agreement smoke pass, never before.
 - For URL routing to the DOCA UROM Service Guide and other
   public DOCA documentation, see
-  [doca-public-knowledge-map ## DOCA services](../../doca-public-knowledge-map/SKILL.md#doca-services).
+  doca-public-knowledge-map ## DOCA services (`doca-public-knowledge-map/SKILL.md#doca-services`).
