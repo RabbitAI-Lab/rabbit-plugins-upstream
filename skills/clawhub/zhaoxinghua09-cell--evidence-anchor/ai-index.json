@@ -1,0 +1,26 @@
+{
+  "name": "evidence-anchor",
+  "version": "1.0.0",
+  "intents": [
+    {"intent": "校验报告里的文件:行号锚点是否还能打开", "entry": "scripts/anchor.py check R.md --root ."},
+    {"intent": "列出文档里所有锚点及状态", "entry": "scripts/anchor.py list R.md --root ./repo"},
+    {"intent": "发布前拦住失效引用", "entry": "scripts/anchor.py check docs/report.md --root . || exit 1"},
+    {"intent": "确认某个行号在改版后是否仍然有效", "entry": "scripts/anchor.py check R.md --root <repo>"}
+  ],
+  "triggers": [
+    "check my citations", "verify anchors", "does this line number still exist",
+    "核对引用", "核实行号", "证据门禁", "发布前核对"
+  ],
+  "not_for": [
+    "判断锚点那一行内容是否正确",
+    "替作者补写锚点或参考文献",
+    "检索外部网页或数据库"
+  ],
+  "theory_anchor": {
+    "principle": "结论必须挂锚：三条锚点位置（文件:行号 / 包内不存在（路径）/ 属判断项（无文件可指））",
+    "why": "可验证性不是加个测试，而是每条结论都能被第三方打开核对——包括承认哪些核对不了"
+  },
+  "related": ["lgd-skill-review", "skill-improver"],
+  "entry": "scripts/anchor.py",
+  "_note": "intents 为机器初拟，待人工校订"
+}

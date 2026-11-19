@@ -1,44 +1,51 @@
-## Description: <br>
-Identifies negative emotions such as crying, anger, fear, and distress in children's surveillance footage and produces alerts, soothing reminders, and caregiver-facing reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies possible signs of distress in children from images or video and provides structured analysis reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External caregivers, daycare operators, and developers use this skill to analyze child-focused images or video for negative emotion signals and to retrieve cloud-hosted historical analysis reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Children's images, videos, remote media URLs, report history requests, and account-linked identifiers may be sent to configured Life Emergence cloud services. <br>
-Mitigation: Install and operate only after confirming consent, legal basis, retention and deletion terms, and who can access historical reports. <br>
-Risk: The skill silently creates or reuses identity for report association. <br>
-Mitigation: Review identity handling before deployment and restrict report-history access to authorized operators. <br>
-Risk: The authoritative security verdict is suspicious because consent and retention controls are unclear. <br>
-Mitigation: Treat deployment as requiring security and privacy review before use with real children's media. <br>
+## Use Case:
 
+Caregivers and childcare staff use the skill to review child images or video for possible signs of distress and receive a structured report. Results are advisory and do not replace adult supervision.
 
-## Reference(s): <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
-- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-emotion-recognition-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-backed text output from Python CLI commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links and optional local output files when the CLI --output parameter is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.15 (source: server release evidence) <br>
+Risk: ClawScan marks the release suspicious, citing reported account and credential handling, possible transmission of sensitive child footage, and mismatches between documented options and behavior; the scan was partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the reported data handling and account setup before installation. Submit child footage only when authorized and when the external processing is acceptable, and do not rely on the analysis as a substitute for adult supervision.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/18072937735/skills/smyx-child-emotion-recognition-analysis)
+- [API reference](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured analysis report with results, suggestions, and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports depend on the supplied image, video, or URL; history requests return report records.]
+
+## Skill Version(s):
+
+1.0.39 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

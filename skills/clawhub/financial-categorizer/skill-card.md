@@ -1,43 +1,54 @@
-## Description: <br>
-Process bank transaction CSV exports (Nordea, ICA), auto-categorize transactions using configurable rules, manage transaction links, and generate analytical database views. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Process bank transaction CSV exports (Nordea, ICA), auto-categorize transactions using configurable rules, manage transaction links, and generate analytical database views.
 
-## Publisher: <br>
-[patello](https://clawhub.ai/user/patello) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[patello](https://clawhub.ai/user/patello)
 
-## Use Case: <br>
-External users and developers use this skill to manage local personal-finance transaction data, categorize bank CSV imports, link transfers and reimbursements, and generate SQLite-backed finance summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The tool operates on user-selected bank-export CSVs and local SQLite finance databases. <br>
-Mitigation: Install and run it only in workspaces where access to those local finance files is intended, and keep private data outside the skill directory. <br>
-Risk: Cleanup, linking, auto-discovery, and recurring-payment changes can modify local finance records. <br>
-Mitigation: Back up the SQLite database first and prefer dry-run previews where supported before committing changes. <br>
-Risk: The security review identified a safety gap for `remove-recurring --hard`, which deletes a recurring-payment configuration immediately without a confirmation prompt. <br>
-Mitigation: Use `remove-recurring --hard` only after confirming the target ID and maintaining a current database backup. <br>
+## Use Case:
 
+Individual finance users and developers can import local bank CSV exports into SQLite, organize transactions with category rules and links, and review balances, spending summaries, recurring payments, and cash flow.
 
-## Reference(s): <br>
-- [Financial Categorizer on ClawHub](https://clawhub.ai/patello/skills/financial-categorizer) <br>
-- [patello publisher profile](https://clawhub.ai/user/patello) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands, configuration examples, and local data-management instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces guidance for local CSV import, SQLite database updates, categorization rules, transaction links, recurring-payment tracking, and reporting workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.10.0 (source: server release metadata and artifact _meta.json) <br>
+Risk: ClawScan reports a high-confidence risk that removing a manual category match may also delete user-created transfer links, affecting financial reports. The scan verdict is suspicious, and inspection was incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Back up the SQLite database and review transaction links before and after manual-match changes; inspect dry-run results before cleanup or auto-linking.
+
+Risk: Supplying --yes or -y can bypass confirmation prompts for destructive database operations.
+
+Mitigation: Back up the database, use a dry run where available, and bypass prompts only after reviewing the intended changes.
+
+## Reference(s):
+
+- [financial-categorizer on ClawHub](https://clawhub.ai/patello/skills/financial-categorizer)
+- [patello on ClawHub](https://clawhub.ai/user/patello)
+
+## Skill Output:
+
+**Output Type(s):** [Text, SQLite database records and analytical views]
+
+**Output Format:** [Terminal text and local SQLite data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Updates a local finance database; destructive operations provide confirmation prompts and dry-run options where supported.]
+
+## Skill Version(s):
+
+1.17.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

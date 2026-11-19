@@ -1,45 +1,50 @@
-## Description: <br>
-Close the loop on long-running remote work: pick the right completion signal per platform (CI, EAS, deploy, releases), run monitoring in the background, notify on finish, and never treat trigger as success. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Close the loop on long-running remote work: pick the right completion signal per platform (CI, EAS, deploy, releases), run monitoring in the background, notify on finish, and never treat trigger as success. Includes GitHub Actions via the Wander scripts when applicable.
 
-## Publisher: <br>
-[erergb](https://clawhub.ai/user/erergb) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[erergb](https://clawhub.ai/user/erergb)
 
-## Use Case: <br>
-Developers and agents use Wander to monitor long-running CI, build, deploy, and release tasks through the platform that owns the terminal status, then verify success or collect failure details before proceeding. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: External Wander scripts are cloned and executed outside the skill package. <br>
-Mitigation: Verify the cloned Wander repository and scripts before installing or running them. <br>
-Risk: GitHub CLI authentication may expose CI status and failed logs from repositories the user can access. <br>
-Mitigation: Confirm the active GitHub account and repository scope before starting background monitoring. <br>
-Risk: Background monitors can keep reading CI state until the watched job reaches a terminal status. <br>
-Mitigation: Stop monitors that are no longer needed and review their terminal output before acting on the result. <br>
+## Use Case:
 
+Developers and engineers use Wander to monitor long-running CI, build, deploy, and release jobs until the platform reports an authoritative terminal result, including GitHub Actions workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/erergb/wander) <br>
-- [Wander repository](https://github.com/ERerGB/wander) <br>
-- [Wander v1 scope: GitHub Actions today](https://github.com/ERerGB/wander/blob/main/README.md#v1-scope-github-actions-today) <br>
-- [Wander edge cases](https://github.com/ERerGB/wander/blob/main/EDGE_CASES.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May start background monitors and inspect CI status or failed logs through the user's authenticated tooling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata) <br>
+Risk: ClawScan rates this release suspicious with medium confidence because its GitHub Actions guide includes repository updates and rerunning failed jobs beyond the stated monitoring and notification purpose; the watcher implementation was not supplied for verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: The scanner recommends not installing. If considering it anyway, review the guide's repository push and rerun instructions and confirm affected workflows' side effects and costs are acceptable.
+
+## Reference(s):
+
+- [GitHub Actions adapter guide](references/github-actions.md)
+- [Wander repository](https://github.com/ERerGB/wander)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.11 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

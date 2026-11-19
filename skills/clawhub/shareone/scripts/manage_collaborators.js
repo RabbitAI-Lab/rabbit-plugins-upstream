@@ -1,126 +1,53 @@
 #!/usr/bin/env node
 
 const {
+    emitError,
     CREDENTIAL_MODE_SUDOWORK_PROXY,
     detectCredentialMode,
-    getBaseUrl,
+    parseShareReference,
     printShareOneScriptError,
     requestShareOneBuffer,
     requestShareOneJson,
     resolveDirectApiKey,
 } = require('./shareone_client');
 
-const args = process.argv.slice(2);
-let ref = null;
-let apiKey = null;
-let action = null;
-let usernames = [];
-let explicitBaseUrl = null;
-
-function usage() {
-    console.error('Usage: node manage_collaborators.js <share_link_or_id> --action <add|remove|list> [--usernames <name1,name2>] [--api-key <owner_key>] [--base-url <url>]');
-    console.error('  协作者按 ShareOne 用户名标识（不是 API Key）。');
-}
-
-function nextValue(index, flag) {
-    const value = args[index + 1];
-    if (value === undefined) {
-        console.error(`ERROR:MISSING_VALUE:${flag}`);
-        usage();
-        process.exit(1);
-    }
-    return value;
-}
-
-for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
-    if (arg === '--api-key') {
-        apiKey = nextValue(i, arg);
-        i += 1;
-    } else if (arg === '--base-url') {
-        explicitBaseUrl = nextValue(i, arg);
-        process.env.SHAREONE_BASE_URL = explicitBaseUrl;
-        i += 1;
-    } else if (arg === '--action') {
-        action = nextValue(i, arg);
-        i += 1;
-    } else if (arg === '--usernames') {
-        usernames = nextValue(i, arg).split(',').map(k => k.trim()).filter(Boolean);
-        i += 1;
-    } else if (!arg.startsWith('--') && !ref) {
-        ref = arg;
-    } else {
-        console.error(`ERROR:UNKNOWN_ARGUMENT:${arg}`);
-        usage();
-        process.exit(1);
-    }
-}
-
-if (!ref) {
-    console.error('ERROR:MISSING_SHARE_REF');
-    usage();
-    process.exit(1);
-}
+const {commandLine} = require('./cli_args');
+const {values, positional: ref} = commandLine({
+    summary: 'list or change collaborators as the share owner. Identify collaborators by ShareOne username. Another deployment requires explicit --base-url or SHAREONE_BASE_URL configuration.',
+    result: 'the observed collaborators list or per-username add/remove results. Check each result; not_found is not a successful grant.',
+    positional: 'share_link_or_id', options: {
+        '--action': {value: 'action', choices: ['add','remove','list'], description: 'Required collaboration operation.'},
+        '--usernames': {value: 'name1,name2', description: 'ShareOne usernames, required for add/remove; not API keys.'},
+        '--api-key': true, '--base-url': true},
+});
+const apiKey = values['api-key'], action = values.action;
+const usernames = (values.usernames || '').split(',').map(name => name.trim()).filter(Boolean);
 
 if (!action) {
-    console.error('ERROR:MISSING_ACTION');
-    console.error('Provide --action add, --action remove, or --action list.');
-    process.exit(1);
+    emitError('ERROR:MISSING_ACTION', ['Provide --action add, --action remove, or --action list.'].join('\n'));
 }
 
 const validActions = new Set(['add', 'remove', 'list']);
 if (!validActions.has(action)) {
-    console.error(`ERROR:INVALID_ACTION:${action}`);
-    console.error('--action must be one of: add, remove, list.');
-    process.exit(1);
+    emitError(`ERROR:INVALID_ACTION:${action}`, ['--action must be one of: add, remove, list.'].join('\n'));
 }
 
 if ((action === 'add' || action === 'remove') && usernames.length === 0) {
-    console.error(`ERROR:MISSING_USERNAMES`);
-    console.error(`--usernames is required for --action ${action}.`);
-    process.exit(1);
-}
-
-function parseRef(input) {
-    const raw = String(input || '').trim();
-    let path = raw.split('?')[0].split('#')[0];
-
-    try {
-        if (raw.includes('://')) {
-            const parsed = new URL(raw);
-            if (!explicitBaseUrl) {
-                process.env.SHAREONE_BASE_URL = `${parsed.protocol}//${parsed.host}`;
-            }
-            path = parsed.pathname;
-        }
-    } catch (_) {
-        path = raw.split('?')[0].split('#')[0];
-    }
-
-    const parts = path.split('/').filter(Boolean);
-    const knownPrefixes = new Set(['s', 'md', 'pdf', 'ppt', 'word']);
-
-    if (parts.length >= 2 && knownPrefixes.has(parts[0])) {
-        return parts[1];
-    }
-
-    return parts[parts.length - 1] || raw;
+    emitError(`ERROR:MISSING_USERNAMES`, [`--usernames is required for --action ${action}.`].join('\n'));
 }
 
 (async () => {
+    const {shareRef} = parseShareReference(ref);
+    if (!shareRef) emitError('MISSING_SHARE_REF');
     const credentialMode = await detectCredentialMode();
     if (credentialMode.mode === CREDENTIAL_MODE_SUDOWORK_PROXY && apiKey) {
-        console.error('ERROR:SUDOWORK_MANAGED_KEY');
-        console.error('Sudowork 模式下不要传 --api-key；请通过本 skill 的 save_api_key.js 或 create_guest_key.js 设置 ShareOne API Key。');
-        process.exit(1);
+        emitError('ERROR:SUDOWORK_MANAGED_KEY', ['Sudowork 模式下不要传 --api-key；请通过本 skill 的 save_api_key.js 或 create_guest_key.js 设置 ShareOne API Key。'].join('\n'));
     }
 
     if (credentialMode.mode !== CREDENTIAL_MODE_SUDOWORK_PROXY && !resolveDirectApiKey(apiKey)) {
-        console.error('ERROR:KEY_NOT_FOUND');
-        process.exit(1);
+        emitError('ERROR:KEY_NOT_FOUND');
     }
 
-    const shareRef = parseRef(ref);
     const apiPath = `/api/v1/shares/${encodeURIComponent(shareRef)}/collaborators`;
 
     if (action === 'list') {
@@ -143,6 +70,5 @@ function parseRef(input) {
 
     console.log(JSON.stringify(result, null, 2));
 })().catch((error) => {
-    printShareOneScriptError(error);
-    process.exit(1);
+    process.exit(printShareOneScriptError(error));
 });

@@ -1,7 +1,7 @@
 {
-  "_comment": "超级股票操盘 Skill —— 26 位数字人专家注册表。每位专家包含 name / skill_name / role / research_area / trigger_scenarios / priority(high/mid/low)。专家之间通过编排层进行圆桌讨论，输出可被风控闸门校验的结论。",
-  "version": "1.0.0",
-  "total": 26,
+  "_comment": "超级股票操盘 Skill —— 31 位数字人专家注册表。每位专家包含 name / skill_name / role / research_area / trigger_scenarios / priority(high/mid/low)。专家之间通过编排层进行圆桌讨论，输出可被风控闸门校验的结论。v1.1.0 新增「短线战术派」（吴国平、陈旭、王炳洁、曹芝烨、杨涛），沉淀自《短线金手》七册实战战法。",
+  "version": "1.1.0",
+  "total": 31,
   "schools": [
     { "school": "价值派", "experts": ["沃伦·巴菲特", "查理·芒格", "海榕君"] },
     { "school": "技术派", "experts": ["王开", "赵哲", "魏嵬猫哥"] },
@@ -9,7 +9,8 @@
     { "school": "宏观策略派", "experts": ["刘高畅", "陶川", "陈洪斌", "宏观经济学家"] },
     { "school": "量化风控派", "experts": ["塔勒布", "聂方义", "策略分析师"] },
     { "school": "配置理财派", "experts": ["纳瓦尔", "望京博格", "基金研究员", "杨业伟", "银行理财专家", "保险专家"] },
-    { "school": "另类", "experts": ["黄金研究专家", "外汇研究员", "i小万", "魏亚妮"] }
+    { "school": "另类", "experts": ["黄金研究专家", "外汇研究员", "i小万", "魏亚妮"] },
+    { "school": "短线战术派", "experts": ["吴国平", "陈旭", "王炳洁", "曹芝烨", "杨涛"] }
   ],
   "experts": [
     {
@@ -218,6 +219,46 @@
       "role": "散户情绪分析师",
       "research_area": "社区情绪、散户行为、舆情、情绪极值",
       "trigger_scenarios": ["社区情绪", "题材情绪", "事件驱动"],
+      "priority": "mid"
+    },
+    {
+      "name": "吴国平",
+      "skill_name": "private-equity-profit-system",
+      "role": "私募盈利系统导师",
+      "research_area": "私募盈利系统总纲、龙虎榜主力追踪、F10 主力解析、K线语言、分时盘口、止损体系",
+      "trigger_scenarios": ["短线战机", "打板", "集合竞价", "龙虎榜", "主力吸筹", "个股异动"],
+      "priority": "high"
+    },
+    {
+      "name": "陈旭",
+      "skill_name": "limit-up-sniper-morphology",
+      "role": "涨停狙击专家",
+      "research_area": "涨停板战法、58 式涨停形态、连板接力、涨停基因、题材龙头",
+      "trigger_scenarios": ["打板", "涨停", "连板", "题材爆发", "短线战机"],
+      "priority": "high"
+    },
+    {
+      "name": "王炳洁",
+      "skill_name": "intraday-chart-pankou",
+      "role": "分时图盘口专家",
+      "research_area": "分时图波形、盘口语言、买卖点、量价配合、T+0 日内",
+      "trigger_scenarios": ["分时图", "盘中交易", "盘口", "T+0", "短线战机"],
+      "priority": "high"
+    },
+    {
+      "name": "曹芝烨",
+      "skill_name": "rapid-pumping-casebase",
+      "role": "急速拉升专家",
+      "research_area": "主升浪图谱、急速拉升案例库、量价起飞点、突破形态、题材爆发",
+      "trigger_scenarios": ["急速拉升", "主升浪", "突破", "题材爆发", "短线战机"],
+      "priority": "mid"
+    },
+    {
+      "name": "杨涛",
+      "skill_name": "kline-mastery-basics",
+      "role": "K线精通专家",
+      "research_area": "K线基础、黄金分割、时间窗口、大长腿、缺口、背离、实战利器",
+      "trigger_scenarios": ["K线", "黄金分割", "大长腿", "缺口", "背离", "短线战机"],
       "priority": "mid"
     }
   ]

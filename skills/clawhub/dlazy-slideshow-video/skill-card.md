@@ -1,43 +1,55 @@
-## Description: <br>
-Dlazy Slideshow Video uses the pinned dLazy CLI to turn slides or documents into narrated slideshow-style videos with voiceover and transitions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turn slides or documents into narrated slideshow videos with voiceover and transitions when a slideshow-style video is requested.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill to create explainer, report, courseware, or training videos from slides, PDFs, and other documents through dLazy's hosted file-to-video workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and attached files are sent to dLazy as a third-party service. <br>
-Mitigation: Use the skill only when organizational policy allows uploading that content to dLazy, and avoid attaching sensitive files unless approved. <br>
-Risk: The dLazy API key grants access to the user's dLazy organization. <br>
-Mitigation: Store the key through the dLazy CLI, and rotate or revoke it when access is no longer needed. <br>
+## Use Case:
 
+External users can turn presentations and documents into narrated explainer, report, courseware, or training videos through dLazy's hosted service.
 
-## Reference(s): <br>
-- [Dlazy Slideshow Video on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-slideshow-video) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and streamed CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the pinned @dlazy/cli 1.2.3 package and may upload user-selected local files to dLazy for project-scoped video generation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and release evidence) <br>
+Risk: ClawScan marks the skill suspicious because scanners report organization project-listing and login actions that do not clearly match its slideshow-video purpose, as well as a broad activation trigger; the verdict does not establish malicious intent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the dLazy CLI's authentication and project-listing behavior and confirm the activation scope before use.
+
+Risk: Prompts and attached files are sent to dLazy's hosted API and media storage.
+
+Mitigation: Only send documents and credentials that are approved for use with the hosted service.
+
+## Reference(s):
+
+- [dLazy service](https://dlazy.com)
+- [dLazy CLI package on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy CLI project page](https://github.com/dlazy-ai/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video files, Text]
+
+**Output Format:** [Generated slideshow video with text responses in the CLI; video encoding depends on the hosted service.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Attached local files are uploaded to dLazy storage before processing.]
+
+## Skill Version(s):
+
+1.0.39 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

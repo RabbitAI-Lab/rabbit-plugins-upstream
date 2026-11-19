@@ -1,45 +1,59 @@
-## Description: <br>
-MindVault helps agents archive conversations, extract memory rules, create project snapshots, and apply the DRAS-V thinking protocol. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MindVault archives conversations to local JSONL and helps agents extract durable rules and project snapshots for long-term memory across sessions and local frameworks.
 
-## Publisher: <br>
-[zhouxin121](https://clawhub.ai/user/zhouxin121) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zhouxin121](https://clawhub.ai/user/zhouxin121)
 
-## Use Case: <br>
-Developers and agent users can use this skill to preserve local conversation history, extract reusable memory rules, restore project context, and trigger a structured DRAS-V reasoning flow during agent work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Conversation archives and operational metadata can retain sensitive chats, credentials, private third-party content, or sensitive file paths. <br>
-Mitigation: Avoid archiving secrets or private content, protect the archive directory, and review generated JSONL, memory notes, and project snapshots before sharing or reusing them. <br>
-Risk: The security review notes uncertainty around local-only storage, Coze cloud use, and paid automation data destinations. <br>
-Mitigation: Use local modes by default and confirm data destinations, retention, and any report-sending behavior before enabling Coze or paid automation workflows. <br>
+## Use Case:
 
+Developers using local agent frameworks can archive conversations, extract durable working rules, and create project snapshots to restore context across sessions.
 
-## Reference(s): <br>
-- [Mindvault on ClawHub](https://clawhub.ai/zhouxin121/skills/mindvault) <br>
-- [Additional MindVault usage guide](https://pay.ldxp.cn/item/p0r2lb) <br>
-- [Elite Longterm Memory](https://clawhub.ai/nextfrontierbuilds/elite-longterm-memory) <br>
-- [Memory Tiering](https://clawhub.ai/sarielwang93/memory-tiering) <br>
-- [Fluid Memory](https://clawhub.ai/againta/fluid-memory) <br>
-- [Memory Qdrant](https://clawhub.ai/zuiho-kai/memory-qdrant) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, JSONL archives, Markdown snapshots, and shell commands for bundled Python scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local archive files, memory notes, and project snapshot documents when the agent follows the skill instructions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: ClawHub release metadata) <br>
+Risk: Security evidence reports a disguised WorkBuddy session path used to evade keyword blocking.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the source behavior and run the skill only when its access to the intended WorkBuddy session data is understood.
+
+Risk: Security evidence reports that paired call records may be omitted from archives, and scan coverage was partial.
+
+Mitigation: Check exported archives for completeness before relying on them as a lossless record, and retain the source data until verified.
+
+Risk: Conversation archives may retain sensitive content from original messages.
+
+Mitigation: Avoid archiving conversations containing secrets where possible, and review or remove sensitive entries from local archives.
+
+## Reference(s):
+
+- [MindVault on ClawHub](https://clawhub.ai/zhouxin121/skills/mindvault)
+- [Project repository listed in package metadata (provenance unavailable)](https://github.com/zhouxin121/mindvault)
+- [MindVault feature details](https://www.jinengpu.chat/mindvault-detail.html)
+
+## Skill Output:
+
+**Output Type(s):** [JSONL files, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Local JSONL conversation archives and Markdown memory or project files, with shell command examples and written guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Archive actions are user-triggered; archived conversation files can contain the original messages, including sensitive information.]
+
+## Skill Version(s):
+
+1.3.1 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

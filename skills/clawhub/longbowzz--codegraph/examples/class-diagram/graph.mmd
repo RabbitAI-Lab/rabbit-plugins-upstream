@@ -1,0 +1,41 @@
+classDiagram
+  direction LR
+  class CodeGraphPlugin {
+    +apply(ctx, config)
+  }
+  class GraphBuilder {
+    +buildDiagram(options)
+  }
+  class WalkthroughBuilder {
+    +buildWalkthrough(options)
+  }
+  class Validator {
+    +validate(mmd, locs)
+  }
+  class HtmlBuilder {
+    +buildHtml(mmd, locs)
+  }
+  class WalkthroughHtmlBuilder {
+    +buildWalkthrough(mmd)
+  }
+  class MermaidAdapter {
+    +parseDiagram(source)
+    +render(id, source)
+  }
+  class LocationTable {
+    +normalizeLocations()
+  }
+  class Renderer {
+    +renderDiagram()
+  }
+
+  CodeGraphPlugin --> GraphBuilder : registers
+  CodeGraphPlugin --> WalkthroughBuilder : registers
+  CodeGraphPlugin --> Renderer : hosts
+  GraphBuilder --> Validator : invokes
+  GraphBuilder --> HtmlBuilder : invokes
+  WalkthroughBuilder --> WalkthroughHtmlBuilder : invokes
+  Validator ..> MermaidAdapter : parses
+  HtmlBuilder ..> MermaidAdapter : renders
+  HtmlBuilder ..> LocationTable : normalizes
+  Renderer ..> MermaidAdapter : renders

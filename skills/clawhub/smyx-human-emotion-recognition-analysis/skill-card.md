@@ -1,46 +1,54 @@
-## Description: <br>
-Analyzes frontal face images or videos with a cloud visual AI service to produce emotion recognition results, abnormal emotion flags, report links, and history lookups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes frontal-face images and videos to classify emotional expressions, estimate intensity, flag anomalies, and provide analysis reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Developers and agents use this skill to analyze user-provided face media for structured emotion recognition reports and report-history retrieval. Results are for reference only and should not be treated as psychological counseling or clinical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Face images or videos and inferred emotion or mental-state data are sent to the publisher's cloud service. <br>
-Mitigation: Use only with appropriate consent and authorization, and avoid uploading sensitive media unless cloud processing is acceptable. <br>
-Risk: Report history is account-linked and may retrieve prior cloud analysis results for the resolved identity. <br>
-Mitigation: Review history output before sharing it, and segregate or clear workspace identity data when reports should not be reused across sessions. <br>
-Risk: The skill may store account tokens in a local workspace SQLite database. <br>
-Mitigation: Restrict workspace access and remove local token/database files when decommissioning or transferring the workspace. <br>
+## Use Case:
 
+External users and developers can submit face images or videos for emotion classifications, intensity estimates, anomaly flags, and report lookup. The skill describes its results as informational and not a substitute for professional mental health assessment.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-human-emotion-recognition-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/18072937735) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API reference](references/api_doc.md) <br>
-- [Shared analysis API reference](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON analysis reports with optional report links and saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local image/video files or public media URLs, supports basic/standard/json detail levels, and can query cloud report history.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The security assessment flags sensitive media processing whose purpose and limits are not clearly disclosed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain consent and verify the media upload destination and handling before submitting face images or videos.
+
+Risk: The security assessment flags credential handling and persistent account, identity, and token data.
+
+Mitigation: Restrict where credentials may be sent and understand the account registration and data storage behavior before use. The assessment was partial, so some evidence may be incomplete.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-human-emotion-recognition-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured JSON analysis reports and Markdown report tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may include emotion classifications, intensity scores, anomaly flags, and report links; the skill says its results do not replace professional psychological consultation or diagnosis.]
+
+## Skill Version(s):
+
+1.0.19 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

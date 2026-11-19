@@ -1,41 +1,54 @@
-## Description: <br>
-Executes implementation plans with progress tracking, checkpoint validation, and quality gates after planning is complete and tasks are ready to implement. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Executes implementation plans with progress tracking, checkpoint validation, and quality gates.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to execute existing implementation plans in dependency order, track task progress, apply TDD and checkpoint validation, and prepare completion reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow may guide high-impact production migration or data-change work. <br>
-Mitigation: Keep dry-run, explicit confirmation, verification, and cleanup gates in place before applying changes. <br>
-Risk: Task progress or completion reports could be inaccurate if checkpoints are skipped. <br>
-Mitigation: Validate acceptance criteria, tests, quality checks, and blockers at each checkpoint before marking tasks complete. <br>
+## Use Case:
 
+Developers use this skill after planning to implement tasks in dependency order, track progress, and check work against acceptance criteria, tests, and quality gates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-project-execution) <br>
-- [Attune plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with code, shell command, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: External delegation may expose project information without checking destination approval or giving a user-facing privacy warning.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before delegating, review whether the destination is approved, consider what project information will be shared, and inform the user.
+
+Risk: The security report notes instruction-scope concerns and partial scan coverage, so unresolved references and other behavior may not have been fully assessed.
+
+Mitigation: Review referenced materials and the skill's behavior before use, and restrict delegated access to the project information needed for the task.
+
+## Reference(s):
+
+- [Project homepage (skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/attune)
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-attune-project-execution)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Markdown, Configuration, Shell commands]
+
+**Output Format:** [Code changes, Markdown checklists and progress reports, shell commands, and JSON execution-state data.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs depend on the implementation plan and project; execution-state data may record task status and progress metrics.]
+
+## Skill Version(s):
+
+1.10.3 (source: SKILL.md frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

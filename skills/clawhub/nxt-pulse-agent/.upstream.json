@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/nxt-pulse-agent",
   "slug": "nxt-pulse-agent",
   "ownerHandle": null,
-  "version": "0.5.0",
-  "updatedAt": 1778492687174,
-  "contentHash": "a2416627b3808216c561743cf935435d3ac11a99f86372d280ead75d5002648b",
-  "fetchedAt": "2026-07-26T19:23:28.170Z"
+  "version": "0.5.1",
+  "updatedAt": 1794976272438,
+  "contentHash": "57ec919cd6ee086726938434d65ab572f3dda79c9ba0bdfbd0167a0f509039de",
+  "fetchedAt": "2026-11-19T16:45:03.191Z"
 }

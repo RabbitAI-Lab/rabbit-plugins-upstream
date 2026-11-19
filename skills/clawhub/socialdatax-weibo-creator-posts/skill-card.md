@@ -1,43 +1,48 @@
-## Description: <br>
-用于微博创作者数据、微博创作者内容列表、近期发布、内容调研和创作者内容分析。覆盖 Weibo creator posts，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于查找微博创作者近期发布内容，并支持内容调研、风格分析、创作者对标和账号跟踪。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+开发者、研究人员和运营分析人员可查询微博创作者的近期内容，用于内容调研、风格分析、创作者对标和账号跟踪。
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The security assessment rates the skill suspicious because its instructions invoke an unpinned CLI package with automatic approval; the assessment was partial because some referenced paths could not be matched to bundled artifacts.
+
+Mitigation: Review the CLI package and its referenced behavior, and pin it to a reviewed version before installation.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External users and developers use this skill to fetch and summarize Weibo creator post lists for recent publishing review, creator benchmarking, content research, and account tracking through SocialDataX. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [JSON, Analysis, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses SOCIALDATAX_API_KEY for data access. <br>
-Mitigation: Keep the API key private and provide it only through the expected environment variable. <br>
-Risk: Unbounded pagination can increase API credit use. <br>
-Mitigation: Prefer bounded options such as --pages or --max-items before using --all. <br>
-Risk: Returned Weibo creator-post data may be incomplete or depend on API availability and input identifiers. <br>
-Mitigation: Check returned errors, verify user IDs or profile URLs, and retry once for non-balance network or API failures when appropriate. <br>
+**Output Format:** [JSON creator-post data with concise text summaries when requested]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo-creator-posts) <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
+**Other Properties Related to Output:** [May include post text, media links, publish times, interaction counts, author details, and pagination data when provided by the source.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration guidance, JSON, Markdown] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON data from SocialDataX responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY, supports bounded pagination with pages or max-items, and can summarize returned Weibo post fields.] <br>
+0.1.24 (source: server-resolved release metadata)
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,59 @@
-## Description: <br>
-Analyzes resting pet video from a fixed camera to estimate respiratory rate, compare it with species and body-size norms, and return abnormal-breathing warnings with report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes a resting pet video to estimate breathing rate, compare it with species and size ranges, and return an informational alert report; it does not provide a veterinary diagnosis.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External pet owners, veterinary staff, and pet-care operators use this skill to analyze resting pet media for respiratory-rate abnormalities and retrieve cloud report history. Results are health-reference warnings, not veterinary diagnosis or treatment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet videos or video URLs may be sent to LifeEmergence cloud services. <br>
-Mitigation: Use only with informed user approval for cloud processing, avoid sensitive media, and prefer a version that clearly prompts before upload and documents retention and deletion. <br>
-Risk: Reports may be tied to an automatically resolved or created identity with weak user control over account linkage and history lookup. <br>
-Mitigation: Review identity-linking behavior before deployment and require clear controls for account linkage, report history access, and deletion. <br>
-Risk: Service tokens may be stored in the workspace data directory. <br>
-Mitigation: Restrict workspace access, avoid sharing workspaces that contain service tokens, and rotate or remove tokens when access is no longer needed. <br>
-Risk: Respiratory-rate warnings could be mistaken for medical diagnosis. <br>
-Mitigation: Present results as health-reference screening only and advise veterinary review for persistent, severe, or concerning symptoms. <br>
+## Use Case:
 
+Pet owners, animal-care staff, and veterinary teams can review a resting pet video for an estimated respiratory rate and an alert when the result falls outside reference ranges. Treat the report as informational and seek veterinary care for persistent or urgent concerns.
 
-## Reference(s): <br>
-- [Pet Respiratory API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown report or JSON result from CLI/API, with optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include respiratory-rate findings, warning level, recommendations, report links, and historical report tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The security review flags possible external video uploads, account creation, and stored authentication data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the service endpoint and authentication behavior before use, and submit only videos and credentials you are authorized to share.
+
+Risk: The security review marks the skill suspicious and notes a gap between its advertised monitoring purpose and the behavior demonstrated by reviewed code; the scan was partial.
+
+Mitigation: Review the complete skill and confirm its behavior matches the intended monitoring task before relying on its reports.
+
+Risk: Respiratory-rate estimates could be mistaken for a veterinary diagnosis or delay care.
+
+Mitigation: Treat results as informational only and contact a veterinarian for persistent abnormalities or urgent symptoms.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-respiratory-rate-abnormal-detect-analysis)
+- [API interface notes](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured respiratory-rate report as text or JSON; Markdown tables for report lists.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results are informational and are not a veterinary diagnosis.]
+
+## Skill Version(s):
+
+1.0.11 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

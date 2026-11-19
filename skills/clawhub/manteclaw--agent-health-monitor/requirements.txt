@@ -1,0 +1,17 @@
+# agent-health-monitor dependencies (v1.0.3)
+# Install with: pip install -r requirements.txt
+#
+# Required: balance-monitor.py imports web3 at module top level, and
+# healthcheck.py uses web3 and eth-account for the Alchemy RPC and
+# executor-key checks. Without web3 the balance check cannot run at all
+# (master_monitor.py reports that as a failure; it never silently passes).
+web3
+eth-account
+
+# Optional: alert_bot.py prefers python-telegram-bot when installed and
+# falls back to plain HTTPS otherwise. Uncomment to use it:
+# python-telegram-bot
+
+# Optional: the Bankr key checks use the litcoin SDK when installed.
+# Without it they report "SDK not installed" and skip. Uncomment to use it:
+# litcoin

@@ -1,44 +1,55 @@
-## Description: <br>
-Detects liveness from a single selfie image via the Didit standalone API, supporting checks for physical presence, spoofing or presentation attacks, passive liveness verification, and face quality and luminance metrics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects backend code to Didit's passive liveness API to check a single selfie for liveness and spoofing, and interpret its score, status, and warnings.
 
-## Publisher: <br>
-[rosasalberto](https://clawhub.ai/user/rosasalberto) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[rosasalberto](https://clawhub.ai/user/rosasalberto)
 
-## Use Case: <br>
-Developers and identity-verification teams use this skill to call Didit's passive liveness endpoint for selfie-based anti-spoofing checks, face-quality review, and liveness scoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill processes sensitive face images through Didit for biometric liveness analysis. <br>
-Mitigation: Use only with appropriate consent and clear retention expectations before submitting selfie images. <br>
-Risk: Didit API credentials could be exposed through prompts, logs, or shared command history. <br>
-Mitigation: Use a dedicated API key and avoid placing credentials in prompts, logs, or committed files. <br>
-Risk: Saved API requests may affect retention expectations. <br>
-Mitigation: Review Didit's retention and Business Console settings, especially where saved API requests are enabled by default. <br>
+## Use Case:
 
+Developers integrating selfie-based liveness checks use this skill to send a single selfie to Didit's API and handle the result, including decline, spoofing, duplicate-face, and blocklist warnings.
 
-## Reference(s): <br>
-- [Didit documentation](https://docs.didit.me) <br>
-- [Didit Passive Liveness API reference](https://docs.didit.me/standalone-apis/passive-liveness) <br>
-- [Didit liveness overview](https://docs.didit.me/core-technology/liveness/overview) <br>
-- [ClawHub release page](https://clawhub.ai/rosasalberto/didit-liveness-detection) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration, API calls] <br>
-**Output Format:** [Markdown guidance with code examples, shell commands, and JSON API response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires DIDIT_API_KEY and sends a user selfie image to the Didit API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill sends a selfie and API key to Didit's external liveness service; saved requests store the image and enroll a face in the search index.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an API key with only the access needed, review Didit's data handling for your use case, and set save_api_request=false when storage and enrollment are not needed.
+
+Risk: The security review is partial because some local references could not be resolved, and the skill does not declare its tool scope.
+
+Mitigation: Review the complete skill and script behavior, and confirm the API key's permissions before deployment.
+
+## Reference(s):
+
+- [Didit Passive Liveness API Reference](https://docs.didit.me/standalone-apis/passive-liveness)
+- [Didit Liveness Feature Guide](https://docs.didit.me/core-technology/liveness/overview)
+- [Didit Documentation](https://docs.didit.me)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown documentation with Python and TypeScript examples and JSON response shapes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes request and response examples, setup instructions, and result-handling guidance.]
+
+## Skill Version(s):
+
+1.4.0 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

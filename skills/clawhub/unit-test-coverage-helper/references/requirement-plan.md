@@ -2,7 +2,7 @@
 
 ## Live Requirement
 
-Validated demand: Teams need repeatable help adding useful unit tests and raising test coverage for existing codebases. This requirement is supported by 12 separate online signals across 2 source families, so it represents broader demand rather than a single isolated request.
+Validated demand: Teams need repeatable help adding useful unit tests and raising test coverage for existing codebases. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
 
 ## Audience
 
@@ -14,37 +14,36 @@ software-and-data
 
 ## Requirement Score
 
-Total: 90/100
+Total: 100/100
 
 Demand: 70/70
 
 Local feasibility: 30/30
 
-Evidence coverage: 12 signals across 2 source families.
+Evidence coverage: 12 signals across 3 source families.
 
 Scoring rationale:
 
 - Evidence count: 12; required minimum: 3.
-- Distinct source families: 2; sources: github, hacker-news.
+- Distinct source families: 3; sources: github, hacker-news, segmentfault.
 - Demand score: 70/70 based on corroboration, source diversity, and professional/community signal.
 - Local feasibility score: 30/30.
 - Implementation is a documentation, workflow, code, or analysis skill that can run on ordinary CPU hardware.
-- Score capped because corroborating evidence does not come from at least three different source families.
 
 ## Evidence
 
-- github-issues (2026-07-24T03:40:51+00:00): [spec: trustworthy centred Mumble experience, performance, and platform parity](https://github.com/mongre25-droid/mumble/issues/12)
-- github-issues (2026-07-25T14:17:05+00:00): [WAL replay caches a query plan per batch with no eviction — unbounded memory growth on large rebuilds](https://github.com/verveguy/liminis-context-graph/issues/238)
-- github-issues (2026-07-24T05:31:22+00:00): [[Contract] — Multi-Outcome (Categorical) Markets](https://github.com/Arena1X/InsightArena/issues/1329)
-- github-issues (2026-07-23T18:58:18+00:00): [[devkit/integration] Add integration test CI job](https://github.com/StellarCommons/stellar-fee-tracker/issues/499)
-- github-issues (2026-07-26T10:21:07+00:00): [Table UI Definition: derive the "Cell components" list from the SELECT query, not from the whole schema](https://github.com/kitamura-tetsuo/outliner/issues/4238)
-- github-issues (2026-07-23T13:19:56+00:00): [Reject empty payment batch payloads](https://github.com/mux-labs/mux-backend/issues/597)
-- github-issues (2026-07-23T13:19:57+00:00): [Document Docker Compose local setup](https://github.com/mux-labs/mux-backend/issues/598)
-- hacker-news-search (2026-07-26T09:20:47+00:00): [Clinical failure rates over the decades: yikes](https://news.ycombinator.com/item?id=49056211)
-- hacker-news-search (2026-07-26T01:40:01+00:00): [LLM Usage in Debian: Three Proposals](https://news.ycombinator.com/item?id=49053737)
-- hacker-news-search (2026-07-26T00:58:31+00:00): [Ask HN: How would you harden AI changes to a 1M-line legacy SaaS before review?](https://news.ycombinator.com/item?id=49053524)
-- hacker-news-search (2026-07-25T19:42:51+00:00): [Engineering management after the cost of code collapsed](https://news.ycombinator.com/item?id=49050839)
-- hacker-news-search (2026-07-25T09:21:07+00:00): [Buz – A fork of Bun using modern Zig, with sub-1s incremental builds](https://news.ycombinator.com/item?id=49045975)
+- github-issues (2026-11-09T08:29:04+00:00): [Job-native Role collaborationを完成させ、旧実行・認可経路を置換する](https://github.com/hiono/taxion/issues/283)
+- github-issues (2026-11-10T06:46:01+00:00): [V2 \| ERP P111 — ضبط Entitlements والفروع والسقوف وMaker Checker قبل الإتاحة](https://github.com/walidatiyaai2025-gif/FOOD/issues/2845)
+- hacker-news-search (2026-11-16T23:52:37+00:00): [Ask HN: Who's really winning with AI-Coding?](https://news.ycombinator.com/item?id=50525329)
+- github-issues (2026-11-18T20:10:51+00:00): [[F17] Remaining Epic F work after the 18 November run](https://github.com/lukaskourilcz/devshark/issues/646)
+- hacker-news-search (2026-11-10T07:20:54+00:00): [Question: How to control unit tests in Agentic Pipelines](https://news.ycombinator.com/item?id=50437119)
+- github-issues (2026-11-19T00:53:27+00:00): [config migrate's other printed commands are spelled from the report base, not where it ran: the strict = false repair grund fmt --marker --write formats another project and exits 0, and a pasted member: command migrates the workspace root](https://github.com/agent-grounds/grund/issues/1458)
+- github-issues (2026-11-19T05:52:05+00:00): [Stuck-backlog Phase 3 follow-up: persistence budget queue-pause intervals and inherited-round exemption](https://github.com/shubhodeep1/coding-workflows/issues/9768)
+- segmentfault-search (2026-11-19T06:13:39.900887+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
+- segmentfault-search (2026-11-19T06:13:39.901391+00:00): [javascript](https://segmentfault.com/t/javascript)
+- segmentfault-search (2026-11-19T06:13:39.901391+00:00): [typescript](https://segmentfault.com/t/typescript)
+- segmentfault-search (2026-11-19T06:13:39.901391+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
+- segmentfault-search (2026-11-19T06:13:39.901391+00:00): [Writing Great Unit Tests: Best and Worst Practices](https://segmentfault.com/a/1190000009709754)
 
 ## How The Skill Meets The Requirement
 

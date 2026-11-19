@@ -1,0 +1,50 @@
+{
+  "name": "skill-audit",
+  "version": "0.1.1",
+  "description": "Autonomous agent + auditor for agent skills: discovers SKILL.md files, flags prompt-injection & secrets, scores them and publishes a leaderboard. Zero deps.",
+  "bin": {
+    "skill-audit": "bin/cli.js"
+  },
+  "main": "./src/audit.js",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "agent": "node agent.js --once"
+  },
+  "keywords": [
+    "agent",
+    "skills",
+    "audit",
+    "security",
+    "prompt-injection",
+    "claude",
+    "clawhub",
+    "openclaw",
+    "skills.sh",
+    "quality",
+    "lint",
+    "report-card",
+    "leaderboard",
+    "autonomous-agent"
+  ],
+  "license": "MIT",
+  "author": "Hugo Rodriguez <hugororo2003@gmail.com> (https://github.com/hugororo2003)",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "src",
+    "bin",
+    "agent.js",
+    "config.example.json",
+    "SKILL.md",
+    "AGENTS.md",
+    "README.md",
+    "LICENSE",
+    "examples"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hugororo2003/skill-audit.git"
+  },
+  "homepage": "https://github.com/hugororo2003/skill-audit#readme"
+}

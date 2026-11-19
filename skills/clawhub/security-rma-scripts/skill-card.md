@@ -1,40 +1,49 @@
-## Description: <br>
-Generates compliant investment advisory scripts and talk points for China wealth-management workflows, including stock and fund recommendations, market commentary, client objections, and communication templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates draft investment advisory scripts, market commentary, client objection responses, and compliance checklists for China wealth management professionals.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Securities brokers, wealth-management advisors, and relationship managers use this skill to draft client-facing advisory scripts, product recommendation language, market commentary, objection handling, and compliance-aware communication templates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Compliance-sensitive financial content could be used as client-facing advice without sufficient review. <br>
-Mitigation: Route recommendations, sales scripts, and market commentary through the user's firm compliance process before client use. <br>
-Risk: Generated investment language may not match a client's jurisdiction, risk profile, language preference, or product suitability. <br>
-Mitigation: Confirm jurisdiction, language preference, risk profile, and product suitability before using or adapting outputs. <br>
+## Use Case:
 
+External securities brokers, wealth advisors, and relationship managers can use the skill to draft client communication scripts, market commentary, objection responses, and compliance review checklists. Outputs are reference drafts that require appropriate suitability checks and qualified human review before client use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/security-rma-scripts) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown and template text with occasional code-style structured examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are advisory communication templates and should be reviewed for jurisdiction, suitability, risk disclosure, and firm compliance before client use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: server release metadata and frontmatter) <br>
+Risk: The security review was partial: the manifest could not be parsed, one reference was unresolved, and the static tool-misuse check was incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Resolve the reference and review the manifest and skill behavior before installation; treat the benign verdict as limited assurance.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/gechengling/skills/security-rma-scripts)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Draft client communication scripts, templates, checklists, and explanatory guidance in text or Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses placeholders and abstract scenarios; drafts need suitability checks and qualified compliance review before client use.]
+
+## Skill Version(s):
+
+3.0.5 (source: frontmatter, ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

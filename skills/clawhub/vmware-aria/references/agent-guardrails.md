@@ -9,12 +9,12 @@ This page covers what goes wrong most often with vmware-aria specifically:
 **alert-to-resource correlation**. For the full cross-skill guardrail set, the
 complete system prompt, and the small-model failure-mode checklist, see the
 canonical guide in
-[vmware-monitor's references](https://github.com/zw008/VMware-Monitor/blob/main/skills/vmware-monitor/references/agent-guardrails.md).
+[vmware-monitor's references](https://github.com/vmware-skills/VMware-Monitor/blob/main/skills/vmware-monitor/references/agent-guardrails.md).
 
 These guardrails are adapted, with thanks, from the working configuration
 [@juanpf-ha](https://github.com/juanpf-ha) developed while running vmware-aria
 and vmware-monitor against a production vSphere estate
-([VMware-AIops#31](https://github.com/zw008/VMware-AIops/issues/31)).
+([VMware-AIops#31](https://github.com/vmware-skills/VMware-AIops/issues/31)).
 
 > **Disclaimer**: This is a community-maintained open-source project and is
 > **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom
@@ -40,7 +40,10 @@ the whole sequence server-side and returns:
   `resource_id`), plus `resource_name`, `resource_kind`, and a `confirmed`
   flag. Every key is always present; unresolved values are explicit `null`.
 - `next_step` — the exact vmware-monitor tool and argument to call next, or
-  `null` when there is nothing confirmed to hand off.
+  `null` when there is nothing confirmed to hand off. For an "Objects are not
+  receiving data from adapter instance" alert it is vmware-aria's own
+  `list_resources` with `collection_status=NO_DATA_RECEIVING`, which names the
+  objects that stopped reporting.
 - `warnings` — why anything above is incomplete; empty on success.
 
 A resource that cannot be resolved degrades to a warning plus explicit nulls
@@ -81,4 +84,4 @@ untouched:
 Local-model compatibility is an explicit design constraint for this family, and
 the evidence base is small. If you evaluate a model against this skill, a
 report of what worked and what did not is genuinely useful:
-[github.com/zw008/VMware-Aria/issues](https://github.com/zw008/VMware-Aria/issues).
+[github.com/vmware-skills/VMware-Aria/issues](https://github.com/vmware-skills/VMware-Aria/issues).

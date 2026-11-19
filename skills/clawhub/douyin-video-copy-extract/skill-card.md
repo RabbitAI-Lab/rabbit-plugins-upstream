@@ -1,42 +1,49 @@
-## Description: <br>
-用于抖音文案提取、抖音文案一键提取、抖音视频文案提取、抖音视频转文字、抖音口播转文字和抖音逐字稿，用户粘贴抖音视频链接、分享文案或 aweme_id 后，提取视频上下文、原视频简介和口播逐字稿，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Extracts Douyin video context, original descriptions, and spoken transcripts from a video link, share text, or aweme ID.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and agents use this skill to submit or check Douyin speech-to-text transcript jobs from a video URL, share text, aweme_id, or existing job_id. The skill returns visible video context, the original description, transcript text, copy-ready text, a concise version, and task status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends the provided Douyin URL, share text, aweme_id, or job_id to SocialDataX using SOCIALDATAX_API_KEY. <br>
-Mitigation: Use it only when the user is comfortable sharing that input with SocialDataX and has configured the intended SOCIALDATAX_API_KEY. <br>
-Risk: Transcript jobs may remain in progress after the initial command. <br>
-Mitigation: Keep the returned job_id and poll the same job instead of submitting duplicate transcript jobs. <br>
-Risk: Insufficient balance errors can lead to repeated failed submissions. <br>
-Mitigation: Stop submitting or polling after an insufficient balance response, show the recharge URL returned by the service, and resume only after the same account is funded. <br>
+## Use Case:
 
+External users can provide a Douyin video link, share text, or aweme ID to retrieve video context, the original description, and a spoken transcript. The skill presents transcript content in structured, copyable, and concise forms, and can continue checking an existing transcript job.
 
-## Reference(s): <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured transcript sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include a job_id, current status, and a follow-up polling command when transcript processing is not complete.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.5 (source: server release evidence) <br>
+Risk: The release is marked suspicious because its CLI commands use a mutable latest package, and the partial scan could not resolve several references.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Wait for a reviewed fixed CLI release and understand its credential access before installation; review the unresolved references.
+
+## Reference(s):
+
+- [抖音文案提取 on ClawHub](https://clawhub.ai/devinchen2014/skills/douyin-video-copy-extract)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Structured transcript results and Markdown guidance; direct CLI results are formatted as JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Transcript jobs may be asynchronous and should be continued with the same job ID. SRT export is available through the CLI when valid time segments are returned.]
+
+## Skill Version(s):
+
+0.1.14 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
