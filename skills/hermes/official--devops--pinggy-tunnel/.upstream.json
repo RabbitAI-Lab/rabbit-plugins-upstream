@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/devops/pinggy-tunnel",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "b81adf019729dc40ea7ad21f6b51aa5d967cf7987166850022d0d04dab7bea3a",
-  "fetchedAt": "2026-07-26T17:03:57.010Z"
+  "pushedAt": "2026-11-20T16:13:00Z",
+  "contentHash": "79d5de7c5b290f195e90b40011116cb9b940aba9a5417920a1e24be05618d65d",
+  "fetchedAt": "2026-11-20T16:13:55.780Z"
 }

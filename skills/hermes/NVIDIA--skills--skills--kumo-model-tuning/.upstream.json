@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/kumo-model-tuning",
+  "identifier": "NVIDIA/skills/skills/kumo-model-tuning",
+  "repo": "NVIDIA/skills",
+  "path": "skills/kumo-model-tuning",
+  "branch": "main",
+  "pushedAt": "2026-11-20T16:10:52Z",
+  "contentHash": "4385a2ce1981ab30fbf2cb8784979b5a8c4dc7f05f79b5bc99b09aee7f62f178",
+  "fetchedAt": "2026-11-20T16:13:45.120Z"
+}

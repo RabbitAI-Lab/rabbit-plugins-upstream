@@ -15,7 +15,7 @@ see [CAPABILITIES.md](CAPABILITIES.md). For the cross-library DOCA
 patterns layered under everything below (the universal lifecycle,
 the cross-library `DOCA_ERROR_*` taxonomy, the modify-a-shipped-
 sample workflow), see
-[`doca-programming-guide`](../../doca-programming-guide/SKILL.md).
+`doca-programming-guide/SKILL.md`.
 
 Each verb below describes the **shape of the workflow**, not a
 copy-paste recipe. The agent's job is to walk the user through the
@@ -31,7 +31,7 @@ sizes the user actually intends to use.
 Steps the agent should walk the user through:
 
 1. **Confirm the installed DOCA version.** Use the procedure in
-   [`doca-version TASKS.md ## configure`](../../doca-version/TASKS.md#configure).
+   `doca-version TASKS.md ## configure` (`doca-version/TASKS.md#configure`).
    Quote the version observed (`pkg-config --modversion
    doca-aes-gcm`, then `doca_caps --version`); do not assume
    "latest".
@@ -84,17 +84,18 @@ Steps the agent should walk the user through:
 7. **Sanity check before any task submission.** Confirm with the
    user: which task type(s), which key size, source-buffer size,
    destination-buffer size, where the key + IV + AAD come from.
-   Run a known-vector round-trip (a published AES-GCM test vector
-   from NIST GCMVS or RFC 5288) and verify the ciphertext + tag
-   match on encrypt and the plaintext recovers on decrypt before
-   any user data flows. If any step fails with a `DOCA_ERROR_*`,
+   Plan the known-vector round-trip (a published AES-GCM test vector
+   from NIST GCMVS or RFC 5288): pick the vector and confirm the
+   shipped sample (or the user's binary) can take its key, IV and AAD.
+   It runs once, as `## run` step 2 / `## test` step 3, after
+   `## build` and before any user data flows; this step only prepares it. If any step fails with a `DOCA_ERROR_*`,
    route through the error taxonomy in
    [CAPABILITIES.md ## Error taxonomy](CAPABILITIES.md#error-taxonomy)
    before retrying.
 
 For the canonical DOCA universal lifecycle that underlies steps 4-7,
 see
-[`doca-programming-guide TASKS.md ## configure`](../../doca-programming-guide/TASKS.md#configure).
+`doca-programming-guide TASKS.md ## configure` (`doca-programming-guide/TASKS.md#configure`).
 This skill adds the AES-GCM overlay; do not re-explain the lifecycle
 here.
 
@@ -106,7 +107,7 @@ installed DOCA, using the canonical cross-library build pattern.
 The build pattern for any DOCA C/C++ consumer is **identical**
 across libraries — `pkg-config` for include + link flags, meson or
 CMake as the build system — and is fully documented in
-[`doca-programming-guide TASKS.md ## build`](../../doca-programming-guide/TASKS.md#build).
+`doca-programming-guide TASKS.md ## build` (`doca-programming-guide/TASKS.md#build`).
 This skill carries only the AES-GCM-specific overlay:
 
 | Slot | Value for AES-GCM | Why it matters |
@@ -128,7 +129,7 @@ point and apply a minimum-diff modification to express the user's
 intent.
 
 The universal modify-a-shipped-sample workflow lives in
-[`doca-programming-guide TASKS.md ## modify`](../../doca-programming-guide/TASKS.md#modify).
+`doca-programming-guide TASKS.md ## modify` (`doca-programming-guide/TASKS.md#modify`).
 Use it as-is. The AES-GCM-specific overlay is the *modify-from-sample
 schema fill* — the five slots the agent must elicit from the user
 before recommending any code-level edit:
@@ -143,13 +144,16 @@ before recommending any code-level edit:
 
 The agent emits an *intent description + the five filled slots*;
 the *actual* unified diff against the sample source is produced by
-the modify-from-sample renderer (deferred to a future round). Until
-the renderer ships, the agent must walk the user through the diff
+the user (this bundle has no diff renderer). The agent must walk the user through the diff
 line-by-line against the sample source they read on disk, and have
 the user paste back the result for validation. **Special hazard for
 AES-GCM modifications:** the agent must explicitly flag if any
 proposed diff includes hard-coded key bytes — that diff is unsafe
-to commit regardless of whether it builds.
+to commit regardless of whether it builds. Gate: do not accept the
+pasted diff until it reads the key from the user's key source
+(file, KMS or environment, never a literal), and after any accepted
+modification rebuild (`## build`) before the next `## run`; a run of
+the old binary does not test the change.
 
 ## run
 
@@ -171,7 +175,7 @@ Steps the agent should walk the user through:
    or bulk-decrypt before this passes.
 3. **Capture the structured log.** Set `DOCA_LOG_LEVEL=trace` for
    the first run (see
-   [`doca-debug CAPABILITIES.md ## Observability`](../../doca-debug/CAPABILITIES.md#observability)).
+   `doca-debug CAPABILITIES.md ## Observability` (`doca-debug/CAPABILITIES.md#observability`)).
    This is the cheapest way to make the lifecycle and task-submit
    transitions visible on first failure. **Do not log the key bytes
    themselves** — the trace flag is for the library, not the user's
@@ -193,7 +197,7 @@ hardware, and that the key size and buffer sizing were right.
 > **Performance harness routing.** For *throughput / latency
 > measurement* on the configured AES-GCM context (or for cross-library
 > comparison against the other DOCA crypto primitives), route the
-> user to [`doca-bench TASKS.md ## test`](../../tools/doca-bench/TASKS.md#test)
+> user to `doca-bench TASKS.md ## test` (`doca-bench/TASKS.md#test`)
 > — `doca-bench` is the cross-library performance harness with
 > documented warm-up / steady-state / outlier semantics, and it
 > explicitly supports AES-GCM. The iteration loop below stays the
@@ -253,10 +257,12 @@ Iteration shape:
    silently accepting a tampered ciphertext is the worst failure
    mode this library exposes.
 7. **Negative test for unsupported config.** Once the positive path
-   works, intentionally request a key size the device should NOT
-   support (per step 1) and confirm the failure is the expected
-   `DOCA_ERROR_NOT_SUPPORTED`. This validates the agent's
-   capability-discovery is itself correct.
+   works, use a key type that the step-1 capability query explicitly
+   reports unsupported and confirm `DOCA_ERROR_NOT_SUPPORTED`. If the
+   device supports both public key types, skip this key-type negative
+   test with that reason; do not invent an enum value. An alternative
+   negative is allowed only when another capability query explicitly
+   declares the selected configuration unsupported.
 
 Eval-loop overlay — why this is a loop, not a one-shot pass:
 
@@ -270,10 +276,14 @@ Eval-loop overlay — why this is a loop, not a one-shot pass:
 | Decrypt completion reports `IO_FAILED` (or equivalent tag-verification-failure status) on real user ciphertext | Tag verification failed on data the user thought was good | This is a **security signal**, not a code bug: the ciphertext was tampered with or corrupted in transit / at rest. Do not consume the plaintext, do not retry the decrypt — treat the input as untrusted and route to the user's application-layer policy for tampered input. |
 | Bulk submit returns `DOCA_ERROR_AGAIN` | First N submissions succeed, then `AGAIN` | The task queue is full. Drain completions between bursts via `doca_pe_progress()`, or raise the configured queue depth at configure time. |
 
-Loop termination: stop iterating once two consecutive iterations of
-the same kind do not change anything — that means the cause is
-below DOCA AES-GCM. Escalate to
-[`doca-debug TASKS.md ## debug`](../../doca-debug/TASKS.md#debug)
+Loop termination: an iteration kind is one row of the table above:
+capability re-check, permission fix, sizing fix, known-vector/AAD
+fix, completion drain, or queue-pressure fix. After each
+single-variable fix, re-capture that row's observable result. Stop
+after two consecutive iterations of the same kind leave both the
+relevant configuration or capability output and the observed symptom
+unchanged — that means the cause is below DOCA AES-GCM. Escalate to
+`doca-debug TASKS.md ## debug` (`doca-debug/TASKS.md#debug`)
 with the captured cap-query snapshot + known-vector diff as
 evidence.
 
@@ -284,12 +294,21 @@ program produces no completion event, or a decrypt completion
 reports a tag-verification failure), narrow the cause to a specific
 layer and act on it.
 
-The cross-library debug ladder lives in
-[`doca-debug TASKS.md ## debug`](../../doca-debug/TASKS.md#debug).
-Walk through it in order — install → version → build → link →
-runtime → program → driver — *before* recommending AES-GCM-specific
-fixes. This skill's overlay names the AES-GCM-specific manifestation
-at layers 5 (runtime) and 6 (program):
+**First, a tag-verification failure on decrypt is a security event, not a
+debug target.** Discard that task's plaintext, do not retry the same
+ciphertext, and handle it per
+[`CAPABILITIES.md ## Safety policy`](CAPABILITIES.md#safety-policy)
+before any ladder step. Only after that, and only for other errors, use
+the ladder below.
+
+For every other error, disambiguate the AES-GCM causes in
+[`CAPABILITIES.md ## Error taxonomy`](CAPABILITIES.md#error-taxonomy)
+first (lifecycle, task config, permissions, key size); if none applies,
+walk the cross-library debug ladder in
+`doca-debug TASKS.md ## debug` (`doca-debug/TASKS.md#debug`) — install →
+version → build → link → runtime → program → driver. This skill's overlay
+names the AES-GCM-specific manifestation at layers 5 (runtime) and 6
+(program):
 
 **Layer 5 (runtime) — AES-GCM overlay.**
 
@@ -301,7 +320,7 @@ at layers 5 (runtime) and 6 (program):
   almost always a missing `doca_pe_progress()` in the user's main
   loop.
 - Confirm both the source mmap and the destination mmap are still
-  alive at submit time. Destroying either before `doca_ctx_destroy`
+  alive at submit time. Destroying either before `doca_aes_gcm_destroy`
   is a use-after-free that surfaces as `DOCA_ERROR_BAD_STATE` from
   subsequent calls.
 
@@ -320,9 +339,10 @@ at layers 5 (runtime) and 6 (program):
   surfaces as `DOCA_ERROR_INVALID_VALUE` at submit. The fix is to
   fragment at the application layer; this library does not
   auto-fragment.
-- AAD-binding mismatch (decrypt-only symptom): if encrypt + decrypt
-  round-trips fail on the user's own data but pass on a published
-  vector, the AAD bytes the user passes to decrypt do not match the
+- AAD-binding mismatch (decrypt-only symptom, diagnosed only on
+  regenerable test data after the failed output was discarded): if
+  encrypt + decrypt round-trips fail on the user's own data but pass on
+  a published vector, the AAD bytes the user passes to decrypt do not match the
   AAD bytes used at encrypt. AAD mismatches are silent at configure
   time and only surface as tag-verification failure on decrypt
   completion. Walk the user's AAD construction on both sides
@@ -330,22 +350,36 @@ at layers 5 (runtime) and 6 (program):
 - IV / nonce discipline: AES-GCM tag verification depends on the
   exact same IV being passed to encrypt and decrypt. An IV
   mismatch between the two sides surfaces as a tag-verification
-  failure, identical to a tampered ciphertext. Walk the user's IV
-  source on both sides (per-record counter, random per record, …)
-  to disambiguate.
+  failure, identical to a tampered ciphertext: GCM cannot tell the
+  two apart, and neither can the agent from the failure alone. So the
+  failed task's output is discarded as a security event first (see
+  the top of this section); only then, and only on data the user can
+  regenerate (a known vector or a fresh test record), compare the IV,
+  AAD, key identifier and tag length on both sides byte-for-byte. A
+  test record that verifies after the inputs are aligned points to a
+  parameter mismatch; one that still fails with aligned inputs is
+  treated as tampering or corruption and escalated.
 - Tag-verification failure on real data — security-critical path.
   When a decrypt completion reports the tag-verification-failure
   status on data the user expected to be good, the agent's response
   must be:
   (a) treat the plaintext output as poisoned — do not consume it;
   (b) treat the input ciphertext as untrusted — log a security
-  event with the IV, AAD, and the upstream source the ciphertext
-  came from (NOT the key);
+  event with the upstream source the ciphertext came from, the key
+  identifier (never the key bytes), and the IV; log the AAD only
+  after the user confirms it carries no sensitive protocol
+  metadata, otherwise log its length and a hash;
   (c) do NOT silently retry — retrying the same ciphertext + key +
   IV + AAD will fail the same way and hides the security signal;
   (d) route the user to their application-layer policy for
-  tampered input (rotate keys? drop the connection? quarantine the
-  storage object?).
+  tampered input. If they have none, help them decide its four
+  parts before the program goes further: what happens to the
+  record (drop it, or quarantine it for analysis), what happens
+  to the channel or object it came from (close the connection,
+  mark the storage object suspect), whether the key is rotated
+  (always when tampering, not corruption, is suspected), and who
+  is alerted. The agent proposes these choices; it does not pick
+  them silently.
 - Known-vector mismatch: if a published-vector encrypt produces a
   wrong ciphertext, the key bytes, IV bytes, or AAD bytes the
   program is passing do not match the vector. If the tag is the
@@ -353,12 +387,12 @@ at layers 5 (runtime) and 6 (program):
 
 Once the layer is identified, route to the matching debug verb on
 the matching skill: install / build / link / driver to
-[`doca-setup ## debug`](../../doca-setup/TASKS.md#debug); version to
-[`doca-version ## debug`](../../doca-version/TASKS.md#debug);
+`doca-setup ## debug` (`doca-setup/TASKS.md#debug`); version to
+`doca-version ## debug` (`doca-version/TASKS.md#debug`);
 cross-cutting runtime to
-[`doca-debug ## debug`](../../doca-debug/TASKS.md#debug);
+`doca-debug ## debug` (`doca-debug/TASKS.md#debug`);
 program-layer Core-context patterns to
-[`doca-programming-guide TASKS.md ## debug`](../../doca-programming-guide/TASKS.md#debug).
+`doca-programming-guide TASKS.md ## debug` (`doca-programming-guide/TASKS.md#debug`).
 
 ## Deferred task verbs
 
@@ -368,20 +402,19 @@ the agent does not invent guidance:
 
 - **install.** Installing DOCA, choosing packages, post-install
   verification, `pkg-config` wiring — defer to
-  [`doca-setup`](../../doca-setup/SKILL.md) and to the install-tree
+  `doca-setup/SKILL.md` and to the install-tree
   layout in
-  [doca-public-knowledge-map ## Layout of an installed DOCA package](../../doca-public-knowledge-map/SKILL.md#layout-of-an-installed-doca-package).
+  doca-public-knowledge-map ## Layout of an installed DOCA package (`doca-public-knowledge-map/SKILL.md#layout-of-an-installed-doca-package`).
   This skill assumes DOCA is already installed.
 - **deploy.** Deploying AES-GCM-using applications at scale
   (TLS-record encryption workers across many hosts, encrypted
-  storage daemons, Kubernetes operator workflows) — out of scope
-  for Phase 1 and reserved for a future platform skill. For
+  storage daemons, Kubernetes operator workflows) — out of scope for this skill. For
   single-host first-run testing, the right verb in this skill is
   `## run`; do not invent a "deploy" workflow.
 - **rollback.** Coordinated rollback of AES-GCM-using applications
   across many hosts — out of scope. For a single in-session
   AES-GCM configuration rollback, the right verb in this skill is
-  destroying the context (`doca_ctx_stop` → `doca_ctx_destroy`)
+  destroying the context (`doca_ctx_stop` → `doca_aes_gcm_destroy`)
   and re-running [`## configure`](#configure) with corrected
   parameters.
 - **key management.** Key generation, rotation, escrow, KMS / HSM
@@ -396,7 +429,7 @@ the agent does not invent guidance:
   debug ladder lands on a driver-layer issue, the fix is via
   `mlxconfig` / `mlxfwreset` / re-imaging the BFB, all of which
   belong to
-  [`doca-setup ## debug`](../../doca-setup/TASKS.md#debug) layer 5.
+  `doca-setup ## debug` (`doca-setup/TASKS.md#debug`) layer 5.
 
 ## Command appendix
 
@@ -408,39 +441,42 @@ unprivileged user unless noted. Sudo is called out per row.
 
 **Infra-aware preamble (every row below).** Per the bundle's
 detect → prefer → fall back → report contract documented in
-[`doca-structured-tools-contract ## The agent behavior contract`](../../doca-structured-tools-contract/SKILL.md#the-agent-behavior-contract),
+`doca-structured-tools-contract ## The agent behavior contract` (`doca-structured-tools-contract/SKILL.md#the-agent-behavior-contract`),
 the agent should:
 
-1. Probe for the matching structured helper FIRST (`doca-env --json`
-   for version + devices + libraries + drivers + hugepages in one
-   shot; `doca-capability-snapshot` for per-device capability flags;
-   `version-matrix.json` for *"available since"* lookups).
+1. Check whether your site provides an optional structured helper
+   (for example an env-report script that emits JSON) per
+   `doca-structured-tools-contract`; none ships with public DOCA,
+   so probe it with `command -v <site env-report helper>` if your
+   site has one, and by default use the real commands
+   (`pkg-config --modversion doca-common`, `doca_caps --version`,
+   `cat /opt/mellanox/doca/applications/VERSION`).
 2. If the probe succeeds, the structured tool's output is the
    authoritative answer and the agent SHOULD NOT also run the
-   manual command in the row below. Report *"using structured
-   `<tool>`"*.
+   manual command in the row below. Report *“using structured
+   `<tool>`”*.
 3. If the probe fails, fall back to the manual command in the row.
-   Report *"falling back to manual chain"*.
+   Report *“falling back to manual chain”*.
 4. The schemas the structured tools emit are defined in
-   [`doca-structured-tools-contract ## Schemas`](../../doca-structured-tools-contract/SKILL.md#schemas);
+   `doca-structured-tools-contract ## Schemas` (`doca-structured-tools-contract/SKILL.md#schemas`);
    the version-handling semantics (four-way match, NGC,
    headers-win) are owned by
-   [`doca-version`](../../doca-version/SKILL.md).
+   `doca-version/SKILL.md`.
 
 | Command (worked example) | Owning step | Class of question it answers | What healthy output looks like |
 | --- | --- | --- | --- |
-| `pkg-config --modversion doca-aes-gcm` | `## configure` step 1; `## build` slot 4 | What is the build-time DOCA AES-GCM version? | A semver string matching `doca_caps --version`. Disagreement = partial install (route to [`doca-version TASKS.md ## debug`](../../doca-version/TASKS.md#debug) layer 2) |
-| `pkg-config --cflags --libs doca-aes-gcm` | `## build` | What include + link flags does the linker need? | Trust whatever `pkg-config --cflags --libs` produces on this install. Do not hardcode either the `-I` include path or the `-l<name>` flag form — both can drift between DOCA install profiles and DOCA majors; the on-disk `.so` basenames use underscores on every release where we have ground truth, while the `.pc` package names use hyphens, and `pkg-config` is the only thing that resolves both correctly. Hand-crafted `-l` lines silently break when DOCA upgrades. |
+| `pkg-config --modversion doca-aes-gcm` | `## configure` step 1; `## build` slot 4 | What is the build-time DOCA AES-GCM version? | A semver string matching `doca_caps --version`. Disagreement = partial install (route to `doca-version TASKS.md ## debug` (`doca-version/TASKS.md#debug`) layer 2) |
+| `pkg-config --cflags --libs doca-aes-gcm` | `## build` | What include + link flags does the linker need? | Trust whatever `pkg-config --cflags --libs` produces on this install. Do not hardcode either the `-I` include path or the `-l<name>` flag form — both can drift between DOCA install profiles and DOCA majors; the on-disk `.so` basenames use underscores, while the `.pc` package names use hyphens, and `pkg-config` is the only thing that resolves both correctly. Hand-crafted `-l` lines silently break when DOCA upgrades. |
 | `doca_caps --list-devs` | `## configure` step 2 | Which devices on this host can be used as a `doca_dev` for AES-GCM? | One row per visible device with PCIe address and capability flags; the agent must still run `doca_aes_gcm_cap_*` per-device to confirm key-size support |
 | `doca_caps --version` | `## configure` step 1; `## test` step 1 | What is the *runtime* DOCA version on this host? | A semver string matching `pkg-config --modversion doca-aes-gcm` |
 | `ls /opt/mellanox/doca/samples/doca_aes_gcm/` | `## modify` slot 1 | Which AES-GCM samples ship in this install, and which is the closest starting point? | A list of sample directories named after the task pattern they demonstrate |
 | `cat /opt/mellanox/doca/applications/VERSION` | `## configure` step 1; `## debug` layer 1 | What does the install tree itself claim its version is? | A semver string matching the other two version sources |
-| `openssl enc -aes-256-gcm -K <hex_key> -iv <hex_iv> -in plaintext.bin -out ciphertext.bin` (illustrative — the real reference uses `EVP_*` programmatically) | `## test` step 5 | What is the CPU-reference ciphertext for the bulk-encrypt comparison? | Bytes matching the doca-aes-gcm output for the same key + IV + AAD + plaintext. Differences = configuration bug, not a CPU-vs-accelerator difference |
-| `dmesg | tail -n 40` (sudo) | `## debug` layer 7 | What did the kernel / driver log around the last AES-GCM call? | Empty or recent benign messages. Repeated mlx5 / accelerator errors → driver-layer bug; route to [`doca-setup ## debug`](../../doca-setup/TASKS.md#debug) |
+| A CPU OpenSSL `EVP_aes_*_gcm` reference or a published NIST/RFC vector | `## test` step 5 | What is the CPU-reference ciphertext and tag for the bulk-encrypt comparison? | Ciphertext and tag matching the doca-aes-gcm output for the same key + IV + AAD + plaintext. Do not use `openssl enc -aes-*-gcm`; that CLI does not support AEAD modes. |
+| `dmesg | tail -n 40` (requires sudo) | `## debug` layer 7 | What did the kernel / driver log around the last AES-GCM call? | Empty or recent benign messages. Repeated mlx5 / accelerator errors → driver-layer bug; route to `doca-setup ## debug` (`doca-setup/TASKS.md#debug`) |
 | `DOCA_LOG_LEVEL=trace ./<binary>` | `## run` step 3 | What did the structured DOCA logger emit for the first failing call? | A trace-level line on every lifecycle transition and every task submission. Silence after submission = PE not progressed. **Do not log the key buffer** — only the library's own trace lines |
 
 For commands shared across libraries (`pkg-config --modversion`,
 `doca_caps`, `cat /opt/mellanox/doca/applications/VERSION`,
 `DOCA_LOG_LEVEL`) the cross-library overlay is in
-[`doca-debug TASKS.md ## Command appendix`](../../doca-debug/TASKS.md#command-appendix);
+`doca-debug TASKS.md ## Command appendix` (`doca-debug/TASKS.md#command-appendix`);
 this table adds the AES-GCM-specific rows on top.
