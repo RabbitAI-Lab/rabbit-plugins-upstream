@@ -1,47 +1,62 @@
-## Description: <br>
-Benchmarks competitor SEO and GEO signals, including keywords, content, backlinks, AI citations, and traffic share, to produce strengths, weaknesses, and an action plan. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Benchmarks competitor keywords, content, backlinks, AI citations, and traffic share into strengths, weaknesses, and an action plan.
 
-## Publisher: <br>
-[aaron-he-zhu](https://clawhub.ai/user/aaron-he-zhu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[aaron-he-zhu](https://clawhub.ai/user/aaron-he-zhu)
 
-## Use Case: <br>
-Marketing, SEO, and growth teams use this skill to compare 3-5 competitors across keywords, content, backlinks, traffic share, and AI citation signals, then turn the evidence into a prioritized competitive brief and action plan. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Competitor research notes and strategy decisions may be saved into project memory. <br>
-Mitigation: Confirm the project memory policy before use and remove sensitive, stale, or inappropriate competitor notes before sharing or deploying outputs. <br>
-Risk: Optional external tools may receive competitor URLs, search queries, or SEO metrics. <br>
-Mitigation: Use only approved tools and avoid sending confidential or restricted business data to external services. <br>
-Risk: Competitive findings can be misleading when estimates are presented as measured facts. <br>
-Mitigation: Label every metric as Measured, User-provided, Estimated, or N/A, and tie strengths or weaknesses to named competitors and cited evidence. <br>
+## Use Case:
 
+Marketing, SEO, and go-to-market teams use this skill to compare 3-5 competitors across search visibility, content strategy, backlinks, AI citations, positioning, and traffic signals. It produces a prioritized competitive brief with evidence labels and an immediate, short-term, and long-term action plan.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/aaron-he-zhu/skills/competitor-analysis) <br>
-- [Homepage](https://github.com/aaron-he-zhu/aaron-marketing-skills) <br>
-- [Analysis Templates](references/analysis-templates.md) <br>
-- [Battlecard Template](references/battlecard-template.md) <br>
-- [Positioning Frameworks](references/positioning-frameworks.md) <br>
-- [Example Report](references/example-report.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with comparison tables, evidence labels, action plans, and optional shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a user-facing competitor brief and reusable research summary; metrics should be labeled as Measured, User-provided, Estimated, or N/A.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-19.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Competitor metrics may be estimated or incomplete when SEO, analytics, or AI monitoring tools are unavailable.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require each metric to be labeled measured, user-provided, estimated, or N/A, and review source dates before acting on strategic recommendations.
+
+Risk: Public web research or scraping may interact with competitor sites or third-party content sources.
+
+Mitigation: Use compliant data sources, respect robots and access restrictions, and avoid collecting non-public or sensitive information.
+
+Risk: Durable memory handoff can retain business context, competitor facts, or strategy decisions.
+
+Mitigation: Review saved notes before persistence and disable or redact memory writes for sensitive competitive strategy.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/aaron-he-zhu/skills/competitor-analysis)
+- [Project Homepage](https://github.com/aaron-he-zhu/aaron-marketing-skills)
+- [Analysis Templates](references/analysis-templates.md)
+- [Battlecard Template](references/battlecard-template.md)
+- [Positioning Frameworks](references/positioning-frameworks.md)
+- [Example Report](references/example-report.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown competitor brief, comparison tables, battlecard templates, and durable research handoff notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Metrics must be labeled as measured, user-provided, estimated, or N/A; durable notes may be saved under memory/research/ when enabled.]
+
+## Skill Version(s):
+
+19.0.0 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

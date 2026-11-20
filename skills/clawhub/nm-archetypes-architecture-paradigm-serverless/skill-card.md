@@ -1,43 +1,57 @@
-## Description: <br>
-Applies serverless FaaS patterns for event-driven workloads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Serverless FaaS patterns. Use for bursty event-driven workloads with pay-per-execution cost and little infrastructure
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and architects use this skill to evaluate when serverless FaaS patterns fit event-driven, bursty workloads and to plan state management, deployment, observability, cost, and risk considerations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Serverless architecture guidance may not match a user's deployment, IAM, cost, or compliance constraints. <br>
-Mitigation: Validate recommendations against the target cloud environment, organizational policies, and workload requirements before acting. <br>
-Risk: Long-running processes, persistent connections, and local state requirements can make a serverless FaaS design unsuitable. <br>
-Mitigation: Check workload duration, connection, and state requirements before adopting serverless patterns. <br>
-Risk: Cold starts, provider limits, and provider-specific APIs can affect latency, reliability, and portability. <br>
-Mitigation: Plan cold-start mitigation, monitor provider quotas, and isolate provider-specific integrations where portability matters. <br>
+## Use Case:
 
+Developers and architects use this skill to assess whether serverless functions fit event-driven workloads and to plan function boundaries, state management, deployment, observability, and cost controls.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-serverless) <br>
-- [Configured OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown guidance with architecture checklists and recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; cloud deployment, IAM, cost, and compliance decisions should be validated against the user's own environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Provider-specific APIs can make it costly to move the workload between cloud providers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Where practical, place provider-specific calls behind interfaces or use portable frameworks.
+
+Risk: Distributed function execution can make failures and latency difficult to trace.
+
+Mitigation: Standardize tracing and structured logging across functions.
+
+Risk: Concurrency, memory, and other provider limits can constrain workload growth.
+
+Mitigation: Monitor provider quotas and design workloads to be shardable or horizontally scalable.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-serverless)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown prose and structured recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include serverless adoption steps, architecture decision record guidance, and infrastructure, deployment, observability, and cost recommendations.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,57 @@
-## Description: <br>
-Applies microservices guidance for independent deployment and per-service scaling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies microservices for independent deployment and per-service scaling
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers, software architects, and engineering leads use this skill to evaluate whether a microservices architecture fits their team structure, scaling needs, and operational maturity. It guides service-boundary decisions, platform prerequisites, architecture decision records, runbooks, and testing strategy. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger terms such as architecture and scalability may activate this skill in general architecture discussions where microservices guidance is not intended. <br>
-Mitigation: Review the activation context before relying on the guidance, and install or enable the skill only where microservices architecture advice is desired. <br>
-Risk: Microservices recommendations can increase operational complexity when teams lack platform engineering, observability, CI/CD, and incident-response maturity. <br>
-Mitigation: Use the skill's own fit checks before adoption and require human architecture review before applying recommendations to production systems. <br>
+## Use Case:
 
+Developers, architects, and engineering teams use this skill to assess whether microservices fit their organization and system, then plan service boundaries, platform foundations, and adoption criteria.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-microservices) <br>
-- [Night Market archetypes homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with architecture recommendations, deliverables, and risk mitigations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory output only; no tool calls, shell commands, API calls, or credential handling are declared in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: Microservices add operational overhead and depend on mature DevOps and SRE practices.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Invest in dedicated platform support and shared tooling for service teams.
+
+Risk: Distributed data ownership can make consistency across services difficult.
+
+Mitigation: Use patterns such as Sagas, make message handling idempotent, and run reconciliation jobs for eventual consistency.
+
+Risk: Overly small services can add communication overhead that outweighs the benefits of distribution.
+
+Mitigation: Give each service a meaningful functional boundary and monitor change coupling to find candidates for merging.
+
+## Reference(s):
+
+- [Project homepage (skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+
+## Skill Output:
+
+**Output Type(s):** [Architecture guidance, Markdown]
+
+**Output Format:** [Markdown guidance with adoption steps, examples, risks, and exit criteria]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provides decision guidance and planning checklists.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

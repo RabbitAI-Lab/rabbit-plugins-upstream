@@ -1,44 +1,55 @@
-## Description: <br>
-A Chinese divination assistant for BaZi, daily fortune, Liu Yao, Da Liu Ren, Lu Ming, and luck-cycle readings using xungufa.com. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chinese astrology and divination queries for BaZi, Zi Wei Dou Shu, Qi Men Dun Jia, Liu Yao, and Da Liu Ren, returning chart and fortune results from Xungu.
 
-## Publisher: <br>
-[cnyouker](https://clawhub.ai/user/cnyouker) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cnyouker](https://clawhub.ai/user/cnyouker)
 
-## Use Case: <br>
-External users ask an agent for Chinese divination outputs, including BaZi charts, daily fortunes, Liu Yao casts, Da Liu Ren charts, Lu Ming readings, and annual luck-cycle analysis. The skill helps collect the needed birth or casting details, call the provider service, and present formatted results for user review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Birth details, casting times, and optionally an API token may be shared with xungufa.com. <br>
-Mitigation: Use the skill only when that data sharing is acceptable, and avoid entering information that should not be sent to the provider. <br>
-Risk: Local birth profiles can persist across future sessions if saved. <br>
-Mitigation: Save a profile only after explicit consent and delete it when reuse is no longer wanted. <br>
-Risk: API responses or divination outputs may include content that should not be treated as authoritative advice. <br>
-Mitigation: Treat results as interpretive guidance and review outputs before relying on them for decisions. <br>
+## Use Case:
 
+External users can request a Chinese astrology chart or reading based on birth details or a selected time, and receive results for BaZi, Zi Wei Dou Shu, Qi Men Dun Jia, Liu Yao, or Da Liu Ren.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/cnyouker/xungu-query) <br>
-- [Publisher profile](https://clawhub.ai/user/cnyouker) <br>
-- [xungufa.com](https://xungufa.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown text with formatted divination tables, API examples, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require an XUNGU_API_TOKEN for Liu Yao, Da Liu Ren, and full-feature access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: server release metadata) <br>
+Risk: The scan notes a low-probability least-privilege concern because environment and network capabilities are present while tool scope is not declared.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the runtime permissions and restrict environment and network access to what the skill needs.
+
+Risk: Queries send user-provided birth details or selected times to Xungu for chart generation.
+
+Mitigation: Explain the data flow before the first query and avoid sending details the user does not want to share.
+
+## Reference(s):
+
+- [Xungu Agent API reference](https://www.xungufa.com/static/openapi/agent-api.json)
+- [Xungu API key settings](https://www.xungufa.com/apikey/)
+- [Xungu Query on ClawHub](https://clawhub.ai/cnyouker/skills/xungu-query)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Guidance]
+
+**Output Format:** [JSON responses or formatted chart text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chart and fortune details are organized by divination method; interpretations are limited to returned data.]
+
+## Skill Version(s):
+
+1.1.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

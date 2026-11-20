@@ -1,43 +1,51 @@
-## Description: <br>
-Estimates daily feed intake per livestock individual from continuous feeder videos by tracking the change of feed remaining in the trough, and outputs intake trend with anomaly alerts. | 通过食槽视频估算每日采食量变化，异常时预警。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Estimates daily feed intake per livestock individual from continuous feeder videos by tracking the change of feed remaining in the trough, and outputs intake trend with anomaly alerts.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to estimate livestock feed intake from fixed feeder images or videos, review intake trends, and identify abnormal feeding patterns. It also supports querying prior feed-intake reports associated with the current account identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Feeder images or videos, report queries, and account identity data are sent to lifeemergence.com services. <br>
-Mitigation: Install and use only after confirming that these remote-service data flows are acceptable for the workspace and livestock operation. <br>
-Risk: The security evidence reports automatic identity creation or reuse and local token storage. <br>
-Mitigation: Review identity lifecycle, token storage location, and shared-workspace access before use in sensitive environments. <br>
+## Use Case:
 
+Livestock and farm operators use this skill to estimate individual or group feed intake from feeder images or videos, review intake trends and anomaly alerts, and retrieve prior analysis reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-feed-intake-estimation-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Feed intake API documentation](artifact/references/api_doc.md) <br>
-- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON text, with optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs can include structured intake estimates, trend labels, anomaly alerts, historical report tables, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; skill frontmatter reports 1.0.3) <br>
+Risk: Scanners rate the skill suspicious due to reported account and credential handling, broad network access, and unclear or undeclared behavior beyond its stated feed analysis purpose. The scan evidence is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review account registration, credential handling, upload behavior, and export-only behavior before installing, as advised by the security guidance.
+
+## Reference(s):
+
+- [API documentation](artifact/references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-feed-intake-estimation-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Report links]
+
+**Output Format:** [Structured analysis results and history records, with an export link when available]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes feed intake estimates, trend indicators, and anomaly alerts; results are visual estimates.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

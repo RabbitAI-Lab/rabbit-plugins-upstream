@@ -1,45 +1,59 @@
-## Description: <br>
-Detects falls in target areas from video streams to support real-time home safety monitoring for elderly people living alone. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects possible falls in a target area from video streams for safety monitoring of older adults living alone.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and safety-monitoring developers use this skill to analyze local videos or video URLs for fall events and to request structured reports or history for elderly home-safety monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends fall-detection videos, video URLs, identity values, and report history requests to configured LifeEmergence/Open API services. <br>
-Mitigation: Use it only when those data transfers are acceptable, and prefer explicit user confirmation before uploads or history queries. <br>
-Risk: The skill silently creates or reuses local identities and persists tokens or report-related records. <br>
-Mitigation: Review the local data directory before deployment and clear generated records or tokens according to the user's retention policy. <br>
-Risk: Fall-detection results are advisory and may be incorrect or incomplete. <br>
-Mitigation: Require human confirmation and appropriate caregiver or medical follow-up before relying on alerts for safety decisions. <br>
+## Use Case:
 
+Households and care teams can submit a monitoring clip to screen for possible falls and review prior analysis reports. Treat alerts as prompts for human confirmation, not as a substitute for checking on the person.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fall-detection-video-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Fall detection API documentation](references/api_doc.md) <br>
-- [Common analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown summaries and tables, JSON detail output, and optional saved text or JSON result files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links and history-list tables; supports basic, standard, and json detail levels.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release evidence; artifact frontmatter lists 1.0.6) <br>
+Risk: Credential handling and forwarding to caller-supplied destinations are not fully clarified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve credential destinations before installing or connecting credentials.
+
+Risk: Video uploads and history retrieval may expose sensitive footage or report data, and consent behavior is unclear.
+
+Mitigation: Use only footage with appropriate consent, and clarify upload, history, and export behavior before use.
+
+Risk: Automatic account registration and storage behavior is not fully documented.
+
+Mitigation: Confirm what account information is created and stored before installation.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-fall-detection-video-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, JSON, Markdown]
+
+**Output Format:** [Structured fall-detection report in text or JSON, with Markdown report lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include suggestions and a report link; results need human confirmation.]
+
+## Skill Version(s):
+
+1.0.20 (source: server-resolved release metadata; artifact frontmatter reports 1.0.22)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

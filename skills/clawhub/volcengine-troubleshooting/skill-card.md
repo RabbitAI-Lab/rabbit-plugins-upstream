@@ -1,43 +1,61 @@
-## Description: <br>
-Use when the user encounters VolcEngine errors or needs local troubleshooting for OpenAPI, Python SDK, CLI, IAM, billing, compute, networking, storage, database, CDN, media, AI, security, or VKE cases. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when the user encounters VolcEngine errors or needs local troubleshooting for OpenAPI, Python SDK, CLI, IAM, billing, compute, networking, storage, database, CDN, media, AI, security, or VKE cases.
 
-## Publisher: <br>
-[volc-sdk-team](https://clawhub.ai/user/volc-sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[volc-sdk-team](https://clawhub.ai/user/volc-sdk-team)
 
-## Use Case: <br>
-Developers and cloud operations engineers use this skill to triage VolcEngine failures, collect minimal local context, route issues to the right product domain, and propose read-only diagnostic checks before any confirmed change. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may operate in environments with VolcEngine credentials and sensitive account context. <br>
-Mitigation: Use least-privilege temporary credentials where possible, avoid secret-value or token-minting permissions unless explicitly needed, and mask AccessKeyId values while never printing SecretKey or SessionToken values. <br>
-Risk: Some troubleshooting paths can lead to commands that reveal API keys, role credentials, workload tokens, SecretValue, user data, or full console output. <br>
-Mitigation: Require manual approval before any command that could reveal sensitive values, and prefer read-only Describe/List/Get/Query/Lookup/Check operations. <br>
+## Use Case:
 
+Developers and operators use this skill to diagnose VolcEngine errors across local tools, OpenAPI and cloud product areas. It guides evidence gathering and read-only checks, then explains findings and possible next steps.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/volc-sdk-team/volcengine-troubleshooting) <br>
-- [Getting Started](references/getting-started.md) <br>
-- [OpenAPI Quick Check](references/openapi-quick-check.md) <br>
-- [Domain Troubleshooting Guides](references/domain-guides/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only diagnostic posture by default; credentials and sensitive account details should be masked or omitted.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Database fault-injection actions or permission changes may disrupt services if treated as routine read-only checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep checks read-only by default; explain the impact and obtain explicit user confirmation before any state-changing database or permission action.
+
+Risk: Redis logs or key names may expose sensitive operational information.
+
+Mitigation: Collect only the minimum information needed for the case and redact sensitive values and identifiers before sharing.
+
+Risk: The security scan had partial coverage, so it does not establish a complete assessment.
+
+Mitigation: Review the relevant skill guidance and security findings before relying on it for a production troubleshooting workflow.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/volc-sdk-team/skills/volcengine-troubleshooting)
+- [Getting started and scenario routing](references/getting-started.md)
+- [OpenAPI quick checks](references/openapi-quick-check.md)
+- [Product domain guide index](references/domain-guides/README.md)
+- [Storage and database guide](references/domain-guides/storage-database/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Shell commands, Code]
+
+**Output Format:** [Markdown troubleshooting guidance with diagnostic CLI commands and occasional Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include structured diagnostic summaries; cloud changes require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

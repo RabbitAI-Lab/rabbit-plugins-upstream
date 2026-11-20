@@ -1,39 +1,48 @@
-## Description: <br>
-Generates a Mermaid workflow diagram showing process steps, decisions, and state transitions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates a Mermaid workflow diagram showing process steps, decisions, and state transitions
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[athola](https://clawhub.ai/user/athola)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and engineers use this skill to turn code or documentation about CI/CD pipelines, lifecycle processes, and state machines into workflow diagrams that show their steps and decision points.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Codebase-derived diagram content sent to Mermaid Chart could disclose confidential deployment steps, identifiers, security gates, or operational logic.
+
+Mitigation: Check repository privacy rules before use and avoid sending diagram content that includes confidential operational details.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and engineers use this skill to visualize CI/CD pipelines, deployment workflows, lifecycle processes, and state machines as Mermaid flowcharts. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Code, Markdown]
 
-## Known Risks and Mitigations: <br>
-Risk: Generated workflow diagrams may omit or misstate process steps when the explored code or documentation is incomplete. <br>
-Mitigation: Review the Mermaid flowchart and rendered diagram against the source workflow before using it for operational decisions or publishing it. <br>
+**Output Format:** [Mermaid flowchart syntax with a rendered diagram and brief description]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-cartograph-workflow-diagram) <br>
-- [Cartograph homepage](https://github.com/athola/claude-night-market/tree/master/plugins/cartograph) <br>
+**Other Properties Related to Output:** [Diagrams are limited to 20 nodes and include a decision point. Error or fallback paths use dotted arrows when present.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, guidance] <br>
-**Output Format:** [Markdown containing Mermaid flowchart code and a brief natural-language summary; may include rendered diagram output through the Mermaid Chart MCP.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Workflow diagrams are intended to stay concise, with source guidance limiting diagrams to 20 nodes and using Mermaid flowchart conventions for decisions, process steps, sub-processes, and transitions.] <br>
+1.10.3 (source: frontmatter)
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

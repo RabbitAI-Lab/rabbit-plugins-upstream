@@ -1,38 +1,51 @@
-## Description: <br>
-Structured analysis for any input. Data, code, text, decisions, visuals. Prioritize, question, conclude. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Structured analysis for any input. Data, code, text, decisions, visuals. Prioritize, question, conclude.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Employees, external users, developers, and analysts use this skill to structure analysis of data, code, text, decisions, and visuals with explicit prioritization, counter-evidence, and action-oriented conclusions. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Broad activation can shape many analysis-style responses, including cases where a lighter answer would be sufficient. <br>
-Mitigation: Use the skill when explicit prioritization, counter-evidence, and action-oriented conclusions are desired. <br>
-Risk: The skill asks the agent to distinguish input-grounded claims from inferences, but it does not independently verify claims. <br>
-Mitigation: Review important findings against the original input or authoritative sources before relying on the analysis. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
+## Use Case:
+
+External users and developers use Analyze to structure analysis of data, code, text, decisions, and visual inputs, with explicit prioritization, source marking, counter-evidence, and action-oriented conclusions.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Outputs could be mistaken for expert advice in legal, medical, security, financial, or other high-impact decisions.
+
+Mitigation: Treat the skill output as a thinking aid and use appropriate expert review for high-impact decisions.
+
+Risk: Broad analysis guidance may still produce incorrect or misleading conclusions if the input is incomplete or biased.
+
+Mitigation: Use the skill's source-labeling, missing-information, and counter-evidence prompts before acting on recommendations.
+
+## Reference(s):
 
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style structured analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompts the agent to mark claims as from input or inferred, prioritize findings, include counter-evidence, and end with an action.] <br>
+## Skill Output:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+**Output Type(s):** [text, markdown, guidance]
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+**Output Format:** [Markdown-style structured analysis guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Encourages claim source labels, prioritization levels, counter-analysis, and a final recommended action.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

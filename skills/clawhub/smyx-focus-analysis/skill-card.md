@@ -1,45 +1,57 @@
-## Description: <br>
-Analyzes video or image inputs for gaze direction, head pose, facial landmarks, focus level, distraction, and mind-wandering indicators, then returns a structured concentration report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Real-time detection of gaze direction and facial pose to quantify focus, distraction, and mind-wandering in classroom, office, and driving videos.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers can use this skill to submit classroom, office, or driving attention media for focus analysis and to retrieve prior cloud-hosted analysis reports. The skill is suited to generating structured attention summaries, trend data, suggestions, and report links for human review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive face or attention media may be uploaded to the publisher's cloud service for analysis. <br>
-Mitigation: Use only media that users are authorized to process, confirm consent for identifiable people, and review the service destination and retention expectations before deployment. <br>
-Risk: Analysis history is linked to an automatically managed account identity with locally stored tokens. <br>
-Mitigation: Review token storage expectations, restrict runtime access to the skill workspace, and clear local account state when the skill is no longer needed. <br>
-Risk: Focus and distraction results can affect decisions about students, employees, drivers, or other identifiable people. <br>
-Mitigation: Treat outputs as decision-support information only and require human review before using results in operational, educational, employment, or safety decisions. <br>
+## Use Case:
 
+Educators, meeting facilitators, and fleet safety teams can use the skill to review video for gaze direction, head pose, estimated focus and distraction patterns, and attention trends. Treat results as advisory and combine them with human assessment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-focus-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, files] <br>
-**Output Format:** [Markdown or JSON text with optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include focus scores, trend data, distraction counts, suggestions, historical report records, and report export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release evidence; artifact frontmatter reports 1.0.9) <br>
+Risk: The security assessment says account and token handling is not clearly explained.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before use, clarify how identities and credentials are created, stored, associated with requests, and protected.
+
+Risk: The security assessment flags potentially unexpected uploads of video to a remote service.
+
+Mitigation: Confirm remote processing and retention practices, and submit recordings only when you are authorized to do so.
+
+Risk: The security assessment warns that a shared default identity could expose another sender's reports.
+
+Mitigation: Use isolated per-user identities and confirm report access is properly separated before querying history.
+
+## Reference(s):
+
+- [Skill introduction](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Markdown, Report links]
+
+**Output Format:** [Structured analysis reports in JSON or Markdown, with optional report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scene, analysis duration, focus threshold, and detail level are configurable; results can optionally be saved to a file.]
+
+## Skill Version(s):
+
+1.0.20 (source: server-resolved release record)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

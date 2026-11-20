@@ -1,53 +1,57 @@
-## Description: <br>
-视频平台公域流量精准获客工具。基于评论区数据挖掘，支持竞品截流、意向客户筛选、舆情转化及私域引流，适用于短视频营销、销售线索挖掘、精准获客与流量变现，助力企业低成本获取高意向客户。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill retrieves public Douyin video, creator, post, comment, and trending data for content research, competitor analysis, demand discovery, and public-channel lead generation.
 
-## Publisher: <br>
-[um-why](https://clawhub.ai/user/um-why) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[um-why](https://clawhub.ai/user/um-why)
 
-## Use Case: <br>
-Marketing and sales teams use this skill to search public Douyin content, retrieve creator posts and comments, monitor hot topics, and export structured lead signals for follow-up. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Bulk collection of public Douyin user and comment data may create privacy, platform-terms, or anti-spam compliance issues. <br>
-Mitigation: Use only when authorized to collect and process the targeted data, and review platform terms, privacy obligations, and anti-spam rules before deployment. <br>
-Risk: The API token and search, video, or account inputs are sent to guaikei.com. <br>
-Mitigation: Limit token access to approved operators, avoid sending sensitive inputs, and rotate the token if exposure is suspected. <br>
-Risk: Result logs can contain user IDs, nicknames, comment text, and related metadata on disk. <br>
-Mitigation: Store logs in an access-controlled location and delete or secure them after operational use. <br>
+## Use Case:
 
+Marketing, content, sales, and analytics teams use this skill to inspect public Douyin content and creator activity, track trends, understand audience needs, and identify potential leads from public comments.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/um-why/skills/douyin-public-customer-acquisition) <br>
-- [Publisher profile](https://clawhub.ai/user/um-why) <br>
-- [Guaikei service website](https://www.guaikei.com) <br>
-- [Options reference](references/options.md) <br>
-- [Changelog](references/changelog.md) <br>
-- [Search input schema](assets/search_cli_req.schema.json) <br>
-- [Search output schema](assets/search_cli_resp.schema.json) <br>
-- [Post input schema](assets/post_cli_req.schema.json) <br>
-- [Post output schema](assets/post_cli_resp.schema.json) <br>
-- [Comment input schema](assets/comment_cli_req.schema.json) <br>
-- [Comment output schema](assets/comment_cli_resp.schema.json) <br>
-- [Hot list output schema](assets/hot_cli_resp.schema.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, files, shell commands, configuration] <br>
-**Output Format:** [CLI console output and JSON log files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js 16.14.0+ and GUAIKEI_API_TOKEN; search, post, and comment commands can write JSON logs under the skill logs directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata, SKILL.md frontmatter, package.json) <br>
+Risk: Static analysis was incomplete, so some files may not have been fully inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the complete package before installing and confirm its behavior against your needs.
+
+Risk: The reported workflow may send search terms or links to a third-party API.
+
+Mitigation: Check the provider's data-sharing details and avoid queries or links you do not want to share.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/um-why/skills/douyin-public-customer-acquisition)
+- [Guaikei service and support](https://www.guaikei.com)
+- [Customer acquisition guide](references/customer-acquisition.md)
+- [Demand mining guide](references/demand-mining.md)
+- [FAQ and setup guidance](references/faq.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Analysis, Guidance]
+
+**Output Format:** [Structured JSON results with concise text or Markdown summaries and analysis.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results can include public content and creator details, engagement metrics, links, and timestamps. Results are not saved by default; saving can be enabled for supported commands.]
+
+## Skill Version(s):
+
+1.5.1 (source: skill frontmatter, package.json, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

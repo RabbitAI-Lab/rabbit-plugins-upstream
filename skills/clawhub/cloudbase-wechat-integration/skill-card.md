@@ -1,55 +1,63 @@
-## Description: <br>
-CloudBase WeChat integration guide for Mini Program WeChat Pay, Official Account JSAPI Pay, Native QR-code Pay, Official Account OAuth, openid handling, payment callbacks, and CloudBase Integration Center generated functions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers in adding, debugging, and extending CloudBase WeChat payment, virtual payment, and Official Account OAuth flows using the Integration Center.
 
-## Publisher: <br>
-[binggg](https://clawhub.ai/user/binggg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[binggg](https://clawhub.ai/user/binggg)
 
-## Use Case: <br>
-Developers and engineers use this skill to add, debug, or extend WeChat payment and Official Account OAuth flows on CloudBase. It guides scenario selection, generated function usage, callback handling, order-state validation, credential placement, and troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Payment fulfillment could be triggered from frontend success signals instead of authoritative server-side payment state. <br>
-Mitigation: Use payment callbacks or explicit order queries before updating business records or fulfilling orders. <br>
-Risk: Merchant secrets, APIv3 keys, private keys, AppSecret values, or certificates could be exposed in source code, generated examples, commits, or chat. <br>
-Mitigation: Keep credentials in CloudBase Integration Center configuration and preserve generated credential handling when extending functions. <br>
-Risk: Generated CloudBase function names and routes may differ from examples such as pay-common or offiaccount-common. <br>
-Mitigation: Inspect the actual Integration Center generated function name and route before generating calls or troubleshooting code. <br>
-Risk: Official Account and Mini Program openid values can be confused, causing payment or OAuth failures. <br>
-Mitigation: Confirm the client context and AppID binding, then use the openid from the matching Mini Program or Official Account flow. <br>
+## Use Case:
 
+Developers use this skill to implement and troubleshoot Mini Program, Official Account JSAPI, Native QR-code, virtual payment, OAuth, and payment callback flows in CloudBase, including console setup and reliable order-state handling.
 
-## Reference(s): <br>
-- [CloudBase WeChat Integration Skill Page](https://clawhub.ai/binggg/skills/cloudbase-wechat-integration) <br>
-- [CloudBase Integration Center Overview](https://docs.cloudbase.net/integration/introduce/index.md) <br>
-- [CloudBase Integration Center Usage](https://docs.cloudbase.net/integration/usage/index.md) <br>
-- [CloudBase WeChat Pay Mini Program](https://docs.cloudbase.net/integration/wechat-pay-miniprogram/index.md) <br>
-- [CloudBase WeChat Pay JSAPI H5](https://docs.cloudbase.net/integration/wechat-pay-jsapi-h5/index.md) <br>
-- [CloudBase WeChat Pay Native](https://docs.cloudbase.net/integration/wechat-pay-native/index.md) <br>
-- [CloudBase WeChat Official Account OAuth](https://docs.cloudbase.net/integration/wechat-official-oauth/index.md) <br>
-- [Mini Program WeChat Pay](artifact/references/mini-program-pay.md) <br>
-- [Native QR-Code Pay](artifact/references/native-qr-pay.md) <br>
-- [Official Account JSAPI Pay](artifact/references/official-account-jsapi-pay.md) <br>
-- [Official Account OAuth](artifact/references/official-account-oauth.md) <br>
-- [WeChat Integration Troubleshooting](artifact/references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with code snippets, checklists, and configuration steps] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scenario-specific output depends on the selected WeChat Pay or Official Account OAuth flow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.14 (source: server release metadata; artifact frontmatter reports 2.24.1) <br>
+Risk: A production payment test may charge real money without requiring explicit approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer sandbox testing; before any production test, explain possible charges, fees, and fulfillment effects and require the user's approval.
+
+Risk: The security scan was partial because three local references could not be resolved, so those references were not covered.
+
+Mitigation: Review the unavailable references before relying on the scan's coverage.
+
+## Reference(s):
+
+- [CloudBase WeChat Integration Overview](references/overview.md)
+- [Mini Program WeChat Pay](references/mini-program-pay.md)
+- [Official Account JSAPI Pay](references/official-account-jsapi-pay.md)
+- [Native QR-Code Pay](references/native-qr-pay.md)
+- [Official Account OAuth](references/official-account-oauth.md)
+- [Mini Program Virtual Payment](references/virtual-payment.md)
+- [WeChat Integration Troubleshooting](references/troubleshooting.md)
+- [CloudBase Integration Center Overview](https://docs.cloudbase.net/integration/introduce.md)
+- [CloudBase Integration Center Usage](https://docs.cloudbase.net/integration/usage.md)
+- [WeChat Mini Program Virtual Payment](https://developers.weixin.qq.com/miniprogram/dev/platform-capabilities/business-capabilities/virtual-payment)
+- [wx.requestVirtualPayment API](https://developers.weixin.qq.com/miniprogram/dev/api/payment/wx.requestVirtualPayment.html)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Configuration instructions, API calls]
+
+**Output Format:** [Markdown with inline code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scenario-specific instructions and code examples; generated function names and paths should be confirmed from the user's CloudBase setup.]
+
+## Skill Version(s):
+
+1.2.89 (source: server-resolved ClawHub release; artifact frontmatter states 2.37.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

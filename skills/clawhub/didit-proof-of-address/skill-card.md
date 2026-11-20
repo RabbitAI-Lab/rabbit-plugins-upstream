@@ -1,44 +1,56 @@
-## Description: <br>
-Integrate Didit Proof of Address standalone API to verify address documents. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers integrate Didit’s Proof of Address API to verify address documents and return extracted details, checks, and warnings.
 
-## Publisher: <br>
-[rosasalberto](https://clawhub.ai/user/rosasalberto) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[rosasalberto](https://clawhub.ai/user/rosasalberto)
 
-## Use Case: <br>
-Developers and operators use this skill to integrate Didit's proof-of-address API, upload supported address documents, and interpret verification results such as approval status, extracted address fields, warnings, and review outcomes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uploads sensitive proof-of-address documents such as utility bills, bank statements, and government documents to Didit. <br>
-Mitigation: Confirm the exact document before upload and review Didit's privacy, retention, and billing behavior before submitting sensitive records. <br>
-Risk: The workflow uses DIDIT_API_KEY to authenticate API requests. <br>
-Mitigation: Use only an API key intended for this workflow and handle it as a secret in the agent environment. <br>
-Risk: Optional vendor_data can add unnecessary identifiers to verification requests. <br>
-Mitigation: Avoid unnecessary vendor_data and include only identifiers required for the user's workflow. <br>
+## Use Case:
 
+Developers use this skill to integrate Didit’s standalone Proof of Address API into backend applications, submitting address documents and optionally checking extracted details against expected identity or address data.
 
-## Reference(s): <br>
-- [Didit Documentation](https://docs.didit.me) <br>
-- [Didit Proof of Address API Reference](https://docs.didit.me/standalone-apis/proof-of-address) <br>
-- [Didit Proof of Address Feature Guide](https://docs.didit.me/core-technology/proof-of-address/overview) <br>
-- [ClawHub Skill Page](https://clawhub.ai/rosasalberto/didit-proof-of-address) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration instructions, API Calls, JSON] <br>
-**Output Format:** [Markdown guidance with inline code examples, shell commands, and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires DIDIT_API_KEY and uploads proof-of-address documents to Didit's API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: Proof-of-address documents and related fields are sent to Didit, and an API key is required.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only documents and fields you are authorized to share, and keep DIDIT_API_KEY in a secure environment variable.
+
+Risk: The security scan has partial coverage because some referenced materials could not be resolved.
+
+Mitigation: Review the complete skill and its referenced materials before deployment.
+
+## Reference(s):
+
+- [Didit Proof of Address API](https://docs.didit.me/standalone-apis/proof-of-address)
+- [Proof of Address feature guide](https://docs.didit.me/core-technology/proof-of-address/overview)
+- [Proof of Address warnings](https://docs.didit.me/core-technology/proof-of-address/warnings-proof-of-address)
+- [Didit pricing](https://didit.me/pricing)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Shell commands, JSON, Guidance]
+
+**Output Format:** [Python integration code, JSON verification results, and a short text summary]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires DIDIT_API_KEY and an address document; API requests may be billed.]
+
+## Skill Version(s):
+
+1.4.0 (source: frontmatter, release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

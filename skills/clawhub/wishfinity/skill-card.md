@@ -1,41 +1,50 @@
-## Description: <br>
-Add "save for later" to shopping agents, product recommendation engines, gift idea generators, and AI commerce experiences by saving product URLs to a universal Wishfinity wishlist. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Save a product from any store to a Wishfinity wishlist. Connects the Wishfinity +W MCP server, which returns a save link the user opens to finish saving. Free Wishfinity account (created when the link is opened).
 
-## Publisher: <br>
-[leebellon](https://clawhub.ai/user/leebellon) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[leebellon](https://clawhub.ai/user/leebellon)
 
-## Use Case: <br>
-Developers building shopping agents, product recommendation engines, gift idea generators, and AI commerce experiences use this skill to offer a user-facing save-for-later action that sends product URLs to Wishfinity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on Wishfinity and the wishfinity-mcp-plusw npm package. <br>
-Mitigation: Install it only when the deployment trusts Wishfinity and the npm package, and review the package before production use. <br>
-Risk: Product URLs can contain private tokens, account-specific identifiers, or other sensitive query parameters. <br>
-Mitigation: Use confirmation for ambiguous save requests and avoid sending URLs that include sensitive parameters. <br>
+## Use Case:
 
+External users can give an agent a product page URL and receive a Wishfinity save link, then open that link to complete saving the product to their wishlist.
 
-## Reference(s): <br>
-- [Wishfinity](https://wishfinity.com) <br>
-- [Wishfinity MCP server](https://github.com/wishfinity/wishfinity-mcp-plusw) <br>
-- [ClawHub skill page](https://clawhub.ai/leebellon/skills/wishfinity) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON configuration and MCP tool output fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The MCP tool add_to_wishlist accepts a product URL and returns an action_url plus display_text for the user-facing save flow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The optional local setup runs an unpinned package with npx.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package before using the local setup; the hosted MCP endpoint is available as an alternative.
+
+## Reference(s):
+
+- [Wishfinity integrations](https://info.wishfinity.com/integrations/overview)
+- [Wishfinity +W npm package](https://www.npmjs.com/package/wishfinity-mcp-plusw)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, JSON]
+
+**Output Format:** [Markdown save link followed by JSON containing the same link]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns a link for the user to open and complete the save on Wishfinity.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,5 @@
+interface:
+  display_name: "上下文交接"
+  short_description: "新会话只接收交接后等待，主 Agent 按需向子 Agent 同步任务上下文"
+policy:
+  allow_implicit_invocation: true

@@ -1,15 +1,30 @@
 # 类型与弃用检查（TypeScript/JavaScript 项目）
 
-> 本文件为 `review_process.md` 第 7 节「类型与弃用检查」的详细内容，适用于 TypeScript/JavaScript 项目。
+> 本文件为 `review_process.md` 第 8 节「类型与弃用检查」的详细内容，适用于 TypeScript/JavaScript 项目。
 > 仅当目录中存在 `package.json` **且**包含 TypeScript/JavaScript 文件（`.ts`、`.tsx`、`.js`、`.jsx`）时，才对该目录执行本维度检查。`package.json` 的位置即为 JS/TS 项目的边界——无论是仓库根目录还是子目录中的子项目均适用。缺少 `package.json` 的目录即使存在零散的 JS/TS 文件，也应跳过（这些文件可能是其他项目的辅助脚本，不属于独立的 JS/TS 工程）。
 
 ---
 
 ## 执行原则
 
-- **忽略范围**：执行代码扫描和检查时，应跳过 `.gitignore` 中指定的文件和目录（如 `node_modules/`、`dist/`、`build/`、`.next/`、`.nuxt/`、构建产物等）。若使用 `find` 命令扫描，可通过 `git check-ignore` 或工具自带的忽略逻辑排除。
-- **辅助定位**：tsc 和 ESLint 的诊断信息仅作为问题「线索」，不能直接等同于最终分级结果。必须结合代码上下文阅读分析后，判断是否为真实问题及其实际严重程度。
+> 通用原则（忽略范围、辅助定位）见 [common_principles.md](common_principles.md)。
+
 - **项目配置优先**：若项目已配置 `tsconfig.json`、`tsconfig.*.json`、`.eslintrc.*`、`eslint.config.*`，以项目自身配置为准。执行时优先使用项目已有配置，不强制覆盖。
+
+## 环境准备
+
+> 本节说明执行 tsc / ESLint 前的前端环境与依赖准备策略。
+
+### 本地审查场景
+
+- 以用户当前本地环境为准，不自动安装 Node、不安装项目依赖。
+- 若用户本地缺少 `node_modules`，按下方 fallback 链降级执行，并在报告中注明环境状态。
+
+### 远程 Claw 场景
+
+- **Node 环境准备**：先按 [frontend_dependency_installation/node_environment.md](../frontend_dependency_installation/node_environment.md) 检测 Node 环境；若未安装或版本不匹配，使用 Volta 安装/切换至项目所需 Node 版本。
+- **项目依赖安装**：Node 环境就绪后，按 [frontend_dependency_installation/project_dependencies.md](../frontend_dependency_installation/project_dependencies.md) 安装/更新 `node_modules`，确保第三方类型、ESLint 插件和框架配置可正确解析。
+- 依赖安装完成后，再执行下方的 tsc / ESLint 检查。
 
 ## TypeScript 编译检查（tsc）
 

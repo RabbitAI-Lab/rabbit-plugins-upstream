@@ -1,41 +1,50 @@
-## Description: <br>
-Browse hookify rule catalog. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Browse hookify rule catalog
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agent users use this skill to browse Hookify rule categories and install pre-built rules into a project as templates or local .claude rule files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad triggers and rule-installation behavior can modify future agent behavior by adding .claude rule files. <br>
-Mitigation: Review the exact destination and rule contents before any write, and install only rules intentionally requested by the user. <br>
-Risk: The packaged artifact does not include the referenced rule files or installer script. <br>
-Mitigation: Treat catalog entries as guidance unless the referenced files are present in the target project or obtained from a trusted source. <br>
+## Use Case:
 
+Developers use this skill to browse categorized pre-built hookify rules, choose rules for common Git, Python, security, workflow, and performance tasks, and install them into a project or adapt them as templates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-hookify-rule-catalog) <br>
-- [Hookify homepage metadata](https://github.com/athola/claude-night-market/tree/master/plugins/hookify) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with inline shell commands, rule identifiers, and rule-file paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or instruct creation of local .claude Hookify rule files when the user requests installation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: Installation behavior is only partly verified because referenced installer and rule files were not included in the scanned release.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation steps and verify the referenced installer and rule files before installing.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-hookify-rule-catalog)
+- [Project homepage (listed in skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/hookify)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands and rule configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Catalog and installation guidance; referenced installer and rule files were not included in the scanned release.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

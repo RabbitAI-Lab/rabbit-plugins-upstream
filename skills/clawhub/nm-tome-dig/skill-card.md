@@ -1,41 +1,50 @@
-## Description: <br>
-Refines an active research session by drilling deeper into a subtopic after tome:research, narrowing results to a specific channel or angle. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Refines an active research session by drilling deeper into a subtopic. Use after tome:research to narrow results to a specific channel or angle
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Researchers and agents use this skill to refine an active tome research session by drilling into a subtopic or channel and updating the saved findings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill refines and updates an active research session, so narrowed searches may change the saved report or emphasize a partial angle. <br>
-Mitigation: Review the updated findings and report before relying on them or sharing them. <br>
-Risk: The skill expects an existing tome research session and may not be useful when no active session or matching channel exists. <br>
-Mitigation: Start with tome:research and confirm the requested channel is available before using this refinement skill. <br>
+## Use Case:
 
+Researchers and other users with an active tome research session can explore a subtopic or narrow the search to a channel, then review the merged and re-ranked findings in the updated report.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-tome-dig) <br>
-- [Tome plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/tome) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown research findings and concise guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read and update the active research session/report; no credential handling, hidden execution, destructive actions, or unrelated data access were identified in the security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Targeted searches may miss relevant material or rank findings imperfectly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check source coverage and review the updated report before relying on or sharing its conclusions.
+
+## Reference(s):
+
+- [Related Night Market tome plugin](https://github.com/athola/claude-night-market/tree/master/plugins/tome)
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-tome-dig)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Conversational findings and an updated Markdown research report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Adds targeted findings to the active session, re-ranks the report, and presents the new findings.]
+
+## Skill Version(s):
+
+1.10.3 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

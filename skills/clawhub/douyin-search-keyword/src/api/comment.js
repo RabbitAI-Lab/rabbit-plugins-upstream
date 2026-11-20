@@ -2,28 +2,39 @@
  * 抖音评论模块
  */
 const constants = require("../config/constants");
-const { requestApi } = require("../utils/request");
+const { SkillError } = require("../utils/errors");
+const { requestApi, pollTaskResult } = require("../utils/request");
+const { formatUnixSeconds } = require("../utils/time");
+const { pickCost } = require("../utils/cost");
+
+function enrichCommentItem(item) {
+  if (!item || typeof item !== "object") return item;
+  const processedItem = { ...item };
+
+  if (item.user_sec_uid) {
+    processedItem.user_url = `https://www.douyin.com/user/${item.user_sec_uid}`;
+  }
+
+  if (
+    typeof item.create_time === "number" &&
+    item.create_time &&
+    !item.create_time_str
+  ) {
+    processedItem.create_time_str = formatUnixSeconds(item.create_time);
+  }
+
+  if (Array.isArray(item.reply_comment)) {
+    processedItem.reply_comment = item.reply_comment.map(enrichCommentItem);
+  }
+
+  return processedItem;
+}
 
 function processCommentResults(data) {
   if (!Array.isArray(data)) {
-    return [];
+    throw new SkillError("API_SCHEMA_CHANGED", "评论结果格式异常", true);
   }
-
-  return data.map((item) => {
-    const processedItem = { ...item };
-
-    if (item.user_sec_uid) {
-      processedItem.user_url = `https://www.douyin.com/user/${item.user_sec_uid}`;
-    }
-
-    if (item.create_time) {
-      processedItem.create_time_str = new Date(
-        item.create_time * 1000,
-      ).toLocaleString();
-    }
-
-    return processedItem;
-  });
+  return data.map(enrichCommentItem);
 }
 
 /**
@@ -35,10 +46,7 @@ function processCommentResults(data) {
  * @throws {Error} API调用失败时抛出错误
  */
 async function createCommentTask(token, url, limit) {
-  const params = {
-    _: Date.now(),
-    token: token,
-  };
+  const params = { _: Date.now() };
 
   const data = {
     url,
@@ -50,6 +58,7 @@ async function createCommentTask(token, url, limit) {
     "/api/douyin/comment/url",
     params,
     data,
+    token,
     constants.CREATE_MAX_ATTEMPTS,
     "创建任务",
   );
@@ -60,31 +69,28 @@ async function createCommentTask(token, url, limit) {
  * @param {string} token - 技能令牌
  * @param {string} url - 视频URL
  * @param {number} limit - 评论数量, 1-10000
- * @returns {Promise<Array>} 评论列表数组
+ * @returns {Promise<{ results: Array, cost?: number }>}
  * @throws {Error} API调用失败时抛出错误
  */
 async function getCommentTask(token, url, limit) {
   const params = {
-    _: Date.now(),
-    token: token,
     url: url,
     limit: limit,
   };
 
-  const response = await requestApi(
-    "GET",
+  const response = await pollTaskResult(
     "/api/douyin/comment/info",
     params,
-    null,
-    constants.QUERY_MAX_ATTEMPTS,
+    token,
     "查询任务",
   );
+  const cost = pickCost(response);
 
   if (response.data) {
-    return processCommentResults(response.data);
+    return { results: processCommentResults(response.data), cost };
   }
 
-  return [];
+  return { results: [], cost };
 }
 
 module.exports = {

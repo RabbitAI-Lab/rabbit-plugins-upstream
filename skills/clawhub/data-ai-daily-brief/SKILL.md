@@ -1,11 +1,22 @@
 ---
+slug: data-ai-daily-brief
+displayName: Data AI Daily Brief
 name: data-ai-daily-brief
-version: "5.0.0"
+version: "5.0.8"
 description: >
   Turn any industry into a daily intelligence briefing. An AI agent searches,
   filters, writes, and delivers structured daily briefs to 9 channels — with
   machine-checked formatting and a business review gate. Ships with a Data+AI
   profile out of the box; switch to any domain via config.
+  中文摘要：行业日报生成器——AI agent 搜索、筛选、编写并投递结构化每日简报至 9 个渠道，
+  含机器格式校验与业务评审门禁。触发词：行业日报、每日情报简报、自动日报、daily brief.
+description_zh: "行业日报生成器：将任意行业转为每日情报简报，AI agent 搜索、筛选、编写并投递至 9 个渠道，含机器格式校验与业务评审门禁；自带 Data+AI 配置，可切换任意领域。"
+not_for:
+  - One-off research reports or market analysis (daily recurring briefs focus)
+  - Real-time alerting or breaking-news push (batched daily digest)
+  - Original investigative journalism (aggregation and synthesis of existing sources)
+  - Publishing without the business review gate (the gate cannot be skipped)
+
 read_when:
   - daily brief
   - industry report
@@ -21,6 +32,17 @@ allowed-tools:
   - execute_command
   - web_search
   - web_fetch
+  - env
+  - file_read
+  - file_write
+  - network
+metadata:
+  openclaw:
+    permissions:
+      - env
+      - file_read
+      - file_write
+      - network
 disable: false
 ---
 
@@ -110,7 +132,7 @@ Produce a professional brief for practitioners in the target industry, based onl
 #### Confidence Tiers
 
 - **Level A — confirmed fact:** first-hand source (official site/blog, GitHub release, earnings filing, live event). → may go into A / B / C / D.
-- **Level B — high-trust secondary:** reliable media (Reuters, Bloomberg, TechCrunch) but no first-hand doc yet. → may cautiously go into A / C with a "media report / no official filing" label; prefer the Watchlist.
+- **Level B — high-trust secondary:** reliable media (Reuters, Bloomberg, TechCrunch) but no first-hand doc yet. → may cautiously go into C with a "media report / no official filing" label; prefer the Watchlist.
 - **Level C — indirect signal / unverified rumor:** social leaks, community chatter, unmerged-PR speculation. → Watchlist only.
 
 #### Deduplication
@@ -249,7 +271,7 @@ Per `config.json`, push to any of **9 channels** (✅ verified / 📦 community-
 
 **Regional:** ✅ **WeChat Work** (`scripts/send_wecom.py` — concise summary first <4096 bytes, then full HTML; 3-layer priority fill; no links in summary; duplicate-push lock), 📦 **DingTalk** (`send_dingtalk.py`), 📦 **Feishu/Lark** (`send_feishu.py`).
 **Global:** 📦 **Slack** (`send_slack.py`), 📦 **Discord** (`send_discord.py`), 📦 **Telegram** (`send_telegram.py`), 📦 **Microsoft Teams** (`send_teams.py`).
-**Universal:** 📦 **Email** (`send_email.py`, SMTP), ✅ **GitHub Pages** (`deploy_github.py`, auto-archives history).
+**Universal:** 📦 **Email** (`send_email.py`, SMTP), ✅ **GitHub Pages** (`deploy_github.py`, auto-archives history). **⚠️ Public-exposure warning: deploying to GitHub Pages publishes the generated report to a publicly accessible URL (and auto-archives it in history). Before deploying, confirm with the user that the report content is safe to make public; do not publish drafts containing confidential/unpublished information.**
 
 > **Encoding note (Windows):** under a GBK locale, running the push script directly can raise `UnicodeEncodeError` on emoji output and crash a channel mid-print. Run with `PYTHONIOENCODING=utf-8 python -X utf8 <script>` or add `sys.stdout.reconfigure(encoding='utf-8')` at the top of the entry script. If some channels fail, re-push only the failed channel with `--force` to avoid duplicate sends.
 
@@ -273,7 +295,8 @@ Per `config.json`, push to any of **9 channels** (✅ verified / 📦 community-
 | Scenario | Action |
 |----------|--------|
 | **Generation-stage format crash (Step 4.5 ❌)** | Return to Step 3 and regenerate the affected section or whole doc; never patch item-count gaps in review |
-| Search yields nothing | Report "no qualifying information today", generate an empty template (title + date only), do not push |
+| Search yields nothing | Report "no qualifying information today", generate an empty template (title + date only) and skip Step 4.5 pre-flight (N1=0 is expected here, not a format crash), do not push |
+| Thin input day (items below profile minimum) | Mark the edition THIN in the judgment and state it explicitly; never pad with stale news to fill the template |
 | A single source is unavailable | Skip it, continue other searches, note "⚠️ {source} unreachable" |
 | All candidates fail review | Output the review detail, do not push, await user decision |
 | Candidates severely insufficient (A–D total < 5) | Expand search first; if still short, demote borderline items to E (tagged 【Demoted】); if still short, report and pause for user decision |
@@ -281,6 +304,15 @@ Per `config.json`, push to any of **9 channels** (✅ verified / 📦 community-
 | Config missing | Generate defaults via `scripts/init_config.py`, then continue |
 | HTML template missing | Generate Markdown only, skip HTML, state so in output |
 | File detection with non-ASCII (e.g. Chinese) filenames | Use `find`, not `ls` — shells like Git Bash mishandle quoting of non-ASCII paths and produce false "file missing" results |
+
+## Output Format
+
+Each run produces, per the configured adapters:
+- **Markdown brief** (`outputs/YYYY-MM-DD/brief.md`) — the canonical source of truth
+- **HTML page** (optional) — rendered from the Markdown for web/archive viewing
+- **Channel payloads** — per-channel digests (e.g., IM summary within length limits) generated by enabled adapters
+
+Structure of the brief itself (sections, length caps, judgment placement) is defined by the profile config and enforced by the format-check step; a brief that fails format-check is not delivered.
 
 ## Customization
 

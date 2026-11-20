@@ -33,6 +33,7 @@ const BRIDGE_CREDENTIAL = runtimeConfig.bridgeCredential;
 const OPERATOR_NAME = runtimeConfig.operatorName;
 const LOGS_DIR = runtimeConfig.logsDir;
 const OUTBOUND_CALLS_ENABLED = runtimeConfig.outboundCallsEnabled;
+const CRM_ENABLED = runtimeConfig.crmEnabled;
 
 // ─── Helpers ───
 
@@ -97,7 +98,7 @@ function buildMcpSkillContext() {
       if (!allowedBins.has(baseBin) && !allowedBins.has(file)) {
         throw new Error(`Permission denied: binary "${baseBin}" not allowed`);
       }
-      return runLocalHelper(file, args);
+      return runLocalHelper(file, args, { allowedBinaries: [...allowedBins] });
     },
 
     callLog: {
@@ -198,8 +199,9 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       description:
         'Make an outbound phone call via Twilio. Amber will handle the conversation ' +
         'autonomously, pursuing the stated objective. ALWAYS use contacts_lookup first ' +
-        'to resolve a name to a verified phone number. The tool will show who it is about ' +
-        'to call and require confirmed=true before actually dialing — this prevents wrong-number calls.',
+        'to resolve a name to a phone number. The tool previews the exact destination and objective; ' +
+        'obtain operator approval before repeating with confirmed=true and the returned approvalToken. ' +
+        'Contact-cache matches are hints, not proof of recipient identity.',
       inputSchema: {
         type: 'object' as const,
         properties: {
@@ -215,6 +217,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
             type: 'string',
             description: 'What to accomplish on the call (e.g., "book a table for 4 at 7pm")',
           },
+          approvalToken: { type: 'string', description: 'Single-use token from the exact call preview. Send only after explicit operator approval.' },
           confirmed: {
             type: 'boolean',
             description: 'Set to true only after the tool has shown you who it will call and you have verified the number. Never set this on the first attempt.',
@@ -258,7 +261,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     {
       name: 'start_screening',
       description:
-        'Enable inbound call screening. Amber will answer incoming calls, ' +
+        'Resume inbound call screening. Amber will answer new incoming calls, ' +
         'identify the caller, take a message, and deliver a structured summary.',
       inputSchema: {
         type: 'object' as const,
@@ -267,7 +270,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: 'stop_screening',
-      description: 'Disable inbound call screening. Calls will ring through normally.',
+      description: 'Pause inbound call screening. Amber declines new incoming calls as busy until screening is resumed.',
       inputSchema: {
         type: 'object' as const,
         properties: {},
@@ -322,7 +325,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         required: ['action'],
       },
     },
-    {
+    ...(CRM_ENABLED ? [{
       name: 'crm',
       description:
         'Manage contacts and interaction history. Look up contacts by phone or name, ' +
@@ -355,6 +358,10 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
             type: 'string',
             description: 'Notes about the contact or interaction',
           },
+          context_notes: {
+            type: 'string',
+            description: 'Contact notes for create or update. Omit to retain the existing notes. Use an empty string to clear them.',
+          },
           tags: {
             type: 'array',
             items: { type: 'string' },
@@ -363,7 +370,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         },
         required: ['action'],
       },
-    },
+    }] : []),
     {
       name: 'bridge_health',
       description:
@@ -404,7 +411,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   try {
     switch (name) {
       case 'make_call': {
-        let { to, name: toName, objective, confirmed } = args as { to?: string; name?: string; objective: string; confirmed?: boolean };
+        let { to, name: toName, objective, confirmed, approvalToken } = args as { to?: string; name?: string; objective: string; confirmed?: boolean; approvalToken?: string };
 
         if (!OUTBOUND_CALLS_ENABLED) {
           return {
@@ -454,46 +461,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         // Normalize to E.164 (strip formatting)
         to = '+' + to.replace(/\D/g, '');
 
-        // Safety check: always verify number against contacts cache before dialing.
-        // Require explicit confirmed=true if no matching contact is found.
         if (!confirmed) {
+          let matchedName = '';
           const cachePath = path.join(__dirname, '..', 'contacts-cache.json');
-          let matchedName: string | null = null;
-          if (fs.existsSync(cachePath)) {
-            try {
-              const cache = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
-              const contacts: any[] = cache.contacts || [];
-              const digits = to.replace(/\D/g, '').slice(-10);
-              const match = contacts.find((c: any) => {
-                const phones: any[] = c.phones || (c.phone ? [{ number: c.phone }] : []);
-                return phones.some((p: any) => (p.number || '').replace(/\D/g, '').slice(-10) === digits);
-              });
-              if (match) {
-                matchedName = [match.firstName, match.lastName].filter(Boolean).join(' ') || match.organization || null;
-              }
-            } catch {}
-          }
-
-          if (!matchedName) {
-            return {
-              content: [{
-                type: 'text',
-                text: `⚠️ Safety check: "${to}" was not found in Apple Contacts. Cannot verify this number belongs to the intended person.\n\nTo proceed anyway, call again with confirmed=true. To find the correct number first, use contacts_lookup.`,
-              }],
-              isError: true,
-            };
-          }
-
-          // Found in contacts — show who we're about to call and require one more confirmation step
-          return {
-            content: [{
-              type: 'text',
-              text: `📞 About to call **${matchedName}** at ${to}.\nObjective: ${objective}\n\nTo confirm and place the call, call make_call again with confirmed=true.`,
-            }],
-          };
+          try {
+            const contacts = JSON.parse(fs.readFileSync(cachePath, 'utf8')).contacts || [];
+            const match = contacts.find((c: any) => (c.phones || (c.phone ? [{ number: c.phone }] : []))
+              .some((p: any) => String(p.number || '').replace(/\D/g, '') === to!.replace(/\D/g, '')));
+            if (match) matchedName = [match.firstName, match.lastName].filter(Boolean).join(' ') || match.organization || '';
+          } catch { /* Missing/unreadable optional cache: show unverified destination warning. */ }
+          const preview = await bridgeRequest('/call/preview', { to, objective });
+          return { content: [{ type: 'text', text: `Preview: call ${to}. ${matchedName ? `Contact-cache match: ${matchedName} (not identity proof).` : "No exact contact-cache match; verify this destination with the operator."} Objective: ${objective}\nObtain explicit operator approval, then repeat with confirmed=true and approvalToken=${preview.approvalToken}. Valid for five minutes and this exact call only.` }] };
         }
-
-        const result = await bridgeRequest('/call/outbound', { to, objective });
+        if (!approvalToken) {
+          return { content: [{ type: 'text', text: 'Missing approvalToken. Preview first with confirmed=false, then obtain operator approval.' }], isError: true };
+        }
+        const result = await bridgeRequest('/call/outbound', { to, objective, confirmed: true, approvalToken });
         return {
           content: [{
             type: 'text',
@@ -555,35 +538,17 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         return { content: [{ type: 'text', text: formatted.join('\n\n') }] };
       }
 
-      case 'start_screening': {
-        // The bridge handles screening automatically when running.
-        // This is a status confirmation — use GET /healthz directly.
-        try {
-          const res = await fetch(`${BRIDGE_URL}/healthz`);
-          const data = await res.json();
-          if (!data.ok) throw new Error('unhealthy');
-          return {
-            content: [{
-              type: 'text',
-              text: 'Call screening is active. Amber is answering incoming calls on your Twilio number. Summaries will appear in your call history.',
-            }],
-          };
-        } catch {
-          return {
-            content: [{
-              type: 'text',
-              text: 'The Amber bridge is not running. Start it with `npm start` in the runtime directory, then screening will activate automatically.',
-            }],
-            isError: true,
-          };
-        }
-      }
-
+      case 'start_screening':
       case 'stop_screening': {
+        const enabled = name === 'start_screening';
+        const result = await bridgeRequest('/screening', { enabled });
+        if (result.enabled !== enabled) throw new Error('The Amber bridge did not confirm the screening change');
         return {
           content: [{
             type: 'text',
-            text: 'To stop screening, shut down the Amber bridge process. While the bridge is running, it automatically answers inbound calls.',
+            text: enabled
+              ? 'Call screening is active. Amber will answer new incoming calls.'
+              : 'Call screening is paused. Amber will decline new incoming calls as busy. Active calls and outbound calling remain available.',
           }],
         };
       }
@@ -600,6 +565,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case 'crm': {
+        if (!CRM_ENABLED) {
+          return {
+            content: [{
+              type: 'text',
+              text: 'CRM is disabled. Set AMBER_CRM_ENABLED=true, install amber-skills/crm dependencies, and restart Amber to use caller memory.',
+            }],
+            isError: true,
+          };
+        }
+
         // Format CRM results into readable text
         const formatCrmResult = (result: any): string => {
           if (!result.success) return result.message ?? result.error ?? JSON.stringify(result);
@@ -673,6 +648,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case 'contacts_lookup': {
         const contactName = (args as any)?.name;
         const contactPhone = (args as any)?.phone;
+        const includeExtendedFields = /^(1|true|yes)$/i.test(process.env.AMBER_CONTACTS_EXTENDED || '');
 
         if (!contactName && !contactPhone) {
           return {
@@ -732,20 +708,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           const formatted = matches.map((c: any) => {
             const fullName = [c.firstName, c.lastName].filter(Boolean).join(' ') || c.organization || 'Unknown';
             const lines = [`### ${fullName}`];
-            if (c.organization) lines.push(`🏢 ${c.organization}${c.jobTitle ? ` — ${c.jobTitle}` : ''}`);
             if (c.phones?.length) {
               lines.push(`📱 ${c.phones.map((p: any) => `${p.number}${p.label ? ` (${p.label})` : ''}`).join(', ')}`);
             }
-            if (c.emails?.length) {
-              lines.push(`📧 ${c.emails.map((e: any) => `${e.address}${e.label ? ` (${e.label})` : ''}`).join(', ')}`);
+            if (includeExtendedFields) {
+              if (c.organization) lines.push(`🏢 ${c.organization}${c.jobTitle ? ` — ${c.jobTitle}` : ''}`);
+              if (c.emails?.length) {
+                lines.push(`📧 ${c.emails.map((e: any) => `${e.address}${e.label ? ` (${e.label})` : ''}`).join(', ')}`);
+              }
+              if (c.relationships?.length) {
+                lines.push(`👥 ${c.relationships.map((r: any) => `${r.name} (${r.type})`).join(', ')}`);
+              }
+              if (c.addresses?.length) {
+                lines.push(`📍 ${c.addresses[0].full}`);
+              }
+              if (c.note) lines.push(`📝 ${c.note}`);
             }
-            if (c.relationships?.length) {
-              lines.push(`👥 ${c.relationships.map((r: any) => `${r.name} (${r.type})`).join(', ')}`);
-            }
-            if (c.addresses?.length) {
-              lines.push(`📍 ${c.addresses[0].full}`);
-            }
-            if (c.note) lines.push(`📝 ${c.note}`);
             return lines.join('\n');
           }).join('\n\n');
 

@@ -7,6 +7,19 @@ most problems automatically.
 
 ## Authentication Issues
 
+Which token is the problem:
+
+```mermaid
+flowchart TD
+    start["Run scripts/apple_music_api.sh verify"] --> code{What fails?}
+    code -->|"401 on every endpoint"| dev["Developer token expired or malformed<br/>→ setup_auth.py --new-dev-token"]
+    code -->|"403 on /v1/me/* only;<br/>catalog still works"| user["Music User Token expired or revoked<br/>→ setup_auth.py (browser sign-in)"]
+    code -->|"429"| rate["Rate limited; the wrapper backs off<br/>→ see HTTP 429 below"]
+    code -->|"Network error"| net["Can't reach api.music.apple.com<br/>→ see Network timeout below"]
+    dev --> other["Both expire around 6 months:<br/>check the other token too"]
+    user --> other
+```
+
 ### HTTP 401 — Developer Token Invalid or Expired
 
 **Symptoms:** Every API call returns `401 Unauthorized`.
@@ -27,9 +40,10 @@ most problems automatically.
 2. Regenerate if expired:
 
    ```bash
-   python3 scripts/generate_dev_token.py <team_id> <key_id> <path/to/AuthKey.p8>
-   export APPLE_MUSIC_DEV_TOKEN="<new_token>"
+   python3 scripts/setup_auth.py --new-dev-token --key-id <key_id> --team-id <team_id> --key-path <path/to/AuthKey.p8>
    ```
+
+   (Or `generate_dev_token.py` with `APPLE_KEY_ID`, `APPLE_TEAM_ID` and `APPLE_PRIVATE_KEY_PATH` set.)
 
 3. Verify:
 
@@ -54,8 +68,8 @@ Catalog endpoints (`/v1/catalog/*`) still work.
 
 **Fix:**
 
-1. Re-authorize in the browser using the MusicKit JS page from `references/auth-setup.md`
-2. Copy the new token from the browser console
+1. Get a new token: `python3 scripts/setup_auth.py` (browser sign-in), or by hand with the MusicKit JS page from `references/auth-setup.md`
+2. If you did it by hand, copy the new token from the page
 3. Update your environment:
 
    ```bash
@@ -133,8 +147,9 @@ PyJWT is the only pip dependency in the entire project, and it's only needed for
 # Force a fresh profile (bypass 7-day cache)
 python3 scripts/taste_profiler.py --max-age 0
 
-# Or delete cache entirely
-rm -rf ~/.apple-music-dj/
+# Or remove just the cached profile (keeps your history, snapshots and config).
+# Ask before deleting — it's the user's data.
+rm ~/.apple-music-dj/taste_profile.json
 ```
 
 ---

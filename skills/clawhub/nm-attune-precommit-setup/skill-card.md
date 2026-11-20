@@ -1,45 +1,57 @@
-## Description: <br>
-Configures pre-commit hooks for linting, type checking, formatting, and testing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Configures pre-commit hooks for linting, type checking, formatting, and testing
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to add or improve pre-commit quality gates for linting, formatting, type checking, tests, security scans, component-level checks, and CI-aligned validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated or adopted pre-commit hooks can execute local scripts automatically during commits. <br>
-Mitigation: Review the generated .pre-commit-config.yaml and any referenced local scripts or Makefile targets before installing hooks. <br>
-Risk: CI examples can upload coverage data to Codecov if the optional workflow step is enabled. <br>
-Mitigation: Review CI configuration and remove or configure coverage upload for the project's data-sharing policy. <br>
+## Use Case:
 
+Developers use this skill to set up or improve pre-commit quality checks in new projects, existing codebases, and monorepos. It provides patterns for local hooks and CI checks covering formatting, linting, type checking, tests, and project-specific validation.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-attune-precommit-setup) <br>
-- [OpenClaw Metadata Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
-- [pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks) <br>
-- [Ruff pre-commit](https://github.com/astral-sh/ruff-pre-commit) <br>
-- [mypy pre-commit mirror](https://github.com/pre-commit/mirrors-mypy) <br>
-- [Bandit](https://github.com/PyCQA/bandit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with YAML, TOML, and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes layered pre-commit patterns, CI examples, and troubleshooting guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: The instructions include staging and commit guidance that could affect unintended project changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review suggested commands, stage only intended files, and inspect the staged changes before committing.
+
+Risk: The CI example uploads coverage data to Codecov.
+
+Mitigation: Check what coverage data and related information your CI sends to Codecov before enabling the upload.
+
+Risk: The security scan was partial because some referenced files were unavailable, so the described workflows were not fully verified.
+
+Mitigation: Review the unavailable referenced materials and confirm relevant workflow behavior before relying on it.
+
+## Reference(s):
+
+- [Attune project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune)
+
+## Skill Output:
+
+**Output Type(s):** [Configuration instructions, Code, Shell commands]
+
+**Output Format:** [Markdown with YAML, TOML, and shell code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

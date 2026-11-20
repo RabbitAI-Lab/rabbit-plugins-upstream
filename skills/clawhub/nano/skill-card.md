@@ -1,65 +1,62 @@
-## Description: <br>
-Nano (XNO) supports cryptocurrency wallet operations, transaction analysis, explorer lookups, address validation, unit conversion, and block-lattice guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Nano (XNO) wallet operations, transaction analysis, and explorer lookups, including sending and receiving, balance checks, address validation, unit conversion, and Nano protocol guidance.
 
-## Publisher: <br>
-[casualsecurityinc](https://clawhub.ai/user/casualsecurityinc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[casualsecurityinc](https://clawhub.ai/user/casualsecurityinc)
 
-## Use Case: <br>
-External users, developers, and wallet operators use this skill when an agent needs to work with Nano/XNO wallets, balances, pending funds, payment requests, transaction history, explorer links, and Nano protocol questions. The skill guides MCP tool use first and CLI commands as a fallback for compatible agent environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically broadcast receive/open transactions and may activate on generic wallet, balance, invoice, or open-account requests. <br>
-Mitigation: Install it only for Nano/XNO wallet work and require explicit confirmation before receive/open, send, refund, representative change, or spending-limit/config changes. <br>
-Risk: Wallet seeds or private keys could be exposed if they are provided to an agent. <br>
-Mitigation: Do not share seeds or private keys with the agent; use OWS-managed wallet flows and placeholder commands when private-key signing is unavoidable. <br>
-Risk: Ambiguous refund, send, or representative-change requests can move funds or alter wallet governance incorrectly. <br>
-Mitigation: Validate destination addresses, show full addresses and amounts, and require operator confirmation before executing value-moving or representative-changing actions. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Nano accounts and transactions, manage wallet operations when requested, and provide address, payment, and explorer guidance.
 
-## Reference(s): <br>
-- [Nano Protocol](https://nano.org) <br>
-- [MCP Reference](references/mcp.md) <br>
-- [Wallets Reference](references/wallets.md) <br>
-- [Balance Reference](references/balance.md) <br>
-- [Receive Reference](references/receive.md) <br>
-- [Send Reference](references/send.md) <br>
-- [Transaction History Reference](references/history.md) <br>
-- [Address Validation Reference](references/validate.md) <br>
-- [Unit Conversion Reference](references/convert.md) <br>
-- [QR Reference](references/qr.md) <br>
-- [Message Signing Reference](references/sign.md) <br>
-- [Message Verification Reference](references/verify.md) <br>
-- [Representative Change Reference](references/change-rep.md) <br>
-- [RPC Account Balance Reference](references/rpc_account-balance.md) <br>
-- [RPC Account Info Reference](references/rpc_account-info.md) <br>
-- [RPC Receivable Reference](references/rpc_receivable.md) <br>
-- [RPC Capability Probe Reference](references/rpc_probe-caps.md) <br>
-- [Submit Block Reference](references/submit-block.md) <br>
-- [Block Send Reference](references/block_send.md) <br>
-- [Block Receive Reference](references/block_receive.md) <br>
-- [Block Change Reference](references/block_change.md) <br>
-- [Diagnostics Reference](references/diag.md) <br>
-- [Nano Representative Lists](https://blocklattice.io/representatives) <br>
-- [NanoTicker Representatives](https://nanoticker.org/representatives) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON tool-call examples and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access for RPC-backed wallet and explorer operations; address validation and unit conversion can be performed offline.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.5.2 (source: server release evidence) <br>
+Risk: Scanner reports possible recipient substitution during transfers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the full destination address and amount through a trusted channel before any transfer.
+
+Risk: Scanner reports unpinned package launches.
+
+Mitigation: Review package launch behavior before installation and use the documented pinned xno-skills version.
+
+Risk: Wallet queries may expose account activity to third-party RPC providers.
+
+Mitigation: Review the configured RPC provider and avoid querying wallet information through providers whose privacy practices you do not accept.
+
+## Reference(s):
+
+- [Nano.org](https://nano.org)
+- [Blocklattice explorer](https://blocklattice.io)
+- [Nano block-lattice reference](artifact/references/blocklattice.md)
+- [Nano wallet send and receive guidance](artifact/references/send.md)
+- [Nano wallet receive guidance](artifact/references/receive.md)
+- [NOMS signing support status](https://github.com/open-wallet-standard/core/pull/217)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and structured tool responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Wallet operations require user intent; wallet secrets are not exposed.]
+
+## Skill Version(s):
+
+5.1.1 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
