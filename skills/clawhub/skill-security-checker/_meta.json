@@ -1,6 +1,9 @@
 {
-  "ownerId": "kn7chdrwbdhaqkwajcyhtfvjx989ddb1",
-  "slug": "skill-security-checker",
-  "version": "2.0.0",
-  "publishedAt": 1784711664202
+  "name": "skill-security-checker",
+  "version": "3.7.0",
+  "description": "Skill Security — 安全审计扫描器",
+  "author": "njskills",
+  "license": "MIT",
+  "schema_version": "1.0",
+  "agent_created": true
 }

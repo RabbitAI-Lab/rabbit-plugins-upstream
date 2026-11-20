@@ -1,41 +1,56 @@
-## Description: <br>
-PubMed citation verifier that detects AI-fabricated PMID references with fuzzy matching against PubMed metadata. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Verifies PMIDs, DOIs, arXiv IDs, and reference lists against academic registries, checking whether each identifier matches the cited paper and producing citation reports and formatted references.
 
-## Publisher: <br>
-[docsor1212](https://clawhub.ai/user/docsor1212) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[docsor1212](https://clawhub.ai/user/docsor1212)
 
-## Use Case: <br>
-Researchers, medical writers, evidence-based medicine teams, and developers use this skill to batch-verify PMID citations, detect invalid or mismatched references, and produce reports for human review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Private drafts or citation-derived search terms may be sent to PubMed or Crossref when verification, DOI checks, or suggestions are enabled. <br>
-Mitigation: Review the selected source path before running, avoid suggestion or DOI checks for sensitive drafts when appropriate, and sanitize citation text before external lookups. <br>
-Risk: PubMed metadata may be stored in a local SQLite cache. <br>
-Mitigation: Use --no-cache for sensitive projects or clear the local cache after verification. <br>
+## Use Case:
 
+Researchers, medical writers, and evidence-based medicine teams use it to audit reference lists and check whether cited identifiers point to the papers they claim.
 
-## Reference(s): <br>
-- [PubMed E-utilities API Quick Reference](references/api_examples.md) <br>
-- [ClawHub Pubmed Verifier release](https://clawhub.ai/docsor1212/pubmed-verifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, code, guidance, files] <br>
-**Output Format:** [Markdown guidance with CLI commands and optional HTML, JSON, or text report files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May query PubMed and Crossref, may cache PubMed metadata locally, and can generate reports for citation review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.4 (source: server release evidence) <br>
+Risk: Reported citation-verification flaws could miss mismatches or misclassify lookup failures, and the security review is partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the results as an aid rather than the sole accuracy check; confirm important citations against the source paper or registry.
+
+Risk: The skill sends citation data in requests to external registries, and disclosure may be inadequate.
+
+Mitigation: Avoid submitting confidential citation information unless you understand and accept the external data flow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/docsor1212/skills/pubmed-verifier)
+- [Project homepage](https://github.com/docsor1212/pubmed-verifier)
+- [Usage guide](references/usage_guide.md)
+- [API examples](references/api_examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, HTML]
+
+**Output Format:** [Citation verification reports in text, JSON, or HTML, plus formatted reference lists.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Verification results use correct, mismatch, partial, invalid, or unknown states; registry failures are reported as unverified.]
+
+## Skill Version(s):
+
+7.2.1 (source: SKILL.md frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

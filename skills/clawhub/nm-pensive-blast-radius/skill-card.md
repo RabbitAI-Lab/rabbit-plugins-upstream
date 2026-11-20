@@ -1,43 +1,49 @@
-## Description: <br>
-Analyzes code change impact with risk scoring and affected-node mapping so developers can understand what a change touches and what lacks test coverage before merging. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes code change impact with risk scoring and affected-node mapping. Use before merging to understand what a change touches and what lacks test coverage
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill before merging code changes to map affected files or functions, identify missing test coverage, and prioritize review based on risk. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may read and search local repository contents to map changed files and call sites. <br>
-Mitigation: Use it only in repositories whose contents may be inspected by the agent, and review proposed commands before execution. <br>
-Risk: Repository search fallbacks using rg or grep can produce false positives. <br>
-Mitigation: Prefer graph or semantic analysis when available, and manually verify affected nodes and test gaps before acting on the results. <br>
-Risk: Risk suggestions may be incorrect or misleading if accepted without review. <br>
-Mitigation: Treat the risk table and suggested actions as review inputs, then confirm coverage, security relevance, and backward compatibility before merging. <br>
+## Use Case:
 
+Developers and reviewers use this skill before merging to map code changes to affected nodes, rank impact risk, and identify affected functions without test coverage.
 
-## Reference(s): <br>
-- [Pensive plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-blast-radius) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with risk tables, prioritized findings, suggested actions, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use graph-based impact results when available, or repository search fallbacks for manual analysis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The skill checks an agent configuration directory while looking for an optional tool; the available security review is marked partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review that check before running the skill and treat the security evidence as incomplete.
+
+## Reference(s):
+
+- [Pensive plugin page](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON]
+
+**Output Format:** [Markdown risk table and structured findings JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings include affected nodes, file locations, source anchors, test coverage status, overall risk, and suggested actions.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {"id": "G01", "kind": "unit", "fn": "ok_anchor", "expect": "OK",
+     "desc": "文件存在且行号在范围内 → OK"},
+    {"id": "G02", "kind": "unit", "fn": "missing_file", "expect": "FILE_MISSING",
+     "desc": "文件不存在 → FILE_MISSING"},
+    {"id": "G03", "kind": "unit", "fn": "line_oor", "expect": "LINE_OOR",
+     "desc": "行号超出文件行数 → LINE_OOR"},
+    {"id": "G04", "kind": "unit", "fn": "backslash_path", "expect": "OK",
+     "desc": "Windows 反斜杠路径同样识别 → OK"},
+    {"id": "G05", "kind": "unit", "fn": "col_suffix", "expect": "OK",
+     "desc": "file.py:12:5 的 5 是列不是行，不误判越界"},
+    {"id": "G06", "kind": "unit", "fn": "no_anchor", "expect": "NO_ANCHOR",
+     "desc": "纯叙述文档 → 无锚点，不判错"},
+    {"id": "G07", "kind": "cli", "fn": "check_exit", "expect": "exit_one",
+     "desc": "有失效锚点时退出码 1"},
+    {"id": "G08", "kind": "cli", "fn": "bad_root", "expect": "exit_two",
+     "desc": "根目录不存在时退出码 2"},
+    {"id": "G09", "kind": "unit", "fn": "lf_only", "expect": "LF",
+     "desc": "写出的报告与包内新增文件行尾为 LF"}
+  ]
+}

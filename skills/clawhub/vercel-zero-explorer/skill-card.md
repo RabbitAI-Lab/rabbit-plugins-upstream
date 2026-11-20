@@ -1,42 +1,55 @@
-## Description: <br>
-AI-powered guide for understanding, using, and building with Vercel Zero, including syntax, .0 files, native tools, explicit effects, structured JSON diagnostics, and AI-native workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered guide for Vercel Zero - the first programming language designed specifically for AI agents. Covers Zero graph-first workflow, .0 projection files, native tools, explicit effects, structured JSON diagnostics, and AI-native development workflows. Built for AI developers, language designers, and researchers exploring the future of AI-native programming.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, AI agent builders, language designers, and researchers use this skill to learn Vercel Zero concepts, generate illustrative Zero snippets, and reason about AI-native development workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Technical claims and examples for Vercel Zero may become outdated or may not match the current official Zero implementation. <br>
-Mitigation: Verify guidance and code examples against current official Zero documentation before relying on them. <br>
-Risk: Generated API examples may encourage users to place secrets in prompts or sample code. <br>
-Mitigation: Use placeholders for credentials and avoid entering secrets into generated examples. <br>
+## Use Case:
 
+Developers, language designers, and researchers use this skill to understand Vercel Zero concepts, review command examples and diagnostics, and explore agent integration patterns. Its version-specific guidance should be checked against the official documentation.
 
-## Reference(s): <br>
-- [Zero Official Documentation](https://vercel.com/docs/zero) <br>
-- [Vercel Zero GitHub Repository](https://github.com/vercel-labs/zero) <br>
-- [AI Agent Programming Language Analysis](https://blog.csdn.net/irpywp/article/details/161167783) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with explanatory text, tables, and fenced code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Markdown-only reference output; no executable behavior or privileged access is declared.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The security review is incomplete: tool-misuse analysis was limited and several local references could not be resolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill and its references before installation; use an isolated, disposable workspace and keep production systems and sensitive data out, as the skill advises.
+
+Risk: The artifact says Zero is experimental and that commands and behavior can change between versions.
+
+Mitigation: Verify version-specific claims and commands against the official repository and documentation before relying on them.
+
+## Reference(s):
+
+- [Vercel Zero GitHub Repository](https://github.com/vercel-labs/zero)
+- [Zero Official Documentation](https://vercel.com/docs/zero)
+- [InfoQ: Vercel Labs Ships Zero, a Graph-First Language Built So Agents Write the Code](https://www.infoq.com/news/2026/08/vercel-ships-zero-ai)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, JSON]
+
+**Output Format:** [Markdown with examples, tables, code blocks, and command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference material only; command and version details require verification against current official documentation.]
+
+## Skill Version(s):
+
+1.0.4 (source: artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

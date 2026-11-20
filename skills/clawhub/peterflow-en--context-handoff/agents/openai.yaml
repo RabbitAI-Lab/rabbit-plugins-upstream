@@ -1,0 +1,5 @@
+interface:
+  display_name: "Context handoff"
+  short_description: "Pass the current task to a fresh chat or an assigned agent"
+policy:
+  allow_implicit_invocation: true

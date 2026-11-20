@@ -1,40 +1,51 @@
-## Description: <br>
-Do Cli helps agents and terminal users install and operate the `do` command-line client for todo and life-tracking workflows through the do REST API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Install and use the do CLI to manage tasks, habits, and related life-tracking records from a terminal or agent.
 
-## Publisher: <br>
-[robbeverhelst](https://clawhub.ai/user/robbeverhelst) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[robbeverhelst](https://clawhub.ai/user/robbeverhelst)
 
-## Use Case: <br>
-Developers, agents, and users of the do personal productivity app use this skill to configure scoped API-key access and run daily task and habit workflows from a terminal or automation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill presents the CLI as agent-safe while the commands can capture tasks, mark tasks done, snooze tasks, and log habits in a real personal account. <br>
-Mitigation: Install only for the intended do account, use a narrowly scoped API key, and require explicit user intent before commands that change task or habit data. <br>
-Risk: Saved configuration can expose broad account access to later agent runs if a key has more scope than the workflow needs. <br>
-Mitigation: Prefer environment variables for agent and CI runs, avoid persisting unnecessary credentials, and grant only the scopes required for the requested workflow. <br>
+## Use Case:
 
+People and agents use this skill to capture and review tasks, manage habits, and work with related life-tracking records through the do CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/robbeverhelst/do-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with command examples and JSON-oriented CLI output expectations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The described commands may read or change personal task and habit data depending on the scoped API key and command invoked.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release evidence) <br>
+Risk: ClawScan rates the skill suspicious with medium confidence because it reports an unverified remote installer and messaging and family-tree capabilities beyond the stated task and habit-management purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, verify the Bun installer through a trusted method and clarify or remove the extra capabilities, following the security guidance in the release evidence.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/robbeverhelst/skills/do-cli)
+- [Project documentation](https://github.com/robbeverhelst/do)
+- [GitHub releases](https://github.com/robbeverhelst/do/releases)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON CLI responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands can read or update account records; destructive operations require an explicit opt-in flag.]
+
+## Skill Version(s):
+
+1.0.19 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

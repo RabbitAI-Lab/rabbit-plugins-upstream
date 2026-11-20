@@ -1,0 +1,33 @@
+{
+  "name": "skill-improver",
+  "version": "1.0.0",
+  "summary": "Turns a skill review's remediation list into executed changes, refusing anything that would fake capability to raise a score.",
+  "intents": [
+    "把评测整改项落地",
+    "修复技能包被扣分的项",
+    "为什么我的技能被判 BLOCK",
+    "技能包体检完怎么改",
+    "apply review findings to my skill",
+    "auto-fix missing LICENSE / ai-index / tags / triggers",
+    "为什么有些项工具不肯修"
+  ],
+  "triggers": [
+    "fix my skill package",
+    "apply the review findings",
+    "why was my skill rejected",
+    "improve skill quality",
+    "skill remediation"
+  ],
+  "not_for": [
+    "creating a skill from scratch",
+    "getting a score without changing anything",
+    "faking tests or demos to pass a review"
+  ],
+  "theory_anchor": "有籍（可定位）/ 有证（可复跑）/ 有门禁（不达标不放行）",
+  "related": ["lgd-skill-review", "summarize-pro", "debug-pro"],
+  "entry": {
+    "diagnose": "python scripts/improve.py <pkg>",
+    "apply": "python scripts/improve.py <pkg> --apply",
+    "doc_drift": "python scripts/improve.py <pkg> --apply --fix-doc-drift"
+  }
+}

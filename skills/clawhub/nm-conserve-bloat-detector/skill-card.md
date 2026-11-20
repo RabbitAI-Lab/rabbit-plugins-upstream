@@ -1,43 +1,54 @@
-## Description: <br>
-Detects codebase bloat via dead code, duplication, complexity, and documentation bloat scans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects codebase bloat via dead code, duplication, complexity, and doc bloat scans
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to scan repositories for dead code, duplication, dependency bloat, stale files, growth trends, and documentation bloat before cleanup, release, or refactoring work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad repository scans can include more files than intended, especially when ignore-file handling is incomplete. <br>
-Mitigation: Confirm the scan scope and maintain .bloat-ignore exclusions before running repository-wide checks. <br>
-Risk: The optional package-registry lookup can disclose package names to an external registry. <br>
-Mitigation: Skip or explicitly approve the npm view check when dependency names or network access are sensitive. <br>
-Risk: DELETE recommendations can remove useful code or documentation if treated as automatic actions. <br>
-Mitigation: Treat DELETE findings as review candidates and require tests, reference checks, dry-run review, and backups before removal. <br>
+## Use Case:
 
+Developers and engineers use this skill to find dead or stale code, duplication, complexity, documentation and dependency bloat, and growth trends during maintenance or before a release. It organizes findings into confidence-ranked analysis and remediation guidance for human review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-bloat-detector) <br>
-- [Project homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and YAML report examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes confidence levels, bloat scores, recommended remediation actions, and review-first cleanup guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release metadata; artifact frontmatter lists 1.9.8) <br>
+Risk: Optional package registry checks may disclose dependency names.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run only the checks needed for the task, and skip registry lookups when that disclosure is unacceptable.
+
+Risk: Some commands are reported as posing file-overwrite risk, and the security scan could not resolve some local references.
+
+Mitigation: Inspect commands and target paths before running them; use dry-run options and backups for file-changing cleanup, and review referenced components when needed.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve)
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-bloat-detector)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown or JSON findings with optional shell commands for analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tiered findings include confidence and prioritization; remediation proposals are reviewed by the user before changes.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

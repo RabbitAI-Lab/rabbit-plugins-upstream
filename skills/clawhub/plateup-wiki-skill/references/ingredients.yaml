@@ -1,0 +1,49 @@
+meta:
+  source: https://wiki.plateupgame.com/ingredients
+  retrieved: 2026-11-05
+  game_version: 1.5.x
+  scope: "Supplement to recipes.yaml, not an exhaustive recipe index."
+
+additional_uses:
+  Apple: [apple_pie_dessert, cheese_board]
+  Bamboo: [bamboo_side, bamboo_stir_fry]
+  Beans: [breakfast_beans]
+  Blue Fish: [fish]
+  Pink Fish: [fish]
+  Broccoli: [broccoli_side, broccoli_cheese_soup]
+  Butter: [lasagne]
+  Carrot: [carrot_soup]
+  Cheese: [broccoli_cheese_soup, cheese_board, mushroom_pizza, onion_pizza]
+  Cherries: [cherry_pie]
+  Corn: [corn_on_cob]
+  Eggs: [breakfast_eggs, cookies, sponge_cake, cupcake, brownies, doughnut]
+  Flour: [apple_pie_dessert, bread_starter, cherry_pie, onion_rings, mushroom_pie, mushroom_pizza, onion_pizza, pumpkin_pie, vegetable_pies, cookies, sponge_cake, cupcake, brownies, doughnut]
+  Ice Cream: [ice_cream]
+  Mandarin: [mandarin_starter]
+  Meat: [meat_soup, steak_stir_fry]
+  Mince: [lasagne]
+  Mushrooms: [breakfast_extras, mushroom_stir_fry]
+  Nuts: [cheese_board]
+  Oil: [mushroom_pizza, onion_pizza]
+  Onion: [broccoli_cheese_soup, carrot_soup, meat_soup, onion_rings, pumpkin_soup, tomato_soup]
+  Potato: [chips, mashed_potato, roast_potato]
+  Pumpkin: [pumpkin_pie, pumpkin_seed, pumpkin_soup]
+  Rice: [bamboo_stir_fry, mushroom_stir_fry, steak_stir_fry]
+  Spaghetti: [spaghetti_bolognese, cheesy_spaghetti]
+  Sugar: [cookies, sponge_cake, cupcake, brownies, doughnut]
+  Sundae Glasses: [sundaes]
+  Tomato: [breakfast_extras, mushroom_pizza, onion_pizza, tomato_soup]
+
+wiki_only_uses:
+  Christmas Crackers: [Christmas Crackers]
+  Nuts: [Nut Roast]
+
+extras_and_equipment:
+  Chocolate Syrup: {unlocked_by: Extra Chocolate Syrup, requested_for: [Sundaes]}
+  Cupcake Stand: {unlocked_by: Cupcake Stand, requested_for: [Black Coffee, Iced Coffee, Latte, Tea]}
+  Extra Ketchup: {unlocked_by: Hot Dogs, requested_for: [Hot Dogs]}
+  Extra Mustard: {unlocked_by: Hot Dog - Mustard, requested_for: [Hot Dogs]}
+  Extra Soy Sauce: {unlocked_by: [Dumpling - Soy Sauce, Stir Fry - Soy Sauce], requested_for: [Dumplings, Stir Fry variants]}
+  Milk: {unlocked_by: Extra Milk, requested_for: [Black Coffee, Iced Coffee, Latte, Tea]}
+  Strawberry Syrup: {unlocked_by: Extra Strawberry Syrup, requested_for: [Sundaes]}
+  Sugar: {unlocked_by: Extra Sugar, requested_for: [Black Coffee, Iced Coffee, Latte, Tea]}

@@ -1,45 +1,50 @@
-## Description: <br>
-Zhanfu Playwright guides agents through ZhanFu WebDriver automation using local HTTP API calls, then Playwright CDP page automation after a WebDriver port is available. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automates ZhanFu storefront workflows through its WebDriver client, using Playwright for browser tasks after a store is opened.
 
-## Publisher: <br>
-[zhangzhang1997](https://clawhub.ai/user/zhangzhang1997) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhangzhang1997](https://clawhub.ai/user/zhangzhang1997)
 
-## Use Case: <br>
-Developers and operators use this skill to open, close, create, inspect, and automate ZhanFu shops through the local ZhanFu client. It is intended for user-directed desktop automation where ZhanFu is installed and the requested action fits the documented Windows or macOS limits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can control a local ZhanFu client, including shop lifecycle actions, plugin settings, download settings, cache clearing, and client exit. <br>
-Mitigation: Allow these actions only for user-directed ZhanFu workflows and confirm restart, cache-clearing, plugin, download-path, and ExitClient requests before execution. <br>
-Risk: The skill may use user-provided ZhanFu credentials through the local client API. <br>
-Mitigation: Use only credentials provided for the current task, avoid storing them, and stop when login or critical API calls fail. <br>
-Risk: Local automation depends on Playwright and requests in the runtime environment. <br>
-Mitigation: Install the dependencies in a controlled environment and consider pinning versions before deployment. <br>
-Risk: Some cache, plugin, and download-directory actions are Windows-only and are not supported on macOS. <br>
-Mitigation: On macOS, do not call SetDownLoadPath, ClearCacheFolder, ClearCache, or SetInstallPlugins; tell the user the requested action is unsupported and stop. <br>
+## Use Case:
 
+Agents use it to manage ZhanFu stores and automate pages in store browsers with Playwright.
 
-## Reference(s): <br>
-- [ZhanFu WebDriver API reference](reference.md) <br>
-- [ClawHub skill page](https://clawhub.ai/zhangzhang1997/skills/zhanfu-playwright) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown guidance with JSON HTTP examples, shell commands, and Python/Playwright code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a local ZhanFu client, Playwright, requests, and user-directed access to the local WebDriver HTTP service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: ClawScan rated the release suspicious with medium confidence, citing client and store management workflows that can terminate processes or delete caches without a required confirmation gate; analysis of much of the package was incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review recovery and cache deletion safeguards before use, verify the bundled Playwright files and dependency lockfile, and confirm watcher and required environment, network, or shell access is acceptable.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/zhangzhang1997/skills/zhanfu-playwright)
+- [ZhanFu WebDriver API reference](artifact/reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Browser actions, Guidance]
+
+**Output Format:** [Concise status text and browser interactions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js 18 or newer; some store management actions are Windows only.]
+
+## Skill Version(s):
+
+1.0.8 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,77 +1,73 @@
 ---
-name: "critical-thinking"
-description: "Install a durable Challenge the Direction rule into an agent's AGENTS.md after explicit user approval."
+name: critical-thinking
+description: On-demand direction check. Pressure-tests a plan, decision, premise, or requested approach before effort goes into it — separates the real goal from the chosen method, tests the assumptions, weighs alternatives and the cost of being wrong, then gives a clear verdict and the cheapest test. Read-only; never edits files or agent instructions.
 ---
 
 # Critical Thinking
 
-Install a standing decision-quality rule into the active agent workspace. This is a one-time setup skill, not a workflow that must be invoked for every decision.
+A Critical Thinking check pressure-tests a direction before effort goes into it. It treats the user's request as evidence of intent, not as proof that the premise or method is sound.
 
-## Goal
+It is not reflexive opposition, a debate exercise, or a lecture on cognitive biases. It serves the user's outcome.
 
-Make the agent treat user instructions as evidence of intent, not proof that the premise or requested direction is sound.
+## When to use
 
-## Installation workflow
+Run it when the user asks: "critical thinking", "challenge this", "check this direction", "is this a good idea", "poke holes in it", "devil's advocate", or the skill by name.
 
-1. Locate the active workspace instruction file, normally the root `AGENTS.md`.
-2. Read the existing file completely enough to preserve its structure and detect conflicts.
-3. Check whether a section named `Decision Quality — Challenge the Direction` already exists.
-4. If the rule already exists with equivalent meaning, make no change and report that installation is already complete.
-5. If the target or authority hierarchy is unclear, stop and identify the possible files.
-6. Show the user:
-   - the exact target path;
-   - the exact rule block below;
-   - whether the action will insert, replace an older equivalent block, or do nothing.
-7. Obtain explicit approval before editing the persistent instruction file.
-8. Preserve all unrelated instructions. Insert the block in the most relevant general-rules section; otherwise append it cleanly.
-9. Re-read the file and verify that the block appears exactly once.
-10. Report the changed path and explain that the behavior applies only when that AGENTS.md is actually loaded. Recommend verification in a fresh session when possible.
+The agent may *offer* a check, in one line, before work that is strategic, costly, public, hard to reverse, or resting on an untested assumption. Do not run it unasked. Never offer it for simple, reversible, low-risk requests.
 
-## Exact rule to install
+Before checking, state in one line what is being checked, in the user's terms.
 
-```markdown
-## Decision Quality — Challenge the Direction
+## Sources
 
-The user's instruction is not proof that the premise or chosen direction is sound.
-For strategic, costly, public, difficult-to-reverse, or assumption-heavy work,
-pause before implementation and perform a brief direction check:
+Use what is already at hand: the conversation, files or links the user pointed to, the project being discussed.
 
-1. Restate the real outcome the user appears to want, separately from the
-   requested method or current hypothesis.
-2. Check relevant evidence, normal practice, existing solutions, constraints,
-   and what has already been tried.
-3. Identify material alternatives and the likely cost of continuing on a false
-   premise.
-4. Say plainly when the requested direction seems weak, premature, internally
-   inconsistent, or unlike the best available approach. Recommend the better
-   route before making consequential changes.
-5. Distinguish the user's tentative idea, preference, question, and explicit
-   final decision. Do not silently promote a tentative statement into a durable
-   rule.
-6. If the user knowingly chooses the original route after seeing the tradeoffs,
-   respect that decision unless it crosses a safety or authority boundary.
+Look up normal practice, existing solutions, or facts only when the verdict depends on them, and say what was looked up. Do not search unrelated files, messages, or accounts.
 
-Do not turn this into reflexive opposition or process overhead. Simple,
-reversible, low-risk requests should still be handled directly. The goal is
-independent judgment in service of the user's outcome, not agreement for its
-own sake.
-```
+Never invent evidence, prior attempts, numbers, or expert consensus. If something material is unknown, say so and mark it **Open**.
 
-## Safety and compatibility
+## The check
 
-- Never edit system prompts, platform policies, identity files, memory, hooks, schedulers, or configuration as substitutes for AGENTS.md.
-- Never overwrite the whole file.
-- Never remove or weaken existing safety, privacy, authority, or user-preference rules.
-- Do not install without explicit user approval.
-- Do not claim global or permanent behavior beyond workspaces that load the modified file.
-- Keep the operation idempotent: repeated runs must not duplicate the block.
-- If an existing decision-quality section conflicts with this rule, show the conflict and ask before replacing it.
+Consider each of these, without forcing them into identical blocks:
 
-## Success check
+1. **Real outcome** — what the user ultimately wants, separate from the requested method or current hypothesis.
+2. **Premise** — the assumptions the direction depends on. Which are supported, which are guesses.
+3. **Evidence and practice** — what is known, what is normally done, what already exists, what has already been tried.
+4. **Alternatives** — materially different routes to the same outcome, including a smaller version or doing nothing. Only the ones that could change the decision.
+5. **Cost of being wrong** — what continuing on a false premise costs, and how reversible it is.
+6. **Status of the idea** — tentative idea, preference, open question, or final decision. Do not promote a tentative idea into a commitment.
 
-Installation succeeds only when:
-- the correct active AGENTS.md was identified;
-- the user approved the exact persistent change;
-- the rule appears exactly once;
-- unrelated instructions remain intact;
-- the agent reports the path and verification status.
+Follow the weakest load-bearing point rather than filling a template. One serious flaw outranks five minor ones.
+
+## Voice
+
+Direct, concrete, fair. Steelman the direction before challenging it.
+
+Say plainly when it looks weak, premature, inconsistent, or worse than an available alternative. Say just as plainly when it holds up — a check that always finds problems is worthless.
+
+No hedging fog, no flattery, no moralizing.
+
+## Output
+
+1. **Verdict** first, in one line: **Go**, **Go with changes**, **Rethink**, or **Stop**, with the single main reason.
+2. **Real goal** — one sentence.
+3. **Load-bearing points** — two to four, each with a short title, why it matters, and a confidence label: **Strong**, **Moderate**, or **Tentative**.
+4. **Better route** — if there is one: the recommended alternative or adjustment, and what it costs compared with the original.
+5. **Cheapest test** — the smallest step that would confirm or kill the main premise before committing.
+6. A brief grounding note:
+   - **Observed:** what the evidence directly supports;
+   - **Inferred:** the judgement this check proposes;
+   - **Open:** what remains unknown, and what would change the verdict.
+
+Keep it short — a check, not a report. Scale depth with the stakes.
+
+## After the check
+
+The user decides. If they knowingly keep the original route after seeing the tradeoffs, proceed without re-arguing, unless it crosses a safety or authority boundary.
+
+Do not re-run the check on the same decision unless new information appears.
+
+## Safety
+
+The check is read-only. It must not edit files, write memories, modify `AGENTS.md`, `SOUL.md`, system prompts, identity, configuration, hooks, or schedules, or install standing rules. It produces a judgement and changes nothing.
+
+Never fabricate sources, data, quotations, or history to strengthen a critique.

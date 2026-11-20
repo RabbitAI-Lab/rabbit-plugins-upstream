@@ -1,13 +1,13 @@
 ---
 name: dlazy-start
 version: 2.0.6
-description: AI 编排器（Claude Code / Cursor / Codex / Copilot）驱动 @dlazy/cli 的快速上手手册。覆盖安装、鉴权、能力探测、调用云端/本地工具、轮询异步任务,以及常见故障恢复。
+description: "AI 编排器（Claude Code / Cursor / Codex / Copilot）驱动 @dlazy/cli 的快速上手手册。覆盖安装、鉴权、能力探测、调用云端/本地工具、轮询异步任务,以及常见故障恢复。"
 triggers:
   - dLazy CLI 智能体上手手册
-metadata: {"clawdbot":{"emoji":"🎬","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli","installAlternative":"npx @dlazy/cli","homepage":"https://dlazy.com","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"AGPL-3.0-or-later","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"你正在为用户操作 @dlazy/cli。先探测:跑 `dlazy tools list` 看可用工具,`dlazy tools describe <名字>` 看单工具的 input/output schema 和成本。调用形态:`dlazy <工具名> --input @file.json`(或加 `--format json` 拿机读 envelope)。异步任务用 `dlazy status <generateId>` 轮询。需要本地 runtime 时跑 `dlazy doctor remotion --install` 或 `dlazy doctor yt-dlp --install`。在没用 `dlazy tools list` 核实之前,绝不声称某工具存在。"}}
+metadata: {"clawdbot":{"emoji":"🎬","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli","installAlternative":"npx @dlazy/cli","homepage":"https://dlazy.com","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"AGPL-3.0-or-later","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"你正在为用户操作 @dlazy/cli。先探测:跑 `dlazy tools list` 看可用工具,`dlazy tools describe <名字>` 看单工具的 input/output schema 和成本。调用形态:`dlazy <工具名> --input @file.json`(或加 `--format json` 拿机读 envelope)。异步任务用 `dlazy status <generateId>` 轮询。需要本地 runtime 时跑 `dlazy doctor remotion --install` 或 `dlazy doctor yt-dlp --install`。在没用 `dlazy tools list` 核实之前,绝不声称某工具存在。"}}
 ---
 
-# dlazy-start — 智能体上手手册
+# 智能体上手手册 Start
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

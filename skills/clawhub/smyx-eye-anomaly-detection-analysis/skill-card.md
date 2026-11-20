@@ -1,46 +1,55 @@
-## Description: <br>
-AI-powered pet eye anomaly detection from close-up pet images or videos identifies redness, tearing, tear staining, and pupil or cornea opacity, then returns structured visual anomaly alerts and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes close-up pet eye images or video for signs of redness, abnormal tearing, and opacity, then returns screening alerts and reports.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External pet owners, boarding centers, and veterinary triage users can submit close-up pet face images or videos for visual screening of eye redness, tearing, opacity, and asymmetry. The skill is a monitoring and triage aid, not a substitute for professional veterinary diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet images, videos, or provided media URLs are sent to the publisher's cloud analysis service. <br>
-Mitigation: Use only media appropriate for third-party processing, avoid sensitive household footage, and confirm the publisher's retention and deletion policy before deployment. <br>
-Risk: The skill can automatically create or reuse a remote identity and store authentication tokens locally for report history access. <br>
-Mitigation: Run the skill in a dedicated workspace, protect or periodically clear local skill data, and review credential-storage and account-linking behavior before use. <br>
-Risk: Visual anomaly results may be mistaken for veterinary diagnosis. <br>
-Mitigation: Present results as screening guidance only and direct users to professional veterinary care for abnormal, severe, or persistent symptoms. <br>
+## Use Case:
 
+Pet owners, boarding staff, and veterinary teams can submit clear pet-face images or videos for a visual screening of redness, tearing, and eye opacity, or retrieve previous reports. Results are screening prompts and do not replace a veterinarian’s diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-eye-anomaly-detection-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis text with report links; optional file output when requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include cloud report history and export links associated with the resolved user identity.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.5) <br>
+Risk: The skill is rated suspicious because scanners report undeclared account and credential handling; reported behaviors include local profile and token storage and possible media uploads.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid installation unless you are comfortable with those behaviors. Use only images you are comfortable sending for analysis, and verify account, token, and media handling before use.
+
+Risk: An option described as avoiding analysis may still trigger it, and scan coverage is partial because a local reference did not resolve.
+
+Mitigation: Do not rely on that option to prevent analysis; resolve and review the missing reference before relying on the scan as complete.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-eye-anomaly-detection-analysis)
+- [API interface notes](artifact/references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Markdown, Guidance]
+
+**Output Format:** [Structured JSON reports with textual or Markdown summaries and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Visual screening output only; not a veterinary diagnosis.]
+
+## Skill Version(s):
+
+1.0.14 (server-resolved release metadata; artifact frontmatter says 1.0.23)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

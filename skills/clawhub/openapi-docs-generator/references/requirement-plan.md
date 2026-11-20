@@ -32,18 +32,18 @@ Scoring rationale:
 
 ## Evidence
 
-- csdn-search (2026-03-13T00:00:00+00:00): [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- csdn-search (2025-09-05T00:00:00+00:00): [Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- github-issues (2026-07-12T05:32:50+00:00): [Add OpenAPI Documentation Examples](https://github.com/nensii21/devlink/issues/252)
-- github-issues (2026-07-25T08:25:57+00:00): [[FEAT] Generate dynamic interactive OpenAPI 3.1 documentation endpoint at /api-docs for REST integration](https://github.com/PRODHOSH/ossfolio/issues/577)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
-- github-issues (2026-07-26T05:12:50+00:00): [Make AWS HTTP API throttling configurable and cost-aware](https://github.com/haya-inc/hayasend/issues/44)
+- github-issues (2026-11-14T08:41:29+00:00): [[QUEUE] CODEX — CONTINUATION 01 (REGISTERED)](https://github.com/StegVerse-Labs/.github/issues/3471)
+- github-issues (2026-11-15T15:02:34+00:00): [PAIRING SURFACE — CONTINUATION 02 · successor to #3467 (rollover at the 2,500-comment cap)](https://github.com/StegVerse-Labs/.github/issues/3472)
+- csdn-search (2026-03-13T00:00:00+00:00): [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=13d1a67839414d4c866316354168eb53&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-159013081-null-null.142^v102^pc_search_result_base6&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- github-issues (2026-11-18T12:19:09+00:00): [[DOCUMENTATION] Add API Documentation Generation](https://github.com/EbzyJones/StellarFox/issues/323)
+- segmentfault-search (2026-11-19T06:13:52.182961+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
+- segmentfault-search (2026-11-19T06:13:52.182961+00:00): [javascript](https://segmentfault.com/t/javascript)
+- segmentfault-search (2026-11-19T06:13:52.182961+00:00): [typescript](https://segmentfault.com/t/typescript)
+- segmentfault-search (2026-11-19T06:13:52.182961+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
+- segmentfault-search (2026-11-19T06:13:52.183463+00:00): [答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
+- segmentfault-search (2026-11-19T06:13:52.183463+00:00): [OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
+- segmentfault-search (2026-11-19T06:13:52.183463+00:00): [答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
+- github-issues (2026-11-16T23:01:06+00:00): [Add PostgreSQL reference-run repository](https://github.com/ramspec-labs/rampspec-backend/issues/43)
 
 ## How The Skill Meets The Requirement
 
