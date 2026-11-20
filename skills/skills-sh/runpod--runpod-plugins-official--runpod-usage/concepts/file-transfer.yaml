@@ -1,0 +1,79 @@
+id: file-transfer
+name: File transfer
+kind: capability
+summary: >
+  Ways to move datasets into Runpod and results out: `runpodctl send` and
+  `receive`, `runpodctl network-volume upload` and `download`, SCP or rsync over
+  SSH to a pod, and the S3-compatible API on network volumes.
+product: null
+is_a: null
+part_of: runpod-platform
+aliases: [runpodctl send, runpodctl receive, network-volume upload, network-volume download, croc, S3 upload, s3api, cloud sync, datasets in, checkpoints out]
+
+surfaces:
+  mcp: []
+  runpodctl: [send, receive, network-volume upload, network-volume download]
+  console: Pods (cloud sync), Settings (S3 API keys)
+
+fields: []
+
+relations:
+  - { type: uses, target: network-volume, cardinality: "0..1" }
+  - { type: uses, target: pod-ssh-access, cardinality: "0..1" }
+
+rules:
+  - id: file-transfer.no-pod-file-api
+    statement: >
+      REST v2 and the Runpod MCP server have no route that moves files to or
+      from a pod. Use SCP or rsync over `ssh.direct`, `runpodctl send` and
+      `receive`, or the S3-compatible API on a network volume.
+    status: documented
+    see: [pod-ssh-access.proxy-vs-direct]
+    evidence:
+      - { source: rest-v2-spec, ref: paths under /v2, seen: "2026-09-28", note: No path uploads or downloads files. }
+      - { source: public-docs, url: "https://docs.runpod.io/pods/configuration/use-ssh" }
+
+  - id: file-transfer.send-receive
+    statement: >
+      `runpodctl send <path>` prints a connection code and waits; run `runpodctl
+      receive <code>` on the other machine. It needs no API key and no pod, and
+      works between any two machines. Each `send` generates a new code unless
+      you pass `--code`, so capture the first line of its output and check that
+      both sides exit 0. Transfers are already compressed, so there is no need
+      to archive first.
+    status: documented
+    evidence:
+      - { source: skill, path: plugins/runpod/skills/runpodctl/SKILL.md, note: File Transfer section. }
+      - { source: public-docs, url: "https://docs.runpod.io/runpodctl/reference/runpodctl-send" }
+      - { source: other, ref: runpodctl send --help (runpodctl 2.14.0), seen: "2026-09-28" }
+
+  - id: file-transfer.s3-api-per-data-center
+    statement: >
+      The S3-compatible API reaches a network volume without a running pod. Only
+      some data centers offer it, each at its own endpoint,
+      `https://s3api-<dc>.runpod.io/`. Pass that endpoint with `--endpoint-url`,
+      the data center id with `--region`, and the volume id as the bucket. S3
+      API keys are separate from Runpod API keys and are created in the console
+      under Settings.
+    status: documented
+    see: [network-volume.s3-api]
+    evidence:
+      - { source: public-docs, url: "https://docs.runpod.io/storage/s3-api" }
+      - { source: skill, path: plugins/runpod/skills/runpod-companion-clis/SKILL.md }
+
+  - id: file-transfer.runpodctl-volume-transfer
+    statement: >
+      In runpodctl 3.1.0 and later, `runpodctl network-volume upload` and
+      `runpodctl network-volume download` move a file or a folder to or from a
+      network volume through its S3-compatible API, with no pod running. They
+      need S3 API keys in addition to the Runpod API key, which looks up the
+      volume's data center unless `--data-center-id` is passed. A transfer that
+      stops partway exits with the code `transfer_incomplete`, and running the
+      same command again resumes it, skipping files that are already done. A
+      full volume exits with `volume_full`: grow the volume, then run the
+      command again.
+    status: documented
+    see: [file-transfer.s3-api-per-data-center]
+    evidence:
+      - { source: other, url: "https://github.com/runpod/runpodctl/blob/main/README.md", seen: "2026-11-06", note: network volume files section and the error code table. }
+      - { source: skill, path: plugins/runpod/skills/runpodctl/reference/command-reference.md, note: Network volume upload and download (v3.1.0+). }

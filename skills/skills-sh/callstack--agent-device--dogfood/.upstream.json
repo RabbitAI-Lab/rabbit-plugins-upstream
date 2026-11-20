@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/callstack/agent-device/dogfood",
+  "repo": "callstack/agent-device",
+  "skillId": "dogfood",
+  "branch": "main",
+  "pushedAt": "2026-11-20T16:09:28Z",
+  "contentHash": "8a76013c8a25fcfafca6af7164db11f6d769eea1a6905f632782d5ab61c952dd",
+  "fetchedAt": "2026-11-20T16:13:57.082Z"
+}
