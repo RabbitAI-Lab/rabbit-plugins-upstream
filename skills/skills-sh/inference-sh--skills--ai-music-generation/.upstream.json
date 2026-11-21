@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/ai-music-generation",
+  "repo": "inference-sh/skills",
+  "skillId": "ai-music-generation",
+  "branch": "main",
+  "pushedAt": "2026-11-17T12:53:05Z",
+  "contentHash": "03797b68d749d983f6cce2f9d0b087f2f4eea0f5181ec6af8342404596eb2231",
+  "fetchedAt": "2026-11-21T15:26:44.350Z"
+}
