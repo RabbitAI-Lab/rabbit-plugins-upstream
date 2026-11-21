@@ -1,40 +1,49 @@
-## Description: <br>
-Audit locally installed agent skills for security and policy issues using the SkillLens CLI or a manual fallback workflow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audit locally installed agent skills for security and policy issues using the SkillLens CLI (`skilllens scan`, `skilllens config`).
 
-## Publisher: <br>
-[jzargona](https://clawhub.ai/user/jzargona) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jzargona](https://clawhub.ai/user/jzargona)
 
-## Use Case: <br>
-Developers and reviewers use this skill to audit local Codex or Claude skill directories, prioritize suspicious findings, and produce risk-focused reports with concrete evidence and fix recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The audit workflow may read skill files under the selected directory, which can expose more local content than intended if the scan root is too broad. <br>
-Mitigation: Review the target path before scanning and prefer a concrete skill directory or configured skill root. <br>
-Risk: The workflow may require installing or running the external SkillLens CLI. <br>
-Mitigation: Confirm the CLI source and use the manual audit fallback when the CLI is unavailable or not trusted. <br>
+## Use Case:
 
+Developers and security reviewers use this skill to audit locally installed Codex or Claude agent skills for security and policy risks. It supports CLI-based SkillLens scans and a manual fallback workflow that produces risk-focused findings and fix recommendations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jzargona/skills/skill-audit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown audit report with inline shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports include verdicts, risk scores, evidence quotes, and fix recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill recommends running an unpinned external SkillLens CLI, which can read local skill files during an audit.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the SkillLens package source, prefer a pinned version or lockfile-backed local install, avoid global install unless needed, run scans as an unprivileged user, and scan a specific target directory.
+
+## Reference(s):
+
+- [Skill Audit ClawHub page](https://clawhub.ai/jzargona/skills/skill-audit)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown audit report with command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include per-skill verdicts, risk scores, evidence quotes, and fix recommendations.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

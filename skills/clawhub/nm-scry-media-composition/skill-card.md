@@ -1,41 +1,58 @@
-## Description: <br>
-Combines GIFs and videos into composite tutorials with vertical or grid layouts via ffmpeg. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Combines GIFs and videos into vertical or grid composites with ffmpeg. Use for multi-part tutorial media.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and technical writers use this skill to combine existing GIFs, videos, and images into tutorial or documentation media using manifest-driven FFmpeg composition. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill guides an agent to run local media-processing commands that write combined output files. <br>
-Mitigation: Confirm FFmpeg execution is intended, review output paths before running commands, and verify the combined file exists with expected size and dimensions. <br>
-Risk: Manifest-provided prerequisite commands can affect the local environment if they are untrusted. <br>
-Mitigation: Use trusted manifests and review any `requires` commands before allowing an agent to execute them. <br>
+## Use Case:
 
+Developers and technical authors use the skill to combine GIFs, videos, and images into media compositions for tutorials and documentation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scry-media-composition) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scry) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with YAML manifests and inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides an agent to validate media component outputs, run FFmpeg composition commands, and report output file metrics.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter says 1.9.8) <br>
+Risk: The security review reports that some examples concatenate media sequentially instead of producing the described vertical or grid layout.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check that the selected example matches the intended layout, then inspect the resulting composition before using it.
+
+Risk: The security review reports that FFmpeg examples can silently overwrite existing output files.
+
+Mitigation: Choose a new output path or confirm and back up any existing file before running an example.
+
+Risk: The security review was partial because several referenced paths were missing, so its evidence is incomplete.
+
+Mitigation: Review the referenced components and their commands before installing or running the skill.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scry)
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scry-media-composition)
+
+## Skill Output:
+
+**Output Type(s):** [Files]
+
+**Output Format:** [Composed GIF or video files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Combines multiple media inputs; reports output dimensions and file size.]
+
+## Skill Version(s):
+
+1.10.3 (source: skill frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

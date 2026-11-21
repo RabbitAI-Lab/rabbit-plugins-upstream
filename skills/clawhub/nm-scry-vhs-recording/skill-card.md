@@ -1,43 +1,54 @@
-## Description: <br>
-Generates terminal recordings using VHS tape scripts and produces GIF outputs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates terminal recordings using VHS tape scripts and produces GIF outputs
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and technical writers use this skill to create terminal demo recordings from VHS tape scripts for documentation, tutorials, and CLI workflow demonstrations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: VHS tape files can execute commands and record terminal output, which may expose secrets, private paths, hostnames, or sensitive command results. <br>
-Mitigation: Review tape files before execution, redact sensitive output, and avoid recording commands that reveal credentials or private data. <br>
-Risk: Publishing with VHS can upload recordings publicly. <br>
-Mitigation: Use publishing options only when public disclosure is intended and the generated recording has been reviewed. <br>
+## Use Case:
 
+Developers use the skill to create terminal-session recordings for documentation and demos by validating VHS tape files and generating GIFs.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-scry-vhs-recording) <br>
-- [OpenClaw Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scry) <br>
-- [VHS Execution Guide](modules/execution.md) <br>
-- [VHS Tape Syntax Reference](modules/tape-syntax.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, Files] <br>
-**Output Format:** [Markdown with inline bash and tape code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide creation of GIF, MP4, WebM, or screenshot files through VHS tape directives.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter lists 1.9.8) <br>
+Risk: Tape commands execute with the user's host permissions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review tape contents and commands before running; only execute tapes you trust on the current host.
+
+Risk: The guide includes a public publishing option, and recordings may contain sensitive content.
+
+Mitigation: Use public publishing only when intended, and inspect recordings for sensitive content before publishing.
+
+## Reference(s):
+
+- [Project homepage (skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/scry)
+- [ClawHub release](https://clawhub.ai/athola/skills/nm-scry-vhs-recording)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Shell commands, Guidance]
+
+**Output Format:** [GIF terminal recordings, with VHS tape instructions and shell commands in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The tape file specifies the output path; VHS also supports MP4 and WebM.]
+
+## Skill Version(s):
+
+1.10.3 (source: artifact frontmatter, ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

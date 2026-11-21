@@ -1,40 +1,50 @@
-## Description: <br>
-Install a durable Challenge the Direction rule into an agent's AGENTS.md after explicit user approval. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+On-demand direction check. Pressure-tests a plan, decision, premise, or requested approach before effort goes into it — separates the real goal from the chosen method, tests the assumptions, weighs alternatives and the cost of being wrong, then gives a clear verdict and the cheapest test. Read-only; never edits files or agent instructions.
 
-## Publisher: <br>
-[srmhrrm-hub](https://clawhub.ai/user/srmhrrm-hub) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[srmhrrm-hub](https://clawhub.ai/user/srmhrrm-hub)
 
-## Use Case: <br>
-Developers and agent operators use this skill to install a persistent decision-quality rule in a workspace AGENTS.md so future agent sessions challenge weak premises before consequential work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill intentionally changes a workspace AGENTS.md instruction file, which can affect later sessions that load that file. <br>
-Mitigation: Review the exact target path and rule block before approving installation, and verify that the rule appears exactly once after editing. <br>
-Risk: Installing the rule in the wrong instruction file may fail to affect the intended workspace or may influence an unintended workspace. <br>
-Mitigation: Confirm the active AGENTS.md path before editing and rely on the skill's requirement to stop when the target or authority hierarchy is unclear. <br>
+## Use Case:
 
+People using an AI agent can request a concise second opinion before investing effort in a plan or decision. The skill tests the assumptions and alternatives, then offers a verdict and a low-cost way to check the direction.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/srmhrrm-hub/skills/critical-thinking) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Configuration] <br>
-**Output Format:** [Markdown rule block with concise installation guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit user approval before editing AGENTS.md; repeated use should be idempotent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: A plan review may offer conclusions that are mistaken or incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the conclusions as advice; assess the supporting evidence and use your judgment before acting.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/srmhrrm-hub/skills/critical-thinking)
+- [Publisher profile](https://clawhub.ai/user/srmhrrm-hub)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Text]
+
+**Output Format:** [Structured Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only advice for user assessment; does not edit files or agent instructions.]
+
+## Skill Version(s):
+
+1.2.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

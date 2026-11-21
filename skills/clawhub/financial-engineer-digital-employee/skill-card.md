@@ -1,42 +1,52 @@
-## Description: <br>
-Provides an end-to-end financial modeling reference workflow covering data profiling, univariate analysis, feature engineering, LR scorecards, XGBoost and DNN modeling, tuning, explainability, model comparison, segmentation, and DeepModel integration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+覆盖数据探查、单变量分析、特征工程、LR评分卡、XGBoost/DNN建模、超参数调优、模型解释、多模型对比、分群建模、DeepModel集成全流程。从数据到模型上线的一站式机器学习建模能力。
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is for demonstration purposes and not for production usage.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers, data scientists, and financial modeling practitioners can use the skill's reference workflows to explore datasets, assess features, compare and explain models, and prepare reviewable analysis drafts. Outputs require qualified human review and are not financial advice or production decisions.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The security scan was benign but incomplete: Skillspector inspected the skill only partially, and many referenced files were absent.
+
+Mitigation: Before using any referenced files or commands, confirm that the source is trusted and that each file or command is expected.
+
+Risk: Modeling drafts may be misleading if data is unauthorized, contains sensitive fields, or includes information unavailable at the prediction time.
+
+Mitigation: Use only authorized, minimized data; check feature timing and leakage; and have a qualified reviewer assess assumptions, results, and limitations before real-world use.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Financial analysts, model developers, and risk professionals use this skill to structure end-to-end credit risk and machine learning modeling workflows. It helps agents draft analysis steps, shell commands, configuration patterns, reports, model artifacts, and comparison guidance that require qualified human review before business use. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Analysis, Code, Shell commands, Configuration instructions]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill states that it does not use persistent storage while its workflows may write reports, logs, models, and other artifacts to disk. <br>
-Mitigation: Choose explicit output directories, set compute and round limits, review generated files for sensitive or regulated data, and delete reports, models, and logs when they are no longer needed. <br>
-Risk: Generated financial modeling outputs may be mistaken for business, investment, legal, insurance, or compliance advice. <br>
-Mitigation: Treat all outputs as draft analytical artifacts and require review by qualified professionals before business, regulatory, or customer-facing use. <br>
-Risk: The workflows can operate on sensitive or regulated financial datasets. <br>
-Mitigation: Run the skill only on datasets the user is authorized to use and follow applicable internal data handling and retention policies. <br>
+**Output Format:** [Markdown guidance with illustrative code, shell commands, and JSON configuration examples]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/financial-engineer-digital-employee) <br>
+**Other Properties Related to Output:** [Reference drafts for human review; the skill itself does not execute commands or perform system operations.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and generated analysis artifact descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct agents to create reports, result.json manifests, serialized models, logs, and output directories; all outputs should be treated as draft analytical artifacts.] <br>
+2.0.6 (source: frontmatter)
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

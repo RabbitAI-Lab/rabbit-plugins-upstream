@@ -1,39 +1,53 @@
-## Description: <br>
-AI-powered options strategy helper for China-market options pricing, Greeks calculation, multi-leg strategy analysis, and volatility trading. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides methods and paper-draft guidance for pricing, Greeks, multi-leg P&L, volatility analysis, and margin stress tests for China exchange-traded options.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Options traders, risk managers, and finance-focused developers use this skill to analyze option pricing inputs, Greeks, common multi-leg strategies, and volatility scenarios for China-market options. It supports educational and analytical workflows, not licensed investment advice or automated trading authority. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill discusses options strategies and market conditions that may be time-sensitive or unsuitable for some users. <br>
-Mitigation: Verify regulatory and market claims against official sources and do not rely on the skill as licensed financial advice, suitability review, broker pricing, or a risk control system. <br>
-Risk: Broad finance trigger phrases may invoke the skill in contexts where users expect trading authority or personalized recommendations. <br>
-Mitigation: Use narrower trigger phrases when deploying and require human review before applying any analysis to real trading decisions. <br>
+## Use Case:
 
+Options traders, quantitative researchers, and risk managers use it to draft educational pricing, Greeks, multi-leg P&L, volatility-surface, margin-stress, and control-checklist analyses for China exchange-traded options.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with explanatory text and code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include option pricing calculations, Greeks summaries, strategy analysis tables, scenario guidance, and risk disclaimers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Security inspection was partial: Skillspector reported 0% coverage because manifest frontmatter was malformed and local references were unresolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the full artifact and resolve the manifest and reference gaps before relying on the scan result.
+
+Risk: Options examples and paper analyses could be mistaken for current trading guidance or executable parameters.
+
+Mitigation: Treat outputs as educational drafts; have qualified personnel verify assumptions and current exchange rules before any operational use.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/security-options-strategy)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Code, Guidance]
+
+**Output Format:** [Markdown with tables and illustrative code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces informational paper drafts and examples; it does not execute code, retrieve market data, access accounts, or place orders. Scope is China exchange-traded options.]
+
+## Skill Version(s):
+
+3.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

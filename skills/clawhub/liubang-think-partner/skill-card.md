@@ -1,42 +1,53 @@
-## Description: <br>
-A Chinese-language thinking partner that applies Liu Bang-inspired leadership, talent, strategy, and decision-making models to team and competition questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-first strategic thinking partner that applies lessons attributed to Liu Bang to leadership, delegation, team alignment, competition, and decision-making.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users and leaders use this skill to frame team-building, delegation, strategic patience, competition, and uncertain decisions through Liu Bang-inspired historical models. Its guidance is advisory and should be checked against current facts and the user's own business context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Leadership and strategy recommendations may not fit a user's current organization, market, or decision context. <br>
-Mitigation: Treat outputs as advisory framing and validate recommendations against current facts, stakeholder input, and local constraints before acting. <br>
-Risk: The artifact includes current-looking 2026 claims that may be stale or unsupported by server provenance. <br>
-Mitigation: Verify time-sensitive claims independently and do not infer GitHub or external provenance when the evidence marks provenance as unavailable. <br>
+## Use Case:
 
+Employees and managers can use the skill to explore leadership, delegation, team collaboration, strategic choices, and decision-making through historical analogies and structured reflection. Its output is a thinking aid; formal HR, legal, safety, financial, and organizational decisions should follow applicable processes and be made by qualified people.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/liubang-think-partner) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
-- [Artifact SKILL.md](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance in Chinese with occasional English terms] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory leadership and strategy analysis; no executable output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server-resolved release evidence) <br>
+Risk: Historical analogies and general leadership guidance may be mistaken for tailored professional advice or a formal organizational decision.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the output as a reflection aid. Route HR, legal, safety, financial, and other formal decisions through applicable institutional processes and qualified personnel.
+
+Risk: Including identifiable personal or organizational details in prompts or drafts could expose sensitive information.
+
+Mitigation: Use abstract role labels and minimal context; add specific background only during an appropriate human review.
+
+## Reference(s):
+
+- [Liubang Think Partner on ClawHub](https://clawhub.ai/gechengling/skills/liubang-think-partner)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-first; may respond in English. Provides reflective prompts, historical analogies, and structured decision frameworks.]
+
+## Skill Version(s):
+
+2.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

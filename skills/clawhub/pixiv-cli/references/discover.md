@@ -1,0 +1,299 @@
+# Discovery playbooks
+
+Chains for finding works and artists. All commands below assume the preflight
+in SKILL.md already ran. Verify flags with `pixiv <cmd> --help`.
+
+## Find works by keyword/tag
+
+```
+pixiv search "landscape" --type artwork --limit 10 --json
+```
+
+- Default search field is partial tag match (`--search-by tag-partial`); switch
+  to `--search-by tag-exact`, `--search-by title-caption`, or authenticated
+  `--search-by tag-title-caption` when the user asks for exact tags, title/caption,
+  or tags-plus-title/caption search. Use `--period day|week|month|half-year|year`
+  to limit the time range, or use inclusive `--start-date YYYY-MM-DD` and/or
+  `--end-date YYYY-MM-DD` (never together with `--period`).
+- For a reliable boolean tag query, use exact tags: `pixiv search "tagA tagB"
+  --search-by tag-exact` requires both tags, while `pixiv search "tagA OR tagB"
+  --search-by tag-exact` accepts either tag. `OR` is uppercase; literal `AND`
+  is not an operator. Partial tag search also accepts the verified uppercase
+  `OR`, but it can match partial, alias, or translated tags and is not a strict
+  exact-tag AND. `title-caption` and `tag-title-caption` have no boolean-tag contract.
+- `search` does not have a `--tag` flag. Supply tag text as the required `WORD`;
+  reserve `--tag` for `user bookmarks` (filter) and `bookmark add` (repeatable
+  bookmark tag).
+- Sort defaults to `date_desc`; `date_asc` is the only other supported value.
+- `--content-type all|illust-and-ugoira|illust|manga|ugoira`, `--ai-mode
+  all|exclude|only`, `--aspect-ratio all|landscape|portrait|square`,
+  `--resolution all|high|medium|low`, and exact `--draw-tool` names are
+  artwork-only filters. `--type` selects the entity route; it is not an
+  artwork subtype flag.
+- `--bookmark-min N` / `--bookmark-max N` are non-negative inclusive public
+  bookmark-count bounds. Use `--bookmark-strategy auto|local|best_effort|server`
+  only when the user explicitly asks for bookmark-count filtering. `auto`
+  currently uses the local candidate filtering path; `local` has the same
+  filtering semantics. `best_effort` preserves the upstream candidate bounds
+  and marks the result partial when local completeness cannot be established.
+  `server` fails explicitly because this branch has no reliable server-filter
+  evidence. Never call bookmark count a like count, and do not describe a
+  candidate page as a complete site-wide result.
+- `--rating sfw|r18|r18g|mature|all` is a local artwork filter over normalized
+  DTO `x_restrict`; it binds the canonical filter digest to the opaque cursor
+  and is never sent as an upstream `rating` or `x_restrict` field. The same
+  unsupported-field rule applies when a flag is not valid for the selected
+  entity.
+- Drawing-tool names use the fixed catalog for this CLI version. Choose an exact
+  value from the [CLI reference](https://github.com/FlanChanXwO/pixiv-cli/blob/main/docs/en/cli-reference.md#drawing-tool-catalog), checking the installed version's help when versions differ;
+  a unique one-edit spelling correction is shown in the validation error.
+- Search requires an authenticated local account. `tag-title-caption` and
+  bookmark-count filtering are App-only in this branch. Never add a Cookie
+  workaround or report an authentication failure as an empty result.
+- Need page 2+: `--page N` (1-based) with a positive `--limit`. Ordinary artwork search without local filtering starts at the target raw offset; AI-only and bookmark-count filtering still skip after local filtering and may read preceding batches.
+- Local filters skip leading empty upstream batches until the first non-empty
+  logical batch or true end. `--limit N` fills filtered results across batches;
+  `--limit 0` walks all filtered results. Do not invent request caps.
+- There is no like-count field; do not treat bookmark totals as likes.
+- Artwork JSON/text include the stable page URL
+  `https://www.pixiv.net/artworks/{id}` as the first field/line. Search JSON also carries available viewer `is_bookmarked`/`is_muted`, `visible`, `sanity_level`, `restriction_attributes`, and optional `series`; detail may add `total_comments`. Viewer state applies to the read account, so recheck before writing under a different account. Omitted viewer/safety keys are unknown, not `false` or `0`; an explicit empty `restriction_attributes` remains `[]`.
+
+## Reverse-search an image
+
+Use the same `search` command with a local regular file or an HTTP(S) image URL:
+
+```bash
+pixiv search ./image.png --provider saucenao --json
+pixiv search https://your-image-url.example/image.png --provider all --ndjson
+```
+
+- An explicit `http:`/`https:` scheme always selects reverse-search mode. An
+  invalid URL is an error and must not be retried as a keyword. Other values
+  select image mode only when they resolve to an existing regular file; other
+  text remains a keyword.
+- Providers are `saucenao`, `ascii2d-color`, `ascii2d-bovw`, and `all`.
+  `reverse_search.provider` defaults to `saucenao`; `--provider` is a one-call
+  override. `reverse_search.pixiv_only` defaults to true and controls whether
+  non-Pixiv evidence stays in `results`.
+- Image mode accepts provider/output/proxy flags only. Do not add keyword
+  filters, `--type`, `--limit`, `--page`, or `--trending-tags`.
+- The reverse-search source must be a local regular-file path or an HTTP(S)
+  URL. Binary image bytes on stdin do not select image mode;
+  `cat image.png | pixiv search` is unsupported.
+- SauceNAO and ascii2d are third-party upload services. The CLI snapshots the
+  source once and returns only its kind/hash, so use an image and URL that the
+  user is authorized to share. Provider retention/caching follows provider
+  policy; ascii2d accepts JPEG/PNG/WEBP and has a provider-specific 10 MB limit.
+- Use TOML paths such as `reverse_search.network.proxy_url` and
+  `reverse_search.network.user_agent` with `pixiv config set` for a dedicated
+  ascii2d proxy and User-Agent. `reverse_search.flaresolverr.url` enables
+  challenge-only JSON recovery. The solver's upstream proxy is separate from
+  solver control traffic and never
+  receives the native ascii2d multipart image upload.
+- JSON returns `input`, provider summaries, raw provider evidence, canonical
+  `records`, provider errors, and `partial`. Piped/explicit NDJSON emits only
+  canonical records. Reverse-search artwork records use generic `type=artwork`,
+  not `illust`, because subtype is not established; external-only hits are not
+  records. With `all`, one successful and one failed provider is a successful
+  partial result; a single-provider or all-provider failure is non-zero.
+- Never echo the source, API key, temporary path, CSRF/redirect values, or
+  upstream response body. The MCP version has the same provider result shape
+  but permits private files and private/loopback/link-local URLs only for a
+  trusted local MCP client; see the MCP reference for that trust model.
+
+## Find novels by keyword/tag
+
+```
+pixiv search "fantasy" --type novel --limit 10 --json
+```
+
+- The canonical route uses `--type novel` and supports only
+  `--search-by tag-partial|tag-exact|title-caption`, `--sort
+  date_desc|date_asc`, and `--period day|week|month`. The legacy
+  `pixiv novel search` route remains a compatibility route with the same basic
+  fields.
+- `--rating`, `--min-text-length`, `--max-text-length`, and `--original-only`
+  are not part of the v1 novel-search contract. Do not send them or treat them
+  as local filters.
+- Novel search uses App authentication and follows the same logical
+  `--limit`/`--page` rules as other paged lists. Never infer a request cap.
+- Novel JSON includes `url`, `x_restrict`, `text_length`, and `is_original`.
+
+## Pagination and completeness
+
+- A search without an explicit `--limit` returns one logical upstream batch. It
+  is a sample, never evidence that no further matches exist.
+- `--limit N` continues across upstream batches until it has N filtered results
+  or reaches the current end. If it returns exactly N, say “found N matching
+  works” or “first N matches”; never say “only N matches exist”. If it returns
+  fewer than N, the current query reached its end and that fact may be stated.
+- When the user asks for a specific number of candidates, request that number
+  with `--limit N`; do not stop at a smaller first batch. To continue a prior
+  bounded search, keep WORD, search fields, filters, and sort identical, then
+  increment `--page N` (1-based). `--page` always requires a positive
+  `--limit`.
+- Only use `--limit 0` for an explicit request to enumerate every result the
+  current search can return. State that this is an exhaustive traversal of the
+  current API search result, not an unsupported claim about a permanent global
+  corpus.
+
+## From a search hit to full detail
+
+For a composable search-to-detail pipeline, prefer canonical NDJSON:
+
+```bash
+pixiv search "landscape" --type artwork --limit 20 | pixiv detail
+```
+
+The pipe makes `search` select canonical NDJSON automatically. The explicit
+producer form is equivalent:
+
+```bash
+pixiv search "landscape" --type artwork --limit 20 --ndjson | pixiv detail
+```
+
+Artwork, novel, and user search records infer the matching detail endpoint from
+`type`; no `--type` is needed. In record mode, an explicit `--type` is only a
+compatibility constraint and never overrides the record type. Reverse-search
+`artwork` and `user` identity records can enter the same pipeline:
+
+```bash
+pixiv search ./image.png --provider all --ndjson | pixiv detail --ndjson
+```
+
+When a single raw ID or URL is more convenient, the existing detail form remains
+supported:
+
+```bash
+pixiv detail 129543211 --json
+```
+
+For record input, `detail --ndjson` emits one canonical Record per line and
+`detail --json` emits one complete JSON array. `search --json` is a complete
+aggregate document, not a record stream, so it cannot be piped directly into
+`detail`. Inspect returned fields before selecting values for a follow-up action;
+prefer one `detail` call over re-searching the same work.
+
+## Explore an artist
+
+```
+pixiv user detail 11
+pixiv user artworks 11 --limit 20
+pixiv user novels 11 --limit 20
+pixiv user bookmarks 11 --tag "landscape" --limit 20
+pixiv user following 11 --limit 20
+pixiv user followers 11 --limit 20
+pixiv user follow add 123456 --restrict private
+pixiv follow remove 123456
+pixiv user related 11 --limit 20
+pixiv user blocked 11 --limit 20
+```
+
+To discover a user by name instead of starting from an artwork, use:
+
+```
+pixiv user search "NAME" --limit 20 --json
+```
+
+- User search uses the authenticated App user-search operation. This v1 branch
+  has no anonymous or `related_illust_authors` fallback; an account or an
+  explicit authentication error is required.
+
+- `user detail USER_ID` requires a numeric ID (no self-default). `--json` gives
+  the full stable profile envelope.
+- `user artworks` / `novels` / `bookmarks` / `following` / `followers` /
+  `blocked` default to the current account when USER_ID is omitted; `detail`
+  and `related` require an explicit numeric ID.
+- User detail and user-list routes accept numeric USER_ID values only. A
+  `pixiv.net/users/<id>` URL is rejected rather than treated as an implicit
+  namespace conversion. For a name, use `user search` while authenticated. Do
+  not substitute an artwork search or label its authors as a username-search
+  result.
+- Follow mutations accept a positive numeric USER_ID or a canonical user
+  Record. `pixiv user follow add/remove` and the root `pixiv follow
+  add/remove` compatibility route share the same owner; `follow add
+  --restrict` accepts `public|private` and defaults to `public`. User profile
+  URLs are rejected locally, and successful mutations keep the empty-success-
+  output contract.
+
+## Followed and latest feeds
+
+```
+pixiv timeline following --type artwork --content-type manga --limit 20
+pixiv timeline following --type novel --restrict private --limit 20
+pixiv timeline latest --type artwork --content-type illust --limit 20
+pixiv timeline latest --type novel --limit 20
+```
+
+- `--type` selects the entity (`artwork` or `novel`). It is not an artwork
+  subtype selector; use `--content-type` for artwork subtype semantics.
+- Following artwork accepts local `all|illust-and-ugoira|illust|manga|ugoira`
+  filtering and defaults to `all`. The upstream following endpoint only takes
+  `restrict`, so the subtype is filtered from returned DTOs and must not be
+  sent as an upstream query parameter. A positive `--limit` continues across
+  upstream batches until the logical result is filled or the current cursor
+  ends.
+- Latest artwork defaults to `illust` and accepts only `illust|manga`; do not
+  use search's broader `all` selector. Explicit `--content-type` is invalid
+  for either novel timeline route.
+
+## Rankings and recommendations
+
+```
+pixiv ranking --mode day --limit 10
+pixiv ranking --mode week --date 2026-07-01 --limit 10
+pixiv ranking --mode week_r18 --limit 10
+pixiv ranking --type novel --mode week --limit 10
+pixiv recommended --type artwork --limit 10
+pixiv recommended --type artwork --content-type manga --limit 10
+pixiv recommended --type all --limit 5
+```
+
+- `ranking` defaults to artwork; pass `--type novel` for novel ranking. The
+  artwork-only `--date YYYY-MM-DD` option is rejected for novel ranking.
+  Both entity types support `day`, `day_male`, `day_female`, `week`, `week_original`,
+  `week_rookie`, `month`, `day_manga`, `week_manga`, `month_manga`,
+  `week_rookie_manga`, `day_r18`, `day_male_r18`, `day_female_r18`,
+  `week_r18`, and `week_r18g`. The final nine require authentication; never
+  substitute a failed extended mode with `day`.
+- `recommended` always needs authentication and a kind. Use the typed
+  `--type` flag; for artwork, `--content-type all|illust|manga` is a local
+  filter over returned artwork DTO kinds and is not sent as the upstream
+  `content_type` parameter. For `all`, inspect the actual output shape and
+  keep the returned categories separate rather than assuming one flat list.
+
+## Curate: bookmarks and follows
+
+```
+pixiv bookmark add 129543211
+pixiv follow add 11
+pixiv bookmark list --type artwork --limit 20
+pixiv bookmark list USER_ID_OR_URL --type all --limit 20 --json
+pixiv bookmark tags --limit 20
+pixiv bookmark tags USER_ID_OR_URL --type all --limit 20 --json
+pixiv bookmark detail ARTWORK_ID_OR_NOVEL_ID_OR_URL --type novel --json
+```
+
+`bookmark list` and `bookmark tags` accept a user ID or user URL. Their
+`--type all` mode reads artwork first and novels second, applies one logical
+page across both streams, and keeps typed records/tags separate; a failure in
+either stream fails the aggregate before JSON/NDJSON is emitted. `bookmark
+detail` accepts an artwork or novel ID/URL with a matching `--type`, but not
+`all`. State the target ID in one line before executing (SKILL.md operation
+tiers). `remove` variants are symmetrical. These need authentication; on an
+anonymous session report that a login is required instead of attempting
+fallback.
+
+## Search a local vector index
+
+With setup authorized, run `pixiv vector setup` for local CPU inference (default `siglip2-base-512`, optional `siglip2-base-256`). Both download fixed FP32 text/image models and a tokenizer; text queries allow 64 tokens including EOS. macOS arm64, Linux AMD64/ARM64 and Windows AMD64/ARM64 have native assets; Intel macOS uses cloud models. Run `pixiv vector setup --model gemini-embedding-2-preview` for cloud inference (optional `--base-url URL`) and provide the key privately through hidden input or stdin. The saved key is redacted by configuration output. Setup probes controlled text and PNG before saving.
+
+`pixiv vector sync --json` scans both bookmark scopes for the selected local account and calculates shared pending pages. After the initial scan, it checks the head; `--reconcile` traverses selected lists to detect removed or moved memberships, preserving shared artworks/vectors. Use `--restrict public|private|all`, `--content-type all|illust-and-ugoira|illust|manga|ugoira` and `--rating all|sfw|r18|r18g|mature` to limit this run. Metadata is recorded before type/rating filtering. Public/private workers share a minimum 0.2-second Pixiv interval and valid 429 cooldowns, with one SDK read retry; each combined batch of up to 100 list pages is followed by serial embedding. Completed pages/checkpoints survive interruption; rerun the same command to continue. A failed reconciliation keeps prior memberships.
+
+Select original bookmark positions with `vector sync --limit 100`, `--offset 500 --limit 10`, or `--tail 10`. Each selected visibility counts independently (`--restrict all --limit 100` selects up to 200 works). Select positions before type/rating filtering; existing vectors and returned unavailable works still occupy positions. Limit 0 means through the end; tail must be positive, excludes offset/limit, and traverses each list completely before embedding its final selection. Range flags exclude reconcile. Only selected matching works are embedded, with manga still using its first page. Repeat interrupted commands to resume their isolated checkpoints; completed commands start a fresh selection next time. Range completion is separate from a full initial scan. Inspect the optional `range` summary and unfinished `status --json` `ranges`; preserve other pending work for ordinary sync/search.
+
+`pixiv vector add ID_OR_URL...` refreshes and embeds specific artworks, deduplicates within the call and reuses valid vectors; omitted targets read standard artwork NDJSON. It stops at the first error, preserving earlier results; missing works create no placeholder. `pixiv vector search "a rainy city" --json` or `pixiv vector search ./reference.png --ndjson` searches the current model space. Input recognizes actual local images and HTTP(S) image URLs; plain names shared with non-image files remain text. Explicit image paths/URLs report invalid content or loading failures; `--image` remains supported. Tag/character/appearance descriptions are ordinary text queries ranked against image vectors. Results retain snapshots, best-page scores and standard pagination. A busy/limited/stopped catch-up can leave pending pages; inspect `index` and stderr warnings. An empty index with incomplete initial scans prompts `vector sync`. `--no-sync` searches saved vectors without catch-up or requiring login. All local accounts share the index, including private/R18 metadata.
+
+`pixiv vector status --json` shows models, pending pages and private disk usage. `vector clear --unused` removes other models' vectors, `--index` removes records/vectors while retaining configuration, and `--all` removes vector data and disables recording. Cleanup requires confirmation or `--yes`; authorize deletion before running it.
+
+Local vector setup accepts `--device cpu|gpu` (default CPU). GPU downloads WebGPU explicitly and must pass the CPU comparison probe; runtime GPU errors prompt CPU setup. Text stays on CPU; switching devices preserves vectors.

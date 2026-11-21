@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/find-agent",
   "slug": "find-agent",
   "ownerHandle": null,
-  "version": "1.3.5",
-  "updatedAt": 1778764909599,
-  "contentHash": "09dae6315cdd3d41f68bac782eb50147e4c7a4fdacfcda4891e8b48cc8677f7b",
-  "fetchedAt": "2026-07-26T19:13:21.010Z"
+  "version": "1.1.0",
+  "updatedAt": 1795109602517,
+  "contentHash": "a005f19130eb383a23e5115e761a50fa6b0585016e3e1d1737e840bf3f0746db",
+  "fetchedAt": "2026-11-21T15:31:43.549Z"
 }

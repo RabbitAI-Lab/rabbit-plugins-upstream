@@ -1,44 +1,58 @@
-## Description: <br>
-Read and send email via IMAP/SMTP, including checking unread messages, fetching content, searching mailboxes, marking messages read or unread, and sending email with attachments across multiple accounts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read and send email via IMAP/SMTP. Check for new/unread messages, fetch content, search mailboxes, mark as read/unread, and send emails with attachments. Supports multiple accounts. Works with any IMAP/SMTP server including Gmail, Outlook, 163.com, vip.163.com, 126.com, vip.126.com, 188.com, and vip.188.com.
 
-## Publisher: <br>
-[troioi-vn](https://clawhub.ai/user/troioi-vn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[troioi-vn](https://clawhub.ai/user/troioi-vn)
 
-## Use Case: <br>
-Developers and agent users use this skill to connect an agent to standard IMAP and SMTP mail servers for mailbox lookup, message retrieval, attachment download, and outbound email workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access real mailbox contents and send email through configured accounts. <br>
-Mitigation: Use a dedicated app password or provider authorization code and configure only accounts that are appropriate for agent access. <br>
-Risk: Stored IMAP and SMTP credentials may expose mailbox access if the local configuration is mishandled. <br>
-Mitigation: Store credentials in the configured user-level environment file, avoid main account passwords, and rotate credentials if the environment is shared or compromised. <br>
-Risk: Email attachments and file-backed message content can expose local files or introduce untrusted downloaded content. <br>
-Mitigation: Keep ALLOWED_READ_DIRS and ALLOWED_WRITE_DIRS narrow, review outgoing attachments before sending, and treat downloaded attachments as untrusted files. <br>
+## Use Case:
 
+People with configured IMAP/SMTP accounts use this skill to read, search, organize, and send email, including messages with attachments.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/troioi-vn/imap-smtp-email-maddy-fix) <br>
-- [Publisher profile](https://clawhub.ai/user/troioi-vn) <br>
-- [Google App Passwords](https://myaccount.google.com/apppasswords) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with shell command examples and CLI JSON/text output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read mailbox contents, send email, and write downloaded attachments only within configured account and directory settings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.14 (source: ClawHub release evidence) <br>
+Risk: The skill can create mailboxes and copy or move messages, which changes mailbox contents.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use these commands only when requested, and confirm the source and destination mailboxes before moving messages.
+
+Risk: The setup guidance allows disabling TLS certificate verification for servers with self-signed certificates.
+
+Mitigation: Keep certificate verification enabled unless the server certificate has been independently checked and the exception is necessary.
+
+Risk: The security scan was incomplete, so it does not establish that unexamined portions are safe.
+
+Mitigation: Review the skill and its permissions before configuring it with mailbox credentials.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/troioi-vn/skills/imap-smtp-email-maddy-fix)
+- [Google Account App Passwords](https://myaccount.google.com/apppasswords)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Files]
+
+**Output Format:** [JSON command results with email content and metadata; downloaded attachments as files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+0.0.15 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

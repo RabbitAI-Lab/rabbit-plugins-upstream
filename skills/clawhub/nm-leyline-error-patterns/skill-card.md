@@ -1,41 +1,50 @@
-## Description: <br>
-Provides error classification, recovery, and graceful-degradation patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides error classification, recovery, and graceful-degradation patterns.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agent builders use this skill to classify service and agent failures, choose recovery strategies such as backoff or graceful degradation, and produce user-actionable error handling guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Full-context error logs can capture tokens, credentials, prompts, file paths, or personal data. <br>
-Mitigation: Redact or minimize logs and alerts before applying the examples; avoid storing credentials or sensitive prompt content in debugging records. <br>
-Risk: Generic error-handling patterns may be copied into a service without matching its reliability or escalation requirements. <br>
-Mitigation: Review the classifications, retry limits, fallback behavior, and escalation paths before deployment. <br>
+## Use Case:
 
+Developers building integrations use this skill to classify service and agent errors, choose recovery strategies, apply graceful degradation, and structure debugging guidance.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-leyline-error-patterns) <br>
-- [Leyline Plugin Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Python and YAML examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only; examples should be adapted and reviewed before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: A benign scan does not guarantee that the skill is risk-free.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the guidance and assess its examples in the target project before relying on them.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/athola/skills/nm-leyline-error-patterns)
+- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Configuration]
+
+**Output Format:** [Markdown with Python and YAML examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Illustrative patterns and snippets; adapt them to the project's services and framework.]
+
+## Skill Version(s):
+
+1.10.3 (source: SKILL.md frontmatter; server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

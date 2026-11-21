@@ -1,45 +1,59 @@
-## Description: <br>
-Search Google Flights for prices, times, and airlines. No API key required. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google Flights for prices, times, and airlines. No API key required.
 
-## Publisher: <br>
-[awlevin](https://clawhub.ai/user/awlevin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[awlevin](https://clawhub.ai/user/awlevin)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to search Google Flights from the command line for flight prices, schedules, airlines, seat classes, passenger counts, and one-way or round-trip itineraries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Remote install scripts and package managers can change the local Python environment. <br>
-Mitigation: Install a trusted release through uv, pipx, or pip, and review install commands before execution. <br>
-Risk: The --upgrade option changes the installed flight-search package. <br>
-Mitigation: Use --upgrade only when an intentional package update is desired. <br>
-Risk: Flight search results depend on Google Flights scraping through the underlying fast-flights library and may fail or be blocked by network or anti-bot controls. <br>
-Mitigation: Treat returned itineraries and prices as advisory, retry transient failures, and verify booking details with an authoritative travel provider before purchase. <br>
+## Use Case:
 
+External users and developers use this skill to look up one-way or round-trip Google Flights results from an agent workflow or command line, including prices, airlines, departure and arrival times, durations, stops, passenger counts, and seat class.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/awlevin/skills/flight-search) <br>
-- [PyPI Project](https://pypi.org/project/flight-search/) <br>
-- [fast-flights Underlying Library](https://github.com/AWeirdDev/flights) <br>
-- [Project Homepage](https://github.com/Olafs-World/flight-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance, Text, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands; CLI results are text or JSON] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires uvx for one-off execution; the package can also be installed with uv, pipx, or pip.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.7 (source: CHANGELOG.md and pyproject.toml, released 2026-02-06) <br>
+Risk: The README one-line installer retrieves and executes a remote shell script.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the install path first and prefer a pinned package-manager install such as uv, pipx, or pip in controlled environments.
+
+Risk: The --upgrade path can update local packages without version pinning.
+
+Mitigation: Avoid self-upgrade commands in managed environments unless the target version and change approval are explicit.
+
+Risk: Flight search inputs such as airports, dates, passenger counts, and seat class may be sent to Google or the underlying scraper service.
+
+Mitigation: Do not submit sensitive itinerary details unless that data sharing is acceptable for the user or organization.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/awlevin/skills/flight-search)
+- [PyPI package](https://pypi.org/project/flight-search/)
+- [fast-flights underlying library](https://github.com/AWeirdDev/flights)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [Plain text flight listings or structured JSON search results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may include route, departure date, return date, price status, airline, departure and arrival times, duration, stops, price, and best-flight marker.]
+
+## Skill Version(s):
+
+0.1.7 (source: pyproject.toml, CHANGELOG, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

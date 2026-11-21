@@ -1,47 +1,54 @@
-## Description: <br>
-Routes multi-tool workflows through MCP servers for large datasets and pipelines. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Routes multi-tool workflows through MCP servers for large datasets and pipelines.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill inside Claude Code to route large MCP, data pipeline, and chained-tool workflows through focused modules for pattern selection, subagent coordination, validation, and result synthesis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: MCP workflow context may include proprietary code, secrets, customer data, or sensitive datasets. <br>
-Mitigation: Review before installing in sensitive environments and require explicit invocation for MCP workflows. <br>
-Risk: External result storage or debug logs may retain sensitive workflow context without clear safeguards. <br>
-Mitigation: Allow external storage and debug logging only in approved, access-controlled locations with redaction and retention limits. <br>
-Risk: Unrestricted MCP servers or subagents may expand workflow access beyond the intended scope. <br>
-Mitigation: Restrict which MCP servers and subagents may run before using the skill. <br>
+## Use Case:
 
+Developers using Claude Code can use the hub to route multi-step MCP workflows, select tool-chain patterns, coordinate subagents, and monitor context use during large data tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-mcp-code-execution) <br>
-- [clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
-- [MCP coordination patterns](artifact/modules/mcp-coordination.md) <br>
-- [MCP execution patterns](artifact/modules/mcp-patterns.md) <br>
-- [MCP subagents module](artifact/modules/mcp-subagents.md) <br>
-- [MCP validation module](artifact/modules/mcp-validation.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with inline code and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Provides workflow routing steps, module checklists, MCP execution patterns, validation guidance, and result synthesis guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Context snapshots and intermediate results may be logged or stored without clearly stated privacy safeguards.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before use, review where snapshots and results are stored and who can access them; avoid sensitive data unless protections are confirmed, and limit use to MCP-related workflows.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-conserve-mcp-code-execution)
+- [Project homepage (skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/conserve)
+- [MCP coordination patterns](artifact/modules/mcp-coordination.md)
+- [MCP execution patterns](artifact/modules/mcp-patterns.md)
+- [MCP subagent guidance](artifact/modules/mcp-subagents.md)
+- [MCP validation guidance](artifact/modules/mcp-validation.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Markdown]
+
+**Output Format:** [Markdown guidance with Python and shell examples, workflow steps, and validation recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Offers example workflows and recommendations; execution depends on the available MCP tools and host environment.]
+
+## Skill Version(s):
+
+1.10.3 (source: artifact frontmatter, server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

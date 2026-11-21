@@ -1,43 +1,50 @@
-## Description: <br>
-Knowledge Expansion Notetaking (KEN) turns newly shared knowledge, concepts, or methods into sourced, structured deep-note cards and archives them to Get notes, Feishu wiki/docs, and a local file. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+当用户分享新学到的知识、概念或方法时，帮助其追溯来源、解析概念与适用边界、生成结构化深度笔记，并归档到 Get笔记 和飞书。
 
-## Publisher: <br>
-[binhuatochina](https://clawhub.ai/user/binhuatochina) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[binhuatochina](https://clawhub.ai/user/binhuatochina)
 
-## Use Case: <br>
-External users use this skill to expand a newly learned idea into a structured note with source context, concept analysis, boundaries, ambiguity checks, follow-up questions, and an AI-written continuation. It is intended for personal knowledge management workflows that sync generated notes into Get notes, Feishu wiki/docs, and local backup files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically archive user-provided knowledge content to external Get note and Feishu destinations. <br>
-Mitigation: Use it only with the intended Feishu workspace and Get note account, avoid sensitive personal or proprietary notes unless external archiving is acceptable, and require explicit confirmation before syncing. <br>
-Risk: The workflow grants full Feishu document access to a hardcoded user identifier. <br>
-Mitigation: Review and replace the recipient before use, or remove the automatic permission grant and require explicit approval for permission changes. <br>
-Risk: The skill depends on sensitive credentials and external workspace permissions for Feishu and Get note operations. <br>
-Mitigation: Keep credentials scoped to the minimum required access, store them outside the skill files, and rotate them if workspace membership or intended usage changes. <br>
+## Use Case:
 
+Individuals use this skill to turn newly learned ideas into structured notes with source context, concept analysis, limits, follow-up questions, and practical applications, then archive them to Get笔记 and Feishu.
 
-## Reference(s): <br>
-- [Feishu knowledge base configuration](references/feishu-kb-config.md) <br>
-- [ClawHub release page](https://clawhub.ai/binhuatochina/knowledge-expansion-notetaking) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown notes with Feishu XML conversion guidance and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generates an eight-section deep note, up to 800 Chinese characters for the AI continuation section, and returns archive links plus a core finding and follow-up question.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.5 (source: frontmatter and server release evidence) <br>
+Risk: Automatic cloud archiving and full-access sharing with a fixed account may expose private notes or grant unintended access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before enabling sync, confirm which notes are uploaded, review destination access controls, and adjust fixed-account sharing if it is not intended.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/binhuatochina/skills/knowledge-expansion-notetaking)
+- [Feishu knowledge-base configuration](references/feishu-kb-config.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Structured Markdown knowledge notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes concept analysis, applicability boundaries, follow-up questions, and an AI continuation of up to 800 Chinese characters; can be archived to Get笔记 and Feishu.]
+
+## Skill Version(s):
+
+0.4.15 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

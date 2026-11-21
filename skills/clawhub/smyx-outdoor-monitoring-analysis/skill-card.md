@@ -1,45 +1,59 @@
-## Description: <br>
-Detects people, vehicles, non-motorized vehicles, and pets in outdoor images or video, then returns structured monitoring reports for areas such as courtyards, orchards, and farms. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes outdoor surveillance images and videos to detect people, vehicles, non-motorized vehicles, and pets, and produces monitoring reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze outdoor monitoring images, videos, or media URLs for target detection, intrusion assessment, risk levels, and history report lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Media files or URLs are sent to a remote analysis service and report history is retrieved from a cloud API. <br>
-Mitigation: Use only media that is appropriate to share with the remote service, review the configured service endpoints before installation, and confirm retention and deletion options for generated reports. <br>
-Risk: The skill can silently resolve or create an account-linked identity and reuse it for analysis and history lookup. <br>
-Mitigation: Review identity resolution behavior before use, avoid sharing internal identity values in prompts or outputs, and confirm how locally stored identity or token state can be removed. <br>
-Risk: Local persistence and token handling may retain account or report-access state on the host. <br>
-Mitigation: Inspect local storage paths and token caches before deployment, restrict filesystem access where possible, and rotate or clear credentials after testing. <br>
+## Use Case:
 
+External users managing courtyards, orchards, farms, and other outdoor areas can submit images or videos for object detection, intrusion assessment, and monitoring reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-outdoor-monitoring-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Analysis API error code documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands] <br>
-**Output Format:** [Markdown text with structured JSON results and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save results to a user-specified output file and may include links to remotely stored reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server-resolved release metadata) <br>
+Risk: Surveillance media and identity data may be sent to remote services or associated with account and report records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before submitting media, clarify the destination, account handling, access, and retention practices; avoid sharing sensitive footage unless approved.
+
+Risk: The scanner reports that the export-only option may still analyze supplied media.
+
+Mitigation: Do not rely on that option to prevent analysis; clarify its behavior and avoid supplying sensitive media until confirmed.
+
+Risk: The security scan was partial because a referenced local path was missing, so it may not cover the complete skill package.
+
+Mitigation: Review the missing component and complete a full package security review before deployment.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-outdoor-monitoring-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [API interface documentation](artifact/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured monitoring reports with detection results, counts, risk notes, recommendations, and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts JPG, JPEG, PNG, MP4, AVI, and MOV files up to 10 MB; results are for security reference only.]
+
+## Skill Version(s):
+
+1.0.22 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

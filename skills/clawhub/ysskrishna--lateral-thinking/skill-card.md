@@ -1,39 +1,54 @@
-## Description: <br>
-Helps agents use provocations, concept fans, challenge questions, random stimuli, and deliberate reframes to break stuck thinking patterns and develop surprising actionable ideas. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use provocations and reframes to unlock lateral ideas when brainstorming feels stuck or incremental, and skip it for rule lookups or strict logical proofs.
 
-## Publisher: <br>
-[ysskrishna](https://clawhub.ai/user/ysskrishna) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ysskrishna](https://clawhub.ai/user/ysskrishna)
 
-## Use Case: <br>
-Employees, external users, and developers can use this skill when ideation feels stuck, options seem incremental, or a problem benefits from structured lateral thinking moves. It guides the agent through setup, provocation or alternate entry paths, principle extraction, concept fan expansion, and tagged candidate ideas. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Provocations can be mistaken for literal recommendations, especially when they touch safety, ethics, or law. <br>
-Mitigation: Pair every provocation with a movement idea or real-world principle, and stop to surface conflicts when safety, ethics, or law are implicated. <br>
-Risk: The security guidance warns that workflow actions can affect development, publishing, moderation, or production data. <br>
-Mitigation: Review commands before execution, use dry-run or confirmation modes when available, and avoid high-autonomy operation for untrusted code or production data. <br>
+## Use Case:
 
+People brainstorming a stalled problem use the skill to challenge assumptions, develop fresh directions, and turn promising ideas into actionable candidates.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with structured headings, prompts, and tagged candidate ideas] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask up to three clarifying questions when safety or legal constraints are unclear.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2026.5.17 (source: server release metadata and skill metadata) <br>
+Risk: One reference could not be resolved, so the security scan did not cover everything it might point to.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the referenced material directly before relying on guidance that depends on it.
+
+Risk: A provocative idea could be mistaken for a recommendation if the movement and evaluation steps are skipped.
+
+Mitigation: Pair each provocation with its movement idea and judge feasibility only in the Candidates stage.
+
+## Reference(s):
+
+- [Lateral Thinking Example](references/example.md)
+- [ClawHub skill page](https://clawhub.ai/ysskrishna/skills/lateral-thinking)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Structured Markdown or prose with reframes, idea branches, and candidate actions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+2026.11.15 (source: frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

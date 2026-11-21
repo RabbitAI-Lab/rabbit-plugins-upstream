@@ -18,6 +18,18 @@ class AdapterError(Exception):
     """所有适配器错误的统一类型（中文提示）。"""
 
 
+class AdapterTimeoutError(AdapterError):
+    """调用超时错误（用于触发故障转移，与鉴权/限流等错误区分）。"""
+
+    def __init__(self, provider, model, timeout_sec, cause=None):
+        self.provider = provider
+        self.model = model
+        self.timeout_sec = timeout_sec
+        self.cause = cause
+        msg = "调用超时（%s / %s，%ds），模型可能过载或网络不畅" % (provider, model, timeout_sec)
+        super().__init__(msg)
+
+
 def http_post_json(url, headers, payload, timeout=60):
     """发送 JSON POST，返回 (status_code, parsed_json_or_text)。"""
     data = json.dumps(payload).encode("utf-8")
@@ -66,6 +78,14 @@ class AdapterBase:
 
     def chat(self, messages, model, stream=False, timeout=60):
         raise NotImplementedError
+
+    def embed(self, texts, model=None, timeout=60):
+        """文本向量嵌入。子类实现，不支持的厂商抛 NotImplementedError。"""
+        raise NotImplementedError("该适配器不支持 embedding")
+
+    def rerank(self, query, documents, model=None, timeout=60):
+        """文档重排序。子类实现，不支持的厂商抛 NotImplementedError。"""
+        raise NotImplementedError("该适配器不支持 rerank")
 
     def _extract_usage(self, data):
         """从响应里取 token 用量，兼容多种字段名。"""

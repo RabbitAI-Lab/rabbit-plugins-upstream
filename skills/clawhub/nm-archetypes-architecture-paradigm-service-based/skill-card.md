@@ -1,43 +1,54 @@
-## Description: <br>
-Applies coarse-grained service architecture for deployment independence. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies coarse-grained service architecture for deployment independence.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and architecture teams use this skill to evaluate and describe service-based architectures for systems that need independently deployable components while retaining coarse-grained services or shared data constraints. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may appear in broad architecture or modularity conversations because of its activation keywords. <br>
-Mitigation: Use the guidance when service-based architecture is relevant, and review recommendations before applying them to a system design. <br>
-Risk: Service-based guidance can still influence architecture decisions even though the skill has no executable behavior. <br>
-Mitigation: Validate service boundaries, data ownership, contracts, deployment plans, and rollback plans with the responsible architecture and engineering teams. <br>
-Risk: Shared databases can couple services and degrade the architecture into a distributed monolith. <br>
-Mitigation: Assign schema ownership, control breaking changes through review, track coupling, and use views, replication, or schema deprecation schedules where appropriate. <br>
+## Use Case:
 
+Developers and architects use this skill to define coarse-grained service boundaries, contracts, data ownership, and deployment practices for multi-team systems that need deployment independence without full microservice autonomy.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-service-based) <br>
-- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown prose with architecture checklists and recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; no executable behavior, data access, or persistence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence; artifact frontmatter reports 1.9.8) <br>
+Risk: Shared database changes can create cascading effects across services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use database views or replication, and maintain a formal schema deprecation schedule.
+
+Risk: Weak governance can let services become a distributed monolith with tight coupling and added network complexity.
+
+Mitigation: Track coupling metrics and enforce clear ownership of services and data.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-service-based)
+- [Claude Night Market archetypes plugin](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Architecture decision records, Service contracts, Runbooks]
+
+**Output Format:** [Markdown guidance and architecture artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Content is tailored to the system and its service boundaries; no fixed artifact template is specified.]
+
+## Skill Version(s):
+
+1.10.3 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

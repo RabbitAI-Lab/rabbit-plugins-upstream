@@ -1,45 +1,51 @@
-## Description: <br>
-Generates condensed time-lapse album highlight reports from local or URL videos by extracting segments that match user-specified keywords or targets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Extracts video segments matching user-selected people, pets, scenes, events, or keywords and assembles them into condensed highlight reels with structured analysis reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Agents use this skill when a user wants to find and summarize people, pets, scenes, or events in long videos, or retrieve prior time-lapse analysis reports linked to the current account identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send videos, video URLs, and prompts to a cloud analysis service. <br>
-Mitigation: Use it only with media that is appropriate for the listed cloud processing behavior, and avoid sensitive personal media unless that handling is acceptable. <br>
-Risk: The skill silently creates or reuses an account-like identifier and stores account tokens locally. <br>
-Mitigation: Run it in an environment where local account persistence is expected, and clear the skill data store when account linkage should not persist. <br>
-Risk: The skill can retrieve account-linked historical reports with limited user control. <br>
-Mitigation: Review history-query requests before use and avoid sharing the resulting report list or links outside the intended account context. <br>
+## Use Case:
 
+External users organizing family, travel, or event videos can ask the agent to find footage matching specified subjects or keywords and create a condensed highlight reel. They can also retrieve prior analysis reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-custom-timelapse-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [Markdown report text with embedded JSON and report links; optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cloud report history and export links; detail can be basic, standard, or json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter declares 1.0.8) <br>
+Risk: ClawScan rates this release suspicious with high confidence, citing reported persistent account and credential handling and behavior beyond its video-highlights purpose. Scanning was partial, so the evidence is incomplete; the scanners did not establish malicious intent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid installation unless you are comfortable with the reported remote video submission, account and token handling, and local persistence; review the skill's data flows before use.
+
+## Reference(s):
+
+- [API interface documentation](references/api_doc.md)
+- [Skill introduction](https://lifeemergence.com/sample.html)
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-custom-timelapse-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Markdown, Analysis reports, Report links]
+
+**Output Format:** [Structured text (JSON by default); history lists are presented as Markdown tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provides video analysis results and report links; history queries return report lists. Results can optionally be saved to a file.]
+
+## Skill Version(s):
+
+1.0.19 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

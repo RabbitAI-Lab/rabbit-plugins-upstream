@@ -1,41 +1,50 @@
-## Description: <br>
-Applies KISS, YAGNI, and SOLID principles for clean code with reduced complexity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies KISS, YAGNI, and SOLID principles for clean code with reduced complexity
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill during design, architecture, refactoring, and code review work to apply KISS, YAGNI, and SOLID principles and reduce unnecessary complexity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad triggers may activate the skill during general design or architecture discussions. <br>
-Mitigation: Use the guidance when code-quality principles are relevant, and prefer narrower trigger wording if a deployment needs more specific activation. <br>
-Risk: Code-quality guidance can influence review decisions even when readability tradeoffs are justified. <br>
-Mitigation: Review recommendations against the project's context, especially for throwaway migrations or performance-critical code where the artifact notes different tradeoffs may apply. <br>
+## Use Case:
 
+Developers and engineers use this skill to review or refactor code for readability and maintainability by applying KISS, YAGNI, and SOLID principles. It provides questions and examples to help decide when a design is unnecessarily complex or over-abstracted.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-code-quality-principles) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands] <br>
-**Output Format:** [Markdown guidance with language-specific code examples and optional verification commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; no hidden execution, persistence, credential handling, or data transfer behavior found in the security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: A referenced document is missing, so the scanner could not assess all referenced context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use judgment before installing or applying the guidance, and review the skill and its relevant documentation.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-conserve-code-quality-principles)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Text]
+
+**Output Format:** [Markdown with language-specific code examples, tables, and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Examples cover Python, Rust, and TypeScript; includes a code review checklist.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

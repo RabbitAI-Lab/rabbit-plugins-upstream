@@ -4,31 +4,36 @@ playlist_health.py — Playlist Health Check & Maintenance.
 
 Subcommands:
   check     Scan playlists for removed tracks, duplicates, and staleness
-  fix       Remove duplicates and replaced removed tracks (with --auto or interactive)
+  fix       Preview, or with --apply carry out: remove duplicate copies of a track and ADD a
+            replacement for each unavailable track (the unavailable entry itself is left in place)
 
 Usage:
   python3 playlist_health.py check <playlist_id|all> --profile <profile.json>
-  python3 playlist_health.py fix <playlist_id> --profile <profile.json> [--auto]
+  python3 playlist_health.py fix <playlist_id> --profile <profile.json> [--apply]
+
+`fix` changes the playlist in the user's library (it REMOVES duplicate copies and ADDS replacement
+tracks; it never removes an unavailable entry), so it only previews ("WOULD remove ...") unless
+--apply is given. (--apply was called --auto before 3.2.4;
+the old spelling still works.)
 
 Requires: APPLE_MUSIC_DEV_TOKEN and APPLE_MUSIC_USER_TOKEN env vars.
 """
 
 import sys
-if sys.version_info < (3, 9):
+if sys.version_info < (3, 11):
     sys.exit(
-        f"ERROR: Python 3.9+ is required (you have "
+        f"ERROR: Python 3.11+ is required (you have "
         f"{sys.version_info.major}.{sys.version_info.minor}). Please upgrade."
     )
 
 import argparse
 import json
+import subprocess
 from collections import Counter
 from pathlib import Path
 
-from _common import call_api, load_config, load_profile, require_env_tokens
-from typing import Optional, Union
+from _common import call_api, load_config, require_env_tokens, run_script
 
-SCRIPT_DIR = Path(__file__).parent
 
 
 def check_playlist(playlist_id: str, sf: str) -> dict:
@@ -108,7 +113,7 @@ def check_playlist(playlist_id: str, sf: str) -> dict:
     }
 
 
-def find_replacement(sf: str, name: str, artist: str) -> Optional[dict]:
+def find_replacement(sf: str, name: str, artist: str) -> dict | None:
     """Search catalog for a replacement track (same song, different catalog ID)."""
     query = f"{name} {artist}"
     result = call_api("search", sf, query, "songs")
@@ -169,6 +174,19 @@ def cmd_check(args) -> dict:
         return check_playlist(args.playlist_id, sf)
 
 
+def _run_builder(mode: str, playlist_id: str, ids_file: str, done: str, failed: str) -> str:
+    """Run `build_playlist.sh <mode>` (confirmed with --yes) and return the action to report."""
+    try:
+        result = run_script("build_playlist.sh", mode, playlist_id, ids_file, "--yes")
+    except (OSError, subprocess.TimeoutExpired) as e:
+        print(f"WARN: build_playlist.sh {mode} didn't finish: {e}", file=sys.stderr)
+        return failed
+    if result.returncode != 0:
+        print(f"WARN: build_playlist.sh {mode} exited {result.returncode}: {result.stderr.strip()}", file=sys.stderr)
+        return failed
+    return done
+
+
 def cmd_fix(args) -> dict:
     """Fix health issues in a playlist."""
     require_env_tokens()
@@ -188,27 +206,24 @@ def cmd_fix(args) -> dict:
     if report["duplicates"]:
         for dup in report["duplicates"]:
             extras = dup["count"] - 1
-            if args.auto:
+            if args.apply:
                 print(f"  Removing {extras} duplicate(s) of {dup['id']}...", file=sys.stderr)
                 # Write IDs to remove
                 import tempfile
-                import subprocess
                 ids_to_remove = [dup["id"]] * extras
                 with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
                     f.write("\n".join(ids_to_remove))
                     ids_file = f.name
                 try:
-                    subprocess.run(
-                        [str(SCRIPT_DIR / "build_playlist.sh"), "remove",
-                         args.playlist_id, ids_file],
-                        capture_output=True, text=True, timeout=30,
-                    )
-                    actions_taken.append(f"Removed {extras} duplicate(s) of {dup['id']}")
+                    actions_taken.append(
+                        _run_builder("remove", args.playlist_id, ids_file,
+                                     done=f"Removed {extras} duplicate(s) of {dup['id']}",
+                                     failed=f"Couldn't remove {extras} duplicate(s) of {dup['id']}"))
                 finally:
                     Path(ids_file).unlink(missing_ok=True)
             else:
                 actions_taken.append(
-                    f"WOULD remove {extras} duplicate(s) of {dup['id']} (use --auto to apply)"
+                    f"WOULD remove {extras} duplicate(s) of {dup['id']} (use --apply to apply)"
                 )
 
     # Handle removed tracks — find replacements
@@ -222,34 +237,29 @@ def cmd_fix(args) -> dict:
             }
             replacements.append(entry)
 
-            if replacement and args.auto:
+            if replacement and args.apply:
                 print(
-                    f"  Replacing '{track['name']}' with '{replacement['name']}'...",
+                    f"  Adding a replacement for '{track['name']}': '{replacement['name']}'...",
                     file=sys.stderr,
                 )
-                # Remove old, add new
+                # Add only: the unavailable entry itself stays in the playlist
                 import tempfile
-                import subprocess
 
                 # Add replacement
                 with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
                     f.write(replacement["id"])
                     ids_file = f.name
                 try:
-                    subprocess.run(
-                        [str(SCRIPT_DIR / "build_playlist.sh"), "refresh",
-                         args.playlist_id, ids_file],
-                        capture_output=True, text=True, timeout=30,
-                    )
                     actions_taken.append(
-                        f"Added replacement: '{replacement['name']}' by {replacement['artist']}"
-                    )
+                        _run_builder("refresh", args.playlist_id, ids_file,
+                                     done=f"Added replacement: '{replacement['name']}' by {replacement['artist']}",
+                                     failed=f"Couldn't add a replacement for '{track['name']}'"))
                 finally:
                     Path(ids_file).unlink(missing_ok=True)
             elif replacement:
                 actions_taken.append(
-                    f"WOULD replace '{track['name']}' with '{replacement['name']}' "
-                    f"by {replacement['artist']} (use --auto)"
+                    f"WOULD add '{replacement['name']}' by {replacement['artist']} "
+                    f"as a replacement for '{track['name']}' (use --apply)"
                 )
             else:
                 actions_taken.append(
@@ -261,7 +271,8 @@ def cmd_fix(args) -> dict:
         "issues_found": report["removed_count"] + report["duplicate_count"],
         "actions_taken": actions_taken,
         "replacements": replacements,
-        "auto_applied": args.auto,
+        "applied": args.apply,
+        "auto_applied": args.apply,  # legacy key, kept for existing consumers
     }
 
 
@@ -278,8 +289,11 @@ def main():
     p_fix.add_argument("playlist_id", help="Playlist library ID")
     p_fix.add_argument("--profile", default=None, help="Path to taste profile JSON")
     p_fix.add_argument("--storefront", default=None, help="Storefront code")
-    p_fix.add_argument("--auto", action="store_true",
-                       help="Automatically apply fixes without confirmation")
+    p_fix.add_argument("--apply", dest="apply", action="store_true",
+                       help="Carry out the fixes (removes duplicate tracks, adds replacements). "
+                            "Without it, `fix` only previews what it would do.")
+    # Old spelling from before 3.2.4: "auto" read as "unattended"; accepted but not advertised
+    p_fix.add_argument("--auto", dest="apply", action="store_true", help=argparse.SUPPRESS)
 
     args = parser.parse_args()
 
@@ -287,6 +301,9 @@ def main():
         result = cmd_check(args)
     elif args.command == "fix":
         result = cmd_fix(args)
+    else:  # argparse already restricts this; the branch keeps the variable provably assigned
+        print(f"ERROR: unknown command '{args.command}'.", file=sys.stderr)
+        sys.exit(1)
 
     print(json.dumps(result, indent=2))
 

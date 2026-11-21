@@ -1,45 +1,55 @@
-## Description: <br>
-Combines continuous livestock barn video with environmental sensor data such as temperature, humidity, and ammonia to identify group stress responses caused by abnormal in-barn conditions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Combines livestock behavior in continuous barn videos with environmental sensor data (temperature, humidity, ammonia, etc.) to identify group stress responses caused by abnormal in-barn conditions. | 结合畜禽行为与环境传感器，识别温湿度异常时的群体应激反应。
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Farm operators, livestock environment teams, and agent developers use this skill to analyze barn video and optional sensor time series for environment-linked group stress indicators. It returns structured anomaly findings, stress levels, historical report listings, and report links for review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan verdict is suspicious because the skill sends barn media or supplied URLs to a Life Emergence/Open API service and can access authenticated report history. <br>
-Mitigation: Use only with non-sensitive footage and sensor data that may be processed by that external service; review the service relationship and data handling expectations before deployment. <br>
-Risk: The skill performs automatic identity creation and stores or reuses identity-linked values and tokens in local workspace data. <br>
-Mitigation: Run it in a dedicated workspace, inspect local data persistence such as data/smyx-api-key.txt and the SQLite token store, and avoid shared workspaces unless account-linking and retention behavior is acceptable. <br>
-Risk: Analysis output is an anomaly-screening aid and may be incorrect or incomplete for animal welfare or facility control decisions. <br>
-Mitigation: Treat results as review material and require qualified personnel to verify findings before changing equipment settings or making operational decisions. <br>
+## Use Case:
 
+Livestock environment managers use the skill to correlate barn video with environmental sensor readings and identify possible group stress responses during abnormal conditions. The reports support monitoring and inspection; the skill documentation says they are for reference and do not provide equipment or environmental control instructions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-environmental-anomaly-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
-- [SMYX analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, files] <br>
-**Output Format:** [Markdown report text with JSON-style structured analysis and optional saved output file.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include behavior findings, environmental correlation results, stress levels, historical report lists, and cloud report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; SKILL.md frontmatter says 1.0.2) <br>
+Risk: ClawScan marks the skill suspicious for account and credential handling, broad or unintended actions, and a mismatch with its stated livestock analysis purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill and its permissions before use; avoid providing API secrets or private video and sensor data until it has been vetted.
+
+Risk: The available security evidence is incomplete because Skillspector reports an unresolved local path-like reference.
+
+Mitigation: Resolve the referenced path and complete the security review before relying on the scan results.
+
+## Reference(s):
+
+- [API reference](artifact/references/api_doc.md)
+- [Skill introduction](https://lifeemergence.com/sample.html)
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-environmental-anomaly-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured analysis results and reports, with Markdown tables for historical report lists and report links when available]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Analysis findings and stress levels are advisory and based on supplied media and sensor data.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -18,7 +18,7 @@ from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
 
-from manifest import validate_for_merge
+from manifest import read_output_text, validate_for_merge
 
 
 # =============================================================================
@@ -134,6 +134,61 @@ def _validate_chunk_images(temp_dir):
 
     if errors:
         print("\n=== Image validation failed ===")
+        for e in errors:
+            print(e)
+            print()
+        return False
+    return True
+
+
+# Pandoc footnote labels cannot contain whitespace, ^, [ or ]; this also keeps
+# `[^1^]` pseudo-footnotes from older conversions out of the comparison.
+_FOOTNOTE_LABEL_RE = re.compile(r'\[\^([^\]\s^\[]+)\]')
+
+
+def _scan_footnote_labels(text):
+    """Return (Counter of reference labels, Counter of definition labels)."""
+    refs, defs = Counter(), Counter()
+    for m in _FOOTNOTE_LABEL_RE.finditer(text):
+        line_start = text.rfind('\n', 0, m.start()) + 1
+        indent = text[line_start:m.start()]
+        is_definition = len(indent) <= 3 and not indent.strip() and text.startswith(':', m.end())
+        (defs if is_definition else refs)[m.group(1)] += 1
+    return refs, defs
+
+
+def _validate_chunk_footnotes(temp_dir):
+    """Verify each output_chunk*.md keeps the footnote labels of its chunk*.md.
+
+    A dropped or renumbered `[^N]` / `[^N]:` leaves a dangling reference or an
+    orphaned note in the merged book. Returns False on any divergence and
+    prints every error at once.
+    """
+    temp_path = Path(temp_dir)
+    errors = []
+    for src_chunk in sorted(temp_path.glob('chunk*.md')):
+        out_chunk = temp_path / f'output_{src_chunk.name}'
+        if not out_chunk.exists():
+            continue
+        src_text = read_output_text(src_chunk)
+        out_text = read_output_text(out_chunk)
+        if src_text is None or out_text is None:
+            continue  # unreadable files are the manifest validator's job
+        src_refs, src_defs = _scan_footnote_labels(src_text)
+        out_refs, out_defs = _scan_footnote_labels(out_text)
+        if src_refs != out_refs or src_defs != out_defs:
+            errors.append(
+                f"ERROR: {out_chunk.name} footnote markers diverge from {src_chunk.name}\n"
+                f"  missing references [^N] (count): {sorted((src_refs - out_refs).items()) or 'none'}\n"
+                f"  extra   references [^N] (count): {sorted((out_refs - src_refs).items()) or 'none'}\n"
+                f"  missing definitions [^N]: (count): {sorted((src_defs - out_defs).items()) or 'none'}\n"
+                f"  extra   definitions [^N]: (count): {sorted((out_defs - src_defs).items()) or 'none'}\n"
+                f"  fix: in {out_chunk.name}, restore every footnote marker exactly as in {src_chunk.name}; "
+                f"translate only the note text"
+            )
+
+    if errors:
+        print("\n=== Footnote validation failed ===")
         for e in errors:
             print(e)
             print()
@@ -289,10 +344,12 @@ def merge_markdown_files(temp_dir):
     # Always validate manifest, even if output.md exists (catch stale/corrupt outputs)
     ok, ordered_files, warnings = validate_for_merge(temp_dir)
 
-    # Image structure validation runs unconditionally — bad chunks invalidate any cached output.md
-    if not _validate_chunk_images(temp_dir):
+    # Image and footnote validation run unconditionally — bad chunks invalidate any cached output.md
+    images_ok = _validate_chunk_images(temp_dir)
+    footnotes_ok = _validate_chunk_footnotes(temp_dir)
+    if not (images_ok and footnotes_ok):
         if os.path.exists(output_md):
-            print("Removing stale output.md (built from chunks that failed image validation)")
+            print("Removing stale output.md (built from chunks that failed validation)")
             os.remove(output_md)
         return False
 
@@ -325,13 +382,17 @@ def merge_markdown_files(temp_dir):
         print(f"Merging {len(ordered_files)} translated files (manifest-ordered)")
         merged_content = ""
         for file_path in ordered_files:
-            try:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    content = f.read().strip()
-                if content:
-                    merged_content += content + "\n\n"
-            except Exception as e:
-                print(f"Error reading {os.path.basename(file_path)}: {e}")
+            content = read_output_text(file_path)
+            if content is None:
+                print(f"ERROR: Cannot read {os.path.basename(file_path)} — aborting merge")
+                return False
+            content = content.strip()
+            if not content:
+                # validate_for_merge already rejects blank outputs; this is a
+                # last line of defense so a chunk can never vanish silently.
+                print(f"ERROR: Blank output {os.path.basename(file_path)} — aborting merge")
+                return False
+            merged_content += content + "\n\n"
     else:
         # Legacy fallback: glob-based merge (no manifest)
         print("WARNING: No manifest.json found — using legacy glob-based merge.")
@@ -366,10 +427,17 @@ def merge_markdown_files(temp_dir):
                 print(f"ERROR: Orphaned outputs (no matching source): {', '.join(sorted(orphaned, key=natural_sort_key))}")
             return False
 
-        # Verify no empty output files
+        # Verify no empty, unreadable, or whitespace-only output files
         for fp in output_files:
             if os.path.getsize(fp) == 0:
                 print(f"ERROR: Empty output file: {os.path.basename(fp)}")
+                return False
+            text = read_output_text(fp)
+            if text is None:
+                print(f"ERROR: Unreadable output file: {os.path.basename(fp)}")
+                return False
+            if not text.strip():
+                print(f"ERROR: Blank output file: {os.path.basename(fp)}")
                 return False
 
         # Use source order to determine merge order (via expected output names)
@@ -381,13 +449,15 @@ def merge_markdown_files(temp_dir):
 
         merged_content = ""
         for file_path in output_files:
-            try:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    content = f.read().strip()
-                if content:
-                    merged_content += content + "\n\n"
-            except Exception as e:
-                print(f"Error reading {os.path.basename(file_path)}: {e}")
+            content = read_output_text(file_path)
+            if content is None:
+                print(f"ERROR: Cannot read {os.path.basename(file_path)} — aborting merge")
+                return False
+            content = content.strip()
+            if not content:
+                print(f"ERROR: Blank output {os.path.basename(file_path)} — aborting merge")
+                return False
+            merged_content += content + "\n\n"
 
     try:
         with open(output_md, 'w', encoding='utf-8') as f:
@@ -421,7 +491,10 @@ def convert_with_pandoc(md_file, html_file, title, lang_attr):
         '--metadata', f'title={title}',
         '--metadata', f'lang={lang_attr}',
         '--from', 'markdown+smart+east_asian_line_breaks',
-        '--to', 'html5'
+        '--to', 'html5',
+        # Without this, pandoc emits any TeX it cannot approximate in plain
+        # HTML (fractions, roots, display math) as raw `$...$` text.
+        '--mathml'
     ]
 
     try:
@@ -442,7 +515,7 @@ def convert_with_python_markdown(md_file, html_file, title):
         with open(md_file, 'r', encoding='utf-8') as f:
             md_content = f.read()
 
-        extensions = ['toc', 'tables', 'fenced_code', 'codehilite', 'nl2br']
+        extensions = ['toc', 'tables', 'fenced_code', 'codehilite', 'nl2br', 'footnotes']
         md = markdown.Markdown(extensions=extensions)
         html_content = md.convert(md_content)
 
@@ -863,9 +936,13 @@ def add_toc(temp_dir):
 # Step 7: Generate DOCX/EPUB/PDF with error transparency
 # =============================================================================
 
-def generate_format(html_file, temp_dir, output_ext, lang_attr):
+def generate_format(html_file, temp_dir, output_ext, lang_attr, cover=None):
     """Generate a specific format using calibre_html_publish.py"""
     output_file = os.path.join(temp_dir, f"book{output_ext}")
+    cover = cover if output_ext == '.epub' else None
+    if cover and not os.path.isfile(cover):
+        print(f"Cover image not found: {cover}")
+        return None
 
     if os.path.exists(output_file):
         output_mtime = os.path.getmtime(output_file)
@@ -883,7 +960,9 @@ def generate_format(html_file, temp_dir, output_ext, lang_attr):
                     images_newer = True
                     break
 
-        if not html_newer and not images_newer:
+        cover_newer = bool(cover and os.path.getmtime(cover) > output_mtime)
+
+        if not html_newer and not images_newer and not cover_newer:
             file_size = os.path.getsize(output_file)
             print(f"Skipping {output_ext} - already exists and up to date ({file_size:,} bytes)")
             return output_file
@@ -893,6 +972,8 @@ def generate_format(html_file, temp_dir, output_ext, lang_attr):
                 reasons.append("source HTML changed")
             if images_newer:
                 reasons.append("image assets changed")
+            if cover_newer:
+                reasons.append("cover image changed")
             print(f"Rebuilding {output_ext} - {', '.join(reasons)}")
 
     publish_script = os.path.join(SCRIPT_DIR, "calibre_html_publish.py")
@@ -902,6 +983,8 @@ def generate_format(html_file, temp_dir, output_ext, lang_attr):
 
     try:
         cmd = ["python3", publish_script, html_file, "-o", output_file, "--lang", lang_attr]
+        if cover:
+            cmd.extend(["--cover", cover])
         result = subprocess.run(cmd, check=True, capture_output=True, text=True)
 
         if os.path.exists(output_file):
@@ -924,7 +1007,7 @@ def generate_format(html_file, temp_dir, output_ext, lang_attr):
         return None
 
 
-def generate_formats(temp_dir, lang_attr):
+def generate_formats(temp_dir, lang_attr, cover=None):
     """Generate DOCX, EPUB, and PDF with result summary"""
     print("=== Generating output formats ===")
 
@@ -939,7 +1022,7 @@ def generate_formats(temp_dir, lang_attr):
 
     results = {}
     for ext in ['.docx', '.epub', '.pdf']:
-        result = generate_format(html_file, temp_dir, ext, lang_attr)
+        result = generate_format(html_file, temp_dir, ext, lang_attr, cover=cover)
         if result:
             file_size = os.path.getsize(result)
             results[ext] = ('OK', f"{file_size:,} bytes")
@@ -959,6 +1042,48 @@ def generate_formats(temp_dir, lang_attr):
     return not has_failures
 
 
+def _validate_export_name(name):
+    """Validate an export filename stem. Keep aliases inside temp_dir."""
+    if not name or not name.strip():
+        raise ValueError("--export-name must not be empty")
+    if '\x00' in name or '/' in name or '\\' in name:
+        raise ValueError("--export-name must be a filename stem, not a path")
+    stem = name.strip()
+    # This stem maps the web HTML alias onto the canonical ebook HTML.
+    # Check case-insensitively so the same names are safe on macOS/Windows.
+    if stem.casefold() == "book_doc":
+        raise ValueError("--export-name would overwrite reserved output book_doc.html; choose another name")
+    return stem
+
+
+def export_named_aliases(temp_dir, export_name):
+    """Copy canonical outputs to optional user-facing filenames.
+
+    Canonical artifacts remain untouched. The alias names use export_name as a
+    filename stem, with book_doc.html receiving a _doc suffix to avoid colliding
+    with the web HTML alias.
+    """
+    stem = _validate_export_name(export_name)
+    mappings = {
+        "book.html": f"{stem}.html",
+        "book_doc.html": f"{stem}_doc.html",
+        "book.docx": f"{stem}.docx",
+        "book.epub": f"{stem}.epub",
+        "book.pdf": f"{stem}.pdf",
+    }
+    copied = []
+    for src_name, dst_name in mappings.items():
+        src = os.path.join(temp_dir, src_name)
+        if not os.path.exists(src):
+            continue
+        dst = os.path.join(temp_dir, dst_name)
+        if os.path.exists(dst) and os.path.samefile(src, dst):
+            continue
+        shutil.copy2(src, dst)
+        copied.append(dst_name)
+    return copied
+
+
 # =============================================================================
 # Main
 # =============================================================================
@@ -969,6 +1094,8 @@ def main():
     parser.add_argument('--title', default=None, help='Translated book title (override config)')
     parser.add_argument('--author', default=None, help='Author name (override config)')
     parser.add_argument('--lang', default=None, help='Output language code (override config)')
+    parser.add_argument('--cover', default=None, help='Cover image path for EPUB output')
+    parser.add_argument('--export-name', default=None, help='Optional filename stem for exported alias copies')
     parser.add_argument('--cleanup', action='store_true', help='Remove intermediate artifacts after successful build')
 
     args = parser.parse_args()
@@ -977,6 +1104,21 @@ def main():
     if not os.path.isdir(temp_dir):
         print(f"Error: Temp directory not found: {temp_dir}")
         sys.exit(1)
+
+    cover = args.cover
+    if cover:
+        if not os.path.isfile(cover):
+            print(f"Error: Cover image not found: {cover}")
+            sys.exit(1)
+        cover = os.path.abspath(cover)
+
+    export_name = None
+    if args.export_name:
+        try:
+            export_name = _validate_export_name(args.export_name)
+        except ValueError as e:
+            print(f"Error: {e}")
+            sys.exit(1)
 
     # Load config as base, CLI args override
     config = load_config(temp_dir)
@@ -1005,7 +1147,17 @@ def main():
     add_toc(temp_dir)
 
     # Step 7: Generate formats
-    all_formats_ok = generate_formats(temp_dir, lang_cfg['lang_attr'])
+    all_formats_ok = generate_formats(temp_dir, lang_cfg['lang_attr'], cover=cover)
+
+    if export_name:
+        if all_formats_ok:
+            aliases = export_named_aliases(temp_dir, export_name)
+            if aliases:
+                print("\nExport aliases:")
+                for name in aliases:
+                    print(f"  {name}")
+        else:
+            print("\nSkipping export aliases — some formats failed.")
 
     print("\n=== Build Complete ===")
     print(f"All outputs saved to: {temp_dir}")
