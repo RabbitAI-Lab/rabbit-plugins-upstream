@@ -13,11 +13,13 @@
 //
 // Flags: -o/--output (.wav → ffmpeg transcode; .mp3 → raw bytes), --words,
 //   --voice (starfish id), --speed, --lang, --list.
-// Requires: $HEYGEN_API_KEY / OAuth ~/.heygen credentials and ffmpeg for .wav output.
+// Requires: $HEYGEN_API_KEY / OAuth ~/.hyperframes credentials and ffmpeg for .wav output.
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { heygenAuthHeaders, heygenJSON, loadEnvFromDir } from "./lib/heygen.mjs";
+import { replaceFile } from "../../scripts/lib/manifest.mjs";
+import { terminalText } from "../../scripts/lib/terminal-text.mjs";
 import { ffprobeDuration, resolveVoiceId, synthesizeOne, withWordIds } from "./lib/tts.mjs";
 
 const argv = process.argv.slice(2);
@@ -29,7 +31,7 @@ function flag(name, def) {
   return v.startsWith("--") ? true : v;
 }
 const die = (m) => {
-  console.error(`✗ heygen-tts: ${m}`);
+  console.error(`✗ heygen-tts: ${m}`.split("\n").map(terminalText).join("\n"));
   process.exit(1);
 };
 
@@ -77,7 +79,7 @@ if (listOnly) {
     headers: authHeaders,
   });
   for (const v of payload.data ?? payload.voices ?? []) {
-    console.log(`${v.voice_id}\t${v.name}\t${v.language ?? ""}`);
+    console.log(terminalText(`${v.voice_id}\t${v.name}\t${v.language ?? ""}`));
   }
   process.exit(0);
 }
@@ -91,10 +93,10 @@ const text =
 if (!text) die("input text is empty");
 
 const voiceId = await resolveVoiceId({ provider: "heygen", userVoice, lang });
-if (!userVoice) console.error(`· using voice ${voiceId}`);
+if (!userVoice) console.error(terminalText(`· using voice ${voiceId}`));
 
 // ---------- synthesize (shared engine code) ----------
-const { ok, words } = await synthesizeOne({
+const { ok, words, error } = await synthesizeOne({
   provider: "heygen",
   text,
   voiceId,
@@ -103,13 +105,14 @@ const { ok, words } = await synthesizeOne({
   wavAbs: output,
   hyperframesDir: process.cwd(),
 });
-if (!ok) die("synthesis failed (HeyGen request/transcode error)");
+// HeyGen's own refusal, verbatim: a caller shows it or acts on it (a deleted voice, a limit).
+if (!ok) die(error ?? "synthesis failed (HeyGen request/transcode error)");
 
 let wordCount = 0;
 if (wordsPath) {
   if (words && words.length) {
     mkdirSync(dirname(wordsPath), { recursive: true });
-    writeFileSync(wordsPath, JSON.stringify(withWordIds(words), null, 2));
+    replaceFile(wordsPath, JSON.stringify(withWordIds(words), null, 2));
     wordCount = words.length;
   } else {
     console.error("⚠ no word_timestamps in response — run `hyperframes transcribe` instead");
@@ -118,4 +121,6 @@ if (wordsPath) {
 
 const dur = ffprobeDuration(output);
 const durStr = isFinite(dur) ? ` (${dur.toFixed(2)}s)` : "";
-console.log(`✓ ${output}${durStr}${wordCount ? ` · ${wordsPath} (${wordCount} words)` : ""}`);
+console.log(
+  terminalText(`✓ ${output}${durStr}${wordCount ? ` · ${wordsPath} (${wordCount} words)` : ""}`),
+);
