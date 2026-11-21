@@ -1,26 +1,27 @@
 # Video Summarization Deployment Reference
 
-Use `vss-deploy-profile` for full deployment. This file is the video summarization-specific
-service reference for the VSS 3.2.0 `lvs` profile.
+Use `vss-build-vision-ai` for full deployment. This file is the video summarization-specific
+service reference for the VSS 3.3.0 `lvs` profile.
 
 ## Current VSS Docker Compose Shape
 
 Source files:
 
 - `deploy/docker/developer-profiles/dev-profile-lvs/.env`
+- `deploy/docker/developer-profiles/dev-profile-lvs/overrides.env`
 - `deploy/docker/services/video-summarization/compose.yml`
 - `deploy/docker/services/video-summarization/configs/config.yaml`
 - `deploy/docker/services/rtvi/rtvi-vlm/rtvi-vlm-docker-compose.yml`
 - `deploy/docker/services/infra/compose.yml`
 
-Key service signals in the current develop branch:
+Key service signals in the VSS 3.3.0 release:
 
 | Item | Value |
 |---|---|
-| Compose profile | `bp_developer_lvs_2d` |
+| Compose profile | `lvs-server` |
 | video summarization service | `lvs-server` |
 | video summarization container | `vss-lvs` |
-| video summarization image | `${LVS_IMAGE:-nvcr.io/nvidia/vss-core/vss-video-summarization}:${LVS_TAG:-3.2.1}` (use `LVS_TAG=3.2.1-sbsa` on SBSA / DGX Spark / Grace) |
+| video summarization image | `nvcr.io/nvidia/vss-core/vss-video-summarization:3.3.0` (use `3.3.0-sbsa` on SBSA; see image overrides below) |
 | REST API | `http://<HOST_IP>:38111` |
 | Readiness | `GET /v1/ready` |
 | MCP port | `38112`, disabled by default in the developer profile |
@@ -47,24 +48,26 @@ docker logs --tail 100 vss-lvs
 Prefer the profile deploy skill:
 
 ```text
-/vss-deploy-profile -p lvs
+the `/vss-build-vision-ai` stock Video Summarization workflow
 ```
 
 If you are already operating the resolved Docker Compose stack, include the
 profile that owns the video summarization service:
 
 ```bash
-docker compose --profile bp_developer_lvs_2d ps lvs-server
-docker compose --profile bp_developer_lvs_2d logs -f lvs-server
+docker compose --profile lvs-server ps lvs-server
+docker compose --profile lvs-server logs -f lvs-server
 ```
 
 ## Required Inputs
 
-The checked-in profile env file,
-`deploy/docker/developer-profiles/dev-profile-lvs/.env`, is the defaults file.
-For a deployment, follow `vss-deploy-profile` and apply overrides to
+The checked-in profile env files split stable defaults and runtime/profile defaults:
+`deploy/docker/developer-profiles/dev-profile-lvs/.env` is the stable-default layer,
+and `deploy/docker/developer-profiles/dev-profile-lvs/overrides.env` is copied to
+`generated.env` for deployment-specific overrides. For a deployment, follow
+`vss-build-vision-ai` and apply overrides to
 `deploy/docker/developer-profiles/dev-profile-lvs/generated.env`, then resolve
-`deploy/docker/resolved.yml`. Do not edit the service compose directly.
+`deploy/docker/resolved.yml` using `.env` plus `generated.env`. Do not edit the service compose directly.
 Password values should come from the profile env or deployment overrides; do
 not add password defaults to the service compose file.
 
@@ -86,14 +89,27 @@ Video summarization service values:
 | Var | Default / Example | Purpose |
 |---|---|---|
 | `LVS_BACKEND_URL` | `http://${HOST_IP}:38111` | Agent-facing video summarization URL. |
-| `LVS_IMAGE` | `nvcr.io/nvidia/vss-core/vss-video-summarization` | video summarization image repository. |
-| `LVS_TAG` | `3.2.1` (x86 / Jetson Thor); `3.2.1-sbsa` (SBSA / DGX Spark / Grace) | video summarization image tag in current develop. The tag must match the host CPU platform. |
+| `VSS_CONTAINER_REGISTRY` | `nvcr.io/nvidia/vss-core` | Shared image registry root used when the service repository is unset. |
+| `VSS_VIDEO_SUMMARIZATION_IMAGE` | `${VSS_CONTAINER_REGISTRY}/vss-video-summarization` | Service image repository override, without a tag. |
+| `VSS_VIDEO_SUMMARIZATION_TAG` | `3.3.0` on x86/Tegra; `3.3.0-sbsa` on SBSA | Service image tag override. |
+| `CONTAINER_IMAGE` | unset | Complete image reference override; takes precedence over the repository and tag variables. |
 | `LVS_ENABLE_MCP` | `false` | Enable MCP/SSE endpoint only when needed. |
 | `LVS_DATABASE_BACKEND` | `elasticsearch_db` | Default event database backend. |
 | `KAFKA_ENABLED` | `true` in dev-profile-lvs | Enables RTVI -> Kafka -> Logstash -> ES integration. |
-| `KAFKA_BOOTSTRAP_SERVERS` | `${HOST_IP}:9092` | Broker address from the video summarization container. |
+| `KAFKA_BOOTSTRAP_SERVERS` | `kafka:29092` | Broker address from the video summarization container. |
 | `KAFKA_STRUCTURED_SUMMARY_TOPIC` | `mdx-structured-events-summary` | Structured summary publish topic. |
 | `LVS_ENABLE_LLM_MERGING` | `true` in dev-profile-lvs | Merge duplicate or overlapping events with the LLM. |
+
+Compose resolves the image using the following expression from
+`deploy/docker/services/video-summarization/compose.yml`:
+
+```text
+${CONTAINER_IMAGE:-${VSS_VIDEO_SUMMARIZATION_IMAGE:-${VSS_CONTAINER_REGISTRY:-nvcr.io/nvidia/vss-core}/vss-video-summarization}:${VSS_VIDEO_SUMMARIZATION_TAG:-3.3.0}}
+```
+
+Set service-specific overrides in `generated.env` before resolving Compose.
+`LVS_IMAGE` and `LVS_TAG` are obsolete; use `VSS_VIDEO_SUMMARIZATION_IMAGE`
+and `VSS_VIDEO_SUMMARIZATION_TAG` instead.
 
 ## Database Backend Selection
 
@@ -136,12 +152,10 @@ embedding endpoint. `rtvi-embed` is profile-gated for Search and exposes RTVI
 embedding APIs such as `/v1/generate_text_embeddings`; the graph backend
 expects the text embedding interface used by the video summarization embedding adapter.
 
-The current VSS Docker `lvs-server` uses host networking. When adding Neo4j or
-ArangoDB as open-source sidecar containers, expose their ports on the host and
-point the video summarization service at `127.0.0.1` or `${HOST_IP}` via a
-compose override. Do not rely on Docker DNS names like `graph-db` or `arango-db`
-from inside the host-networked `lvs-server` unless the deployment has explicitly
-provided those names.
+The current VSS Docker `lvs-server` uses the default Compose bridge network.
+When adding Neo4j or ArangoDB as sidecar containers on that network, address
+them by their Compose service names (`graph-db` or `arango-db`). Use a
+host-reachable address only for a database running outside the Compose project.
 
 Example Neo4j override:
 
@@ -163,7 +177,7 @@ services:
   lvs-server:
     environment:
       LVS_DATABASE_BACKEND: graph_db
-      GRAPH_DB_HOST: 127.0.0.1
+      GRAPH_DB_HOST: graph-db
       GRAPH_DB_USERNAME: ${GRAPH_DB_USERNAME:-neo4j}
       GRAPH_DB_PASSWORD: ${GRAPH_DB_PASSWORD:?GRAPH_DB_PASSWORD_required}
       GRAPH_DB_HTTP_PORT: ${GRAPH_DB_HTTP_PORT:-7474}
@@ -195,7 +209,7 @@ services:
   lvs-server:
     environment:
       LVS_DATABASE_BACKEND: graph_db_arango
-      ARANGO_DB_HOST: 127.0.0.1
+      ARANGO_DB_HOST: arango-db
       ARANGO_DB_USERNAME: ${ARANGO_DB_USERNAME:-root}
       ARANGO_DB_PASSWORD: ${ARANGO_DB_PASSWORD:?ARANGO_DB_PASSWORD_required}
       ARANGO_DB_PORT: ${ARANGO_DB_PORT:-8529}
@@ -207,19 +221,21 @@ services:
 
 After adding an override, set the matching values in
 `developer-profiles/dev-profile-lvs/generated.env`, then resolve through the
-same dry-run path used by `vss-deploy-profile`:
+same dry-run path used by `vss-build-vision-ai`:
 
 ```bash
 cd "$REPO/deploy/docker"
-docker compose --env-file developer-profiles/dev-profile-lvs/generated.env \
+docker compose \
+  --env-file developer-profiles/dev-profile-lvs/.env \
+  --env-file developer-profiles/dev-profile-lvs/generated.env \
   -f compose.yml -f <db-override.yml> \
   config > resolved.yml
 ```
 
-Normalize `resolved.yml`, then verify it before recreating the service:
+Verify `resolved.yml` before recreating the service:
 
 ```bash
-uv run "$REPO/skills/vss-deploy-profile/scripts/normalize_resolved_yml.py" \
+uv run "$REPO/skills/vss-build-vision-ai/scripts/normalize_resolved_yml.py" \
   "$REPO/deploy/docker/resolved.yml"
 sed -n '/lvs-server:/,/^[^ ]/p' resolved.yml \
   | grep -E 'LVS_DATABASE_BACKEND|GRAPH_DB_|ARANGO_DB_|LVS_EMB_'
@@ -248,38 +264,37 @@ RT-VLM values:
 
 | Var | Default / Example | Purpose |
 |---|---|---|
-| `RTVI_VLM_BASE_URL` | `http://${HOST_IP}:8018` | Agent-facing RT-VLM URL. |
-| `RTVI_VLM_URL` | `http://${HOST_IP}:${RTVI_VLM_PORT}` | video summarization-facing RT-VLM URL. |
+| `RTVI_VLM_BASE_URL` | `http://rtvi-vlm:8000` | Compose service URL injected into LVS as `RTVI_VLM_URL`. |
+| `RTVI_VLM_URL` | `http://rtvi-vlm:8000` (derived from `RTVI_VLM_BASE_URL`) | video summarization-facing RT-VLM URL. |
 | `RTVI_VLM_MODEL_TO_USE` | `cosmos-reason3` | RT-VLM backend selector for default integrated mode. |
 | `RTVI_VLM_MODEL_PATH` | `ngc:nim/nvidia/cosmos3-nano-reasoner:bf16-final` | Default integrated checkpoint. |
 | `RTVI_VLM_KAFKA_ENABLED` | `true` | Publish raw captions to Kafka. |
-| `RTVI_VLM_KAFKA_TOPIC` | `mdx-vlm-captions` | Raw captions topic. |
+| `RTVI_VLM_MESSAGE_BUS` | `kafka` | Generated-output broker type. |
+| `RTVI_VLM_MESSAGE_BUS_TOPIC` | `mdx-vlm-captions` | Raw captions topic. |
+| `RTVI_VLM_ERROR_BUS` | `kafka` | Error-output broker type. |
 
 ## Model Id Rule
 
-For the default integrated RT-VLM path:
-
-```bash
-VLM_NAME=nim_nvidia_cosmos3-nano-reasoner_bf16-final
-RTVI_VLM_MODEL_PATH=ngc:nim/nvidia/cosmos3-nano-reasoner:bf16-final
-```
-
-`VLM_NAME` must match the id returned by:
+`VLM_NAME`, when configured, must match the id returned by:
 
 ```bash
 curl -sf "http://${HOST_IP}:8018/v1/models" | jq -r '.data[].id'
 ```
 
-Do not replace it with the friendly model name unless the endpoint advertises
-that exact id.
+Use the endpoint response as authoritative; do not assume an image tag, NIM
+profile name, or friendly name is also the serving id.
 
 ## Helm Notes
 
 The Helm service chart lives at `deploy/helm/services/video-summarization`.
-Important 3.2 values:
+VSS 3.3.0 release image values:
 
 - `image.repository: nvcr.io/nvidia/vss-core/vss-video-summarization`
-- `image.tag: "3.2.1"` (use `"3.2.1-sbsa"` on SBSA / DGX Spark / Grace hosts)
+- `image.tag: "3.3.0"` (use `"3.3.0-sbsa"` on SBSA)
+- `global.container_prefix` / `global.container_tag` override the repository
+  root and tag for the whole managed set, LVS included. When non-empty, they
+  take precedence over `image.repository` and `image.tag`; the repository
+  becomes `<global.container_prefix>/vss-video-summarization`
 - `service.backendPort: 38111`
 - `service.mcpPort: 38112`
 - `KAFKA_ENABLED: "true"`
@@ -301,7 +316,7 @@ curl -sf "http://${HOST_IP}:8018/v1/models" | jq -r '.data[].id'
 
 # Kafka topic traffic, when kafka is enabled
 docker exec kafka kafka-console-consumer \
-  --bootstrap-server localhost:9092 \
+  --bootstrap-server localhost:29092 \
   --topic mdx-vlm-captions \
   --max-messages 1
 
