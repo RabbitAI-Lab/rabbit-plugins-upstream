@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/latent-spaces/brag/tree/main/skills/brag",
+  "identifier": "official/creative/brag",
+  "repo": "latent-spaces/brag",
+  "path": "skills/brag",
+  "branch": "main",
+  "pushedAt": "2026-11-15T17:07:46Z",
+  "contentHash": "5758d61389ea136d79e37a8d6469ede498c668fb6b9d6e1359a625ee706acf83",
+  "fetchedAt": "2026-11-21T15:27:42.434Z"
+}

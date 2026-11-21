@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nixl-docs",
+  "identifier": "NVIDIA/skills/skills/nixl-docs",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nixl-docs",
+  "branch": "main",
+  "pushedAt": "2026-11-20T21:00:07Z",
+  "contentHash": "8f6e11108505eb2f7eee2ec6bfb4cfefda60ee698b95aec2e9f5fe2fef31e3fb",
+  "fetchedAt": "2026-11-21T15:27:46.539Z"
+}
