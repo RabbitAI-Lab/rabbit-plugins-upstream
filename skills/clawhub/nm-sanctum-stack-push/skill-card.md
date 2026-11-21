@@ -1,43 +1,54 @@
-## Description: <br>
-Pushes all branches in a stack and opens or updates one dependent GitHub pull request per slice. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pushes all branches in a stack and opens or updates one dependent PR per slice. Use after stack-create to publish the stack or after adding commits to a slice.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers use this skill after creating a stacked branch topology to publish each slice, create draft dependent pull requests, and post a stack summary for reviewers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can push branches or create pull requests against the wrong repository, remote, stack prefix, base branch, or GitHub account. <br>
-Mitigation: Confirm the repository, origin remote, STACK value, BASE branch, and authenticated gh account before running push or pull request commands. <br>
-Risk: The optional jj git push --all accelerator may push more refs than the stack-specific loop. <br>
-Mitigation: Prefer the stack-specific git push loop for routine use, or inspect refs carefully before using jj git push --all. <br>
-Risk: Generated pull request titles, bodies, and stack summary comments may be incomplete or misleading. <br>
-Mitigation: Keep pull requests as drafts until titles, descriptions, branch ordering, and summary comments have been reviewed. <br>
+## Use Case:
 
+Developers use this skill after creating a committed branch stack or adding commits to publish stack branches, open or maintain a dependent pull request for each slice, and post a stack summary.
 
-## Reference(s): <br>
-- [Sanctum plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-stack-push) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline bash command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes Git, GitHub CLI, and optional jj command examples; the agent should review the repository, remote, stack prefix, base branch, and account before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: A broad push scope may publish bookmarks outside the requested stack, and the scan reports mismatches between advertised and reported behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the selected branches and publication targets before running; confirm the resulting pull requests and stack summary.
+
+Risk: The security scan was partial because one static analysis was degraded by a parser limit.
+
+Mitigation: Review the skill’s behavior and publication scope before installing.
+
+## Reference(s):
+
+- [Sanctum plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum)
+- [ClawHub skill listing](https://clawhub.ai/athola/skills/nm-sanctum-stack-push)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Markdown, Guidance]
+
+**Output Format:** [Git and GitHub CLI operations with a Markdown stack summary]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an existing committed stack and authenticated GitHub CLI; pushes branches and posts a stack summary.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

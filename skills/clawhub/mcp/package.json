@@ -1,0 +1,79 @@
+{
+  "name": "@cryptoslip/mcp",
+  "version": "1.0.0",
+  "mcpName": "io.github.NARAProtocol/cryptoslip",
+  "description": "PocketSlip MCP Server & OpenClaw Skill for CryptoSLIP Protocol V3.2 on Base Mainnet (8453)",
+  "license": "MIT",
+  "homepage": "https://slip.naraprotocol.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NARAProtocol/cryptoslip-sdk.git",
+    "directory": "packages/mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/NARAProtocol/cryptoslip-sdk/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "cryptoslip",
+    "mcp",
+    "modelcontextprotocol",
+    "openclaw",
+    "base",
+    "usdc",
+    "x402",
+    "payments",
+    "agents"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "cryptoslip-mcp": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./pocketSlip": {
+      "types": "./dist/pocketSlip.d.ts",
+      "default": "./dist/pocketSlip.js"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "default": "./dist/server.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "SKILL.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "oxlint src",
+    "start": "node ./dist/cli.js"
+  },
+  "dependencies": {
+    "@cryptoslip/sdk": "file:../sdk",
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "viem": "^2.23.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vitest": "^5.0.1"
+  }
+}

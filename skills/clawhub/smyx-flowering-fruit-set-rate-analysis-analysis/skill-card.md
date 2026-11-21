@@ -1,43 +1,54 @@
-## Description: <br>
-Analyzes tomato or chili flower and fruit images or videos to count open flowers and young fruits, compute fruit-set rate, and return grower-facing guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes tomato and chili flower or fruit images to count open flowers and young fruits and estimate fruit-set rate.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External growers, horticulture operators, and agent developers use this skill to analyze tomato or chili flower/fruit media, estimate fruit-set rates, receive pollination or environment adjustment guidance, and view prior analysis reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded media or URLs are sent to lifeemergence cloud services for analysis. <br>
-Mitigation: Use only media and URLs suitable for third-party cloud processing; avoid sensitive images or private/internal URLs unless publisher disclosures meet your consent, retention, deletion, and permission requirements. <br>
-Risk: The skill silently creates or reuses an identity, stores tokens locally, and queries cloud report history tied to that identity. <br>
-Mitigation: Review local identity and token storage before installation, run the skill in an isolated workspace, and avoid using it where silent cloud history linkage is unacceptable. <br>
+## Use Case:
 
+Tomato and chili growers use the skill to estimate pollination outcomes from flower and fruit images and inform follow-up observation and care decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-flowering-fruit-set-rate-analysis-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API 接口文档](references/api_doc.md) <br>
-- [API接口文档](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON text, including structured analysis reports, report links, and optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local image/video paths or public media URLs; documented media limit is 10 MB.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: ClawScan rates this release suspicious with high confidence, citing substantial undeclared account, credential, and history features, external media processing, and a mismatch with the stated plant-analysis purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Consider avoiding installation unless there is a clear need and you are comfortable with the reported behaviors; review the skill and its security evidence before use.
+
+Risk: Scanner coverage was partial: a referenced local path was missing and some delegated behavior could not be verified.
+
+Mitigation: Treat the assessment as incomplete and inspect the unverified behavior before deciding whether to install or use the skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-flowering-fruit-set-rate-analysis-analysis)
+- [Skill usage demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured analysis report in JSON or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Flower and young-fruit counts, estimated fruit-set rate, care suggestions, and report links when available.]
+
+## Skill Version(s):
+
+1.0.14 (source: server-resolved release metadata; packaged SKILL.md declares 1.0.20)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,6 +1,18 @@
 """
-WPS Worker v4.3.0 - 智能引擎切换 v4.3
+WPS Worker v4.5.0 - 智能引擎切换 v4.5
 引擎优先级: WPS > MS Office > LibreOffice > 纯Python
+
+v4.5.0 变更:
+  - 🎯 会议纪要生成（ASR 转写 → LLM 摘要 → Word 生成）
+  - 🎯 ASR 降级链（whisper → azure → google → template）
+  - 🎯 LLM 降级链（rule-engine → external-llm → pure-template）
+  - 🎯 COM 健康检查（状态检测 + 残留进程 + 自动释放）
+  - 🎯 故障排除大章合并（避坑+FAQ+错误ID 统一索引）
+
+v4.4.0 变更:
+  - 🎯 长文档排版自动化（目录/页眉页脚/标题编号/图表索引/交叉引用/格式统一）
+  - 🎯 多级标题编号引擎（中文/阿拉伯/罗马数字三种样式）
+  - 🎯 格式统一预设模板（论文/标书/报告）
 
 v4.3.0 变更:
   - 🎯 Excel 深度分析（公式纠错/数据清洗/透视表/数据预测/NL2Formula）
@@ -43,15 +55,17 @@ from wps_common import (
     safe_path, ensure_desktop_path, release_wps, release_ms, with_retry
 )
 
-# 纯 Python 模式（含排序/筛选/图表/统计/公式）
-from wps_pure import (
-    pure_create_word, pure_edit_word, pure_info_word,
-    pure_create_excel, pure_input_excel, pure_info_excel,
-    pure_create_ppt, pure_info_ppt,
-    pure_sort_excel, pure_filter_excel, pure_chart_excel,
-    pure_statistics_excel, pure_add_excel_sheet, pure_formula_excel,
-    pure_format_word
-)
+# 纯 Python 模式（惰性导入 / 坑13 优化：仅在 PURE/LIBREOFFICE 路径真正调用时加载，
+# 省去每条命令的 wps_pure 模块导入开销；pywin32/python-docx/openpyxl 经核查已在其内部惰性导入）
+_PURE_MOD = None
+
+
+def _pure():
+    global _PURE_MOD
+    if _PURE_MOD is None:
+        import wps_pure
+        _PURE_MOD = wps_pure
+    return _PURE_MOD
 
 # 错误处理模块
 from wps_error import wps_error
@@ -178,7 +192,7 @@ def cmd_create_word(args):
     filepath = args.get("filepath", str(ensure_desktop_path(f"{title}.docx")))
 
     if engine in ("PURE", "LIBREOFFICE"):
-        return pure_create_word(title, filepath, body)
+        return _pure().pure_create_word(title, filepath, body)
 
     try:
         if engine == "WPS":
@@ -222,7 +236,7 @@ def cmd_edit_word(args):
         return {"success": False, "error": wps_error("E010", feature="编辑文档")}
 
     if engine == "PURE":
-        return pure_edit_word(filepath.__str__(), text, position)
+        return _pure().pure_edit_word(filepath.__str__(), text, position)
 
     try:
         if engine == "WPS":
@@ -254,7 +268,7 @@ def cmd_format_word(args):
     filepath = safe_path(args["filepath"])
 
     # 所有引擎走纯 Python（兼容性最好）
-    return pure_format_word(
+    return _pure().pure_format_word(
         filepath.__str__(),
         font_name=args.get("font", ""),
         font_size=args.get("size", 0),
@@ -313,7 +327,7 @@ def cmd_export_word(args):
 
 def cmd_info_word(args):
     filepath = safe_path(args["filepath"])
-    return pure_info_word(filepath.__str__)
+    return _pure().pure_info_word(filepath.__str__)
 
 
 # ==================== Excel ====================
@@ -325,7 +339,7 @@ def cmd_create_excel(args):
     if engine in ("PURE", "LIBREOFFICE"):
         filepath = args.get("filepath", str(ensure_desktop_path(f"{name}.xlsx")))
         sheets = args.get("sheets", ["Sheet1"])
-        result = pure_create_excel(name, sheets, filepath)
+        result = _pure().pure_create_excel(name, sheets, filepath)
         return result
 
     try:
@@ -347,7 +361,7 @@ def cmd_create_excel(args):
 
         if engine == "MSOFFICE":
             ms = get_ms_module()
-            result = ms.ms_create_excel(name, args.get("sheets"))
+            result = ms.ms_create_excel(name, args.get("sheets"), args.get("filepath"))
             release_ms()
             return {**result, "engine": "MSOFFICE"}
 
@@ -361,7 +375,7 @@ def cmd_input_excel(args):
     filepath = safe_path(args["filepath"])
     sheet = args.get("sheet", "Sheet1")
     data = args.get("data", [])
-    return pure_input_excel(filepath.__str__(), sheet, data)
+    return _pure().pure_input_excel(filepath.__str__(), sheet, data)
 
 
 def cmd_formula_excel(args):
@@ -373,7 +387,7 @@ def cmd_formula_excel(args):
     engine = get_engine()
     if engine != "WPS":
         # 非 WPS 走纯 Python（openpyxl 支持写公式）
-        return pure_formula_excel(filepath.__str__(), sheet, cell, formula)
+        return _pure().pure_formula_excel(filepath.__str__(), sheet, cell, formula)
 
     try:
         wps = get_wps()
@@ -394,7 +408,7 @@ def cmd_add_sheet_excel(args):
     sheet = args.get("sheet", "Sheet1")
     headers = args.get("headers")
     data = args.get("data")
-    return pure_add_excel_sheet(filepath.__str__(), sheet, headers, data)
+    return _pure().pure_add_excel_sheet(filepath.__str__(), sheet, headers, data)
 
 
 def cmd_stats_excel(args):
@@ -402,14 +416,14 @@ def cmd_stats_excel(args):
     sheet = args.get("sheet", "Sheet1")
     column = args.get("column", "A")
     stat_type = args.get("type", "SUM")
-    return pure_statistics_excel(filepath.__str__(), sheet, column, stat_type)
+    return _pure().pure_statistics_excel(filepath.__str__(), sheet, column, stat_type)
 
 
 def cmd_sort_excel(args):
     filepath = safe_path(args["filepath"])
     sheet = args.get("sheet", "Sheet1")
     sorts = args.get("sorts", [])
-    return pure_sort_excel(filepath.__str__(), sheet, sorts)
+    return _pure().pure_sort_excel(filepath.__str__(), sheet, sorts)
 
 
 def cmd_filter_excel(args):
@@ -417,7 +431,7 @@ def cmd_filter_excel(args):
     sheet = args.get("sheet", "Sheet1")
     conditions = args.get("conditions", [])
     logic = args.get("logic", "AND")
-    return pure_filter_excel(filepath.__str__(), sheet, conditions, logic)
+    return _pure().pure_filter_excel(filepath.__str__(), sheet, conditions, logic)
 
 
 def cmd_chart_excel(args):
@@ -426,12 +440,12 @@ def cmd_chart_excel(args):
     chart_type = args.get("type", "bar")
     data_range = args.get("data", "A1:B10")
     title = args.get("title", "")
-    return pure_chart_excel(filepath.__str__(), sheet, chart_type, data_range, title)
+    return _pure().pure_chart_excel(filepath.__str__(), sheet, chart_type, data_range, title)
 
 
 def cmd_info_excel(args):
     filepath = safe_path(args["filepath"])
-    return pure_info_excel(filepath.__str__)
+    return _pure().pure_info_excel(filepath.__str__)
 
 
 # ==================== PPT ====================
@@ -442,7 +456,7 @@ def cmd_create_ppt(args):
     filepath = args.get("filepath", str(ensure_desktop_path(f"{title}.pptx")))
 
     if engine in ("PURE", "LIBREOFFICE"):
-        return pure_create_ppt(title, filepath)
+        return _pure().pure_create_ppt(title, filepath)
 
     try:
         if engine == "WPS":
@@ -458,7 +472,7 @@ def cmd_create_ppt(args):
 
         if engine == "MSOFFICE":
             ms = get_ms_module()
-            result = ms.ms_create_ppt(title)
+            result = ms.ms_create_ppt(title, filepath)
             release_ms()
             return {**result, "engine": "MSOFFICE"}
 
@@ -621,7 +635,7 @@ def cmd_export_ppt(args):
 
 def cmd_info_ppt(args):
     filepath = safe_path(args["filepath"])
-    return pure_info_ppt(filepath.__str__)
+    return _pure().pure_info_ppt(filepath.__str__)
 
 
 # ==================== 格式转换 ====================
@@ -742,14 +756,6 @@ def cmd_nl_analyze(args):
         sheet=args.get("sheet", "Sheet1")
     )
 
-def cmd_contract_review(args):
-    """Word 合同审查"""
-    from wps_contract_review import review_docx_contract
-    return review_docx_contract(
-        filepath=args.get("file"),
-        output_path=args.get("output", "")
-    )
-
 def cmd_invoice_ocr(args):
     """发票 OCR 入账"""
     from wps_invoice_ocr import invoice_to_accounting
@@ -792,6 +798,62 @@ def cmd_excel_analyze(args):
         agg_func=args.get("agg_func", "sum"),
     )
 
+def cmd_long_document(args):
+    """长文档排版 v4.4"""
+    from long_document import format_document
+    return format_document(
+        filepath=args.get("file"),
+        task=args.get("task", "analyze"),
+        max_level=args.get("max_level", 3),
+        field=args.get("field", False),
+        insert=args.get("insert", False),
+        odd_even=args.get("odd_even", False),
+        odd_header=args.get("odd_header", ""),
+        even_header=args.get("even_header", ""),
+        chapter_in_header=args.get("chapter_in_header", False),
+        page_number=args.get("page_number", False),
+        page_format=args.get("page_format", "arabic"),
+        page_start=args.get("page_start", 1),
+        style=args.get("style", "arabic"),
+        preset=args.get("preset", "thesis"),
+        numbering_style=args.get("numbering_style", "arabic"),
+        output_path=args.get("output", ""),
+    )
+
+def cmd_meeting_minutes(args):
+    """会议纪要生成 v4.5"""
+    from meeting_minutes import MeetingMinutesGenerator
+    config = {
+        "asr_method": args.get("asr_method", "auto"),
+        "summary_method": args.get("summary_method", "auto"),
+        "segment_minutes": args.get("segment_minutes", 5),
+        "progress_cb": lambda *a: None,  # Worker 模式下静默
+    }
+    gen = MeetingMinutesGenerator(config)
+    return gen.generate_minutes(
+        audio_path=args.get("file"),
+        output_path=args.get("output", ""),
+        title=args.get("title", "会议纪要"),
+        language=args.get("language", "zh"),
+    )
+
+def cmd_com_health(args):
+    """COM 健康检查 v4.5"""
+    from com_health import COMHealthChecker
+    checker = COMHealthChecker(auto_release=args.get("auto_release", False))
+    check_type = args.get("check_type", "full")
+    
+    if check_type == "wps":
+        return checker.check_wps_com()
+    elif check_type == "ms":
+        return checker.check_ms_com()
+    elif check_type == "residuals":
+        return checker.check_com_residuals()
+    elif check_type == "release":
+        return checker.release_all_com(force=args.get("force", False))
+    else:
+        return checker.full_health_check()
+
 COMMANDS = {
     "create_word": cmd_create_word,
     "edit_word": cmd_edit_word,
@@ -819,10 +881,12 @@ COMMANDS = {
     "check_update": cmd_check_update,
     "docx_to_ppt": cmd_docx_to_ppt,
     "nl_analyze": cmd_nl_analyze,
-    "contract_review": cmd_contract_review,
     "invoice_ocr": cmd_invoice_ocr,
     "ppt_generate": cmd_ppt_generate,
     "excel_analyze": cmd_excel_analyze,
+    "long_document": cmd_long_document,
+    "meeting_minutes": cmd_meeting_minutes,
+    "com_health": cmd_com_health,
     "exit": None,
 }
 

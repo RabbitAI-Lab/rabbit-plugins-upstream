@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/stocktoday-data",
   "slug": "stocktoday-data",
   "ownerHandle": null,
-  "version": "2.0.2",
-  "updatedAt": 1782710171908,
-  "contentHash": "ff5a335658a709b8f44b8c850e8bf7909e3155e5e76a81797931e8377ea98a9c",
-  "fetchedAt": "2026-07-26T18:22:33.633Z"
+  "version": "2.1.0",
+  "updatedAt": 1794979219824,
+  "contentHash": "ede5d9dc32419484c969ddf7a75e022449f006d50ba6525c49fe86c64a04326f",
+  "fetchedAt": "2026-11-21T15:36:25.869Z"
 }

@@ -1,47 +1,52 @@
-## Description: <br>
-Multi-agent roundtable discussion for topic-driven, multi-round debate with convergence detection and conclusion generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turn source materials into evidence-backed, actionable recommendations for important decisions and Code Review, using host-run professional roles where they improve the result.
 
-## Publisher: <br>
-[parsifalc](https://clawhub.ai/user/parsifalc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[parsifalc](https://clawhub.ai/user/parsifalc)
 
-## Use Case: <br>
-Developers and agent operators use this skill to coordinate structured discussions among multiple agent roles for technical reviews, product decisions, root-cause analysis, requirements clarification, and architecture tradeoffs. It helps capture sequential viewpoints, consensus, disagreements, and conclusion material for later review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Discussion text can be persisted locally and shared through the web viewer or external chat notifications. <br>
-Mitigation: Avoid using the skill for confidential discussions unless storage and recipients are approved; keep the web viewer disabled or bound to localhost unless remote access is intentional. <br>
-Risk: The skill can use external chat notifications and may require OAuth tokens or other sensitive credentials. <br>
-Mitigation: Use only approved notification channels, protect tokens, and confirm recipients before enabling notifications for sensitive discussions. <br>
-Risk: The bundle includes subprocess, browser, network sharing, and release or operations scripts that may be inappropriate in sensitive environments. <br>
-Mitigation: Review or remove operational scripts before deployment, constrain output paths, and run the skill in an environment with appropriate process and network controls. <br>
+## Use Case:
 
+Developers, project owners, and teams use Roundtable to turn source materials into actionable recommendations for important decisions and structured code reviews. It helps compare options, surface evidence gaps and trade-offs, and keep recommendations separate from user approval.
 
-## Reference(s): <br>
-- [Roundtable homepage](https://roundtable.izmw.me) <br>
-- [README](README.md) <br>
-- [API Reference](docs/API.md) <br>
-- [Integration Guide](docs/INTEGRATION.md) <br>
-- [Adapter Guide](docs/ADAPTER.md) <br>
-- [Architecture](docs/architecture.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline tool calls, shell commands, YAML snippets, and JSON-serializable discussion summaries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Discussion content may be persisted locally and may be shared through the optional web viewer or configured chat notifications.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.4 (source: server release evidence, SKILL.md frontmatter, pyproject.toml, package.json) <br>
+Risk: The scan has medium confidence and incomplete reference coverage; the skill also includes publishing and external notification guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, review those workflows and confirm their destinations suit your needs.
+
+## Reference(s):
+
+- [Agent Roundtable on ClawHub](https://clawhub.ai/parsifalc/skills/agent-roundtable)
+- [Publisher profile](https://clawhub.ai/user/parsifalc)
+- [Roundtable project homepage](https://roundtable.izmw.me)
+- [Real-time Notifications Reference](references/notifications-example.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Evidence-backed recommendations and code review findings in concise Markdown or host-rendered reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Grounded in supplied materials, with sources, trade-offs, uncertainties, and follow-up conditions made explicit]
+
+## Skill Version(s):
+
+2.2.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

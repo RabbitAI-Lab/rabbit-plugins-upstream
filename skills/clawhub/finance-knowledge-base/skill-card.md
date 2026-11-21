@@ -1,41 +1,53 @@
-## Description: <br>
-Manages internal financial knowledge bases with document organization, knowledge graph structure, semantic search, and intelligent Q&A guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides design guidance for financial institutions organizing internal knowledge bases, including document taxonomy, knowledge graphs, search evaluation, metric definitions, lifecycle governance, and Q&A quality checks.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is for demonstration purposes and not for production usage.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Financial institution employees and knowledge managers use this skill to plan internal knowledge-base organization, retrieval workflows, knowledge graph structure, and Q&A patterns. It provides advisory reference material that requires human review before real-world application. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat generated knowledge-base guidance as financial, legal, or insurance advice. <br>
-Mitigation: Use the output as reference material only and require review by qualified professionals before applying it to real financial workflows. <br>
-Risk: Knowledge-base structure or retrieval guidance could introduce incorrect or misleading information into internal documentation. <br>
-Mitigation: Review proposed structures, search behavior, and Q&A content against authoritative internal policies before deployment. <br>
+## Use Case:
 
+Financial institution knowledge managers and reviewers can use it to draft document taxonomies, knowledge graph schemas, metric registries, retrieval evaluations, and version governance checklists. Outputs are reference drafts for qualified human review and do not operate production systems or provide financial, legal, or compliance advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/finance-knowledge-base) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with structured guidance and illustrative Python examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory-only reference output; no executable code, network calls, persistent storage, or credential collection are included in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.2 (source: server release metadata) <br>
+Risk: The security review was partial, so referenced material may not have been fully inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill listing and referenced material before installation, as advised by the security evidence.
+
+Risk: Reference guidance may be mistaken for institution-specific financial, legal, or compliance advice or treated as an approved production change.
+
+Mitigation: Have qualified reviewers validate sources and applicability; do not use the skill to change production data or permissions or to make professional advice decisions.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/finance-knowledge-base)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Analysis, Code]
+
+**Output Format:** [Markdown with tables, checklists, and illustrative code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference drafts for human review; code examples are illustrative.]
+
+## Skill Version(s):
+
+5.0.7 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

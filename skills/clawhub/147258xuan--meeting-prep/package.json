@@ -1,0 +1,8 @@
+{
+  "name": "meeting-prep",
+  "version": "0.1.0",
+  "description": "Auto-summarize recent context into a meeting prep brief from memory files.",
+  "main": "index.js",
+  "keywords": ["meeting", "prep", "summary", "calendar", "context"],
+  "license": "MIT"
+}

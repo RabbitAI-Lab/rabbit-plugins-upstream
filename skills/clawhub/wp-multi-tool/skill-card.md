@@ -1,42 +1,54 @@
-## Description: <br>
-WordPress site health audit, performance optimization, database cleanup, autoload tuning, slow query detection, wp-config management, image size control, frontend speed fixes, and server diagnostics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WordPress site health audit, performance optimization, database cleanup, autoload tuning, slow query detection, wp-config management, image size control, frontend speed fixes, and server diagnostics. Combines 19 optimization and control modules into a single paid plugin (Pro $79/year single-site, $199/year or $499 lifetime unlimited). The diagnostic commands in this skill work on any WordPress 5.8+ site without the plugin.
 
-## Publisher: <br>
-[marcindudekdev](https://clawhub.ai/user/marcindudekdev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[marcindudekdev](https://clawhub.ai/user/marcindudekdev)
 
-## Use Case: <br>
-Developers, site owners, and WordPress operators use this skill to inspect site health, diagnose performance bottlenecks, and apply WP-CLI based optimization or cleanup actions with confirmation for writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: WP-CLI commands can inspect or change a live WordPress site. <br>
-Mitigation: Use the skill only on sites where the operator is authorized to run WP-CLI, and review proposed commands before execution. <br>
-Risk: Cleanup, configuration edits, frontend toggles, or plugin activation can modify data or site behavior. <br>
-Mitigation: Require explicit user confirmation for write operations and take a database backup before destructive cleanup commands. <br>
+## Use Case:
 
+WordPress site owners and developers use this skill to inspect site health, performance, database state, and WP Multitool monitoring data through WP-CLI. They can use its suggested cleanup and configuration commands after confirming each write operation.
 
-## Reference(s): <br>
-- [WP Multitool Homepage](https://wpmultitool.com) <br>
-- [ClawHub Skill Page](https://clawhub.ai/marcindudekdev/skills/wp-multi-tool) <br>
-- [Publisher Profile](https://clawhub.ai/user/marcindudekdev) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown with WP-CLI command blocks and optional JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only diagnostics can be proposed directly; write operations require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.0 (source: server release metadata) <br>
+Risk: Cleanup and configuration commands can delete WordPress data or change site behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Get user confirmation before every write operation and export a database backup before cleanup.
+
+Risk: The included SQL examples use the default wp_ table prefix and may fail on sites with a custom prefix.
+
+Mitigation: Check the site's prefix with `wp db prefix` and substitute it in the SQL before running queries.
+
+## Reference(s):
+
+- [WP Multitool](https://wpmultitool.com)
+- [ClawHub skill release](https://clawhub.ai/marcindudekdev/skills/wp-multi-tool)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Analysis, Guidance, Configuration instructions]
+
+**Output Format:** [Markdown with inline SQL and shell code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write operations require user confirmation.]
+
+## Skill Version(s):
+
+1.10.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

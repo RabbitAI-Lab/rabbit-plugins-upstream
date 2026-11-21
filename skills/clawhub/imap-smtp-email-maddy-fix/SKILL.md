@@ -38,6 +38,11 @@ npm install --production
 
 Configuration is stored at `~/.config/imap-smtp-email/.env` (survives skill updates). If no config is found there, the skill falls back to a `.env` file in the skill directory (for backward compatibility).
 
+`IMAP_PASS` and `SMTP_PASS` may be either literal passwords or Passbolt secret
+references in the form `passbolt://RESOURCE_ID`. When a Passbolt reference is
+used, the skill resolves the password locally at runtime and does not require
+storing the secret itself in `.env`.
+
 ### Config file format
 
 ```bash
@@ -196,6 +201,21 @@ Mark message(s) as read or unread.
 ```bash
 node scripts/imap.js [--account <name>] mark-read <uid> [uid2 uid3...]
 node scripts/imap.js [--account <name>] mark-unread <uid> [uid2 uid3...]
+```
+
+### create-mailbox
+Create a mailbox/folder when it does not already exist.
+
+```bash
+node scripts/imap.js [--account <name>] create-mailbox <name>
+```
+
+### copy / move
+Copy or move message(s) to another mailbox/folder.
+
+```bash
+node scripts/imap.js [--account <name>] copy <uid> [uid2 uid3...] --to <mailbox> [--mailbox INBOX]
+node scripts/imap.js [--account <name>] move <uid> [uid2 uid3...] --to <mailbox> [--mailbox INBOX]
 ```
 
 ### list-mailboxes

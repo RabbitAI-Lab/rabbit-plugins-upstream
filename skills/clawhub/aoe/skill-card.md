@@ -1,41 +1,55 @@
-## Description: <br>
-Manage AI coding agent sessions via Agent of Empires (aoe). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage AI coding agent sessions via Agent of Empires (aoe)
 
-## Publisher: <br>
-[njbrake](https://clawhub.ai/user/njbrake) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[njbrake](https://clawhub.ai/user/njbrake)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to launch, organize, monitor, and inspect AI coding-agent sessions running through Agent of Empires and tmux. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reduced-oversight launch options can skip normal agent approval prompts. <br>
-Mitigation: Review the skill before installation if agents should operate only with explicit approvals, and use reduced-oversight examples only in disposable or tightly sandboxed workspaces. <br>
-Risk: Forceful worktree deletion can remove local work. <br>
-Mitigation: Check git state and confirm the worktree contains nothing needed before using forceful worktree deletion. <br>
+## Use Case:
 
+Developers use this skill to launch, organize, monitor, and communicate with AI coding-agent sessions through Agent of Empires. It provides command-line workflows for session lifecycle, groups, profiles, worktrees, and output capture.
 
-## Reference(s): <br>
-- [Agent of Empires project homepage](https://github.com/agent-of-empires/agent-of-empires) <br>
-- [ClawHub skill page](https://clawhub.ai/njbrake/skills/aoe) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the aoe and tmux binaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.13.1 (source: server release evidence) <br>
+Risk: YOLO mode skips the agent tool's permission prompts, allowing actions to proceed without those checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use YOLO mode only when its permission tradeoff is intended, and review agent actions and changes.
+
+Risk: Purging a session can permanently delete its worktree or branch.
+
+Mitigation: Check the selected session and deletion flags before running a purge command.
+
+## Reference(s):
+
+- [Agent of Empires project](https://github.com/agent-of-empires/agent-of-empires)
+- [Sandbox guide](https://github.com/agent-of-empires/agent-of-empires/blob/main/docs/guides/sandbox.md)
+- [Agent of Empires on ClawHub](https://clawhub.ai/njbrake/skills/aoe)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell command examples and documented JSON output shapes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands and guidance are tailored to the requested agent-session management task.]
+
+## Skill Version(s):
+
+1.25.0 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

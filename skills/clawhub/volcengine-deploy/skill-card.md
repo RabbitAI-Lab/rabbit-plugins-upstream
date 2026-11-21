@@ -1,50 +1,71 @@
-## Description: <br>
-Deploy a local project directory or Git repository to Volcengine as a running, reachable cloud service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Deploy a local project directory or Git repository to Volcengine as a running, reachable cloud service.
 
-## Publisher: <br>
-[volc-sdk-team](https://clawhub.ai/user/volc-sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[volc-sdk-team](https://clawhub.ai/user/volc-sdk-team)
 
-## Use Case: <br>
-Developers and engineers use this skill to deploy local project directories or Git repositories to Volcengine ECS, VKE, or veFaaS after selecting a hosting mode and resource management path. It helps plan, provision, package, verify, and summarize cloud deployments with explicit approval and cleanup records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can provision billable Volcengine cloud resources and expose services publicly. <br>
-Mitigation: Review the generated .volcengine/deployment-plan.md and require explicit approval evidence before provisioning resources. <br>
-Risk: Cloud credentials, connection strings, tokens, and generated service secrets could be exposed during deployment. <br>
-Mitigation: Keep secrets out of logs and summaries, write generated local secret files with restrictive permissions, and keep local smoke-test credentials local-only. <br>
-Risk: Failed or partial deployments can leave cloud resources running. <br>
-Mitigation: Record CLI-created resources in .volcengine/created-resources.json and review reverse-order cleanup commands before deleting resources. <br>
+## Use Case:
 
+Developers and engineers use this skill to deploy a local project or Git repository to Volcengine through ECS, VKE, or veFaaS, with deployment choices and resources recorded for review.
 
-## Reference(s): <br>
-- [Volcengine Deploy on ClawHub](https://clawhub.ai/volc-sdk-team/skills/volcengine-deploy) <br>
-- [Deployment Plan Template](artifact/references/deployment-plan-template.md) <br>
-- [ECS Deployment Details](artifact/references/ecs-deploy-steps.md) <br>
-- [VKE Deployment Details](artifact/references/vke-deploy-steps.md) <br>
-- [veFaaS Skill Execution](artifact/references/faas-deploy-steps.md) <br>
-- [Kubernetes manifest templates](artifact/references/k8s-manifests.md) <br>
-- [Dockerfile templates](artifact/references/dockerfile-templates.md) <br>
-- [Supported runtime dependencies](artifact/references/supported-dependencies.md) <br>
-- [Deployment Service-Linked Roles](artifact/references/service-linked-roles.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Code, Guidance] <br>
-**Output Format:** [Markdown with inline bash, JSON, Docker Compose, systemd, Dockerfile, and Kubernetes manifest snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local deployment state under .volcengine/ and emit cloud deployment summaries, health checks, logs, resource records, cleanup commands, and warnings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The security review is partial: 9 of 12 components were fully inspected, and ClawScan reports deployment risks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated scripts, plans, and deployment configuration before executing them; the available scan does not cover every component.
+
+Risk: Generated smoke-test Compose files publish application and dependency ports on host interfaces, which can expose test services and credentials.
+
+Mitigation: Run the test stack only in a trusted local environment; bind or restrict published ports and avoid exposing test services publicly.
+
+Risk: Deployment packaging can include project files that were not intended for release.
+
+Mitigation: Review the build or archive context and exclude credentials, local environment files, and unrelated files before packaging.
+
+Risk: Deployment configuration handles credentials and changes network access, permissions, and database state.
+
+Mitigation: Keep secrets out of plans and logs, use the designated environment or Secret path with restrictive file permissions, prefer private endpoints and narrow allowlists, and review migration and permission changes.
+
+Risk: Provisioning creates billable resources and may open services to public traffic.
+
+Mitigation: Complete the validated deployment plan and obtain explicit resource-creation approval; limit ingress to required ports and trusted source ranges.
+
+## Reference(s):
+
+- [Deployment plan template](artifact/references/deployment-plan-template.md)
+- [ECS deployment steps](artifact/references/ecs-deploy-steps.md)
+- [VKE deployment steps](artifact/references/vke-deploy-steps.md)
+- [veFaaS deployment steps](artifact/references/faas-deploy-steps.md)
+- [Kubernetes manifests](artifact/references/k8s-manifests.md)
+- [Supported dependencies](artifact/references/supported-dependencies.md)
+- [Dockerfile templates](artifact/references/dockerfile-templates.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Configuration, Deployment guidance]
+
+**Output Format:** [Markdown plans and reports, shell commands, and generated JSON or deployment configuration]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include executable commands and resource, container, or Kubernetes configuration.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

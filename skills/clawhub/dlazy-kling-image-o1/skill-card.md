@@ -1,43 +1,52 @@
-## Description: <br>
-Generate exquisite images with the Kling o1 model, supporting text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate exquisite images with Kling o1 model. Supports text-to-image and image-to-image. 使用可灵 (Kling) o1 模型生成精美图像，支持文生图与参考图生图。
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to invoke the dLazy CLI for Kling o1 image generation from prompts and optional reference images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and referenced local image files are sent to dLazy services for image generation. <br>
-Mitigation: Install and invoke the skill only when this data transfer is intended; use dry-run when available to review payload and cost before calling the API. <br>
-Risk: The skill stores a dLazy API key locally, and scanner evidence notes that inspected CLI code may not enforce the restricted file permissions claimed by the skill. <br>
-Mitigation: Prefer per-invocation DLAZY_API_KEY in sensitive environments, or check and restrict permissions on ~/.dlazy/config.json after login or auth set. <br>
+## Use Case:
 
+Developers and creators use this skill to generate or edit images with Kling o1 from text prompts and optional reference images.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-kling-image-o1) <br>
-- [dLazy publisher profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the dLazy CLI to return hosted image output URLs or asynchronous task status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: The scan noted a mismatch between the image-generation purpose and the reported login-only action, and some install and runtime details were unavailable in analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the visible instructions and confirm how dLazy login supports image generation before authenticating through the CLI.
+
+## Reference(s):
+
+- [CLI source code (listed in the skill documentation)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-kling-image-o1)
+
+## Skill Output:
+
+**Output Type(s):** [Images, JSON, Shell commands]
+
+**Output Format:** [Image assets and a JSON result envelope]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional reference images (up to 10); output can be saved to a local path.]
+
+## Skill Version(s):
+
+1.3.41 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

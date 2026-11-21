@@ -1,44 +1,55 @@
-## Description: <br>
-Identifies obesity, emaciation, external injuries, skin abnormalities, and abnormal mental states to help pet owners detect potential health issues promptly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies obesity, emaciation, external injuries, skin abnormalities, and abnormal mental states, helping pet owners detect health issues promptly.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Pet owners and care workflows use this skill to analyze pet images or videos for body-condition concerns, visible injuries, skin abnormalities, abnormal mental state, and historical report lookup. The output is health-reference guidance and should not replace professional veterinary diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet images, videos, and report history are processed through the Life Emergence cloud service. <br>
-Mitigation: Use only with media and report data appropriate for cloud processing, and inform users that outputs are health-reference guidance rather than veterinary diagnosis. <br>
-Risk: The skill can silently create or reuse a cloud-linked identity and store authentication tokens locally. <br>
-Mitigation: Review local workspace data and token storage before deployment, especially where credential handling, deletion controls, or shared workspaces are sensitive. <br>
+## Use Case:
 
+Pet owners use the skill to review photos or videos for body condition, visible skin changes, and activity concerns, and receive a structured health-reference report or a history list. The results do not replace veterinary diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-body-health-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/18072937735) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Detailed API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured health analysis reports, including report links for historical queries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local image/video files or media URLs; documented media formats include jpg, png, jpeg, mp4, avi, and mov with a 10 MB limit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: ClawHub release evidence; artifact frontmatter reports 1.0.8) <br>
+Risk: The security review is suspicious and partial, citing account and credential handling, broad network capabilities, and behavior that may not consistently match the pet-health purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review account, credential, network, and opt-out behavior before installation; avoid providing credentials or sensitive media until these behaviors are clearly explained and addressed.
+
+Risk: Automated pet-health assessments can be incomplete and may be mistaken for a veterinary diagnosis.
+
+Mitigation: Treat results as health-reference information and consult a veterinarian about concerning findings.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-pet-body-health-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [API interface notes](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Markdown, Guidance]
+
+**Output Format:** [JSON or plain-text analysis reports; Markdown tables for history lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include body-condition scores, skin and activity findings, suggestions, and report links when supplied by the service.]
+
+## Skill Version(s):
+
+1.0.21 (source: server-resolved release metadata; artifact frontmatter declares 1.0.25)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

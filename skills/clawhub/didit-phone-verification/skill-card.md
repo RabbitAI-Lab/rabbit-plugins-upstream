@@ -1,45 +1,57 @@
-## Description: <br>
-Integrate Didit Phone Verification standalone API to send and check OTP codes for phone-number verification through SMS, WhatsApp, Telegram, or voice channels. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers integrate Didit's phone verification API to send and check one-time codes or assess phone-number risk.
 
-## Publisher: <br>
-[rosasalberto](https://clawhub.ai/user/rosasalberto) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[rosasalberto](https://clawhub.ai/user/rosasalberto)
 
-## Use Case: <br>
-Developers use this skill to add Didit phone-number verification flows, including sending OTP codes, checking user-supplied codes, and applying optional disposable or VoIP number policies. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Didit API key for live verification requests. <br>
-Mitigation: Store DIDIT_API_KEY in a secret store or environment variable and do not commit it to source control. <br>
-Risk: Phone numbers, OTP codes, IP addresses, device identifiers, and fraud-signal data may be sent to Didit. <br>
-Mitigation: Send verification data only for users and numbers you are authorized to verify, and obtain appropriate user consent before using the API. <br>
-Risk: Verification codes are subject to expiry, attempt limits, resend limits, and rate limits. <br>
-Mitigation: Handle failed, expired, declined, undeliverable, blocked, retry, and rate-limited responses explicitly in the calling workflow. <br>
+## Use Case:
 
+Developers use the skill to write backend integrations for Didit's standalone phone verification endpoints, including sending and checking one-time codes and assessing phone-number risk.
 
-## Reference(s): <br>
-- [Didit Documentation](https://docs.didit.me) <br>
-- [Didit Phone Verification Overview](https://docs.didit.me/core-technology/phone-verification/overview) <br>
-- [Didit Phone Send API](https://docs.didit.me/standalone-apis/phone-send) <br>
-- [Didit Phone Check API](https://docs.didit.me/standalone-apis/phone-check) <br>
-- [ClawHub Skill Page](https://clawhub.ai/rosasalberto/didit-phone-verification) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code examples, shell commands, and JSON API payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires DIDIT_API_KEY for live API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: server release evidence) <br>
+Risk: Phone verification can involve phone numbers and optional identifiers such as IP or device data being sent to Didit.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Send only the information needed for the verification flow, and account for that data in the application's privacy notices and handling practices.
+
+Risk: Security review coverage is partial, and the evidence notes concerns about the skill's tool permission scope.
+
+Mitigation: Review the skill's permissions and referenced material before use, and keep the DIDIT_API_KEY in a protected environment variable or secret store.
+
+## Reference(s):
+
+- [Didit Phone Verification overview](https://docs.didit.me/core-technology/phone-verification/overview)
+- [Send phone verification code API](https://docs.didit.me/standalone-apis/phone-send)
+- [Check phone verification code API](https://docs.didit.me/standalone-apis/phone-check)
+- [Phone risk API](https://docs.didit.me/standalone-apis/phone-risk)
+- [Didit phone verification pricing](https://docs.didit.me/getting-started/phone-verification-pricing)
+
+## Skill Output:
+
+**Output Type(s):** [Code, API Calls, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Text and Markdown with Python or TypeScript examples, JSON payloads, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.5.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

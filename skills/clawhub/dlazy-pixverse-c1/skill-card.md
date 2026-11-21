@@ -1,47 +1,55 @@
-## Description: <br>
-PixVerse C1 video model for text-to-video, image-to-video, first/last-frame video generation, and reference-image video generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PixVerse C1 generates videos from text prompts, reference images, or first and last frames, with a focus on action, visual effects, and fast motion.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to invoke dLazy's hosted PixVerse C1 video-generation service from an agent. It supports prompt-driven video generation and optional image inputs for reference, component, or first/last-frame workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local media inputs are sent to dLazy's hosted API and media storage. <br>
-Mitigation: Use only prompts and files appropriate for upload to dLazy's service; avoid passing local images or videos unless that data sharing is acceptable. <br>
-Risk: The skill depends on installing or running a third-party npm CLI. <br>
-Mitigation: Review the referenced npm package and source repository before global installation, and prefer the pinned npx command for one-off use. <br>
-Risk: The broad video-generation trigger could route requests to this skill unintentionally. <br>
-Mitigation: Use explicit trigger language such as "pixverse c1" when invoking the skill. <br>
-Risk: API keys are stored in the local dLazy CLI configuration or supplied through the environment. <br>
-Mitigation: Authenticate only on trusted machines and rotate or revoke keys from the dLazy dashboard when access changes. <br>
+## Use Case:
 
+Developers and agents use this skill to request PixVerse C1 video generation from text prompts, reference images, or specified first and last frames, and receive generated media results.
 
-## Reference(s): <br>
-- [Dlazy Pixverse C1 on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-pixverse-c1) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [Markdown instructions with bash command examples and JSON response examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Invoked CLI responses may include generated media URLs or asynchronous task status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.6 (source: frontmatter and server release evidence) <br>
+Risk: Scanner evidence reports a benign verdict with medium confidence, but says the reported login workflow is not established as supporting the documented video-generation purpose and some references could not be checked.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installation or use, review the declared CLI package and confirm its login and generation behavior matches the documented video workflow.
+
+Risk: The skill sends prompts to dLazy's hosted API and uploads supplied local media to its media service.
+
+Mitigation: Avoid sending sensitive prompts or media unless permitted, and rotate or revoke the organization API key if it is exposed.
+
+## Reference(s):
+
+- [dLazy CLI source (declared in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm (declared in skill metadata)](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Video, JSON, Shell commands]
+
+**Output Format:** [Generated video assets with result URLs in a JSON response; shell commands for requests]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports synchronous or asynchronous generation and optional saving to a local path.]
+
+## Skill Version(s):
+
+1.2.43 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

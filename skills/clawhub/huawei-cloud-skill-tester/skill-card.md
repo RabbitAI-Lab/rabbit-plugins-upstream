@@ -1,49 +1,64 @@
-## Description: <br>
-End-to-end functional testing framework for Huawei Cloud skills, covering single-skill unit testing, multi-skill orchestration, end-to-end full-flow testing, structured JSON phase outputs, and chain verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+An end-to-end framework for testing Huawei Cloud skills through single-skill checks, multi-skill orchestration, live-environment flows, and structured reports.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and QA engineers use this skill to validate Huawei Cloud skills through installation checks, feature extraction, CLI/SDK/API feasibility research, test generation, real-environment execution, orchestration testing, cleanup, and consolidated reporting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run generated shell or Python commands and perform Huawei Cloud write operations with credentials. <br>
-Mitigation: Run it only in an isolated test account with least-privilege temporary Huawei Cloud credentials; do not use production AK/SK or valuable billing resources. <br>
-Risk: Generated phase files or execution plans could trigger cloud changes before the operator has fully reviewed them. <br>
-Mitigation: Inspect generated phase files before phase 4 or phase 6 and require explicit review before executing mutating tests. <br>
+## Use Case:
 
+Developers and QA engineers use this skill to assess Huawei Cloud AI Shell skills, test their functions and multi-skill flows, and review consolidated results.
 
-## Reference(s): <br>
-- [Huawei Cloud Skill Tester](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-skill-tester) <br>
-- [Huawei Cloud CLI Installation Guide](https://support.huaweicloud.com/qs-hcli/hcli_02_003.html) <br>
-- [Huawei Cloud SDK Center](https://console.huaweicloud.com/apiexplorer/#/sdkcenter) <br>
-- [Huawei Cloud API Explorer](https://console.huaweicloud.com/apiexplorer/#/openapi) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [Architecture](references/architecture.md) <br>
-- [IAM Policies](references/iam-policies.md) <br>
-- [Output Schema Specification](references/output-schema-spec.md) <br>
-- [Phase Transition Rules](references/phase-transition-rules.md) <br>
-- [Verification Method](references/verification-method.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration, markdown] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON phase reports, generated test cases, and consolidated reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces structured phase summaries and final reports for Huawei Cloud skill test workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: ClawScan rates the skill suspicious with high confidence, citing risks to command execution, installation cleanup, authorization, and the reliability of its testing claims.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Consider avoiding installation, especially where cloud credentials or valuable existing skill installations are present; if evaluating it, use an isolated environment and review its actions first.
+
+Risk: Real-environment phases can affect Huawei Cloud resources, and write cases can create, update, or delete resources when enabled.
+
+Mitigation: Use a dedicated test account with limited permissions, keep ALLOW_WRITES=0 unless write tests are intentional, and confirm cleanup of any test resources.
+
+Risk: Scanner coverage is partial, so some behavior remains unevaluated and the resulting reports do not establish that a skill is safe or correct.
+
+Mitigation: Treat reports as partial test evidence and independently verify important behaviors and cleanup results.
+
+## Reference(s):
+
+- [Architecture](references/architecture.md)
+- [Phase details](references/phase-details.md)
+- [Output schema specification](references/output-schema-spec.md)
+- [Credential handling protocol](references/agent-protocol.md)
+- [Minimum IAM policies](references/iam-policies.md)
+- [Huawei Cloud KooCLI guide](https://support.huaweicloud.com/qs-hcli/hcli_02_003.html)
+- [Huawei Cloud SDK reference](https://console.huaweicloud.com/apiexplorer/#/sdkcenter)
+- [Huawei Cloud API reference](https://console.huaweicloud.com/apiexplorer/#/openapi)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Shell commands, Configuration instructions]
+
+**Output Format:** [Structured JSON phase results and consolidated Markdown reports, with Bash commands for running tests]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Live API tests require Huawei Cloud credentials; write operations are gated by ALLOW_WRITES.]
+
+## Skill Version(s):
+
+1.0.9 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

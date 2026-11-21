@@ -1,47 +1,57 @@
-## Description: <br>
-A decision-coaching skill that helps agents assess whether a consequential decision is inside a user's circle of competence and choose whether to act, defer, wait, or size the bet to uncertainty. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides users in assessing whether a consequential decision falls within their competence and choosing whether to act, defer, wait, or make a smaller bet.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Developers, founders, investors, operators, and decision-makers use this skill to test whether they have calibrated competence in a domain before making a consequential decision. It guides the agent to classify the decision as inside, outside, or partially inside the user's circle and then recommend acting decisively, deferring, waiting, or making a small uncertainty-sized bet. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be used to frame investment, business, hiring, or operational decisions that have high stakes. <br>
-Mitigation: Treat outputs as decision support, verify cited claims independently, and consult qualified domain experts before acting on financial, legal, or operational recommendations. <br>
-Risk: Historical examples can be overgeneralized to a user's current decision. <br>
-Mitigation: Use the skill's circle test to identify the user's actual domain competence and require current evidence before applying an analogy. <br>
+## Use Case:
 
+For employees, founders, investors, board members, and other decision-makers weighing consequential investments, acquisitions, hires, market entries, or technology choices, the skill helps assess whether they have calibrated competence to judge the decision. It guides users to act decisively within their expertise or defer, wait, or limit the bet when outside it.
 
-## Reference(s): <br>
-- [Circle of Competence ClawHub listing](https://clawhub.ai/deciqai/skills/circle-of-competence) <br>
-- [Primary sources](references/sources.md) <br>
-- [Buffett's Tech-Stock Refusal, 1990s](examples/buffetts-tech-stock-refusal-1990s.md) <br>
-- [Quaker's Snapple Acquisition, 1994-1997](examples/quaker-snapple-acquisition-1994-1997.md) <br>
-- [Funding and Building AI Outside Your Circle (2024-2026)](examples/ai-hype-outside-the-circle-2024-2026.md) <br>
-- [Buffett 1996 Letter to Shareholders](https://www.berkshirehathaway.com/letters/1996.html) <br>
-- [FTC: Keep your AI claims in check](https://www.ftc.gov/business-guidance/blog/2023/02/keep-your-ai-claims-check) <br>
-- [SEC press release 2024-36](https://www.sec.gov/newsroom/press-releases/2024-36) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown decision-evaluation template with concise coaching questions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May stop at explicit wait points while coaching the user through a decision.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The security scan reports that one referenced example was only partly inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the partly inspected example before relying on it or installing the skill.
+
+Risk: The framework may inform consequential investment, hiring, acquisition, or market-entry decisions.
+
+Mitigation: Verify relevant facts and consult qualified domain experts before acting on high-stakes decisions.
+
+## Reference(s):
+
+- [Circle of Competence on ClawHub](https://clawhub.ai/deciqai/skills/circle-of-competence)
+- [Buffett, 1996 Shareholder Letter](https://www.berkshirehathaway.com/letters/1996.html)
+- [How Snapple Got Its Juice Back (Harvard Business Review)](https://hbr.org/2002/01/how-snapple-got-its-juice-back)
+- [FTC: Keep your AI claims in check](https://www.ftc.gov/business-guidance/blog/2023/02/keep-your-ai-claims-check)
+- [SEC Press Release 2024-36 on AI-related statements](https://www.sec.gov/newsroom/press-releases/2024-36)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured circle assessment with a decision, confidence, test results, verdict, response plan, and competence boundary.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [In coaching mode, asks one question at a time and waits for the user's response before continuing.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

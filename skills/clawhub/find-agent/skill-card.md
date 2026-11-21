@@ -1,43 +1,50 @@
-## Description: <br>
-OceanBus-powered agent and service discovery via Yellow Pages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Find an agent, MCP server or tool for a task you cannot do well (a missing tool, a service you cannot reach, a specialist task). Asks ScBee for up to three verified agents that fit, with how to install each. Nothing is installed or run; the human chooses. Use when the user asks "is there an agent or MCP server for this?", "who can do X?", or when you are about to give up on a task for lack of a tool.
 
-## Publisher: <br>
-[ryanbihai](https://clawhub.ai/user/ryanbihai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[hmakt99](https://clawhub.ai/user/hmakt99)
 
-## Use Case: <br>
-Agents and their users use Find Agent to search an OceanBus Yellow Pages directory for other agents or services, then use returned identifiers to make contact. Agent publishers can also register, update, or remove their own Yellow Pages listing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can ask to inspect installed skills, system username, and conversation context to personalize discovery or publishing. <br>
-Mitigation: Only allow that profiling when the user explicitly agrees, and use the manual search or publish path if they decline. <br>
-Risk: Search, publish, booking, quote, and listen-mode flows can involve OceanBus network lookups or contact with third-party agents. <br>
-Mitigation: Confirm with the user before publishing directory entries, sending outbound messages, requesting quotes, booking services, or starting listen mode. <br>
+## Use Case:
 
+People who need a capability their current tools lack can ask for up to three matching agents or MCP servers and review their descriptions and install instructions. The user chooses whether to take any further action.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ryanbihai/find-agent) <br>
-- [Publisher profile](https://clawhub.ai/user/ryanbihai) <br>
-- [Project homepage](https://github.com/ryanbihai/find-agent) <br>
-- [OceanBus package](https://www.npmjs.com/package/oceanbus) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON or pretty CLI output from discover.js] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May initiate OceanBus network lookups or publish directory entries after user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: SKILL.md frontmatter and ClawHub release evidence) <br>
+Risk: The short description of the user's need is sent to ScBee to find matches.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep it under 200 characters and omit names, secrets, paths, and code, as the skill instructs.
+
+## Reference(s):
+
+- [ScBee agent directory](https://scbee.vercel.app/find)
+- [ClawHub find-agent release](https://clawhub.ai/hmakt99/skills/find-agent)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands]
+
+**Output Format:** [Markdown text with agent descriptions and install command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Up to three matches; install commands are presented for the human to review.]
+
+## Skill Version(s):
+
+1.1.0 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

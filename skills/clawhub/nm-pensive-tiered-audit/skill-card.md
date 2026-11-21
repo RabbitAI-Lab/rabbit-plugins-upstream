@@ -1,43 +1,54 @@
-## Description: <br>
-Runs a three-tier codebase audit with git-history triage, targeted area review, and gated full-codebase review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Runs a three-tier codebase audit (git history, targeted scans, full review) with gating.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and maintainers use this skill to audit branch or release changes, identify churn and instability, and escalate only when evidence supports deeper review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill writes local audit findings under .coordination/agents, which may include incomplete or sensitive review notes if committed without checking. <br>
-Mitigation: Review generated findings files before committing or sharing them. <br>
-Risk: Broad review prompts may trigger a multi-tier audit workflow when a narrower review was intended. <br>
-Mitigation: Use explicit prompts that define the desired audit scope and tier. <br>
-Risk: Full-codebase Tier 3 audits can consume substantial context, compute, and reviewer attention. <br>
-Mitigation: Proceed to Tier 3 only after documented Tier 2 justification and explicit user approval. <br>
+## Use Case:
 
+Developers use this skill to review codebase quality, changes, or instability before release or after incidents. It starts with Git history and escalates to targeted review or a full audit when documented criteria warrant it.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-tiered-audit) <br>
-- [Project homepage from metadata](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown findings files with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes tiered audit findings under .coordination/agents and requires explicit approval before Tier 3 full-codebase audits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The security review reports a medium-severity conflict involving the “review” trigger; confidence is medium and some reference checks were incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check that the trigger matches the intended invocation, and verify referenced local paths before use.
+
+Risk: A full codebase audit can consume substantial time and compute.
+
+Mitigation: Keep Tier 3 gated on documented justification and explicit user approval, as described in the skill.
+
+## Reference(s):
+
+- [Project homepage (skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-pensive-tiered-audit)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Files, Guidance]
+
+**Output Format:** [Markdown audit findings with evidence and escalation recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tiered findings; a full codebase audit requires explicit approval.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,49 @@
-## Description: <br>
-Search, read, and manage DocuSign envelopes, recipients, templates, documents, and signing status through a local MCP wrapper. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read DocuSign accounts, envelopes, recipients, templates, and signing status, and create, send, update, void, or remind on signature envelopes through DocuSign's official developer MCP server.
 
-## Publisher: <br>
-[maverick](https://clawhub.ai/user/maverick) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[maverick](https://clawhub.ai/user/maverick)
 
-## Use Case: <br>
-Employees, external collaborators, developers, and operations teams use this skill to inspect DocuSign envelopes, templates, recipients, documents, and signing status, and to send envelopes from templates when the user has clearly authorized the action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send real DocuSign envelopes and operate on signing workflows using sensitive OAuth credentials. <br>
-Mitigation: Use least-privilege OAuth scopes, start in a DocuSign sandbox when possible, and require clear human confirmation before any send, void, update, or document-changing action. <br>
-Risk: Unpinned runtime dependencies such as mcporter and Python packages can change behavior over time. <br>
-Mitigation: Pin approved dependency versions in controlled environments and review updates before deployment. <br>
-Risk: Credential rotation or setup with stale environment values can overwrite refreshed local vault credentials. <br>
-Mitigation: Run setup only from the current credential source of truth and reconnect the integration when OAuth grants expire or are revoked. <br>
+## Use Case:
 
+External users use this skill to review DocuSign accounts, envelopes, recipients, templates, and signing status, and to carry out authorized eSignature actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/maverick/maverick-docusign-mcp) <br>
-- [mcporter](https://github.com/steipete/mcporter) <br>
-- [uv documentation](https://docs.astral.sh/uv/) <br>
-- [DocuSign OAuth token endpoint](https://account-d.docusign.com/oauth/token) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, API calls] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON tool responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Tool calls run through a local stdio MCP wrapper and may access DocuSign envelope, recipient, template, document, and signing-status data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: release evidence) <br>
+Risk: Connecting the skill grants token-based access to DocuSign account and envelope information and can enable eSignature actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a DocuSign developer/demo account, avoid sharing unrelated sensitive content, and review each requested envelope action before authorizing it.
+
+## Reference(s):
+
+- [DocuSign MCP overview](https://developers.docusign.com/platform/mcp-server/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Text responses and structured results from DocuSign tools]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const { emitError } = require('./shareone_client');
 const fs = require('fs');
 const {
     CREDENTIAL_MODE_SUDOWORK_PROXY,
@@ -9,76 +10,38 @@ const {
     resolveDirectApiKey,
 } = require('./shareone_client');
 
-const args = process.argv.slice(2);
-let method = 'GET';
-let apiPath = null;
-let data = null;
-let dataFile = null;
-let apiKey = null;
-let publicRequest = false;
-
-function usage() {
-    console.error("Usage: node shareone_api_request.js <api_path> [--method GET|POST|PUT|DELETE] [--data '<json>' | --data-file <path|-> ] [--api-key <key>] [--public]");
-    console.error("  --data-file <path>  read the request body from a file ('-' for stdin); preferred for non-ASCII or nested-JSON bodies to avoid shell quoting issues.");
-}
-
-function nextValue(index, flag) {
-    const value = args[index + 1];
-    if (value === undefined || value.startsWith('--')) {
-        console.error(`ERROR:MISSING_VALUE:${flag}`);
-        usage();
-        process.exit(1);
-    }
-    return value;
-}
-
-for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--method') {
-        method = String(nextValue(i, args[i])).toUpperCase();
-        i += 1;
-    } else if (args[i] === '--data') {
-        data = nextValue(i, args[i]);
-        i += 1;
-    } else if (args[i] === '--data-file') {
-        dataFile = nextValue(i, args[i]);
-        i += 1;
-    } else if (args[i] === '--api-key') {
-        apiKey = nextValue(i, args[i]);
-        i += 1;
-    } else if (args[i] === '--public') {
-        publicRequest = true;
-    } else if (!args[i].startsWith('--') && !apiPath) {
-        apiPath = args[i];
-    } else {
-        console.error(`ERROR:UNKNOWN_ARGUMENT:${args[i]}`);
-        usage();
-        process.exit(1);
-    }
-}
-
-if (!apiPath) {
-    usage();
-    process.exit(1);
-}
+const {commandLine} = require('./cli_args');
+const {values, positional: apiPath} = commandLine({
+    summary: 'invoke a documented HTTP operation directly. Paths are relative to the configured API deployment; --public omits account credentials.',
+    result: 'exact response bytes on stdout, or {saved_to,bytes} with --output. HTTP 200 may contain a failed remote refresh: inspect its domain state. Writes may commit before a lost response; replay only safe operations with the same supported intent key.',
+    positional: 'api_path', options: {
+        '--method': {value: 'method', normalize: value => value.toUpperCase(), choices: ['GET','POST','PUT','DELETE','PATCH','HEAD','OPTIONS'], description: 'HTTP method; defaults to GET.'},
+        '--data': {value: 'json', description: 'JSON request body; use instead of --data-file.'},
+        '--data-file': {value: 'path|-', description: 'Read exact UTF-8 JSON from a file or stdin; preferred for nested or non-ASCII bodies.'},
+        '--api-key': true, '--public': {description: 'Omit account authentication; share viewer gates still apply.'},
+        '--idempotency-key': true, '--output': {value: 'path', description: 'Save exact response bytes to this file.'}},
+});
+const method = values.method || 'GET', dataFile = values['data-file'] ?? null;
+let data = values.data ?? null;
+const apiKey = values['api-key'], publicRequest = values.public;
+const idempotencyKey = values['idempotency-key'], outputPath = values.output ?? null;
 
 // Prefer --data-file for bodies that are awkward to pass inline (CJK text,
 // nested/escaped JSON): file/stdin bytes reach the request verbatim, free of
 // shell quoting.
 if (dataFile !== null) {
     if (data !== null) {
-        console.error("ERROR:BAD_ARGS");
-        console.error("Pass either --data or --data-file, not both.");
-        process.exit(1);
+        emitError("ERROR:BAD_ARGS", ["Pass either --data or --data-file, not both."].join('\n'));
     }
     try {
         data = fs.readFileSync(dataFile === '-' ? 0 : dataFile, 'utf8');
     } catch (error) {
-        console.error(`ERROR:DATA_FILE_UNREADABLE: ${error.message}`);
-        process.exit(1);
+        emitError(`ERROR:DATA_FILE_UNREADABLE: ${error.message}`);
     }
 }
 
 const headers = {};
+if (idempotencyKey) headers['Idempotency-Key'] = idempotencyKey;
 let body = null;
 if (data !== null) {
     body = data;
@@ -89,14 +52,11 @@ if (data !== null) {
 (async () => {
     const credentialMode = await detectCredentialMode();
     if (credentialMode.mode === CREDENTIAL_MODE_SUDOWORK_PROXY && apiKey && !publicRequest) {
-        console.error("ERROR:SUDOWORK_MANAGED_KEY");
-        console.error("Sudowork 模式下不要传 --api-key；请通过本 skill 的 save_api_key.js 或 create_guest_key.js 设置 ShareOne API Key。");
-        process.exit(1);
+        emitError("ERROR:SUDOWORK_MANAGED_KEY", ["Sudowork 模式下不要传 --api-key；请通过本 skill 的 save_api_key.js 或 create_guest_key.js 设置 ShareOne API Key。"].join('\n'));
     }
 
     if (!publicRequest && credentialMode.mode !== CREDENTIAL_MODE_SUDOWORK_PROXY && !resolveDirectApiKey(apiKey)) {
-        console.error("ERROR:KEY_NOT_FOUND");
-        process.exit(1);
+        emitError("ERROR:KEY_NOT_FOUND");
     }
 
     return requestShareOneBuffer(apiPath, {
@@ -106,8 +66,12 @@ if (data !== null) {
         headers,
     }, body);
 })().then((res) => {
-    process.stdout.write(res.data);
+    if (outputPath !== null) {
+        fs.writeFileSync(outputPath, res.data);
+        process.stdout.write(JSON.stringify({ saved_to: outputPath, bytes: res.data.length }) + '\n');
+    } else {
+        process.stdout.write(res.data);
+    }
 }).catch((error) => {
-    printShareOneScriptError(error);
-    process.exit(1);
+    process.exit(printShareOneScriptError(error));
 });

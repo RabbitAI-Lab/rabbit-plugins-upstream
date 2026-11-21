@@ -17,7 +17,7 @@ installer:
 argument-hint: "[a project path, pipeline/runner id, or describe your CI/CD task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["CICD_AIOPS_CONFIG"],"bins":["cicd-aiops"],"config":["~/.cicd-aiops/config.yaml","~/.cicd-aiops/secrets.enc"]},"optional":{"env":["CICD_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"CICD_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/CICD-AIops","emoji":"🔁","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["cicd-aiops","uvx"]},"optional":{"env":["CICD_AIOPS_CONFIG","CICD_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/CICD-AIops","emoji":"🔁","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed CI/CD operations across self-managed GitLab (REST API v4 /api/v4/..., access token via PRIVATE-TOKEN header) and self-hosted Gitea (API v1 /api/v1/..., access token via "Authorization: token"). Each target in the config names its own platform, and a name-keyed platform registry selects the API shape, so the same tools work on both and one config can span a mixed estate; surfaces one platform lacks (e.g. runner administration on Gitea) raise a teaching error listing what is available. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.cicd-aiops/ (relocatable via CICD_AIOPS_HOME).
@@ -30,6 +30,8 @@ compatibility: >
 ---
 
 # CICD AIops
+
+> **Audit availability:** Real writes require a durable audit intent. Reads and previews can continue if audit storage fails; check the warning and audit health before relying on their audit trail.
 
 > **Disclaimer**: Community-maintained open-source project, **not affiliated with, endorsed by, or sponsored by GitLab Inc. or the Gitea project.** GitLab and Gitea are trademarks of their respective owners. Source at [github.com/AIops-tools/CICD-AIops](https://github.com/AIops-tools/CICD-AIops) under the MIT license.
 
@@ -78,6 +80,15 @@ uv tool install cicd-aiops
 cicd-aiops init       # wizard: pick platform (gitlab/gitea) + base URL + encrypted token
 cicd-aiops doctor     # version endpoint + token-scope probe per target
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/cicd-aiops
+openclaw skills info cicd-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 
@@ -214,7 +225,7 @@ of the token you connect it with (a GitLab/Gitea access token without write
 scope — writes then fail at the server). There is no read-only switch, policy
 file, or approval gate.
 
-- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.cicd-aiops/audit.db` (relocatable via `CICD_AIOPS_HOME`): params, result, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
+- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.cicd-aiops/audit.db` (relocatable via `CICD_AIOPS_HOME`): params, outcome summary, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
 - `CICD_AUDIT_APPROVED_BY` / `CICD_AUDIT_RATIONALE` are optional annotations recorded on the audit row (who/why); they are never required and never block.
 - **Runaway guard** — a safety backstop, not authorization: the same call looped in a tight window trips a circuit breaker. Disable with `CICD_RUNAWAY_MAX=0`.
 - Destructive writes support `--dry-run` / `dry_run=True` and double confirmation at the CLI. `delete_artifacts` is irreversible (priorState records the destroyed count/bytes; audit only).

@@ -1,47 +1,51 @@
-## Description: <br>
-Create and manage Volcengine cloud resources using the Volcengine CLI (`ve` command), including ECS, VPC, CLB, RDS, Redis, and related services. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create, query, modify, and delete Volcengine cloud resources with the `ve` CLI, including supported TOS, Ark, and TLS workflows.
 
-## Publisher: <br>
-[volc-sdk-team](https://clawhub.ai/user/volc-sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[volc-sdk-team](https://clawhub.ai/user/volc-sdk-team)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to inspect, create, modify, and troubleshoot Volcengine infrastructure through the `ve` CLI while following account, profile, credential, and confirmation rules. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use cloud credentials and perform operations that create, modify, stop, delete, or register real Volcengine resources. <br>
-Mitigation: Review the active account and profile before use, keep read-only operations as the default, and require explicit confirmation before write or destructive commands. <br>
-Risk: The login helper can read local Volcengine CLI credential files and may automatically replace an existing login session. <br>
-Mitigation: Install only where agent access to the intended Volcengine account is acceptable, and verify the current identity after authentication or re-authentication. <br>
+## Use Case:
 
+Developers and cloud engineers use this skill to operate Volcengine resources, troubleshoot `ve` commands, and follow the supported workflows for TOS, Ark, and TLS tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/volc-sdk-team/skills/volcengine-cli) <br>
-- [Volcengine CLI releases](https://github.com/volcengine/volcengine-cli/releases) <br>
-- [Common error handling](references/common-errors.md) <br>
-- [Extension APIs](references/extend-apis.md) <br>
-- [ECS service notes](references/ecs.md) <br>
-- [VPC service notes](references/vpc.md) <br>
-- [RDS service notes](references/rds.md) <br>
-- [Redis service notes](references/redis.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Volcengine CLI commands, confirmation prompts for write or destructive operations, polling guidance, and troubleshooting steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release evidence) <br>
+Risk: The security scan was only partially complete and flagged unverified remote installer commands and API endpoint handling concerns.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer and API endpoint handling before installation; treat the scan as a review warning, not a finding of malicious intent.
+
+## Reference(s):
+
+- [Volcengine CLI releases](https://github.com/volcengine/volcengine-cli/releases)
+- [Volcengine CLI installer](https://cloudcache.volccdn.com/ve/install.sh)
+- [Ark CLI skills](https://github.com/volcengine/ark-cli/tree/main/skills)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON API data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands depend on the installed `ve` version, configured credentials, region, and applicable confirmation rules.]
+
+## Skill Version(s):
+
+1.1.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

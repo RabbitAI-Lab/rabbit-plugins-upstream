@@ -1,0 +1,507 @@
+{
+  "schema_version": "1.0",
+  "contract_version": "1.0",
+  "bank_version": "0.1.3-seed.1",
+  "generated_at": "2026-11-21",
+  "questions": [
+    {
+      "question_id": "sec-soc-knowledge-001",
+      "role_family": "soc",
+      "level": "junior",
+      "dimension": "告警 triage",
+      "kind": "knowledge",
+      "prompt": "面对同时出现的登录失败、终端告警和情报命中，你会如何排序并说明首个验证动作？",
+      "expected_evidence": [
+        "告警上下文",
+        "资产重要性",
+        "验证动作",
+        "升级依据"
+      ],
+      "followups": [
+        "如果资产归属未知，你会先确认什么？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御研判，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "06bf2d8324f71d32209a859829f6c7d8d17c24c65ba285ba1b707bb65cf4e131"
+    },
+    {
+      "question_id": "sec-soc-scenario-001",
+      "role_family": "soc",
+      "level": "mid",
+      "dimension": "误报治理",
+      "kind": "scenario",
+      "prompt": "某规则每天产生大量重复告警，但仍有真实事件混在其中。你会如何设计降噪验证，避免只看数量下降？",
+      "expected_evidence": [
+        "基线",
+        "样本分层",
+        "误报和漏报验证",
+        "回滚条件"
+      ],
+      "followups": [
+        "你如何证明降噪没有掩盖高风险事件？"
+      ],
+      "answer_boundary": "只讨论自有或获授权环境中的防御规则优化。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "8bace233bac039d6148cda2e6cfc252bc03b8ef1c2ee0a75d88b0b3e5d39e526"
+    },
+    {
+      "question_id": "sec-soc-resume-001",
+      "role_family": "soc",
+      "level": "mid",
+      "dimension": "简历证据",
+      "kind": "resume_followup",
+      "prompt": "请把“负责告警处置、提升效率”改写为包含个人责任、告警规模、方法和结果的一句话。",
+      "expected_evidence": [
+        "个人责任",
+        "时间窗",
+        "告警规模",
+        "方法",
+        "结果"
+      ],
+      "followups": [
+        "这个结果有看板、日报或复盘材料可以佐证吗？"
+      ],
+      "answer_boundary": "不得补写未经确认的规模和百分比。",
+      "source_refs": [
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "0f6fae6112c2a1d4d60a634dd33fea1d49255cdbfe45be745fb667515e51efb3"
+    },
+    {
+      "question_id": "sec-ir-knowledge-001",
+      "role_family": "incident_response",
+      "level": "mid",
+      "dimension": "证据链",
+      "kind": "knowledge",
+      "prompt": "应急响应中，为什么需要在隔离、取证和恢复之间明确顺序？请给出一个取舍例子。",
+      "expected_evidence": [
+        "事件目标",
+        "证据保全",
+        "业务影响",
+        "恢复条件"
+      ],
+      "followups": [
+        "如果业务方要求立即恢复，你如何记录风险决策？"
+      ],
+      "answer_boundary": "只讨论授权事件响应和取证，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "1ed15b8261418f3b184d0b2cad0e5920def73817fd2fbcb839de9914605558c6"
+    },
+    {
+      "question_id": "sec-ir-scenario-001",
+      "role_family": "incident_response",
+      "level": "senior",
+      "dimension": "遏制决策",
+      "kind": "scenario",
+      "prompt": "一起疑似横向移动事件中，关键业务主机尚未确认失陷。你会如何决定是否断网，并保留哪些依据？",
+      "expected_evidence": [
+        "影响范围",
+        "证据强度",
+        "业务依赖",
+        "遏制动作",
+        "复盘记录"
+      ],
+      "followups": [
+        "断网可能造成哪些不可逆影响？"
+      ],
+      "answer_boundary": "以授权防御和业务连续性为前提，不提供攻击操作。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "ba306c0f1e9a2fd040eb2ec85b4d69b3270319972aeaaeb0e3db4e768b8770c5"
+    },
+    {
+      "question_id": "sec-ir-resume-001",
+      "role_family": "incident_response",
+      "level": "mid",
+      "dimension": "简历证据",
+      "kind": "resume_followup",
+      "prompt": "请说明一次你亲自承担的应急响应：事件类型、发现时间、你的职责、遏制动作和最终结果。",
+      "expected_evidence": [
+        "事件类型",
+        "时间线",
+        "个人职责",
+        "遏制动作",
+        "结果"
+      ],
+      "followups": [
+        "哪些客户名称、地址或漏洞细节需要脱敏？"
+      ],
+      "answer_boundary": "必须脱敏客户、内网地址、漏洞细节和未公开事件。",
+      "source_refs": [
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "046bbfbc149f2d344dc5f7f524e0f76fa52afb1449df8fd0a45d5e5a5e4053a7"
+    },
+    {
+      "question_id": "sec-off-knowledge-001",
+      "role_family": "offensive_security",
+      "level": "junior",
+      "dimension": "授权边界",
+      "kind": "knowledge",
+      "prompt": "拿到一个测试目标时，哪些授权信息必须在开始验证前确认？",
+      "expected_evidence": [
+        "授权主体",
+        "目标范围",
+        "时间窗口",
+        "禁止动作",
+        "报告渠道"
+      ],
+      "followups": [
+        "发现范围外资产时怎么处理？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试。",
+      "source_refs": [
+        "owasp-wstg",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "3b6e6aac3b6ad394ae0df36b2b7b85e1a3f137ed1720f9f01c34d3f8cc399d19"
+    },
+    {
+      "question_id": "sec-off-scenario-001",
+      "role_family": "offensive_security",
+      "level": "mid",
+      "dimension": "漏洞验证",
+      "kind": "scenario",
+      "prompt": "你怀疑一个 Web 参数存在注入风险，但业务系统较敏感。你会如何以最小影响证明风险并保留证据？",
+      "expected_evidence": [
+        "授权范围",
+        "最小验证",
+        "证据保全",
+        "影响控制",
+        "修复复测"
+      ],
+      "followups": [
+        "如果验证可能写入业务数据，何时停止并申请确认？"
+      ],
+      "answer_boundary": "不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "9e4661fc96353e8ab59f6879b0e803319ed9c0e71411c4348a399578b59b0b46"
+    },
+    {
+      "question_id": "sec-off-resume-001",
+      "role_family": "offensive_security",
+      "level": "mid",
+      "dimension": "简历证据",
+      "kind": "resume_followup",
+      "prompt": "简历里写到“挖掘多个高危漏洞”，请补充授权范围、测试方法、漏洞类型、验证证据和修复复测结果。",
+      "expected_evidence": [
+        "授权范围",
+        "测试方法",
+        "漏洞范围",
+        "验证证据",
+        "修复复测"
+      ],
+      "followups": [
+        "哪些漏洞编号、客户名或资产地址不能公开？"
+      ],
+      "answer_boundary": "不得披露未授权客户、漏洞利用细节或敏感资产信息。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "a9e43080c70cc5dda179bac4e1160fa4dd568b0a4570f2cb27ee476db94a18af"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-001",
+      "role_family": "appsec",
+      "level": "junior",
+      "dimension": "安全开发生命周期",
+      "kind": "knowledge",
+      "prompt": "在 SDLC 中，威胁建模、SAST、DAST 和依赖扫描分别更适合解决什么问题？",
+      "expected_evidence": [
+        "阶段",
+        "输入",
+        "发现类型",
+        "误报边界",
+        "修复闭环"
+      ],
+      "followups": [
+        "哪些问题无法仅靠工具扫描确认？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "cwe-top25-2025"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "a54410d2ef8096710d2f405cf8c2459cacf024810e858e09753cca9bf7f17619"
+    },
+    {
+      "question_id": "sec-appsec-scenario-001",
+      "role_family": "appsec",
+      "level": "mid",
+      "dimension": "修复取舍",
+      "kind": "scenario",
+      "prompt": "上线前发现一个中危漏洞，修复会影响核心接口兼容性。你会如何评估风险、制定上线决策和复测计划？",
+      "expected_evidence": [
+        "业务影响",
+        "可利用条件",
+        "补偿控制",
+        "修复计划",
+        "复测证据"
+      ],
+      "followups": [
+        "谁有权批准带风险上线？"
+      ],
+      "answer_boundary": "不把风险接受说成漏洞已修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "940440878aa634d70a247972479797ee56f965c26b5476092d49e7cff874d234"
+    },
+    {
+      "question_id": "sec-appsec-resume-001",
+      "role_family": "appsec",
+      "level": "mid",
+      "dimension": "简历证据",
+      "kind": "resume_followup",
+      "prompt": "请把“负责代码审计和漏洞修复”改成可验证成果：应用范围、审计方法、问题类型、修复率和复测证据是什么？",
+      "expected_evidence": [
+        "应用范围",
+        "审计方法",
+        "问题类型",
+        "修复结果",
+        "复测证据"
+      ],
+      "followups": [
+        "修复率的分母和统计时间窗是什么？"
+      ],
+      "answer_boundary": "不得把工具告警数量直接当作已确认漏洞数量。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "cwe-top25-2025"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "a41d3c07c454457e6f15e7a8fe82344ff226116b247b3b419b71c9324d12f80a"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-001",
+      "role_family": "security_engineering",
+      "level": "junior",
+      "dimension": "安全基线",
+      "kind": "knowledge",
+      "prompt": "设计主机或云资源安全基线时，如何避免只列检查项而没有可验证结果？",
+      "expected_evidence": [
+        "控制目标",
+        "适用范围",
+        "检查方法",
+        "例外",
+        "验证结果"
+      ],
+      "followups": [
+        "例外项由谁批准、何时复核？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "fa93923a741c1e07822c2d5afa15d244ba18ab84f12a125c51ea1970ca8cb28b"
+    },
+    {
+      "question_id": "sec-seceng-scenario-001",
+      "role_family": "security_engineering",
+      "level": "senior",
+      "dimension": "变更与回滚",
+      "kind": "scenario",
+      "prompt": "你要在多租户云环境中收紧 IAM 权限。如何设计灰度、监控和回滚，避免把正常业务切断？",
+      "expected_evidence": [
+        "环境规模",
+        "权限差异",
+        "灰度范围",
+        "监控指标",
+        "回滚条件"
+      ],
+      "followups": [
+        "怎样证明收紧后没有产生新的越权路径？"
+      ],
+      "answer_boundary": "不提供绕过云权限或攻击真实环境的方法。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "811a81220e71f1d604c66d1c247cf8d0472984fc8b26d06b9dd71685c485426e"
+    },
+    {
+      "question_id": "sec-seceng-resume-001",
+      "role_family": "security_engineering",
+      "level": "mid",
+      "dimension": "简历证据",
+      "kind": "resume_followup",
+      "prompt": "请说明一次安全加固项目的环境规模、控制目标、你的实施动作、变更回滚和验证结果。",
+      "expected_evidence": [
+        "环境规模",
+        "控制目标",
+        "实施动作",
+        "回滚",
+        "验证结果"
+      ],
+      "followups": [
+        "有没有变更单、监控截图或基线报告可以佐证？"
+      ],
+      "answer_boundary": "不得把团队成果全部写成个人主导。",
+      "source_refs": [
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "e1aa8e7fc0410483ffd18c9ee22d7e92895faa028fe70aaf6ddf9bdf411a953a"
+    },
+    {
+      "question_id": "sec-grc-knowledge-001",
+      "role_family": "grc_data_security",
+      "level": "junior",
+      "dimension": "风险判断",
+      "kind": "knowledge",
+      "prompt": "描述一个合规风险时，怎样区分控制要求、当前事实、缺口、整改动作和残余风险？",
+      "expected_evidence": [
+        "适用要求",
+        "当前事实",
+        "缺口",
+        "整改动作",
+        "残余风险"
+      ],
+      "followups": [
+        "谁来接受残余风险，证据如何留档？"
+      ],
+      "answer_boundary": "不把备案、审计通过或整改计划说成不存在边界的事实承诺。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "a30a531c7e516bb965666fb446074566110859cf9d827d8fda7b3108b1af8c2b"
+    },
+    {
+      "question_id": "sec-grc-scenario-001",
+      "role_family": "grc_data_security",
+      "level": "mid",
+      "dimension": "数据分类分级",
+      "kind": "scenario",
+      "prompt": "一个业务团队准备上线新数据字段，你会如何判断数据分类分级、访问边界、留存周期和跨境风险？",
+      "expected_evidence": [
+        "数据类型",
+        "分类分级",
+        "访问角色",
+        "留存与删除",
+        "跨境事实"
+      ],
+      "followups": [
+        "哪些判断必须由法务、业务或安全负责人确认？"
+      ],
+      "answer_boundary": "不输出法律结论或替代正式合规审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "fd42262e62a70c861351304f541b0b40b266af2bff8eae146767e5379aca2831"
+    },
+    {
+      "question_id": "sec-grc-resume-001",
+      "role_family": "grc_data_security",
+      "level": "mid",
+      "dimension": "简历证据",
+      "kind": "resume_followup",
+      "prompt": "请说明一次你参与的风险或合规项目：适用框架、控制范围、你的职责、整改闭环和可验证证据。",
+      "expected_evidence": [
+        "适用框架",
+        "控制范围",
+        "个人动作",
+        "整改结果",
+        "证据边界"
+      ],
+      "followups": [
+        "哪些成果属于团队或外部机构，不能写成个人成果？"
+      ],
+      "answer_boundary": "不得披露客户名称、未公开审计结论或敏感控制细节。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-21",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "da040bebabc0bccdb12a270b04ee78aeef8dc997bd09a2e098b5283578a1df6b"
+    }
+  ]
+}

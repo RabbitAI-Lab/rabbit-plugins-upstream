@@ -1,43 +1,60 @@
-## Description: <br>
-Write, rewrite, or audit natural, genre-aware prose with long-form continuity, explicit reference-style matching, physical and relationship consistency, deterministic AI-pattern linting, and protected fact verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides multilingual tools and guidance for natural rewriting, genre-aware drafting, and long-form continuity and editorial review.
 
-## Publisher: <br>
-[whh110112](https://clawhub.ai/user/whh110112) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[whh110112](https://clawhub.ai/user/whh110112)
 
-## Use Case: <br>
-External users and developers use this skill to draft, continue, revise, lint, audit, and verify prose across fiction, webnovels, essays, news, self-media, and academic writing while preserving supplied facts and continuity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Referenced supporting files and commands are not included in the submitted artifact, so parts of the workflow may not work unless those resources are supplied elsewhere. <br>
-Mitigation: Confirm required README, docs, module files, and command implementations are available before relying on the full workflow. <br>
-Risk: Drafts, sources, and continuity ledgers may contain sensitive or unpublished writing material processed by the agent. <br>
-Mitigation: Provide only material appropriate for the agent environment and review outputs before sharing or publication. <br>
-Risk: Writing, audit, or verification guidance can still introduce incorrect edits or misleading conclusions. <br>
-Mitigation: Use deterministic linting and source verification where applicable, then perform human review for factual and editorial decisions. <br>
+## Use Case:
 
+Writers, editors, and developers use the skill to revise supplied drafts, create or continue genre-aware prose, and review long-form voice, continuity, and rewrite fidelity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/whh110112/skills/human-writing-skills) <br>
-- [Server-resolved GitHub provenance](https://github.com/whh110112/human-writing-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and plain text with optional command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce drafts, revisions, audits, lint findings, verification notes, and workflow guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: release evidence) <br>
+Risk: ClawScan marks the release suspicious with medium confidence, citing potentially unsafe code execution and fixer behavior it considers risky for a writing and editing skill.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package verifier behavior and inspect proposed text changes before using the fixer.
+
+Risk: Manuscript data could be sent to a hosted provider, depending on the workflow configuration.
+
+Mitigation: Review the provider configuration and data flow before submitting manuscript material.
+
+Risk: The scan was partial and covered 97.4% of components, leaving some evidence incomplete.
+
+Mitigation: Review the remaining components before relying on the scan as a complete assessment.
+
+## Reference(s):
+
+- [Long-Form Consistency Guide](artifact/docs/long-form-consistency.md)
+- [Pattern Linter Guide](artifact/docs/pattern-linter.md)
+- [Editing Tools and Rewrite Fidelity](artifact/docs/editing-tools.md)
+- [Multilingual Quality Evaluation](artifact/docs/evaluation.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Guidance, JSON, Files]
+
+**Output Format:** [Revised prose, Markdown prompts and audit reports, and structured JSON reports or ledgers.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the supplied draft, context, selected modules, and host model.]
+
+## Skill Version(s):
+
+0.17.2 (source: server release evidence, pyproject.toml)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
