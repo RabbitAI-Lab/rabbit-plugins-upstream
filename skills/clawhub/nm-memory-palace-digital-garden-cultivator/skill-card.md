@@ -1,43 +1,55 @@
-## Description: <br>
-Manages digital garden notes, link structures, and health metrics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages digital garden notes, link structures, and health metrics
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-External users and developers use this skill to design, maintain, and evaluate digital garden knowledge bases, including bidirectional links, content maturity, maintenance cadence, and health metrics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may suggest archive, delete, or pruning actions for knowledge-base notes. <br>
-Mitigation: Review proposed archive, delete, and pruning actions before applying them to notes or documentation. <br>
-Risk: The skill can activate for broad documentation or linking requests. <br>
-Mitigation: Use it for digital garden or knowledge-base maintenance tasks where its linking and lifecycle guidance is relevant. <br>
+## Use Case:
 
+Knowledge workers and developers use this skill to organize a digital garden, connect notes, review content maturity, and track maintenance and link health.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-memory-palace-digital-garden-cultivator) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace) <br>
-- [Linking Patterns](modules/linking-patterns.md) <br>
-- [Garden Maintenance](modules/maintenance.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with example shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Provides digital garden maintenance workflows, linking guidance, maturity levels, and health metric formats.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server-resolved release metadata) <br>
+Risk: Maintenance instructions may lead to notes being deleted or reorganized without explicit approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the maintenance instructions before enabling them and keep backups of important notes.
+
+Risk: The security scan was partial because some referenced local paths could not be resolved.
+
+Mitigation: Review related material and referenced paths before installation.
+
+## Reference(s):
+
+- [Memory Palace project page](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace)
+- [Linking Patterns](artifact/modules/linking-patterns.md)
+- [Garden Maintenance](artifact/modules/maintenance.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Analysis, Guidance, JSON, Shell commands]
+
+**Output Format:** [Markdown guidance and notes; garden metrics as JSON, brief text, or Prometheus exposition]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Metrics may be presented in JSON, brief, or Prometheus format.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

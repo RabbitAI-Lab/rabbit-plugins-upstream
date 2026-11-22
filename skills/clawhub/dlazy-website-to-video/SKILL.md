@@ -2,10 +2,10 @@
 name: dlazy-website-to-video
 version: 1.3.5
 description: "website to video, url to video, landing page to video, link to ad, web promo video — capture the site, derive brand, storyboard, voiceover, build, validate on a Remotion template. Use when the user gives a URL (or just pastes a link) and wants a promo, social ad, or product demo."
-metadata: {"clawdbot":{"emoji":"🌐","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When this skill is called, run 'dlazy chat --skill website-to-video --prompt ...' for a new task, or 'dlazy chat --project <id> --prompt ...' to continue (discover ids via 'dlazy projects list'). Never pass both --skill and --project."}}
+metadata: {"clawdbot":{"emoji":"🌐","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When this skill is called, run 'dlazy chat --skill website-to-video --prompt ...' for a new task, or 'dlazy chat --project <id> --prompt ...' to continue (discover ids via 'dlazy projects list'). Never pass both --skill and --project."}}
 ---
 
-# website-to-video
+# 网站转视频 Website to Video
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 
@@ -51,7 +51,7 @@ Each key is scoped to your dLazy organization and can be **rotated or revoked at
 
 ## About & Provenance
 
-- **CLI source code**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI source code**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **Maintainer**: dlazyai
 - **npm package**: `@dlazy/cli` (pinned to `1.2.3` in this skill's install spec)
 - **Homepage**: [dlazy.com](https://dlazy.com)

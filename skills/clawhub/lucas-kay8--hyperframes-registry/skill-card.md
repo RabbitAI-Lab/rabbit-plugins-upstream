@@ -1,46 +1,60 @@
-## Description: <br>
-Install and wire HyperFrames registry blocks and components into compositions, including add-command usage, install locations, block sub-composition wiring, component snippet merging, and registry discovery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Install and wire registry blocks and components into HyperFrames compositions.
 
-## Publisher: <br>
-[lucas-kay8](https://clawhub.ai/user/lucas-kay8) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lucas-kay8](https://clawhub.ai/user/lucas-kay8)
 
-## Use Case: <br>
-Developers and engineers use this skill to install HyperFrames registry blocks and components, discover available registry items, and wire installed snippets or sub-compositions into project HTML/CSS/JS. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated wiring guidance may introduce incorrect or unsuitable edits to composition HTML, CSS, or JavaScript. <br>
-Mitigation: Review generated snippets and project diffs, then run HyperFrames lint and preview checks before merging changes. <br>
-Risk: The skill may suggest running HyperFrames commands or fetching public registry information. <br>
-Mitigation: Run commands in the intended project directory and review installed registry files before relying on them. <br>
+## Use Case:
 
+Developers and engineers use this skill to install HyperFrames registry blocks or components, wire them into existing compositions, configure install locations, and discover registry items.
 
-## Reference(s): <br>
-- [Install Locations](references/install-locations.md) <br>
-- [Wiring Blocks](references/wiring-blocks.md) <br>
-- [Wiring Components](references/wiring-components.md) <br>
-- [Registry Discovery](references/discovery.md) <br>
-- [Demo HTML Convention](references/demo-html-pattern.md) <br>
-- [HyperFrames Registry Manifest](https://raw.githubusercontent.com/heygen-com/hyperframes/main/registry/registry.json) <br>
-- [HyperFrames Configuration Schema](https://hyperframes.heygen.com/schema/hyperframes.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions] <br>
-**Output Format:** [Markdown with inline bash, HTML, CSS, JavaScript, and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May recommend reading installed files, running HyperFrames commands, and editing composition files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill may be applied to unrelated block or component requests outside a HyperFrames project.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the workspace is a HyperFrames project and that the request concerns HyperFrames registry items before applying the workflow.
+
+Risk: External registry snippets may add HTML, CSS, or JavaScript to a composition.
+
+Mitigation: Review installed snippets before merging them into project files and run HyperFrames lint or preview checks after wiring.
+
+## Reference(s):
+
+- [Install Locations](references/install-locations.md)
+- [Wiring Blocks](references/wiring-blocks.md)
+- [Wiring Components](references/wiring-components.md)
+- [Registry Discovery](references/discovery.md)
+- [Demo HTML Convention](references/demo-html-pattern.md)
+- [HyperFrames Registry](https://raw.githubusercontent.com/heygen-com/hyperframes/main/registry)
+- [HyperFrames Registry Manifest](https://raw.githubusercontent.com/heygen-com/hyperframes/main/registry/registry.json)
+- [HyperFrames Configuration Schema](https://hyperframes.heygen.com/schema/hyperframes.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline bash, HTML, JavaScript, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose local HyperFrames project edits and registry snippet integration steps.]
+
+## Skill Version(s):
+
+1.0.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

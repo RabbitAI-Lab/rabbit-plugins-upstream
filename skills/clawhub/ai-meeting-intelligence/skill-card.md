@@ -1,42 +1,62 @@
-## Description: <br>
-AI Meeting Intelligence helps teams turn meeting notes or transcripts into summaries, action items, decisions, agendas, follow-up drafts, and meeting analytics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps turn meeting materials into drafts of agendas, summaries, action items, follow-ups, and decision records.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Project managers, executives, sales teams, and distributed teams use this skill to prepare meeting agendas, summarize meeting content, extract action items and decisions, draft follow-ups, and track meeting outcomes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Meeting transcripts, attendee identities, recordings, CRM details, and follow-up emails may contain confidential or personal information. <br>
-Mitigation: Use the skill only with participant consent and authorization, sanitize sensitive content when needed, and prefer local handling for confidential discussions. <br>
-Risk: Generated follow-up emails, tracker updates, action items, or integration recommendations may be incomplete or incorrect. <br>
-Mitigation: Review generated communications and proposed updates before sending, applying, or syncing them to external tools. <br>
-Risk: Action item ownership can be ambiguous in partial notes or incomplete transcripts. <br>
-Mitigation: Flag unclear owners or deadlines for clarification instead of assigning them automatically. <br>
+## Use Case:
 
+Project managers, executives, and distributed teams can use the skill to prepare meeting agendas and turn meeting notes or transcripts into reviewable summaries, decisions, and action-item drafts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/ai-meeting-intelligence) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Configuration instructions] <br>
-**Output Format:** [Markdown with structured summaries, tables, checklists, and draft email text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include meeting summaries, agenda templates, action item tables, decision logs, follow-up recommendations, and integration guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Scan evidence is incomplete because a local reference could not be resolved, despite a benign verdict with medium confidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill and its referenced materials before installation; treat the scan result as reassuring but not conclusive.
+
+Risk: Meeting materials may contain personal, customer, financial, health, or other confidential information.
+
+Mitigation: Share only the information needed for the task, redact sensitive identifiers, and keep legally or regulatorily sensitive material local unless third-party processing is approved.
+
+Risk: Recording or transcribing without participant consent may conflict with applicable law or organizational policy.
+
+Mitigation: Confirm participant consent and organizational policy before recording or enabling transcription.
+
+Risk: Draft summaries or analyses may omit context or be inaccurate when used as formal legal, financial, or regulatory records.
+
+Mitigation: Have a responsible person review drafts; rely on approved records for formal decisions, and explicitly confirm before saving or sending any draft.
+
+## Reference(s):
+
+- [AI Meeting Intelligence Expert on ClawHub](https://clawhub.ai/gechengling/skills/ai-meeting-intelligence)
+- [Publisher profile: gechengling](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Guidance]
+
+**Output Format:** [Structured text and Markdown, including agenda, summary, decision-log, and action-item drafts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts for user review; no meeting recording, external sending, or system updates are performed by the skill.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter; release evidence agrees)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

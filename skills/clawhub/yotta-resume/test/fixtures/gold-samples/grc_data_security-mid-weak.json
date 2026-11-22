@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "sample_id": "grc_data_security-mid-weak",
+  "role_family": "grc_data_security",
+  "level": "mid",
+  "variant": "weak",
+  "resume": "# 金样候选人\n13900001234 | gold@example.com\n\n## 个人简介\n安全合规、风险管理与数据安全，3 年经验。负责安全合规、等保、数据分类分级、个人信息保护和风险评估闭环。\n\n## 工作经历\n### 某安全团队 | 中级 GRC / 风险 / 合规 / 数据安全 | 2022.01 - 2025.12\n- 负责安全合规和等保整改工作。\n- 参与数据分类分级、个人信息保护和风险评估。\n- 维护数据安全风险台账 xx 项。\n- 优化安全控制覆盖，减少关键偏差。\n\n## 技能\n安全合规, 等保, 数据分类分级, 个人信息保护, 风险评估, 数据安全\n\n## 教育背景\n### 某大学 | 信息安全 | 本科 | 2018.09 - 2022.06",
+  "jd": "岗位职责：\n1. 负责 安全合规\n2. 负责 等保\n3. 负责 数据分类分级\n4. 负责 个人信息保护\n5. 负责 风险评估\n6. 负责 数据安全\n任职要求：具备真实项目证据，遵守授权与隐私边界。",
+  "expected": {
+    "industry": "cybersecurity",
+    "issue_codes_present": [
+      "weak_claim",
+      "missing_metric",
+      "placeholder",
+      "sensitive_contact"
+    ],
+    "issue_codes_absent": [],
+    "jd_keywords_present": [
+      "安全合规",
+      "等保",
+      "数据分类分级",
+      "个人信息保护",
+      "风险评估",
+      "数据安全"
+    ],
+    "jd_keywords_missing": [],
+    "sensitive_literals": [
+      "13900001234",
+      "gold@example.com"
+    ],
+    "interview_kinds": [
+      "resume_followup",
+      "knowledge",
+      "scenario"
+    ]
+  }
+}

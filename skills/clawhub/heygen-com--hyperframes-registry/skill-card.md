@@ -1,48 +1,61 @@
-## Description: <br>
-Install, discover, and wire HyperFrames registry blocks and components into compositions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+About 450 ready-made HyperFrames blocks and components installed as editable source - transitions, overlays, titles, kinetic type, captions, charts, map overlays, 3D, camera moves. Use it before hand-building any named visual (CRT scanlines, glitch, film grain, a chart); also for hyperframes add and catalog.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and video engineers use this skill to discover HyperFrames registry items, install blocks or components, wire them into host compositions, and author new registry contributions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Preview, publish, or upload commands can send project material to an unintended destination. <br>
-Mitigation: Review the project for secrets or private assets and confirm the destination before running publish or upload commands. <br>
-Risk: CDN dependencies in HTML templates can change or load third-party code in production. <br>
-Mitigation: Vendor or integrity-pin CDN dependencies before using generated templates in production. <br>
-Risk: Manual wiring of blocks and components can introduce incorrect composition IDs, timing, paths, or layering. <br>
-Mitigation: Review installed files and run the documented HyperFrames lint, check, and preview commands before deployment. <br>
+## Use Case:
 
+Developers use this skill to search for HyperFrames visual blocks and components, install them into video projects, and adapt the editable source to their compositions.
 
-## Reference(s): <br>
-- [Install Locations](references/install-locations.md) <br>
-- [Registry Discovery](references/discovery.md) <br>
-- [Wiring Blocks](references/wiring-blocks.md) <br>
-- [Wiring Components](references/wiring-components.md) <br>
-- [Contributing a Block or Component to the Registry](references/contributing.md) <br>
-- [Contribute Templates](references/templates.md) <br>
-- [HyperFrames Registry Manifest](https://raw.githubusercontent.com/heygen-com/hyperframes/main/registry/registry.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown with shell, HTML, CSS, JavaScript, and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose HyperFrames CLI commands and project file edits for registry installation, wiring, validation, preview, and publishing workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: ClawScan rates this release suspicious with medium confidence; its security summary reports undisclosed external actions and sharing of search details beyond the stated catalog and installation purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review outbound behavior before running the skill, and avoid sending sensitive search details until the reported sharing is understood.
+
+Risk: The security guidance flags unpinned package commands, which can fetch a package version that has not been reviewed.
+
+Mitigation: Verify the package identity and pin a reviewed version before execution.
+
+Risk: The security scan was partial because one local path-like reference could not be resolved.
+
+Mitigation: Resolve and inspect the missing reference before installing or running the skill.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/heygen-com/skills/hyperframes-registry)
+- [Search behavior and catalog guidance](references/search.md)
+- [Block wiring guidance](references/wiring-blocks.md)
+- [Component wiring guidance](references/wiring-components.md)
+- [Install locations](references/install-locations.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with shell commands and HTML, CSS, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May install editable composition source files and provide instructions for adapting them.]
+
+## Skill Version(s):
+
+1.0.20 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

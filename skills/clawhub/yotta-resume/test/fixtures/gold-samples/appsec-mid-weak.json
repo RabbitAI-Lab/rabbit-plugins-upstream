@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "sample_id": "appsec-mid-weak",
+  "role_family": "appsec",
+  "level": "mid",
+  "variant": "weak",
+  "resume": "# 金样候选人\n13900001234 | gold@example.com\n\n## 个人简介\n应用安全、代码审计与供应链安全，3 年经验。负责应用安全 SDLC、代码审计、OWASP / CWE 修复建议和供应链安全治理。\n\n## 工作经历\n### 某安全团队 | 中级 应用安全 / 安全研发 | 2022.01 - 2025.12\n- 负责应用安全代码审计和安全研发支持。\n- 参与 OWASP 风险治理与供应链安全工作。\n- 优化 CWE 检查规则并输出 xx 份审计报告。\n- 优化安全控制覆盖，减少关键偏差。\n\n## 技能\n应用安全, 代码审计, OWASP, CWE, 供应链安全, Python\n\n## 教育背景\n### 某大学 | 信息安全 | 本科 | 2018.09 - 2022.06",
+  "jd": "岗位职责：\n1. 负责 应用安全\n2. 负责 代码审计\n3. 负责 OWASP\n4. 负责 CWE\n5. 负责 供应链安全\n6. 负责 Python\n任职要求：具备真实项目证据，遵守授权与隐私边界。",
+  "expected": {
+    "industry": "cybersecurity",
+    "issue_codes_present": [
+      "weak_claim",
+      "missing_metric",
+      "placeholder",
+      "sensitive_contact"
+    ],
+    "issue_codes_absent": [],
+    "jd_keywords_present": [
+      "应用安全",
+      "代码审计",
+      "OWASP",
+      "CWE",
+      "供应链安全",
+      "Python"
+    ],
+    "jd_keywords_missing": [],
+    "sensitive_literals": [
+      "13900001234",
+      "gold@example.com"
+    ],
+    "interview_kinds": [
+      "resume_followup",
+      "knowledge",
+      "scenario"
+    ]
+  }
+}

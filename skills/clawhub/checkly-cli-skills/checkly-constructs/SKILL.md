@@ -7,6 +7,10 @@ description: Understand the Checkly constructs system including resource lifecyc
 
 The Checkly constructs system provides type-safe abstractions for monitoring resources.
 
+## Validation boundaries
+
+Checks and monitors synthesize default degraded/max limits explicitly, matching backend defaults; absence of an ordering diagnostic is not proof that the API accepts the payload. Retired `me-south-1` is invalid in resource locations, shared `checks.locations` and `cli.runLocation`; remove or replace it. A Slack App alert channel with destinations fails validation if the account reports the app disconnected; connect it or remove the channel. Missing integration state skips this check, not proof of deliverability.
+
 ## Core concepts
 
 ### Construct hierarchy
@@ -16,16 +20,24 @@ Construct (base)
 ├── Check
 │   ├── RuntimeCheck
 │   │   ├── ApiCheck
-│   │   ├── BrowserCheck
-│   │   └── MultiStepCheck
-│   └── PlaywrightCheck
-├── Monitor
-│   ├── HeartbeatMonitor
-│   ├── TcpMonitor
-│   ├── DnsMonitor
-│   └── UrlMonitor
+│   │   ├── PlaywrightCheck
+│   │   └── RepairableRuntimeCheck
+│   │       ├── BrowserCheck
+│   │       └── MultiStepCheck
+│   └── Monitor
+│       ├── HeartbeatMonitor
+│       ├── TcpMonitor
+│       ├── DnsMonitor
+│       ├── IcmpMonitor
+│       ├── UrlMonitor
+│       ├── GrpcMonitor
+│       ├── SslMonitor
+│       └── TracerouteMonitor
 ├── CheckGroup
-└── AlertChannel
+├── AlertChannel
+├── StatusPage / StatusPageV3
+├── StatusPageV3Component
+└── StatusPageV3AutomationRule
 ```
 
 ### Logical IDs
@@ -39,7 +51,7 @@ new ApiCheck('api-status-check', {  // <- logical ID
 ```
 
 **Rules:**
-- Must be unique within resource type
+- Must be unique within resource type and at most 255 characters
 - Pattern: `[A-Za-z0-9_-/#.]+`
 - Use descriptive IDs: `'homepage-check'` not `'check-1'`
 
@@ -50,6 +62,155 @@ new ApiCheck('api-status-check', {  // <- logical ID
 3. **Bundling**: Code and dependencies packaged
 4. **Synthesis**: Converted to API payload
 5. **Deployment**: Created/updated in Checkly
+
+## Component-based Status Page V3
+
+Import `StatusPageV3`, `StatusPageV3Component`, and `StatusPageV3AutomationRule` from `checkly/constructs`. A v3 page has no legacy cards or `StatusPageService` resources: declare its hierarchy with components that point to the page. A `SERVICE` may be nested beneath a same-page `GROUP` through `parent`.
+
+```typescript
+import {
+  StatusPageV3,
+  StatusPageV3AutomationRule,
+  StatusPageV3Component,
+} from 'checkly/constructs'
+
+const statusPage = new StatusPageV3('example-status-page-v3', {
+  name: 'Example Status Page',
+  url: 'example-status-page-v3',
+  customDomain: 'status.example.com',
+  defaultTheme: 'AUTO',
+  supportLink: 'https://support.example.com',
+  themeColors: {
+    light: {
+      linkFontColor: '#005AC2',
+      primaryButtonBackgroundColor: '#151A1E',
+    },
+    dark: { linkFontColor: '#248AFF' },
+  },
+})
+
+const webApp = new StatusPageV3Component('example-web-app-group', {
+  statusPage,
+  type: 'GROUP',
+  name: 'Web application',
+  displayOrder: 1,
+  expandedByDefault: true,
+})
+
+const signUp = new StatusPageV3Component('example-sign-up-service', {
+  statusPage,
+  parent: webApp,
+  type: 'SERVICE',
+  name: 'Sign up',
+  description: 'The sign up flow',
+  displayOrder: 1,
+  showHistoricalData: false,
+})
+
+new StatusPageV3AutomationRule('example-api-down-rule', {
+  statusPage,
+  name: 'API down',
+  firstUpdate: 'The API is down, we are investigating.',
+  lastUpdate: 'The API has recovered.',
+  tags: ['api:public'],
+  coolDownMinutes: 5,
+  components: [{ component: signUp, targetImpact: 'MAJOR_OUTAGE' }],
+})
+```
+
+Automation rules open one incident when a failing check or its group has any tag listed by the rule, apply each component's `targetImpact`, and resolve the incident on recovery. They require Checkly's automated incident management add-on. `tags` must contain at least one item; target impacts are `UNDER_MAINTENANCE`, `DEGRADED_PERFORMANCE`, `PARTIAL_OUTAGE`, or `MAJOR_OUTAGE`.
+
+Both component types accept `showHistoricalData` (default `true`); only a `GROUP` accepts `expandedByDefault` (default `false`). Omit either property to keep the backend default. `supportLink` appears in the page footer. `themeColors.light` and `themeColors.dark` accept partial color maps, so unspecified colors retain Checkly defaults; values must be three- or six-digit hex strings and unknown color keys fail validation. Custom theme colors require the corresponding Checkly plan feature.
+
+Use `StatusPageV3.fromId(<physical-id>)` and `StatusPageV3Component.fromId(<physical-id>)` when code should reference existing UI-managed resources without managing them. A deployed logical ID cannot change generation between `StatusPage` and `StatusPageV3`; use a new logical ID for a v3 migration rather than redeploying the legacy ID as a different resource shape.
+
+## Structured check intent
+
+Use `intent` to give Checkly root-cause analysis and check-repair features durable guidance about what a check is meant to verify. Intent supplements descriptions and executable assertions; it does not replace either.
+
+```typescript
+new ApiCheck('dashboard-api', {
+  name: 'Dashboard API',
+  intent: {
+    goal: 'Verify that authenticated users can open the dashboard.',
+    constraints: [
+      {
+        type: 'REQUIRED_OUTCOME',
+        statement: 'The dashboard displays the account overview.',
+      },
+      {
+        type: 'MUST_PRESERVE',
+        statement: 'Do not weaken the authentication assertion.',
+      },
+    ],
+  },
+  request: {
+    method: 'GET',
+    url: 'https://example.com/api/dashboard',
+  },
+})
+```
+
+Intent is supported by `ApiCheck`, `BrowserCheck`, `MultiStepCheck`, `PlaywrightCheck`, `TcpMonitor`, `DnsMonitor`, `IcmpMonitor`, `UrlMonitor`, and `GrpcMonitor`. It is not exposed on `HeartbeatMonitor`, `SslMonitor`, or `TracerouteMonitor`.
+
+Deployment semantics are deliberate:
+
+- Provide an object to set or update intent.
+- Omit `intent` or set `intent: null` to have none; both clear any web-authored intent on deployment.
+
+The CLI trims surrounding whitespace. `goal` is required and limited to 2,000 characters after trimming. Constraints use exact uppercase types `REQUIRED_OUTCOME` or `MUST_PRESERVE`; each statement is limited to 1,000 characters, and each type may appear at most 20 times. Unknown fields or constraint types fail validation.
+
+## Removed-property migration
+
+Removed names in this section are migration warnings, not valid construct options:
+
+| Removed API | Current replacement |
+|---|---|
+| `AgenticCheck` | For new/replacement checks, use `BrowserCheck` or `MultiStepCheck` with `aiAutoRepairEnabled: true`. Existing checks can remain on the compatible legacy toolchain until retirement on **2026-12-01**; follow the [temporary compatibility path](references/agentic-check-transition.md) before upgrading. Removing a definition deletes that resource on the next deploy; review the plan and use preservation/adoption where needed. |
+| `doubleCheck` on checks, groups or defaults | `retryStrategy`; use the explicit builders below. |
+| `groupId`, `groupName` on constructs/config entries | `group: myGroup`; use a group declared in config or `CheckGroupV2.fromId()` for existing suite groups. |
+| `ApiCheck.localSetupScript`, `ApiCheck.localTearDownScript` | `setupScript: { content: '…' }`, `tearDownScript: { content: '…' }`. Groups retain their local-script properties for now. |
+| `HeartbeatCheck`, `TcpCheck` and their Props types | `HeartbeatMonitor`, `TcpMonitor` and corresponding Props types. |
+| `AssertionBuilder.responseTme()` | `AssertionBuilder.responseTime()`. |
+
+```typescript
+import { ApiCheck, CheckGroupV2, RetryStrategyBuilder } from 'checkly/constructs'
+
+const group = new CheckGroupV2('api-group', { name: 'API' })
+new ApiCheck('status', {
+  name: 'Status',
+  group,
+  locations: ['us-east-1'],
+  request: { url: 'https://example.com/status', method: 'GET' },
+  retryStrategy: RetryStrategyBuilder.singleRetry({ baseBackoffSeconds: 0, sameRegion: false }),
+  setupScript: { content: 'console.log("Starting check")' },
+  tearDownScript: { content: 'console.log("Finished check")' },
+})
+```
+
+The explicit single retry above replaces the removed enabled retry toggle. For its disabled form use `RetryStrategyBuilder.noRetries()`. A bare `singleRetry()` waits 60 seconds and retries in the same region, so it is not equivalent. API/browser/multistep checks and `CheckGroupV1` default to one immediate retry in another region. Monitors and Playwright suites default to no CLI retries.
+
+`shouldFail` is accepted only by `ApiCheck`, `UrlMonitor` and `TcpMonitor`. Remove it from all other types, even when false. The project-wide default applies only to those three types; previously inherited true becomes false on unsupported types. Removed properties fail validation even in plain JavaScript or through a cast. Removed imports/methods fail at use time.
+
+## Maintenance windows
+
+```typescript
+import { MaintenanceWindow } from 'checkly/constructs'
+
+new MaintenanceWindow('weekly-maintenance', {
+  name: 'Weekly maintenance',
+  startsAt: new Date('2027-01-04T07:00:00Z'),
+  endsAt: new Date('2027-01-04T08:00:00Z'),
+  repeatInterval: 1,
+  repeatUnit: 'WEEK',
+  timezone: 'America/Chicago',
+  tags: ['maintenance'],
+  silenceAlertsTags: ['maintenance'],
+})
+```
+
+`tags` selects paused checks; `pauseAllChecks: true` pauses every check in the account. `silenceAlertsTags` selects alerts to silence, and `silenceAllAlerts: true` overrides that tag filter account-wide. Tags are optional, but a window with no effective pause/silence scope warns that it affects no checks. `timezone` uses a named IANA zone; it preserves recurring local time across DST while start/end Dates remain absolute instants. Numeric offsets and `Etc/GMT` offsets are rejected. Omission resets timezone to UTC and removes `repeatEndsAt`; changing timezone while a window is active fails until it ends.
+
 
 ## Session and Project
 

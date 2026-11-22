@@ -1,44 +1,54 @@
-## Description: <br>
-Converts a Claude Code session into a blog post, case study, or Reddit post. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts a Claude Code session into a blog post, case study, or Reddit post
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to turn completed Claude Code coding sessions into publishable blog posts, case studies, social threads, or Reddit posts grounded in git history, file changes, test results, and conversation context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Session context, git history, or changed files may contain secrets, private customer data, or internal details that should not be published. <br>
-Mitigation: Review the source session material before drafting and remove sensitive details from any generated post. <br>
-Risk: Generated drafts may be written under docs/posts/ and could be committed or published before review. <br>
-Mitigation: Review every generated file under docs/posts/ before committing, sharing, or publishing it. <br>
+## Use Case:
 
+Developers use this skill to turn a Claude Code work session into a blog post, case study, social thread, or Reddit post that explains the work and its results.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/athola/skills/nm-scribe-session-to-post) <br>
-- [Homepage metadata: claude-night-market scribe plugin](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
-- [Artifact documentation: session extraction](artifact/modules/session-extraction.md) <br>
-- [Artifact documentation: narrative structure](artifact/modules/narrative-structure.md) <br>
-- [Artifact documentation: Reddit format](artifact/modules/reddit-format.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, guidance, shell commands] <br>
-**Output Format:** [Markdown with inline shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write publishable draft files under docs/posts/ when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: release evidence) <br>
+Risk: The skill instructs agents to run project tests and builds.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the source-discovery behavior and project commands first, and proceed only when you trust the project being tested.
+
+Risk: Session-derived recordings or posts may expose sensitive information when published.
+
+Mitigation: Review recordings and drafts for sensitive information before sharing or publishing them.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-scribe-session-to-post)
+- [Scribe plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown posts or plain-text social content, shaped to the selected format]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Narrative content based on the session context and evidence supplied; review before publication.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,51 @@
-## Description: <br>
-Analyzes meal videos or video URLs for eating behavior, dietary patterns, unhealthy habit indicators, and nutrition improvement recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes meal videos to assess eating habits and dietary patterns, then provides structured reports and nutrition suggestions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Users and agents use this skill to submit meal videos or video URLs to the Life Emergence cloud service for dietary behavior assessment, structured nutrition guidance, and historical diet report retrieval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded meal videos, URLs, and historical report requests are processed by a remote Life Emergence cloud service. <br>
-Mitigation: Use only with media appropriate for that service, review the service's privacy and retention claims, and avoid sensitive personal or health-related videos unless the deployment has approved the data handling. <br>
-Risk: The security scan reports that the skill silently creates or reuses a local identity and stores service tokens locally. <br>
-Mitigation: Review local workspace data files and token storage before installation, isolate the skill in a controlled workspace, and rotate or remove stored tokens when no longer needed. <br>
-Risk: The scanner verdict is suspicious because remote login, token storage, and historical report retrieval happen with limited user control or disclosure. <br>
-Mitigation: Require operator review before deployment and clearly disclose remote processing and historical report access to end users. <br>
+## Use Case:
 
+Individuals can use the skill to review meal videos, understand observable eating patterns, and receive structured reports with general nutrition suggestions.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-diet-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration] <br>
-**Output Format:** [Markdown and JSON-formatted analysis reports, Markdown tables for historical reports, report links, and shell commands for invoking the skill scripts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports mp4, avi, and mov inputs up to 10 MB; accepts local file paths or public video URLs; output detail can be basic, standard, or json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: evidence.release.version and SKILL.md frontmatter) <br>
+Risk: ClawScan rates this release suspicious, citing remote account and credential handling and analysis behavior that may conflict with its stated dietary video purpose. The scan was partial because a local reference was missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the verdict and partial-scan limitation before installing. Avoid providing private videos or health-related information until the skill's behavior and data handling have been reviewed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-diet-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [API interface reference](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured analysis report with observations, suggestions, and report links; historical reports are shown in a Markdown table.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts video or image files and URLs; dietary suggestions are for general reference and do not replace advice from a nutritionist or physician.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

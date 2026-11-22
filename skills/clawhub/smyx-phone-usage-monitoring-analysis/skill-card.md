@@ -1,46 +1,54 @@
-## Description: <br>
-Detects workplace phone usage in images or video streams using cloud computer-vision analysis, then returns structured monitoring results, usage counts, duration statistics, recommendations, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes workplace images and videos to identify employee phone use and report usage frequency and duration.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Enterprise operators and workplace-management teams use this skill to analyze office surveillance images, videos, or media URLs for phone-use behavior and to retrieve historical monitoring reports. The output is intended as an internal management aid and should be reviewed alongside privacy, labor, and workplace-notice requirements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill performs workplace surveillance analysis and may process employee images or videos. <br>
-Mitigation: Confirm employee notice or consent, lawful workplace-monitoring basis, retention rules, and human review before operational use. <br>
-Risk: Media and report queries are sent to a cloud service with historical report access. <br>
-Mitigation: Use only approved media, verify backend access controls and retention settings, and avoid submitting sensitive footage outside the intended workspace. <br>
-Risk: The skill may reuse or create an identity and store authentication tokens in local workspace data. <br>
-Mitigation: Run in an isolated workspace, review the workspace data file and SQLite database before use, and remove stored credentials when access should end. <br>
+## Use Case:
 
+Employers and workplace administrators use the skill to review authorized workplace images or video for apparent phone use and receive counts, duration summaries, and management suggestions. It also supports retrieving prior analysis reports.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-phone-usage-monitoring-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
-- [Workplace phone usage monitoring API documentation](references/api_doc.md) <br>
-- [Shared API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, files, guidance] <br>
-**Output Format:** [Markdown or JSON analysis report with optional saved output file and report-link text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires image/video input or a media URL; can also query historical cloud reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: ClawHub release metadata; artifact frontmatter states 1.0.9) <br>
+Risk: The security assessment rates this skill suspicious with high confidence, citing unexpected account and credential handling, remote processing of workplace media without clear disclosure, and an export-only option that may still run analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installation or use, verify where media and identity data are sent, obtain appropriate authorization for remote processing and account creation, and confirm whether export-only use performs analysis.
+
+Risk: The security scan is partial because a referenced path was missing, so the available findings do not fully cover that reference.
+
+Mitigation: Review the missing reference and repeat the security assessment when the complete referenced material is available.
+
+## Reference(s):
+
+- [API documentation](artifact/references/api_doc.md)
+- [Skill introduction](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured analysis results with counts, duration summaries, warnings, recommendations, and report links; JSON or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include employee phone-use detections and historical report links.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

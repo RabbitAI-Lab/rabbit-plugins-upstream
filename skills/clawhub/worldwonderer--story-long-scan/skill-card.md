@@ -1,46 +1,61 @@
-## Description: <br>
-Story Long Scan helps agents collect and analyze long-form Chinese web-novel rankings from platforms such as Qidian, Fanqie, JJWXC, Qimao, and Ciweimao to identify genre trends, topic candidates, and validation actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+长篇网文扫榜。分析起点、番茄、晋江、七猫等平台排行榜与新书数据，提炼市场趋势与热门题材。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-External writers, publishing analysts, and agents use this skill to gather ranking samples and turn them into market scans, reader profiles, and topic decisions for long-form Chinese web novels. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs local Node.js scraper scripts and may use a browser-CDP session to visit ranking pages. <br>
-Mitigation: Review commands before execution and use a dedicated browser profile when existing login state should not be involved. <br>
-Risk: The skill writes generated reports to a local output directory. <br>
-Mitigation: Choose the output directory intentionally and review generated Markdown files before relying on them. <br>
+## Use Case:
 
+面向长篇网文作者与编辑，用于采集并比较中文网文平台的榜单，发现反复出现的题材信号，并形成带依据和验证建议的选题报告。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-long-scan) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [genre-trends.md](artifact/references/genre-trends.md) <br>
-- [publishing-guide.md](artifact/references/publishing-guide.md) <br>
-- [reader-profiling.md](artifact/references/reader-profiling.md) <br>
-- [scan-output-format.md](artifact/references/scan-output-format.md) <br>
-- [topic-decision.md](artifact/references/topic-decision.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown reports, concise text guidance, and shell command suggestions for scraper execution.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write local Markdown reports and topic-decision files to a user-selected output directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.9 (source: server release evidence; artifact frontmatter says 1.0.0) <br>
+Risk: Some scripts were not fully inspected, leaving uncertainty about their behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the affected scripts and decide whether their behavior is acceptable before running them.
+
+Risk: Detected environment and network capabilities have an undeclared tool scope.
+
+Mitigation: Confirm what environment and network access is needed and limit execution to that scope.
+
+## Reference(s):
+
+- [起点采集与分析指南](artifact/references/platform-qidian.md)
+- [番茄采集与分析指南](artifact/references/platform-fanqie.md)
+- [晋江采集与分析指南](artifact/references/platform-jjwxc.md)
+- [七猫采集与分析指南](artifact/references/platform-qimao.md)
+- [刺猬猫采集与分析指南](artifact/references/platform-ciweimao.md)
+- [题材候选参考](artifact/references/genre-trends.md)
+- [选题决策指南](artifact/references/topic-decision.md)
+- [刺猬猫排行榜](https://www.ciweimao.com/rank-index)
+- [番茄作品页面](https://fanqienovel.com/page/{bookId})
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Files]
+
+**Output Format:** [中文 Markdown 扫榜报告与选题决策文件，附结构化榜单数据]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [结论基于所采集的公开榜单样本；各平台热度口径分别解读，不推断未提供的作者后台指标。]
+
+## Skill Version(s):
+
+1.1.30 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "sample_id": "incident_response-senior-clean",
+  "role_family": "incident_response",
+  "level": "senior",
+  "variant": "clean",
+  "resume": "# 金样候选人\n13900001234 | gold@example.com\n\n## 个人简介\n应急响应、DFIR 与取证分析，6 年经验。负责事件响应、证据保全、恶意样本初筛和 MITRE ATT&CK 时间线复盘。\n\n## 工作经历\n### 某安全团队 | 高级 应急响应 / DFIR | 2019.01 - 2025.12\n- 牵头 4 起勒索事件响应，隔离 120 台主机，按证据链完成取证与恢复，平均恢复时间缩短 40%。\n- 分析 60 个恶意样本的 EDR 遥测，使用 MITRE ATT&CK 还原 3 条攻击路径，复盘改进项关闭率 100%。\n- 建立事件时间线和证据保全清单，将核心日志收集遗漏从 8 项降至 0 项。\n\n## 技能\nEDR, SIEM, MITRE ATT&CK, Python, Linux\n\n## 教育背景\n### 某大学 | 信息安全 | 本科 | 2014.09 - 2018.06",
+  "jd": "岗位职责：\n1. 负责 事件响应\n2. 负责 应急响应\n3. 负责 EDR\n4. 负责 恶意样本\n5. 负责 取证分析\n6. 负责 MITRE ATT&CK\n任职要求：具备真实项目证据，遵守授权与隐私边界。",
+  "expected": {
+    "industry": "cybersecurity",
+    "issue_codes_present": [
+      "sensitive_contact"
+    ],
+    "issue_codes_absent": [
+      "weak_claim",
+      "missing_metric",
+      "placeholder"
+    ],
+    "jd_keywords_present": [
+      "事件响应",
+      "应急响应",
+      "EDR",
+      "恶意样本",
+      "取证分析",
+      "MITRE ATT&CK"
+    ],
+    "jd_keywords_missing": [],
+    "sensitive_literals": [
+      "13900001234",
+      "gold@example.com"
+    ],
+    "interview_kinds": [
+      "resume_followup",
+      "knowledge",
+      "scenario"
+    ]
+  }
+}

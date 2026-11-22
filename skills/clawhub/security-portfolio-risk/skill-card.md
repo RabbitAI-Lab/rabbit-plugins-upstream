@@ -1,42 +1,49 @@
-## Description: <br>
-Provides AI-driven portfolio risk analysis for China A-shares with VaR, stress testing, tail risk, factor exposure, and risk attribution for fund managers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides China A-share portfolio risk measurement guidance for VaR and CVaR, stress testing, tail risk, factor exposure, and risk attribution.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Fund managers, risk analysts, and institutional investors use this skill to structure portfolio risk analysis, including VaR, CVaR, stress testing, drawdown review, factor exposure analysis, and risk attribution for China-market portfolios. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive portfolio or client data may be shared during analysis requests. <br>
-Mitigation: Use anonymized or appropriately approved data, and avoid sharing confidential client or portfolio details unless permitted. <br>
-Risk: Regulatory or investment claims may be outdated or unsuitable for a specific decision. <br>
-Mitigation: Verify regulatory and investment claims against official sources and professional review before acting. <br>
-Risk: The skill may activate during broad finance discussions where portfolio risk analysis is not intended. <br>
-Mitigation: Confirm the requested task and scope before applying portfolio risk guidance. <br>
+## Use Case:
 
+Fund managers and risk analysts can use it to structure portfolio-level risk measurement and stress-test drafts for China A-share holdings. Results are methodological references that require qualified human review before use in decisions or formal reporting.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/security-portfolio-risk) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with Python code examples and structured analysis prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include financial risk metric explanations, stress-test scenarios, and portfolio analysis templates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: server release metadata and frontmatter) <br>
+Risk: Security review coverage was limited because Skillspector only partially inspected the Markdown file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the full skill source and address the reported missing local reference before relying on the clean verdict.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/security-portfolio-risk)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Guidance]
+
+**Output Format:** [Markdown with tables and illustrative code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Methodological draft content; risk calculations and conclusions require independent review. The skill does not access data sources or execute the example code.]
+
+## Skill Version(s):
+
+3.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

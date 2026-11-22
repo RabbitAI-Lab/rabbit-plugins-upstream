@@ -1,48 +1,53 @@
-## Description: <br>
-Analyzes short-form Chinese web fiction by breaking down story premise, structure, emotional arcs, reversals, writing techniques, character functions, and reusable genre patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes short fiction by mapping its plot structure, emotional arc, reversals, characters, and writing techniques into a reusable report.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-External users and writing teams use this skill to produce structured literary analysis of short web-fiction works they are authorized to analyze. The generated analysis supports later drafting workflows by preserving plot nodes, technique notes, source backups, and metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill saves full copies of user-provided stories and derived reports in the project workspace. <br>
-Mitigation: Use it only with fiction the user has the right to analyze, store outputs in approved workspace locations, and remove source backups when they are no longer needed. <br>
-Risk: Market-oriented genre guidance may be unsuitable when the user needs neutral literary criticism. <br>
-Mitigation: Review the genre framing before reuse and request neutral literary analysis when market-oriented advice is not desired. <br>
+## Use Case:
 
+External writers and editors use this skill to study short fiction they have permission to analyze, including its story structure, emotional beats, reversals, and character functions. It saves a detailed Markdown analysis, plot-node and writing-technique files, and JSON progress metadata for later reference.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-short-analyze) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Output contract](references/output-contract.md) <br>
-- [Output templates](references/output-templates.md) <br>
-- [Short story decomposition methodology](references/material-decomposition.md) <br>
-- [Genre catalog](references/genre-catalog.md) <br>
-- [Quality checklist](references/quality-checklist.md) <br>
-- [AI-style banned words and sentence patterns](references/banned-words.md) <br>
-- [Anti-AI writing guide](references/anti-ai-writing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, configuration, guidance] <br>
-**Output Format:** [Markdown reports, JSON metadata, and local source-backup files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes analysis artifacts under a per-story output directory, including a main report, plot-node notes, technique notes, source backups, and _meta.json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.12 (source: server release metadata; artifact frontmatter reports 3.0.0) <br>
+Risk: The security scan was partial because several referenced paths were missing from the bundle.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the complete release bundle and the missing referenced files before installation.
+
+## Reference(s):
+
+- [Analysis method](references/analysis-method.md)
+- [Output contract](references/output-contract.md)
+- [Short-fiction genre guide](references/analysis-short-genres.md)
+- [Quality checklist](references/quality-checklist.md)
+- [ClawHub release page](https://clawhub.ai/worldwonderer/skills/story-short-analyze)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Files]
+
+**Output Format:** [Markdown analysis reports and supporting files, plus JSON metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Resumable five-stage analysis; outputs are saved under 拆文库/{书名}/.]
+
+## Skill Version(s):
+
+1.1.36 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

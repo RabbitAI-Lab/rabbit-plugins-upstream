@@ -1,43 +1,58 @@
-## Description: <br>
-Applies hexagonal architecture isolating domain from infrastructure. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hexagonal ports-and-adapters architecture
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and software architects use this skill for guidance on applying hexagonal architecture, defining ports and adapters, and keeping domain logic isolated from infrastructure concerns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Architecture guidance may be over-applied to small utilities or prototypes where port and adapter abstractions add unnecessary overhead. <br>
-Mitigation: Use the skill's when-not-to-use guidance and validate whether the system has enough external dependencies or testing needs to justify the pattern. <br>
-Risk: Generated guidance could introduce incorrect or misleading architecture recommendations for a specific codebase. <br>
-Mitigation: Treat outputs as design advice, review proposed changes before execution, and independently validate architecture decisions against project constraints. <br>
-Risk: Port interfaces can become leaky or drift from the adapters they represent. <br>
-Mitigation: Keep ports domain-centered and use contract tests or automated architecture checks to confirm adapters continue to satisfy their port contracts. <br>
+## Use Case:
 
+Developers use this skill to decide when ports-and-adapters architecture fits and to plan domain ports, edge adapters, use cases, contract tests, and dependency rules. It also helps teams avoid unnecessary abstraction for small utilities and prototypes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-hexagonal) <br>
-- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration, Code] <br>
-**Output Format:** [Markdown guidance with architecture steps, deliverables, risks, and concrete component names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces design advice only; users should independently validate architecture changes before applying them.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: Too many ports can increase maintenance overhead.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Group related operations into cohesive, higher-level ports, often around domain aggregates.
+
+Risk: Ports can leak transport details and couple the domain to infrastructure.
+
+Mitigation: Keep port interfaces domain-centered and use domain-focused data transfer objects instead of transport-specific fields.
+
+Risk: Adapters can drift out of sync with the external systems they represent.
+
+Mitigation: Regularly validate adapters against their contracts and check that changes such as database migrations still meet the persistence port's expectations.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-hexagonal)
+- [Project page from skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown prose with lists and architecture terminology]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

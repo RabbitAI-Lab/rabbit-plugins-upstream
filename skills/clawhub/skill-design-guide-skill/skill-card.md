@@ -1,46 +1,54 @@
-## Description: <br>
-Design better AI skills with proven architecture patterns for choosing Workflow vs Agent, selecting workflow patterns, writing SKILL.md files, and checking quality. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers choose an agent architecture and workflow pattern, write clear SKILL.md files, and review skill quality with a governance-aware checklist.
 
-## Publisher: <br>
-[haiyangchenbj](https://clawhub.ai/user/haiyangchenbj) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[haiyangchenbj](https://clawhub.ai/user/haiyangchenbj)
 
-## Use Case: <br>
-Developers and skill authors use this skill to choose an agent or workflow architecture, select workflow patterns, structure SKILL.md files, and review skill quality before publishing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation wording may overlap with other installed skill-design tools. <br>
-Mitigation: Invoke the skill by explicit name or narrow the request when multiple design or review skills are installed. <br>
+## Use Case:
 
+Developers creating or reviewing AI agent skills use this guide to choose between a workflow and an agent, select a workflow pattern, and check skill structure and quality.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/haiyangchenbj/skills/skill-design-guide-skill) <br>
-- [How to Build a Good Skill / Agent: Industry Design Principles Research](references/agent-design-research.md) <br>
-- [Anthropic Tool Design Guide - Key Takeaways](references/anthropic-tool-design.md) <br>
-- [Workflow Pattern Details](references/pattern-details.md) <br>
-- [Platform Compatibility](references/platform-compatibility.md) <br>
-- [Skill Quality Checklist](references/quality-checklist.md) <br>
-- [Anthropic - Writing Effective Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents) <br>
-- [Anthropic - Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) <br>
-- [LangChain Blog](https://blog.langchain.dev/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, configuration] <br>
-**Output Format:** [Markdown with structured recommendations, checklists, and SKILL.md examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include architecture rationale, quality-review findings, and suggested skill structure.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.3 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The scanner reports package installation behavior and a broad activation scope; its confidence is medium and installed package contents were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check that the reported install behavior and trigger scope fit your environment, and review the installed package contents before enabling it if you proceed.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/haiyangchenbj/skills/skill-design-guide-skill)
+- [Pattern details](references/pattern-details.md)
+- [Quality checklist](references/quality-checklist.md)
+- [Platform compatibility](references/platform-compatibility.md)
+- [Agent design research](references/agent-design-research.md)
+- [Anthropic tool design](references/anthropic-tool-design.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Markdown prose, architecture blueprints, pattern recommendations, and checklist reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.7.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

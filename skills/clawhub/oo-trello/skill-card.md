@@ -1,42 +1,55 @@
-## Description: <br>
-Operates Trello through the OOMOL oo CLI for reading, creating, updating, and deleting Trello data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Trello (trello.com). Use this skill for ANY Trello request — reading, creating, updating, and deleting data. Whenever a task involves Trello, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate their Trello boards, lists, cards, labels, members, comments, and checklists through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform write and destructive Trello actions through an authenticated OOMOL connection. <br>
-Mitigation: Confirm the exact target, payload, and expected effect with the user before changing or removing Trello data. <br>
-Risk: First-time use may fail if the oo CLI is not installed, the user is not signed in, or Trello is not connected. <br>
-Mitigation: Run setup steps only after an auth, connection, or missing-command failure and direct the user to complete the matching OOMOL setup. <br>
+## Use Case:
 
+People using Trello can ask the agent to find boards, cards, members, labels, comments, and checklists, or to create and update Trello content through their connected account. The skill requires confirmation of exact effects before write actions and explicit approval before destructive actions.
 
-## Reference(s): <br>
-- [ClawHub Trello skill listing](https://clawhub.ai/oomol/oo-trello) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Trello homepage](https://trello.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces agent guidance for Trello connector actions and confirmation handling; connector responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: The setup path may execute a downloaded script with local permissions; the script contents were not determined, and the security review was partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an existing oo CLI when available. Before installing, review the installer and resolve the incomplete security review.
+
+Risk: Write and destructive actions change Trello content.
+
+Mitigation: Confirm the exact payload and effect before write actions, and obtain explicit approval for destructive actions.
+
+## Reference(s):
+
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [Trello](https://trello.com)
+- [Trello REST API documentation](https://developer.atlassian.com/cloud/trello/rest/)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON action results with concise textual guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions may read Trello data or propose changes; write and destructive actions require user confirmation as described in the skill.]
+
+## Skill Version(s):
+
+1.0.7 (source: artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

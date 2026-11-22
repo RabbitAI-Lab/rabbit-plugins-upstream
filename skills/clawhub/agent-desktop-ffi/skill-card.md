@@ -1,48 +1,62 @@
-## Description: <br>
-C-ABI bindings over agent-desktop's PlatformAdapter let consumers such as Python ctypes, Swift, Node ffi-napi, Go cgo, C++, and Ruby fiddle link libagent_desktop_ffi directly and run the observe-act workflow without spawning the CLI binary per call. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides C-ABI bindings to agent-desktop's PlatformAdapter so language runtimes can call desktop automation operations through a shared library.
 
-## Publisher: <br>
-[lahfir](https://clawhub.ai/user/lahfir) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lahfir](https://clawhub.ai/user/lahfir)
 
-## Use Case: <br>
-Developers and engineers use this skill to build, link, and operate FFI integrations for desktop automation through agent-desktop's PlatformAdapter. It helps consuming runtimes manage ABI handshakes, adapter lifecycles, references, errors, threading, and memory ownership. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Consuming programs can drive desktop automation through this FFI. <br>
-Mitigation: Install and use the skill only when that desktop automation capability is intended for the consuming host program. <br>
-Risk: Snapshots, screenshots, clipboard data, trace files, and last-error details can contain sensitive user or application data. <br>
-Mitigation: Treat these outputs as sensitive diagnostics and avoid routing them to shared logs or storage unless explicitly intended. <br>
-Risk: Tracing and log callbacks can record or route diagnostic events. <br>
-Mitigation: Enable tracing or log callbacks only when those diagnostics should be recorded or delivered to the caller's callback. <br>
+## Use Case:
 
+Developers using Python, Swift, Node, Go, C++, or Ruby can link the shared library and call its C ABI to observe desktop applications and dispatch UI actions without starting a CLI process for each call.
 
-## Reference(s): <br>
-- [Build and link](references/build-and-link.md) <br>
-- [Error handling](references/error-handling.md) <br>
-- [Pointer ownership](references/ownership.md) <br>
-- [Threading](references/threading.md) <br>
-- [Apple Thread Safety Summary](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/ThreadSafetySummary/ThreadSafetySummary.html) <br>
-- [Apple AXUIElement](https://developer.apple.com/documentation/applicationservices/axuielement) <br>
-- [Apple CGEvent](https://developer.apple.com/documentation/coregraphics/cgevent) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell, C, Python, and FFI guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes build commands, ABI validation guidance, lifecycle rules, and risk-aware diagnostic handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata; artifact frontmatter lists 0.4.1) <br>
+Risk: The security scan was partial, leaving some referenced material unreviewed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the referenced material before relying on the skill in a deployment.
+
+Risk: UI actions can affect the focused desktop application, and targets may change after observation.
+
+Mitigation: Check the current snapshot and qualified target before dispatching each action.
+
+Risk: Diagnostic details can include names, values, or window titles from the user's screen.
+
+Mitigation: Keep error details out of shared logs and redact them before sharing.
+
+## Reference(s):
+
+- [Build and link guide](artifact/references/build-and-link.md)
+- [Error handling guide](artifact/references/error-handling.md)
+- [Pointer ownership guide](artifact/references/ownership.md)
+- [Threading guide](artifact/references/threading.md)
+- [Apple Thread Safety Summary](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/ThreadSafetySummary/ThreadSafetySummary.html)
+- [ClawHub release page](https://clawhub.ai/lahfir/skills/agent-desktop-ffi)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with C, Python, and shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [API usage guidance and examples; no fixed output size.]
+
+## Skill Version(s):
+
+1.0.9 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

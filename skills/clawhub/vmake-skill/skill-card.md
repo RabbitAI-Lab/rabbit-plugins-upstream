@@ -1,53 +1,60 @@
-## Description: <br>
-VMake helps agents submit image and video watermark removal or quality restoration jobs to the paid Vmake media API and return the resulting media. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Process images and videos with Vmake AI for watermark removal and quality restoration, using the remote task catalog to select supported operations.
 
-## Publisher: <br>
-[wemayiiii](https://clawhub.ai/user/wemayiiii) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wemayiiii](https://clawhub.ai/user/wemayiiii)
 
-## Use Case: <br>
-Developers, agents, and external users use this skill when a user asks to remove watermarks or restore quality on images or videos. It guides credential checks, job submission, polling, and optional delivery through configured chat platforms. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Media may be uploaded to Vmake for processing. <br>
-Mitigation: Require explicit user confirmation before processing and avoid submitting sensitive media unless the user accepts Vmake handling. <br>
-Risk: Processing uses a paid, quota-consuming API. <br>
-Mitigation: Confirm paid processing with the user and rely on official billing or administrator guidance instead of guessing prices. <br>
-Risk: The skill can deliver media through configured chat-platform accounts. <br>
-Mitigation: Use scoped chat credentials, validate recipients before delivery, and avoid sending results to unconfirmed destinations. <br>
-Risk: Backend task invocation may exceed the four advertised operations. <br>
-Mitigation: Restrict allowed task names to eraser_watermark, videoscreenclear, image_restoration, and hdvideoallinone. <br>
-Risk: Unpinned dependencies can change behavior in production. <br>
-Mitigation: Pin and review dependencies before production deployment. <br>
+## Use Case:
 
+External users and developers use the skill to remove watermarks or restore image and video quality through Vmake AI. Successful processing consumes quota on the configured Vmake account.
 
-## Reference(s): <br>
-- [ClawHub VMake release page](https://clawhub.ai/wemayiiii/vmake-skill) <br>
-- [Vmake Developers API Key](https://vmake.ai/developers#api-key) <br>
-- [README.md](README.md) <br>
-- [docs/multi-platform.md](docs/multi-platform.md) <br>
-- [docs/errors-and-polling.md](docs/errors-and-polling.md) <br>
-- [docs/im-attachments.md](docs/im-attachments.md) <br>
-- [docs/feishu-send-video.md](docs/feishu-send-video.md) <br>
-- [sdk/README.md](sdk/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API Calls, Text, Files] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON CLI results, media result URLs, and chat delivery instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Vmake credentials and may use configured chat-platform credentials for delivery.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release metadata) <br>
+Risk: The scanner flags undisclosed Feishu and Telegram delivery features and concerns about remote notices.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the bundled delivery options and server-provided notices before use, and enable only an intended delivery channel.
+
+Risk: The scanner reports incomplete analysis and unpinned dependencies.
+
+Mitigation: Review the source and dependency versions before installation, and pin dependencies in the deployment environment.
+
+Risk: Submitting media for processing consumes quota on the configured Vmake account.
+
+Mitigation: Obtain authorization for the media upload and quota use before submitting a task.
+
+## Reference(s):
+
+- [Vmake API Key Documentation](https://vmake.ai/developers#api-key)
+- [Errors and Polling Guide](docs/errors-and-polling.md)
+- [IM Attachments Guide](docs/im-attachments.md)
+- [Multi-platform Delivery Guide](docs/multi-platform.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, URLs, Image and video files, Guidance]
+
+**Output Format:** [JSON task status and result URLs, with processed image or video media delivered when configured]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Task execution consumes Vmake account quota; available tasks and outputs depend on the remote catalog and selected operation.]
+
+## Skill Version(s):
+
+2.0.3 (source: server-resolved release metadata, skill.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

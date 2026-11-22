@@ -1,44 +1,61 @@
-## Description: <br>
-Competitor Analysis helps social media teams audit public competitor signals, benchmark relative performance, and identify white space for differentiated brand strategy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Competitor analysis for social media: public-data competitive reconnaissance that maps rivals' positioning, content formats, cadence, and share of voice to find a differentiated gap the brand can own.
 
-## Publisher: <br>
-[social-media-skills](https://clawhub.ai/user/social-media-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[social-media-skills](https://clawhub.ai/user/social-media-skills)
 
-## Use Case: <br>
-Social media strategists, marketers, and brand teams use this skill to compare direct, aspirational, and adjacent competitors using public data, then translate the findings into differentiated positioning, content pillars, cadence, and testable KPIs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may overstate competitor performance because public competitor metrics are incomplete or estimated. <br>
-Mitigation: State uncertainty, use consistent formulas, benchmark against a direct competitor set over time, and avoid fabricating private analytics, revenue, or ROI. <br>
-Risk: Competitive research could drift into scraping private data, impersonation, or copying protected competitor content. <br>
-Mitigation: Limit analysis to publicly visible signals, do not create fake monitoring accounts or circumvent access controls, and translate insights into the brand's own voice and strategy. <br>
+## Use Case:
 
+Social media strategists, brand teams, and marketing agents use this skill to compare public competitor activity, identify white space, and translate findings into the brand's own positioning, content pillars, cadence, and testable KPIs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/social-media-skills/skills/competitor-analysis) <br>
-- [Audit and whitespace recipes](references/audit-and-whitespace-recipes.md) <br>
-- [Competitor analysis 2026](references/competitor-analysis-2026.md) <br>
-- [Scope, distinctions and connections](references/scope-and-connections.md) <br>
-- [The SCOUT framework](references/the-scout-framework.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, guidance] <br>
-**Output Format:** [Markdown advisory analysis with benchmark notes, white-space mapping, and strategy recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses public competitor information only; competitor metrics should be treated as estimates with explicit uncertainty.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and ClawHub release evidence) <br>
+Risk: The agent may be asked to access private competitor analytics or non-public surfaces.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Restrict analysis to public signals that any user can see, and refuse scraping, impersonation, fake monitoring accounts, or access-control circumvention.
+
+Risk: Competitor performance data can be incomplete or estimated.
+
+Mitigation: Avoid fabricated precise metrics; use consistent formulas, compare against the direct set over time, and label estimates and uncertainty clearly.
+
+Risk: Competitive analysis can drift into copying protected or distinctive competitor content.
+
+Mitigation: Use findings to differentiate the brand's own positioning, pillars, cadence, and voice rather than cloning rival posts or creative.
+
+## Reference(s):
+
+- [The SCOUT Framework](references/the-scout-framework.md)
+- [Competitor Analysis 2026](references/competitor-analysis-2026.md)
+- [Audit Template, Math, and White-Space Recipes](references/audit-and-whitespace-recipes.md)
+- [Scope, Distinctions, and Connections](references/scope-and-connections.md)
+- [ClawHub Skill Page](https://clawhub.ai/social-media-skills/skills/competitor-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown advisory analysis with structured competitor rosters, public-signal benchmarks, white-space findings, and strategy recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Public-data-only; private competitor metrics must be omitted or estimated with explicit uncertainty.]
+
+## Skill Version(s):
+
+1.0.0 (source: SKILL.md frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,57 @@
-## Description: <br>
-Meta (business.meta.com). Use this skill for Meta requests that search or read current user, ad account, campaign, and ads insight data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Meta (Facebook) through an OOMOL-connected account to read advertising and Page data, manage insights reports, and create, update, or delete Page posts.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Meta business data through the oo CLI after confirming the live connector schema for each action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill accesses Meta business data through an OOMOL-connected account. <br>
-Mitigation: Install and use it only when OOMOL is an acceptable intermediary for the connected Meta business account. <br>
-Risk: Connector schemas and action payloads can change over time. <br>
-Mitigation: Review the live connector schema before each action and build payloads from that schema. <br>
-Risk: Future write or destructive Meta actions could alter or remove account data. <br>
-Mitigation: Require explicit user approval before running any action tagged write or destructive. <br>
+## Use Case:
 
+People using an OOMOL-connected Meta account can retrieve advertising and Facebook Page data, generate insights reports, and manage Page posts. The skill provides the documented actions and setup guidance for using the oo CLI with Meta.
 
-## Reference(s): <br>
-- [Meta Business](https://business.meta.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-meta) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, OOMOL sign-in, and a connected Meta account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: The fallback setup runs a remote installer with local user privileges, and the scanner did not inspect that installer's contents.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer's source and contents before running it; follow the documented setup steps only when the command's origin and effects are understood.
+
+Risk: The security scan had partial coverage because two local path-like references could not be resolved.
+
+Mitigation: Review the unresolved references and the full skill before installation.
+
+## Reference(s):
+
+- [Meta business homepage](https://business.meta.com/)
+- [Meta developer documentation](https://developers.facebook.com/docs/)
+- [oo CLI project](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-meta)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text]
+
+**Output Format:** [JSON action responses with concise task results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Response content depends on the selected Meta action and the connected account's permissions.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

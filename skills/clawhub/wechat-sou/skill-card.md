@@ -1,43 +1,60 @@
-## Description: <br>
-微信搜一搜实时搜索工具，支持获取微信生态中的文章、视频和图片搜索数据；当前 artifact 实现了关键词视频搜索。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search publicly available WeChat articles and videos by keyword and return structured results.
 
-## Publisher: <br>
-[um-why](https://clawhub.ai/user/um-why) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[um-why](https://clawhub.ai/user/um-why)
 
-## Use Case: <br>
-External users and developers use this skill to search WeChat content by keyword, especially for real-time video results, market monitoring, competitor analysis, and content planning. It requires a GUAIKEI_API_TOKEN and Node.js runtime. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search keywords are sent to guaikei.com using the configured GUAIKEI_API_TOKEN. <br>
-Mitigation: Use only with keywords appropriate to share with the service, protect the token, and rotate it if exposed. <br>
-Risk: Successful search results are saved locally under the skill's logs directory. <br>
-Mitigation: Review generated log files and manage retention according to the user's data-handling requirements. <br>
-Risk: The release description mentions article, video, and image search, while the current artifact implements video search. <br>
-Mitigation: Treat this version as a video-search tool unless additional article or image modes are separately verified. <br>
+## Use Case:
 
+Agents and analysts use this skill to find public WeChat articles and videos by keyword for content research and trend analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/um-why/wechat-sou) <br>
-- [Guaikei service site](https://www.guaikei.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Files] <br>
-**Output Format:** [JSON object printed to stdout and saved as a local JSON log file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search results include status, keyword, limit, total count, timestamp, runtime metadata, and result records when the upstream service returns matches.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and package.json) <br>
+Risk: Search terms are sent to the third-party Guaikei API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use public, non-sensitive keywords and review the service terms before querying.
+
+Risk: The security assessment is benign with medium confidence because only 18 of 28 components were fully inspected and tool-misuse analysis was degraded.
+
+Mitigation: Review the skill before installation and account for the remaining uncertainty.
+
+Risk: The API token could be exposed if included in command arguments or logs.
+
+Mitigation: Keep GUAIKEI_API_TOKEN in the environment and never place it in command-line arguments.
+
+## Reference(s):
+
+- [Options reference](references/options.md)
+- [FAQ and setup guidance](references/faq.md)
+- [Changelog](references/changelog.md)
+- [Guaikei API access and support](https://www.guaikei.com)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [Structured JSON search results with usage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js 16.14+ and GUAIKEI_API_TOKEN; searches public WeChat content.]
+
+## Skill Version(s):
+
+1.1.2 (source: SKILL.md frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

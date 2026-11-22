@@ -3,11 +3,16 @@ name: speediance
 description: >
   Read completed workouts (summaries and full per-set detail), browse and export the
   exercise catalog, and push custom training programs to your Speediance (Gym Monster)
-  smart cable machine via its cloud API. Authenticates with your account credentials,
-  caches a session token in your OS user-cache directory (override with SPEEDIANCE_TOKEN_CACHE),
-  and makes outbound HTTPS requests to the Speediance cloud API. Reads and emits structured
-  data — the caller decides where to store it. Ships as a single static binary — no Python or
-  other runtime required.
+  smart cable machine via its cloud API, optionally reserving one on its calendar.
+  Authenticates with your account credentials, caches a session token in your OS user-cache
+  directory (override with an exported SPEEDIANCE_TOKEN_CACHE), and makes outbound HTTPS
+  requests to the Speediance cloud API. Reads and emits structured
+  data. It writes local files only in these cases: the session token cache; config.json when you
+  run `config set`, which stores the value you give it (including a password) as plain JSON with
+  owner-only permissions; and the exercise catalog that the `library` command saves (default
+  library.json). Ships as a single static binary — no Python or other runtime required. Use when
+  the user asks for their Speediance or Gym Monster workout data, wants to look up exercises, or
+  wants to create a training program on the machine.
 metadata:
   openclaw:
     emoji: 🏋️
@@ -15,21 +20,29 @@ metadata:
     primaryEnv: SPEEDIANCE_EMAIL
     permissions:
       network:
-        - "Speediance cloud API (HTTPS) — authentication, workout history, exercise catalog, program creation"
+        - "Speediance cloud API (HTTPS) — authentication, workout history, exercise catalog, program creation, training-calendar reservation (`push --date`)"
       files.read:
         - "config.json — optional credential/config file (working directory, or your OS user-config dir)"
-        - ".env — optional env file in the working directory; only the documented SPEEDIANCE_* keys are read (parsed to a map, never exported into the process environment)"
-        - "token cache — cached session token in your OS user-cache dir by default (non-roaming); path overridable via SPEEDIANCE_TOKEN_CACHE or the token_cache_path config key. A legacy .token.json in the working directory is read once to migrate it."
+        - "`.env` — optional env file in the working directory; only the SPEEDIANCE_EMAIL, SPEEDIANCE_PASSWORD, SPEEDIANCE_REGION and SPEEDIANCE_DEVICE_TYPE keys are read (parsed to a map, never exported into the process environment); the path keys SPEEDIANCE_CONFIG and SPEEDIANCE_TOKEN_CACHE are ignored there"
+        - "token cache — cached session token in your OS user-cache dir by default (non-roaming); path overridable via an exported SPEEDIANCE_TOKEN_CACHE, or the token_cache_path key of a config.json given by --config, SPEEDIANCE_CONFIG or the user-config dir (ignored in a working-directory config.json). A legacy .token.json in the working directory is never read; the CLI only warns that it exists."
         - "plan JSON files passed to the push command"
       files.write:
-        - "token cache — session token written after login and refreshed automatically; in your OS user-cache dir by default (non-roaming; override via SPEEDIANCE_TOKEN_CACHE or token_cache_path). A legacy .token.json in the working directory is relocated here and then removed."
+        - "token cache — session token written after login and refreshed automatically; in your OS user-cache dir by default (non-roaming; override via an exported SPEEDIANCE_TOKEN_CACHE or token_cache_path, which a working-directory config.json can't set). A legacy .token.json in the working directory is never read, moved or removed."
         - "library.json — exercise catalog dump (library command; every run writes the full catalog to --out, default library.json)"
         - "config.json — written by the config set command (owner-only permissions)"
     requires:
-      bins: []
+      bins:
+        - speediance-cli
       env:
         - SPEEDIANCE_EMAIL
         - SPEEDIANCE_PASSWORD
+    install:
+      - id: go
+        kind: go
+        module: github.com/stozo04/speediance-cli/v2/cmd/speediance-cli@latest
+        bins:
+          - speediance-cli
+        label: Install speediance-cli (go)
     envVars:
       - name: SPEEDIANCE_EMAIL
         description: Your Speediance / Gym Monster account email address
@@ -44,10 +57,10 @@ metadata:
         description: "Device type integer — 1 = Gym Monster v1 (default, tested). Gym Monster 2 is untested; try 2 if exercises look wrong."
         required: false
       - name: SPEEDIANCE_CONFIG
-        description: "Path to config.json (overrides discovery: working dir, then OS user-config dir)"
+        description: "Path to config.json (overrides discovery: working dir, then OS user-config dir). Read from the exported environment only."
         required: false
       - name: SPEEDIANCE_TOKEN_CACHE
-        description: "Override the token cache file location (default: OS user-cache dir)"
+        description: "Override the token cache file location (default: OS user-cache dir). Read from the exported environment only."
         required: false
 ---
 
@@ -74,10 +87,11 @@ Install it one of two ways:
 #    https://github.com/stozo04/speediance-cli/releases
 
 # B) Or build/install with Go (1.24+):
-go install github.com/stozo04/speediance-cli/cmd/speediance-cli@latest
+go install github.com/stozo04/speediance-cli/v2/cmd/speediance-cli@latest
 ```
 
-Then authenticate:
+Then set your credentials as described in [Credentials](#credentials) below, and
+authenticate. `login` exits with a config error until an email and password are found:
 
 ```bash
 speediance-cli login   # authenticates and caches a session token (run `config path` to see where)
@@ -104,10 +118,12 @@ Alternatively, write a `config.json` in the working directory (gitignored by the
 }
 ```
 
-You can also put these variables in a gitignored **`.env`** file in the working directory — the
-`SPEEDIANCE_*` keys are read from it automatically (exported environment variables still take
-precedence). Only those keys are read; the file is parsed into a map and any other keys are
-ignored, so a stray `.env` can never inject unrelated variables into the process environment.
+You can also put these four variables in a gitignored **`.env`** file in the working directory —
+they are read from it automatically (exported environment variables still take precedence). Only
+those keys are read; the file is parsed into a map and any other keys are ignored, so a stray `.env`
+can never inject unrelated variables into the process environment. The path overrides
+`SPEEDIANCE_CONFIG` and `SPEEDIANCE_TOKEN_CACHE` must be exported (or passed as `--config`): a `.env`
+can't redirect where config is read from or where the session token is written.
 
 ## Commands
 
@@ -120,12 +136,14 @@ speediance-cli workouts --days 7 --json      # recent sessions (summaries, for p
 speediance-cli session <training_id> --json  # full, verbatim detail for one session
 ```
 
-**`today` is the one-shot, agent-friendly entry point.** When the client just says
-"I did a workout," call `today` — you do **not** need to know whether it was a
-program, free weights, or a rowing/ski session. The tool finds the day's session(s)
+**`today` is the one-shot, agent-friendly entry point.** Call it only when the user
+asks for their Speediance data (for example "pull today's Speediance workout"), or
+after they confirm they want it fetched. A passing mention of exercising is not a
+request to read their account: ask first. You do **not** need to know whether the
+session was a program, free weights, or a rowing/ski session. The tool finds the day's session(s)
 and returns each one fully resolved, as an array of the same `{training_id, kind,
-info, detail}` shape that `session` emits. (`kind` is `"program"`, `"free"`, or
-`""`.)
+info, detail}` shape that `session` emits. (`kind` is `"program"`, `"course"`,
+`"free"`, or `""`.)
 
 Sample `workouts --json` output (a digest for picking; `kind` lets you filter):
 
@@ -157,8 +175,9 @@ the same two fields:
 | `kind` | `info` | `detail` |
 |---|---|---|
 | `"program"` | `cttTrainingInfo` payload (incl. `completionRate`) | `cttTrainingInfoDetail` — per-exercise, per-rep arrays |
+| `"course"` | `courseTrainingInfo` payload (incl. `completionRate`) | `courseTrainingInfoDetail` — per-exercise, per-rep arrays for official courses |
 | `"free"` | `freeTraining` payload (totals: `totalCapacity`, `totalEnergy`, `totalDistance` for rowing/ski; `name` for guided sessions) | `freeTrainingDetail` — `[]` for a freestyle Free Lift, **populated** for a guided session (e.g. *Aerobic Rowing* → per-interval `finishedReps` with `distance`/`pace`/`spm` + per-stroke traces) |
-| `""` | `null` | `null` (no session found in either namespace) |
+| `""` | `null` | `null` (no session found in any namespace) |
 
 > `kind:"free"` is the *free namespace*, not "freestyle". It spans both a
 > freestyle **Free Lift** (no `info.name`, `detail: []`, aggregates only) and a
@@ -231,9 +250,9 @@ Notes for consumers:
 - **No flag unlocks data** — the endpoints return it, so the CLI returns it. There
   is no `--telemetry`.
 
-> A `trainingId` can identify *different* sessions in the program vs. free
-> namespaces. Auto-detection prefers the program match; pass `--program` or
-> `--free` to `session` to force a namespace when an id is ambiguous.
+> A `trainingId` can identify *different* sessions in the program, course and free
+> namespaces. Auto-detection prefers the program match; pass `--program`,
+> `--course` or `--free` to `session` to force a namespace when an id is ambiguous.
 
 ### Browse the exercise catalog
 
@@ -245,9 +264,8 @@ speediance-cli library                           # save full catalog to library.
 Returns `[{id, name, muscle, tab}]`. The `id` is required for plan JSON.
 Every run saves the full catalog to `--out` (default `library.json`) — `--search`
 filters only the stdout view, it does not narrow the saved file.
-A committed `library.json` snapshot ships with the repo (Gym Monster v1) for offline
-browsing — regenerate with `speediance-cli library` to get the freshest catalog or a
-different device's exercises.
+The skill package doesn't bundle a catalog. Run `speediance-cli library` once to save it
+locally; a Gym Monster v1 snapshot also lives in the GitHub repo for offline browsing.
 
 ### Create a training program
 
@@ -256,7 +274,14 @@ Author a plan JSON, then push it — the program appears on the machine immediat
 ```bash
 speediance-cli push plan.json --dry-run   # preview payload, no network write
 speediance-cli push plan.json             # create it on the account
+speediance-cli push plan.json --date today  # create it and reserve it on the calendar (today | YYYY-MM-DD)
 ```
+
+`push --json` prints the server's create response (the template code as a JSON string).
+With `--date` it prints `{"template_code": "…", "scheduled_date": "YYYY-MM-DD"}` instead,
+and `--dry-run --date` prints `{"payload": …, "scheduled_date": "YYYY-MM-DD"}`. If the
+reservation fails (exit 3), `--date --json` still prints the `template_code` with
+`scheduled_date: null`. `--date` only accepts today or later.
 
 **Plan JSON format:**
 
@@ -305,9 +330,9 @@ layout.
 | `login` | Authenticate and cache a session token | — |
 | `workouts [--days N]` | List recent completed sessions | ✓ |
 | `today [--date D]` | Every session on a day, auto-resolved to type-correct detail (the one-shot entry point) | ✓ |
-| `session <training_id> [--free\|--program]` | Full, verbatim detail for one session; auto-detects program/free/rowing | ✓ |
+| `session <training_id> [--free\|--program\|--course]` | Full, verbatim detail for one session; auto-detects program/course/free/rowing | ✓ |
 | `library [--search X] [--out FILE]` | Dump or search exercise catalog | ✓ |
-| `push <plan.json> [--dry-run]` | Create a training program on the account | ✓ |
+| `push <plan.json> [--dry-run] [--date D]` | Create a training program on the account, optionally reserving it on the calendar | ✓ |
 | `config show\|set\|path` | Manage `config.json` | ✓ (`show`) |
 | `version` | Build metadata (also `--version`) | ✓ |
 | `completion <shell>` | Shell completion (bash/zsh/fish/powershell) | — |
@@ -315,17 +340,23 @@ layout.
 ## Conventions
 
 - **stdout is parseable** with `--json`; all human-readable hints go to **stderr**.
-- **Exit codes**: `0` success, `2` authentication failure, non-zero for other errors.
+- **Exit codes**: `0` success, `2` authentication failure, `3` `push --date` created the
+  program but could not reserve the day. Don't rerun `push`, which would create a
+  duplicate; ask the user to schedule it in the app. Non-zero for other errors.
 - **Secrets**: `config.json`, `.token.json`, `.env` are gitignored — never commit them.
 - **Token caching**: after the first login, the token is cached in your **OS user-cache
   directory** (e.g. `%LocalAppData%\speediance\token.json` on Windows, `~/.cache/speediance/token.json`
   on Linux, `~/Library/Caches/speediance/token.json` on macOS) and refreshed automatically on
   expiry — *not* in the working directory (so it can't be swept into a commit) and *not* in the
   roaming config dir (so a live credential isn't synced across machines). Override the location with
-  `SPEEDIANCE_TOKEN_CACHE` or the `token_cache_path` config key; run `speediance-cli config path` to
-  see where it resolved. A token left in a legacy `.token.json` by an older version is moved to the
-  per-user location on first run.
+  an exported `SPEEDIANCE_TOKEN_CACHE` or the `token_cache_path` config key; run `speediance-cli config path` to
+  see where it resolved. `token_cache_path` counts only in a config file chosen by `--config`, an
+  exported `SPEEDIANCE_CONFIG` or the user-config dir: a `config.json` that's simply in the working
+  directory can't choose where the token is written, and the CLI warns on stderr when it ignores one.
+  A `.token.json` left in the working directory by an older version is never read, since a planted
+  one could switch accounts; the CLI warns so you can delete it, and you log in once more.
 - **Dry-run first**: always use `--dry-run` before `push` when authoring new programs to
   confirm exercise IDs resolved correctly.
 - If an endpoint breaks after a Speediance app update, all API calls live in
-  `internal/api` — that's the single place to patch.
+  `internal/api` in the [source repo](https://github.com/stozo04/speediance-cli) — that's the
+  single place to patch.

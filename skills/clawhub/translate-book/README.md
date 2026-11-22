@@ -2,9 +2,13 @@
 
 English | [中文](README.zh-CN.md)
 
-Claude Code skill that translates entire books (PDF/DOCX/EPUB) into any language using parallel subagents.
+An agent skill for Codex, Claude Code, and OpenClaw that translates entire books (PDF/DOCX/EPUB) into any language using parallel subagents.
 
-> Inspired by [claude_translater](https://github.com/wizlijun/claude_translater). The original project uses shell scripts as its entry point, coordinating the Claude CLI with multiple step scripts to perform chunked translation. This project restructures the workflow as a Claude Code Skill, using subagents to translate chunks in parallel, with manifest-driven integrity checks, resumable runs, and multi-format output unified into a single pipeline. As the project structure and implementation differ significantly from the original, this is an independent project rather than a fork.
+<p align="center">
+  <img src="assets/poster/translate-book-poster-en.jpg" alt="translate-book — a whole book, translated in parallel: split into chunks, translated by 8 parallel sub-agents, verified and merged into a complete book" width="480">
+</p>
+
+> Inspired by [claude_translater](https://github.com/wizlijun/claude_translater). The original project uses shell scripts as its entry point, coordinating the Claude CLI with multiple step scripts to perform chunked translation. This project restructures the workflow as an agent skill for Codex, Claude Code, and OpenClaw, using subagents to translate chunks in parallel, with manifest-driven integrity checks, resumable runs, and multi-format output unified into a single pipeline. As the project structure and implementation differ significantly from the original, this is an independent project rather than a fork.
 
 ---
 
@@ -15,6 +19,7 @@ Input (PDF/DOCX/EPUB)
   │
   ▼
 Calibre ebook-convert → HTMLZ → HTML → Markdown
+  (or Markdown input, e.g. from MinerU / Marker, skipping Calibre)
   │
   ▼
 Split into chunks (chunk0001.md, chunk0002.md, ...)
@@ -35,55 +40,85 @@ Each chunk gets its own independent subagent with a fresh context window. This p
 ## Features
 
 - **Parallel subagents** — 8 concurrent translators per batch, each with isolated context
-- **Resumable** — chunk-level resume; already-translated chunks are skipped on re-run (for metadata/template changes, use a fresh run)
+- **Resumable + selective re-translation** — chunk-level resume, with `run_state.json` tracking glossary-sensitive re-translation
+- **Neighbor context** — each chunk can see short read-only excerpts from adjacent chunks for pronoun and entity resolution
 - **Manifest validation** — SHA-256 hash tracking prevents stale or corrupt outputs from being merged
 - **Multi-format output** — HTML (with floating TOC), DOCX, EPUB, PDF
+- **Optional output controls** — explicit EPUB cover, custom temp root, and user-facing export aliases
 - **Multi-language** — zh, en, ja, ko, fr, de, es (extensible)
-- **PDF/DOCX/EPUB input** — Calibre handles the conversion heavy lifting
+- **PDF/DOCX/EPUB/Markdown input** — Calibre handles the conversion heavy lifting; formula- and table-heavy PDFs can be pre-extracted to Markdown with MinerU or Marker
 
 ## Prerequisites
 
-- **Claude Code CLI** — installed and authenticated
+- **Agent runtime** — Codex, Claude Code, or OpenClaw, installed and ready to run skills
 - **Calibre** — `ebook-convert` command must be available ([download](https://calibre-ebook.com/))
 - **Pandoc** — for HTML↔Markdown conversion ([download](https://pandoc.org/))
 - **Python 3** with:
   - `pypandoc` — required (`pip install pypandoc`)
   - `beautifulsoup4` — optional, for better TOC generation (`pip install beautifulsoup4`)
+- **MinerU or Marker** — optional, only to pre-extract formula- and table-heavy PDFs to Markdown (see [Step 1](#step-1-convert))
 
 ## Quick Start
 
 ### 1. Install the skill
 
-**Option A: npx (recommended)**
+#### Codex
+
+```bash
+npx skills add deusyu/translate-book -a codex -g
+```
+
+Or install it manually:
+
+```bash
+mkdir -p ~/.agents/skills
+git clone https://github.com/deusyu/translate-book.git ~/.agents/skills/translate-book
+```
+
+Restart Codex if the newly installed skill does not appear.
+
+#### Claude Code
 
 ```bash
 npx skills add deusyu/translate-book -a claude-code -g
 ```
 
-**Option B: ClawHub**
+Or install it manually:
 
 ```bash
-clawhub install translate-book
-```
-
-**Option C: Git clone**
-
-```bash
+mkdir -p ~/.claude/skills
 git clone https://github.com/deusyu/translate-book.git ~/.claude/skills/translate-book
 ```
 
+#### OpenClaw
+
+```bash
+openclaw skills install @deusyu/translate-book
+```
 
 ### 2. Translate a book
 
-In Claude Code, say:
+#### Codex
 
+In the Codex CLI or IDE extension, enter:
+
+```text
+$translate-book Translate /path/to/book.pdf into Chinese.
 ```
+
+Codex can also select the skill automatically when your request matches its description.
+
+#### Claude Code and OpenClaw
+
+Ask the agent:
+
+```text
 translate /path/to/book.pdf to Chinese
 ```
 
-Or use the slash command:
+In Claude Code, you can also use the slash command:
 
-```
+```text
 /translate-book translate /path/to/book.pdf to Japanese
 ```
 
@@ -117,6 +152,35 @@ python3 ../../scripts/convert.py ../baselines/standard-alice/standard-alice.epub
 python3 ../../scripts/merge_and_build.py --temp-dir standard-alice_temp --title "test"
 ```
 
+## Feedback and Contributions
+
+Please open a detailed GitHub issue instead of starting with a pull request. This project is maintained as an AI-assisted skill pipeline, and changes need to be evaluated against the current orchestration rules, chunk/manifest contracts, baseline assets, and release flow in one maintainer-owned context.
+
+Pull requests are not the preferred contribution path and may be closed in favor of an issue. If you already have a patch, include the idea, key diff, failing case, or verification notes in the issue; the maintainer may rework or split the implementation before merging.
+
+A useful issue should include:
+
+- Current behavior and expected behavior
+- Input format and environment, such as PDF/DOCX/EPUB, OS, Python, Calibre, and Pandoc versions
+- Minimal reproduction steps or a small public-domain sample when possible
+- Logs, screenshots, or generated file names that show the failure
+
+## Contact
+
+For bugs and feature requests, please open a [GitHub issue](https://github.com/deusyu/translate-book/issues) as described above. For questions, ideas, or anything else, you can reach me here:
+
+| Channel | Link |
+|---------|------|
+| X (Twitter) | [@0xdeusyu](https://x.com/0xdeusyu) |
+| Telegram | [@DeusThink](https://t.me/DeusThink) |
+| Telegram Group (Chinese) | [@talkdeusyu](https://t.me/talkdeusyu) |
+| Telegram Channel (Chinese) | [@lovedesuyu](https://t.me/lovedesuyu) |
+| Email | [rainman.deus@gmail.com](mailto:rainman.deus@gmail.com) |
+
+For commercial sponsorship, see [Commercial sponsorship](#commercial-sponsorship) below.
+
+The channel is my running log of thinking alongside AI; the group is its discussion space, and translate-book questions are welcome there too.
+
 ## Pipeline Details
 
 ### Step 1: Convert
@@ -125,7 +189,26 @@ python3 ../../scripts/merge_and_build.py --temp-dir standard-alice_temp --title 
 python3 scripts/convert.py /path/to/book.pdf --olang zh
 ```
 
-Calibre converts the input to HTMLZ, which is extracted and converted to Markdown, then split into chunks (~6000 chars each). A `manifest.json` records the SHA-256 hash of each source chunk for later validation.
+Calibre converts the input to HTMLZ, which is extracted and converted to Markdown, then split into chunks (~6000 chars each). A `manifest.json` records the SHA-256 hash of each source chunk for later validation, and a `source_fingerprint.json` ties the temp dir to the exact source bytes it was built from — re-running against a replaced source file aborts instead of silently reusing stale chunks. Temp dirs created before fingerprinting are adopted with a warning on first re-run.
+
+The HTML → Markdown step also cleans Calibre's markup structurally. EPUB footnotes — a marker link such as `<a href="#n1"><sup>1</sup></a>` in the text, paired with a note paragraph that opens with a link back to it — become Pandoc footnotes (`[^1]` in the text, `[^1]: …` right after the paragraph), numbered across the whole book so that per-chapter numbering cannot collide after merging. In-book links keep their text, span attributes such as `{lang="…"}`, empty page anchors, and heading ids are dropped, and typographic dashes and quotes stay as Unicode instead of `---` or escaped ASCII quotes. Notes without a back-link (for example EPUB 3 `<aside>` footnotes) stay ordinary paragraphs.
+
+By default the working directory is `{book_name}_temp/` under the current directory. Use `--temp-root /path/to/work` to keep the same leaf directory name under a different parent.
+
+#### Formula- and table-heavy PDFs: convert Markdown instead (optional)
+
+Calibre reflows PDF text by coordinate heuristics. That works for plain prose, but academic and technical PDFs lose their structure: formulas break into fragments, tables flatten into one cell per line, and multi-column pages interleave. For those PDFs, extract them with a layout-aware parser first and give `convert.py` the Markdown it writes. `.md` / `.markdown` input skips Calibre entirely:
+
+```bash
+pip install -U "mineru>=4.0,<5"                # or: pip install marker-pdf
+mineru-kit parse paper.pdf -o paper.md         # MinerU >= 4 (CPU-only basic tier: ~0.8 GB of models)
+# marker_single paper.pdf --output_dir out/    # Marker: writes out/paper/paper.md
+python3 scripts/convert.py paper.md --olang zh
+```
+
+The parsers keep formulas as `$...$` / `$$...$$` LaTeX and tables as tables. `convert.py` copies images referenced next to the Markdown file, and decodes the base64 images MinerU inlines, into `{book_name}_temp/images/`, so chunks never carry image payloads. Display-math blocks (`$$ ... $$`) are never split across chunks. YAML front matter (`title`, `author`, `lang`) fills `config.txt` and is not sent for translation; without it, a leading `#` heading becomes `original_title`. The temp dir is named after the Markdown file, so `paper.md` maps to `paper_temp/`. If that dir was built from `paper.pdf`, `convert.py` aborts on the source-fingerprint mismatch, so delete it first. Both parsers download ML models on first run. `--strip-page-numbers` and `--detect-page-numbers` only apply to Calibre input.
+
+At build time Pandoc renders `$...$` / `$$...$$` as MathML, so formulas are typeset in `book.html` and `book.pdf`, and in `book.epub` on readers that support MathML. Calibre's DOCX output cannot typeset MathML: formulas appear there as flattened text followed by their TeX source.
 
 ### Step 1.5: Glossary (term consistency across chunks)
 
@@ -153,9 +236,7 @@ Each chunk is translated by a fresh-context sub-agent, which means the same prop
 
 Existing v1 `glossary.json` files are auto-upgraded to v2 on first load. v2 forbids the same surface form (source or alias) appearing in two different terms; if a v1 file has polysemous duplicate sources, the upgrade aborts with a disambiguation message — fix the file by hand and reload.
 
-Edit `glossary.json` between runs to fix translations; existing `glossary.json` is never overwritten — delete it to rebuild from scratch.
-
-> **Note on partial reruns**: in the current release, editing `glossary.json` after some chunks have been translated does NOT auto-invalidate those chunks — they keep their old translations. Precise glossary-driven re-translation is planned for the next commit. For now, delete the affected `output_chunk*.md` files (or the whole temp dir) to apply glossary edits.
+Edit `glossary.json` between runs to fix translations; existing `glossary.json` is never overwritten — delete it to rebuild from scratch. `scripts/run_state.py` records which glossary terms each chunk used, so later glossary changes (including `target`, `category`, and `aliases` edits) only re-translate affected chunks after the state has been recorded.
 
 ### Step 2: Translate (parallel subagents)
 
@@ -163,9 +244,11 @@ The skill launches subagents in batches (default: 8 concurrent). Each subagent:
 
 1. Reads one source chunk (e.g. `chunk0042.md`)
 2. Translates to the target language
-3. Writes the result to `output_chunk0042.md`
+3. Uses a per-chunk term table and short read-only previous/next excerpts
+4. Writes the result to `output_chunk0042.md`
+5. Writes `output_chunk0042.meta.json` observations for glossary feedback
 
-If a run is interrupted, re-running skips chunks that already have valid output files. Failed chunks are retried once automatically.
+Before launching subagents, `scripts/run_state.py plan <temp_dir>` decides which chunks need translation, which existing outputs only need state recording, and which are unchanged. Use `--retranslate-untracked` only when adopting an old temp dir whose existing outputs should be forced through the current glossary. If a run is interrupted, re-running skips chunks that already have valid output files and current state. Failed chunks are retried once automatically.
 
 ### Step 3: Merge & Build
 
@@ -173,12 +256,23 @@ If a run is interrupted, re-running skips chunks that already have valid output 
 python3 scripts/merge_and_build.py --temp-dir book_temp --title "《translated title》"
 ```
 
+Optional output flags:
+
+```bash
+python3 scripts/merge_and_build.py --temp-dir book_temp --title "《translated title》" --cover cover.jpg --export-name "translated-title"
+```
+
+`--cover` passes an explicit image to the EPUB Calibre step. `--export-name` creates alias copies such as `translated-title.epub` while preserving the canonical `book.*` pipeline artifacts. The name `book_doc` (case-insensitive) is reserved and rejected before building because its HTML alias would overwrite `book_doc.html`.
+
 Before merging, the script validates:
 - Every source chunk has a corresponding output file (1:1 match)
 - Source chunk hashes match the manifest (no stale outputs)
-- No output files are empty
+- No output files are empty, blank (whitespace-only), or unreadable — a blank chunk aborts the merge instead of silently dropping its content
+- Every output chunk keeps its source chunk's footnote markers (`[^N]` and `[^N]:`), so no reference or note is left dangling
 
 Then: merge → Pandoc HTML → inject TOC → Calibre generates DOCX, EPUB, PDF.
+
+Intermediate files stay in the temp dir after the build, so a few bad passages can be fixed without re-translating the book. Either edit the affected `output_chunkNNNN.md` and run `python3 scripts/run_state.py record <temp_dir> chunkNNNN`, or delete the file and re-run the skill to re-translate it. `record` marks the chunk as matching the current glossary and source, so run `python3 scripts/run_state.py plan <temp_dir>` first: if that chunk is queued for re-translation because the glossary or its source changed, apply those changes in your edit or re-translate it instead. If the source chunk itself was edited, re-run `convert.py` first so `manifest.json` records the change; otherwise the merge stops with "Source changed since splitting". Leave out page-number flags such as `--strip-page-numbers` on that re-run: once chunks exist they abort, and deleting the cached files as the error suggests would discard the chunks. A re-run may also queue other chunks whose glossary terms changed after they were translated; the skill asks before re-translating those. Then re-run `merge_and_build.py`: it re-merges when a chunk is newer than `output.md` and regenerates the outputs. Do not edit `output.md` itself — any later re-merge rebuilds it from the chunks. `--cleanup` permanently deletes `chunk*.md`, `output_chunk*.md`, and `input.*`, which rules such fixes out; use it only when you are done with the book.
 
 **Note:** `{book_name}_temp/` is a working directory for a single translation run. If you change the title, author, output language, template, or image assets, either use a fresh temp directory or delete the existing final artifacts (`output.md`, `book*.html`, `book.docx`, `book.epub`, `book.pdf`) before re-running.
 
@@ -186,12 +280,14 @@ Then: merge → Pandoc HTML → inject TOC → Calibre generates DOCX, EPUB, PDF
 
 | File | Purpose |
 |------|---------|
-| `SKILL.md` | Claude Code skill definition — orchestrates the full pipeline |
-| `scripts/convert.py` | PDF/DOCX/EPUB → Markdown chunks via Calibre HTMLZ |
+| `SKILL.md` | Agent skill definition — orchestrates the full pipeline |
+| `scripts/convert.py` | PDF/DOCX/EPUB → Markdown chunks via Calibre HTMLZ; Markdown input skips Calibre |
 | `scripts/manifest.py` | Chunk manifest: SHA-256 tracking and merge validation |
 | `scripts/glossary.py` | Glossary management: per-chunk term tables for consistent terminology |
+| `scripts/chunk_context.py` | Read-only previous/next chunk excerpts for sub-agent prompts |
 | `scripts/meta.py` | Per-chunk sub-agent observation file schema (`output_chunkNNNN.meta.json`) |
 | `scripts/merge_meta.py` | Batch-boundary merge: sub-agent observations → canonical glossary |
+| `scripts/run_state.py` | Selective re-translation planner and `run_state.json` recorder |
 | `scripts/merge_and_build.py` | Merge chunks → HTML → DOCX/EPUB/PDF |
 | `scripts/calibre_html_publish.py` | Calibre wrapper for format conversion |
 | `scripts/template.html` | Web HTML template with floating TOC |
@@ -205,17 +301,21 @@ Then: merge → Pandoc HTML → inject TOC → Calibre generates DOCX, EPUB, PDF
 |---------|----------|
 | `Calibre ebook-convert not found` | Install Calibre and ensure `ebook-convert` is in PATH |
 | `Manifest validation failed` | Source chunks changed since splitting — re-run `convert.py` |
+| `was created from different source bytes` | The temp dir belongs to a different source file — delete the temp dir or use a fresh `--temp-root` |
+| PDF formulas/tables garbled after conversion | Extract the PDF with MinerU or Marker, delete the old temp dir, and run `convert.py` on the `.md` (see [Step 1](#step-1-convert)) |
+| `Blank output` / `Empty output` | A subagent wrote a whitespace-only or empty chunk — re-run the skill to re-translate it |
 | `Missing source chunk` | Source file deleted — re-run `convert.py` to regenerate |
 | Incomplete translation | Re-run the skill — it resumes from where it stopped |
+| A few passages need fixing after the build | Fix the affected `output_chunkNNNN.md` instead of `output.md`, then re-run `merge_and_build.py` (see [Step 3](#step-3-merge--build)) |
 | Changed title/template/assets but output didn't update | Delete existing `output.md`, `book*.html`, `book.docx`, `book.epub`, `book.pdf` from the temp dir, then re-run `merge_and_build.py` |
-| Want page-number footers stripped from PDF output | By default, monotonic page-number sequences (e.g. `1, 2, 3, ...`) are auto-detected and dropped while outliers like years (`1984`), chapter numbers, and citation indices stay preserved. If detection misses your case, pass `--strip-page-numbers` to `convert.py` to aggressively delete every standalone-digit line. The flag aborts if a cached `input.md` or `chunk*.md` already exists — delete them first so the flag actually takes effect. |
+| Want page-number footers stripped from PDF output | For PDF input, monotonic page-number sequences (e.g. `1, 2, 3, ...`) are auto-detected and dropped while outliers like years (`1984`), chapter numbers, and citation indices stay preserved. EPUB and DOCX keep every standalone number, because their page numbers are not text (EPUB anchors, DOCX footers); pass `--detect-page-numbers` for an EPUB that does print page numbers as text. If detection misses your case, pass `--strip-page-numbers` to `convert.py` to aggressively delete every standalone-digit line. Both flags abort if a cached `input.md` or `chunk*.md` already exists — delete them first so the flag actually takes effect. |
 | `output.md exists but manifest invalid` | Stale output — the script auto-deletes and re-merges |
 | `Glossary upgrade rejected: duplicate source` | v2 disallows two terms sharing a source/alias surface form. Edit `glossary.json` to disambiguate (e.g., rename one source from `Apple` to `Apple (Inc.)`) and reload. |
 | PDF generation fails | Ensure Calibre is installed with PDF output support |
 
 ## Roadmap
 
-Tracking [issue #7](https://github.com/deusyu/translate-book/issues/7) — name/term inconsistency and pronoun/gender errors across chunks. Today's glossary covers high-frequency main entities; secondary characters, spelling variants, and pronoun resolution are not yet addressed. The plan is four independently shippable phases.
+Tracking [issue #7](https://github.com/deusyu/translate-book/issues/7) — name/term inconsistency and pronoun/gender errors across chunks. The pipeline now covers high-frequency entities, alias/spelling drift, adjacent-chunk pronoun context, and selective re-translation after glossary changes. Full-book organic validation remains a future quality pass. The plan is four independently shippable phases.
 
 ### Design principles
 
@@ -228,28 +328,28 @@ Tracking [issue #7](https://github.com/deusyu/translate-book/issues/7) — name/
 
 Closes the read+write loop. Glossary v2 adds `id`, `aliases`, `gender`, `confidence`, `evidence_refs`, `notes` (v1 files auto-upgrade on first load; the term table is now 3-col and aliases participate in selection). Sub-agents emit `output_chunkNNNN.meta.json` alongside each translated chunk. `scripts/merge_meta.py` (`prepare-merge` / `apply-merge` / `status`) merges per-batch with conservative rules: surface-form uniqueness enforced, malformed metas quarantined (warn + skip + count), confidence escalation via both `evidence_chunks` and `used_term_sources`, FIFO-cap at 5. See SKILL.md Step 4 / Step 4.5 / Step 5.
 
-### Phase 2 — Neighbor context for pronouns (not started, independent of Phase 1)
+### Phase 2 — Neighbor context for pronouns (shipped)
 
-Inject `prev_excerpt` (last ~300 chars of previous chunk) and `next_excerpt` (first ~300 chars of next chunk) into each sub-agent prompt as read-only context. No new state files. Pure prompt-assembly change.
+`scripts/chunk_context.py` injects `prev_excerpt` (last ~300 chars of previous chunk) and `next_excerpt` (first ~300 chars of next chunk) into each sub-agent prompt as read-only context. No new state files are introduced.
 
-### Phase 3 — Selective re-translation (not started, depends on Phase 1)
+### Phase 3 — Selective re-translation (shipped)
 
-Phase 1's batch feedback only improves *forward*. Selective rerun closes the *backward* loop: new `scripts/run_state.py` + `run_state.json` schema; per-chunk tracking of `glossary_version_used`, `entity_ids_used`, `output_hash`; five decision rules for deciding which chunks need re-translation this run.
+Phase 1's batch feedback only improves *forward*. Selective rerun closes the *backward* loop with `scripts/run_state.py` and `run_state.json`: per-chunk tracking of `glossary_version_used`, `entity_ids_used`, `output_hash`, source hash, and selected entity hashes; five planning rules cover missing/empty output, manifest source drift, untracked outputs, source drift since record, and glossary term selection/hash changes.
 
 ### Phase 4 — Bootstrap warm-up (experimental, gated on Phase 1 data)
 
 Phase 1 grows the glossary batch-by-batch, so the first batch sees the smallest glossary and has the highest drift risk. Possible approaches: sequential bootstrap, variable concurrency, or skip entirely. Decision belongs to whoever has run the system on real books.
 
-> The specific schemas and file layouts in each phase are illustrative — they may shift as Phase 1 hits real data. Phase 4 is gated on data; Phase 3 may be re-scoped or dropped if Phase 1 alone proves "good enough".
+> Phase 4 remains gated on real-book evidence. The shipped schemas can still evolve under compatibility-aware migrations if production runs expose gaps.
 
-### Parallel track — Pipeline / UX backlog (not started, separate from issue #7)
+### Parallel track — Pipeline / UX backlog (partly shipped, separate from issue #7)
 
-Recent PR discussions also surfaced several useful workflow improvements, but these are broader than one-off patches and touch repo contracts (artifact names, temp-dir behavior, cleanup semantics, or EPUB compatibility scope). These are being tracked as maintainer-owned roadmap items rather than merged directly from the current PRs:
+Recent PR discussions also surfaced several useful workflow improvements, but these are broader than one-off patches and touch repo contracts (artifact names, temp-dir behavior, cleanup semantics, or EPUB compatibility scope). Current status:
 
-- **Explicit EPUB cover support.** Add `--cover <image>` and pass it through the HTML -> EPUB Calibre step. Keep `--cover-from <epub>` / EPUB cover auto-extraction out of scope until the project is ready to own EPUB parsing compatibility across different package layouts. (context: closed #3)
-- **Configurable temp workspace location.** Keep the current cwd-local `{book_name}_temp/` default for compatibility. If this is revisited later, prefer an explicit `--temp-root` / `--work-dir` style option rather than silently changing the default location. (context: closed #4)
-- **Safer Calibre/Pandoc artifact cleanup.** Continue improving cleanup rules incrementally under regression tests, while preserving the current page-number detection semantics and not stripping real display-math delimiters or content numbers. (context: closed #5)
-- **Optional user-facing export names.** Keep canonical pipeline artifacts as `book.html`, `book_doc.html`, `book.docx`, `book.epub`, and `book.pdf`. If title-based filenames are added later, they should likely be optional exported aliases/copies rather than a silent replacement of the internal artifact contract. (context: closed #6)
+- **Explicit EPUB cover support (shipped).** `merge_and_build.py --cover <image>` passes the image through the HTML -> EPUB Calibre step. `--cover-from <epub>` / EPUB cover auto-extraction remains out of scope until the project is ready to own EPUB parsing compatibility across different package layouts. (context: closed #3)
+- **Configurable temp workspace location (shipped).** `convert.py --temp-root <dir>` keeps the default cwd-local `{book_name}_temp/` behavior unless explicitly overridden. (context: closed #4)
+- **Safer Calibre/Pandoc artifact cleanup (partly shipped).** Page-number and Calibre-marker cleanup is regression-tested, preserving years, chapter numbers, and non-monotonic standalone numbers. Continue improving cleanup incrementally under tests. (context: closed #5)
+- **Optional user-facing export names (shipped).** `merge_and_build.py --export-name <stem>` creates alias copies while preserving canonical pipeline artifacts as `book.html`, `book_doc.html`, `book.docx`, `book.epub`, and `book.pdf`. (context: closed #6)
 
 ## Star History
 
@@ -261,7 +361,15 @@ If you find this project helpful, please consider giving it a Star ⭐!
 
 If this project saves you time, consider sponsoring to keep it maintained and improved.
 
-[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?logo=github)](https://github.com/sponsors/deusyu)
+[![Sponsor](https://img.shields.io/github/sponsors/deusyu?label=Sponsor&logo=github)](https://github.com/sponsors/deusyu)
+
+### Commercial sponsorship
+
+Companies are welcome to sponsor translate-book, and terms are open to discussion. Email [rainman.deus@gmail.com](mailto:rainman.deus@gmail.com).
+
+Not accepted:
+
+- Setup guides, base URLs, or environment variables for third-party model platforms or API relays in the README or docs. translate-book does not call any model API itself; translation runs inside the user's own agent host (Codex, Claude Code, OpenClaw).
 
 ## License
 

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vmake-skill",
   "slug": "vmake-skill",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778492568090,
-  "contentHash": "3a93b8fd88dc7db1ff7b94d7bed3ff04df8ae1d80a8bbe480c60a5b777705c94",
-  "fetchedAt": "2026-07-26T19:28:45.753Z"
+  "version": "2.0.3",
+  "updatedAt": 1795176182598,
+  "contentHash": "5d24ea7f7b4c4faf4bd7458ad968a76ff349cdf6866a5ae553580137e2862ed6",
+  "fetchedAt": "2026-11-22T15:30:26.260Z"
 }

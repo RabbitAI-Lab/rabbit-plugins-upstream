@@ -1,41 +1,49 @@
-## Description: <br>
-Applies NASA Power of 10 rules for safety-critical verifiable code. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies NASA Power of 10 rules for safety-critical verifiable code
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and code reviewers use this skill to apply higher-rigor safety-critical coding review patterns to financial, medical, data-integrity, and other high-reliability software. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be used to guide changes in safety-critical or high-reliability code where incorrect advice could have meaningful impact. <br>
-Mitigation: Require human review, tests, and domain-specific verification before applying suggested patterns to production code. <br>
-Risk: The referenced external pensive plugin may add agents, hooks, or commands that are not present in this markdown-only skill. <br>
-Mitigation: Review and scan the external plugin separately before installing or enabling it. <br>
+## Use Case:
 
+Developers and engineers use these guidelines to review and improve code where reliability matters, applying rigor in proportion to the consequences of failure.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-safety-critical-patterns) <br>
-- [Pensive plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands] <br>
-**Output Format:** [Markdown guidance with inline code and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; no commands are run by the skill itself.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The security review did not cover two referenced local paths, so the available scan evidence is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the referenced paths and the complete skill before installation.
+
+## Reference(s):
+
+- [Claude Night Market Pensive plugin](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Markdown with code examples and structured review findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Review findings may include rule verdicts, file and line locations, cited source text, issues, and suggested fixes.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
