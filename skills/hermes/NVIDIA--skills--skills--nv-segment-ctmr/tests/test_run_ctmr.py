@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,6 +44,18 @@ def test_build_command_uses_documented_monai_bundle_entrypoint(tmp_path: Path) -
     input_dict = cmd[cmd.index("--input_dict") + 1]
     assert "'image':" in input_dict
     assert "'label_prompt': [3, 14]" in input_dict
+
+
+def test_child_process_env_keeps_runtime_values_and_drops_credentials(monkeypatch) -> None:
+    monkeypatch.setenv("PATH", "/trusted/bin")
+    monkeypatch.setenv("MONAI_DATA_DIRECTORY", "/trusted/monai-cache")
+    monkeypatch.setenv("AWS_SECRET_ACCESS_KEY", "not-forwarded")
+
+    env = run_ctmr._child_process_env()
+
+    assert env["PATH"] == "/trusted/bin"
+    assert env["MONAI_DATA_DIRECTORY"] == "/trusted/monai-cache"
+    assert "AWS_SECRET_ACCESS_KEY" not in env
 
 
 def test_find_output_mask_prefers_upstream_single_image_layout(tmp_path: Path) -> None:

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/research/research-paper-writing",
+  "identifier": "official/research/research-paper-writing",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/research/research-paper-writing",
+  "branch": "main",
+  "pushedAt": "2026-11-22T15:25:25Z",
+  "contentHash": "3e6e27ab13356d4addeebd60205aaaf344fa68594a7f1e8f2442fee3c23b463b",
+  "fetchedAt": "2026-11-22T15:26:30.400Z"
+}

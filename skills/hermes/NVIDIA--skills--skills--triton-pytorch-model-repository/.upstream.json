@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/triton-pytorch-model-repository",
+  "identifier": "NVIDIA/skills/skills/triton-pytorch-model-repository",
+  "repo": "NVIDIA/skills",
+  "path": "skills/triton-pytorch-model-repository",
+  "branch": "main",
+  "pushedAt": "2026-11-20T21:00:07Z",
+  "contentHash": "9295df3d08bd72bb30d8d9dc48522fdce1337d33f8e07bf5616077fa4b34fa98",
+  "fetchedAt": "2026-11-22T15:26:21.997Z"
+}
