@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runpod/runpod-plugins-official/runpod-discovery",
+  "repo": "runpod/runpod-plugins-official",
+  "skillId": "runpod-discovery",
+  "branch": "main",
+  "pushedAt": "2026-11-20T19:21:48Z",
+  "contentHash": "cfa13b04ea470f49e32863b62df2d9e5d45ae5f2c314388c12e7d56ca6bcdf99",
+  "fetchedAt": "2026-11-22T15:28:25.039Z"
+}
