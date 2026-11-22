@@ -1,50 +1,55 @@
-## Description: <br>
-Guides agents through a Founder-Mode Audit for early-stage company decisions involving default-alive math, avoided hard actions, premature scaling, unscalable founder work, and stress patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides early-stage founders through a structured audit of runway, avoided decisions, premature scaling, and one concrete next action.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders, operators, and agents supporting early-stage startups use this skill to structure high-stakes company decisions such as hiring, firing, fundraising, burn reduction, pivoting, and customer discovery. It produces a concise audit that highlights runway status, deferred hard actions, premature scaling, unscalable work, stress patterns, and one next action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may request sensitive company financial, personnel, fundraising, or strategy details. <br>
-Mitigation: Share only necessary information, anonymize confidential details when possible, and follow internal data-handling rules before using company-sensitive inputs. <br>
-Risk: Founder-coaching outputs may influence hiring, firing, fundraising, burn, or pivot decisions. <br>
-Mitigation: Treat outputs as decision support and validate recommendations with appropriate legal, financial, HR, fiduciary, and company-specific review before acting. <br>
+## Use Case:
 
+External founders and startup teams use this skill to examine early-stage company decisions such as hiring, fundraising, burn, customer work, and scaling. It guides a stepwise Founder-Mode Audit and ends with one action to take within seven days.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/founder-mindset) <br>
-- [Founder Mindset metadata](https://www.deciqai.com/s/founder-mindset.json) <br>
-- [Founder Mindset sources](references/sources.md) <br>
-- [Paul Graham's Essays and the YC Portfolio (2005-2024)](examples/paul-graham-essays-yc-portfolio-2005-2024.md) <br>
-- [AI-native founder mode and the tiny high-agency team (2023-2026)](examples/ai-native-founder-mode-tiny-teams-2023-2026.md) <br>
-- [Default Alive or Default Dead?](http://paulgraham.com/aord.html) <br>
-- [Do Things That Don't Scale](http://paulgraham.com/ds.html) <br>
-- [Schlep Blindness](http://paulgraham.com/schlep.html) <br>
-- [Founder Mode](http://paulgraham.com/foundermode.html) <br>
-- [Y Combinator Portfolio](https://www.ycombinator.com/companies) <br>
-- [Introducing ChatGPT](https://openai.com/blog/chatgpt) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Analysis] <br>
-**Output Format:** [Markdown audit with checklist-style fields and concise coaching text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask for company cash, burn, revenue growth, runway, hiring, customer, and personnel context before producing the audit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The security review has medium confidence because one referenced example was only partially inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill and the partially inspected example before relying on or installing it.
+
+## Reference(s):
+
+- [ClawHub founder-mindset release](https://clawhub.ai/deciqai/skills/founder-mindset)
+- [Sources listed by the skill](artifact/references/sources.md)
+- [Paul Graham: Default Alive or Default Dead?](http://paulgraham.com/aord.html)
+- [Paul Graham: Do Things That Don't Scale](http://paulgraham.com/ds.html)
+- [Paul Graham: Schlep Blindness](http://paulgraham.com/schlep.html)
+- [Paul Graham: Founder Mode](http://paulgraham.com/foundermode.html)
+- [Y Combinator company directory](https://www.ycombinator.com/companies)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown audit and stepwise coaching prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Identifies one concrete action for the next seven days; coaching mode pauses for user input between steps.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

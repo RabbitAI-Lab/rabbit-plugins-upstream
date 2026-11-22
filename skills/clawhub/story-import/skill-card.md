@@ -1,47 +1,54 @@
-## Description: <br>
-Story Import turns an existing Chinese-language novel or short story into a structured writing project that can be continued with related story-writing skills. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns an existing novel into a structured writing project for continued writing, routing it through long- or short-form analysis and migration workflows.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and writing-workflow agents use this skill to import an existing manuscript, analyze it by length, and rebuild it as a long-form or short-form project with settings, outlines, tracking files, benchmark references, and continuation-ready context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can copy, create, or overwrite manuscript-derived project files in local writing-project directories. <br>
-Mitigation: Invoke it explicitly, point it only at intended manuscript sources, and review overwrite notices and generated files before continuing the writing workflow. <br>
-Risk: Importing a directory that contains unrelated private material could expose that material to the analysis workflow. <br>
-Mitigation: Use a dedicated manuscript file or clean project directory, and avoid selecting folders that contain unrelated sensitive files. <br>
+## Use Case:
 
+Writers use this skill to turn a completed or in-progress novel into a reusable writing project. It organizes analysis, settings, outlines, manuscript files, and continuity records for follow-on writing.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/worldwonderer/skills/story-import) <br>
-- [Metadata Source](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Length Routing Rules](references/length-routing.md) <br>
-- [Long-Form Structure Mapping](references/structure-mapping-long.md) <br>
-- [Short-Form Structure Mapping](references/structure-mapping-short.md) <br>
-- [Character State Reverse Rules](references/character-state-reverse.md) <br>
-- [State Tracking Protocol](references/state-tracking.md) <br>
-- [Text Format and Structure Rules](references/format-and-structure.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with file paths, project-structure plans, status summaries, and command-style workflow handoffs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces or updates local manuscript-derived project files under directories such as 拆文库/, the book project directory, 对标/, 追踪/, and .active-book.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release evidence) <br>
+Risk: ClawScan marks the skill suspicious because a scanner reports that it may silently delete untracked character Markdown files; scan coverage was incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, review the deletion concern and protect existing character Markdown files, as the security guidance recommends.
+
+## Reference(s):
+
+- [Length routing](artifact/references/length-routing.md)
+- [Long-form structure mapping](artifact/references/structure-mapping-long.md)
+- [Short-form structure mapping](artifact/references/structure-mapping-short.md)
+- [Outline reverse workflow](artifact/references/outline-reverse.md)
+- [Import tracking](artifact/references/import-tracking.md)
+- [ClawHub release page](https://clawhub.ai/worldwonderer/skills/story-import)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Markdown, Guidance]
+
+**Output Format:** [Structured Markdown project files and conversational progress guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates project materials such as analysis, settings, outlines, migrated manuscript content, and (for long-form projects) continuity tracking.]
+
+## Skill Version(s):
+
+1.0.53 (source: server-resolved release metadata; artifact frontmatter reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

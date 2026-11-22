@@ -1,48 +1,55 @@
-## Description: <br>
-Use this skill for VMware compliance auditing, baseline checking, drift detection, remediation suggestions, and reporting across vSphere, ESXi, and NSX environments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audits VMware vSphere, ESXi, and NSX environments against compliance baselines, checks known vulnerabilities and configuration drift, and provides remediation advice.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, platform engineers, and compliance operators use this skill to scan VMware estates against built-in or custom baselines, inspect violations and drift, and prepare remediation advice without directly changing managed VMware resources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The remediation workflow may be mistaken for a reporting-only path even though evidence says it can hand changes to vmware-pilot. <br>
-Mitigation: Use the skill for scans, reports, drift review, and advice; for reporting-only use, avoid vmware-harden apply and route any real changes through normal vmware-pilot approval review. <br>
-Risk: Compliance evidence is stored locally and may contain sensitive posture details about VMware environments. <br>
-Mitigation: Protect the configured Twin DuckDB path and review who can read generated reports, dashboard output, and audit logs. <br>
-Risk: LLM remediation advice can be incomplete, generic, or wrong, especially when the optional Anthropic key is not configured. <br>
-Mitigation: Treat remediation output as a proposal, verify it against the actual violation evidence, and require human review before any change is submitted. <br>
+## Use Case:
 
+Developers and VMware administrators use this skill to scan vSphere, ESXi, and NSX environments for compliance gaps, known vulnerabilities, and configuration drift, then review suggested remediation steps.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-harden) <br>
-- [Project Homepage](https://github.com/zw008/VMware-Harden) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
-- [Cross-Skill Workflows](references/cross-skill-workflows.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and text or JSON report references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference local Twin DuckDB state, MCP tool outputs, web dashboard views, and optional LLM remediation suggestions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.7 (source: server release metadata) <br>
+Risk: The security scan flags the remediation-advisor examples for not clearly warning that compliance context may be sent to an external provider; its scan was partial and some local references were unresolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the unresolved references and the advisor's data handling before installation; check what compliance context would be sent to Anthropic before enabling live advice.
+
+## Reference(s):
+
+- [Project homepage listed in skill metadata](https://github.com/vmware-skills/VMware-Harden)
+- [Capabilities and tool behavior](artifact/references/capabilities.md)
+- [CLI reference](artifact/references/cli-reference.md)
+- [Setup and security guide](artifact/references/setup-guide.md)
+- [Agent guardrails](artifact/references/agent-guardrails.md)
+- [STIG content sync notes](artifact/references/stig-content-sync.md)
+- [MCP result contract](artifact/references/mcp-result-contract.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown reports, JSON results, Shell commands, Configuration guidance, Remediation advice]
+
+**Output Format:** [Markdown and JSON, with command and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results include compliance findings, scan coverage, vulnerability status, and drift details; remediation is advisory.]
+
+## Skill Version(s):
+
+1.20.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "sample_id": "offensive_security-senior-weak",
+  "role_family": "offensive_security",
+  "level": "senior",
+  "variant": "weak",
+  "resume": "# 金样候选人\n13900001234 | gold@example.com\n\n## 个人简介\n授权渗透测试、红队与漏洞管理，6 年经验。在明确授权范围内开展渗透测试、OWASP 验证、漏洞管理和修复复测。\n\n## 工作经历\n### 某安全团队 | 高级 渗透测试 / 红队 / 攻防 | 2019.01 - 2025.12\n- 负责渗透测试和漏洞验证，协助输出测试报告。\n- 参与红队演练和漏洞管理。\n- 使用 OWASP 方法测试 xx 个系统。\n- 优化安全控制覆盖，减少关键偏差。\n\n## 技能\n渗透测试, OWASP, WSTG, MITRE ATT&CK, 漏洞管理, Python\n\n## 教育背景\n### 某大学 | 信息安全 | 本科 | 2014.09 - 2018.06",
+  "jd": "岗位职责：\n1. 负责 渗透测试\n2. 负责 红队\n3. 负责 OWASP\n4. 负责 WSTG\n5. 负责 MITRE ATT&CK\n6. 负责 漏洞管理\n7. 负责 Python\n任职要求：具备真实项目证据，遵守授权与隐私边界。",
+  "expected": {
+    "industry": "cybersecurity",
+    "issue_codes_present": [
+      "weak_claim",
+      "missing_metric",
+      "placeholder",
+      "sensitive_contact"
+    ],
+    "issue_codes_absent": [],
+    "jd_keywords_present": [
+      "渗透测试",
+      "红队",
+      "OWASP",
+      "WSTG",
+      "MITRE ATT&CK",
+      "漏洞管理",
+      "Python"
+    ],
+    "jd_keywords_missing": [],
+    "sensitive_literals": [
+      "13900001234",
+      "gold@example.com"
+    ],
+    "interview_kinds": [
+      "resume_followup",
+      "knowledge",
+      "scenario"
+    ]
+  }
+}

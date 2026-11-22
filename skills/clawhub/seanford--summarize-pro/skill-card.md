@@ -1,40 +1,54 @@
-## Description: <br>
-Summarize Pro helps agents turn long text, articles, documents, meetings, emails, transcripts, books, PDFs, reports, and conversations into concise summaries in formats such as TL;DRs, bullet points, key takeaways, action items, executive summaries, comparisons, translations, and custom-length summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Summarize Pro helps agents summarize long content into formats such as TL;DRs, bullet points, key takeaways, action items, executive summaries, meeting notes, email summaries, comparisons, translated summaries, and custom-length summaries.
 
-## Publisher: <br>
-[seanford](https://clawhub.ai/user/seanford) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[seanford](https://clawhub.ai/user/seanford)
 
-## Use Case: <br>
-External users and developers use this skill to summarize long or complex content into readable formats for review, decisions, follow-up tasks, and saved reference. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local summary history, saved summaries, templates, and usage stats may contain sensitive details from user-provided documents. <br>
-Mitigation: Review or delete ~/.openclaw/summarize-pro/ when clearing local data or before using the skill on shared systems. <br>
-Risk: Summaries can omit context or misstate details if source material is ambiguous, incomplete, or too long for the active model context. <br>
-Mitigation: Review important summaries against the source text before relying on them for decisions. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to convert long text, documents, meetings, emails, reports, conversations, and transcripts into concise summaries and task-oriented extracts. It is suited for local summarization workflows where retaining user preferences, summary history, saved summaries, and templates on the local machine is acceptable.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/seanford/skills/summarize-pro) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Configuration] <br>
-**Output Format:** [Markdown-style text with headings, lists, tables, action items, and word-count statistics; local JSON files for settings, history, saved summaries, and templates when persistence features are used.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Keeps summary history and preferences locally under ~/.openclaw/summarize-pro/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and artifact metadata) <br>
+Risk: The skill automatically keeps local usage history, settings, saved summaries, templates, and summary statistics under ~/.openclaw/summarize-pro/.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid using the skill on highly sensitive text when retained local metadata is unacceptable, and periodically review or delete the local history, saved summaries, settings, and templates files.
+
+Risk: Summaries may omit nuance or introduce misleading emphasis when condensing long or complex source material.
+
+Mitigation: Review summaries against the original source before using them for decisions, publication, compliance, or external communication.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/seanford/skills/summarize-pro)
+- [Publisher profile](https://clawhub.ai/user/seanford)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown and plain text summaries, with local JSON settings and history when management features are used]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports multiple summary styles, language-directed summaries, saved summaries, summary history, usage stats, and custom templates.]
+
+## Skill Version(s):
+
+1.0.0 (source: evidence.release.version and artifact/_meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

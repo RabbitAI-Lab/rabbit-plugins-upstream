@@ -1,45 +1,55 @@
-## Description: <br>
-Official Zernio API reference for scheduling posts across 14 social media platforms. Covers authentication, endpoints, webhooks, and platform-specific features. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Official Zernio API reference for scheduling posts across 15 social media platforms and running paid ads on 7 ad networks. Covers authentication, endpoints, webhooks, ads, and platform-specific features. Use when building with the Zernio Social Media Scheduling API.
 
-## Publisher: <br>
-[mikipalet](https://clawhub.ai/user/mikipalet) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mikipalet](https://clawhub.ai/user/mikipalet)
 
-## Use Case: <br>
-Developers and engineers use this skill to integrate with the Zernio Social Media Scheduling API, including authentication, account connection, post scheduling, media upload, webhooks, analytics, and platform-specific publishing behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Examples can guide live social posting, account connection, webhook configuration, deletes, retries, and bulk uploads. <br>
-Mitigation: Use test accounts where possible and require explicit confirmation before applying examples to real social accounts or production webhooks. <br>
-Risk: API keys, app passwords, bot tokens, and webhook secrets may be exposed if pasted into chats, logs, or source files. <br>
-Mitigation: Keep credentials in environment variables or secret stores, redact them from prompts and logs, and rotate any credential that may have been exposed. <br>
+## Use Case:
 
+External developers use this reference to integrate Zernio's API for social account connections, publishing and scheduling posts, managing ads and messages, and working with analytics, webhooks, and conversion tracking.
 
-## Reference(s): <br>
-- [Zernio API documentation](https://docs.zernio.com) <br>
-- [Zernio website](https://zernio.com) <br>
-- [Zernio dashboard](https://zernio.com/dashboard) <br>
-- [Zernio API keys](https://zernio.com/dashboard/api-keys) <br>
-- [ClawHub skill page](https://clawhub.ai/mikipalet/zernio-api) <br>
-- [Publisher profile](https://clawhub.ai/user/mikipalet) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline curl, TypeScript, Python, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill provides API reference guidance and example requests; it does not execute API calls by itself.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: ClawScan assigns a suspicious review verdict with medium confidence, citing capabilities beyond the stated reference purpose, a mutable installer version, and two partially analyzed files; it does not label the publisher malicious.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation command and the partially analyzed files before use, and pin the package version when practical.
+
+Risk: Examples can perform publishing, messaging, uploads, credential handling, or conversion forwarding to external destinations.
+
+Mitigation: Review the destination and data involved before using an example, especially one that publishes, messages, uploads, or shares credentials.
+
+## Reference(s):
+
+- [Zernio API documentation](https://docs.zernio.com)
+- [Fix conversion tracking with Zernio](https://docs.zernio.com/products/server-side-tracking/fix-with-agent)
+- [Zernio Social Media Scheduling API](https://zernio.com/api/v1)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance with REST endpoint descriptions, JSON payloads, and curl, TypeScript, and Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Examples may include API keys, OAuth credentials, and operations that publish, message, upload, or change tracking configuration.]
+
+## Skill Version(s):
+
+1.1.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

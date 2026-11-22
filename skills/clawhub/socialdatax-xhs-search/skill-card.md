@@ -1,44 +1,50 @@
-## Description: <br>
-用于小红书数据分析、小红书笔记搜索、关键词检索、内容调研、竞品分析和趋势研究。覆盖 Xiaohongshu / XHS / RedNote note search，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于小红书数据分析、小红书笔记搜索、关键词检索、内容调研、竞品分析和趋势研究。覆盖 Xiaohongshu / XHS / RedNote note search，来自社媒数据助手 SocialDataX。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and agent developers use this skill to search Xiaohongshu / XHS / RedNote notes by keyword for content research, competitor analysis, market observation, and trend scanning through SocialDataX. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends XHS search queries and the SOCIALDATAX_API_KEY to SocialDataX. <br>
-Mitigation: Use the skill only with an API key and queries that are appropriate to share with SocialDataX. <br>
-Risk: Returned note_url values may include xsec_token query parameters that are preserved in outputs. <br>
-Mitigation: Review exported, forwarded, or published results before sharing them outside the intended audience. <br>
-Risk: Search results are bounded by requested pages and filters, so they may not represent complete platform coverage. <br>
-Mitigation: Describe results as based on fetched pages and keep visible evidence separate from interpretation. <br>
+## Use Case:
 
+External users and analysts use the skill to search Xiaohongshu, XHS, or RedNote posts by keyword for topic discovery, content planning, competitor research, market observation, and trend scanning.
 
-## Reference(s): <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-xhs-search) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/devinchen2014) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and search-result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search outputs may include full note_url values with xsec_token query parameters and complete 24-character note_id values.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.14 (source: server-resolved release metadata) <br>
+Risk: The release is rated suspicious because of broad activation wording and repeated use of a CLI fetched as the unpinned latest version; scan coverage is partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill and its referenced material and resolve concerns about the activation wording and unpinned CLI before installing; the available scan does not establish that all related material was reviewed.
+
+## Reference(s):
+
+- [SocialDataX API access and skill information](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill release](https://clawhub.ai/devinchen2014/skills/socialdatax-xhs-search)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis]
+
+**Output Format:** [Structured search results and concise Markdown summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Preserve returned note URLs, including xsec_token query parameters, and note IDs exactly; searches are bounded by fetched pages.]
+
+## Skill Version(s):
+
+0.1.25 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

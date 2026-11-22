@@ -1,43 +1,58 @@
-## Description: <br>
-Xiaohongshu Radar lets an agent run Xiaohongshu keyword searches and note-detail lookups for content planning, competitive analysis, KOL screening, and trend research. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reads public Xiaohongshu data, including keyword search results, note details, comments, creator posts, and engagement metrics, and returns structured JSON without logging in or making changes.
 
-## Publisher: <br>
-[um-why](https://clawhub.ai/user/um-why) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[um-why](https://clawhub.ai/user/um-why)
 
-## Use Case: <br>
-External users, marketers, and content analysts use this command-line skill to collect public Xiaohongshu search results and note details for campaign research, content ideation, and structured reporting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms, note URLs, and the GUAIKEI_API_TOKEN are sent to the GuaiKei API service. <br>
-Mitigation: Use only when that data sharing is acceptable, store the token as a protected credential, and rotate it if exposure is suspected. <br>
-Risk: Search and detail results are written to local log files that may contain sensitive queries or returned content. <br>
-Mitigation: Protect or delete the logs directory when outputs contain sensitive research, customer, or campaign information. <br>
-Risk: Some documentation claims are broader than the implemented search and detail commands, and one limitation line names Douyin instead of Xiaohongshu. <br>
-Mitigation: Evaluate the skill as a Xiaohongshu keyword-search and note-detail tool, and verify claims outside those implemented commands before relying on them. <br>
+## Use Case:
 
+Creators, marketers, brand teams, creator managers, and support teams can use the skill to research content topics, monitor public competitor posts, review creator engagement, and summarize public note comments. It supports internal analysis of public Xiaohongshu content and does not access private or account-only material.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/um-why/xiaohongshu-radar) <br>
-- [Publisher profile](https://clawhub.ai/user/um-why) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Files, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [JSON or Markdown command-line output, with JSON log files written locally] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js and GUAIKEI_API_TOKEN; search output supports json or markdown, while detail output is JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: SKILL.md frontmatter, package.json, release metadata) <br>
+Risk: The security assessment reports partial inspection: 30 of 43 components were scanned, and several JavaScript files could not be fully interpreted.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill and its data handling before installation, as advised by the security guidance.
+
+Risk: Search terms or note links and the configured API token are sent to the third-party Guaikei service when a request runs.
+
+Mitigation: Send only the public-data query the user requested, avoid including unrelated sensitive information, and restrict access to GUAIKEI_API_TOKEN.
+
+## Reference(s):
+
+- [Quick start and capability overview](readme.md)
+- [Command options](references/options.md)
+- [Output contract](references/contract.md)
+- [Environment and FAQ](references/faq.md)
+- [Guaikei service](https://www.guaikei.com)
+- [ClawHub skill page](https://clawhub.ai/um-why/skills/xiaohongshu-radar)
+
+## Skill Output:
+
+**Output Type(s):** [JSON]
+
+**Output Format:** [Structured JSON response envelope]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Success, empty, and error responses share an envelope; result shape depends on the command.]
+
+## Skill Version(s):
+
+1.2.3 (source: release metadata, SKILL.md frontmatter, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

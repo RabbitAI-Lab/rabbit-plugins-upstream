@@ -1,47 +1,57 @@
-## Description: <br>
-中国大陆AI保险顾问。为个人和家庭提供全方位的保险咨询、产品对比、方案设计、投保指导。当用户询问保险配置、保险方案、产品对比、重疾险/医疗险/寿险/意外险/储蓄险推荐、保费计算、保障缺口分析、需求分析、核保合规、理赔等问题时使用。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+为中国大陆个人与家庭提供保险需求分析、产品比较、保费估算和方案设计支持。
 
-## Publisher: <br>
-[mnetfairy](https://clawhub.ai/user/mnetfairy) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mnetfairy](https://clawhub.ai/user/mnetfairy)
 
-## Use Case: <br>
-External users in mainland China use this skill to compare insurance products, estimate premiums, analyze coverage gaps, design family protection plans, and receive general underwriting, compliance, and claims guidance. Its outputs are reference guidance and should be checked against official insurer channels before purchase decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China mainland <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be treated as licensed insurance or financial advice. <br>
-Mitigation: Treat outputs as reference guidance, not professional recommendations, and verify suitability with qualified professionals or official insurer channels. <br>
-Risk: Product availability and premium estimates may be outdated or differ from official insurer quotes. <br>
-Mitigation: Verify product availability, policy terms, and premiums through official channels before making purchase decisions. <br>
-Risk: Needs analysis can involve sensitive personal, financial, or health details. <br>
-Mitigation: Share only the minimum information needed for the task and avoid unnecessary personal or health details. <br>
-Risk: The skill may mention one insurance sales company contact in a disclosed purchase-channel context. <br>
-Mitigation: Present that contact only when the user asks about purchase channels and keep the provided disclaimer that it is not a recommendation or endorsement. <br>
+## Use Case:
 
+面向中国大陆有保险需求的个人与家庭，帮助梳理保障需求、比较保险产品、估算保费，并了解投保、健康告知和理赔相关事项。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/insurance-advisor-china) <br>
-- [Insurance knowledge reference](artifact/references/insurance-knowledge.md) <br>
-- [Compliance reference](artifact/references/compliance.md) <br>
-- [Insurance product data](artifact/references/products.json) <br>
+### Deployment Geography for Use:
 
+中国大陆
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Chinese markdown responses, JSON from helper scripts, and inline shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local reference data and calculator scripts; product and premium outputs require official verification.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.400 (source: server release evidence) <br>
+Risk: Coverage details, exclusions, or disease-count claims may be inaccurate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify exclusions and disease-count claims in the insurer's product documents before relying on a recommendation.
+
+Risk: Product information may be outdated or incomplete.
+
+Mitigation: Confirm current availability, premiums, and coverage directly with the insurer before making a decision.
+
+## Reference(s):
+
+- [产品参考库](references/products.json)
+- [保险知识库](references/insurance-knowledge.md)
+- [合规参考](references/compliance.md)
+- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/insurance-advisor-china)
+- [ClawHub security audit](https://clawhub.ai/mnetfairy/skills/insurance-advisor-china/security-audit)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language conversational responses, structured reports, and product comparison tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advice and estimates based on local reference data; confirm current product terms with the insurer.]
+
+## Skill Version(s):
+
+2.4.30 (source: SKILL.md frontmatter; release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

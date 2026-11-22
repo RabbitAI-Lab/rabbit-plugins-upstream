@@ -25,8 +25,8 @@
 --select-text-bg-color --search-select-bg-color --control-text-color --blur-text-color
 ```
 
-数量很少，所以大部分样式还是要写选择器 —— 但**靠 `#write` 的特异性就够，不需要
-`!important`**（base.css 自己都不用）。对照：gallery 上某同类主题用了 397 个。
+数量很少，所以大部分样式还是要写选择器。编辑区靠 `#write` 的特异性，
+不使用 `!important`；导出段覆盖 Typora 的打印基础样式时可使用。对照：gallery 上某同类主题用了 397 个。
 
 ## 选择器地图
 
@@ -56,21 +56,41 @@
 `#outline-content .outline-item` `#md-searchpanel` `.md-search-hit` `.modal-content`
 `.context-menu` `.btn` `::-webkit-scrollbar`
 
-**导出**：只作用于导出的规则包进 `@media print { .typora-export * { -webkit-print-color-adjust: exact } }`
+**导出 / PDF**：整页 = 纸面 mid 色（不是窗口外圈 gutter，否则 PDF 底色和编辑区纸面对不上）；`#write` 同色不浮卡片。导出精装：H2 签名线、
+抬升 fence（纸面 highlight；highlight 与 mid 同为白时退到 shade）、直角表、渐变 HR；`!important` 仅导出段。整表勿整块 `break-inside`
+（改 `tr`）。
 
-## 五个静默失败的坑
+## 七个静默失败的坑
 
 全部踩过，共同点是**不报错、页面照常渲染**：
 
 1. **备份文件变成伪主题**。Typora 把根目录下任何文件名含 `.css` 的都列进主题菜单，
    **连 `.` 开头的隐藏文件也算**。`.theme.css.bak-20260720` 会出现在菜单里，
    用户误选后看到旧版且毫无提示 —— 而且这种错误**会自我掩护**：你以为主题做得差，
-   而不是"我选错主题了"。→ 备份进子目录。
+   而不是"我选错主题了"。→ 如需备份，放进子目录；安装器现在不自动备份。
 2. **切换主题不重载被修改的 CSS**。必须 `Cmd+Q` 完全退出重开。
 3. **`format("truetype-variations")` 被老 Chromium 丢弃**，整条 `src` 作废 → 静默 fallback。
 4. **改名要全链路**：`@font-face` 族名、字体栈族名、字体源目录名、install 的 SLUG。
    任一处没跟上就静默失败，而 ttf 兜底还会掩盖问题（只装上 3/8 个文件也照常显示）。
 5. **px 字号**让偏好面板的字号调节失效，但页面看起来完全正常。
+6. **`var(--bg-color)` 会沿用上一个主题的底色**。Typora 把上一个主题的窗口底色缓存在偏好
+   `backgroundColor`，启动时写进 **body 的 inline style**（`document.body.style.setProperty("--bg-color", ...)`）——
+   body 上的 inline style 压过主题 `:root` 的同名变量。纸面若用 `var(--bg-color)`，headless Chrome
+   全对，Typora 里却是上个主题的颜色（深色主题出现浅纸配浅字）。→ **纸面一律写实色**。
+
+   ⚠️ 这个坑最阴的地方：**症状只在特定条件下出现**。2026-10-21 实际遇到的是
+   「深色主题 + 折叠左侧导航栏 → 整页几乎看不见」——因为只有
+   `body:not(.pin-outline)` 那两条规则用了 `var(--bg-color)`，它们仅在侧栏收起时生效；
+   侧栏展开时走别的背景，正常的。查的时候如果只盯着「深色主题」，会以为是深色配色本身有问题。
+
+   复现：`defaults read abnerworks.Typora` 看 `backgroundColor`（上个主题的缓存底色）
+   与 `theme` / `darkTheme` 是否对得上。修复就是把那两条规则改成实色变量
+   （`paper_canvas_bg` / `paper_gutter_bg`）。构建期已有断言拦这个：
+   「底色用了 var(--bg-color)」。
+7. **`:has()` 不能嵌套**。`a:has(.x):not(:has(> p:not(:has(.x))))` 会被浏览器
+   **整条规则丢弃** —— 页面照常渲染，只是那条规则凭空消失。实测：嵌套写法
+   `parsed=false`，平坦写法 `parsed=true`。→ 用平坦的 `:has(> p:only-child > img:only-child)`
+   这类写法；改完在浏览器里查一眼规则是否真的被解析。
 
 ## 提交到 theme.typora.io
 

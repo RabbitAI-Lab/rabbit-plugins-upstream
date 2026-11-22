@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "sample_id": "security_engineering-junior-clean",
+  "role_family": "security_engineering",
+  "level": "junior",
+  "variant": "clean",
+  "resume": "# 金样候选人\n13900001234 | gold@example.com\n\n## 个人简介\n云安全、基础设施加固与自动化，1 年经验。负责云安全、Kubernetes、Terraform、IAM、零信任和备份恢复控制。\n\n## 工作经历\n### 某安全团队 | 初级 安全工程 / 云与基础设施 | 2024.07 - 2025.12\n- 加固 240 台 Linux 主机和 18 个 Kubernetes 集群，使用 Terraform 管理基线，关键偏差从 60 项降至 5 项。\n- 落地 IAM 最小权限和零信任访问控制，覆盖 12 个业务域，季度权限复核完成率 100%。\n- 建设备份恢复演练与变更管理流程，将核心系统恢复验证时间从 8 小时缩短到 2 小时。\n\n## 技能\n云安全, Kubernetes, Terraform, IAM, 零信任, Linux, 备份恢复\n\n## 教育背景\n### 某大学 | 信息安全 | 本科 | 2020.09 - 2024.06",
+  "jd": "岗位职责：\n1. 负责 云安全\n2. 负责 Kubernetes\n3. 负责 Terraform\n4. 负责 IAM\n5. 负责 零信任\n6. 负责 Linux\n7. 负责 备份恢复\n8. 负责 变更管理\n9. 负责 PKI\n任职要求：具备真实项目证据，遵守授权与隐私边界。",
+  "expected": {
+    "industry": "cybersecurity",
+    "issue_codes_present": [
+      "sensitive_contact"
+    ],
+    "issue_codes_absent": [
+      "weak_claim",
+      "missing_metric",
+      "placeholder"
+    ],
+    "jd_keywords_present": [
+      "云安全",
+      "Kubernetes",
+      "Terraform",
+      "IAM",
+      "零信任",
+      "Linux",
+      "备份恢复"
+    ],
+    "jd_keywords_missing": [
+      "PKI"
+    ],
+    "sensitive_literals": [
+      "13900001234",
+      "gold@example.com"
+    ],
+    "interview_kinds": [
+      "resume_followup",
+      "knowledge",
+      "scenario"
+    ]
+  }
+}

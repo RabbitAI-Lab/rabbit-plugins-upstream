@@ -1,41 +1,50 @@
-## Description: <br>
-Removes the egregore watchdog daemon and its associated files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Removes the egregore watchdog daemon and its associated files
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and operators use this skill to stop automatic egregore session relaunching and remove the user-level watchdog files created by the install-watchdog workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The cleanup commands remove specific user-level service files and watchdog logs. <br>
-Mitigation: Verify the paths belong to the egregore watchdog installation before running the removal commands. <br>
-Risk: Removing the watchdog disables automatic egregore session relaunching. <br>
-Mitigation: Use the skill only when automatic relaunching is no longer wanted or when switching to manual invocation. <br>
+## Use Case:
 
+Developers and project maintainers use this skill when removing the egregore watchdog or ending automatic session relaunching. It guides them through platform-specific service cleanup and verification.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-egregore-uninstall-watchdog) <br>
-- [Egregore plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/egregore) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, Text] <br>
-**Output Format:** [Markdown with bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes platform-specific macOS launchd and Linux systemd cleanup commands plus verification steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter states 1.9.8) <br>
+Risk: The security review rates this release suspicious: the uninstall guidance may leave the watchdog running, and scan coverage is partial with disagreement about whether the removal commands match the described behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the cleanup steps against the installed service before use, then verify removal with the documented launchd or systemd checks.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-egregore-uninstall-watchdog)
+- [Project homepage (skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/egregore)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and platform-specific cleanup guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [macOS launchd and Linux systemd cleanup steps with verification commands]
+
+## Skill Version(s):
+
+1.10.3 (source: artifact frontmatter, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

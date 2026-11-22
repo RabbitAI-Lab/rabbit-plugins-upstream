@@ -1,6 +1,6 @@
 # Wisely Read PPT — PPT/PDF 逐页结构化解析
 
-将演示文稿（PPT）或 PDF 文件逐页解析为结构化的 Word 文档，每页包含整页截图、可编辑文字整理、插图描述（以行内标记形式嵌入）。
+将演示文稿（PPT）或 PDF 文件逐页解析为结构化的 Word 文档：脚本先输出逐页初稿（整页截图、可编辑文字、待识别图片标记），再由执行代理逐页视觉校准并补全插图描述，最终生成带图/无图 DOCX。
 
 ## 适用场景
 
@@ -12,15 +12,17 @@
 - **分层读图策略**：整页截图快速判断结构，高清原图逐字转录复杂信息图
 - **智能图片分类**：辅助配图（logo、照片、报纸版面等）简述即可；核心信息图（图表、流程图、架构图等）逐字转录所有文字和数据
 - **文本组成的图表识别**：SmartArt、形状组合等非嵌入图片元素，正确整理为结构化文字而非误加图片标记
+- **双版本交付**：每次输出带图解析稿，同步生成内容一致、真正无图的 `_无图.docx`（图片类二进制、图片关系和缩略图全部清零；OLE/音频/视频保留），图片解析说明完整保留
+- **过程文件隔离**：检测到 `workspace`（产物目录）时，截图、素材、初稿等工作文件自动写入同级 `temp`，不污染交付目录
 - **支持格式**：PPT（.pptx）和 PDF
 
 ## 使用要求
 
 ### 环境依赖
 
-- **PDF 输入**：仅需 poppler（pdftoppm）
-- **PPT 输入**：需要 LibreOffice 渲染器（soffice）+ xvfb（Linux 无头环境）
-- **Python 依赖**：python-pptx、pdfplumber、pymupdf、python-docx、Pillow、pytesseract（脚本自动安装）
+- **PDF 输入**：首选 poppler（pdftoppm）；缺失或执行失败时自动 fallback 到 pypdfium2
+- **PPT 输入**：需要 LibreOffice 渲染器（soffice）+ xvfb（Linux 无头环境）；WPS COM/pywpsrpc 兜底尚未实现，无 soffice 时请提供 PDF
+- **Python 依赖**：python-pptx、pdfplumber、pypdfium2、python-docx、Pillow
 
 ### 模型要求
 
@@ -50,27 +52,38 @@
 
 ## 目录结构
 
+**存在 `workspace`（产物目录）时：**
+
+```
+<workspace 的父目录>/
+├── workspace/                   ← 只放最终交付物
+│   ├── <文件名>_解析稿.docx
+│   └── <文件名>_解析稿_无图.docx
+└── temp/ 或 .temp/              ← 过程目录
+    ├── ppt-parse-working/       ← 初稿 + 素材
+    └── ppt-parse-final/         ← 复核用副本
+```
+
+**不存在 `workspace` 时：**
+
 ```
 <当前工作区>/
 ├── ppt-parse-working/           ← 工作目录（初稿 + 素材）
-│   └── <任务名>/
-│       ├── 初稿_<文件名>.docx
-│       └── 初稿_<文件名>_assets/
 └── ppt-parse-final/             ← 复核后成品目录
-    └── <文件名>_解析稿.docx
 ```
 
-所有路径相对当前工作区，skill 安装到任何地方都能用。
+所有路径相对当前工作区或过程目录，skill 安装到任何地方都能用。
 
 ## 文件说明
 
 ```
-ppt-pdf-to-docx/
+wisely-read-ppt/
 ├── SKILL.md                        ← 主入口（主代理操作手册）
 ├── reference/
 │   └── subagent-workflow.md        ← 子代理工作手册（阶段一+阶段二）
 └── scripts/
-    └── parse.py                    ← 阶段一素材提取脚本
+    ├── parse.py                    ← 阶段一素材提取脚本
+    └── strip_images.py             ← 生成真正无图版（清理正文/页眉/页脚图片与媒体二进制）
 ```
 
 ## 标记符号系统
@@ -84,3 +97,7 @@ ppt-pdf-to-docx/
 ## License
 
 Proprietary
+
+## 第三方许可提示
+
+本 skill 调用的部分第三方组件有独立许可：pypdfium2 为 BSD-3-Clause / Apache-2.0；Poppler 为 GPL；LibreOffice 为 MPL/LGPL。分发或对外提供服务前，请自行完成许可合规审查。

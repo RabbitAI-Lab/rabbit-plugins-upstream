@@ -1,40 +1,50 @@
-## Description: <br>
-Detects git forge (GitHub/GitLab/Bitbucket) and maps CLI commands cross-platform. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects git forge (GitHub/GitLab/Bitbucket) and maps CLI commands cross-platform.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agents use this skill before running forge-specific commands so they can detect GitHub, GitLab, or Bitbucket projects and choose platform-appropriate issue, pull request, merge request, discussion, and CI/CD commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes examples for commands that can modify remote repositories, issues, pull requests, merge requests, discussions, or collaborator-facing comments. <br>
-Mitigation: Use remote write commands only for user-directed tasks, and verify the target repository, issue, PR/MR, API endpoint, and intended platform before execution. <br>
+## Use Case:
 
+Developers writing workflows or skills for hosted Git repositories use this command reference to choose equivalent forge-specific commands for GitHub, GitLab, and Bitbucket. It is intended for issue, pull request or merge request, review, discussion, and CI/CD workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-git-platform) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
-- [Complete command mapping](modules/command-mapping.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, API calls, Configuration] <br>
-**Output Format:** [Markdown reference guidance with inline shell commands, API examples, and command mapping tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes platform-specific terminology and fallbacks for GitHub, GitLab, and Bitbucket forge workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release metadata) <br>
+Risk: The security assessment flags authenticated GitHub discussion searches and changes as broader than the stated command-mapping purpose; scan coverage is also incomplete because two referenced paths were missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review discussion commands and verify the target repository, intended action, and authentication before running them; inspect the missing paths or obtain a complete scan before relying on scanner coverage.
+
+## Reference(s):
+
+- [Complete Command Mapping](modules/command-mapping.md)
+- [Project homepage listed in skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/leyline)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown command reference with tables and inline shell and API examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Platform support varies by operation; Bitbucket examples use its REST API or web interface, and discussion operations are GitHub-only. Authenticated operations depend on provider credentials and configuration.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

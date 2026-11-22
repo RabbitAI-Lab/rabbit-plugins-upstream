@@ -1,0 +1,23 @@
+{
+  "suite": "skill-improver golden",
+  "version": "1.0.0",
+  "cases": [
+    {"id": "G01", "name": "LICENSE 缺失时生成", "kind": "unit", "fn": "license",
+     "expect": "file", "target": "LICENSE"},
+    {"id": "G02", "name": "已存在 LICENSE 时不覆盖", "kind": "unit", "fn": "license",
+     "pre": "write_license", "expect": "none"},
+    {"id": "G03", "name": "tags 少于 3 时补齐", "kind": "unit", "fn": "tags",
+     "expect": "tags_at_least", "n": 3},
+    {"id": "G04", "name": "无 Triggers 段时追加", "kind": "unit", "fn": "triggers",
+     "expect": "contains", "target": "SKILL.md", "text": "## Triggers"},
+    {"id": "G05", "name": "已有同系列标识时不动", "kind": "unit", "fn": "links",
+     "pre": "write_related", "expect": "none"},
+    {"id": "G06", "name": "缺同系列标识且有兄弟时追加", "kind": "unit", "fn": "links",
+     "expect": "contains", "target": "SKILL.md", "text": "同系列"},
+    {"id": "G07", "name": "文档漂移行被替换且不留参数名", "kind": "unit", "fn": "doc_drift",
+     "expect": "not_contains", "target": "SKILL.md", "text": "--draft"},
+    {"id": "G08", "name": "非技能目录直接拒绝", "kind": "cli", "expect": "exit_nonzero"},
+    {"id": "G09", "name": "新增文件行尾为 LF", "kind": "unit", "fn": "license",
+     "expect": "lf_only", "target": "LICENSE"}
+  ]
+}

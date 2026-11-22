@@ -1,0 +1,9 @@
+{
+  "name": "agent-health-monitor",
+  "slug": "agent-health-monitor",
+  "version": "1.0.0",
+  "description": "Monitors agent health status and detects failures for fault-tolerant agent systems",
+  "author": "jpengcheng523-netizen",
+  "tags": ["agent", "health", "monitoring", "fault-tolerance"],
+  "license": "MIT"
+}

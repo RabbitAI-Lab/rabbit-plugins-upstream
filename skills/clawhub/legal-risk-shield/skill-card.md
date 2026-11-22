@@ -1,42 +1,53 @@
-## Description: <br>
-Legal Risk Shield provides Chinese-language enterprise legal risk and compliance guidance spanning company formation, governance, financing, contracts, market exit, and entrepreneur personal risk. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a lifecycle framework for managing enterprise legal risks, from company formation and governance through financing, contracts, and exit, including founders’ civil, commercial, and criminal compliance risks.
 
-## Publisher: <br>
-[yjkj999999](https://clawhub.ai/user/yjkj999999) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yjkj999999](https://clawhub.ai/user/yjkj999999)
 
-## Use Case: <br>
-Business operators, founders, compliance teams, and advisors use this skill to structure legal-risk reviews and compliance checklists for Chinese enterprise lifecycle, governance, financing, contract, exit, and entrepreneur personal-risk scenarios. Outputs should support issue spotting and preparation, not replace qualified legal advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Legal and compliance guidance can be jurisdiction-specific, time-sensitive, or incomplete for a particular matter. <br>
-Mitigation: Verify current law and have qualified counsel review outputs before relying on them for business, legal, or compliance decisions. <br>
-Risk: The security evidence advises use only in trusted ClawHub/Convex maintainer contexts and careful review of workflows that can affect real users, production data, or public state. <br>
-Mitigation: Install and operate the skill only in trusted maintainer environments, and review high-impact actions before execution. <br>
+## Use Case:
 
+Entrepreneurs, company operators, and compliance teams can use the skill to identify legal risk areas across business operations and founders’ personal affairs, and to prepare focused questions for qualified counsel.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yjkj999999/legal-risk-shield) <br>
-- [Skill source](artifact/SKILL.md) <br>
-- [Artifact README](artifact/README.md) <br>
+### Deployment Geography for Use:
 
+China, with selected U.S. and cross-border legal topics
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown guidance, checklists, tables, and structured legal-risk summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Legal and compliance outputs require jurisdiction-aware human review before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and package.json) <br>
+Risk: Legal rules and deadlines in the material may change or depend on jurisdiction and case facts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the output for issue spotting, verify current rules in the relevant jurisdiction, and consult qualified counsel before acting.
+
+Risk: The skill summarizes legal topics without linking individual claims to source passages.
+
+Mitigation: Check material claims against current official sources and the cited publications before relying on them.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/yjkj999999/skills/legal-risk-shield)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Structured summaries, risk checklists, and practical compliance steps, primarily in Chinese.]
+
+## Skill Version(s):
+
+1.0.1 (source: package.json, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

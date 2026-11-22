@@ -3,6 +3,7 @@
 const path = require('path');
 const os = require('os');
 const fs = require('fs');
+const { execFileSync } = require('child_process');
 const dotenv = require('dotenv');
 
 // Config file locations
@@ -45,7 +46,7 @@ function buildConfig(env, prefix) {
       host: env[`${p}IMAP_HOST`] || '127.0.0.1',
       port: parseInt(env[`${p}IMAP_PORT`]) || 1143,
       user: env[`${p}IMAP_USER`],
-      pass: env[`${p}IMAP_PASS`],
+      pass: resolveSecretRef(env[`${p}IMAP_PASS`]),
       tls: env[`${p}IMAP_TLS`] === 'true',
       rejectUnauthorized: env[`${p}IMAP_REJECT_UNAUTHORIZED`] !== 'false',
       mailbox: env[`${p}IMAP_MAILBOX`] || 'INBOX',
@@ -54,7 +55,7 @@ function buildConfig(env, prefix) {
       host: env[`${p}SMTP_HOST`],
       port: parseInt(env[`${p}SMTP_PORT`]) || 587,
       user: env[`${p}SMTP_USER`],
-      pass: env[`${p}SMTP_PASS`],
+      pass: resolveSecretRef(env[`${p}SMTP_PASS`]),
       secure: env[`${p}SMTP_SECURE`] === 'true',
       from: env[`${p}SMTP_FROM`] || env[`${p}SMTP_USER`],
       rejectUnauthorized: env[`${p}SMTP_REJECT_UNAUTHORIZED`] !== 'false',
@@ -62,6 +63,49 @@ function buildConfig(env, prefix) {
     allowedReadDirs: (env.ALLOWED_READ_DIRS || '').split(',').map(d => d.trim()).filter(Boolean),
     allowedWriteDirs: (env.ALLOWED_WRITE_DIRS || '').split(',').map(d => d.trim()).filter(Boolean),
   };
+}
+
+const secretCache = new Map();
+
+function resolveSecretRef(value) {
+  if (!value || typeof value !== 'string') {
+    return value;
+  }
+
+  const match = value.match(/^passbolt:\/\/([0-9a-f-]+)$/i);
+  if (!match) {
+    return value;
+  }
+
+  const resourceId = match[1];
+  if (secretCache.has(resourceId)) {
+    return secretCache.get(resourceId);
+  }
+
+  let stdout;
+  try {
+    stdout = execFileSync('passbolt', ['get', 'resource', '--id', resourceId, '--json'], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+  } catch (err) {
+    const stderr = err.stderr ? String(err.stderr).trim() : err.message;
+    throw new Error(`Failed to resolve Passbolt secret ${resourceId}: ${stderr}`);
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(stdout);
+  } catch (err) {
+    throw new Error(`Passbolt returned invalid JSON for ${resourceId}: ${err.message}`);
+  }
+
+  if (!parsed.password) {
+    throw new Error(`Passbolt resource ${resourceId} has no password value`);
+  }
+
+  secretCache.set(resourceId, parsed.password);
+  return parsed.password;
 }
 
 // List all configured accounts from .env file

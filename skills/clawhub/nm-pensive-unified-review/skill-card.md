@@ -1,41 +1,54 @@
-## Description: <br>
-Orchestrates multi-domain review across code, architecture, tests, security, and related quality areas in a single pass. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Orchestrates multi-domain review (code, arch, tests, security) in a single pass.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to coordinate comprehensive repository reviews, select relevant review domains, synthesize findings, and produce an integrated action plan before merges or releases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad review-related requests. <br>
-Mitigation: Invoke it only for explicit comprehensive review work or use a narrower review skill when the desired review domain is already known. <br>
-Risk: The skill may run a local backlog-capture write command without asking. <br>
-Mitigation: Require user confirmation before executing write commands and review generated backlog entries before keeping them. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to select and coordinate code, architecture, test, API, security, shell, and Makefile reviews. It helps produce evidence-based findings, prioritized recommendations, and an integrated action plan before changes are merged.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-unified-review) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown review report with findings, evidence, recommendations, and action items] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include prioritized severity levels, evidence appendices, and suggested local commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The security assessment reports system-install and file-changing behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands before running them, isolate repository tests and Make inspection from sensitive files and credentials, and request a preview and approval before applying changes.
+
+Risk: Security analysis coverage is incomplete: 13 of 15 components were scanned, two were partially inspected, and static tool-misuse analysis was degraded.
+
+Mitigation: Treat the scan as partial evidence and manually review the relevant skill files and commands before use.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-pensive-unified-review)
+- [Project homepage listed in skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown, Shell commands]
+
+**Output Format:** [Markdown review reports with findings, evidence, recommendations, and action plans; may include shell or Make command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Single review stream; content varies with detected codebase domains and selected review mode.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,54 @@
-## Description: <br>
-Ai News helps an agent fetch daily news summaries, ranked headlines, category-filtered news, and article details from a third-party news API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+每日新闻获取技能，通过 API 获取每日新闻摘要和详情，支持按日期查询、热点新闻排行和新闻详情阅读。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and agents use this skill to retrieve current or date-specific news, browse ranked headlines, filter by category, and read article details. It is intended for news retrieval and summarization, not database or SQL operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill makes network requests to a third-party news API and grants shell execution for those requests. <br>
-Mitigation: Install only in environments where outbound requests to the listed news API are acceptable, and review generated commands before execution. <br>
-Risk: The release evidence reports unrelated database and SQL trigger text in the skill description. <br>
-Mitigation: Use the skill only for news retrieval until the publisher narrows the description to news-only usage and removes the database and SQL wording. <br>
-Risk: Article details may include HTML content from the upstream API. <br>
-Mitigation: Strip or safely render HTML before presenting article details to users. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Chinese daily news summaries, ranked hot news, category-filtered news, and article details through an agent workflow.
 
-## Reference(s): <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON-style news summaries and article details, with shell commands used for API requests.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include dates, ranked headlines, categories, article summaries, article body text, and API error guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill combines a news-fetching purpose with unrelated database, file-writing, and command-execution claims.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installation and use it only for the documented news retrieval workflow unless the publisher narrows and documents the extra scope.
+
+Risk: The skill relies on shell-based API calls.
+
+Mitigation: Run in an agent environment where shell execution is reviewed or sandboxed, and inspect API commands before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/ai-news)
+- [Daily news API endpoint](https://api.cjiot.cc/api/v1/daily?date={当前日期})
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON-style responses with API-derived news summaries and details]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include article titles, categories, heat rankings, publication times, summaries, detail text, and troubleshooting guidance.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

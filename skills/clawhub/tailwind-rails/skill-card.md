@@ -1,40 +1,51 @@
-## Description: <br>
-Tailwind CSS component patterns for Ruby on Rails ERB views. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tailwind CSS component patterns for Ruby on Rails ERB views. Use when building UI components in Rails, creating shared partials, implementing dark mode, writing badge/button/card/table components, setting up a consistent design system, or checking Tailwind markup for contrast and accessibility problems. Trigger phrases: tailwind rails, rails UI components, ERB tailwind, rails dark mode, tailwind badge, tailwind button rails, shared partials tailwind, tailwind hidden class, tailwind contrast.
 
-## Publisher: <br>
-[djc00p](https://clawhub.ai/user/djc00p) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[djc00p](https://clawhub.ai/user/djc00p)
 
-## Use Case: <br>
-Developers building Ruby on Rails views use this skill to create consistent Tailwind CSS components, shared ERB partials, responsive layouts, and dark-mode-ready UI patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated ERB, helper, route, or JavaScript snippets may not fit the target Rails app's authorization, accessibility, or Tailwind setup. <br>
-Mitigation: Review and test snippets in the app before applying them, including authorization behavior, keyboard access, contrast, and Tailwind dark-mode configuration. <br>
+## Use Case:
 
+Developers use this skill to build reusable Tailwind CSS components and responsive, dark-mode-ready interfaces in Rails ERB views. It also provides guidance for checking contrast, keyboard focus, and accessible names.
 
-## Reference(s): <br>
-- [Tailwind Components for Rails](references/components.md) <br>
-- [Dark Mode & Responsive Patterns](references/dark-mode-responsive.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/djc00p/tailwind-rails) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown with Ruby, ERB, JavaScript, and text code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Provides Rails helper snippets, ERB partial patterns, Tailwind class guidance, dark-mode setup, and responsive UI examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The security assessment reports one accessibility guidance defect, and its scan was partial because three referenced paths could not be resolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the accessibility guidance for the intended use and verify responsive behavior with assistive technology before relying on it.
+
+## Reference(s):
+
+- [Components](references/components.md)
+- [Dark Mode & Responsive Patterns](references/dark-mode-responsive.md)
+- [ClawHub skill release](https://clawhub.ai/djc00p/skills/tailwind-rails)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with Ruby, ERB, JavaScript, and Tailwind code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reusable component patterns and accessibility recommendations]
+
+## Skill Version(s):
+
+1.0.4 (source: SKILL.md frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

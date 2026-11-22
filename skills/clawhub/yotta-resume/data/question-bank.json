@@ -1,0 +1,4768 @@
+{
+  "schema_version": "1.0",
+  "contract_version": "1.0",
+  "bank_version": "0.2.0",
+  "generated_at": "2026-11-22",
+  "questions": [
+    {
+      "question_id": "sec-soc-knowledge-001",
+      "role_family": "soc",
+      "level": "junior",
+      "dimension": "告警分诊与优先级",
+      "kind": "knowledge",
+      "prompt": "请解释“登录失败告警的上下文关联和资产优先级”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "2ea5071b09f49208981d7235ef377a15fdfe81a299311a2088d85b7feae65099"
+    },
+    {
+      "question_id": "sec-soc-knowledge-002",
+      "role_family": "soc",
+      "level": "junior",
+      "dimension": "告警降噪",
+      "kind": "knowledge",
+      "prompt": "请解释“重复告警降噪并验证漏报风险”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "214a22c38f8ff83d46b5cdb85df9b84e3a7cd8549acb097c7ae086e97ad7a04c"
+    },
+    {
+      "question_id": "sec-soc-knowledge-003",
+      "role_family": "soc",
+      "level": "junior",
+      "dimension": "检测工程",
+      "kind": "knowledge",
+      "prompt": "请解释“SIEM 规则调优、灰度和回滚”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "ec63e41ec40d618217fbbc5c5318678034c69301e6c250a28fd8038d16583211"
+    },
+    {
+      "question_id": "sec-soc-knowledge-004",
+      "role_family": "soc",
+      "level": "junior",
+      "dimension": "端点检测",
+      "kind": "knowledge",
+      "prompt": "请解释“EDR 告警分诊和隔离建议”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "1a42a97b2886490bfed831c0b750a8074ad6429b79c704421f9d8d7807c676f6"
+    },
+    {
+      "question_id": "sec-soc-knowledge-005",
+      "role_family": "soc",
+      "level": "junior",
+      "dimension": "威胁情报",
+      "kind": "knowledge",
+      "prompt": "请解释“情报命中的上下文验证和误报确认”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "a9bfb593dabb15dddf6456185e28bca4d66bc17688199870b62256b0cfaa9e7e"
+    },
+    {
+      "question_id": "sec-soc-knowledge-006",
+      "role_family": "soc",
+      "level": "mid",
+      "dimension": "ATT&CK 映射",
+      "kind": "knowledge",
+      "prompt": "请围绕“技术映射、证据边界和置信度表达”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "c207362d6e30e2bc83d2f339f09af47ea48d110b03f34205b453127bac9693a1"
+    },
+    {
+      "question_id": "sec-soc-knowledge-007",
+      "role_family": "soc",
+      "level": "mid",
+      "dimension": "横向移动",
+      "kind": "knowledge",
+      "prompt": "请围绕“横向移动线索的验证和升级”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "7b59bf4d1dd1d59c21f830599cdfad614b1fb6a5ae7f4f128237cd166c555328"
+    },
+    {
+      "question_id": "sec-soc-knowledge-008",
+      "role_family": "soc",
+      "level": "mid",
+      "dimension": "账号行为",
+      "kind": "knowledge",
+      "prompt": "请围绕“异常账号行为与权限使用核验”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "dabde96c0b1f2b16433ad8b8041703631dc063424d21cfa09ca78e742a3d669f"
+    },
+    {
+      "question_id": "sec-soc-knowledge-009",
+      "role_family": "soc",
+      "level": "mid",
+      "dimension": "恶意文件",
+      "kind": "knowledge",
+      "prompt": "请围绕“恶意文件告警的初筛和证据保全”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "f44d7c6873f961fd2c7996debc3d8551e6d4d11e6cff8b0fa3798266d6dbe38a"
+    },
+    {
+      "question_id": "sec-soc-knowledge-010",
+      "role_family": "soc",
+      "level": "mid",
+      "dimension": "网络流量",
+      "kind": "knowledge",
+      "prompt": "请围绕“流量异常与业务基线的区分”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "07ba186b40c9dbafc69860f1d9fd82a5b10eac0622d8edaae75352927f1f756d"
+    },
+    {
+      "question_id": "sec-soc-knowledge-011",
+      "role_family": "soc",
+      "level": "senior",
+      "dimension": "漏洞利用迹象",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“漏洞告警与真实利用迹象的区分”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "3fdda8a7cc54fc4aeeda00560405126ee7558fb3cb3d084f3a99a29342312ae1"
+    },
+    {
+      "question_id": "sec-soc-knowledge-012",
+      "role_family": "soc",
+      "level": "senior",
+      "dimension": "邮件安全",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“邮件告警、用户影响范围和处置闭环”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "ef4e1eca006d7717b4b5552c2e917fe3f62ea6b72b67f8c65ea8843f777b0064"
+    },
+    {
+      "question_id": "sec-soc-knowledge-013",
+      "role_family": "soc",
+      "level": "senior",
+      "dimension": "云审计",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“云审计日志异常的关联分析”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "5d1d42c81034b33ad9d998fe5cb63e30a49679d1ae8023ebdc4c7d3e4f03f06f"
+    },
+    {
+      "question_id": "sec-soc-knowledge-014",
+      "role_family": "soc",
+      "level": "senior",
+      "dimension": "事件升级",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“事件升级、值班交接和信息完整性”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "e5fa870925e6e266da1b6138997747c6e0a3175b21b9b8f8d5f5e5ec0eadabb7"
+    },
+    {
+      "question_id": "sec-soc-knowledge-015",
+      "role_family": "soc",
+      "level": "senior",
+      "dimension": "队列治理",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“告警队列积压和处置时效治理”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "4bc5faabe8dcbbd0e6909a69f299be35503b4699a6aa7073a7b775993c0f41e1"
+    },
+    {
+      "question_id": "sec-soc-knowledge-016",
+      "role_family": "soc",
+      "level": "lead",
+      "dimension": "规则上线",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“检测规则上线前的测试和回滚”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "fb832b1a13f8e419337ef5edb76b49a12acff4d3feedfcbbe0464cf0199216ae"
+    },
+    {
+      "question_id": "sec-soc-knowledge-017",
+      "role_family": "soc",
+      "level": "lead",
+      "dimension": "覆盖评估",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“检测覆盖缺口和残余风险表达”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "7c9e840e0edaa570c5da00c79fb8e6ceedb0fae698bcbad732ab36b5e9f86137"
+    },
+    {
+      "question_id": "sec-soc-knowledge-018",
+      "role_family": "soc",
+      "level": "lead",
+      "dimension": "误报复核",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“误报样本复核和知识沉淀”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "23e9956c4b8e0b5f74ed84b64f2c249c8a583ed4628beda8c56665c1685bab0d"
+    },
+    {
+      "question_id": "sec-soc-knowledge-019",
+      "role_family": "soc",
+      "level": "lead",
+      "dimension": "运营指标",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“SOC 运营指标和质量指标设计”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "3eaaedfbc9fe920abdbabe5037be663edebcc99cbb96ffcb373b3f7d8f2b8b9d"
+    },
+    {
+      "question_id": "sec-soc-knowledge-020",
+      "role_family": "soc",
+      "level": "lead",
+      "dimension": "值班质量",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“值班复盘、交接质量和持续改进”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "d9bd4fa9f8697129961909a756b6b8d7b3920dc478192455dee0ec61ec26a45e"
+    },
+    {
+      "question_id": "sec-soc-resume-001",
+      "role_family": "soc",
+      "level": "junior",
+      "dimension": "告警处置规模",
+      "kind": "resume_followup",
+      "prompt": "请把简历里的告警处置经历改写成包含时间窗、告警规模、个人职责、研判方法和结果的证据句。",
+      "expected_evidence": [
+        "时间窗",
+        "告警规模",
+        "个人职责",
+        "研判方法",
+        "结果"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "fe5918d10db364f7fd93981539a982fb01aad114c1a8cbbdeb4120c6f4d3c86f"
+    },
+    {
+      "question_id": "sec-soc-resume-002",
+      "role_family": "soc",
+      "level": "mid",
+      "dimension": "误报治理",
+      "kind": "resume_followup",
+      "prompt": "请说明你实际参与过的一次误报治理：原规则、样本分层、改后效果和漏报复核证据。",
+      "expected_evidence": [
+        "原规则",
+        "样本分层",
+        "改后效果",
+        "漏报复核"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "5615b0bdc3c387f80cccf51de95f94e315acaa52c4f5623379715b7b22d2000b"
+    },
+    {
+      "question_id": "sec-soc-resume-003",
+      "role_family": "soc",
+      "level": "mid",
+      "dimension": "工具与规则",
+      "kind": "resume_followup",
+      "prompt": "请区分你使用过、配置过和独立设计过的 SIEM / EDR 能力，并各举一个证据。",
+      "expected_evidence": [
+        "工具范围",
+        "配置范围",
+        "设计责任",
+        "证据"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "ca6e2e0f443cb445093a3ff216a738b5357a9a8f1b41fe8a5637d4d512db7134"
+    },
+    {
+      "question_id": "sec-soc-resume-004",
+      "role_family": "soc",
+      "level": "senior",
+      "dimension": "升级协作",
+      "kind": "resume_followup",
+      "prompt": "请说明一次你发现高风险线索后的升级对象、时间、证据和后续结果。",
+      "expected_evidence": [
+        "线索",
+        "升级时间",
+        "升级对象",
+        "证据",
+        "结果"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "abf53c0443c722a189633d4de5c513b7699fad12a9768ea86b1b537931e07bf5"
+    },
+    {
+      "question_id": "sec-soc-resume-005",
+      "role_family": "soc",
+      "level": "lead",
+      "dimension": "运营复盘",
+      "kind": "resume_followup",
+      "prompt": "请说明一次值班复盘如何改变了规则、流程或团队协作，并给出可验证结果。",
+      "expected_evidence": [
+        "复盘问题",
+        "改进动作",
+        "责任边界",
+        "验证结果"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "8d3c0163381e93e34c79016512e054db19dfdc3b7b5354abcd4e73e98dcb60a7"
+    },
+    {
+      "question_id": "sec-soc-scenario-001",
+      "role_family": "soc",
+      "level": "mid",
+      "dimension": "误报治理",
+      "kind": "scenario",
+      "prompt": "某条高价值规则每天产生大量重复告警，但真实事件仍混在其中。请设计降噪验证方案，说明基线、样本分层、漏报复核和回滚条件。",
+      "expected_evidence": [
+        "基线",
+        "样本分层",
+        "漏报复核",
+        "回滚条件"
+      ],
+      "followups": [
+        "你如何证明告警数量下降不是靠放宽规则掩盖风险？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 90,
+      "freshness_label": "current",
+      "content_hash": "5e32d856bb05704d72892339c973eb161f5079038e77d7d5278098ff2f9fca7c"
+    },
+    {
+      "question_id": "sec-soc-scenario-002",
+      "role_family": "soc",
+      "level": "senior",
+      "dimension": "跨源关联",
+      "kind": "scenario",
+      "prompt": "登录失败、EDR 告警和威胁情报同时命中同一资产。请说明分诊顺序、证据关联、升级条件和交接内容。",
+      "expected_evidence": [
+        "资产重要性",
+        "跨源证据",
+        "升级条件",
+        "交接内容"
+      ],
+      "followups": [
+        "如果资产归属未知，你会如何避免误判和越权操作？"
+      ],
+      "answer_boundary": "只讨论授权范围内的防御监测、分诊和验证，不提供未授权攻击步骤。",
+      "source_refs": [
+        "nist-nice-2-2-0",
+        "nist-csf-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 90,
+      "freshness_label": "current",
+      "content_hash": "9ce655bd83fd125fea0e69f2bc800c6631c7b13710f76c8a47b6d7bc9b72f390"
+    },
+    {
+      "question_id": "sec-ir-knowledge-001",
+      "role_family": "incident_response",
+      "level": "junior",
+      "dimension": "事件分级",
+      "kind": "knowledge",
+      "prompt": "请解释“事件分级和响应启动条件”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "37bff629d24ca286fca2d38ffd863145f3116e242b5c96b1a1bb41bc2ef6e4cf"
+    },
+    {
+      "question_id": "sec-ir-knowledge-002",
+      "role_family": "incident_response",
+      "level": "junior",
+      "dimension": "证据链",
+      "kind": "knowledge",
+      "prompt": "请解释“证据保全、时间线和完整性校验”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "8b8b827ca128f5b5231f715b84957c286ecc36b87f1768cd697cf62310ad88bd"
+    },
+    {
+      "question_id": "sec-ir-knowledge-003",
+      "role_family": "incident_response",
+      "level": "junior",
+      "dimension": "主机隔离",
+      "kind": "knowledge",
+      "prompt": "请解释“主机隔离决策和业务影响控制”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "cd206bd32288ae2e24646f917f91c0525a51144c4707d4382d456f7b4c778d32"
+    },
+    {
+      "question_id": "sec-ir-knowledge-004",
+      "role_family": "incident_response",
+      "level": "junior",
+      "dimension": "账号处置",
+      "kind": "knowledge",
+      "prompt": "请解释“账号禁用、会话失效和恢复条件”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "325e883c4d47127458ae993ede091a77ea2674d0a14b77d0be1bfeafbd31bd3c"
+    },
+    {
+      "question_id": "sec-ir-knowledge-005",
+      "role_family": "incident_response",
+      "level": "junior",
+      "dimension": "恶意进程",
+      "kind": "knowledge",
+      "prompt": "请解释“恶意进程处置前后的证据顺序”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "5c054514dd76988c29a7b07d66d3b2dd52662cec2523946e0c39593d5841bce8"
+    },
+    {
+      "question_id": "sec-ir-knowledge-006",
+      "role_family": "incident_response",
+      "level": "mid",
+      "dimension": "网络遏制",
+      "kind": "knowledge",
+      "prompt": "请围绕“网络遏制、分段和业务连续性”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "2e696e9c5442f8aa45a68204c5b673ced0a241efa41927d81cb5f9b35acc8676"
+    },
+    {
+      "question_id": "sec-ir-knowledge-007",
+      "role_family": "incident_response",
+      "level": "mid",
+      "dimension": "勒索响应",
+      "kind": "knowledge",
+      "prompt": "请围绕“勒索事件的范围确认、隔离和恢复”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "fac2f51980070da6db1f4da9e7546a344ebc30dae05eae940b45f9e5f790ee72"
+    },
+    {
+      "question_id": "sec-ir-knowledge-008",
+      "role_family": "incident_response",
+      "level": "mid",
+      "dimension": "供应链事件",
+      "kind": "knowledge",
+      "prompt": "请围绕“供应链事件的依赖盘点和影响评估”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "6ea1d529c9014a9589ae133f41c75bc9eeabf6c249b5d3fb96b0d753ab09f14a"
+    },
+    {
+      "question_id": "sec-ir-knowledge-009",
+      "role_family": "incident_response",
+      "level": "mid",
+      "dimension": "云凭证泄露",
+      "kind": "knowledge",
+      "prompt": "请围绕“云凭证泄露的失效、审计和影响核验”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "f6c3268ce6e5758909a7cc2eebda804938867b904d57a376db7128717cd39e39"
+    },
+    {
+      "question_id": "sec-ir-knowledge-010",
+      "role_family": "incident_response",
+      "level": "mid",
+      "dimension": "数据泄露",
+      "kind": "knowledge",
+      "prompt": "请围绕“数据泄露事件的范围评估和证据边界”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "8ed669e1cfad34091b958256fc23578e06f7c231177c4ac027d7831ed0e78199"
+    },
+    {
+      "question_id": "sec-ir-knowledge-011",
+      "role_family": "incident_response",
+      "level": "senior",
+      "dimension": "取证镜像",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“取证镜像、哈希校验和保管链”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "efc045dc4ec85edee39be346e4aa936c7699ccfe3226bde2bb80aa38e5f87f06"
+    },
+    {
+      "question_id": "sec-ir-knowledge-012",
+      "role_family": "incident_response",
+      "level": "senior",
+      "dimension": "日志留存",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“日志留存、时钟一致性和证据链”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "f0d270131dffa1a1d91f2593902ede15b8d0eb58fb598ba2d38f62c2bbbd03cd"
+    },
+    {
+      "question_id": "sec-ir-knowledge-013",
+      "role_family": "incident_response",
+      "level": "senior",
+      "dimension": "业务恢复",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“业务恢复条件、验证和残余风险”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "49489da68baefab5fb96da69bdf46a704945ca8f6b94992f0564ba7d59a749ac"
+    },
+    {
+      "question_id": "sec-ir-knowledge-014",
+      "role_family": "incident_response",
+      "level": "senior",
+      "dimension": "响应指标",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“MTTD、MTTR 和处置质量复盘”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "21fedc82e389a56a4baa6b9077340b4f23da18a4f7b86bdc6179dbdb6458b1d6"
+    },
+    {
+      "question_id": "sec-ir-knowledge-015",
+      "role_family": "incident_response",
+      "level": "senior",
+      "dimension": "根因分析",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“根因分析、纠正措施和复发防护”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "c28c9880806e6a4cd44c0ccee847fbc30a93e32ba6ae7c16c09586b9377b98d1"
+    },
+    {
+      "question_id": "sec-ir-knowledge-016",
+      "role_family": "incident_response",
+      "level": "lead",
+      "dimension": "指挥升级",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“跨团队指挥、升级和风险决策”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "7ed0690547b38ed0b01a2348ef2633ee9e0dfab7a2786be98601e32201fa9895"
+    },
+    {
+      "question_id": "sec-ir-knowledge-017",
+      "role_family": "incident_response",
+      "level": "lead",
+      "dimension": "外部通报",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“外部通报、法务协作和披露边界”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "e9d63ca7e73b197a58fc78763a5ddbdd28372700be1e1a22c5e995aeee7aea32"
+    },
+    {
+      "question_id": "sec-ir-knowledge-018",
+      "role_family": "incident_response",
+      "level": "lead",
+      "dimension": "对外沟通",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“证据脱敏、事实口径和沟通审批”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "baf09a482b2d5dc30d133ef580ee2263862a8adcc0475cb34209e8abb6a0650a"
+    },
+    {
+      "question_id": "sec-ir-knowledge-019",
+      "role_family": "incident_response",
+      "level": "lead",
+      "dimension": "演练设计",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“桌面演练、评分锚点和改进闭环”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "f39cf0be2626775bacb9c434112d65a4e31c32e4d13f08750ea37f4c3287fd71"
+    },
+    {
+      "question_id": "sec-ir-knowledge-020",
+      "role_family": "incident_response",
+      "level": "lead",
+      "dimension": "手册维护",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“响应手册的变更、演练和版本治理”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "1ce9a25ec701eea4a4ddbb1eaacd1fda20020a2ab378eff507867efd71948cb6"
+    },
+    {
+      "question_id": "sec-ir-resume-001",
+      "role_family": "incident_response",
+      "level": "junior",
+      "dimension": "事件时间线",
+      "kind": "resume_followup",
+      "prompt": "请说明一次应急事件的发现时间、确认时间、遏制时间和恢复时间，不能只写“及时处理”。",
+      "expected_evidence": [
+        "时间线",
+        "事件类型",
+        "个人职责",
+        "遏制动作"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "833d1c593285ae5b7f0179241b695013e35d4b6d9d42736db881234441ed292b"
+    },
+    {
+      "question_id": "sec-ir-resume-002",
+      "role_family": "incident_response",
+      "level": "mid",
+      "dimension": "证据保全",
+      "kind": "resume_followup",
+      "prompt": "请说明你在响应中保全了哪些证据、如何保证完整性，以及哪些细节已脱敏。",
+      "expected_evidence": [
+        "证据类型",
+        "完整性方法",
+        "保管链",
+        "脱敏边界"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "e80d1bfb5cb61820fea1f3b2882db6872960f9fecc10523ca574c95b2ba18615"
+    },
+    {
+      "question_id": "sec-ir-resume-003",
+      "role_family": "incident_response",
+      "level": "mid",
+      "dimension": "遏制决策",
+      "kind": "resume_followup",
+      "prompt": "请说明一次隔离或断网决策的业务影响、批准人和回滚条件。",
+      "expected_evidence": [
+        "影响范围",
+        "批准人",
+        "遏制动作",
+        "回滚条件"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "10749578fbde678c8abfbd273058967573c6123ec9e5a0b3d63beb4508718f55"
+    },
+    {
+      "question_id": "sec-ir-resume-004",
+      "role_family": "incident_response",
+      "level": "senior",
+      "dimension": "恢复验证",
+      "kind": "resume_followup",
+      "prompt": "请说明事件恢复后如何验证业务、安全和数据完整性，而不是只看服务恢复。",
+      "expected_evidence": [
+        "业务验证",
+        "安全验证",
+        "数据验证",
+        "残余风险"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "0d8871e287032a5b362c99542a70fbc65a996273f80cbeacb22049f3488cf005"
+    },
+    {
+      "question_id": "sec-ir-resume-005",
+      "role_family": "incident_response",
+      "level": "lead",
+      "dimension": "整改闭环",
+      "kind": "resume_followup",
+      "prompt": "请把“完成复盘”改写成问题、根因、整改责任人、完成时间和复发验证证据。",
+      "expected_evidence": [
+        "问题",
+        "根因",
+        "责任人",
+        "完成时间",
+        "复发验证"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "7d1580ccaad0bd39e37c5bcf7cb569bbfb3cdebb68e777eabaf7e7046d671337"
+    },
+    {
+      "question_id": "sec-ir-scenario-001",
+      "role_family": "incident_response",
+      "level": "mid",
+      "dimension": "遏制取舍",
+      "kind": "scenario",
+      "prompt": "一起疑似横向移动事件中，关键业务主机尚未确认失陷。请说明是否隔离、批准链、证据保全和恢复条件。",
+      "expected_evidence": [
+        "影响范围",
+        "证据强度",
+        "业务依赖",
+        "批准链",
+        "恢复条件"
+      ],
+      "followups": [
+        "如果业务方要求立即恢复，你如何记录风险决策？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 90,
+      "freshness_label": "current",
+      "content_hash": "10d196e3c612b7dc75133133fbc88a5f4a28a57da39a0faa853691b8f64bb962"
+    },
+    {
+      "question_id": "sec-ir-scenario-002",
+      "role_family": "incident_response",
+      "level": "senior",
+      "dimension": "云凭证泄露",
+      "kind": "scenario",
+      "prompt": "发现云访问密钥可能泄露，但尚不确定是否被使用。请设计失效、审计、影响评估和客户沟通流程。",
+      "expected_evidence": [
+        "失效顺序",
+        "审计范围",
+        "影响评估",
+        "沟通边界"
+      ],
+      "followups": [
+        "你如何区分密钥泄露事实与对业务影响的推断？"
+      ],
+      "answer_boundary": "只讨论授权事件响应、取证和恢复，不指导未授权入侵。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 90,
+      "freshness_label": "current",
+      "content_hash": "53704dd148ee7a03e4ef97bf4a0c5783f164a9a0f156077a2f7244140d831fdf"
+    },
+    {
+      "question_id": "sec-off-knowledge-001",
+      "role_family": "offensive_security",
+      "level": "junior",
+      "dimension": "授权边界",
+      "kind": "knowledge",
+      "prompt": "请解释“授权书、测试范围和责任主体”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "bf8cd493ba457244dfd1c4772521f62a0156d988d75c89e8a376a2a0bfa4f380"
+    },
+    {
+      "question_id": "sec-off-knowledge-002",
+      "role_family": "offensive_security",
+      "level": "junior",
+      "dimension": "时间窗口",
+      "kind": "knowledge",
+      "prompt": "请解释“测试时间窗、禁止动作和应急联系人”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "9f04ef33514a17d0c39ea5b9bdab050d648c2b52f51fbb9d2b280662a6b36723"
+    },
+    {
+      "question_id": "sec-off-knowledge-003",
+      "role_family": "offensive_security",
+      "level": "junior",
+      "dimension": "资产确认",
+      "kind": "knowledge",
+      "prompt": "请解释“网络边界、域名和合作方资产确认”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "7f2f032a0b6893153a84f376a97a1ddbac20c14faa1da3275ba58394035aad45"
+    },
+    {
+      "question_id": "sec-off-knowledge-004",
+      "role_family": "offensive_security",
+      "level": "junior",
+      "dimension": "最小验证",
+      "kind": "knowledge",
+      "prompt": "请解释“漏洞验证的最小影响和停止条件”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "9801f092880e58c7c234efc7913f9255dbf040e34c21eb4eacb1320d327ec3e7"
+    },
+    {
+      "question_id": "sec-off-knowledge-005",
+      "role_family": "offensive_security",
+      "level": "junior",
+      "dimension": "证据复现",
+      "kind": "knowledge",
+      "prompt": "请解释“复现步骤、证据材料和可重复性”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "7fa48797bca4267cb231d521fb83333c0b94d36fc162e45b2161a947c300e02e"
+    },
+    {
+      "question_id": "sec-off-knowledge-006",
+      "role_family": "offensive_security",
+      "level": "mid",
+      "dimension": "数据风险",
+      "kind": "knowledge",
+      "prompt": "请围绕“可能写入业务数据时的风险闸门”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "79bc059e138c803931b7c99dfc8c112fb31f22b982bbc8336b56fabce4f353de"
+    },
+    {
+      "question_id": "sec-off-knowledge-007",
+      "role_family": "offensive_security",
+      "level": "mid",
+      "dimension": "凭据处理",
+      "kind": "knowledge",
+      "prompt": "请围绕“凭据发现、脱敏和敏感信息保管”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "b6f15cad8a3c4821524918a8289bfd7f978c41266fe88e6a5786744347a28c07"
+    },
+    {
+      "question_id": "sec-off-knowledge-008",
+      "role_family": "offensive_security",
+      "level": "mid",
+      "dimension": "横向验证",
+      "kind": "knowledge",
+      "prompt": "请围绕“横向移动验证的授权和影响边界”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "398937bb05a9023a453751e0b8d931b1dd81177e9d89e996cd22c4afd1dfc84c"
+    },
+    {
+      "question_id": "sec-off-knowledge-009",
+      "role_family": "offensive_security",
+      "level": "mid",
+      "dimension": "权限提升",
+      "kind": "knowledge",
+      "prompt": "请围绕“权限提升验证的边界和证据要求”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "da42e455c925af906fa3af8e8b77826aef93dc016a1005a63a03a5418a18a686"
+    },
+    {
+      "question_id": "sec-off-knowledge-010",
+      "role_family": "offensive_security",
+      "level": "mid",
+      "dimension": "持久化测试",
+      "kind": "knowledge",
+      "prompt": "请围绕“持久化测试的专项授权和清理计划”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "7e8712b924281fcc6e1037b94730fbac3842f2786eafbd0a2f4cc81d61775d2e"
+    },
+    {
+      "question_id": "sec-off-knowledge-011",
+      "role_family": "offensive_security",
+      "level": "senior",
+      "dimension": "后渗透证据",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“后渗透阶段的证据保全和范围控制”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "3a0a21067dbb8bde35450f650139b9c2342a1c8e239ea0ba4db18b36729e5399"
+    },
+    {
+      "question_id": "sec-off-knowledge-012",
+      "role_family": "offensive_security",
+      "level": "senior",
+      "dimension": "漏洞评级",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“漏洞评级、业务影响和修复优先级”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "285dd436d4c1896499bcfdc24e8f5448ad25fc94da7de67252ac62b42c49c255"
+    },
+    {
+      "question_id": "sec-off-knowledge-013",
+      "role_family": "offensive_security",
+      "level": "senior",
+      "dimension": "报告撰写",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“测试报告、复现证据和修复建议”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "743e7d3828da51a025cad8d3a614eb007fad90d6fe793d39176d9cd275caa3de"
+    },
+    {
+      "question_id": "sec-off-knowledge-014",
+      "role_family": "offensive_security",
+      "level": "senior",
+      "dimension": "修复复测",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“修复方案、复测范围和关闭条件”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "d7ccc12c4308da1bfbc546ce3f8b35f743f512a9c4e131e36e59b78f6b532c9f"
+    },
+    {
+      "question_id": "sec-off-knowledge-015",
+      "role_family": "offensive_security",
+      "level": "senior",
+      "dimension": "高危沟通",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“高危漏洞的应急沟通和升级路径”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "af8f7f84d521e5dacb292641a8cfbe496ae42d354a74097a74fcfff2b7cd1176"
+    },
+    {
+      "question_id": "sec-off-knowledge-016",
+      "role_family": "offensive_security",
+      "level": "lead",
+      "dimension": "环境差异",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“测试环境与生产环境的差异说明”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "75aff4e8e5f413d72bc4c4e989703a76ac187c565d4406d0fe846d196822a67c"
+    },
+    {
+      "question_id": "sec-off-knowledge-017",
+      "role_family": "offensive_security",
+      "level": "lead",
+      "dimension": "组件风险",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“外部组件、依赖和供应链风险”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "c5a45d8e21009f551333c289a90b4cd8257824a37b63f28ef26044279b3a2f7c"
+    },
+    {
+      "question_id": "sec-off-knowledge-018",
+      "role_family": "offensive_security",
+      "level": "lead",
+      "dimension": "攻击面",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“供应链攻击面识别和授权确认”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "b3cbce5a7b4b697a2f93357892bf144edc82989994124d20dcd847a5a488cbe0"
+    },
+    {
+      "question_id": "sec-off-knowledge-019",
+      "role_family": "offensive_security",
+      "level": "lead",
+      "dimension": "扫描验证",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“自动化扫描结果的人工验证”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "69c8870a00ed87d88b3d193abc8b63c005d9290d7cebdf1c2373f86f46c0dc97"
+    },
+    {
+      "question_id": "sec-off-knowledge-020",
+      "role_family": "offensive_security",
+      "level": "lead",
+      "dimension": "红队复盘",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“红队行动复盘、指标和经验沉淀”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "b12e4aa7b2aa40c61db9b5c3b45eb6600180690346e18e957919875677122e91"
+    },
+    {
+      "question_id": "sec-off-resume-001",
+      "role_family": "offensive_security",
+      "level": "junior",
+      "dimension": "授权范围",
+      "kind": "resume_followup",
+      "prompt": "请说明一次测试的授权主体、目标范围、时间窗、禁止动作和范围外资产处理方式。",
+      "expected_evidence": [
+        "授权主体",
+        "目标范围",
+        "时间窗",
+        "禁止动作",
+        "范围外处理"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "ec72a4fe6fe493db6cf5052c9f30c66e91adb4d15a31a0f95bdae317db1bfc3f"
+    },
+    {
+      "question_id": "sec-off-resume-002",
+      "role_family": "offensive_security",
+      "level": "mid",
+      "dimension": "测试方法",
+      "kind": "resume_followup",
+      "prompt": "请区分你实际执行的验证方法和只阅读过的方法，并给出对应的测试记录。",
+      "expected_evidence": [
+        "个人执行",
+        "方法",
+        "测试记录",
+        "证据边界"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "3d44076907c59a47ec879576620293facc16654c8af3f513b672183a72ea7392"
+    },
+    {
+      "question_id": "sec-off-resume-003",
+      "role_family": "offensive_security",
+      "level": "mid",
+      "dimension": "漏洞范围",
+      "kind": "resume_followup",
+      "prompt": "请把“发现多个高危漏洞”改写为漏洞类型、严重级别、影响范围、验证方式和修复状态。",
+      "expected_evidence": [
+        "漏洞类型",
+        "严重级别",
+        "影响范围",
+        "验证方式",
+        "修复状态"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "689dbb1a870c568c4abbdeca4325fc46bc3c3fc7bb8e3bb1ecd39c819d0719a0"
+    },
+    {
+      "question_id": "sec-off-resume-004",
+      "role_family": "offensive_security",
+      "level": "senior",
+      "dimension": "证据脱敏",
+      "kind": "resume_followup",
+      "prompt": "请说明哪些客户名、资产地址、漏洞编号或利用细节不能出现在简历中，如何脱敏。",
+      "expected_evidence": [
+        "敏感字段",
+        "脱敏方式",
+        "披露边界"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "8c07a986f46a61f308b0022f3823f2f61049c2929d6a31b4b8e87793a6c72805"
+    },
+    {
+      "question_id": "sec-off-resume-005",
+      "role_family": "offensive_security",
+      "level": "lead",
+      "dimension": "修复复测",
+      "kind": "resume_followup",
+      "prompt": "请说明漏洞修复后的复测范围、复测结果和未能复测的原因。",
+      "expected_evidence": [
+        "复测范围",
+        "复测结果",
+        "未复测原因"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "156423ab0ac76da0236943d7a49bd4791e0b32543aa5c82537d3a0edb50dc64a"
+    },
+    {
+      "question_id": "sec-off-scenario-001",
+      "role_family": "offensive_security",
+      "level": "mid",
+      "dimension": "最小验证",
+      "kind": "scenario",
+      "prompt": "你怀疑一个 Web 参数存在注入风险，但系统承载敏感业务。请说明最小验证、停止条件、证据保全和修复复测。",
+      "expected_evidence": [
+        "授权范围",
+        "最小验证",
+        "停止条件",
+        "证据保全",
+        "修复复测"
+      ],
+      "followups": [
+        "如果验证可能写入业务数据，何时停止并申请专项确认？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 30,
+      "freshness_label": "current",
+      "content_hash": "b2b83725b05ffbf837a1b934e8511bcc598d413620d629a208b4a4aa07091c5b"
+    },
+    {
+      "question_id": "sec-off-scenario-002",
+      "role_family": "offensive_security",
+      "level": "senior",
+      "dimension": "范围外资产",
+      "kind": "scenario",
+      "prompt": "测试中发现一个疑似关联域名但不在授权清单。请说明识别、隔离、报告和沟通流程。",
+      "expected_evidence": [
+        "授权清单",
+        "范围判定",
+        "停止动作",
+        "报告对象"
+      ],
+      "followups": [
+        "为什么不能把关联关系直接视为授权证据？"
+      ],
+      "answer_boundary": "只讨论已获明确授权的安全测试，不提供破坏性利用、绕过授权或批量攻击指令。",
+      "source_refs": [
+        "owasp-wstg",
+        "owasp-top10-2025",
+        "cwe-top25-2025",
+        "nist-nice-2-2-0",
+        "cisa-kev"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 30,
+      "freshness_label": "current",
+      "content_hash": "fab6f7cb916e982e997cdf616d8b0fa693a91e184045a214e74ac0085987c50e"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-001",
+      "role_family": "appsec",
+      "level": "junior",
+      "dimension": "威胁建模",
+      "kind": "knowledge",
+      "prompt": "请解释“威胁建模的资产、参与者和信任边界”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "12be5ebfb805422307177241c843705a4ea3aba9a79e780dba4f9a7911e06c0c"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-002",
+      "role_family": "appsec",
+      "level": "junior",
+      "dimension": "数据流",
+      "kind": "knowledge",
+      "prompt": "请解释“数据流、信任边界和攻击面表达”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "df33f123049be58dd68d430ccdb4574e758b06c107f943594d577ffcf6b3195a"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-003",
+      "role_family": "appsec",
+      "level": "junior",
+      "dimension": "身份认证",
+      "kind": "knowledge",
+      "prompt": "请解释“身份认证设计和失败路径”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "1bd337a15942ad50b15da7ce835eb882779a13632cac5abb0193c5b0ffade3cf"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-004",
+      "role_family": "appsec",
+      "level": "junior",
+      "dimension": "授权设计",
+      "kind": "knowledge",
+      "prompt": "请解释“对象级授权、角色和越权防护”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "bb4a400a423fadad10e3d770db6e17309bafd17607744869bb5a3ee46246d383"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-005",
+      "role_family": "appsec",
+      "level": "junior",
+      "dimension": "注入防护",
+      "kind": "knowledge",
+      "prompt": "请解释“输入处理、参数化和注入验证”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "3d034d5acebadfbbe5de3a146bf891efba27efec81fa14c81c128cf8c8514352"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-006",
+      "role_family": "appsec",
+      "level": "mid",
+      "dimension": "文件上传",
+      "kind": "knowledge",
+      "prompt": "请围绕“文件上传的校验、隔离和回滚”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "ff5af16caa029f5a5b5d8421d606c54d214d1062622e604d983c4fff47aa8290"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-007",
+      "role_family": "appsec",
+      "level": "mid",
+      "dimension": "反序列化",
+      "kind": "knowledge",
+      "prompt": "请围绕“反序列化风险识别和输入范围”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "ee99b113c3028c395e90096a2ad55ad3acde1208dcad758029ff8feb1415bf7f"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-008",
+      "role_family": "appsec",
+      "level": "mid",
+      "dimension": "SSRF",
+      "kind": "knowledge",
+      "prompt": "请围绕“服务端请求伪造的网络边界控制”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "57f3f0a92b82a8ccc396daed71acbca145d097a0bf581edb361a39c0eda4a830"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-009",
+      "role_family": "appsec",
+      "level": "mid",
+      "dimension": "密钥配置",
+      "kind": "knowledge",
+      "prompt": "请围绕“密钥、配置和敏感参数管理”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "480ecddf6049875fc455dad5b6fa3978033ff9323fbc9bddf5bbf0c76c2ef581"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-010",
+      "role_family": "appsec",
+      "level": "mid",
+      "dimension": "依赖安全",
+      "kind": "knowledge",
+      "prompt": "请围绕“依赖、构建和供应链安全”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "942b3c61c3a30e165fb0a7cc9edf7b0971dff5194ee54bfc875f5a2608bf869b"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-011",
+      "role_family": "appsec",
+      "level": "senior",
+      "dimension": "SAST 分诊",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“SAST 告警分诊和误报边界”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "d0dce6ac0cf76b5edf4f7597e4b3592e8804ebff377aba039b61813cf34de703"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-012",
+      "role_family": "appsec",
+      "level": "senior",
+      "dimension": "DAST 复现",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“DAST 发现的人工复现和证据”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "a053bf67170a42e147eb31dd025f65da1ebe7f402a1efcf5a1dd58cebc5812fa"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-013",
+      "role_family": "appsec",
+      "level": "senior",
+      "dimension": "SCA 修复",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“SCA 漏洞的修复优先级和升级条件”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "99afd08572e6e173f223784d575d8edf29e8dd361347908f48c87cdb7424044b"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-014",
+      "role_family": "appsec",
+      "level": "senior",
+      "dimension": "SDLC 门禁",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“安全需求和 SDLC 门禁设计”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "9cf6d9ef25525ffc2ff8aa7bd24e7167c2cfee5658545f788f51f18320f62791"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-015",
+      "role_family": "appsec",
+      "level": "senior",
+      "dimension": "代码审计",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“代码审计范围、方法和证据”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "e2c86b69ad8a05c04258beb60ba5a9b2b75842b35948bb124bb38662e8305f19"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-016",
+      "role_family": "appsec",
+      "level": "lead",
+      "dimension": "修复兼容",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“安全修复与接口兼容性的取舍”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "6d6086d0622d730a771eac56762334c44308724b6de363469c1dab7ec0b03143"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-017",
+      "role_family": "appsec",
+      "level": "lead",
+      "dimension": "需求验收",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“安全需求的可测试验收条件”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "eaff6c2dfb8b94ca810d13f6cf1522652bf2efb78db04c03a9d248cc5114770e"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-018",
+      "role_family": "appsec",
+      "level": "lead",
+      "dimension": "漏洞回归",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“漏洞回归、复测和关闭标准”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "0de1d28b69dee301ddc935846938892b2853fedea37d4d2dabcd0e8366332416"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-019",
+      "role_family": "appsec",
+      "level": "lead",
+      "dimension": "质量指标",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“安全指标、逃逸率和质量趋势”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "dbd0d7d073ee62dcfafda5d3906f448f0f91bedf273dab717418d601ec5e39b6"
+    },
+    {
+      "question_id": "sec-appsec-knowledge-020",
+      "role_family": "appsec",
+      "level": "lead",
+      "dimension": "评审治理",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“安全评审文化、例外和争议处理”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "4d950b791fe3017fa73ea1a5a7539db59a17c3946288ed8f9eaa42835d20c8c9"
+    },
+    {
+      "question_id": "sec-appsec-resume-001",
+      "role_family": "appsec",
+      "level": "junior",
+      "dimension": "应用范围",
+      "kind": "resume_followup",
+      "prompt": "请说明代码审计覆盖的应用、技术栈、代码规模和不在范围内的系统。",
+      "expected_evidence": [
+        "应用范围",
+        "技术栈",
+        "代码规模",
+        "排除范围"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "b9e97fa292b693abbabe009b5bae494ceceeab0ad35b1e61b19ee02520fcf6e2"
+    },
+    {
+      "question_id": "sec-appsec-resume-002",
+      "role_family": "appsec",
+      "level": "mid",
+      "dimension": "审计方法",
+      "kind": "resume_followup",
+      "prompt": "请说明你实际使用的威胁建模、SAST、人工审计和动态验证方法及各自作用。",
+      "expected_evidence": [
+        "威胁建模",
+        "SAST",
+        "人工审计",
+        "动态验证"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "3f2aaff7072c29acdb00fc0232f0011adfab43cbbc4397266159d43dd9ea102b"
+    },
+    {
+      "question_id": "sec-appsec-resume-003",
+      "role_family": "appsec",
+      "level": "mid",
+      "dimension": "漏洞类型",
+      "kind": "resume_followup",
+      "prompt": "请把“修复很多漏洞”改写为问题类型、风险等级、修复责任、修复率和统计时间窗。",
+      "expected_evidence": [
+        "问题类型",
+        "风险等级",
+        "修复责任",
+        "修复率",
+        "时间窗"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "54f07417208409b081984796d196c97aad5980721a5bc9624c3157548ec94805"
+    },
+    {
+      "question_id": "sec-appsec-resume-004",
+      "role_family": "appsec",
+      "level": "senior",
+      "dimension": "复测证据",
+      "kind": "resume_followup",
+      "prompt": "请说明一个漏洞从发现到关闭的证据链，包括复现、修复、复测和关闭确认。",
+      "expected_evidence": [
+        "复现",
+        "修复",
+        "复测",
+        "关闭确认"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "cc5d93001871a30fb9a14ac17e53b6e81e92ebfa4af738c6ecc8255448bcead0"
+    },
+    {
+      "question_id": "sec-appsec-resume-005",
+      "role_family": "appsec",
+      "level": "lead",
+      "dimension": "安全左移",
+      "kind": "resume_followup",
+      "prompt": "请说明你在需求、设计、开发或发布阶段实际推动过的一项安全机制及其效果。",
+      "expected_evidence": [
+        "阶段",
+        "安全机制",
+        "个人动作",
+        "效果证据"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "ce3a67591f7eb4c2773632454a16a5b05e92cf3e37708448730a7a46aa4459d6"
+    },
+    {
+      "question_id": "sec-appsec-scenario-001",
+      "role_family": "appsec",
+      "level": "mid",
+      "dimension": "风险上线",
+      "kind": "scenario",
+      "prompt": "上线前发现一个中危漏洞，修复会影响核心接口兼容性。请说明风险判断、补偿控制、批准链和复测计划。",
+      "expected_evidence": [
+        "业务影响",
+        "可利用条件",
+        "补偿控制",
+        "批准链",
+        "复测计划"
+      ],
+      "followups": [
+        "你如何避免把风险接受写成漏洞已修复？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 90,
+      "freshness_label": "current",
+      "content_hash": "64931fabff5e167dd2d128689af0ef7de23c87afbb6748cc2c25eed3745274af"
+    },
+    {
+      "question_id": "sec-appsec-scenario-002",
+      "role_family": "appsec",
+      "level": "senior",
+      "dimension": "依赖漏洞",
+      "kind": "scenario",
+      "prompt": "构建扫描发现高风险依赖漏洞，但升级会破坏旧接口。请说明修复优先级、隔离措施、兼容性验证和退出计划。",
+      "expected_evidence": [
+        "依赖范围",
+        "可利用条件",
+        "隔离措施",
+        "兼容性验证",
+        "退出计划"
+      ],
+      "followups": [
+        "你如何证明临时隔离措施不会长期替代修复？"
+      ],
+      "answer_boundary": "只讨论自有代码和获授权应用的安全设计、验证和修复。",
+      "source_refs": [
+        "owasp-top10-2025",
+        "owasp-wstg",
+        "cwe-top25-2025",
+        "nist-csf-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 90,
+      "freshness_label": "current",
+      "content_hash": "294352e5ee3f2750688dd4f6f18998115dc295bf83c90e095d4d783722c32cb0"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-001",
+      "role_family": "security_engineering",
+      "level": "junior",
+      "dimension": "主机基线",
+      "kind": "knowledge",
+      "prompt": "请解释“主机安全基线的控制目标和验证”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "7d17bc550954271f7c9ededb8df2f6d2f3a8e2a90a7571d3f2da7f011ba428a2"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-002",
+      "role_family": "security_engineering",
+      "level": "junior",
+      "dimension": "云 IAM",
+      "kind": "knowledge",
+      "prompt": "请解释“云 IAM 最小权限和权限边界”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "bc751f2f1e582b54a47b612893c6d306a422a09670096cd392615b28bdea8abc"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-003",
+      "role_family": "security_engineering",
+      "level": "junior",
+      "dimension": "网络分段",
+      "kind": "knowledge",
+      "prompt": "请解释“网络分段、访问控制和业务依赖”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "81b6e44d915bc4665fa200d9f5ba98b92ba06b094c69b9d6ae50cc652b4ebeb3"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-004",
+      "role_family": "security_engineering",
+      "level": "junior",
+      "dimension": "日志采集",
+      "kind": "knowledge",
+      "prompt": "请解释“日志采集、时间同步和完整覆盖”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "d768bc612c5c8cd75e3a0790aacdc7c0bb860e32f60ead70ada3fafd166f9fb6"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-005",
+      "role_family": "security_engineering",
+      "level": "junior",
+      "dimension": "端点部署",
+      "kind": "knowledge",
+      "prompt": "请解释“端点检测的部署范围、策略和例外”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "ccb8913951d1a41744f91586e626925e90d2620be93a3419a57858f084f60c52"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-006",
+      "role_family": "security_engineering",
+      "level": "mid",
+      "dimension": "备份恢复",
+      "kind": "knowledge",
+      "prompt": "请围绕“备份、隔离和恢复演练”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "7494c8f88398f5933bbfa96753b63194806382d92aa14b0a83d9a9330847b132"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-007",
+      "role_family": "security_engineering",
+      "level": "mid",
+      "dimension": "补丁管理",
+      "kind": "knowledge",
+      "prompt": "请围绕“补丁分级、维护窗口和回滚”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "c3d6e7b690c425a46bd3caecff60c89699d5b9049dcacd2508043bd5d228a77e"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-008",
+      "role_family": "security_engineering",
+      "level": "mid",
+      "dimension": "密钥轮换",
+      "kind": "knowledge",
+      "prompt": "请围绕“密钥轮换、依赖方和失效顺序”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "93959db7f5b6302ab336978e49a75aeb8f1d1b44338c78c2baaa8a0b6b9d1975"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-009",
+      "role_family": "security_engineering",
+      "level": "mid",
+      "dimension": "镜像安全",
+      "kind": "knowledge",
+      "prompt": "请围绕“容器镜像的构建、扫描和准入”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "76d9215d2acc4ff5d00172f1caf0d7275c7392a792a7e9d8499aaf11804440a1"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-010",
+      "role_family": "security_engineering",
+      "level": "mid",
+      "dimension": "Kubernetes",
+      "kind": "knowledge",
+      "prompt": "请围绕“Kubernetes 基线、RBAC 和网络策略”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "ddbd0547733838f8f6e542bc0cf0a8018b1d21711135b9649b06d77ea218deda"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-011",
+      "role_family": "security_engineering",
+      "level": "senior",
+      "dimension": "IaC 治理",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“Terraform 变更、审查和漂移检测”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "7a9ec6f4c8b261cf87805a9a3fbd57d3cdfb9f2db0f32b97dbb4f3d462485c7e"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-012",
+      "role_family": "security_engineering",
+      "level": "senior",
+      "dimension": "资产清单",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“资产清单、归属和覆盖缺口”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "de89335d45917969a250a788c6b737b0a099601b965f4f23cad422cc676e0a0c"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-013",
+      "role_family": "security_engineering",
+      "level": "senior",
+      "dimension": "暴露治理",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“高危端口和暴露面治理”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "e15c154d43c9ebaef4039c80842ba0548aaceb075a1c71b6a6d0aa10d166ac61"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-014",
+      "role_family": "security_engineering",
+      "level": "senior",
+      "dimension": "配置漂移",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“配置漂移检测、告警和修复”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "ff299405c0f20ea9e5e78e974ee7b2340d7e581999536e25b994113413ef9406"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-015",
+      "role_family": "security_engineering",
+      "level": "senior",
+      "dimension": "灰度变更",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“灰度变更、监控和回滚条件”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "098ca962aa904e5344a223e89e51d82165937874e02d5640c2a205c765436cf0"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-016",
+      "role_family": "security_engineering",
+      "level": "lead",
+      "dimension": "故障边界",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“生产故障与安全事件的交接边界”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "ca5f15bfd460ac1bcd9f0987a1bf87a377b706f3691ac616dcd50b059219b921"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-017",
+      "role_family": "security_engineering",
+      "level": "lead",
+      "dimension": "自动化脚本",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“自动化脚本权限和误操作保护”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "772411074e5457330aff3d1c30a9721e4368adea40d0fc9fb89a5fc7c8e8712c"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-018",
+      "role_family": "security_engineering",
+      "level": "lead",
+      "dimension": "构建安全",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“构建流水线和供应链控制”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "c81d50bba73f7a0699fedf0dfbefc05be4a62e58ef2b41cc0266a7be95f58bb7"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-019",
+      "role_family": "security_engineering",
+      "level": "lead",
+      "dimension": "监控有效性",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“监控告警的有效性和盲区评估”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "104911e0792db65cc1b3de3d2c074ea3bcc02d82d00ad23a146284c43bbbd8cb"
+    },
+    {
+      "question_id": "sec-seceng-knowledge-020",
+      "role_family": "security_engineering",
+      "level": "lead",
+      "dimension": "工程治理",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“安全工程指标、SLO 和治理节奏”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "f3014f30e2c75d5406387da23799d2bcc407115a32f5976c122521d943b95f6a"
+    },
+    {
+      "question_id": "sec-seceng-resume-001",
+      "role_family": "security_engineering",
+      "level": "junior",
+      "dimension": "环境规模",
+      "kind": "resume_followup",
+      "prompt": "请说明一次安全加固项目的环境、资产规模、覆盖范围和例外项。",
+      "expected_evidence": [
+        "环境",
+        "资产规模",
+        "覆盖范围",
+        "例外项"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "af39844b978f915d25595ce213231758278aa7279ab5d8e4d95d9c80ad38073a"
+    },
+    {
+      "question_id": "sec-seceng-resume-002",
+      "role_family": "security_engineering",
+      "level": "mid",
+      "dimension": "控制目标",
+      "kind": "resume_followup",
+      "prompt": "请说明加固对应的控制目标、技术措施和业务约束，避免只列工具名称。",
+      "expected_evidence": [
+        "控制目标",
+        "技术措施",
+        "业务约束"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "3f044b9c5b86b1b66caf63b4bbdbff0917b35dba83096cca8c56d71b16c76b8a"
+    },
+    {
+      "question_id": "sec-seceng-resume-003",
+      "role_family": "security_engineering",
+      "level": "mid",
+      "dimension": "变更回滚",
+      "kind": "resume_followup",
+      "prompt": "请说明一次安全变更的灰度范围、监控指标、回滚条件和实际操作结果。",
+      "expected_evidence": [
+        "灰度范围",
+        "监控指标",
+        "回滚条件",
+        "结果"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "c30570f4cc3aa528c124bf52d2574a5856c5e0576bcea182ce44275d1e1d46f7"
+    },
+    {
+      "question_id": "sec-seceng-resume-004",
+      "role_family": "security_engineering",
+      "level": "senior",
+      "dimension": "自动化",
+      "kind": "resume_followup",
+      "prompt": "请说明你编写的自动化脚本解决了什么风险、权限边界是什么、失败时如何保护环境。",
+      "expected_evidence": [
+        "风险",
+        "脚本动作",
+        "权限边界",
+        "失败保护"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "43ad0a7bfd9a13270897ff59f2ba09084f22775ca913afb26e0491e796b5b5bc"
+    },
+    {
+      "question_id": "sec-seceng-resume-005",
+      "role_family": "security_engineering",
+      "level": "lead",
+      "dimension": "验证证据",
+      "kind": "resume_followup",
+      "prompt": "请说明基线或加固结果如何验证，有哪些报告、看板或抽样结果可以佐证。",
+      "expected_evidence": [
+        "验证方法",
+        "抽样结果",
+        "报告或看板"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "3944aca1ef5e10a357ed4a2afcecd473f8292b19210318b97f41fcd95e666a22"
+    },
+    {
+      "question_id": "sec-seceng-scenario-001",
+      "role_family": "security_engineering",
+      "level": "mid",
+      "dimension": "IAM 收紧",
+      "kind": "scenario",
+      "prompt": "多租户云环境的 IAM 权限过宽。请设计灰度收紧、业务监控、异常场景和回滚条件。",
+      "expected_evidence": [
+        "权限差异",
+        "灰度范围",
+        "业务监控",
+        "异常场景",
+        "回滚条件"
+      ],
+      "followups": [
+        "怎样证明收紧后没有产生新的越权路径？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 90,
+      "freshness_label": "current",
+      "content_hash": "5984172ea9ddb27c986b062b82f92eda01632c2bcfbfd93a5f1bc7588d0062f4"
+    },
+    {
+      "question_id": "sec-seceng-scenario-002",
+      "role_family": "security_engineering",
+      "level": "senior",
+      "dimension": "基线推广",
+      "kind": "scenario",
+      "prompt": "要在大量主机上推广新安全基线，同时存在遗留系统和业务例外。请设计分批、例外、验证和审计方案。",
+      "expected_evidence": [
+        "资产分层",
+        "分批策略",
+        "例外审批",
+        "验证结果",
+        "审计留痕"
+      ],
+      "followups": [
+        "你如何防止例外项永久化？"
+      ],
+      "answer_boundary": "只讨论获授权环境的防御加固、变更和验证。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0",
+        "cisa-kev",
+        "mitre-attack-v18"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 90,
+      "freshness_label": "current",
+      "content_hash": "091a647370f68d130457e8132de460d09b864a1c7d3b30d7f7215a00fa92b5b6"
+    },
+    {
+      "question_id": "sec-grc-knowledge-001",
+      "role_family": "grc_data_security",
+      "level": "junior",
+      "dimension": "适用要求",
+      "kind": "knowledge",
+      "prompt": "请解释“法规、标准和合同要求的适用性识别”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "9c14dc280a742661edcdbcfda5d0664dd97b9b872b2764c23ea19d1a7f323408"
+    },
+    {
+      "question_id": "sec-grc-knowledge-002",
+      "role_family": "grc_data_security",
+      "level": "junior",
+      "dimension": "控制映射",
+      "kind": "knowledge",
+      "prompt": "请解释“控制要求到技术和流程控制的映射”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "f8750ee3c04765a563ebb5c56fa4c7f4f61a60f9e674d542b8df71b9c7e19780"
+    },
+    {
+      "question_id": "sec-grc-knowledge-003",
+      "role_family": "grc_data_security",
+      "level": "junior",
+      "dimension": "风险评估",
+      "kind": "knowledge",
+      "prompt": "请解释“风险场景、影响、可能性和证据”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "65767b10ae73d520e8d34c2001d6e9870f4866decea724fcdddc5a6c06d0bb0a"
+    },
+    {
+      "question_id": "sec-grc-knowledge-004",
+      "role_family": "grc_data_security",
+      "level": "junior",
+      "dimension": "风险接受",
+      "kind": "knowledge",
+      "prompt": "请解释“残余风险、接受权限和复审”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "a0ae09af545ab3b9ac7eda05a9befc15744b7754ba214782f681b002a25e921c"
+    },
+    {
+      "question_id": "sec-grc-knowledge-005",
+      "role_family": "grc_data_security",
+      "level": "junior",
+      "dimension": "供应商风险",
+      "kind": "knowledge",
+      "prompt": "请解释“供应商依赖、评估和持续监控”的目标、基本步骤、常见误区和至少两项验证证据。",
+      "expected_evidence": [
+        "目标与边界",
+        "基本步骤",
+        "常见误区",
+        "验证证据"
+      ],
+      "followups": [
+        "哪些结论不能只凭工具输出，需要人工确认？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "dceabf2846b74b1e04e433ce77a8cc63fcfea61b9cd25eebc07f4cf49f77af2f"
+    },
+    {
+      "question_id": "sec-grc-knowledge-006",
+      "role_family": "grc_data_security",
+      "level": "mid",
+      "dimension": "数据分级",
+      "kind": "knowledge",
+      "prompt": "请围绕“数据分类分级的依据和例外”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "9bfff542b18e7e21f848ad399646c33b7744693bb7e8ca72815f2d1e5aea468d"
+    },
+    {
+      "question_id": "sec-grc-knowledge-007",
+      "role_family": "grc_data_security",
+      "level": "mid",
+      "dimension": "访问边界",
+      "kind": "knowledge",
+      "prompt": "请围绕“数据访问、最小权限和业务角色”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "d048cfd19405f1971ac7073b0b5d79c422879fec764923e9d2ad93aadf2ae7fb"
+    },
+    {
+      "question_id": "sec-grc-knowledge-008",
+      "role_family": "grc_data_security",
+      "level": "mid",
+      "dimension": "留存删除",
+      "kind": "knowledge",
+      "prompt": "请围绕“留存周期、删除请求和证明”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "f1f01d8993c94104bb8351457fa8fd5a8bab56e3ed90439d35b04dae8c1b9f3a"
+    },
+    {
+      "question_id": "sec-grc-knowledge-009",
+      "role_family": "grc_data_security",
+      "level": "mid",
+      "dimension": "跨境事实",
+      "kind": "knowledge",
+      "prompt": "请围绕“跨境数据流、接收方和事实台账”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "5cc223e14d390e19c759a5e314ac03a124fb7da2e90aa4226758e90ffb82b949"
+    },
+    {
+      "question_id": "sec-grc-knowledge-010",
+      "role_family": "grc_data_security",
+      "level": "mid",
+      "dimension": "个人请求",
+      "kind": "knowledge",
+      "prompt": "请围绕“个人信息请求、身份核验和时限”给出一次真实项目中的处理流程，说明输入、关键判断、交付物、失败降级和复核证据。",
+      "expected_evidence": [
+        "场景范围",
+        "关键判断",
+        "处理流程",
+        "交付物",
+        "失败降级",
+        "复核证据"
+      ],
+      "followups": [
+        "如果关键输入缺失，你会如何降级而不是猜测？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "4137e6f6f82eb564169f80094cc2f8e089ae7cc1699215617cc98b653316c38e"
+    },
+    {
+      "question_id": "sec-grc-knowledge-011",
+      "role_family": "grc_data_security",
+      "level": "senior",
+      "dimension": "审计准备",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“审计证据包和事实口径”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "e8458bc45779b6849fe0b423281f792d4b2c7f168a5e39e413c08f155daad070"
+    },
+    {
+      "question_id": "sec-grc-knowledge-012",
+      "role_family": "grc_data_security",
+      "level": "senior",
+      "dimension": "整改闭环",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“审计发现、整改和复核证据”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "4402782693809ea4218763a1b1f9df5875b4135c1847cd150b8b594af74d02d4"
+    },
+    {
+      "question_id": "sec-grc-knowledge-013",
+      "role_family": "grc_data_security",
+      "level": "senior",
+      "dimension": "例外管理",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“控制例外、补偿控制和到期复审”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "deba6e43aa8ec1d73b72008786141c60b92341cb249abf638556c9b837150fbe"
+    },
+    {
+      "question_id": "sec-grc-knowledge-014",
+      "role_family": "grc_data_security",
+      "level": "senior",
+      "dimension": "连续性依赖",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“业务连续性和关键供应商依赖”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "6c62241dd7791000eaef6414621986f26ea5481b39c51b9df63741dcf4832c9d"
+    },
+    {
+      "question_id": "sec-grc-knowledge-015",
+      "role_family": "grc_data_security",
+      "level": "senior",
+      "dimension": "策略可执行",
+      "kind": "knowledge",
+      "prompt": "请设计一套覆盖“安全策略的可执行性和责任”的可验证方案，说明适用范围、风险取舍、监控指标、回滚条件和改进机制。",
+      "expected_evidence": [
+        "适用范围",
+        "风险取舍",
+        "监控指标",
+        "回滚条件",
+        "验证证据",
+        "改进机制"
+      ],
+      "followups": [
+        "如果监控指标改善但风险信号没有下降，你会如何调整方案？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "bcf0861b5cdb06d29ba58870904a7bc1b47dfcda11c8d9e4df57f3c4b32ded8b"
+    },
+    {
+      "question_id": "sec-grc-knowledge-016",
+      "role_family": "grc_data_security",
+      "level": "lead",
+      "dimension": "责任矩阵",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“组织角色、决策权和责任矩阵”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "c013583c1f47bedc2ac2edf0d241e2b42f06f369654859798ddcd2bc7d04242b"
+    },
+    {
+      "question_id": "sec-grc-knowledge-017",
+      "role_family": "grc_data_security",
+      "level": "lead",
+      "dimension": "培训度量",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“安全培训内容和有效性度量”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "358016fcb3f4a3901fc3290584dbf089ac84541824709396c96a3afbea98368b"
+    },
+    {
+      "question_id": "sec-grc-knowledge-018",
+      "role_family": "grc_data_security",
+      "level": "lead",
+      "dimension": "治理报告",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“治理指标、董事会报告和决策依据”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "4686e4440afae34e41111228555be7e5d344dd2a32c7633f499c0bc61a3f8043"
+    },
+    {
+      "question_id": "sec-grc-knowledge-019",
+      "role_family": "grc_data_security",
+      "level": "lead",
+      "dimension": "变更跟踪",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“法规、标准和合同变化的跟踪”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "07253cf11cacbc1c9605dd2364cb03b936a24316c127e8b277045666adad865c"
+    },
+    {
+      "question_id": "sec-grc-knowledge-020",
+      "role_family": "grc_data_security",
+      "level": "lead",
+      "dimension": "事件治理",
+      "kind": "knowledge",
+      "prompt": "如果由你负责“事件后的治理改进和控制更新”的标准与治理，请说明职责分工、度量方式、例外审批、审计留痕和持续改进。",
+      "expected_evidence": [
+        "职责分工",
+        "度量方式",
+        "例外审批",
+        "审计留痕",
+        "改进闭环",
+        "决策依据"
+      ],
+      "followups": [
+        "你如何证明例外项在到期前被重新评审？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "7508ee4df16d45d73d056eb9bc566d8f89e1eded4dc012d2976c527f7237cd85"
+    },
+    {
+      "question_id": "sec-grc-resume-001",
+      "role_family": "grc_data_security",
+      "level": "junior",
+      "dimension": "适用框架",
+      "kind": "resume_followup",
+      "prompt": "请说明一次风险或合规项目实际适用的框架、条款或控制要求，并区分事实与推断。",
+      "expected_evidence": [
+        "适用框架",
+        "控制要求",
+        "事实边界"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "032083088510e77f39fb9ea69e9e332d85433380707f1f23c082213c9a3d6c3e"
+    },
+    {
+      "question_id": "sec-grc-resume-002",
+      "role_family": "grc_data_security",
+      "level": "mid",
+      "dimension": "控制范围",
+      "kind": "resume_followup",
+      "prompt": "请说明你负责的控制范围、排除范围和依赖团队，避免把团队成果写成本人主导。",
+      "expected_evidence": [
+        "控制范围",
+        "排除范围",
+        "依赖团队",
+        "个人责任"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "97f1eb7013d6faf6ef8659211a4d742c76089b2bdb68d224790aee0dd57bc2b5"
+    },
+    {
+      "question_id": "sec-grc-resume-003",
+      "role_family": "grc_data_security",
+      "level": "mid",
+      "dimension": "整改闭环",
+      "kind": "resume_followup",
+      "prompt": "请说明一次整改从差距识别到关闭的证据链，包括责任人、期限和复核结果。",
+      "expected_evidence": [
+        "差距",
+        "责任人",
+        "期限",
+        "复核结果"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "f63bad9b64aa55e2800862cbe4a2e7dab3124faea039f14e9bdca45ff22427d9"
+    },
+    {
+      "question_id": "sec-grc-resume-004",
+      "role_family": "grc_data_security",
+      "level": "senior",
+      "dimension": "数据分级",
+      "kind": "resume_followup",
+      "prompt": "请说明一次数据分类分级项目的对象、分级依据、访问控制和遗留例外。",
+      "expected_evidence": [
+        "数据对象",
+        "分级依据",
+        "访问控制",
+        "例外"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "9c6f9e967fb0bb3125217c6bd400cb8212fdd4b4b29e9f1fd99923da99c7aa2b"
+    },
+    {
+      "question_id": "sec-grc-resume-005",
+      "role_family": "grc_data_security",
+      "level": "lead",
+      "dimension": "残余风险",
+      "kind": "resume_followup",
+      "prompt": "请说明你如何记录残余风险、谁有权接受、如何复审，以及哪些结论不能由你单独给出。",
+      "expected_evidence": [
+        "残余风险",
+        "接受权限",
+        "复审周期",
+        "结论边界"
+      ],
+      "followups": [
+        "哪些数据尚未经你确认，不能写入简历？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 180,
+      "freshness_label": "current",
+      "content_hash": "1c97670c650151495ed6301f1ddbe72ab1f089c91202ad02743d8410c3860ac0"
+    },
+    {
+      "question_id": "sec-grc-scenario-001",
+      "role_family": "grc_data_security",
+      "level": "mid",
+      "dimension": "新字段上线",
+      "kind": "scenario",
+      "prompt": "业务准备上线包含个人信息的新数据字段。请说明分类分级、访问角色、留存删除、跨境事实和审批边界。",
+      "expected_evidence": [
+        "数据字段",
+        "分类分级",
+        "访问角色",
+        "留存删除",
+        "跨境事实"
+      ],
+      "followups": [
+        "哪些判断必须由法务、业务负责人或安全负责人确认？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 90,
+      "freshness_label": "current",
+      "content_hash": "ee5a06080ebab6207554f2c8d0dd5c223029a7e8a12ae759db0a5e29aa45c78f"
+    },
+    {
+      "question_id": "sec-grc-scenario-002",
+      "role_family": "grc_data_security",
+      "level": "senior",
+      "dimension": "供应商审计",
+      "kind": "scenario",
+      "prompt": "关键供应商发生安全事件，但影响范围尚不明确。请说明事实核验、合同义务、风险隔离和复审计划。",
+      "expected_evidence": [
+        "事实核验",
+        "合同义务",
+        "风险隔离",
+        "复审计划"
+      ],
+      "followups": [
+        "你如何处理供应商声明与自有证据之间的冲突？"
+      ],
+      "answer_boundary": "只讨论风险、控制和合规事实，不输出法律结论或替代正式审批。",
+      "source_refs": [
+        "nist-csf-2-0",
+        "nist-nice-2-2-0"
+      ],
+      "status": "active",
+      "last_verified_at": "2026-11-22",
+      "stale_after_days": 90,
+      "freshness_label": "current",
+      "content_hash": "db310abc6bd61cb0ed272ab2417f5d55340f6e426947907732626c5cfe32c238"
+    }
+  ]
+}

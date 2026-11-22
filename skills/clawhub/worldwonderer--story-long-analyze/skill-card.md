@@ -1,45 +1,55 @@
-## Description: <br>
-Analyzes long-form web novels through a staged pipeline covering opening chapters, character structure, reader-payoff design, pacing, chapter summaries, setting and relationship extraction, summary reports, and style profiling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+分析长篇网文的黄金三章、逐章事件与摘要、剧情因果、情绪与节奏、角色、设定和文风，并支持复用旧成果、补缺和断点续跑。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers, editors, and creative-development agents use this skill to break down legally available long-form fiction into structured analysis files for plot, pacing, character, setting, emotional hooks, reusable writing patterns, and prose style. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill copies full novel text into the workspace and stores sizeable source excerpts. <br>
-Mitigation: Use it only with text you own or are authorized to process, and delete retained `原文/`, `文风.md` excerpts, and `/tmp/style-sample.txt` when source text should not remain on disk. <br>
-Risk: The skill can update related project files outside the main analysis folder without a strong confirmation step. <br>
-Mitigation: Run it in a controlled workspace and review diffs after each run before accepting or publishing changes. <br>
+## Use Case:
 
+网文作者和编辑可用它拆解长篇小说，梳理章节事实、剧情推进、读者情绪、人物关系与设定，并整理为便于续用的分析文档。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-long-analyze) <br>
-- [Publisher profile](https://clawhub.ai/user/worldwonderer) <br>
-- [OpenClaw source metadata link](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Material decomposition reference](references/material-decomposition.md) <br>
-- [Output templates reference](references/output-templates.md) <br>
-- [Style profile protocol reference](references/style-profile-protocol.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Files, Analysis, Guidance] <br>
-**Output Format:** [Markdown files organized under a book-specific analysis directory] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates staged analysis artifacts such as summaries, character files, plot and pacing indexes, setting notes, reports, progress state, and style profiles.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.12 (source: ClawHub release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: The workflow may update a separate topic-selection document without clear approval or target verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the project path and review the proposed document update before applying it.
+
+Risk: The security review is incomplete: some components were only partially inspected and others were not scanned.
+
+Mitigation: Review the remaining components and confirm the requested tool access before use.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/worldwonderer/skills/story-long-analyze)
+- [Publisher profile](https://clawhub.ai/user/worldwonderer)
+- [Project URL listed in skill metadata (provenance unavailable)](https://github.com/zenstory-ai/oh-story-claudecode)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Files]
+
+**Output Format:** [Markdown reports, chapter summaries, and related analysis files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Organized by chapter and topic; existing analysis can be reused, supplemented, or resumed.]
+
+## Skill Version(s):
+
+1.1.47 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

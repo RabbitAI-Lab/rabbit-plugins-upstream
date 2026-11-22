@@ -1,44 +1,55 @@
-## Description: <br>
-Using plant images, optional environmental data, and growth metrics, this skill calls a plant-analysis service to produce a 0-100 vitality score, vitality grade, trend, change percentage, alert hints, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes plant images, environmental data, and growth metrics to produce a 0–100 vitality score and trend.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, developers, and plant-monitoring operators use this skill to evaluate plant vitality from plant images or videos and to retrieve cloud-hosted historical vitality reports. It is intended for smart planters, plant factories, home gardening, and plant-monitoring platforms where concise scoring and trend reporting support care decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Plant images, videos, URLs, and report history may be processed by lifeemergence.com services. <br>
-Mitigation: Use only media and URLs approved to leave the user's environment, and avoid private files or internal URLs unless external processing is permitted. <br>
-Risk: The skill may create or reuse a local or remote identity and store session tokens in workspace data. <br>
-Mitigation: Review workspace data handling before deployment, limit access to generated tokens, and remove or rotate stored identity data when the skill is no longer needed. <br>
-Risk: Single-image vitality scores can be affected by lighting, angle, and image quality. <br>
-Mitigation: Prefer consistent daily image sequences and treat scores as care guidance rather than definitive plant-health diagnosis. <br>
+## Use Case:
 
+External users, home gardeners, and plant-monitoring operators use this skill to assess plant vitality from images and optional environmental or growth data, including its recent trend.
 
-## Reference(s): <br>
-- [API Documentation](references/api_doc.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-vitality-index-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown and JSON reports with score, grade, trend, alert hints, report links, and optional history tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call cloud APIs for analysis and historical report retrieval; supports local file paths or public media URLs as inputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter lists 1.0.6) <br>
+Risk: The security assessment reports a mismatch between the plant-analysis description and account, credential, and video-analysis capabilities, along with unsafe credential handling and ignored export-only behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the implementation and proceed only if you trust the service receiving media and identity data and are comfortable with local credential storage and account registration.
+
+Risk: The security scan was partial because a referenced local path was missing, so it does not cover every referenced resource.
+
+Mitigation: Review the missing referenced resource and other included resources before relying on the scan assessment.
+
+## Reference(s):
+
+- [API reference](references/api_doc.md)
+- [Skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-vitality-index-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured vitality report with score, grade, trend, and report link]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Single images may provide a score without a trend; results are for care reference and can vary with image angle and lighting.]
+
+## Skill Version(s):
+
+1.0.18 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

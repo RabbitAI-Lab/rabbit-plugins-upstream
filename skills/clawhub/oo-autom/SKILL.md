@@ -5,8 +5,9 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Autom"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.6"
   services: ["autom"]
+  icon: "https://static.oomol.com/logo/third-party/autom.svg"
 ---
 
 # Autom
@@ -36,10 +37,19 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
+- `bing_search` — Search Bing and get organic results with their position, title, link and snippet.
+- `brave_search` — Search Brave's web index and get organic results with their position, title, link and snippet.
+- `duckduckgo_search` — Search DuckDuckGo and get organic results with their position, title, link and snippet.
 - `find_google_countries` — Search supported Google countries in Autom and return matching country codes.
 - `find_google_languages` — Search supported Google languages in Autom and return matching language codes.
 - `find_google_locations` — Search supported Google locations in Autom and return matching location IDs.
 - `get_usage` — Get current Autom credit usage, subscription quota, rate limits, account metadata, and API key metadata.
+- `google_autocomplete` — Get the Google Search autocomplete suggestions for a partial query.
+- `google_maps` — Search Google Maps and get places with address, website, phone number and coordinates.
+- `google_news` — Search Google News and get articles with title, source, date, link and snippet.
+- `google_search` — Search Google and get organic results with their position, title, link and snippet, the knowledge graph and the estimated total.
+- `google_search_light` — Search Google and get only the organic results, the fastest and cheapest Google search.
+- `yahoo_search` — Search Yahoo and get organic results with their position, title, link and snippet.
 
 ## Safety
 
@@ -70,11 +80,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Autom is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=autom
+  https://console.oomol.com/connections/autom
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Autom homepage: https://www.autom.dev
+- API documentation: https://docs.autom.dev/usage
