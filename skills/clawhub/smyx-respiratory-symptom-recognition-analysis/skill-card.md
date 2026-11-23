@@ -1,44 +1,55 @@
-## Description: <br>
-Analyzes respiratory symptom videos or URLs with a cloud vision API to detect coughing, phlegm, and wheezing frequency, then returns structured health-monitoring results and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes video to detect and count coughing, phlegm, and wheezing episodes and produce respiratory health monitoring reports for early alerts.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and health-monitoring agents use this skill to analyze respiratory symptom videos or URLs, retrieve cloud-generated monitoring reports, and view historical report records. Results are for health reference and early anomaly awareness, not medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive respiratory or health-related videos or URLs are sent to the publisher's cloud service. <br>
-Mitigation: Obtain explicit user confirmation before uploads and avoid patient-identifying media unless the workspace and service terms are appropriate. <br>
-Risk: The skill creates or reuses a local identity and stored API tokens for report history. <br>
-Mitigation: Use isolated workspaces for shared environments and review identity and token handling before enabling history queries. <br>
-Risk: Health-monitoring analysis may be misleading if treated as diagnosis. <br>
-Mitigation: Present results as reference information only and direct users to medical professionals for diagnosis or urgent respiratory symptoms. <br>
+## Use Case:
 
+External users and caregivers can review respiratory symptom counts from a video and retrieve prior monitoring reports. Treat results as early monitoring information and consult a clinician for diagnosis or urgent symptoms.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-respiratory-symptom-recognition-analysis) <br>
-- [Respiratory symptom recognition API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands] <br>
-**Output Format:** [Markdown text with structured JSON analysis results and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a local file when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: ClawHub release evidence) <br>
+Risk: Security evidence flags account, credential, and network behavior as broader than the stated respiratory analysis purpose; the assessment is partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the actual account and credential handling and remote video processing before installation; avoid sending sensitive health videos until you are comfortable with the service.
+
+Risk: Video-based symptom estimates could be mistaken for a medical diagnosis.
+
+Mitigation: Use reports only as monitoring aids, consult a clinician for diagnosis, and seek urgent care for serious breathing difficulty.
+
+## Reference(s):
+
+- [Respiratory symptom analysis API documentation](references/api_doc.md)
+- [Skill usage introduction](https://lifeemergence.com/sample.html)
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-respiratory-symptom-recognition-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Markdown, Text, Guidance]
+
+**Output Format:** [Structured JSON analysis results and Markdown report lists, with health alerts and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts local video files or public video URLs and supports history lookup; video requirements are MP4, AVI, or MOV up to 10 MB.]
+
+## Skill Version(s):
+
+1.0.23 (source: server-resolved release metadata; SKILL.md frontmatter says 1.0.26)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

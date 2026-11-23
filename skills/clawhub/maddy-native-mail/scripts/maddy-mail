@@ -1,0 +1,171 @@
+#!/usr/bin/env python3
+import argparse, base64, json, os, re, shlex, smtplib, ssl, subprocess, sys, tempfile, textwrap
+from email import policy
+from email.message import EmailMessage
+from email.parser import BytesParser
+from email.utils import formatdate, make_msgid
+from pathlib import Path
+
+CONFIG = Path(os.environ.get("MADDY_MAIL_CONFIG", "~/.config/maddy-mail/config.json")).expanduser()
+
+def load_config():
+    with CONFIG.open() as f: return json.load(f)
+
+def account(cfg, name=None):
+    name = name or cfg.get("default_account")
+    try: return name, cfg["accounts"][name]
+    except KeyError: raise SystemExit(f"unknown account: {name}")
+
+def shell(cmd, *, input_bytes=None, check=True):
+    p = subprocess.run(cmd, input=input_bytes, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if check and p.returncode:
+        sys.stderr.write(p.stderr.decode(errors="replace"))
+        raise SystemExit(p.returncode)
+    return p.stdout, p.stderr, p.returncode
+
+def ssh_maddy(cfg, args, *, input_bytes=None, check=True):
+    remote = "sudo -u maddy " + shlex.quote(cfg.get("maddy_path", "/usr/local/bin/maddy")) + " " + " ".join(shlex.quote(a) for a in args)
+    return shell(["ssh", cfg["ssh_host"], remote], input_bytes=input_bytes, check=check)
+
+def maddy_user(acc): return acc["email"]
+
+def cmd_list(args):
+    cfg=load_config(); _, acc=account(cfg,args.account)
+    out,_,_=ssh_maddy(cfg,["imap-msgs","list",maddy_user(acc),args.folder])
+    text=out.decode(errors="replace")
+    if args.json:
+        msgs=[]
+        lines=text.splitlines(); i=0
+        pat=re.compile(r"^UID (\d+): (.*?) - (.*)$")
+        while i < len(lines):
+            m=pat.match(lines[i])
+            if m:
+                uid, frm, subj=m.groups(); flags=""; date=""
+                if i+1 < len(lines):
+                    mm=re.match(r"^\s*\[(.*?)\],\s*(.*)$", lines[i+1])
+                    if mm: flags,date=mm.groups()
+                msgs.append({"uid": int(uid), "from": frm.strip(), "subject": subj.strip(), "flags": [f.strip() for f in flags.split() if f.strip()], "date": date.strip()})
+            i+=1
+        print(json.dumps(msgs, ensure_ascii=False, indent=2))
+    else:
+        print(text, end="")
+
+def dump_raw(cfg, acc, folder, uid):
+    out,_,_=ssh_maddy(cfg,["imap-msgs","dump","--uid",maddy_user(acc),folder,str(uid)])
+    # maddy 0.9 may emit warning on stdout before headers; strip leading WARNING lines.
+    raw=out
+    while raw.startswith(b"WARNING:"):
+        nl=raw.find(b"\n")
+        raw=raw[nl+1:] if nl != -1 else b""
+    return raw
+
+def best_body(msg):
+    if msg.is_multipart():
+        for part in msg.walk():
+            if part.get_content_maintype()=="multipart": continue
+            disp=(part.get("Content-Disposition") or "").lower()
+            if "attachment" in disp: continue
+            if part.get_content_type()=="text/plain":
+                return part.get_content()
+        for part in msg.walk():
+            if part.get_content_type()=="text/html":
+                return re.sub(r"<[^>]+>", "", part.get_content())
+        return ""
+    return msg.get_content() if msg.get_content_maintype()=="text" else ""
+
+def cmd_read(args):
+    cfg=load_config(); _, acc=account(cfg,args.account)
+    raw=dump_raw(cfg,acc,args.folder,args.uid)
+    if args.raw:
+        sys.stdout.buffer.write(raw); return
+    msg=BytesParser(policy=policy.default).parsebytes(raw)
+    for h in ["From","To","Cc","Date","Subject","Message-ID"]:
+        if msg.get(h): print(f"{h}: {msg.get(h)}")
+    print()
+    print(best_body(msg).rstrip())
+
+def cmd_add(args):
+    cfg=load_config(); _, acc=account(cfg,args.account)
+    data=sys.stdin.buffer.read()
+    if not data.strip(): raise SystemExit("refusing to add empty message")
+    out,_,_=ssh_maddy(cfg,["imap-msgs","add",maddy_user(acc),args.folder],input_bytes=data)
+    print(out.decode(errors="replace"), end="")
+
+def cmd_delete(args):
+    cfg=load_config(); _, acc=account(cfg,args.account)
+    if not args.yes:
+        raise SystemExit("refusing to delete without --yes")
+    out,_,_=ssh_maddy(cfg,["imap-msgs","remove","--uid","--yes",maddy_user(acc),args.folder,str(args.uid)])
+    print(out.decode(errors="replace"), end="")
+
+def password(acc):
+    cmd=acc.get("password_cmd")
+    if not cmd: raise SystemExit("missing password_cmd")
+    # Run as an argv list, never through a shell. A string is split with shlex;
+    # a pipeline belongs in a small script that password_cmd points at.
+    argv=cmd if isinstance(cmd, list) else shlex.split(cmd)
+    argv=[os.path.expanduser(a) for a in argv]
+    out=subprocess.check_output(argv)
+    return out.decode().strip()
+
+def smtp_tls_context():
+    # smtplib.starttls() without a context does not verify the certificate.
+    return ssl.create_default_context()
+
+def cmd_send(args):
+    cfg=load_config(); _, acc=account(cfg,args.account)
+    body = Path(args.body_file).read_text() if args.body_file else sys.stdin.read()
+    msg=EmailMessage()
+    msg["From"]=acc["email"]
+    msg["To"]=args.to
+    if args.cc: msg["Cc"]=args.cc
+    msg["Subject"]=args.subject
+    msg["Date"]=formatdate(localtime=True)
+    msg["Message-ID"]=make_msgid(domain=acc["email"].split("@",1)[1])
+    msg.set_content(body)
+    recipients=[x.strip() for x in (args.to.split(",") + (args.cc.split(",") if args.cc else [])) if x.strip()]
+    with smtplib.SMTP(acc["smtp_host"], int(acc.get("smtp_port",587)), timeout=30) as s:
+        s.starttls(context=smtp_tls_context()); s.login(acc["email"], password(acc)); s.send_message(msg, to_addrs=recipients)
+    print(f"sent: {msg['Message-ID']}")
+
+def cmd_selftest(args):
+    cfg=load_config(); name, acc=account(cfg,args.account)
+    token="maddy-mail-selftest-" + make_msgid(domain=acc["email"].split("@",1)[1]).strip("<>").replace("@","-")
+    body=f"Self-test disposable message. Token: {token}\n"
+    msg=EmailMessage(); msg["From"]=acc["email"]; msg["To"]=acc["email"]; msg["Subject"]=token; msg["Date"]=formatdate(localtime=True); msg["Message-ID"]=make_msgid(domain=acc["email"].split("@",1)[1]); msg.set_content(body)
+    with smtplib.SMTP(acc["smtp_host"], int(acc.get("smtp_port",587)), timeout=30) as s:
+        s.starttls(context=smtp_tls_context()); s.login(acc["email"], password(acc)); s.send_message(msg)
+    print("sent self-test", token)
+    import time
+    uid=None
+    for _ in range(12):
+        time.sleep(5)
+        out,_,_=ssh_maddy(cfg,["imap-msgs","list",maddy_user(acc),args.folder])
+        text=out.decode(errors="replace")
+        for line in text.splitlines():
+            if token in line:
+                uid=int(line.split(":",1)[0].split()[1]); break
+        if uid: break
+    if not uid: raise SystemExit("self-test message not found")
+    print(f"received uid={uid}")
+    raw=dump_raw(cfg,acc,args.folder,uid)
+    if token.encode() not in raw: raise SystemExit("self-test content mismatch")
+    print("read ok")
+    ssh_maddy(cfg,["imap-msgs","remove","--uid","--yes",maddy_user(acc),args.folder,str(uid)])
+    print("deleted ok")
+    out,_,_=ssh_maddy(cfg,["imap-msgs","list",maddy_user(acc),args.folder])
+    if token in out.decode(errors="replace"): raise SystemExit("delete verification failed")
+    print("list/delete verification ok")
+
+def main():
+    p=argparse.ArgumentParser(description="Helper for Maddy mailboxes over SSH + SMTP")
+    p.add_argument("--account", default=None)
+    sub=p.add_subparsers(required=True)
+    q=sub.add_parser("list"); q.add_argument("--folder",default="INBOX"); q.add_argument("--json",action="store_true"); q.set_defaults(func=cmd_list)
+    q=sub.add_parser("read"); q.add_argument("uid",type=int); q.add_argument("--folder",default="INBOX"); q.add_argument("--raw",action="store_true"); q.set_defaults(func=cmd_read)
+    q=sub.add_parser("add"); q.add_argument("--folder",default="INBOX"); q.set_defaults(func=cmd_add)
+    q=sub.add_parser("delete"); q.add_argument("uid",type=int); q.add_argument("--folder",default="INBOX"); q.add_argument("--yes",action="store_true"); q.set_defaults(func=cmd_delete)
+    q=sub.add_parser("send"); q.add_argument("--to",required=True); q.add_argument("--cc",default=""); q.add_argument("--subject",required=True); q.add_argument("body_file",nargs="?"); q.set_defaults(func=cmd_send)
+    q=sub.add_parser("selftest"); q.add_argument("--folder",default="INBOX"); q.set_defaults(func=cmd_selftest)
+    args=p.parse_args(); args.func(args)
+if __name__=="__main__": main()

@@ -491,6 +491,88 @@ async function markAsUnread(uids, mailbox = DEFAULT_MAILBOX) {
   }
 }
 
+// Create a mailbox if it does not already exist
+async function createMailbox(mailbox) {
+  const imap = await connect();
+
+  try {
+    const mailboxes = await new Promise((resolve, reject) => {
+      imap.getBoxes((err, boxes) => {
+        if (err) reject(err);
+        else resolve(formatMailboxTree(boxes));
+      });
+    });
+
+    const exists = mailboxes.some((box) => box.name === mailbox);
+    if (exists) {
+      return { success: true, mailbox, action: 'already exists' };
+    }
+
+    return new Promise((resolve, reject) => {
+      imap.addBox(mailbox, (err) => {
+        if (err) reject(err);
+        else resolve({ success: true, mailbox, action: 'created' });
+      });
+    });
+  } finally {
+    imap.end();
+  }
+}
+
+// Copy messages to another mailbox
+async function copyMessages(uids, destinationMailbox, mailbox = DEFAULT_MAILBOX) {
+  const imap = await connect();
+
+  try {
+    await openBox(imap, mailbox);
+
+    return new Promise((resolve, reject) => {
+      imap.copy(uids, destinationMailbox, (err, newUIDs) => {
+        if (err) reject(err);
+        else {
+          resolve({
+            success: true,
+            sourceMailbox: mailbox,
+            destinationMailbox,
+            uids,
+            newUIDs,
+            action: 'copied',
+          });
+        }
+      });
+    });
+  } finally {
+    imap.end();
+  }
+}
+
+// Move messages to another mailbox
+async function moveMessages(uids, destinationMailbox, mailbox = DEFAULT_MAILBOX) {
+  const imap = await connect();
+
+  try {
+    await openBox(imap, mailbox);
+
+    return new Promise((resolve, reject) => {
+      imap.move(uids, destinationMailbox, (err, newUIDs) => {
+        if (err) reject(err);
+        else {
+          resolve({
+            success: true,
+            sourceMailbox: mailbox,
+            destinationMailbox,
+            uids,
+            newUIDs,
+            action: 'moved',
+          });
+        }
+      });
+    });
+  } finally {
+    imap.end();
+  }
+}
+
 // List all mailboxes
 async function listMailboxes() {
   const imap = await connect();
@@ -623,6 +705,33 @@ async function main() {
         result = await markAsUnread(positional, options.mailbox);
         break;
 
+      case 'create-mailbox':
+        if (!positional[0]) {
+          throw new Error('Mailbox name required: node imap.js create-mailbox <name>');
+        }
+        result = await createMailbox(positional[0]);
+        break;
+
+      case 'copy':
+        if (positional.length === 0) {
+          throw new Error('UID(s) required: node imap.js copy <uid> [uid2...] --to <mailbox>');
+        }
+        if (!options.to) {
+          throw new Error('Destination mailbox required: --to <mailbox>');
+        }
+        result = await copyMessages(positional, options.to, options.mailbox || DEFAULT_MAILBOX);
+        break;
+
+      case 'move':
+        if (positional.length === 0) {
+          throw new Error('UID(s) required: node imap.js move <uid> [uid2...] --to <mailbox>');
+        }
+        if (!options.to) {
+          throw new Error('Destination mailbox required: --to <mailbox>');
+        }
+        result = await moveMessages(positional, options.to, options.mailbox || DEFAULT_MAILBOX);
+        break;
+
       case 'list-mailboxes':
         result = await listMailboxes();
         break;
@@ -637,7 +746,7 @@ async function main() {
 
       default:
         console.error('Unknown command:', command);
-        console.error('Available commands: check, fetch, download, search, mark-read, mark-unread, list-mailboxes, list-accounts');
+        console.error('Available commands: check, fetch, download, search, mark-read, mark-unread, create-mailbox, copy, move, list-mailboxes, list-accounts');
         process.exit(1);
     }
 

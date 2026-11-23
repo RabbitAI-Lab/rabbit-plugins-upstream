@@ -1,43 +1,56 @@
-## Description: <br>
-小红书数据洞察大师 supports keyword search and note detail lookup for Xiaohongshu public-content analysis, helping agents find popular posts, compare competitors, and monitor content trends. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This read-only skill searches public Xiaohongshu notes, retrieves note details and comments, and gathers creator posts and engagement data as JSON without logging in or publishing.
 
-## Publisher: <br>
-[um-why](https://clawhub.ai/user/um-why) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[um-why](https://clawhub.ai/user/um-why)
 
-## Use Case: <br>
-Content creators, brand marketers, market analysts, MCN teams, and agent operators use this skill to retrieve Xiaohongshu keyword results and note details for topic discovery, competitor analysis, trend monitoring, and reporting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms, note URLs, and returned public-content data are sent to a third-party Guaikei API service. <br>
-Mitigation: Use a dedicated revocable API token and avoid queries that should not leave the local environment. <br>
-Risk: Task results are saved to local log files after execution. <br>
-Mitigation: Periodically delete generated logs when local retention is not desired. <br>
-Risk: The third-party API may be rate-limited, unavailable, or changed outside the skill owner's control. <br>
-Mitigation: Keep request volume within documented limits and treat failed or empty results as operational signals rather than complete market evidence. <br>
+## Use Case:
 
+Creators, brand teams, and analysts use this skill to research topics, monitor competitors, assess creators, and summarize public comment sentiment on Xiaohongshu.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/um-why/xiaohongshu-data-insight) <br>
-- [Publisher profile](https://clawhub.ai/user/um-why) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Markdown, Shell commands, Analysis] <br>
-**Output Format:** [JSON or Markdown emitted by Node.js command-line tools] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search output includes Xiaohongshu note metadata and interaction counts; detail output includes note information, interaction data, and comment analysis when returned by the API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata, OpenClaw metadata, and package.json) <br>
+Risk: Search keywords and Xiaohongshu links are sent to the third-party Guaikei API, and the security review asks users to clarify what request data may be transmitted.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before use, explain the data sent to Guaikei and avoid submitting sensitive keywords or links unless the user understands and accepts that data flow.
+
+Risk: The security review says the artifact was only partially inspected and recommends against installation pending review.
+
+Mitigation: Review the remaining skill components and resolve the security concerns before installing or using the skill.
+
+## Reference(s):
+
+- [Guaikei service](https://www.guaikei.com)
+- [Output contract](references/contract.md)
+- [Command options](references/options.md)
+- [Request routing](references/routing.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Analysis]
+
+**Output Format:** [Structured JSON results with concise natural-language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results cover public notes, note details, comments, creator posts, and engagement metrics; the command output uses a status envelope.]
+
+## Skill Version(s):
+
+1.2.3 (source: frontmatter, package.json, changelog)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

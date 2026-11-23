@@ -1,43 +1,50 @@
-## Description: <br>
-Create content tasks and automations in Automate It, do the content work yourself or leave it to the built-in worker, poll task status through the human review gate, and fetch links to published posts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create content tasks and automations in Automate It, do the content work yourself or leave it to the built-in worker, poll task status through the human review gate, and fetch links to published posts. To support that it also reads and writes the surrounding workspace — skills (brand voice and house style, which it can also create/update/delete), workspace files and folders, connected publishing integrations, link shortening — all bounded by the API key's scopes and the caller's workspace role. Deleting tasks, content items, automations, folders, or skills is possible but requires explicit confirmation on each command. Use when asked to draft, schedule, or publish social content via Automate It, or to check the status or published results of a submitted task.
 
-## Publisher: <br>
-[workingdevshero](https://clawhub.ai/user/workingdevshero) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[workingdevshero](https://clawhub.ai/user/workingdevshero)
 
-## Use Case: <br>
-Developers, content operators, and agents use this skill to draft, schedule, publish, and monitor Automate It content tasks through a scoped API key and a human review workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A broadly scoped API key could permit more task, content, automation, or file actions than the current job needs. <br>
-Mitigation: Use a narrowly scoped Automate It API key for the specific task and report missing-scope errors instead of retrying with broader access by default. <br>
-Risk: Reviewer/admin actions and --no-review can bypass or alter the normal human review workflow. <br>
-Mitigation: Use reviewer/admin commands or --no-review only when the operator explicitly requests them, and do not approve or publish content produced by the same agent. <br>
-Risk: Deletion commands and some automation or folder operations can permanently affect workspace data. <br>
-Mitigation: Require an explicit operator deletion request before passing --yes, and prefer non-destructive updates such as revising content in place. <br>
+## Use Case:
 
+External users and developers use this skill to draft or delegate social and article content, manage Automate It tasks and automations, and track human review and publishing results.
 
-## Reference(s): <br>
-- [Automate It agents homepage](https://automate.it.com/agents) <br>
-- [ClawHub skill page](https://clawhub.ai/workingdevshero/skills/automate-it) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node and an Automate It API key; command effects are bounded by API key scopes and workspace role.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: ClawScan rates the skill suspicious with medium confidence; the bundled executable was only partly inspected, leaving evidence incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat this as a review-level warning, consider the recommendation not to install, and seek a complete, inspectable analysis of the bundled executable. The scanner evidence does not establish malicious intent.
+
+## Reference(s):
+
+- [Automate It agent guide](https://automate.it.com/agents)
+- [ClawHub skill release](https://clawhub.ai/workingdevshero/skills/automate-it)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Text, Links]
+
+**Output Format:** [JSON responses and text, including task status and published post links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can create or update workspace content and submit it for human review; publishing follows the workspace review and permission settings.]
+
+## Skill Version(s):
+
+0.5.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

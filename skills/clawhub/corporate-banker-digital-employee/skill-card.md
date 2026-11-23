@@ -1,43 +1,57 @@
-## Description: <br>
-Covers pre-loan due diligence, industry analysis, ownership tracing, financial statement analysis, visit planning, product roadshows, credit application preparation, and visit memo workflows for corporate banking relationship managers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+覆盖贷前尽调、行业分析、股权穿透、财报分析、拜访计划、产品路演、授信申请、拜访备忘录全流程。助力对公客户经理高效完成信贷全流程作业。
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Corporate banking employees use this skill for reference workflows and report drafting across client visit preparation, financial analysis, credit due diligence, industry and ownership risk analysis, product roadshow preparation, visit memo drafting, and credit application submission checks. Outputs are reference materials that require professional review before operational use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The server security summary reports under-disclosed live system access, sensitive data handling, and persistent records. <br>
-Mitigation: Install only where bank API access, customer-data permissions, audit retention, external data use, note saving, and case creation are explicitly approved and technically scoped. <br>
-Risk: The artifact includes workflows that handle confidential customer, credit, transaction, risk, and document data. <br>
-Mitigation: Require data minimization, masking of personal and account identifiers, access control, and human review before reports are shared or used in business decisions. <br>
-Risk: The artifact includes workflows for saving visit notes and initiating credit application case creation. <br>
-Mitigation: Require clear user consent and confirmation gates before saving notes, creating cases, or submitting workflow outputs to banking systems. <br>
+## Use Case:
 
+Employees serving as corporate banking relationship managers use this skill to prepare visit plans, financial and industry analyses, due diligence outlines, ownership reviews, product presentations, visit memoranda, and credit application drafts. It provides Chinese-first reference workflows for PRC banking; qualified staff must verify source information and review drafts before use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/corporate-banker-digital-employee) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+China (PRC banking context)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown reports, structured checklists, workflow guidance, and JSON-like audit-log examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires human review; some artifact workflows describe bank API access, customer-data handling, note-saving, case creation, and audit records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server evidence and frontmatter) <br>
+Risk: Client personal, account, or business information may be sensitive.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Minimize and anonymize inputs, use summarized account data, and handle records only in institution-controlled systems.
+
+Risk: Draft analysis could be mistaken for an approved credit decision or formal professional advice.
+
+Mitigation: Have qualified staff verify source records, assumptions, and conclusions; follow the institution's approval process for all decisions.
+
+Risk: PRC-specific banking and regulatory references may not fit another jurisdiction or remain current.
+
+Mitigation: Confirm applicable jurisdiction, dates, and requirements against current official sources and local compliance guidance.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/corporate-banker-digital-employee)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Guidance]
+
+**Output Format:** [Chinese-first Markdown drafts, checklists, analytical summaries, and structured tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference drafts require qualified human review. Sensitive client data should be minimized and anonymized; this skill does not perform institution system operations.]
+
+## Skill Version(s):
+
+2.0.11 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

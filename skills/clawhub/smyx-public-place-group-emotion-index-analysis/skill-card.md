@@ -1,46 +1,59 @@
-## Description: <br>
-Analyzes fixed-camera public-place images or videos to produce anonymized group emotion distributions, a 0-100 group emotion index, operational suggestions, safety-warning guidance, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed-camera video from public venues to summarize facial-expression categories and a 0–100 group emotion index.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External operators and developers use this skill to analyze public-place camera footage for group-level emotion trends in malls, exhibition halls, scenic areas, museums, airports, and similar venues. It supports operational planning and human-reviewed safety awareness, not individual identification or automated action against people. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Public-place images or videos may be sent to external services for analysis. <br>
-Mitigation: Use only footage you are authorized to process, provide clear public notice, and confirm retention rules before deployment. <br>
-Risk: The skill can create or reuse persistent local or remote identity and token state linked to report history. <br>
-Mitigation: Review account, token, and local storage behavior before installation and limit access to users who should see cloud-stored report history. <br>
-Risk: Group emotion scores can be misused for individual decisions, automated interventions, discriminatory service, or differential pricing. <br>
-Mitigation: Use only anonymous aggregate results, keep safety outputs human-reviewed, and do not use the score to identify, track, price, or treat individuals differently. <br>
-Risk: Low face visibility, short time windows, or small samples can make the group emotion index unreliable. <br>
-Mitigation: Follow the documented minimum-sample rule, do not publish an index when fewer than five faces are detected, and label camera or sampling limitations in reports. <br>
+## Use Case:
 
+External venue operators and their developers can use the skill to review fixed-camera footage and receive aggregate emotion metrics, trends, and suggested operational or safety follow-up.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-public-place-group-emotion-index-analysis) <br>
-- [API Documentation](artifact/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis report with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write results to a requested file; history queries return cloud report records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata; artifact frontmatter says 1.0.5) <br>
+Risk: The security assessment reports that local video may be sent to an external service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before providing footage, confirm the venue is authorized to share it with that service and review the service's processing and retention terms.
+
+Risk: The security assessment flags undisclosed account and credential handling, including account or token creation and retention.
+
+Mitigation: Review the account and token lifecycle before use, use only approved scoped credentials, and avoid submitting secrets until handling is understood.
+
+Risk: The security assessment says some behavior may not clearly match the described emotion analysis; the scan was partial, with a referenced local path missing and delegated behavior unassessed.
+
+Mitigation: Review the complete package and any delegated components before use, and do not rely on its outputs until the behavior is understood.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-public-place-group-emotion-index-analysis)
+- [API reference](artifact/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured JSON analysis reports and Markdown summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Aggregate emotion distributions and group index, with possible regional breakdowns, trends, suggestions, and report links; outputs are described as group-level results.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

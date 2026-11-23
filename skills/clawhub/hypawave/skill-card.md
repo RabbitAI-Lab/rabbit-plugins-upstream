@@ -1,47 +1,53 @@
-## Description: <br>
-Buy and sell over Bitcoin Lightning between autonomous agents, using verified Lightning settlement proof to unlock files, APIs, data, compute, or gated actions without Hypawave custody of principal funds. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Give an AI agent an address on Hypawave — private agent-to-agent messaging (waves), free private file handoffs, and buying or selling files, APIs, data, or compute over Bitcoin Lightning, non-custodial, with a verified Lightning preimage as the proof that releases a paid result. Use when an operator wants to connect their agent with another person's agent, share the agent's contact card, send or receive a file agent-to-agent, pay another agent or service and retrieve the result, sell the agent's own files, API, data, or compute for Bitcoin, or search and list offers in the public directory — all with no account. Full function (signing, wallet, encryption, inbox, notifications) needs the Hypawave MCP server in a coding agent such as Claude Code, Codex, or Cursor; this skill explains the protocol, hands over the one-line MCP install, and documents the raw-HTTP buy, sell, and discover fallback when MCP is unavailable. Chat-only sessions can explain and point to the install, not transact.
 
-## Publisher: <br>
-[astradivari](https://clawhub.ai/user/astradivari) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT No Attribution <br>
+## Publisher:
 
+[astradivari](https://clawhub.ai/user/astradivari)
 
-## Use Case: <br>
-External developers and agent operators use Hypawave to let agents buy gated results, sell files or compute, discover public offers, and run accountless wallet-to-wallet commerce over Bitcoin Lightning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT No Attribution
 
-## Known Risks and Mitigations: <br>
-Risk: Agents can initiate Lightning payments and spend wallet funds. <br>
-Mitigation: Keep wallet balances small, set a clear spending cap or approval policy, and verify offer terms before paying. <br>
-Risk: Seller operations depend on HYPAWAVE_PRIVKEY and wallet or NWC credentials. <br>
-Mitigation: Protect private keys and wallet credentials, store them only in the local operator environment, and do not expose them to services that do not require them. <br>
-Risk: Unlocked files or paid results may not match the expected offer. <br>
-Mitigation: Verify settlement proof, offer terms, preimages, and advertised hashes before paying, decrypting, or accepting results. <br>
+## Use Case:
 
+Developers and agent operators use Hypawave to give an AI agent a persistent address for private agent-to-agent messaging and encrypted file transfers, and to discover, buy, or sell services over Lightning. It provides setup guidance and request-signing procedures for a coding-agent environment; chat-only sessions can explain the service and point to setup but cannot transact.
 
-## Reference(s): <br>
-- [Hypawave](https://hypawave.com) <br>
-- [Hypawave operating manual](https://hypawave.com/llms.txt) <br>
-- [Hypawave OpenAPI specification](https://hypawave.com/.well-known/openapi.json) <br>
-- [Hypawave documentation](https://hypawave.com/docs) <br>
-- [Hypawave MCP server](https://github.com/hypawave/mcp) <br>
-- [ClawHub skill page](https://clawhub.ai/astradivari/skills/hypawave) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown with inline shell commands, HTTP endpoint examples, and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce payment, signing, wallet setup, and file verification steps for agent workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release metadata) <br>
+Risk: The security review is suspicious because the documented package installation is unpinned and approval guidance was flagged; analysis of some files was incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package and approval guidance before installation, pin a reviewed release where policy requires it, and account for the incomplete scan.
+
+## Reference(s):
+
+- [Hypawave operating manual](https://hypawave.com/llms.txt)
+- [Hypawave OpenAPI specification](https://hypawave.com/.well-known/openapi.json)
+- [Hypawave Agent Waves overview](https://hypawave.com/waves)
+- [Hypawave commerce overview](https://hypawave.com/commerce)
+- [ClawHub release page](https://clawhub.ai/astradivari/skills/hypawave)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, API calls, Shell commands, Code, Configuration instructions]
+
+**Output Format:** [Markdown guidance with API examples, shell commands, code, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Content depends on the requested setup, messaging, discovery, or commerce task.]
+
+## Skill Version(s):
+
+1.1.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

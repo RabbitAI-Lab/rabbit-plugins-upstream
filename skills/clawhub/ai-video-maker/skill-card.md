@@ -1,43 +1,54 @@
-## Description: <br>
-Executes AIVideoMaker API workflows for text-to-video and image-to-video generation, including task creation, status polling, task detail retrieval, and cancellation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate, quote, monitor, retrieve, and cancel AI videos through the AI Video Maker API.
 
-## Publisher: <br>
-[husu](https://clawhub.ai/user/husu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[husu](https://clawhub.ai/user/husu)
 
-## Use Case: <br>
-Developers and engineers use this skill to automate AIVideoMaker text-to-video and image-to-video jobs, monitor task status, retrieve completed outputs, and cancel submitted tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, image inputs, task IDs, and the AIVIDEO_API_KEY are sent to AIVideoMaker. <br>
-Mitigation: Use a dedicated API key, avoid sensitive media, rotate credentials when needed, and monitor provider account usage. <br>
-Risk: Video generation requests may consume provider credits or encounter upstream rate limits. <br>
-Mitigation: Confirm model and duration choices before execution, monitor credit usage, and use the built-in retry/backoff behavior for idempotent task queries. <br>
+## Use Case:
 
+Developers and agents use this skill to create and manage video generation jobs through the AI Video Maker API, estimate costs, check account setup, and resume existing jobs. It requires approval before submitting a paid generation.
 
-## Reference(s): <br>
-- [AIVideoMaker API Reference](references/api-reference.md) <br>
-- [Usage Examples](references/examples.md) <br>
-- [AIVideoMaker](https://aivideomaker.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/husu/ai-video-maker) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Shell commands, Guidance] <br>
-**Output Format:** [JSON responses with command-line workflow guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Normalized task results include ok, status, taskId, data, errorCode, errorMessage, and retryAfter when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.14 (source: server evidence, SKILL.md frontmatter, _meta.json, clawhub.manifest.json) <br>
+Risk: ClawScan marks the release suspicious with medium confidence because installation and update instructions use an unpinned CLI and changeable releases; script analysis is incomplete, so the scan does not establish that the skill is safe.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Consider avoiding installation until the publisher provides a pinned CLI version and an immutable, integrity-checked release.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/husu/skills/ai-video-maker)
+- [AI Video Maker API](https://aivideomaker.ai)
+- [API reference](references/api-reference.md)
+- [Prompting and input selection](references/prompting.md)
+- [Creative recipes](references/recipes.md)
+- [Recovery and delivery](references/recovery.md)
+
+## Skill Output:
+
+**Output Type(s):** [Video, Text]
+
+**Output Format:** [Generated video links with task status and concise text guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Video links include a 24-hour retention deadline.]
+
+## Skill Version(s):
+
+1.0.16 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

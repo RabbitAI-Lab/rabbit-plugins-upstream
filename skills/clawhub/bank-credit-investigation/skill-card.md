@@ -1,41 +1,57 @@
-## Description: <br>
-AI-powered bank credit due diligence assistant for analyzing borrowers, financials, industry risk, ESG factors, and generating investigation report drafts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a structured, Chinese-first framework for corporate borrower due diligence, financial and industry risk analysis, and draft investigation reports.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Commercial bank credit officers, credit analysts, risk managers, and relationship managers use this skill to structure borrower due diligence, review financial and industry risk, and draft credit investigation reports for qualified internal review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Draft credit ratings, pricing, collateral, covenant, and lending recommendations may be incomplete or unsuitable for a real borrower. <br>
-Mitigation: Use outputs only as analytical support and require review by qualified bank officers under internal credit policy before any lending decision. <br>
-Risk: Borrower financials, ownership details, and investigation materials may contain confidential information. <br>
-Mitigation: Share borrower data only in chat environments approved for that information and minimize sensitive data where possible. <br>
+## Use Case:
 
+Bank credit officers, loan analysts, and risk managers can use the framework to organize corporate borrower checks and prepare draft due diligence reports for review. Qualified staff must verify the underlying facts and make all formal credit decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/bank-credit-investigation) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown narrative, tables, checklists, and report templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory draft outputs requiring qualified human review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.1 (source: server release evidence) <br>
+Risk: Sensitive borrower, personal, account, or credit information shared in a conversation could expose confidential data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use aggregated, redacted summaries; omit original records and identifying details, and have authorized staff check sensitive information through approved internal systems.
+
+Risk: Generated analysis or regulatory summaries may be inaccurate or out of date and could be mistaken for a formal lending judgment.
+
+Mitigation: Check evidence and current official sources, then require qualified staff to review and approve the draft before any use in a credit process.
+
+Risk: The security verdict is benign, but the scanner reports that inspection was partial, so the result is limited evidence for installation decisions.
+
+Mitigation: Review the skill source before installation and treat the scan result as incomplete evidence.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/bank-credit-investigation)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Structured Markdown with checklists, tables, and draft report sections]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft reference material requiring source verification and qualified human review; not a final credit decision.]
+
+## Skill Version(s):
+
+5.0.6 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

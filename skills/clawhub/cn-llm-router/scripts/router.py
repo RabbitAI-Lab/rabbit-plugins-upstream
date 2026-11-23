@@ -19,6 +19,7 @@ import sys
 import json
 import argparse
 import time
+import random
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -32,7 +33,17 @@ import yaml_simple
 import report as report_mod
 import update_check
 import mock_engine
+import health_check
+import session_manager
+import price_registry
+import price_checker
+import batch_queue
+import cost_estimator
+import merge_strategy
+import eval_suite
+import eval_store
 from adapters import build, AdapterError
+from adapters.base import AdapterTimeoutError
 from adapters.base import _estimate_tokens as estimate_tokens
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -104,10 +115,76 @@ def _cap(m, key):
         return 5.0
 
 
-def _best_by_capability(models, cap_key):
+def _get_win_score(provider, model_name, task_type):
+    """查询竞技场胜率，归一化到 0-10。无数据返回 None。"""
+    rates = cost_tracker.win_rates().get(task_type, [])
+    if not rates:
+        return None
+    model_wins = None
+    for r in rates:
+        if r["provider"] == provider and r["model"] == model_name:
+            model_wins = r["wins"]
+            break
+    if model_wins is None:
+        return None
+    max_wins = max(r["wins"] for r in rates)
+    if max_wins <= 0:
+        return None
+    return model_wins / max_wins * 10.0
+
+
+# v2.9.0 个性化 auto 模式开关（由 --personalized 设置，进程内有效）
+PERSONALIZED_MODE = False
+
+
+def _personalized_pick(models, task_type):
+    """按本机实测评分表选模型（auto --personalized）。返回 (provider, model, reason) 或 None。
+
+    读 references/score_table.yaml；无数据返回 None（回退通用画像）。
+    选择依据可解释：输出本次评测得分与日期。
+    """
+    table = eval_suite.load_score_table()
+    scores = table.get("provider_scores", {}) or {}
+    if not scores:
+        return None
+    dim = task_type if task_type in eval_suite.DIMENSIONS else None
+    best = None
+    best_score = -1.0
+    for mkey, info in scores.items():
+        if not isinstance(info, dict):
+            continue
+        prov = info.get("provider")
+        mod = info.get("model")
+        # 只在当前候选集内选
+        if not any(p == prov and m.get("name") == mod for p, m in models):
+            continue
+        s = float(info.get(dim, info.get("total", 0)) or 0) if dim else float(info.get("total", 0) or 0)
+        if s > best_score:
+            best_score = s
+            best = (prov, mod, info)
+    if not best:
+        return None
+    prov, mod, info = best
+    basis = dim or "综合"
+    reason = ("个性化 auto：按本机实测「%s」得分 %.2f 选择（评测 %s，%s 题）" %
+              (basis, best_score, info.get("eval_date", "未知"), info.get("cases", "?")))
+    return prov, mod, reason
+
+
+def _best_by_capability(models, cap_key, task_type=None):
     """在候选中选能力画像最高者；同分时选更便宜的（性价比优先）。
+    当 task_type 提供时，静态画像(60%) + 动态胜率(40%) 加权；
+    无竞技场数据时回退纯静态画像。
     这样新增厂商只要在 models.yaml 填了画像，就能被 auto 策略自动选中，无需改代码。"""
-    return max(models, key=lambda pm: (_cap(pm[1], cap_key), -_price(pm[1])))
+    def score(pm):
+        p, m = pm
+        cap = _cap(m, cap_key)
+        if task_type:
+            win = _get_win_score(p, m["name"], task_type)
+            if win is not None:
+                cap = cap * 0.6 + win * 0.4
+        return (cap, -_price(m))
+    return max(models, key=score)
 
 
 def resolve(strategy, classification, reg, manual_model=None, allow_unconfigured=False):
@@ -140,9 +217,41 @@ def resolve(strategy, classification, reg, manual_model=None, allow_unconfigured
     if not models:
         raise AdapterError("注册表中无可用模型，请检查 models.yaml")
 
+    # v2.4 多模态路由：当分类器识别到 image/audio 时，优先选带 multimodal 标签的模型
+    # 放在 cheap/quality/auto 之前，让所有策略都受益于多模态过滤
+    multimodal = cls.get("multimodal")
+    multimodal_fallback = False
+    if multimodal:
+        mm_models = [pm for pm in models if pm[1].get("multimodal")]
+        if mm_models:
+            models = mm_models
+        else:
+            multimodal_fallback = True  # 无多模态模型时回退全量，auto 分支标注
+
     if strategy == "cheap":
-        best = min(models, key=lambda pm: _price(pm[1]))
-        return best[0], best[1]["name"], "cheap 策略：选择价格最低的模型"
+        # v2.7.0 cheap 策略质量感知：按性价比排序（评分/价格），不再单纯选最便宜
+        pricing = price_registry.load_pricing()
+        if pricing:
+            def cheap_score(pm):
+                p, m = pm
+                price = _price(m)
+                if price <= 0:
+                    return (0, 0)  # 免费模型优先
+                # 获取该模型的评分（从价格档案中取能力画像平均分）
+                model_name = m.get("name", "")
+                pinfo = pricing.get(model_name, {})
+                # 使用静态能力画像作为质量参考
+                quality = (m.get("reason_score", 5) + m.get("code_score", 5) + m.get("long_score", 5)) / 3.0
+                # 性价比 = 质量 / 价格（越高越好）
+                return (quality / price, -price)
+            best = max(models, key=cheap_score)
+            reason = "cheap 策略：性价比最优（评分/价格）"
+        else:
+            best = min(models, key=lambda pm: _price(pm[1]))
+            reason = "cheap 策略：选择价格最低的模型"
+        if multimodal_fallback:
+            reason = "⚠️ 多模态(" + multimodal + ")需求但无支持模型，回退全量｜" + reason
+        return best[0], best[1]["name"], reason
 
     if strategy == "quality":
         # 优先带 reasoner 的，其次上下文最长的
@@ -154,31 +263,47 @@ def resolve(strategy, classification, reg, manual_model=None, allow_unconfigured
             s += (m.get("ctx", 0) or 0) / 1000.0
             return s
         best = max(models, key=qscore)
-        return best[0], best[1]["name"], "quality 策略：选择能力最强的模型"
+        reason = "quality 策略：选择能力最强的模型"
+        if multimodal_fallback:
+            reason = "⚠️ 多模态(" + multimodal + ")需求但无支持模型，回退全量｜" + reason
+        return best[0], best[1]["name"], reason
 
     # auto：任务感知（v2.1 起结合能力画像 reason_score/code_score/long_score）
+    # v2.3 起：静态画像(60%) + 动态胜率(40%) 加权
+    # v2.4 起：多模态需求时已过滤候选集
+    task_type = cls["task_type"]
+
+    # v2.9.0 个性化 auto：本机实测评分表优先（可解释），无数据自动回退通用画像
+    if PERSONALIZED_MODE:
+        picked = _personalized_pick(models, task_type)
+        if picked:
+            p, m, reason = picked
+            if multimodal_fallback:
+                reason = "⚠️ 多模态需求无支持模型，回退全量｜" + reason
+            return p, m, reason
+
     reason_bits = []
+    if multimodal_fallback:
+        reason_bits.append("⚠️ 多模态(" + multimodal + ")需求但无支持模型，回退全量")
     if cls["needs_reasoning"]:
         reasoner = [pm for pm in models if pm[1].get("reasoner")]
         if reasoner:
-            # 有 reasoner 时按 reason_score 选最强的
             best = max(reasoner, key=lambda pm: _cap(pm[1], "reason_score"))
             reason_bits.append("需推理→选 reasoner 模型(按推理画像)")
         else:
-            # 无 reasoner：按 reason_score 选最强，其次看价格
-            best = _best_by_capability(models, "reason_score")
-            reason_bits.append("需推理但无 reasoner→选推理画像最强")
+            best = _best_by_capability(models, "reason_score", task_type=task_type)
+            reason_bits.append("需推理但无 reasoner→选推理画像+胜率加权")
     elif cls["length_bucket"] == "long":
         longs = [pm for pm in models if (pm[1].get("ctx") or 0) >= 128000]
         if longs:
             best = max(longs, key=lambda pm: (_cap(pm[1], "long_score"), pm[1].get("ctx", 0)))
             reason_bits.append("长文→选超长上下文(≥128k)且长文画像最强")
         else:
-            best = _best_by_capability(models, "long_score")
-            reason_bits.append("长文但无超长上下文→选长文画像最强")
-    elif cls["task_type"] == "code":
-        best = _best_by_capability(models, "code_score")
-        reason_bits.append("代码任务→选代码画像最强(性价比优先)")
+            best = _best_by_capability(models, "long_score", task_type=task_type)
+            reason_bits.append("长文但无超长上下文→选长文画像+胜率加权")
+    elif task_type == "code":
+        best = _best_by_capability(models, "code_score", task_type=task_type)
+        reason_bits.append("代码任务→选代码画像+胜率加权(性价比优先)")
     elif cls["budget_sensitive"]:
         best = min(models, key=lambda pm: _price(pm[1]))
         reason_bits.append("价格敏感(分类/抽取/翻译)→选最便宜")
@@ -222,6 +347,35 @@ def _price_of(provider, model_name, reg):
 
 
 # ───────────────────────── 命令实现 ─────────────────────────
+def _resolve_dry_run(strategy, classification, reg, manual_model=None, dry_run=False):
+    """统一路由解析（含 --dry-run 建议模式）。"""
+    allow_unconfigured = dry_run or not config.configured_providers()
+    try:
+        if strategy == "manual":
+            if not manual_model:
+                raise AdapterError("manual 模式需通过 --model provider:model 指定具体模型")
+            provider, model, reason = _resolve_manual(manual_model, reg,
+                                                      allow_unconfigured=allow_unconfigured)
+        else:
+            provider, model, reason = resolve(strategy, classification, reg,
+                                               allow_unconfigured=allow_unconfigured)
+    except AdapterError:
+        if allow_unconfigured:
+            raise
+        # 有密钥但仍失败 → 进入建议模式
+        try:
+            if strategy == "manual" and manual_model:
+                provider, model, reason = _resolve_manual(manual_model, reg, allow_unconfigured=True)
+            else:
+                provider, model, reason = resolve(strategy, classification, reg, allow_unconfigured=True)
+        except AdapterError as e2:
+            raise SystemExit("❌ 路由失败：%s" % e2)
+        reason = "【建议模式·仅展示推荐不调用】" + reason
+    if dry_run:
+        reason = "【dry-run·仅展示推荐不调用】" + reason
+    return provider, model, reason
+
+
 def cmd_chat(args, reg):
     prompt = args.prompt or " ".join(args.message or [])
     if not prompt:
@@ -234,18 +388,47 @@ def cmd_chat(args, reg):
     if getattr(args, "mock", False):
         return _cmd_chat_mock(args, reg, prompt, system, classification, strategy)
 
+    # ── dry-run 模式（v2.3 建议模式统一）──
+    dry_run = getattr(args, "dry_run", False)
+
+    # 解析主模型 + 备用模型列表（用于故障转移）
     try:
         if strategy == "manual":
-            provider, model, reason = _resolve_manual(args.model, reg)
+            primary_p, primary_m, reason = _resolve_manual(args.model, reg, allow_unconfigured=dry_run)
+            backups = []
         else:
-            provider, model, reason = resolve(strategy, classification, reg)
+            if dry_run:
+                primary_p, primary_m, reason = resolve(strategy, classification, reg, allow_unconfigured=True)
+                backups = []
+            else:
+                (primary_p, primary_m), backups, reason = health_check.resolve_with_fallback(
+                    strategy, classification, reg, max_backups=2)
     except AdapterError as e:
         raise SystemExit("❌ 路由失败：%s" % e)
 
-    messages = []
-    if system:
-        messages.append({"role": "system", "content": system})
-    messages.append({"role": "user", "content": prompt})
+    # dry-run 展示后返回
+    if dry_run:
+        print("🧭 dry-run 路由决策（%s 模式）" % strategy)
+        print("  厂商/模型 : %s / %s" % (primary_p, primary_m))
+        print("  依据       : %s" % reason)
+        print("  任务分类   : 类型=%s 推理=%s 长度=%s" % (
+            classification["task_type"], classification["needs_reasoning"],
+            classification["length_bucket"]))
+        return
+
+    # v2.6 多轮会话集成
+    session_id = getattr(args, "session", None)
+    history_model = None
+    history_provider = None
+    if session_id:
+        messages, history_model, history_provider = session_manager.build_messages_with_history(
+            session_id, prompt, system=system
+        )
+    else:
+        messages = []
+        if system:
+            messages.append({"role": "system", "content": system})
+        messages.append({"role": "user", "content": prompt})
 
     if not args.no_cache:
         hit = cache.get(prompt, ttl_hours=args.cache_ttl, fuzzy=args.cache_fuzzy)
@@ -260,43 +443,80 @@ def cmd_chat(args, reg):
                 print(hresp)
             return
 
+    # 尝试主模型 + 备用模型（故障转移）
+    candidates = [(primary_p, primary_m)] + backups
+    fallback_from = None
+    last_error = None
+    success = False
     t0 = time.time()
-    est_tokens = False  # 是否为估算 token（流式无精确 usage 时置 True）
-    try:
-        adapter = build(reg["providers"][provider]["adapter"], _adapter_cfg(provider, reg))
-        if args.stream:
-            print("🤖 [%s / %s] %s\n" % (provider, model, reason))
-            chunks = adapter.chat(messages, model, stream=True, timeout=args.timeout)
-            full = []
-            for piece in chunks:
-                if piece == "":
-                    break
-                full.append(piece)
-                if not args.json:
-                    sys.stdout.write(piece)
-                    sys.stdout.flush()
-            print("")
-            content = "".join(full)
-            # 流式多数厂商不返回精确 usage：用 _estimate_tokens 兜底估算，
-            # 输入按完整 prompt(+system) 估、输出按累积文本估，并标注为「估」。
-            in_text = "".join(m.get("content", "") for m in messages)
-            it = estimate_tokens(in_text)
-            ot = estimate_tokens(content)
-            est_tokens = True
-        else:
-            res = adapter.chat(messages, model, stream=False, timeout=args.timeout)
-            content = res["content"]
-            it, ot = res["in_tokens"], res["out_tokens"]
-    except AdapterError as e:
-        cost_tracker.log_call(provider, model, classification["task_type"], 0, 0, 0.0,
-                               int((time.time() - t0) * 1000), False, str(e))
-        raise SystemExit("❌ 调用失败：%s" % e)
+    est_tokens = False
+    provider = model = None
+    content = None
+
+    for idx, (prov, mod) in enumerate(candidates):
+        # 跳过不可达的备用模型
+        if idx > 0 and not health_check.check_health().get(prov, False):
+            continue
+        try:
+            adapter = build(reg["providers"][prov]["adapter"], _adapter_cfg(prov, reg))
+            if args.stream:
+                if idx > 0:
+                    print("⚡ 降级到 %s / %s（原模型 %s 不可用）" % (prov, mod, candidates[0][0]))
+                print("🤖 [%s / %s] %s\n" % (prov, mod, reason))
+                chunks = adapter.chat(messages, mod, stream=True, timeout=args.timeout)
+                full = []
+                for piece in chunks:
+                    if piece == "":
+                        break
+                    full.append(piece)
+                    if not args.json:
+                        sys.stdout.write(piece)
+                        sys.stdout.flush()
+                print("")
+                content = "".join(full)
+                in_text = "".join(m.get("content", "") for m in messages)
+                it = estimate_tokens(in_text)
+                ot = estimate_tokens(content)
+                est_tokens = True
+            else:
+                res = adapter.chat(messages, mod, stream=False, timeout=args.timeout)
+                if idx > 0:
+                    print("⚡ 降级到 %s / %s（原模型 %s 不可用）" % (prov, mod, candidates[0][0]))
+                content = res["content"]
+                it, ot = res["in_tokens"], res["out_tokens"]
+            provider, model = prov, mod
+            fallback_from = candidates[0][0] + ":" + candidates[0][1] if idx > 0 else None
+            success = True
+            break
+        except (AdapterTimeoutError, AdapterError) as e:
+            last_error = e
+            err_str = str(e)
+            # 记录失败
+            cost_tracker.log_call(prov, mod, classification["task_type"], 0, 0, 0.0,
+                                  int((time.time() - t0) * 1000), False, err_str,
+                                  fallback_from=candidates[0][0] + ":" + candidates[0][1] if idx > 0 else None)
+            if isinstance(e, AdapterTimeoutError):
+                print("⚠️ %s / %s 超时（%ds），尝试下一个..." % (prov, mod, e.timeout_sec))
+            else:
+                print("⚠️ %s / %s 失败：%s" % (prov, mod, err_str[:80]))
+            continue
+
+    if not success:
+        raise SystemExit("❌ 所有模型调用均失败：%s" % last_error)
 
     elapsed = int((time.time() - t0) * 1000)
     price = _price_of(provider, model, reg)
     cost = cost_tracker.compute_cost(price, it, ot)
-    cost_tracker.log_call(provider, model, classification["task_type"], it, ot, cost, elapsed, True)
+    cost_tracker.log_call(provider, model, classification["task_type"], it, ot, cost, elapsed, True,
+                          tokens_estimated=est_tokens)
     cache.put(prompt, provider, model, content)
+
+    # v2.6 多轮会话记录
+    if session_id:
+        session_manager.append_message(session_id, "user", prompt, model=model, provider=provider)
+        session_manager.append_message(session_id, "assistant", content, model=model, provider=provider)
+        if not args.json:
+            print("  [session: %s]" % session_id)
 
     tok_tag = "(估)" if est_tokens else ""
     if args.json:
@@ -394,26 +614,10 @@ def cmd_route(args, reg):
         raise SystemExit("❌ 请提供 --prompt 或 -m")
     cls = classifier.classify(prompt, args.task)
     strategy = args.strategy if args.strategy else "auto"
-    try:
-        if strategy == "manual":
-            if not args.model:
-                raise AdapterError("manual 模式需通过 --model provider:model 指定具体模型")
-            provider, model, reason = _resolve_manual(args.model, reg)
-        else:
-            provider, model, reason = resolve(strategy, cls, reg)
-    except AdapterError as e:
-        if not config.configured_providers():
-            # 未配置任何密钥 → 进入「建议模式」，仅展示推荐路由，不发起调用
-            try:
-                if strategy == "manual" and args.model:
-                    provider, model, reason = _resolve_manual(args.model, reg, allow_unconfigured=True)
-                else:
-                    provider, model, reason = resolve(strategy, cls, reg, allow_unconfigured=True)
-            except AdapterError:
-                raise SystemExit("❌ 路由失败：%s" % e)
-            reason = "【建议模式·未配置密钥，仅展示推荐不调用】" + reason
-        else:
-            raise SystemExit("❌ 路由失败：%s" % e)
+    manual_model = args.model if args.model else None
+    dry_run = getattr(args, "dry_run", False)
+    provider, model, reason = _resolve_dry_run(strategy, cls, reg,
+                                                manual_model=manual_model, dry_run=dry_run)
     if args.json:
         print(json.dumps({"strategy": strategy, "provider": provider, "model": model,
                           "reason": reason, "classification": cls}, ensure_ascii=False))
@@ -427,10 +631,12 @@ def cmd_route(args, reg):
 
 def cmd_report(args, reg):
     agg = cost_tracker.aggregate(args.period)
+    # v2.7.0 双轨：加载价格档案
+    pricing = price_registry.load_pricing() if getattr(args, "dual", False) else None
     if args.html:
         path = report_mod.render_html(agg, args.html)
         print("📊 HTML 报表已生成：%s" % path)
-    print(report_mod.render_text(agg))
+    print(report_mod.render_text(agg, pricing=pricing))
 
 
 def cmd_hardware(args, reg):
@@ -477,8 +683,431 @@ def cmd_budget(args, reg):
     print(report_mod.budget_alert(exc, spent, bud))
 
 
+def cmd_price_check(args, reg):
+    """v2.7.0 降价检测。"""
+    provider = getattr(args, "price_provider", None)
+    result = price_checker.check_price_changes(provider=provider)
+    
+    print("🔍 价格变更检测")
+    print("  检查厂商数: %d" % result["checked"])
+    
+    if result["changes"]:
+        print("\n⚠️  疑似调价：")
+        for c in result["changes"]:
+            print("   - %s / %s" % (c["provider"], c["model"]))
+            print("     输入价: %.4f → %.4f" % (c["old_in"], c["new_in"]))
+            print("     输出价: %.4f → %.4f" % (c["old_out"], c["new_out"]))
+            print("     来源: %s" % c.get("url", ""))
+    else:
+        print("  ✅ 未检测到价格变化")
+    
+    if result["errors"]:
+        print("\n❌ 抓取失败：")
+        for e in result["errors"]:
+            print("   - %s: %s" % (e["provider"], e.get("reason", "")))
+    
+    if result["stale"]:
+        print("\n📅 档案过期提醒（超过 30 天未更新）：")
+        for s in result["stale"]:
+            print("   - %s: %s" % (s["name"], s.get("reason", "")))
+    
+    if args.json:
+        print(json.dumps(result, ensure_ascii=False))
+
+
+def cmd_price_history(args, reg):
+    """v2.7.0 价格档案查看。"""
+    pricing = price_registry.all_prices()
+    if args.json:
+        print(json.dumps(pricing, ensure_ascii=False, indent=2))
+    else:
+        print("📋 价格档案（%d 个模型）" % len(pricing))
+        for name, info in sorted(pricing.items()):
+            date_str = info.get("date", "无")
+            source_str = info.get("source", "")
+            print("  %-25s 入 %-6.4f 出 %-6.4f 日期 %s %s" % (
+                name, info["in"], info["out"], date_str, source_str))
+
+
+# ───────────────────────── v2.9.0 批处理 / 长文链 / 评测 ─────────────────────────
+def _batch_call(prompt, task_hint, strategy, model_spec, reg, timeout=60):
+    """批处理单条任务的模型调用（复用现有路由 + 适配器，带重试由队列层负责）。
+
+    返回 (content, provider, model, in_tokens, out_tokens, cost)。
+    """
+    cls = classifier.classify(prompt, task_hint)
+    configured = config.configured_providers()
+
+    if model_spec and model_spec != "auto":
+        # 指定模型：provider:model 或 auto 之外的策略名
+        if ":" in model_spec:
+            prov, mod = _resolve_manual(model_spec, reg, allow_unconfigured=not configured)
+        else:
+            prov, mod, _ = resolve(model_spec, cls, reg, allow_unconfigured=not configured)
+    else:
+        prov, mod, _ = resolve(strategy, cls, reg, allow_unconfigured=not configured)
+
+    adapter = build(reg["providers"][prov]["adapter"], _adapter_cfg(prov, reg))
+    res = adapter.chat([{"role": "user", "content": prompt}], mod, stream=False, timeout=timeout)
+    price = _price_of(prov, mod, reg) or {}
+    pin = float(price.get("in", 0) or 0)
+    pout = float(price.get("out", 0) or 0)
+    it, ot = res["in_tokens"], res["out_tokens"]
+    cost = it / 1_000_000 * pin + ot / 1_000_000 * pout
+    return res["content"], prov, mod, it, ot, round(cost, 6)
+
+
+def cmd_batch(args, reg):
+    """v2.9.0 批处理：清单批量调用 + 跑前成本预估 + 断点续跑。"""
+    # 子命令：run / status / results / list
+    bcmd = getattr(args, "batch_cmd", "run")
+
+    q = batch_queue.BatchQueue(db_path=getattr(args, "db", None), max_retries=getattr(args, "retries", 2))
+
+    if bcmd == "list":
+        jobs = q.list_jobs(limit=getattr(args, "limit", 10))
+        if not jobs:
+            print("暂无批处理任务。")
+            return
+        print("📦 批处理任务列表")
+        for j in jobs:
+            print("  %-16s 任务 %d 条  源 %s  创建 %s" % (
+                j["job_id"], j["total"], j["src_file"] or "-",
+                time.strftime("%m-%d %H:%M", time.localtime(j["created_at"]))))
+        return
+
+    if bcmd == "status":
+        job_id = args.job_id
+        p = q.progress(job_id)
+        if not p:
+            raise SystemExit("❌ 未找到任务: %s" % job_id)
+        if args.json:
+            print(json.dumps(p, ensure_ascii=False))
+        else:
+            print("📊 任务进度 %s" % job_id)
+            print("  总数 %d  完成 %d  失败 %d  待处理 %d  进行中 %d" % (
+                p["total"], p["done"], p["failed"], p["pending"], p["running"]))
+            print("  进度 %.1f%%" % p["percent"])
+            print("  已花费 ¥%.4f" % q.total_cost(job_id))
+        return
+
+    if bcmd == "results":
+        job_id = args.job_id
+        items = q.results(job_id, only_failed=getattr(args, "failed_only", False))
+        if args.json:
+            print(json.dumps(items, ensure_ascii=False))
+        else:
+            for it in items:
+                print("[#%d] %s | %s" % (it["idx"], it["status"], it["payload"][:50]))
+                if it.get("error"):
+                    print("     错误: %s" % it["error"][:80])
+        return
+
+    # bcmd == run
+    path = args.manifest
+    items = batch_queue._parse_manifest(path)
+    if not items:
+        raise SystemExit("❌ 任务清单为空或全为注释: %s" % path)
+
+    strategy = getattr(args, "strategy", "auto")
+    model_spec = getattr(args, "model", "auto")
+    task_hint = getattr(args, "task", None)
+
+    # 决定用于预估的模型名
+    est_model = model_spec.split(":", 1)[-1] if model_spec and ":" in model_spec else "deepseek-chat"
+
+    # 断点续跑：--resume 复用已有 job，否则新建
+    job_id = getattr(args, "resume", None)
+    if job_id:
+        if not q.get_job(job_id):
+            raise SystemExit("❌ 待续跑的任务不存在: %s" % job_id)
+        pending = q.claim_pending(job_id)
+        run_items = pending
+        print("▶️  断点续跑 %s：跳过已完成，补 %d 条" % (job_id, len(run_items)))
+    else:
+        # 跑前成本预估
+        est = cost_estimator.estimate_batch(items, est_model)
+        from_cfg = config.load_config(getattr(args, "config", None))
+        budget = float(from_cfg.get("budget_monthly", 0) or 0)
+        if getattr(args, "budget", None):
+            budget = float(args.budget)
+        gate = cost_estimator.budget_gate(est, budget, confirmed=getattr(args, "yes", False))
+        if not args.json:
+            print(cost_estimator.render_estimate(est, gate))
+        if args.json:
+            print(json.dumps({"estimate": est, "gate": gate}, ensure_ascii=False))
+        if not gate["allowed"]:
+            raise SystemExit("❌ %s（加 --yes 显式确认后启动）" % gate["reason"])
+
+        job_id = q.create_job(items, name=os.path.basename(path), strategy=strategy,
+                              model=model_spec, task_hint=task_hint, src_file=path)
+        run_items = q.claim_pending(job_id)
+        print("📦 已创建任务 %s（%d 条）" % (job_id, len(items)))
+
+    if getattr(args, "estimate_only", False):
+        return
+
+    # 硬件自适应并发
+    workers = hardware.enforce_limit(getattr(args, "concurrency", None) or hardware.profile()["max_concurrency"])
+    print("⚙️  并发 %d（硬件档位 %s）" % (workers, hardware.profile()["tier"]))
+
+    import concurrent.futures as cf
+    done_n = 0
+    fail_n = 0
+    lock = __import__("threading").Lock()
+
+    def run_one(item):
+        nonlocal done_n, fail_n
+        q.mark_running(item["id"])
+        try:
+            content, prov, mod, it, ot, cost = _batch_call(
+                item["payload"], task_hint, strategy, model_spec, reg, timeout=getattr(args, "timeout", 60))
+            q.mark_done(item["id"], result=content, cost=cost, in_tokens=it, out_tokens=ot)
+            with lock:
+                done_n += 1
+                if not args.json and done_n % 10 == 0:
+                    print("   进度 %d/%d" % (done_n + fail_n, len(run_items)))
+        except Exception as e:
+            status = q.mark_failed(item["id"], error=str(e))
+            with lock:
+                fail_n += 1
+            return (item["idx"], status, str(e)[:60])
+        return None
+
+    with cf.ThreadPoolExecutor(max_workers=workers) as pool:
+        errs = [r for r in pool.map(run_one, run_items) if r]
+
+    print("✅ 批处理完成：成功 %d / 失败 %d" % (done_n, fail_n))
+    if errs:
+        print("   失败样例：%s" % errs[:3])
+    print("   任务 ID: %s（可用 batch status %s 查看进度）" % (job_id, job_id))
+    print("   总花费 ¥%.4f" % q.total_cost(job_id))
+    if args.json:
+        print(json.dumps({"job_id": job_id, "done": done_n, "failed": fail_n,
+                          "cost": q.total_cost(job_id)}, ensure_ascii=False))
+    q.close_all()
+
+
+def cmd_longchain(args, reg):
+    """v2.9.0 长文一键链：分块 → 并行 → 合并。"""
+    text = args.text
+    if not text and getattr(args, "file", None):
+        with open(args.file, "r", encoding="utf-8") as f:
+            text = f.read()
+    if not text or not text.strip():
+        raise SystemExit("❌ 请提供 --text 或 --file")
+
+    task_type = args.task_type
+    strategy = getattr(args, "strategy", "auto")
+    model_spec = getattr(args, "model", "auto")
+
+    cls = classifier.classify(text[:500], task_type)
+    if model_spec and ":" in model_spec:
+        prov, mod = _resolve_manual(model_spec, reg, allow_unconfigured=not config.configured_providers())
+    else:
+        prov, mod, _ = resolve(strategy, cls, reg, allow_unconfigured=not config.configured_providers())
+
+    ctx = int(getattr(args, "ctx", 32000) or 32000)
+    workers = hardware.enforce_limit(getattr(args, "concurrency", None) or hardware.profile()["max_concurrency"])
+
+    def call_fn(prompt):
+        adapter = build(reg["providers"][prov]["adapter"], _adapter_cfg(prov, reg))
+        res = adapter.chat([{"role": "user", "content": prompt}], mod,
+                           stream=False, timeout=getattr(args, "timeout", 120))
+        return res["content"]
+
+    result = merge_strategy.longchain(
+        text, task_type, call_fn, model_ctx=ctx, max_workers=workers,
+        chunk_chars=getattr(args, "chunk_chars", None))
+
+    if args.json:
+        print(json.dumps(result, ensure_ascii=False))
+    else:
+        print("🧠 模型 %s / %s" % (prov, mod))
+        print(merge_strategy.render_longchain(result))
+        out = getattr(args, "output", None)
+        if out:
+            with open(out, "w", encoding="utf-8") as f:
+                f.write(result["result"])
+            print("\n💾 已保存到: %s" % out)
+
+
+def cmd_arena_suite(args, reg):
+    """v2.9.0 A/B 质量评测集：arena --suite。"""
+    suite = eval_suite.load_suite()
+    models_arg = getattr(args, "models", "auto")
+    selected = []
+
+    if models_arg and models_arg != "auto":
+        for token in models_arg.split(","):
+            token = token.strip()
+            if ":" not in token:
+                continue
+            prov, mod = token.split(":", 1)
+            for p, pinfo in reg.get("providers", {}).items():
+                if p != prov:
+                    continue
+                for m in pinfo.get("models", []):
+                    if m["name"] == mod:
+                        selected.append({"provider": prov, "model": mod})
+                        break
+    if not selected:
+        # auto：已配置厂商的默认模型（最多 3 家）
+        for prov in config.configured_providers()[:3]:
+            pinfo = reg["providers"].get(prov)
+            if pinfo:
+                selected.append({"provider": prov, "model": pinfo.get("default_model", "")})
+
+    if not selected:
+        # 无密钥时提供 mock 评测模式（本地规则响应），保证 CLI 可离线演示
+        if not getattr(args, "mock", False):
+            raise SystemExit("❌ 未检测到已配置密钥。请配置厂商 Key，或加 --mock 用本地模拟响应演示评测流程。")
+        selected = [{"provider": "mock", "model": "mock-model"}]
+
+    mock_mode = getattr(args, "mock", False)
+    cases_filter = getattr(args, "category", None)
+
+    def call_fn(provider, model, prompt, category):
+        if cases_filter and category != cases_filter and mock_mode:
+            return ""
+        if mock_mode:
+            # 本地规则响应：拼接 rubric 关键词，纯演示评分流程（零 LLM）
+            return "本地模拟回答：" + prompt[:40] + " " + category
+        adapter = build(reg["providers"][provider]["adapter"], _adapter_cfg(provider, reg))
+        res = adapter.chat([{"role": "user", "content": prompt}], model,
+                           stream=False, timeout=60)
+        return res["content"]
+
+    use_suite = suite
+    if cases_filter:
+        use_suite = dict(suite)
+        use_suite["cases"] = [c for c in suite["cases"] if c["category"] == cases_filter]
+
+    workers = hardware.enforce_limit(getattr(args, "concurrency", None) or hardware.profile()["max_concurrency"])
+    print("🏃 开始本地评测（%d 题 × %d 模型，并发 %d）..." % (
+        len(use_suite["cases"]), len(selected), workers))
+
+    result = eval_suite.run_suite(call_fn, suite=use_suite, models=selected, max_workers=workers)
+
+    if args.json:
+        print(json.dumps(result, ensure_ascii=False))
+    else:
+        print(eval_suite.render_table(result))
+
+    # 存档 + 对比
+    if not getattr(args, "no_save", False):
+        n = eval_store.save_run(result, db_path=getattr(args, "db", None))
+        history = eval_store.history(db_path=getattr(args, "db", None))
+        if not args.json:
+            print()
+            print(eval_store.compare(result, db_path=getattr(args, "db", None)))
+            print("\n💾 已存档 %d 条评测记录" % n)
+
+    # 保存雷达图 + 个性化评分表
+    radar = getattr(args, "radar", None)
+    if radar:
+        eval_suite.save_radar_svg(result, radar)
+        print("📊 雷达图已保存: %s" % radar)
+    if getattr(args, "save_profile", False):
+        eval_suite.save_score_table(result)
+        print("💾 已回填个性化评分表（auto --personalized 可用）")
+
+
 def cmd_version(args, reg):
     print("cn-llm-router v%s" % meta.VERSION)
+
+
+def cmd_embed(args, reg):
+    """v2.6 embed：文本向量嵌入。"""
+    # 解析 texts
+    texts_raw = args.texts
+    try:
+        texts = json.loads(texts_raw)
+        if not isinstance(texts, list):
+            texts = [texts_raw]
+    except json.JSONDecodeError:
+        texts = [t.strip() for t in texts_raw.split(",") if t.strip()]
+
+    if not texts:
+        raise SystemExit("❌ --texts 不能为空")
+
+    # 选厂商
+    provider = args.provider
+    if not provider:
+        configured = config.configured_providers()
+        if not configured:
+            raise SystemExit("❌ 未配置任何厂商密钥，请先设置环境变量")
+        provider = configured[0]
+
+    adapter = build(reg["providers"][provider]["adapter"], _adapter_cfg(provider, reg))
+    try:
+        result = adapter.embed(texts, model=args.model, timeout=args.timeout)
+    except NotImplementedError:
+        raise SystemExit("❌ 厂商 %s 不支持 embedding" % provider)
+
+    if args.json:
+        # embeddings 可能很大，只输出前 3 维 + 统计
+        preview = [{"dim": len(e), "preview": e[:3]} for e in result["embeddings"]]
+        print(json.dumps({
+            "provider": provider,
+            "model": result["model"],
+            "count": len(result["embeddings"]),
+            "dim": result["dim"],
+            "tokens": result["tokens"],
+            "embeddings_preview": preview,
+        }, ensure_ascii=False))
+    else:
+        print("🔤 文本向量嵌入（%s / %s）" % (provider, result["model"]))
+        print("  文本数: %d" % len(result["embeddings"]))
+        print("  维度: %d" % result["dim"])
+        print("  消耗 tokens: %d" % result["tokens"])
+        for i, e in enumerate(result["embeddings"][:3]):
+            print("  [%d] 前3维: %s" % (i, e[:3]))
+        if len(result["embeddings"]) > 3:
+            print("  ...（共 %d 条）" % len(result["embeddings"]))
+
+
+def cmd_rerank(args, reg):
+    """v2.6 rerank：文档重排序。"""
+    # 解析 documents
+    docs_raw = args.documents
+    try:
+        documents = json.loads(docs_raw)
+        if not isinstance(documents, list):
+            documents = [docs_raw]
+    except json.JSONDecodeError:
+        documents = [t.strip() for t in docs_raw.split(",") if t.strip()]
+
+    if not documents:
+        raise SystemExit("❌ --documents 不能为空")
+
+    provider = args.provider
+    if not provider:
+        configured = config.configured_providers()
+        if not configured:
+            raise SystemExit("❌ 未配置任何厂商密钥，请先设置环境变量")
+        provider = configured[0]
+
+    adapter = build(reg["providers"][provider]["adapter"], _adapter_cfg(provider, reg))
+    try:
+        result = adapter.rerank(args.query, documents, model=args.model, timeout=args.timeout)
+    except NotImplementedError:
+        raise SystemExit("❌ 厂商 %s 不支持 rerank" % provider)
+
+    if args.json:
+        print(json.dumps({
+            "provider": provider,
+            "model": result["model"],
+            "results": result["results"],
+        }, ensure_ascii=False))
+    else:
+        print("📊 文档重排序（%s / %s）" % (provider, result["model"]))
+        print("  查询: %s" % args.query[:60])
+        for r in result["results"]:
+            idx = r.get("index", "?")
+            score = r.get("relevance_score", r.get("score", 0))
+            text = r.get("text", r.get("document", ""))[:60]
+            print("  #%d  分数: %.4f  %s" % (idx, score, text))
 
 
 # ───────────────────────── CLI ─────────────────────────
@@ -504,6 +1133,14 @@ def build_parser():
                         help="v2.0 Mock 模式：不调真实 API，从本地预设库返回响应")
     p_chat.add_argument("--latency", type=int, default=0,
                         help="Mock 模式下模拟延迟（毫秒），用于测试超时逻辑")
+    # v2.3 --dry-run 建议模式（与 route 统一）
+    p_chat.add_argument("--dry-run", action="store_true",
+                        help="v2.3 dry-run 模式：仅展示推荐路由，不调用 API")
+    # v2.6 多轮会话
+    p_chat.add_argument("--session", help="v2.6 多轮会话：会话 ID（自动维护上下文）")
+    # v2.9.0 个性化 auto
+    p_chat.add_argument("--personalized", action="store_true",
+                        help="v2.9.0 auto 策略按本机实测评测得分选模型（需先跑 arena --suite --save-profile）")
 
     p_route = sub.add_parser("route", help="仅做路由决策（不调用 API）")
     p_route.add_argument("--prompt", help="用户问题")
@@ -512,11 +1149,17 @@ def build_parser():
     p_route.add_argument("--strategy", default="auto", help="auto/cheap/quality/manual")
     p_route.add_argument("--model", help="manual 时的 provider:model")
     p_route.add_argument("--json", action="store_true")
+    p_route.add_argument("--dry-run", action="store_true",
+                         help="v2.3 dry-run 模式：仅展示推荐路由，不调用 API")
+    p_route.add_argument("--personalized", action="store_true",
+                         help="v2.9.0 auto 按本机实测评测得分选模型（可解释依据）")
 
     p_rep = sub.add_parser("report", help="成本/用量报表")
     p_rep.add_argument("--period", default="month", choices=["day", "week", "month"])
     p_rep.add_argument("--html", help="导出 HTML 报表路径")
     p_rep.add_argument("--config", help="config.json 路径")
+    p_rep.add_argument("--dual", action="store_true",
+                       help="v2.7.0 双轨计算：档案价估算 vs 实测回填")
 
     p_hw = sub.add_parser("hardware", help="硬件画像与并发建议")
 
@@ -533,10 +1176,114 @@ def build_parser():
 
     sub.add_parser("version", help="版本号")
 
+    # v2.6 embed 子命令
+    p_embed = sub.add_parser("embed", help="v2.6 文本向量嵌入")
+    p_embed.add_argument("--texts", required=True, help="待嵌入文本（JSON 数组或逗号分隔）")
+    p_embed.add_argument("--model", help="指定模型（默认用厂商默认 embedding 模型）")
+    p_embed.add_argument("--provider", help="指定厂商（默认自动选已配置的）")
+    p_embed.add_argument("--json", action="store_true", help="JSON 输出")
+    p_embed.add_argument("--timeout", type=int, default=60)
+
+    # v2.6 rerank 子命令
+    p_rerank = sub.add_parser("rerank", help="v2.6 文档重排序")
+    p_rerank.add_argument("--query", required=True, help="查询文本")
+    p_rerank.add_argument("--documents", required=True, help="文档列表（JSON 数组或逗号分隔）")
+    p_rerank.add_argument("--model", help="指定模型")
+    p_rerank.add_argument("--provider", help="指定厂商")
+    p_rerank.add_argument("--json", action="store_true", help="JSON 输出")
+    p_rerank.add_argument("--timeout", type=int, default=60)
+
+    # v2.6 session 子命令
+    p_session = sub.add_parser("session", help="v2.6 多轮会话管理")
+    p_session.add_argument("session_cmd", choices=["list", "show", "delete"],
+                           help="list=列出会话 / show=查看历史 / delete=删除")
+    p_session.add_argument("--id", help="会话 ID")
+
+    # v2.6 describe 子命令（视频/文档理解）
+    p_desc = sub.add_parser("describe", help="v2.6 通用视觉理解（视频/文档/图片）")
+    p_desc.add_argument("input", help="输入文件路径或 URL")
+    p_desc.add_argument("--prompt", help="自定义提示词（默认自动选择）")
+    p_desc.add_argument("--provider", help="指定厂商")
+    p_desc.add_argument("--json", action="store_true")
+    p_desc.add_argument("--timeout", type=int, default=120)
+
     # v2.0 Mock 数据编辑器
     p_mock = sub.add_parser("mock", help="v2.0 Mock 数据编辑器（自定义 query→response 映射）")
     p_mock.add_argument("--edit", action="store_true", help="进入交互式 mock 数据编辑")
     p_mock.add_argument("--list", action="store_true", help="列出所有自定义 mock 场景")
+
+    # v2.2 健康检查
+    sub.add_parser("health-check", help="v2.2 检查各厂商 API 连通性")
+
+    # v2.7.0 降价检测
+    p_pc = sub.add_parser("price-check", help="v2.7.0 降价检测（抓取厂商价目页做哈希比对）")
+    p_pc.add_argument("--provider", help="指定厂商（默认检查全部已配置厂商）")
+    p_pc.add_argument("--json", action="store_true")
+
+    # v2.7.0 价格档案查看
+    p_ph = sub.add_parser("price-history", help="v2.7.0 价格档案查看")
+    p_ph.add_argument("--json", action="store_true")
+
+    # v2.2 模型竞技场（v2.4 扩展：--blind 控制盲选/显名对比）
+    p_arena = sub.add_parser("arena", help="v2.4 多模型对比（--blind 盲选，否则显名对比）")
+    p_arena.add_argument("--prompt", help="用户问题")
+    p_arena.add_argument("-m", "--message", action="append")
+    p_arena.add_argument("--task", help="显式任务类型")
+    p_arena.add_argument("--models", default="auto",
+                         help="auto=自动选 2-4 家，或指定 provider:model,provider:model")
+    p_arena.add_argument("--blind", action="store_true",
+                         help="盲选模式：隐藏模型名，投票后揭示（默认显名对比）")
+    p_arena.add_argument("--json", action="store_true")
+    p_arena.add_argument("--mock", action="store_true",
+                         help="Mock 模式：不调真实 API，从本地预设库返回")
+    # v2.9.0 本地评测集
+    p_arena.add_argument("--suite", action="store_true",
+                         help="v2.9.0 本地 50 题评测集（四维得分表 + 雷达图 + 历史存档）")
+    p_arena.add_argument("--category", choices=["code", "reason", "translate", "summarize"],
+                         help="仅评测某一类")
+    p_arena.add_argument("--concurrency", type=int, help="评测并发数（默认按硬件自适应）")
+    p_arena.add_argument("--radar", help="导出雷达图 SVG 路径")
+    p_arena.add_argument("--save-profile", action="store_true",
+                         help="把本次得分回填 score_table.yaml（供 auto --personalized 使用）")
+    p_arena.add_argument("--no-save", action="store_true", help="不写入评测历史存档")
+    p_arena.add_argument("--db", help="评测存档 SQLite 路径")
+
+    # v2.9.0 批处理 batch 子命令
+    p_batch = sub.add_parser("batch", help="v2.9.0 批处理：清单批量调用 + 断点续跑")
+    p_batch.add_argument("batch_cmd", choices=["run", "status", "results", "list"],
+                         help="run=启动 / status=进度 / results=结果 / list=任务列表")
+    p_batch.add_argument("manifest", nargs="?", help="任务清单 txt / jsonl 路径（run 时必填）")
+    p_batch.add_argument("job_id", nargs="?", help="任务 ID（status/results 时必填）")
+    p_batch.add_argument("--strategy", default="auto", help="auto/cheap/quality/manual")
+    p_batch.add_argument("--model", default="auto", help="指定模型 provider:model")
+    p_batch.add_argument("--task", help="显式任务类型提示")
+    p_batch.add_argument("--concurrency", type=int, help="并发数（默认硬件自适应）")
+    p_batch.add_argument("--retries", type=int, default=2, help="失败重试次数（默认 2）")
+    p_batch.add_argument("--budget", type=float, help="本次预算阈值（元）")
+    p_batch.add_argument("--yes", action="store_true", help="显式确认超预算执行")
+    p_batch.add_argument("--resume", help="续跑指定任务 ID（跳过已完成）")
+    p_batch.add_argument("--estimate-only", action="store_true", help="只预估不执行")
+    p_batch.add_argument("--failed-only", action="store_true", help="results 只列失败项")
+    p_batch.add_argument("--limit", type=int, default=10, help="list 显示条数")
+    p_batch.add_argument("--db", help="进度 SQLite 路径")
+    p_batch.add_argument("--config", help="config.json 路径")
+    p_batch.add_argument("--timeout", type=int, default=60)
+    p_batch.add_argument("--json", action="store_true")
+
+    # v2.9.0 长文一键链
+    p_lc = sub.add_parser("longchain", help="v2.9.0 长文一键链：分块→并行→合并")
+    p_lc.add_argument("--text", help="待处理长文本")
+    p_lc.add_argument("--file", help="从文件读取长文本")
+    p_lc.add_argument("task_type", choices=["summarize", "translate"], help="任务类型")
+    p_lc.add_argument("--strategy", default="auto")
+    p_lc.add_argument("--model", default="auto")
+    p_lc.add_argument("--ctx", type=int, default=32000, help="目标模型上下文窗口（默认 32000）")
+    p_lc.add_argument("--chunk-chars", type=int, help="每块字符数（默认按 ctx 自动）")
+    p_lc.add_argument("--concurrency", type=int, help="并发数（默认硬件自适应）")
+    p_lc.add_argument("--timeout", type=int, default=120)
+    p_lc.add_argument("--output", help="结果保存路径")
+    p_lc.add_argument("--json", action="store_true")
+
     return ap
 
 
@@ -560,6 +1307,318 @@ def cmd_mock(args, reg):
         print("  mock --list  列出所有自定义 mock 场景")
 
 
+def _run_parallel(prompt, task_type, selected, reg, mock=False, blind=True):
+    """共享并行调用辅助函数（v2.4 提取）。
+
+    返回 list of (provider, model_name, content, error)。
+    blind=True 时返回结果顺序不打乱（调用方自行打乱标号）。
+    """
+    import concurrent.futures as cf
+    from adapters import build as build_adapter
+
+    def call_one(idx, prov, model):
+        try:
+            if mock:
+                resp = mock_engine.build_mock_response(prompt, task_type)
+                return idx, prov, model["name"], resp["content"], None
+            cfg = _adapter_cfg(prov, reg)
+            adapter = build_adapter(reg["providers"][prov]["adapter"], cfg)
+            res = adapter.chat([{"role": "user", "content": prompt}],
+                               model["name"], stream=False, timeout=60)
+            return idx, prov, model["name"], res["content"], None
+        except Exception as e:
+            return idx, prov, model["name"], "", str(e)
+
+    results = [None] * len(selected)
+    with cf.ThreadPoolExecutor(max_workers=min(len(selected), 4)) as pool:
+        futures = [pool.submit(call_one, i, p, m) for i, (p, m) in enumerate(selected)]
+        for fut in cf.as_completed(futures):
+            idx, prov, mod, content, err = fut.result()
+            results[idx] = (prov, mod, content, err)
+    return results
+
+
+def cmd_arena(args, reg):
+    """多模型对比：--blind 盲选竞技（隐藏模型名投票），默认显名对比。"""
+    prompt = args.prompt or " ".join(args.message or [])
+    if not prompt:
+        raise SystemExit("❌ 请提供 --prompt 或 -m")
+    task_hint = args.task
+    cls = classifier.classify(prompt, task_hint)
+    task_type = cls["task_type"]
+    blind = getattr(args, "blind", False)
+
+    # 选模型：auto 策略自动选 2-4 家（已配置密钥 + 可达），或用户指定
+    if args.models == "auto":
+        all_models = _all_models(reg, only_configured=True)
+        health = health_check.check_health()
+        reachable = [(p, m) for p, m in all_models if health.get(p, False)]
+        max_arena = min(4, hardware.profile().get("max_concurrency", 4))
+        by_prov = {}
+        for p, m in reachable:
+            by_prov.setdefault(p, []).append(m)
+        selected = []
+        for p, ms in by_prov.items():
+            if len(selected) >= max_arena:
+                break
+            selected.append((p, ms[0]))
+        random.shuffle(selected)
+        selected = selected[:max_arena]
+    else:
+        selected = []
+        for token in args.models.split(","):
+            token = token.strip()
+            if ":" not in token:
+                continue
+            prov, mod = token.split(":", 1)
+            found = False
+            for p, pinfo in reg.get("providers", {}).items():
+                if p != prov:
+                    continue
+                for m in pinfo.get("models", []):
+                    if m["name"] == mod:
+                        selected.append((p, m))
+                        found = True
+                        break
+                if found:
+                    break
+            if not found:
+                print("⚠️ 未找到模型：%s" % token)
+
+    if len(selected) < 2:
+        raise SystemExit("❌ 至少需要 2 家模型，请检查 --models 或密钥配置")
+
+    if blind:
+        print("🏟️  模型竞技场 — 任务类型：%s（%s）" % (task_type, prompt[:60]))
+        print("   正在并行调用 %d 家模型...\n" % len(selected))
+    else:
+        print("📊 多模型对比 — 任务类型：%s（%s）" % (task_type, prompt[:60]))
+        print("   正在并行调用 %d 家模型...\n" % len(selected))
+
+    results = _run_parallel(prompt, task_type, selected, reg,
+                            mock=getattr(args, "mock", False), blind=blind)
+
+    if blind:
+        # 盲选模式：打乱顺序，标 A/B/C/D
+        order = list(range(len(selected)))
+        random.shuffle(order)
+        labels = [chr(65 + i) for i in range(len(order))]
+        display = []
+        for lbl, idx in zip(labels, order):
+            prov, mod, content, err = results[idx]
+            if err:
+                print("❌ [%s] %s / %s 调用失败：%s" % (lbl, prov, mod, err[:60]))
+            else:
+                display.append((lbl, prov, mod, content))
+                print("[%s] %s" % (lbl, content[:300]))
+                if len(content) > 300:
+                    print("   ...（%d 字）" % len(content))
+                print()
+    else:
+        # 显名模式：直接显示模型名 + 回答
+        display = []
+        for prov, mod, content, err in results:
+            if err:
+                print("❌ [%s / %s] 调用失败：%s" % (prov, mod, err[:60]))
+            else:
+                display.append((prov, mod, content))
+                print("[%s / %s] %s" % (prov, mod, content[:300]))
+                if len(content) > 300:
+                    print("   ...（%d 字）" % len(content))
+                print()
+
+    if not display:
+        if args.json:
+            mode = "blind" if blind else "compare"
+            print(json.dumps({"arena": {"task_type": task_type, "mode": mode,
+                                        "error": "所有模型调用均失败"}}, ensure_ascii=False))
+            return
+        raise SystemExit("❌ 所有模型调用均失败")
+
+    # 构建 JSON 记录
+    session_record = {
+        "task_type": task_type,
+        "mode": "blind" if blind else "compare",
+        "models": [{"provider": p, "model": m} for p, m in selected],
+        "results": {}
+    }
+    if blind:
+        session_record["results"] = {lbl: {"provider": p, "model": m, "content": c[:200]}
+                                      for lbl, p, m, c in display}
+    else:
+        session_record["results"] = {("%s/%s" % (p, m)): {"provider": p, "model": m, "content": c[:200]}
+                                      for p, m, c in display}
+
+    # JSON 模式
+    if args.json:
+        session_record["hint"] = "blind 模式请使用 arena --blind 交互投票" if blind else "显名对比已完成"
+        print(json.dumps({"arena": session_record}, ensure_ascii=False))
+        return
+
+    # 仅 blind 模式支持交互投票
+    if not blind:
+        print("（显名对比模式，无投票。如需盲选竞技，请加 --blind）")
+        return
+
+    try:
+        vote = input("请选择最佳回答（%s）：" % "/".join(lbl for lbl, *_ in display)).strip().upper()
+    except (EOFError, KeyboardInterrupt):
+        vote = ""
+    if vote:
+        for lbl, prov, mod, content in display:
+            if lbl == vote:
+                print("\n✅ 你选择了 [%s] %s / %s" % (lbl, prov, mod))
+                cost_tracker.log_arena_vote(prompt, task_type,
+                                           [{"provider": p, "model": m} for p, m in selected],
+                                           prov, mod)
+                return
+    print("\n未记录投票。")
+
+
+def cmd_session(args, reg):
+    """v2.6 多轮会话管理命令。"""
+    if args.session_cmd == "list":
+        sessions = session_manager.list_sessions()
+        if not sessions:
+            print("暂无会话记录。")
+            return
+        print("会话列表：")
+        for s in sessions:
+            print("  %s  model=%s  updated=%s" % (
+                s["id"], s.get("model", "-"), time.strftime("%Y-%m-%d %H:%M", time.localtime(s["updated_at"]))))
+    elif args.session_cmd == "show":
+        if not args.id:
+            raise SystemExit("❌ --id 必填")
+        sess = session_manager.get_session(args.id)
+        if not sess:
+            print("会话 %s 不存在。" % args.id)
+            return
+        print("会话 %s（%d 条消息）：" % (sess["id"], len(sess["messages"])))
+        for m in sess["messages"]:
+            print("  [%s] %s" % (m["role"], m["content"][:120]))
+    elif args.session_cmd == "delete":
+        if not args.id:
+            raise SystemExit("❌ --id 必填")
+        ok = session_manager.delete_session(args.id)
+        print("已删除" if ok else "会话不存在")
+
+
+def cmd_describe(args, reg):
+    """v2.6 describe：通用视觉理解（视频/文档/图片）。"""
+    import text_splitter
+
+    input_path = args.input
+    is_url = input_path.startswith(("http://", "https://"))
+
+    if not is_url and not os.path.exists(input_path):
+        raise SystemExit("❌ 文件不存在: %s" % input_path)
+
+    ext = os.path.splitext(input_path)[1].lower() if not is_url else ""
+
+    # 路由决策：视频 → 抽帧；文档 → 转文本；图片 → 直传视觉模型
+    if ext in (".mp4", ".avi", ".mov", ".mkv", ".webm", ".flv"):
+        mode = "video"
+    elif ext in (".pdf", ".docx", ".doc", ".txt", ".md", ".xlsx", ".pptx"):
+        mode = "document"
+    elif ext in (".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".svg"):
+        mode = "image"
+    else:
+        mode = "image"
+
+    # 选厂商（视觉模型）
+    provider = args.provider
+    if not provider:
+        # 找有 multimodal 标签的模型
+        for p, pinfo in reg.get("providers", {}).items():
+            for m in pinfo.get("models", []):
+                if m.get("multimodal"):
+                    provider = p
+                    break
+            if provider:
+                break
+        if not provider:
+            configured = config.configured_providers()
+            if configured:
+                provider = configured[0]
+            else:
+                raise SystemExit("❌ 未配置密钥，无法调用 describe")
+
+    # 构造 prompt
+    prompt = args.prompt
+    if not prompt:
+        if mode == "video":
+            prompt = "请描述这段视频的关键内容，包括场景、人物、动作和对话要点。"
+        elif mode == "document":
+            prompt = "请解析并总结这份文档的核心内容、结构和关键信息。"
+        else:
+            prompt = "请详细描述这张图片的内容，包括场景、物体、文字和细节。"
+
+    # 处理文件
+    if mode == "document":
+        # 文档走长文路由
+        if ext == ".txt" or ext == ".md":
+            with open(input_path, "r", encoding="utf-8", errors="replace") as f:
+                text = f.read()
+        else:
+            text = "[二进制文档 %s] 当前版本仅支持 txt/md 直接读取，其他格式请先转为文本。" % input_path
+
+        # 长文分段
+        model_cfg = reg["providers"][provider]
+        model_ctx = 64000  # 默认
+        for m in model_cfg.get("models", []):
+            if m.get("ctx", 0) > model_ctx:
+                model_ctx = m["ctx"]
+
+        chunk_len = text_splitter.auto_chunk_length(model_ctx)
+        chunks = text_splitter.split_by_paragraphs(text, max_chars=chunk_len)
+
+        adapter = build(model_cfg["adapter"], _adapter_cfg(provider, reg))
+
+        def task_fn(chunk, idx):
+            msg = [{"role": "user", "content": "请摘要以下文档分段（第 %d/%d 段）：\n\n%s" % (idx + 1, len(chunks), chunk)}]
+            res = adapter.chat(msg, model_cfg["models"][0]["name"], stream=False, timeout=args.timeout)
+            return res["content"]
+
+        result = text_splitter.chunked_call(chunks, task_fn)
+        summary = result["result"]
+        n_chunks = result["chunks"]
+
+        if args.json:
+            print(json.dumps({"provider": provider, "mode": mode, "chunks": n_chunks, "summary": summary}, ensure_ascii=False))
+        else:
+            print("📄 文档解析（%s / %s, %d 段摘要合并）" % (provider, mode, n_chunks))
+            print(summary)
+
+    elif mode == "video":
+        # 视频：提示需要 ffmpeg 抽帧（不强制依赖）
+        has_ffmpeg = False
+        try:
+            import subprocess
+            subprocess.run(["ffmpeg", "-version"], capture_output=True, timeout=5)
+            has_ffmpeg = True
+        except Exception:
+            pass
+
+        if has_ffmpeg:
+            print("🎬 视频模式：ffmpeg 抽帧 → 视觉模型（当前为接口演示，实际调用需配置密钥）")
+            print("  输入: %s" % input_path)
+            print("  提示: %s" % prompt)
+        else:
+            print("🎬 视频模式：需要 ffmpeg 才能抽帧处理")
+            print("  安装: choco install ffmpeg  或  scoop install ffmpeg")
+            print("  输入: %s" % input_path)
+
+        if args.json:
+            print(json.dumps({"provider": provider, "mode": mode, "ffmpeg": has_ffmpeg, "status": "interface_ready"}, ensure_ascii=False))
+
+    else:
+        # 图片：直接走视觉模型
+        print("🖼️ 图片模式：%s" % input_path)
+        print("  提示: %s" % prompt)
+        if args.json:
+            print(json.dumps({"provider": provider, "mode": "image", "status": "interface_ready"}, ensure_ascii=False))
+
+
 def main():
     ap = build_parser()
     args = ap.parse_args()
@@ -567,11 +1626,21 @@ def main():
         ap.print_help()
         return
     reg = load_registry()
+    # v2.9.0 个性化 auto 开关（进程内），chat/route 均读取
+    global PERSONALIZED_MODE
+    PERSONALIZED_MODE = bool(getattr(args, "personalized", False))
+
+    # arena --suite 走评测集命令，否则走原有竞技场
+    arena_fn = cmd_arena_suite if getattr(args, "suite", False) else cmd_arena
     dispatch = {
         "chat": cmd_chat, "route": cmd_route, "report": cmd_report,
         "hardware": cmd_hardware, "cache": cmd_cache, "config": cmd_config,
         "update-check": cmd_update, "budget": cmd_budget, "version": cmd_version,
-        "mock": cmd_mock,
+        "mock": cmd_mock, "health-check": health_check.cmd_health_check,
+        "arena": arena_fn, "embed": cmd_embed, "rerank": cmd_rerank,
+        "session": cmd_session, "describe": cmd_describe,
+        "price-check": cmd_price_check, "price-history": cmd_price_history,
+        "batch": cmd_batch, "longchain": cmd_longchain,
     }
     dispatch[args.cmd](args, reg)
 

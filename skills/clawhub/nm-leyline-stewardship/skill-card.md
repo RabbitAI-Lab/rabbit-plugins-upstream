@@ -1,39 +1,49 @@
-## Description: <br>
-Applies stewardship virtues (Care, Curiosity, Humility, Diligence) to plugin work. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies stewardship virtues (Care, Curiosity, Humility, Diligence) to plugin work
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and plugin maintainers use this skill to apply stewardship principles and reflection prompts while designing, reviewing, maintaining, and documenting plugins. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad triggers may cause the skill to appear in general quality or maintenance conversations where stewardship guidance is not needed. <br>
-Mitigation: Review trigger fit for the workspace before installing and invoke the skill primarily for plugin design, review, maintenance, and contributor-experience work. <br>
+## Use Case:
 
+Plugin developers use this skill when making design decisions or reviewing code quality and contributor experience. It helps them apply stewardship principles and virtues to maintenance work and reflect at workflow boundaries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-stewardship) <br>
-- [Leyline plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown guidance and reflection prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory markdown-only output; no executable code, credential handling, persistence, or hidden data access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Reflection prompts may be applied at broad task or session boundaries, including routine or unrelated work.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the reflection module at natural plugin workflow boundaries and consider whether reflection is useful for the task at hand.
+
+## Reference(s):
+
+- [Leyline plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown guidance, checklists, and reflection prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Principles and workflow prompts for plugin design and maintenance]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

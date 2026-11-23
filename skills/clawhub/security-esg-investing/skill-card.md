@@ -1,41 +1,53 @@
-## Description: <br>
-AI-powered ESG investing analysis assistant covering ESG rating analysis, green finance screening, carbon footprint assessment, and sustainable investment portfolio construction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides ESG rating comparison, green bond screening, Scope 1/2/3 carbon accounting, and sustainable portfolio analysis for China market investment decisions.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-ESG analysts, sustainable fund managers, institutional investors, and agents serving them use this skill to compare ESG ratings, screen green finance products, estimate carbon footprint inputs, and structure sustainable investment portfolio analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial, regulatory, and carbon-accounting outputs may be outdated or incomplete if used as authoritative advice. <br>
-Mitigation: Treat outputs as reference material and verify current rules, market data, ESG ratings, and emissions factors against authoritative sources before making decisions. <br>
-Risk: Broad ESG and sustainability trigger terms may activate the skill for general sustainability requests. <br>
-Mitigation: Confirm the user needs ESG investing or sustainable finance analysis before applying the skill's frameworks. <br>
+## Use Case:
 
+ESG analysts, sustainable fund managers, and institutional investors can use the skill to compare ratings, screen green bonds, assess carbon data, and structure sustainable portfolio reviews for China market investment decisions. Its outputs are analytical drafts that require qualified human review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/security-esg-investing) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with example Python code blocks and analysis frameworks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reference-oriented ESG, green finance, carbon accounting, and portfolio analysis guidance] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Carbon estimates can be misleading when required inputs are missing or assumptions and emission factors are unsuitable.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Mark missing inputs as unknown rather than zero, document calculation boundaries and factor sources, and have a qualified reviewer check results before relying on them.
+
+Risk: The skill asks for ESG analysis inputs that may include sensitive company or portfolio information.
+
+Mitigation: Provide only necessary public or de-identified data; do not include confidential diligence materials, personal information, or non-public company records.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/security-esg-investing)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown prose, comparison tables, checklists, and calculation worksheets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft analysis based on user-provided inputs; code examples are illustrative and are not executed by the skill. Requires independent review before use in investment decisions or external reporting.]
+
+## Skill Version(s):
+
+3.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

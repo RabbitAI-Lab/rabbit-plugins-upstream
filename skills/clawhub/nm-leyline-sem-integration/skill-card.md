@@ -1,42 +1,51 @@
-## Description: <br>
-Provides sem semantic-diff detection, install-on-first-use, and fallback patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides sem semantic-diff detection, install-on-first-use, and fallback patterns.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers building or modifying skills that consume git diff output use this skill to add semantic-diff detection, optional sem installation, and normalized git-diff fallback behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation terms can cause the skill to trigger when semantic-diff guidance is not needed. <br>
-Mitigation: Review the trigger terms before installation and narrow them if accidental invocation would interrupt the workflow. <br>
-Risk: Install-on-first-use guidance can involve package-manager commands or downloading a sem binary. <br>
-Mitigation: Review the proposed install command and source before running it, or decline installation and use the documented git-diff fallback path. <br>
+## Use Case:
 
+Developers building or maintaining skills that consume git diffs use these patterns to detect sem, offer installation, and normalize semantic or standard git diff output.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-sem-integration) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
-- [sem CLI repository](https://github.com/Ataraxy-Labs/sem) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON schema examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes primary sem paths and git-diff fallback patterns for agent workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: Installing the optional sem CLI runs a third-party tool installation command.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation source and use the documented standard git diff fallback if you prefer not to install sem.
+
+## Reference(s):
+
+- [sem project](https://github.com/Ataraxy-Labs/sem)
+- [Leyline plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline)
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-leyline-sem-integration)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provides sem detection, installation options, and git diff fallback patterns.]
+
+## Skill Version(s):
+
+1.10.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

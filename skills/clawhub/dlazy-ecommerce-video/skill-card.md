@@ -1,44 +1,56 @@
-## Description: <br>
-Turns product photos, specifications, catalogs, or ecommerce listings into conversion-focused shopping ad videos with multilingual voiceover and an optional virtual host. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns product photos, details, or ecommerce listings into conversion-focused shopping videos with multilingual voiceover and an optional virtual host.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[dlazyai](https://clawhub.ai/user/dlazyai)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Merchants, ecommerce marketers, and product teams use this skill to turn product photos, specifications, catalogs, or marketplace listings into promotional videos for online stores and social commerce.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The security review has medium confidence and partial coverage, with some local references unresolved.
+
+Mitigation: Review the CLI and API behavior before use, and avoid sending sensitive product or customer data.
+
+Risk: The scan noted organization project listing whose relevance to ecommerce video tasks is unclear.
+
+Mitigation: Review the project scope before listing organization projects, and use only the project information needed for the task.
+
+Risk: Files attached to a task are uploaded to the hosted media service.
+
+Mitigation: Remove sensitive or unnecessary information from files before attaching them.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External creators, ecommerce teams, and developers use this skill to start or continue dLazy projects that generate product, shopping, TikTok Shop, and ecommerce ad videos from product files or listing links. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Video, Text]
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, project context, and files passed with `--files` are sent to dLazy-hosted services. <br>
-Mitigation: Avoid sending sensitive content unless approved for that service, and review dLazy terms before use. <br>
-Risk: The dLazy API key may be saved in `~/.dlazy/config.json`, while the referenced CLI package may not enforce the private file permissions claimed by the skill. <br>
-Mitigation: Use a dedicated, revocable API key; prefer `DLAZY_API_KEY` per invocation when persistence is not needed; and verify local config file permissions after login. <br>
-Risk: Global installation adds a third-party CLI package to the local environment. <br>
-Mitigation: Review the dLazy CLI before installing and consider using the pinned `npx @dlazy/cli@1.2.3` path instead of a persistent global install. <br>
+**Output Format:** [Generated ecommerce video assets with accompanying agent responses]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+**Other Properties Related to Output:** [Videos may include multilingual voiceover and an optional virtual host.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a pinned dLazy CLI invocation and may reference project IDs, prompts, API-key setup, and local files supplied by the user.] <br>
+1.0.42 (source: server release metadata)
 
-## Skill Version(s): <br>
-1.0.3 (source: release evidence and SKILL.md frontmatter) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

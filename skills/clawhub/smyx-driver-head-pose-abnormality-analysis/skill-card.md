@@ -1,48 +1,55 @@
-## Description: <br>
-Analyzes in-cabin DMS camera media to estimate driver head pose, detect sustained head-down or side-view behavior, and return distracted-driving alerts with structured report output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Using an in-cabin DMS camera, the system analyzes the driver's head pose in real time, computing head pitch (down/up) and yaw (left/right turn). When sustained head-down or side-view behavior exceeds configured thresholds, it produces a distracted-driving alert.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, fleet operators, and developers use this skill to analyze driver-facing camera images, videos, or media URLs for head-pose abnormalities and distracted-driving events. It returns structured detection results, warning messages, recommended vehicle or fleet actions, and report links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Driver or cabin media and submitted URLs may be processed by a remote LifeEmergence service. <br>
-Mitigation: Use the skill only with explicit driver or employee consent, and avoid submitting footage that is not approved for cloud processing. <br>
-Risk: The skill may create or reuse account identity and retrieve account-linked report history without a clear user consent boundary. <br>
-Mitigation: Deploy only in environments where silent account linkage is acceptable, and review who can query historical reports before installation. <br>
-Risk: Authentication data may be stored locally for reuse. <br>
-Mitigation: Install in a controlled workspace, restrict local file access, and remove persisted account data when decommissioning the skill. <br>
-Risk: Head-pose detection can be unreliable when the driver face or head contour is not clearly visible. <br>
-Mitigation: Use sufficiently clear DMS footage that meets the stated frame-rate, resolution, and visibility constraints, and treat alerts as driver-assistance signals. <br>
+## Use Case:
 
+Developers and fleet operators use the skill to analyze in-cabin driver video for sustained head-down or side-view behavior and produce distraction alerts and reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-driver-head-pose-abnormality-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/18072937735) <br>
-- [Driver head-pose API documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown text with structured JSON report content, warning summaries, report links, and optional command examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local media files or media URLs; analysis and report history depend on remote LifeEmergence services and account-linked state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release and SKILL.md frontmatter) <br>
+Risk: The security assessment flags a mismatch between advertised real-time monitoring and video-report processing, undeclared account handling, and possible transfer or storage of footage, identity data, or tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the security assessment and behavior before enabling; use authorized footage with driver consent, restrict credentials, and verify remote data handling and account actions.
+
+Risk: Driver face video contains sensitive biometric information, and poor visibility can reduce head-pose estimate reliability.
+
+Mitigation: Obtain driver consent, follow applicable privacy requirements, protect recordings, and treat alerts as an aid rather than a substitute for driver attention.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-driver-head-pose-abnormality-analysis)
+- [API interface notes](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Structured JSON analysis reports and Markdown summaries or report lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include head-pose angles, distraction events, alert types, and report links.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

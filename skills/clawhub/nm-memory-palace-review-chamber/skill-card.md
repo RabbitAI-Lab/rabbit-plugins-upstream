@@ -1,39 +1,50 @@
-## Description: <br>
-Captures and retrieves PR-review findings in memory palaces for storing architectural decisions, recurring patterns, standards, and lessons for future reference. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures and retrieves PR review findings in project memory palaces so teams can reuse durable decisions, patterns, and standards.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and reviewers use this skill after PR review to decide which findings should become persistent project knowledge and where to store them in a memory palace. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can preserve PR review knowledge such as security findings, design decisions, PR numbers, and participant names. <br>
-Mitigation: Use it only in projects where persistent internal knowledge capture is acceptable, and review captured entries before storing or sharing them. <br>
+## Use Case:
 
+Developers use the skill after PR reviews to identify durable findings, organize them as decisions, patterns, standards, or lessons, and retrieve relevant knowledge during future work.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-memory-palace-review-chamber) <br>
-- [ClawDIS homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with examples, checklists, tables, and command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces structured review-capture guidance rather than executable code.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The security review notes a possible mismatch between the memory-capture purpose and the described GitHub review workflow, and says one module was only partially analyzed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, check that the described review workflow fits your needs and review the partially analyzed module.
+
+## Reference(s):
+
+- [Memory Palace project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace)
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-memory-palace-review-chamber)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands]
+
+**Output Format:** [Markdown guidance and structured review entries, with shell-style commands for capture and search]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Review entries can include PR context, tags, room locations, and links to related knowledge.]
+
+## Skill Version(s):
+
+1.10.3 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
