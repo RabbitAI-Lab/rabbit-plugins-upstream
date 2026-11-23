@@ -1,40 +1,53 @@
-## Description: <br>
-AI-powered wealth advisor for bank mobile apps offering personalized product matching, investment consultation, and compliance-compliant customer interaction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supports bank digital banking teams in drafting and reviewing product-suitability rules, wealth-advisory scripts, and compliance checks for mobile apps.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is for demonstration purposes and not for production usage.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External digital banking and wealth-management teams use this skill as an advisor-assist reference for bank mobile app product matching, investment consultation scripts, financial planning prompts, and compliance-aware customer interaction. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat generated wealth-advisory guidance as real financial advice. <br>
-Mitigation: Require qualified human review before using recommendations in customer-facing or regulated workflows. <br>
-Risk: Customer-profile examples and inputs may contain sensitive financial information. <br>
-Mitigation: Avoid identifiable customer financial data unless the organization has proper consent, retention, and compliance controls. <br>
+## Use Case:
 
+China-based commercial bank digital banking teams and wealth-management advisors can use this skill to prepare draft product-suitability rules, consultation scripts, prohibited-language checks, and review workflows. Outputs are reference drafts for human review, not personalized customer recommendations or production matching decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/security-app-wealth-advisor) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown guidance with illustrative Python and compliance-checklist snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory-only output requiring qualified human review before real-world financial use] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.2 (source: server release evidence; artifact frontmatter says 3.0.1) <br>
+Risk: The security scan had partial coverage and reported a low-severity concern about product eligibility rules.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review whether the reported return-target exclusion fits the intended use before relying on product-matching outputs; the scan guidance notes that coverage was partial.
+
+Risk: Customer profiles can contain sensitive financial information.
+
+Mitigation: Use anonymized or synthetic profiles for design and testing, and require qualified human review before applying drafts in real customer interactions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/security-app-wealth-advisor)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Guidance]
+
+**Output Format:** [Markdown with tables, checklists, draft scripts, workflow descriptions, and illustrative Python snippets.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference drafts requiring qualified human review; examples use placeholders or synthetic data and are not production-ready recommendations or executable systems.]
+
+## Skill Version(s):
+
+3.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

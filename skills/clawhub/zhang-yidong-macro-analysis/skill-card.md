@@ -1,38 +1,54 @@
-## Description: <br>
-基于张忆东宏观框架，分析A股/港股市场趋势、货币政策及资产配置，助力投资决策和风险管理。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+提供以张忆东宏观策略框架为基础的 A 股与港股周期、市场结构和风险分析方法。
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users and analysts use this skill to structure macro and market-framework discussion for A-share and Hong Kong equity trends, monetary policy, allocation scenarios, and risk review. It is for educational scenario analysis, not personalized investment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Finance analysis may be mistaken for personalized investment advice. <br>
-Mitigation: Use the skill for market-framework discussion and scenario analysis only; verify current market data, jurisdictional rules, risk tolerance, and suitability before making financial decisions. <br>
+## Use Case:
 
+面向希望梳理中国宏观环境及 A 股、港股市场结构的使用者，生成中文为主的分析框架和待复核纸面草稿。内容不构成投资建议，也不提供具体标的交易或仓位指令。
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/gechengling/skills/zhang-yidong-macro-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown narrative analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-first prose with selected English finance terms; users should verify current market data and suitability before acting.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.0 (source: server evidence and frontmatter) <br>
+Risk: The security review was incomplete and a referenced local path was missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the full skill and its referenced material before installing.
+
+Risk: Market and policy observations can become outdated, and framework examples may be mistaken for actionable investment advice.
+
+Mitigation: Check current figures against official sources and keep outputs as informational drafts; qualified professionals should make investment decisions independently.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/gechengling/skills/zhang-yidong-macro-analysis)
+- [Publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Chinese prose and Markdown tables or lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Framework-based draft for human review; no live data retrieval or automated actions.]
+
+## Skill Version(s):
+
+2.1.4 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

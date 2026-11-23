@@ -1,51 +1,53 @@
-## Description: <br>
-Helps agents coach users through concrete continue, pivot, or quit decisions by separating unrecoverable prior investment from marginal future costs and benefits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users evaluate continue, pivot, or quit decisions by separating irrecoverable past investments from future costs and benefits.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, employees, and agents use this skill as decision support when prior spending, time, effort, reputation, or project momentum may be distorting a continue-or-quit choice. It guides the user through fresh-start testing, marginal future NPV comparison, mechanism diagnosis, and structural countermeasures. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may influence business, career, investment, or relationship decisions. <br>
-Mitigation: Treat outputs as decision support and independently verify important assumptions before acting. <br>
-Risk: A user may apply sunk-cost reasoning when prior investment genuinely lowers future marginal costs or switching costs exceed continuing costs. <br>
-Mitigation: Run the skill's fit check first and exclude cases where real synergies, short-term variance, or switching costs explain continued investment. <br>
-Risk: Marginal future NPV can be misleading when costs, benefits, or alternatives are poorly estimated. <br>
-Mitigation: Quantify future continue and quit scenarios explicitly, document assumptions, and use fresh-eyes review or stage-gate criteria for consequential decisions. <br>
+## Use Case:
 
+Individuals, teams, and decision makers use it to assess whether to continue a project, investment, position, or relationship through a fresh-start test and forward-looking costs and benefits.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/sunk-cost-fallacy) <br>
-- [deciqAI Sunk-Cost Fallacy Skill Page](https://www.deciqai.com/c/sunk-cost-fallacy) <br>
-- [deciqAI Machine-Readable Skill Metadata](https://www.deciqai.com/s/sunk-cost-fallacy.json) <br>
-- [Primary Sources](references/sources.md) <br>
-- [Arkes & Blumer's 1985 Studies](examples/arkes-blumers-1985-studies.md) <br>
-- [The Concorde Program](examples/concorde-program.md) <br>
-- [AI Build-Out Sunk Costs (2023-2026)](examples/ai-buildout-sunk-costs-2023-2026.md) <br>
-- [Dawkins & Carlisle (1976), Nature DOI](https://doi.org/10.1038/262131a0) <br>
-- [Stanford HAI AI Index Report 2025](https://aiindex.stanford.edu) <br>
-- [Menlo Ventures State of Generative AI in the Enterprise](https://menlovc.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown coaching response with a structured decision template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Interactive coach mode may pause at WAIT prompts; no executable code, privileged access, persistence, or hidden behavior is present in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: A fresh-start or sunk-cost framing may oversimplify a decision when prior investment changes future marginal costs, switching costs, or short-term uncertainty.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check for genuine synergies, switching costs, and short-term variance, then compare current estimates of future costs and benefits before recommending a course of action.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/sunk-cost-fallacy)
+- [deciqAI skill guide](https://www.deciqai.com/c/sunk-cost-fallacy)
+- [Source bibliography](references/sources.md)
+- [Dawkins and Carlisle (1976), the Concorde fallacy](https://doi.org/10.1038/262131a0)
+- [deciqAI Knowledge Skills repository](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Markdown with a structured decision worksheet]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide the user one question at a time when they need coaching.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,37 +1,53 @@
-## Description: <br>
-Generates compliant, multi-format financial marketing content, including articles, social media posts, video scripts, and content planning for financial teams. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides templates, planning guidance, review checklists, and scoring standards for drafting and reviewing regulated financial marketing content.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Financial marketing teams use this skill to draft educational and promotional content across articles, social posts, short video scripts, and editorial calendars. Compliance and legal reviewers should validate product claims, risk disclosures, return statements, and jurisdiction-specific requirements before publication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated financial marketing content may include inaccurate regulatory notes, unsupported product claims, missing risk disclosures, or jurisdiction-specific compliance gaps. <br>
-Mitigation: Treat generated copy and regulatory notes as draft assistance only; have qualified compliance or legal reviewers check claims, disclosures, return statements, and jurisdiction-specific requirements before publication. <br>
+## Use Case:
 
+Financial marketing teams use the skill to plan content, draft and adapt text across formats, and check drafts against compliance and quality criteria. All public facing content requires review by qualified compliance and business staff before use.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+China (examples focus on Chinese financial regulators and marketing practices)
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or plain text content drafts with structured templates, tables, and planning guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include bilingual English and Chinese marketing drafts, content calendars, compliance prompts, and risk-disclosure reminders.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Drafts may contain inaccurate or non-compliant financial marketing claims or omit required disclosures.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check claims against current approved product materials and have qualified compliance and business staff review every draft before external use.
+
+Risk: The security review is incomplete: Skillspector reported 0% component coverage, a malformed manifest, and a missing local reference; AIG reported no findings.
+
+Mitigation: Review the complete skill contents and account for the stated scan limits when assessing confidence in its behavior.
+
+## Reference(s):
+
+- [Finance Content Factory on ClawHub](https://clawhub.ai/gechengling/skills/finance-content-factory)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown prose, tables, checklists, planning templates, and draft content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts require qualified compliance and business review before external use; the skill does not save, access data, or publish content.]
+
+## Skill Version(s):
+
+3.0.5 (source: artifact/SKILL.md frontmatter, evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,59 @@
-## Description: <br>
-Analyzes newborn face images or short videos with AI visual screening to estimate sclera and facial-skin yellowness and return a low, medium, high, or inconclusive jaundice-risk hint. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes newborn facial images for visual jaundice indicators and returns a preliminary risk hint.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External caregivers, newborn-family product teams, and medical-support staff use this skill to submit newborn face media for a cloud-based visual jaundice pre-screen and history-report lookup. Results are preliminary risk hints and should be confirmed by professional bilirubin measurement and clinical review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send sensitive newborn face images, videos, and health-report queries to the publisher's cloud service. <br>
-Mitigation: Use only with guardian consent in a controlled workspace, avoid unnecessary identifying media, and do not use the result as a diagnosis or for urgent medical decisions. <br>
-Risk: Visual jaundice screening can be affected by lighting, filters, obstruction, skin products, or camera quality. <br>
-Mitigation: Capture media in natural white light without filters or obstructions, treat inconclusive or medium/high results as prompts for professional bilirubin testing, and seek clinical care for concerning symptoms. <br>
-Risk: The security review notes automatic local identity management and workspace token persistence. <br>
-Mitigation: Install only in an isolated workspace, review stored credentials before and after use, and clear local state or rotate tokens when the skill is no longer needed. <br>
+## Use Case:
 
+Parents and healthcare staff can use the skill to screen newborn facial images for possible jaundice and review a preliminary risk hint with suggested next steps. Its visual output is for screening and does not replace clinical assessment or bilirubin testing.
 
-## Reference(s): <br>
-- [ClawHub Skill Listing](https://clawhub.ai/18072937735/skills/smyx-neonatal-jaundice-screening-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis text with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include visual jaundice-risk hints, confidence or recommended action fields when returned by the service, history-report records, and links to exported reports; outputs are not medical diagnoses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter lists 1.0.4) <br>
+Risk: ClawScan rates the skill suspicious with high confidence, citing undeclared account and history access, credential handling, and risks involving sensitive newborn media and identity data; its scan is incomplete because a referenced local path was missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Clarify account, credential, and data-transfer behavior and review the missing component before installation; avoid submitting credentials or sensitive images until those behaviors are understood.
+
+Risk: Newborn facial images and identity data are highly sensitive.
+
+Mitigation: Obtain a guardian's informed consent and confirm appropriate access, storage, and transfer protections before uploading images or using cloud reports.
+
+Risk: Visual estimates can be misleading and are not a clinical bilirubin measurement.
+
+Mitigation: Treat results as preliminary screening only; seek clinician assessment and confirm concerns with transcutaneous or serum bilirubin testing.
+
+## Reference(s):
+
+- [API Reference](references/api_doc.md)
+- [Skill listing](https://clawhub.ai/18072937735/skills/smyx-neonatal-jaundice-screening-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured analysis report with a risk hint, observations, and recommended next steps; historical reports can be listed in Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Visual screening only; a clinician and bilirubin testing should confirm concerns. Poor lighting or an obscured face may make results inconclusive.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

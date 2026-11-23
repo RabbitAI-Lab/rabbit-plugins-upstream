@@ -1,45 +1,58 @@
-## Description: <br>
-Dlazy Blog To Video helps agents invoke the dLazy file-to-video SaaS workflow to turn blog posts or other documents into narrated videos with storyboard, voiceover, and build steps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects to dLazy's hosted assistant to turn blog posts and other documents into narrated videos with storyboards and voiceover.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and agents can use this skill to start or continue dLazy file-to-video projects for converting blog posts, articles, and documents into narrated videos for social, YouTube, training, courseware, or report-broadcast use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill advertises blog-to-video but routes agents through a broader file/document-to-video SaaS workflow. <br>
-Mitigation: Treat it as a general file-to-video wrapper and confirm the intended document or file scope before use. <br>
-Risk: Prompts and explicitly attached files may be sent to dLazy API and file storage endpoints. <br>
-Mitigation: Avoid submitting confidential documents unless the dLazy account, data handling terms, and storage behavior are acceptable. <br>
-Risk: The workflow requires a dLazy API key that may be stored in local CLI configuration. <br>
-Mitigation: Use account-scoped keys, keep the local config protected, and rotate or revoke the key when access changes. <br>
+## Use Case:
 
+External users can ask an agent to convert a blog post or document into a narrated video. The workflow supports project-based follow-up through dLazy's hosted assistant.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-blog-to-video) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and CLI guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct an agent to run pinned dLazy CLI commands, attach files, or continue an existing dLazy project.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: The security assessment reports a purpose mismatch and incomplete scan coverage, so the observed behavior may not fully match the advertised blog-to-video task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill and confirm that its workflow matches the intended task before relying on its results.
+
+Risk: Prompts and attached files are sent to dLazy's hosted API and media storage.
+
+Mitigation: Avoid sending sensitive material unless your organization permits sharing it with the service.
+
+Risk: The workflow uses a dLazy API key and can list projects in the authenticated organization.
+
+Mitigation: Use a trusted CLI installation, protect the saved API key, and review project access before use.
+
+## Reference(s):
+
+- [dLazy website](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video, Storyboard, Narration]
+
+**Output Format:** [Rendered narrated video with storyboard and voiceover]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Project-scoped, multi-turn workflow; output is produced by the dLazy hosted service.]
+
+## Skill Version(s):
+
+1.0.43 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

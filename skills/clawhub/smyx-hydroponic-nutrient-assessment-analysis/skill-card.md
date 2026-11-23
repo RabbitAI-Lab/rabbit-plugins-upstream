@@ -1,43 +1,55 @@
-## Description: <br>
-This skill analyzes hydroponic root and leaf images or videos to qualitatively assess nutrient concentration status and provide adjustment guidance without producing EC or ppm values. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes hydroponic root and leaf images for visual signs of nutrient stress, then provides a qualitative assessment and directional dilution or nutrient-addition advice.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Hydroponic growers, plant-factory operators, and developers integrating plant monitoring workflows use this skill to analyze root and leaf media, identify visual stress indicators, and receive qualitative nutrient adjustment advice. It can also query cloud-hosted historical assessment records associated with the local user identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cloud analysis sends selected plant media and account-linked metadata to lifeemergence.com services. <br>
-Mitigation: Use only intended hydroponic media, avoid unrelated private files, and confirm that sharing the media with the external service is acceptable before running analysis. <br>
-Risk: The skill can create or reuse a local identity and store service tokens in the workspace data directory. <br>
-Mitigation: Review or clear data/smyx-api-key.txt and smyx-common-claw.db before use, and restrict access to workspaces where those files may be created. <br>
+## Use Case:
 
+Hydroponic growers use this skill to assess nutrient concentration from plant root and leaf images and receive directional adjustment advice.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-hydroponic-nutrient-assessment-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Interface Documentation](artifact/references/api_doc.md) <br>
-- [SMYX Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured analysis text with optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include qualitative nutrient status, root and leaf observations, adjustment advice, historical report records, and report links when returned by the service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server-resolved release metadata; artifact frontmatter reports 1.0.7) <br>
+Risk: Account registration, credential use and storage, and external media processing are not clearly explained; some actions may occur without clear user notice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and confirm these data practices before installation or use, and provide only credentials and media whose handling is acceptable.
+
+Risk: The security review is partial because two referenced local files were missing.
+
+Mitigation: Review the missing references and complete a security review of the full package before relying on the skill.
+
+## Reference(s):
+
+- [API interface reference](references/api_doc.md)
+- [Analysis API response and error reference](skills/smyx_analysis/references/api_doc.md)
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-hydroponic-nutrient-assessment-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Analysis, Guidance]
+
+**Output Format:** [Text or JSON assessment report with qualitative findings and directional adjustment advice]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Qualitative visual assessment; does not provide EC or ppm values; report links may be included.]
+
+## Skill Version(s):
+
+1.0.15 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

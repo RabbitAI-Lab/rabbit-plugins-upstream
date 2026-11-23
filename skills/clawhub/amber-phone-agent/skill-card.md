@@ -1,49 +1,54 @@
-## Description: <br>
-Amber gives an agent real phone capabilities through a Twilio or compatible voice bridge, OpenAI Realtime calling, MCP tools, inbound screening, confirmed outbound calls, call logs, transcripts, optional CRM/contact memory, calendar booking, contacts lookup, and a loopback-only dashboard. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Give Hermes Agent real phone capabilities through Amber's Twilio/OpenAI voice bridge and MCP tools.
 
-## Publisher: <br>
-[batthis](https://clawhub.ai/user/batthis) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[batthis](https://clawhub.ai/user/batthis)
 
-## Use Case: <br>
-Developers and operators use Amber to connect an agent to real telephone workflows, including inbound screening, explicitly confirmed outbound calls, call-history review, contact lookup, and calendar-assisted scheduling. The skill is intended for configured deployments where the operator manages telephony, AI-provider credentials, caller notice, access control, and retention practices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT No Attribution
 
-## Known Risks and Mitigations: <br>
-Risk: Amber handles sensitive phone, contact, calendar, transcript, and optional CRM data. <br>
-Mitigation: Operate it as a sensitive communications system: keep logs, transcripts, contact caches, and CRM files private; define retention and deletion practices; and enable CRM enrichment or extended contacts only when needed. <br>
-Risk: Telephony, AI-provider, and optional OpenClaw credentials can expose real calling and data access if over-scoped or leaked. <br>
-Mitigation: Use dedicated least-privilege Twilio, OpenAI, and OpenClaw credentials, keep secrets out of logs, rotate them when needed, and review dependency and configuration changes before deployment. <br>
-Risk: A locally served bridge or dashboard may expose call controls or communications records if made reachable without protection. <br>
-Mitigation: Keep the bridge and dashboard loopback-only or place them behind authentication and network controls before using real callers. <br>
-Risk: Real calls may involve people who did not configure the system and may be recorded or transcribed. <br>
-Mitigation: Configure caller notice and consent appropriate to the deployment, and require explicit confirmation before outbound calls, calendar writes, payments, commitments, or escalation-sensitive actions. <br>
+## Use Case:
 
+Operators use Amber through Hermes to screen inbound calls, place outbound calls after explicit confirmation, review call history, resolve contacts, and coordinate calendars or opt-in CRM follow-up.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/batthis/skills/amber-phone-agent) <br>
-- [Amber repository](https://github.com/batthis/amber-openclaw-voice-agent) <br>
-- [Architecture](references/architecture.md) <br>
-- [Release checklist](references/release-checklist.md) <br>
-- [Runtime README](runtime/README.md) <br>
-- [Hermes package README](packaging/hermes/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown instructions with code blocks and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are operator-facing setup, verification, and usage guidance for connecting Amber runtime and MCP tools to an agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.5.45 (source: server release metadata and runtime/package.json) <br>
+Risk: ClawScan reports a suspicious verdict at medium confidence and says its analysis was partial; its summary highlights installation setup and resource use for review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, review CRM consent and transcript-enrichment settings, the optional background watcher, granted host and MCP permissions, network access, and how credentials and call data are protected.
+
+Risk: The skill handles real calls and sensitive caller, contact, calendar, and transcript data, and calls may incur provider and API charges.
+
+Mitigation: Confirm the recipient and objective before dialing; configure caller notice, consent, access controls, retention, and deletion practices before using it with real callers.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/batthis/skills/amber-phone-agent)
+- [Amber project setup and documentation (link declared in skill metadata)](https://github.com/batthis/amber-openclaw-voice-agent)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown instructions with shell commands and YAML configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Instructions may lead to real calls or calendar changes; the skill requires explicit confirmation for outbound calls and calendar creation.]
+
+## Skill Version(s):
+
+5.5.66 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

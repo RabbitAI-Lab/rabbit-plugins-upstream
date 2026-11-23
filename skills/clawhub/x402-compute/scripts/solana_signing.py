@@ -2,7 +2,8 @@
 """
 Solana x402 payment helpers for x402-compute scripts.
 
-Builds x402-compatible X-Payment headers for Solana accepts options.
+Builds x402 payment headers for Solana accepts options: v2 PAYMENT-SIGNATURE when the 402
+carried a v2 PAYMENT-REQUIRED header, otherwise v1 X-Payment.
 Supports SOLANA_SECRET_KEY as:
 - JSON array of keypair bytes, or
 - base58 keypair string.
@@ -17,6 +18,8 @@ from typing import Any, Dict, Tuple
 
 import requests
 
+import x402_wire
+
 RPC_URL = "https://api.mainnet-beta.solana.com"
 USDC_MINT_SOLANA = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
 TOKEN_PROGRAM_ID = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
@@ -25,13 +28,8 @@ SYSTEM_PROGRAM_ID = "11111111111111111111111111111111"
 RENT_SYSVAR_ID = "SysvarRent111111111111111111111111111111111"
 
 
-def _load_dotenv_if_available() -> None:
-    try:
-        from dotenv import load_dotenv  # type: ignore
-
-        load_dotenv()
-    except Exception:
-        pass
+# NO .env AUTO-LOADING — see the note in wallet_signing.py. SOLANA_SECRET_KEY is read from the
+# process environment only; it is never sourced from a file found by walking the filesystem.
 
 
 def _import_solders() -> Dict[str, Any]:
@@ -62,7 +60,6 @@ def _import_solders() -> Dict[str, Any]:
 
 
 def _load_keypair(keypair_cls: Any) -> Any:
-    _load_dotenv_if_available()
     raw = (os.getenv("SOLANA_SECRET_KEY") or "").strip()
     if not raw:
         raise ValueError("Set SOLANA_SECRET_KEY for Solana payment signing")
@@ -80,7 +77,6 @@ def _load_keypair(keypair_cls: Any) -> Any:
 
 
 def load_solana_wallet_address() -> str:
-    _load_dotenv_if_available()
     explicit = (os.getenv("SOLANA_WALLET_ADDRESS") or os.getenv("WALLET_ADDRESS_SECONDARY") or "").strip()
     if explicit:
         return explicit
@@ -258,10 +254,13 @@ def _build_transaction_base64(accept_option: Dict[str, Any], payer_wallet_addres
             "Run ensure_solana_destination_ready() before creating X-Payment."
         )
 
-    # Keep exactly 3 instructions for x402 exact-scheme Solana verification.
+    # Keep exactly 3 instructions for x402 exact-scheme Solana verification. The facilitator
+    # (PayAI) rejects a 200k compute limit / 1000 microlamport price as
+    # invalid_exact_svm_payload_transaction_instructions_compute_limit_instruction; these are
+    # the values the Cloud app uses, proven on a live Training payment 2026-10-21.
     instructions = [
-        set_compute_unit_limit(200000),
-        set_compute_unit_price(1000),
+        set_compute_unit_limit(40000),
+        set_compute_unit_price(1),
         create_transfer_checked_ix(source_ata, mint, dest_ata, payer_pubkey, amount, 6),
     ]
 
@@ -304,3 +303,18 @@ def create_solana_xpayment_from_accept(accept_option: Dict[str, Any]) -> str:
         "payload": {"transaction": signed_tx},
     }
     return base64.b64encode(json.dumps(payload).encode()).decode()
+
+
+def create_solana_payment_header(challenge: Dict[str, Any], accept_option: Dict[str, Any]) -> Tuple[str, str]:
+    """(header name, value) paying a Solana `accept_option` from `challenge` (x402_wire.read_challenge).
+
+    v2 challenge -> PAYMENT-SIGNATURE (same signed transaction, v2 envelope).
+    v1 challenge -> X-Payment, exactly what create_solana_xpayment_from_accept sends.
+    """
+    if not x402_wire.uses_v2(challenge, accept_option):
+        return x402_wire.HEADER_X_PAYMENT, create_solana_xpayment_from_accept(accept_option)
+    if x402_wire.network_name(accept_option.get("network")) != "solana":
+        raise ValueError(f"Expected a Solana mainnet option, got network={accept_option.get('network')!r}")
+    payer = load_solana_wallet_address()
+    signed_tx = _build_transaction_base64(accept_option, payer_wallet_address=payer)
+    return x402_wire.v2_payment_header(challenge, accept_option, {"transaction": signed_tx})

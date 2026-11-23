@@ -1,43 +1,50 @@
-## Description: <br>
-Automatically detects and counts livestock or poultry individuals from barn or passage camera images/videos, outputting total headcount with confidence for fast inventory. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes barn or passage images and videos to count livestock or poultry and return headcounts with confidence.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Farm operators and agents use this skill to submit livestock barn, passage, or enclosure images and videos for inventory counts, per-area counts, confidence information, and report links. It can also retrieve prior cloud reports associated with the current identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Barn images, videos, and generated identity information are sent to the vendor cloud service for analysis and report lookup. <br>
-Mitigation: Use only with data you are allowed to share with the vendor service, and review organizational data-handling requirements before deployment. <br>
-Risk: The skill can create or reuse a local identity and keep backend tokens in workspace data for future report access. <br>
-Mitigation: Avoid shared workspaces for this skill, or separate and clear the workspace data directory between users. <br>
+## Use Case:
 
+Livestock and poultry operators use the skill to count animals in barn or passage images and videos, review counts and confidence, and retrieve historical reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-livestock-counting-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Livestock counting API documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON text containing livestock counts, confidence details, structured analysis, history listings, and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save the returned report text to a local output file when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter says 1.0.2) <br>
+Risk: The security evidence rates the release suspicious, citing unclear account and credential handling, data-sharing and control-flow behavior, and a mismatch between the stated purpose and reviewed code. Scanner coverage is incomplete because a local reference was missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before use, ask the publisher to explain account registration, identity and token storage, shared-account behavior, video upload destinations, and why export-only settings still permit analysis; review the missing reference.
+
+## Reference(s):
+
+- [API Reference](references/api_doc.md)
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-livestock-counting-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured analysis results in JSON; historical report lists in Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Headcount, optional regional counts, confidence, and report links.]
+
+## Skill Version(s):
+
+1.0.16 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

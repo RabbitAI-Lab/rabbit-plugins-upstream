@@ -1,98 +1,41 @@
+const { emitError } = require('./shareone_client');
 const fs = require('fs');
 const path = require('path');
 const {
     CREDENTIAL_MODE_SUDOWORK_PROXY,
     detectCredentialMode,
     printShareOneScriptError,
+    parseShareOneResponse,
     requestShareOneBuffer,
     resolveDirectApiKey,
 } = require('./shareone_client');
 
 const ACTIVE_TASK_FILENAME = '.shareone_active_task';
-
-const args = process.argv.slice(2);
-let filePath = null;
-let apiKey = null;
-let filename = null;
-let password = null;
-let watermark = null;
-let shareId = null;
-let allowComments = null;
-let slug = null;
-let remoteUrl = null;
-let forceNew = false;
-
-function usage() {
-    console.error("Usage: node upload_page.js <file_path> [--remote-url <url>] [--api-key <key>] [--base-url <url>] [--filename <name>] [--password <pwd>] [--watermark <wm>] [--share-id <id>] [--slug <slug>] [--allow-comments <true|false>] [--force-new]");
-}
-
-function nextValue(index, flag) {
-    const value = args[index + 1];
-    if (value === undefined || value.startsWith('--')) {
-        console.error(`ERROR:MISSING_VALUE:${flag}`);
-        usage();
-        process.exit(1);
-    }
-    return value;
-}
-
-function parseBoolean(value, flag) {
-    if (value === 'true') return true;
-    if (value === 'false') return false;
-    console.error(`ERROR:INVALID_BOOLEAN:${flag}`);
-    console.error(`${flag} must be true or false.`);
-    process.exit(1);
-}
-
-for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--api-key') {
-        apiKey = nextValue(i, args[i]);
-        i += 1;
-    } else if (args[i] === '--base-url') {
-        process.env.SHAREONE_BASE_URL = nextValue(i, args[i]);
-        i += 1;
-    } else if (args[i] === '--filename') {
-        filename = nextValue(i, args[i]);
-        i += 1;
-    } else if (args[i] === '--password') {
-        password = nextValue(i, args[i]);
-        i += 1;
-    } else if (args[i] === '--watermark') {
-        watermark = nextValue(i, args[i]);
-        i += 1;
-    } else if (args[i] === '--share-id') {
-        shareId = nextValue(i, args[i]);
-        i += 1;
-    } else if (args[i] === '--slug') {
-        slug = nextValue(i, args[i]);
-        i += 1;
-    } else if (args[i] === '--allow-comments') {
-        allowComments = parseBoolean(nextValue(i, args[i]), args[i]);
-        i += 1;
-    } else if (args[i] === '--remote-url') {
-        remoteUrl = nextValue(i, args[i]);
-        i += 1;
-    } else if (args[i] === '--force-new') {
-        forceNew = true;
-    } else if (!args[i].startsWith('--') && !filePath) {
-        filePath = args[i];
-    } else {
-        console.error(`ERROR:UNKNOWN_ARGUMENT:${args[i]}`);
-        usage();
-        process.exit(1);
-    }
-}
-
-if (!filePath && !remoteUrl) {
-    usage();
-    process.exit(1);
-}
+const {commandLine} = require('./cli_args');
+const {values, positional: filePath} = commandLine({
+    summary: 'publish a local text artifact or bind a remote source on a new/original share. GitLab requires a full immutable commit and operator setup for private sources.',
+    result: 'the server publication JSON (share_id/share_url/settings) or an explicit pending review record. An invalid response is an unconfirmed operation; retain the same intent key.',
+    positional: 'file_path', optional: true,
+    options: {'--remote-url': {value: 'url', description: 'Complete HTML/Markdown/text source, at most 16 MiB. Use instead of a local file; refresh_share refetches an existing binding.'},
+        '--viewer-scope': true, '--api-key': true, '--base-url': true, '--filename': true,
+        '--password': true, '--watermark': true, '--share-id': true, '--slug': true,
+        '--allow-comments': true, '--allow-data': true, '--force-new': true, '--idempotency-key': true},
+});
+const apiKey = values['api-key'];
+let filename = values.filename;
+const password = values.password ?? null, watermark = values.watermark ?? null;
+const shareId = values['share-id'];
+const allowComments = values['allow-comments'] ?? null, allowData = values['allow-data'] ?? null;
+const slug = values.slug ?? null, remoteUrl = values['remote-url'];
+const viewerScope = values['viewer-scope'] ?? null, forceNew = values['force-new'];
+const idempotencyKey = values['idempotency-key'];
+const unbind = remoteUrl === '' && Boolean(filePath) && Boolean(shareId);
+if (remoteUrl === '' && !unbind) emitError('BAD_ARGS', 'Detaching a source requires a local file and --share-id. See --help.');
+if (!unbind && Boolean(filePath) === Boolean(remoteUrl)) emitError('BAD_ARGS', 'Provide exactly one local file or --remote-url. See --help.');
 
 if (!shareId && !forceNew && fs.existsSync(ACTIVE_TASK_FILENAME)) {
     const activeShareId = fs.readFileSync(ACTIVE_TASK_FILENAME, 'utf-8').trim();
-    console.error("ERROR:ACTIVE_SHARE_TASK");
-    console.error(`检测到进行中的评论处理任务（目标 share: ${activeShareId}）。请使用 --share-id ${activeShareId} 执行 PUT 更新原链接，不要创建新链接。只有确认要创建全新链接时，才删除 ${ACTIVE_TASK_FILENAME} 文件或追加 --force-new。`);
-    process.exit(1);
+    emitError("ERROR:ACTIVE_SHARE_TASK", [`检测到进行中的评论处理任务（目标 share: ${activeShareId}）。请使用 --share-id ${activeShareId} 执行 PUT 更新原链接，不要创建新链接。只有确认要创建全新链接时，才删除 ${ACTIVE_TASK_FILENAME} 文件或追加 --force-new。`].join('\n'));
 }
 
 const HISTORY_FILENAME = '.shareone_history.json';
@@ -109,20 +52,18 @@ function readHistory() {
 
 if (!shareId && !forceNew && absFilePath) {
     const previous = readHistory()[absFilePath];
-    if (previous && previous.share_id) {
-        console.error("ERROR:FILE_PREVIOUSLY_PUBLISHED");
-        console.error(`该文件之前已发布过（share_id: ${previous.share_id}${previous.share_url ? `，链接: ${previous.share_url}` : ''}）。请使用 --share-id ${previous.share_id} 执行 PUT 更新原链接；只有确认用户要为同一文件创建全新链接时，才追加 --force-new。`);
-        process.exit(1);
+    if (previous && previous.share_id && !(idempotencyKey && previous.idempotency_key === idempotencyKey)) {
+        emitError("ERROR:FILE_PREVIOUSLY_PUBLISHED", [`该文件之前已发布过（share_id: ${previous.share_id}${previous.share_url ? `，链接: ${previous.share_url}` : ''}）。请使用 --share-id ${previous.share_id} 执行 PUT 更新原链接；只有确认用户要为同一文件创建全新链接时，才追加 --force-new。`].join('\n'));
     }
 }
 
-function recordHistory(responseText) {
+function recordHistory(parsed) {
     if (!absFilePath) return; // remote URL mode has no local file to track
     try {
-        const parsed = JSON.parse(responseText);
         if (!parsed || !parsed.share_id) return;
         const history = readHistory();
-        history[absFilePath] = { share_id: parsed.share_id, share_url: parsed.share_url };
+        history[absFilePath] = { share_id: parsed.share_id, share_url: parsed.share_url,
+            ...(!shareId && idempotencyKey ? {idempotency_key: idempotencyKey} : {}) };
         fs.writeFileSync(HISTORY_FILENAME, JSON.stringify(history, null, 2));
     } catch (_) {
         // History is best-effort; never fail the upload because of it.
@@ -136,14 +77,11 @@ if (!filename && filePath) {
 async function uploadPage() {
     const credentialMode = await detectCredentialMode();
     if (credentialMode.mode === CREDENTIAL_MODE_SUDOWORK_PROXY && apiKey) {
-        console.error("ERROR:SUDOWORK_MANAGED_KEY");
-        console.error("Sudowork 模式下不要传 --api-key；请通过本 skill 的 save_api_key.js 或 create_guest_key.js 设置 ShareOne API Key。");
-        process.exit(1);
+        emitError("ERROR:SUDOWORK_MANAGED_KEY", ["Sudowork 模式下不要传 --api-key；请通过本 skill 的 save_api_key.js 或 create_guest_key.js 设置 ShareOne API Key。"].join('\n'));
     }
 
     if (credentialMode.mode !== CREDENTIAL_MODE_SUDOWORK_PROXY && !resolveDirectApiKey(apiKey)) {
-        console.error("ERROR:KEY_NOT_FOUND");
-        process.exit(1);
+        emitError("ERROR:KEY_NOT_FOUND");
     }
 
     let payload;
@@ -158,39 +96,64 @@ async function uploadPage() {
         payload = {
             filename: filename,
             html_content: content,
+            ...(unbind ? {remote_url: ''} : {}),
         };
     }
 
     if (password !== null) payload.password = password;
+    if (viewerScope !== null) payload.viewer_scope = viewerScope;
     if (watermark !== null) payload.watermark = watermark;
     if (slug !== null) payload.custom_slug = slug;
 
     if (allowComments !== null) {
         payload.allow_comments = allowComments;
+    } else if (!shareId) {
+        payload.allow_comments = false;
+    }
+    if (allowData !== null) {
+        payload.allow_data = allowData;
     }
 
     const data = JSON.stringify(payload);
     const urlPath = shareId
-        ? `/api/v1/pages/${shareId}`
+        ? `/api/v1/pages/${encodeURIComponent(shareId)}`
         : '/api/v1/pages';
 
     const method = shareId ? 'PUT' : 'POST';
 
-    const res = await requestShareOneBuffer(urlPath, {
+    const requestOptions = {
         method: method,
         apiKey,
         headers: {
+            ...(!shareId && idempotencyKey ? {'Idempotency-Key': idempotencyKey} : {}),
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(data)
         }
-    }, data);
+    };
+    const res = await requestShareOneBuffer(urlPath, requestOptions, data);
+    const pendingStatuses = require('./api_contract.json').publication_pending_statuses;
+    const nonempty = value => typeof value === 'string' && value.trim().length > 0;
+    const result = parseShareOneResponse(res, urlPath, requestOptions, value => value && !Array.isArray(value) && (
+        nonempty(value.share_id) && nonempty(value.share_url) ||
+        res.statusCode === 202 && pendingStatuses.includes(value.status) && nonempty(value.review_id)));
+    console.log(JSON.stringify(result));
+    recordHistory(result);
 
-    console.log(res.text);
-    recordHistory(res.text);
+    // cli-steering: the instant an AI turns on page storage is the right moment
+    // to surface the sensitivity choice + the data-local compute pattern — not a
+    // static prompt it may never read. One line on stderr (stdout stays clean JSON).
+    if (allowData === true && result.settings?.allow_data === true) {
+        console.error(
+            'HINT:PAGE_DATA_ENABLED:This page can store data. '
+            + 'Public/shared → window.__SHAREONE__.putShared (server, cross-device); '
+            + 'sensitive → window.__SHAREONE__.putPrivate (this device+browser only, never uploaded). '
+            + 'Private data can still be computed on: keep the model public and run inference in the page '
+            + 'so bytes never leave the device — reference: templates/client-side-inference.html'
+        );
+    }
 
-    if (shareId && !remoteUrl) {
-        const content = fs.readFileSync(filePath, "utf-8");
-        await verifyUpdatedContent(shareId, content);
+    if (shareId && !remoteUrl && result.share_id) {
+        await verifyUpdatedContent(shareId, payload.html_content);
     }
 }
 
@@ -209,6 +172,5 @@ async function verifyUpdatedContent(updatedShareId, expectedContent) {
 }
 
 uploadPage().catch((error) => {
-    printShareOneScriptError(error);
-    process.exit(1);
+    process.exit(printShareOneScriptError(error));
 });

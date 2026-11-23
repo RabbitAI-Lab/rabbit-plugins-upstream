@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/newrelic-cli-skills",
   "slug": "newrelic-cli-skills",
   "ownerHandle": null,
-  "version": "1.0.5",
-  "updatedAt": 1784396287757,
-  "contentHash": "5dc1c0ac929ab842739285f356f3c2711baf6974c04070cf43cf18339e5a6b66",
-  "fetchedAt": "2026-07-26T18:10:48.988Z"
+  "version": "1.0.12",
+  "updatedAt": 1795109784510,
+  "contentHash": "9c6e254778c26ae1dc5a048d9677ad73ffbb354418ee8ed27a2d06d9e62a0b69",
+  "fetchedAt": "2026-11-23T19:42:35.924Z"
 }

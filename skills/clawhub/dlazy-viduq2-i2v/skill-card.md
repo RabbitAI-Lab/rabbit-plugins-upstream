@@ -1,45 +1,48 @@
-## Description: <br>
-Convert static images into dynamic videos using the Vidu Q2 image-to-video model. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Convert static images into dynamic videos using Vidu Q2 image-to-video model. 使用 Vidu Q2 图生视频模型，将静态图片通过智能运镜转化为动态视频。
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative users use this skill to invoke dLazy's Vidu Q2 image-to-video CLI, supplying prompts and source images to generate hosted video outputs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected prompts, parameters, and media files are sent to dLazy services for generation. <br>
-Mitigation: Confirm the user is comfortable sending the selected inputs to dLazy before invoking the CLI. <br>
-Risk: A dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Use per-invocation DLAZY_API_KEY when persistent storage is not desired, and rotate or revoke keys from the dLazy dashboard when they are no longer needed. <br>
-Risk: A global CLI installation persists on the system. <br>
-Mitigation: Prefer the pinned npx invocation when a non-persistent CLI execution is sufficient. <br>
+## Use Case:
 
+Developers and creators use the dLazy CLI to submit an image and prompt for Vidu Q2 generation, then receive a task status or media URL.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-i2v) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service](https://dlazy.com) <br>
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The security review is partial and does not establish that the CLI performs the advertised image-to-video conversion; install details are unresolved.
+
+Mitigation: Review the CLI behavior and install details, and decide whether you are comfortable with its login flow before installing.
+
+## Reference(s):
 
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted result URLs or an async generateId for polling.] <br>
+## Skill Output:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and SKILL.md frontmatter) <br>
+**Output Type(s):** [JSON, Media URLs, Generation status]
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+**Output Format:** [JSON response with generation status and media output URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generation may be asynchronous; the response can contain a task identifier before outputs are ready.]
+
+## Skill Version(s):
+
+1.3.43 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

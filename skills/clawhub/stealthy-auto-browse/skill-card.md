@@ -1,45 +1,64 @@
-## Description: <br>
-Provides Docker-based browser automation with Camoufox and OS-level input for authorized QA, compatibility testing, and defensive security research against systems the user owns or is permitted to test. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Headless-detection-resistant browser automation in Docker for authorized QA, compatibility testing, and defensive security research. Camoufox + OS-level input + persistent fingerprints. Use only with sites you own or have written authorization to test.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers, QA engineers, and defensive security testers use this skill to control a local browser automation service for authorized testing of anti-bot behavior, compatibility issues, and realistic browser workflows. It is intended for owned systems, in-scope security engagements, sanctioned staging environments, and controlled detection-library research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dual-use browser automation could be applied to unauthorized scraping, access-control evasion, or activity outside the approved test scope. <br>
-Mitigation: Use the skill only on systems the operator owns or has written permission to test, and keep test targets, accounts, and workflows explicitly scoped. <br>
-Risk: An exposed unauthenticated API or VNC viewer could give another party full control of the browser session. <br>
-Mitigation: Bind services to localhost, set AUTH_TOKEN, prefer Authorization headers over query-string tokens, and do not expose VNC beyond local debugging. <br>
-Risk: Page capture, screenshots, DOM inspection, cookies, storage, and logs can collect sensitive data from authorized targets. <br>
-Mitigation: Capture only what the approved test requires, use isolated test accounts, avoid persistent real session data, and remove mounted profile data after testing. <br>
-Risk: Automatic dialog acceptance or URL-triggered loaders can approve destructive actions or modify page state without fresh confirmation. <br>
-Mitigation: Disable or tightly scope dialog auto-accept before stateful workflows and mount only loader YAML that has been written or audited by the operator. <br>
+## Use Case:
 
+Developers and security testers use this skill to check their own sites or explicitly authorized targets for anti-bot compatibility, browser behavior, and defensive security testing. Use it only within the documented authorization and scope.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/stealthy-auto-browse) <br>
-- [Setup reference](references/setup.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON action examples, YAML script examples, shell commands, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to issue HTTP or MCP browser actions; service responses can include JSON, page text, HTML, screenshots, recordings, cookies, storage, console logs, and network logs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.4 (source: server-resolved release evidence) <br>
+Risk: The security scan rated the release suspicious because it repeatedly uses a changeable Docker image reference; the scan was partial because some local references could not be resolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Consider waiting to install until the Docker image is pinned to a reviewed digest, as the security guidance recommends.
+
+Risk: Without AUTH_TOKEN, anyone who can reach the browser API can control the browser, including its pages, cookies, and scripts.
+
+Mitigation: Set AUTH_TOKEN and bind published API and viewer ports to localhost or place the API behind an authenticating proxy.
+
+Risk: Browser dialogs accept by default and can confirm destructive actions on stateful sites.
+
+Mitigation: Call handle_dialog with accept: false before actions that may raise dialogs on stateful sites, and avoid targets where an accidental confirmation could cause harm.
+
+Risk: Mounted page loaders run automatically on matching URLs and can change page state.
+
+Mitigation: Only mount loader files that you wrote or audited, and review their steps before use.
+
+## Reference(s):
+
+- [Setup and security guidance](references/setup.md)
+- [Project homepage](https://github.com/psyb0t/docker-stealthy-auto-browse)
+- [API input guidance](https://github.com/psyb0t/docker-stealthy-auto-browse/blob/main/docs/api.md#humanized-input)
+- [Script mode control flow](https://github.com/psyb0t/docker-stealthy-auto-browse/blob/main/docs/script-mode.md#control-flow)
+
+## Skill Output:
+
+**Output Type(s):** [Text, HTML, Screenshots, Structured data, API calls, Configuration instructions]
+
+**Output Format:** [JSON API responses containing page text, HTML, screenshots, and structured browser results; Markdown setup guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Page capture and browser actions should stay within the authorized test scope.]
+
+## Skill Version(s):
+
+3.9.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -7,20 +7,24 @@
   1. 把 MANIFEST 里的「演示版」HTML 拷进 dist/,用干净 slug 命名(suanli/ep01 …)
   2. 把内嵌的本地 Anthropic 字体(绝对路径)改成站内 /fonts/,并把 woff2 一起打包进去
      —— 这样公网也能用上 Anthropic Sans/Mono(原 suanli 文章页公网会丢这两个字体)
-  3. 把 Google Fonts 换成 loli.net 国内镜像(国内首屏不卡字体)
-  4. 生成 dist/index.html 沉浸式主题导航页(暖黑,COMPUTE LEDGER 调性)
-  5. --deploy(默认) 用 Wrangler 部署到 Cloudflare Pages 项目 keynote → keynote.pages.dev
+  3. 去掉第三方字体 CDN,注入自托管 /fonts/ @font-face
+  4. 首页 home.html → dist/index.html
+  5. 加 --deploy 才用 Wrangler 部署到 Cloudflare Pages(项目名取 YANDU_CF_PROJECT)
 
 用法:
-  python3 演读DECK/publish.py              # 构建 + 部署到 Cloudflare Pages(keynote)
-  python3 演读DECK/publish.py --build-only # 只生成 dist/(本地预览,不部署)
+  python3 演读DECK/publish.py           # 只构建 dist/(本地预览,默认不部署)
+  YANDU_CF_PROJECT=<你的项目名> python3 演读DECK/publish.py --deploy   # 构建 + 部署
+
+可选环境变量:
+  YANDU_CF_PROJECT       Cloudflare Pages 项目名(部署必填)
+  YANDU_CF_BEACON_TOKEN  你自己的 Cloudflare Web Analytics token;留空则不注入统计脚本
+  YANDU_ENABLE_COMMENTS  设为 1/true 才向页面注入留言板(默认关闭)
 
 加一期:在 MANIFEST 加一行即可,重跑脚本。零依赖,只用标准库。
-
-定位:keynote.pages.dev = 沉浸式阅览主题站。一个主题(系列)一组演示稿,后续可扩展更多主题。
 """
 
 import argparse
+import os
 import re
 import shutil
 import subprocess
@@ -29,20 +33,20 @@ from pathlib import Path
 
 # ---------------------------------------------------------------------------
 SELF = Path(__file__).resolve().parent                # 演读DECK/（发布系统自身目录，自包含）
-ROOT = SELF.parent                                    # 项目根（MANIFEST 里演示版源路径的基准）
+ROOT = SELF.parent                                    # 项目根 Pi.dev/（MANIFEST 里演示版源的基准）
 OUT = SELF / "dist"                                   # 构建产物 = 部署到 CF Pages 的目录
-CF_PROJECT = "hekouwang"              # *.pages.dev 前缀 → hekouwang.pages.dev
-SITE_TITLE = "演读 DECK"
-SITE_TAGLINE = "把复杂的 AI，读成一场演示。一屏一镜、可翻页、能自动播放的沉浸式阅读。"
-BRAND = "会勇禾口王的AI笔记"
-HANDLE = "@huiyonghkw"
+CF_PROJECT = os.environ.get("YANDU_CF_PROJECT", "")   # *.pages.dev 前缀
+CF_BEACON_TOKEN = os.environ.get("YANDU_CF_BEACON_TOKEN", "")
+ENABLE_COMMENTS = os.environ.get("YANDU_ENABLE_COMMENTS", "").strip().lower() in (
+    "1", "true", "yes", "on",
+)
 
 # Anthropic 字体已收进本目录 fonts/src（自包含，不再依赖外部 skill 路径）
 FONT_SRC = SELF / "fonts" / "src"
 FONT_FILES = ["anthropicSans.woff2", "anthropicMono.woff2"]
 # V6 焰彩白引擎用的 Mozilla 可变字体（拉丁，小体积、无需子集化，整包打进 dist/fonts/）
 MOZILLA_FILES = ["MozillaHeadline-Variable.woff2", "MozillaText-Variable.woff2"]
-# 演示版源 HTML(content-factory 出品)里内嵌的本地字体路径；localize 时统一替换成站内 /fonts/。
+# 演示版源 HTML(content-master-skill 出品)里内嵌的本地字体路径；localize 时统一替换成站内 /fonts/。
 # 正则同时认两种写法，不写死某台机器/用户名——他机/换目录/不同 skill 路径都认：
 #   ① 任意绝对路径 + /assets/fonts/（模型已把 {{SKILL_DIR}} 替换成真实绝对路径的常态）
 #   ② 未替换的 {{SKILL_DIR}}/assets/fonts/ 占位符（模型拷引擎模板时漏替换的兜底）
@@ -105,20 +109,6 @@ FONT_MIRRORS = {
 
 # 发布清单:(源演示版 相对 ROOT, slug, 系列, EP标签, 分类, 标题, 一句话简介, 屏数)
 MANIFEST = [
-    (
-        "EP-智能体互联国标系列/序篇-全景与三协议/序篇-演示版.html",
-        "guobiao/xu", "智能体互联国标", "序篇", "全景 · OVERVIEW",
-        "全球第一份「智能体互联」国标，到底定了什么",
-        "GB/Z 185 七部分原文读完：它和 MCP／A2A／ANP 什么关系，最不一样的一刀切在身份。",
-        17,
-    ),
-    (
-        "EP-智能体互联国标系列/EP01-总体架构/EP01-演示版.html",
-        "guobiao/ep01", "智能体互联国标", "EP01", "总体架构 · ARCHITECTURE",
-        "智能体要互联，先过哪五道关",
-        "185.1 总体架构：五域十接口一条闭环，用一次「订会议室」走通身份→工具全链路。",
-        17,
-    ),
     (
         "EP-算力账本/EP01-把算力当电卖/EP01-演示版.html",
         "suanli/ep01", "算力账本", "EP01", "入门 · BASICS",
@@ -190,19 +180,78 @@ MANIFEST = [
         17,
     ),
     (
+        "EP-Harness工程系列/EP06-MCP协议大改深读/演示版.html",
+        "harness/ep06", "Harness 工程", "EP06", "协议深读 · MCP",
+        "我之前放弃 MCP 的三个理由，今天被一个个补上",
+        "做 EP02 时我挑了 CLI 放弃 MCP，写了三个理由。2026-07-28 这一版，把这三个理由一个个补上了。MCP 从'能连'变成'能上线'，是 AI 智能体的 HTTP/1.1 时刻。",
+        15,
+    ),
+    (
+        "EP-Harness工程系列/EP01-你以为在挑模型/演示版.html",
+        "harness/ep01", "Harness 工程", "EP01", "入门 · MODEL",
+        "你以为在挑模型，其实在挑 harness",
+        "2026 年模型分数一个比一个高，可用起来还是时好时坏。真正决定体验的不是模型，而是模型外面那整套系统——harness：循环、工具、子代理、校验、权限、记忆。",
+        12,
+    ),
+    (
+        "EP-Harness工程系列/EP02-循环工程/演示版.html",
+        "harness/ep02", "Harness 工程", "EP02", "循环 · LOOP",
+        "你不再写提示了，你开始写循环",
+        "2026 年最早把 AI 用到极致的人不再 prompt，而在设计替自己 prompt 的系统——循环工程。Ralph、六块拼图、翻车四地、最硬反方，外加一个最小可复制循环。",
+        14,
+    ),
+    (
+        "EP-Harness工程系列/EP03-一个人指挥一支AI小队/演示版.html",
+        "harness/ep03", "Harness 工程", "EP03", "指挥 · TEAM",
+        "一个人怎么指挥一支 AI 小队",
+        "同样 2025 年，Anthropic 说子代理把成绩拉高 90.2%，Cognition 说只会得到脆弱系统。这篇把 fan-out 这枚硬币两面摊开，给你一把「什么时候该派小队、什么时候单线程」的尺子。",
+        10,
+    ),
+    (
+        "EP-Harness工程系列/EP04-AI怎么自己发现错了又改对/演示版.html",
+        "harness/ep04", "Harness 工程", "EP04", "校验 · GATE",
+        "AI 说它改好了，你信吗？",
+        "AI 最爱说「搞定了」。这一篇用 4 个天天遇得到的场景，把「AI 怎么自己发现错了又改对」讲成大白话：真正让它改对的不是反思，是给它一份对不上就得重做的标准答案。",
+        12,
+    ),
+    (
         "EP-出行SaaS工程手记/EP01-一份代码变100个小程序/EP01-演示版.html",
         "saas/ep01", "出行SaaS工程手记", "EP01", "多租户 · SAAS",
         "一份代码，怎么变成 100 个商户各自的小程序",
         "微信「代运营」把复杂度的乘法改写成一条平线：授权令牌链 + 9 步代发布流水线 + 边际成本趋零，再让 AI 把它压到一个人扛得住。",
         21,
     ),
+    (
+        "../fastmcp-lab/ep01-hello-tool/教程/演示版.html",
+        "fastmcp/ep01", "FastMCP 中文入门", "EP01", "入门 · HELLO",
+        "FastMCP 是什么？装好并写出第一个 Tool",
+        "官方文档陪读第1课：装好依赖、写出 @mcp.tool、用 verify 绿灯验收——函数写了 ≠ 模型能发现。",
+        15,
+    ),
+    (
+        "../fastmcp-lab/ep02-tools-resources-prompts/教程/演示版.html",
+        "fastmcp/ep02", "FastMCP 中文入门", "EP02", "三分法 · TRP",
+        "Tool 之外，还有 Resource 和 Prompt",
+        "会写 Tool 不等于会设计 MCP server。待办玩具域各放一个最小例子，verify 一次验齐三分。",
+        13,
+    ),
+    (
+        "../fastmcp-lab/ep03-host-connect/教程/演示版.html",
+        "fastmcp/ep03", "FastMCP 中文入门", "EP03", "宿主 · HOST",
+        "verify 全绿，为什么 Cursor 里还是找不到？",
+        "两道验收：进程内绿灯只是入场券；CLI list + 真调 whoami 才算过关。",
+        16,
+    ),
+    (
+        "EP-股票识字系列/EP01-三个市盈率/演示版.html",
+        "shizi/ep01", "股票识字", "EP01", "名词科普 · PE",
+        "软件上三个市盈率，差了快四倍",
+        "用利通电子例题学会静÷动尺子：别抄最小那个「动」，先看它们差多大。",
+        14,
+    ),
 ]
 
 SERIES_META = {
-    "智能体互联国标": {
-        "en": "AGENT INTERCONNECTION · GB/Z 185",
-        "dek": "全球第一份「智能体互联」国标 GB/Z 185，七部分一集集讲成人话。",
-    },
     "算力账本": {
         "en": "COMPUTE LEDGER",
         "dek": "用记账的方式，把 AI 背后的算力与 Token 经济学讲清楚。",
@@ -219,6 +268,14 @@ SERIES_META = {
         "en": "RIDE-SAAS · FIELD NOTES",
         "dek": "面向企业出行的多租户 SaaS，怎么用一份代码服务一百个商户——真实项目里的架构、踩坑与 AI 协作，一期一个战场。",
     },
+    "FastMCP 中文入门": {
+        "en": "FASTMCP LAB",
+        "dek": "官方文档陪读、边造边学：装好 · 三分法 · 宿主接通——每课可跑代码 + 一屏一镜演示。",
+    },
+    "股票识字": {
+        "en": "STOCK LITERACY",
+        "dek": "用实盘例题把投资名词讲成人话：先给尺子，再谈软件上的数字——不喊单、不荐股、只识字。",
+    },
 }
 
 
@@ -227,12 +284,9 @@ SERIES_META = {
 # 每页注入（deck 走 build()、首页走 copy_home()，都过 localize()，一处即全站）。
 # 意义：爬虫不执行 JS → 这个数字天然把机器人筛掉，是「真人有没有来」的唯一可信口径。
 #   （对照：CF「帐户分析/流量概览」统计的是边缘请求数，机器人全算进去，会虚高几十倍。）
-# token 是公开的客户端标识（本来就明文出现在页面里），非密钥，入库无风险。
+# token 取 YANDU_CF_BEACON_TOKEN，必须是站点所有者自己的；留空则不注入。
 # ⚠️ static.cloudflareinsights.com 国内可能加载失败 → CN 真人会被少计。
 #    别把它当唯一真相源；判断国内真人另看留言板 D1 / 公众号后台。
-# ⚠️ 落地新项目时把 token 换成你自己的（CF 控制台 → Web Analytics → 添加站点后拿）。
-#    留空则不注入 beacon（不想统计、或还没建站时的默认）。
-CF_BEACON_TOKEN = ""   # ← 填你自己的 Web Analytics token
 CF_BEACON = ("""<!-- Cloudflare Web Analytics --><script type='module' """
              """src='https://static.cloudflareinsights.com/beacon.min.js' """
              f"""data-cf-beacon='{{"token": "{CF_BEACON_TOKEN}"}}'>"""
@@ -242,7 +296,7 @@ CF_BEACON = ("""<!-- Cloudflare Web Analytics --><script type='module' """
 def localize(html: str) -> str:
     """① 本地 Anthropic 字体绝对路径 → 站内 /fonts/；② 自托管思源黑/宋：
     删掉 Google Fonts / loli 外链（preconnect + css2），注入本地 @font-face；
-    ③ 注入 Cloudflare Web Analytics beacon（真人流量统计）。"""
+    ③ 配了 YANDU_CF_BEACON_TOKEN 时注入 Cloudflare Web Analytics beacon（真人流量统计）。"""
     html = FONT_ABS_RE.sub("/fonts/", html)   # 通配收编 Anthropic + Mozilla 绝对路径
     # 删除字体 preconnect（googleapis / gstatic / loli 任意）
     html = re.sub(r'\s*<link rel="preconnect"[^>]*(?:googleapis|gstatic|loli)[^>]*>', "", html)
@@ -256,7 +310,7 @@ def localize(html: str) -> str:
         pl = PRELOAD_LINKS_V6 if "Mozilla" in html else PRELOAD_LINKS
         html = html.replace("<head>", "<head>" + pl, 1)
     # Web Analytics beacon（放 </body> 前，type=module 天然 defer，不挡首屏）
-    if "cloudflareinsights" not in html:
+    if CF_BEACON and "cloudflareinsights" not in html:
         html = (html.replace("</body>", CF_BEACON + "\n</body>", 1)
                 if "</body>" in html else html + CF_BEACON)
     return html
@@ -333,7 +387,7 @@ COMMENT_WIDGET = r"""
         <span class="hkwc-msg" id="hkwcMsg"></span>
         <button class="hkwc-send" id="hkwcSend" type="submit">发送</button>
       </div>
-      <div class="hkwc-cr">本站演示引擎开源为 Claude Skill · <a href="https://github.com/huiyonghkw/hekouwang-yandu-deck-skill" target="_blank" rel="noopener">GitHub @huiyonghkw</a></div>
+      <div class="hkwc-cr">留言保存在本站自己的 Cloudflare D1，不经第三方</div>
     </form>
   </aside>
 </div>
@@ -414,12 +468,25 @@ def subset_cjk() -> None:
     charfile = OUT / "_chars.txt"
     charfile.write_text("".join(sorted(chars)), encoding="utf-8")
 
+    # 注意:只判 exists() 不够。venv 把绝对路径写死在 shebang 里,仓库一挪目录
+    # 脚本还在、但解释器死链,执行时才抛 FileNotFoundError —— 那时 dist/ 已经清掉
+    # 重写了一半。所以这里实跑一次确认可用,不可用就当没有,走下面的缓存兜底。
+    def _usable(exe: str) -> bool:
+        try:
+            subprocess.run([exe, "--help"], capture_output=True, check=True, timeout=30)
+            return True
+        except (OSError, subprocess.SubprocessError):
+            return False
+
     pyft = None
     for cand in (SELF / "tools" / "fenv" / "bin" / "pyftsubset",):
-        if cand.exists():
+        if cand.exists() and _usable(str(cand)):
             pyft = str(cand); break
     if pyft is None:
-        pyft = shutil.which("pyftsubset")
+        found = shutil.which("pyftsubset")
+        pyft = found if found and _usable(found) else None
+    if pyft is None:
+        print("  ⚠️ pyftsubset 不可用(检查 tools/fenv 是否因目录搬迁失效),改用缓存子集")
 
     have_src = all((CJK_SRC / s).exists() for s, _ in CJK_JOBS)
     if pyft and have_src:
@@ -463,7 +530,7 @@ def build() -> list[dict]:
 
     built, missing = [], []
     for src_rel, slug, series, ep, cat, title, dek, screens in MANIFEST:
-        src = ROOT / src_rel
+        src = (ROOT / src_rel).resolve()
         if not src.exists() or src.stat().st_size == 0:
             missing.append(src_rel)
             print(f"  ⚠️  跳过(缺失或空): {src_rel}")
@@ -471,7 +538,8 @@ def build() -> list[dict]:
         dst = OUT / f"{slug}.html"
         dst.parent.mkdir(parents=True, exist_ok=True)
         page_html = localize(src.read_text(encoding="utf-8", errors="replace"))
-        page_html = inject_comments(page_html, slug, f"{ep} · {title}")
+        if ENABLE_COMMENTS:
+            page_html = inject_comments(page_html, slug, f"{ep} · {title}")
         dst.write_text(page_html, encoding="utf-8")
         built.append({"slug": slug, "series": series, "ep": ep, "cat": cat,
                       "title": title, "dek": dek, "screens": screens})
@@ -489,211 +557,35 @@ def build() -> list[dict]:
     return built
 
 
-def write_index(items: list[dict]) -> None:
-    # 按系列分组
-    groups: dict[str, list[dict]] = {}
-    for it in items:
-        groups.setdefault(it["series"], []).append(it)
-
-    blocks = []
-    for series, eps in groups.items():
-        sm = SERIES_META.get(series, {"en": "", "dek": ""})
-        cards = []
-        for a in eps:
-            cards.append(f'''      <a class="card pre" href="{a['slug']}">
-        <div class="card-top"><span class="badge">{a['ep']}</span><span class="cat">{a['cat']}</span></div>
-        <h3>{a['title']}</h3>
-        <p>{a['dek']}</p>
-        <div class="card-foot"><span class="screens">{a['screens']} 屏</span><span class="go">进入演示 →</span></div>
-      </a>''')
-        blocks.append(f'''    <section class="series">
-      <div class="series-head pre">
-        <div class="series-en">{sm['en']}</div>
-        <h2>{series}</h2>
-        <p class="series-dek">{sm['dek']}</p>
-      </div>
-      <div class="grid">
-{chr(10).join(cards)}
-      </div>
-    </section>''')
-    blocks_html = "\n".join(blocks)
-
-    html = f'''<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{SITE_TITLE} · 沉浸式演示 — {BRAND}</title>
-<meta name="description" content="{SITE_TAGLINE} 由{BRAND}出品。当前主题:算力账本 COMPUTE LEDGER。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="{SITE_TITLE} · 沉浸式演示主题站">
-<meta property="og:description" content="{SITE_TAGLINE}">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23161514'/%3E%3Cpath d='M13 5 6 18h6l-1 9 9-13h-6z' fill='none' stroke='%23e08a5f' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.loli.net">
-<link rel="preconnect" href="https://gstatic.loli.net" crossorigin>
-<link href="https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@400;500;700;800;900&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
-<style>
-  @font-face{{font-family:'Anthropic Sans';src:url('/fonts/anthropicSans.woff2') format('woff2');font-weight:300 800;font-style:normal;font-display:swap;font-feature-settings:'dlig' 0}}
-  @font-face{{font-family:'Anthropic Mono';src:url('/fonts/anthropicMono.woff2') format('woff2');font-weight:300 800;font-style:normal;font-display:swap}}
-  :root{{
-    --bg:#161514;--surface:#221f1d;--surface2:#1b1917;
-    --line:rgba(244,242,235,.09);--line2:rgba(244,242,235,.16);--line3:rgba(244,242,235,.26);
-    --text:#f4f2eb;--read:#cdc8bd;--text2:#aea99f;--text3:#948e84;--text4:#5f5a52;
-    --hot:#e08a5f;--hot2:#efb79b;--hl0:#f6e1d1;--cool:#8fa6bd;--cool2:#aec2d4;
-    --font:'Anthropic Sans','Noto Sans SC','PingFang SC',system-ui,sans-serif;
-    --serif:'Noto Serif SC',Georgia,serif;
-    --mono:'Anthropic Mono','PingFang SC',ui-monospace,monospace;
-  }}
-  *,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
-  html{{scroll-behavior:smooth;background:var(--bg);color:var(--text);font-family:var(--font)}}
-  body{{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;
-    background:radial-gradient(1100px 700px at 80% -8%,rgba(224,138,95,.12),transparent 60%),
-      radial-gradient(900px 800px at -8% 28%,rgba(143,166,189,.06),transparent 55%),var(--bg)}}
-  .grain{{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.04;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px}}
-  .mesh{{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
-    background-image:linear-gradient(rgba(244,242,235,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(244,242,235,.022) 1px,transparent 1px);
-    background-size:64px 64px;mask:radial-gradient(circle at 50% 18%,#000,transparent 80%)}}
-  .frame{{position:fixed;inset:18px;z-index:1;pointer-events:none}}
-  .frame i{{position:absolute;width:22px;height:22px;border:1.5px solid var(--line3)}}
-  .frame i:nth-child(1){{top:0;left:0;border-right:0;border-bottom:0}}
-  .frame i:nth-child(2){{top:0;right:0;border-left:0;border-bottom:0}}
-  .frame i:nth-child(3){{bottom:0;left:0;border-right:0;border-top:0}}
-  .frame i:nth-child(4){{bottom:0;right:0;border-left:0;border-top:0}}
-
-  .wrap{{position:relative;z-index:2;max-width:1080px;margin:0 auto;padding:0 clamp(1.5rem,5vw,3rem)}}
-
-  .masthead{{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);
-    font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--text3);
-    padding:1.7rem 0 1.1rem;border-bottom:1px solid var(--line)}}
-  .masthead .l{{display:flex;align-items:center;gap:.7rem;color:var(--text2)}}
-  .masthead .live{{width:7px;height:7px;border-radius:50%;background:var(--hot);box-shadow:0 0 0 0 rgba(224,138,95,.5);animation:pulse 2.6s infinite}}
-  @keyframes pulse{{0%{{box-shadow:0 0 0 0 rgba(224,138,95,.45)}}70%{{box-shadow:0 0 0 7px rgba(224,138,95,0)}}100%{{box-shadow:0 0 0 0 rgba(224,138,95,0)}}}}
-
-  .hero{{padding:clamp(3.5rem,9vw,6.5rem) 0 clamp(2.5rem,6vw,4rem)}}
-  .kicker{{font-family:var(--mono);font-size:.74rem;font-weight:500;letter-spacing:.34em;color:var(--cool2);text-transform:uppercase;display:flex;align-items:center;gap:.9rem;margin-bottom:2rem}}
-  .kicker span{{width:3rem;height:1px;background:linear-gradient(90deg,var(--cool),transparent)}}
-  .hero h1{{font-family:var(--mono);font-size:clamp(3.4rem,13vw,8rem);font-weight:800;letter-spacing:.04em;line-height:.95;
-    background:linear-gradient(96deg,var(--hl0),var(--hot2) 45%,var(--hot));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:1.5rem}}
-  .hero .tag{{font-size:clamp(1.1rem,2.4vw,1.4rem);color:var(--read);max-width:40rem;line-height:1.8}}
-  .hero .tag b{{color:var(--text);font-weight:700}}
-  .hero .howto{{margin-top:1.8rem;font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;color:var(--text3);
-    display:inline-flex;align-items:center;gap:.7rem;border:1px solid var(--line2);border-radius:9999px;padding:.6rem 1.2rem}}
-  .hero .howto b{{color:var(--hot2);font-weight:600}}
-
-  .series{{padding:clamp(2rem,5vw,3.5rem) 0}}
-  .series-head{{margin-bottom:2rem}}
-  .series-en{{font-family:var(--mono);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--cool2);margin-bottom:.7rem}}
-  .series h2{{font-size:clamp(1.7rem,4vw,2.5rem);font-weight:800;letter-spacing:-.02em;margin-bottom:.6rem}}
-  .series-dek{{color:var(--text2);font-size:1.02rem;line-height:1.7;max-width:42rem}}
-
-  .grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:1.1rem}}
-  .card{{position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);
-    border-radius:18px;padding:1.7rem 1.8rem;text-decoration:none;color:inherit;overflow:hidden;isolation:isolate;
-    box-shadow:0 1px 2px rgba(0,0,0,.25),0 16px 38px rgba(0,0,0,.28);
-    transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}}
-  .card::before{{content:'';position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;
-    background:linear-gradient(158deg,rgba(244,242,235,.05),transparent 40%)}}
-  .card:hover{{transform:translateY(-4px);border-color:rgba(224,138,95,.5);
-    box-shadow:0 18px 42px -16px rgba(224,138,95,.4)}}
-  .card-top{{display:flex;align-items:center;gap:.7rem;margin-bottom:1.1rem}}
-  .badge{{font-family:var(--mono);font-size:.72rem;font-weight:700;color:#231a14;background:var(--hot);
-    padding:.25rem .65rem;border-radius:999px;letter-spacing:.04em}}
-  .cat{{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text3)}}
-  .card h3{{font-size:1.32rem;font-weight:800;line-height:1.3;margin-bottom:.6rem;letter-spacing:-.01em;text-wrap:balance}}
-  .card p{{color:var(--text2);font-size:.95rem;line-height:1.7;flex:1}}
-  .card-foot{{display:flex;justify-content:space-between;align-items:center;margin-top:1.3rem;
-    padding-top:1rem;border-top:1px solid var(--line)}}
-  .screens{{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--text4)}}
-  .go{{font-family:var(--mono);font-size:.78rem;font-weight:700;color:var(--hot2);letter-spacing:.02em}}
-
-  .about{{margin-top:clamp(2.5rem,6vw,4.5rem);max-width:48rem}}
-  .about-en{{font-family:var(--mono);font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--text3);margin-bottom:1rem}}
-  .about-id{{font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:800;color:var(--text);line-height:1.4;letter-spacing:-.01em;margin-bottom:1rem;text-wrap:balance}}
-  .about-id b{{color:var(--hot2);font-weight:800}}
-  .about-line{{color:var(--text2);font-size:1.02rem;line-height:1.85;margin-bottom:1rem}}
-  .about-line b{{color:var(--read);font-weight:700}}
-  .about-cta{{color:var(--hot2);font-size:1.02rem;line-height:1.7}}
-  .about-cta b{{color:var(--hl0);font-weight:700}}
-
-  footer{{margin-top:clamp(2.5rem,6vw,4rem);padding:2.6rem 0 3.5rem;border-top:1px solid var(--line);
-    display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;align-items:center}}
-  footer .brand{{font-family:var(--font);font-size:1.05rem;font-weight:800;color:var(--text)}}
-  footer .meta{{font-family:var(--mono);font-size:.74rem;color:var(--text3);letter-spacing:.06em}}
-
-  .pre{{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1)}}
-  .pre.in{{opacity:1;transform:none}}
-  @media (prefers-reduced-motion:reduce){{.pre{{opacity:1;transform:none;transition:none}}}}
-  @media(max-width:560px){{.grid{{grid-template-columns:1fr}}}}
-</style>
-</head>
-<body>
-<div class="grain"></div>
-<div class="mesh"></div>
-<div class="frame"><i></i><i></i><i></i><i></i></div>
-
-<div class="wrap">
-  <div class="masthead">
-    <div class="l"><span class="live"></span>{SITE_TITLE} / 沉浸式演示</div>
-    <div class="r">{BRAND}</div>
-  </div>
-
-  <header class="hero">
-    <div class="kicker pre"><span></span>沉浸式阅览 · 一屏一镜 · 可翻页 / 自动播放</div>
-    <h1 class="pre">{SITE_TITLE}</h1>
-    <p class="tag pre">{SITE_TAGLINE.replace("沉浸式阅览 · ", "")}<br>把复杂主题做成一场<b>可翻页的演示</b>——像看 PPT，也像看一支安静的视频。</p>
-    <div class="howto pre">▸ 进入后 <b>方向键 / 空格 / 点击</b> 翻页，右下可 <b>自动播放</b></div>
-  </header>
-
-{blocks_html}
-
-  <section class="about pre">
-    <div class="about-en">ABOUT · {BRAND}</div>
-    <p class="about-id">「禾口王」拼起来是个「程」字 —— <b>真会用 AI 的程序员</b>。</p>
-    <p class="about-line">不聊 AI 会不会取代你，只聊先用 AI 的人怎么取代你。我自己先把 AI 工作流跑通，再拆给你——把 6 小时的活干成 30 分钟，一个人干完一支团队。<b>你正在看的这个演示站，就是这套流水线顺手产出的东西之一。</b></p>
-    <p class="about-cta">🎁 微信搜 <b>{BRAND}</b>，回复 <b>工厂</b>，领「AI 内容流水线手册」。</p>
-  </section>
-
-  <footer>
-    <span class="brand">{BRAND}</span>
-    <span class="meta">{HANDLE} · 不聊 AI 会不会取代你，只聊先用 AI 的人怎么取代你</span>
-  </footer>
-</div>
-
-<script>
-(function(){{
-  var motionOK=!window.matchMedia||window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
-  var els=[].slice.call(document.querySelectorAll('.pre'));
-  if(!motionOK||!('IntersectionObserver' in window)){{els.forEach(function(e){{e.classList.add('in')}});return;}}
-  var io=new IntersectionObserver(function(es){{es.forEach(function(en){{if(en.isIntersecting){{en.target.classList.add('in');io.unobserve(en.target);}}}});}},{{rootMargin:'0px 0px -8% 0px',threshold:.06}});
-  els.forEach(function(e){{io.observe(e)}});
-  setTimeout(function(){{els.forEach(function(e){{e.classList.add('in')}});}},1500);
-}})();
-</script>
-</body>
-</html>'''
-    (OUT / "index.html").write_text(html, encoding="utf-8")
-    print("  ✓ 生成沉浸式导航页  →  dist/index.html")
-
-
 # ---------------------------------------------------------------------------
 def ensure_wrangler() -> str | None:
     exe = shutil.which("wrangler")
-    if exe:
-        return exe
-    if shutil.which("npm") is None:
-        print("\n⚠️  没有 npm,无法安装 Wrangler。请先装 Node.js。")
-        return None
-    print("\n📥 未检测到 Wrangler,自动安装:npm i -g wrangler …")
-    try:
-        subprocess.run(["npm", "i", "-g", "wrangler"], check=True)
-    except subprocess.CalledProcessError:
-        print("⚠️  Wrangler 安装失败,请手动 `npm i -g wrangler`。")
-        return None
-    return shutil.which("wrangler")
+    if exe is None:
+        print("\n⚠️  未检测到 Wrangler。请自行安装并锁定版本后重跑,例如:npm i -g wrangler@<版本>")
+    return exe
+
+
+def _wrangler_project_name() -> str:
+    """读 wrangler.toml 的 name，用来和 YANDU_CF_PROJECT 对齐。"""
+    cfg = SELF / "wrangler.toml"
+    if not cfg.exists():
+        return ""
+    for line in cfg.read_text(encoding="utf-8").splitlines():
+        s = line.strip()
+        if s.startswith("name") and "=" in s:
+            return s.split("=", 1)[1].strip().strip("\"'")
+    return ""
 
 
 def deploy_cloudflare() -> None:
+    if not CF_PROJECT:
+        sys.exit("❌ 未设置 YANDU_CF_PROJECT(你自己的 Cloudflare Pages 项目名),不部署。")
+    toml_name = _wrangler_project_name()
+    if toml_name and toml_name not in ("<your-pages-project>", CF_PROJECT):
+        sys.exit(
+            f"❌ YANDU_CF_PROJECT={CF_PROJECT!r} 与 wrangler.toml name={toml_name!r} 不一致。"
+            "请改成同一个项目名后再部署，避免发到错误站点。"
+        )
     exe = ensure_wrangler()
     if exe is None:
         return
@@ -702,37 +594,39 @@ def deploy_cloudflare() -> None:
     if res.returncode != 0 or "not authenticated" in out or "not logged" in out:
         print("\n🔑 还没登录 Cloudflare。在终端跑一次(浏览器授权):")
         print("     wrangler login")
-        print("   登录后重跑:python3 演读DECK/publish.py")
+        print("   登录后重跑:python3 演读DECK/publish.py --deploy")
         return
     # 项目不存在则创建(已存在会报错,忽略)
     subprocess.run([exe, "pages", "project", "create", CF_PROJECT,
                     "--production-branch", "main"], capture_output=True)
-    # 配置式部署:不带目录参数,让 wrangler 读 SELF/wrangler.toml
-    # (pages_build_output_dir=dist + functions/ + D1 绑定一起随部署生效),cwd 必须是配置所在目录
-    cmd = [exe, "pages", "deploy",
+    # 显式 --project-name，与 YANDU_CF_PROJECT 一致；仍在 SELF 读 wrangler.toml 拿 D1/functions
+    cmd = [exe, "pages", "deploy", "dist",
+           "--project-name", CF_PROJECT,
            "--branch", "main", "--commit-dirty=true"]
-    print(f"\n🚀 部署到 Cloudflare Pages(读 wrangler.toml): {' '.join(cmd)}  (cwd={SELF})")
+    print(f"\n🚀 部署到 Cloudflare Pages: {' '.join(cmd)}  (cwd={SELF})")
     try:
         subprocess.run(cmd, check=True, cwd=str(SELF))
         print(f"\n✅ 部署完成!公开地址:https://{CF_PROJECT}.pages.dev")
     except subprocess.CalledProcessError as e:
         sys.exit(f"❌ 部署失败(exit {e.returncode})。先 `wrangler login`;若报 D1 绑定错,"
                  f"确认 wrangler.toml 里 database_id 已填(见 README「留言板」一节);"
-                 f"若 {CF_PROJECT}.pages.dev 名称被占用,改 CF_PROJECT 换一个前缀。")
+                 f"若 {CF_PROJECT}.pages.dev 名称被占用,改 YANDU_CF_PROJECT 换一个前缀。"
+                 f"若 Functions 未上传，确认 cwd 下有 functions/ 且 wrangler.toml 在同一目录。")
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="发布沉浸式演示主题站(默认构建+部署到 Cloudflare Pages / keynote)")
-    ap.add_argument("--build-only", action="store_true", help="只生成 dist/,不部署")
+    ap = argparse.ArgumentParser(description="构建沉浸式演示主题站;加 --deploy 才部署到 Cloudflare Pages")
+    ap.add_argument("--deploy", action="store_true", help="构建后部署到 YANDU_CF_PROJECT")
+    ap.add_argument("--build-only", action="store_true", help="兼容旧参数,等同默认行为")
     args = ap.parse_args()
 
     print(f"📦 生成发布目录: {OUT}")
     build()
-    if args.build_only:
-        print(f"\n本地预览:  open {OUT}/index.html")
-        print(f"一键发布:  python3 演读DECK/publish.py")
-    else:
+    if args.deploy and not args.build_only:
         deploy_cloudflare()
+    else:
+        print(f"\n本地预览:  open {OUT}/index.html")
+        print("确认无误后发布:  YANDU_CF_PROJECT=<项目名> python3 演读DECK/publish.py --deploy")
 
 
 if __name__ == "__main__":

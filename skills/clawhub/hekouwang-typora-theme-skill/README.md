@@ -1,63 +1,145 @@
-# hekouwang-typora-theme-skill
+# hekouwang · Typora 长文阅读主题
 
-会勇禾口王 · **Typora 主题工程 Skill**。
+<p align="center">
+  <b>把 Markdown 从编辑器里的纯文本，变成一张适合连续阅读与写作的纸。</b><br>
+  免费 V2（浅色 + 深色 · MIT）· 专业版六套视觉走 SkillPay 买断
+</p>
 
-维护「hekouwang」主题（复刻 Claude 桌面端阅读体验，深浅双版），并把一套主题工程方法
-固化成可复用工具。
+<p align="center">
+  <a href="README.en.md">English</a>
+  · <a href="https://huiyonghkw.github.io/hekouwang-typora-theme-lite-skill/"><b>体验站</b></a>
+  · <a href="https://huiyonghkw.github.io/hekouwang-typora-theme-lite-skill/live/">在线真 CSS</a>
+  · <a href="https://skillpay.alipay.com/shelf/product?productId=P0806000213890180&amp;merchantCode=huiyonghkw">SkillPay · ¥9.9</a>
+  · <a href="README.zh.md">技术说明</a>
+</p>
 
-![screenshot](docs/screenshot.png)
+<p align="center">
+  <img src="https://img.shields.io/badge/version-2.0.3-06a88c" alt="version 2.0.3">
+  <img src="https://img.shields.io/badge/license-MIT-00d4aa" alt="MIT">
+  <img src="https://img.shields.io/badge/Typora-macOS%20%7C%20Windows-6a45e0" alt="Typora macOS Windows">
+</p>
 
-## 它解决什么
+免费 V2 真机截图（macOS Typora）：
 
-做主题真正费时间的不是写 CSS，而是**一类不报错的失败**：改了 CSS 但 Typora 没变化、
-字体没生效却照常渲染、配色凭直觉猜结果和参照对不上、主题菜单里多出个奇怪条目。
-这些都不会抛错，只会让你在错误的基础上继续调。
+| 浅色 | 深色 |
+|---|---|
+| ![免费 V2 浅色](docs/previews/r/v2-light.webp) | ![免费 V2 深色](docs/previews/r/v2-dark.webp) |
 
-所以这个 skill 的重点是三件事：
+## 这套主题解决什么
 
-1. **CSS 由 `tokens.json` 生成**，不手写。构建时强制断言：0 个 `!important`、
-   除根字号外 0 处 px 字号（后者会让 Typora 的字号调节失效，但页面看起来完全正常）。
-2. **采样，不猜配色**。`sample_colors.py` 从参照截图取真实像素，还能反解叠加色的 alpha
-   —— 三通道解出一致的那个才是真的。实测靠这个推翻过两次凭直觉的判断。
-3. **验证要能分辨真假**。`verify_render.py` 永远带一个"不存在的字体"作 fallback 基准，
-   任何字体量出来等于基准就说明它没生效。没有基准的宽度数字毫无意义。
+- **中文长文松而不散。** 正文 `1rem`、行高 `1.65`；纸面随窗口伸缩，阅读列居中夹在 `48–96rem`。
+- **层级靠字号与留白，不靠彩条。** 代码、引用、表格各有边界，但不把文章切成卡片墙。
+- **侧栏收起即全幅。** 纸边与投影一起消失；正文仍落在阅读列内。
+- **编辑 / 源码 / 专注 / PDF 同一套节奏。** 导出压平浮层；纸张与页边距跟 Typora 设置走。
+- **中英混排不将就。** 西文随包 Inter，中文用系统字体；Windows 走 `body.os-windows` 字栈。
 
-## 用法
+## 安装（约两分钟）
 
-装进 `~/.claude/skills/` 后，直接对 Claude Code 说：
+在 Typora：**偏好设置 → 外观 → 打开主题文件夹**。或用安装器：
 
-> 帮我把 Typora 主题的行高调紧一点
-> 我的主题字体好像没生效，查一下
-> 按这张截图的配色做一套主题
-
-或手动：
+### macOS
 
 ```bash
-python3 scripts/build.py       # tokens.json → 两个 CSS（含自检）
-./scripts/install.sh           # 装进 Typora
-python3 scripts/verify_render.py --css theme/hekouwang.css --fonts "Hekouwang Sans"
-python3 scripts/sample_colors.py 参照.png --box 700,640,1700,700 --label 正文背景
+git clone https://github.com/huiyonghkw/hekouwang-typora-theme-lite-skill.git
+cd hekouwang-typora-theme-lite-skill
+./scripts/install.sh
 ```
 
-⚠️ 改完 CSS 必须 **`Cmd+Q` 完全退出 Typora 再重开** —— 切换主题不会重新加载被修改的文件。
+### Windows（PowerShell）
 
-## 文档
+```powershell
+git clone https://github.com/huiyonghkw/hekouwang-typora-theme-lite-skill.git
+cd hekouwang-typora-theme-lite-skill
+.\scripts\install-windows.ps1
+```
 
-| | |
+若策略拦住脚本：`powershell -ExecutionPolicy Bypass -File .\scripts\install-windows.ps1`（只影响本次进程）。自定义主题目录用 `-ThemeDir 'D:\your\Typora\themes'`。
+
+然后**完全退出并重开 Typora**，主题菜单选 **Hekouwang** / **Hekouwang Dark**。改 CSS 后也要重启才会加载。
+
+也可手动复制 `theme/hekouwang.css`、`theme/hekouwang-dark.css` 与 `theme/hekouwang/` 到主题目录。
+
+### 可选：更窄的阅读列
+
+在主题目录新建 `hekouwang.user.css`（深色用 `hekouwang-dark.user.css`）：
+
+```css
+:root { --hk-reading-measure: 40rem; }
+```
+
+改完后重启 Typora。
+
+## 免费与专业版
+
+| | 内容 | 授权 |
+|---|---|---|
+| **免费 V2** | `Hekouwang` / `Hekouwang Dark`（本仓） | MIT |
+| **专业版** | V1 / V2 Pro / V3–V6，各浅+深共 12 个 CSS | SkillPay 买断 ¥9.9 · 许可见专业包内 `LICENSE-PRO.txt` |
+
+免费版是完整长文主题，不是功能阉割。专业版换的是六套独立色彩与标题工艺，阅读指标与免费版相同。菜单名：**Hekouwang V1**、**Hekouwang V1 Dark** 等。购买：[SkillPay · ¥9.9](https://skillpay.alipay.com/shelf/product?productId=P0806000213890180&merchantCode=huiyonghkw) · [体验站说明](https://huiyonghkw.github.io/hekouwang-typora-theme-lite-skill/#buy)。
+
+| 主题 | 视觉方向 |
 |---|---|
-| [SKILL.md](SKILL.md) | 入口与铁律 |
-| [references/tokens.md](references/tokens.md) | 调参口径：改哪个值管什么 |
-| [references/typora-spec.md](references/typora-spec.md) | 选择器地图、官方规范、五个静默坑 |
-| [references/fonts.md](references/fonts.md) | 字体策略、授权红线、三级降级 |
-| [references/workflow.md](references/workflow.md) | 做新主题 / 加变体 / 发布到主题库 |
+| **V1 · 石墨青绿** | 冷蓝灰、薄荷青、紫链 |
+| **V2 Pro · 典藏编辑** | 胡桃墨、古铜、暖纸、双线 |
+| **V3 · 财经** | 海军蓝与黄铜，偏表格秩序 |
+| **V4 · 玻璃** | 冰蓝、雾面叠片 |
+| **V5 · HUD** | 紫晶外壳、青色信号 |
+| **V6 · 焰彩** | 李紫、珊瑚橙与粉 |
 
-## 相关
+真机预览（点图可放大；也可在[体验站对比](https://huiyonghkw.github.io/hekouwang-typora-theme-lite-skill/#compare-shots)）：
 
-- 主题仓库（可直接下载安装）：https://github.com/huiyonghkw/hekouwang-typora-theme
-- Typora 主题库提交：[typora/theme.typora.io#523](https://github.com/typora/theme.typora.io/pull/523)
+### V1 · 石墨青绿
+
+| 浅色 | 深色 |
+|---|---|
+| ![V1 浅色](docs/previews/r/v1-light.webp) | ![V1 深色](docs/previews/r/v1-dark.webp) |
+
+### V2 Pro · 典藏编辑
+
+| 浅色 | 深色 |
+|---|---|
+| ![V2 Pro 浅色](docs/previews/r/v2-pro-light.webp) | ![V2 Pro 深色](docs/previews/r/v2-pro-dark.webp) |
+
+### V3 · 财经
+
+| 浅色 | 深色 |
+|---|---|
+| ![V3 浅色](docs/previews/r/v3-light.webp) | ![V3 深色](docs/previews/r/v3-dark.webp) |
+
+### V4 · 玻璃
+
+| 浅色 | 深色 |
+|---|---|
+| ![V4 浅色](docs/previews/r/v4-light.webp) | ![V4 深色](docs/previews/r/v4-dark.webp) |
+
+### V5 · HUD
+
+| 浅色 | 深色 |
+|---|---|
+| ![V5 浅色](docs/previews/r/v5-light.webp) | ![V5 深色](docs/previews/r/v5-dark.webp) |
+
+### V6 · 焰彩
+
+| 浅色 | 深色 |
+|---|---|
+| ![V6 浅色](docs/previews/r/v6-light.webp) | ![V6 深色](docs/previews/r/v6-dark.webp) |
+
+## 给想定制的人
+
+不要手改 `theme/*.css`（生成物）。改 [`scripts/tokens.json`](scripts/tokens.json) / [`scripts/palettes.json`](scripts/palettes.json) 后重建：
+
+```bash
+python3 scripts/build.py
+python3 scripts/verify_layout.py --all
+```
+
+构建会拦 `px` 字号滥用、非导出区 `!important`，并对出货 CSS 做对比度审计。细节见 [技术说明](README.zh.md)；目录约定见 [`STRUCTURE.md`](STRUCTURE.md)。
+
+本仓 Agent 入口：根 [`SKILL.md`](SKILL.md)（`hekouwang-typora-theme-lite-skill`）。
 
 ## 授权
 
-MIT，见 [LICENSE.txt](LICENSE.txt)（用 `.txt` 后缀是因为 SkillHub 的发布白名单不收无扩展名文件）。
-随包的 Inter 字体采用 SIL OFL 1.1。
-本 skill 不包含、不分发任何 Anthropic 专有字体。
+- 免费主题、脚本与 Lite Skill：**[MIT](LICENSE)**；Inter：SIL OFL 1.1
+- 专业版主题包：包内许可 / `LICENSE-PRO.txt`，个人使用，勿二次分发
+- 与 Anthropic PBC 无从属关系；Claude / Anthropic 为其商标

@@ -71,6 +71,7 @@ function createTransporter() {
     host: config.smtp.host,
     port: config.smtp.port,
     secure: config.smtp.secure,
+    requireTLS: !config.smtp.secure && config.smtp.requireTLS,
     auth: {
       user: config.smtp.user,
       pass: config.smtp.pass,

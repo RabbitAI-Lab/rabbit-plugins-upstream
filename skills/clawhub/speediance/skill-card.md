@@ -1,45 +1,58 @@
-## Description: <br>
-Reads completed Speediance Gym Monster workouts, exports exercise catalog data, and pushes custom training programs through the user's Speediance account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read Speediance workouts and exercise data, and create custom training programs for a Gym Monster machine, with optional calendar reservations.
 
-## Publisher: <br>
-[stozo04](https://clawhub.ai/user/stozo04) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[stozo04](https://clawhub.ai/user/stozo04)
 
-## Use Case: <br>
-External users and agent developers with Speediance Gym Monster accounts use this skill to retrieve workout details, inspect the exercise catalog, and create custom training programs on their own account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with Speediance API region configurable for Global or EU. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Speediance email and password and may cache a session token locally. <br>
-Mitigation: Use trusted, gitignored environment or config files, run from directories you control, and check the configured token cache path. <br>
-Risk: Program creation can modify the user's Speediance account by adding training programs. <br>
-Mitigation: Use dry-run mode and review generated program payloads before pushing them to the account. <br>
-Risk: The integration is unofficial and depends on Speediance cloud API behavior that may change. <br>
-Mitigation: Validate returned workout data before relying on it and re-check behavior after Speediance app or API changes. <br>
+## Use Case:
 
+Gym Monster owners and their agents can review completed workouts, look up exercises, and prepare training programs. The skill can also reserve a program on the machine calendar when requested.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/stozo04/skills/speediance) <br>
-- [Source homepage](https://github.com/stozo04/speediance-cli) <br>
-- [Release binaries](https://github.com/stozo04/speediance-cli/releases) <br>
-- [Go package documentation](https://pkg.go.dev/github.com/stozo04/speediance-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs Speediance workout, session, catalog, and program data; operations may read local credential/config files, cache a session token, write library/config files, and call the Speediance cloud API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata) <br>
+Risk: The skill uses account credentials and a live session token; config.json stores the password in plaintext.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer environment variables or a secret store, avoid sharing config.json, and protect credential and token files.
+
+Risk: Pushing a program or reserving a date changes the user's Speediance account.
+
+Mitigation: Review the plan with `--dry-run` first and make account changes only when the user requests them.
+
+Risk: Gym Monster 2 behavior is untested and exercise IDs can differ by device.
+
+Mitigation: Use the documented Gym Monster v1 setting where possible and check exercise resolution before pushing a plan.
+
+## Reference(s):
+
+- [Speediance CLI source repository](https://github.com/stozo04/speediance-cli)
+- [Speediance CLI releases](https://github.com/stozo04/speediance-cli/releases)
+
+## Skill Output:
+
+**Output Type(s):** [JSON data, Shell commands, Configuration guidance]
+
+**Output Format:** [Structured JSON for CLI results, with concise setup and usage guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Workout fields are returned as supplied by the service; JSON output is available for parsing.]
+
+## Skill Version(s):
+
+1.0.13 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

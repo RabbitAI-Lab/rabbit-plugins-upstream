@@ -17,7 +17,7 @@ installer:
 argument-hint: "[pid / table / index name or describe your DBA task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["POSTGRES_AIOPS_CONFIG"],"bins":["postgres-aiops"],"config":["~/.postgres-aiops/config.yaml","~/.postgres-aiops/secrets.enc"]},"optional":{"env":["POSTGRES_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"POSTGRES_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Postgres-AIops","emoji":"🐘","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["postgres-aiops","uvx"]},"optional":{"env":["POSTGRES_AIOPS_CONFIG","POSTGRES_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Postgres-AIops","emoji":"🐘","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed PostgreSQL DBA operations. The governance harness (audit, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency. Connects via psycopg 3 and reads the system catalogs and pg_stat_* views.
   All write operations are audited to a local SQLite DB under ~/.postgres-aiops/ (relocatable via POSTGRES_AIOPS_HOME).
@@ -31,6 +31,8 @@ compatibility: >
 ---
 
 # Postgres AIops
+
+> **Audit availability:** Real writes require a durable audit intent. Reads and previews can continue if audit storage fails; check the warning and audit health before relying on their audit trail.
 
 > **Disclaimer**: Community-maintained open-source project, **not affiliated with, endorsed by, or sponsored by the PostgreSQL Global Development Group or any vendor.** "PostgreSQL" and related trademarks belong to their owners. Source at [github.com/AIops-tools/Postgres-AIops](https://github.com/AIops-tools/Postgres-AIops) under the MIT license.
 
@@ -62,6 +64,15 @@ uv tool install postgres-aiops
 postgres-aiops init       # interactive wizard: connection + encrypted password
 postgres-aiops doctor
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/postgres-aiops
+openclaw skills info postgres-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 
@@ -135,7 +146,7 @@ permitted. That is your agent's judgement, or the permission of the account you 
 INSERT/UPDATE/DELETE/DDL) — writes then fail at the server). There is no read-only switch, policy
 file, or approval gate.
 
-- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.postgres-aiops/audit.db` (relocatable via `POSTGRES_AIOPS_HOME`): params, result, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
+- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.postgres-aiops/audit.db` (relocatable via `POSTGRES_AIOPS_HOME`): params, outcome summary, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
 - `POSTGRES_AUDIT_APPROVED_BY` / `POSTGRES_AUDIT_RATIONALE` are optional annotations recorded on the audit row (who/why); they are never required and never block.
 - **Runaway guard** — a safety backstop, not authorization: the same call looped in a tight window trips a circuit breaker. Disable with `POSTGRES_RUNAWAY_MAX=0`.
 - Writes support `--dry-run` / `dry_run=True` and double confirmation at the CLI.

@@ -1,44 +1,56 @@
-## Description: <br>
-Build or review frontend UI for clean, restrained, human-designed interfaces without generic AI visual patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build or review frontend UI for clean, restrained, human-designed interfaces without generic AI visual patterns.
 
-## Publisher: <br>
-[leostehlik](https://clawhub.ai/user/leostehlik) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[leostehlik](https://clawhub.ai/user/leostehlik)
 
-## Use Case: <br>
-Developers and AI coding agents use this skill when creating or reviewing frontend UI to avoid generic AI visual patterns and produce restrained, usable interfaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can shape frontend implementation choices and may conflict with product, accessibility, security, localization, or existing design-system requirements. <br>
-Mitigation: Treat the rules as advisory visual-quality constraints and preserve explicit product, accessibility, security, localization, and design-system requirements when they conflict. <br>
-Risk: Generated UI may still include misleading, decorative, or hard-to-use interface patterns if the checklist is skipped. <br>
-Mitigation: Use the bundled review checklist and reference files before accepting generated frontend work. <br>
+## Use Case:
 
+Developers using coding agents apply this skill when they explicitly request frontend design, implementation, visual polish, or design review. It guides agents toward functional, restrained interfaces and provides a checklist for reviewing the result.
 
-## Reference(s): <br>
-- [Banned UI Patterns](references/banned-patterns.md) <br>
-- [Colour Palettes](references/colour-palettes.md) <br>
-- [No Slop UI Review Checklist](examples/review-checklist.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/leostehlik/no-slop-ui) <br>
-- [Publisher Profile](https://clawhub.ai/user/leostehlik) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Configuration] <br>
-**Output Format:** [Markdown guidance with frontend code and configuration recommendations when applicable] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory visual-quality rules subordinate to accessibility, security, localization, product requirements, and existing design systems.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.1 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: ClawScan noted a purpose mismatch and incomplete analysis of one referenced file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the repository-validation capability and the partially inspected reference to confirm they fit your needs before installing.
+
+## Reference(s):
+
+- [Banned visual patterns](references/banned-patterns.md)
+- [Colour palettes](references/colour-palettes.md)
+- [Stack recipes](references/stack-recipes.md)
+- [UI review checklist](examples/review-checklist.md)
+- [Agent snippets](docs/agent-snippets.md)
+- [coss ui documentation](https://coss.com/ui)
+- [WrenLore website example](https://wrenlore.com/)
+- [DoubleMint dashboard example](https://pool.derogold.online/)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Guidance, Markdown]
+
+**Output Format:** [Frontend code and concise review guidance in the project's existing formats]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Adapted to the requested UI task and the project's existing design system.]
+
+## Skill Version(s):
+
+0.8.0 (source: frontmatter, changelog)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

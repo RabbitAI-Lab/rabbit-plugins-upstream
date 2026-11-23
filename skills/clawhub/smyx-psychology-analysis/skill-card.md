@@ -1,44 +1,55 @@
-## Description: <br>
-Analyzes video inputs for mental-health and behavioral signals, returning structured psychological analysis reports, risk indicators, improvement suggestions, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides an interface for submitting video for psychological analysis and returning structured reports and improvement suggestions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers can use this skill to submit local video files or video URLs to a cloud analysis service for mental-health tendency analysis and to retrieve prior reports. It is positioned for employee care, campus screening, and home health monitoring workflows where outputs are treated as reference material rather than clinical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive video or image inputs and psychological analysis results are processed by the publisher's cloud service and may be linked to an internal identity. <br>
-Mitigation: Use only with informed consent, approved data handling, and clear retention, deletion, and account-isolation terms before applying it to real mental-health, workplace, or campus screening data. <br>
-Risk: The skill can silently create or reuse local authentication state and user identity. <br>
-Mitigation: Review token storage and identity isolation before deployment, and run the skill in an isolated account or environment for each intended user population. <br>
-Risk: Psychological analysis outputs may be mistaken for clinical diagnosis or treatment advice. <br>
-Mitigation: Present outputs as reference-only screening information and require professional review or referral for users with meaningful psychological distress. <br>
+## Use Case:
 
+Individuals or organizations can submit local videos or video URLs for psychological analysis and retrieve previously generated reports. The documentation says reports are for reference and do not replace professional diagnosis or treatment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-psychology-analysis) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown reports or JSON, with optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports local mp4, avi, and mov files or video URLs; documented file size limit is 10 MB.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: server release metadata and auto changelog; artifact frontmatter lists 1.0.7) <br>
+Risk: Video uploads and remote account setup may involve sensitive data and stored credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before uploading, verify what video and identity data the service receives, what credentials it stores, and whether analysis can be avoided in export-only use; obtain consent and use only appropriate footage.
+
+Risk: The advertised analysis capability may not match the supplied implementation, and scan coverage leaves some uncertainty.
+
+Mitigation: Verify the available behavior and service responses before relying on reports; treat results as informational and seek qualified professional help for mental health concerns.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-psychology-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Markdown, Report links]
+
+**Output Format:** [Structured text or JSON reports, with report export links; results can be saved to a file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include suggested improvements; the documentation describes them as informational, not a professional diagnosis or treatment.]
+
+## Skill Version(s):
+
+1.0.26 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

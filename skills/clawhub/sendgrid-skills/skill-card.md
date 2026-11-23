@@ -1,51 +1,62 @@
-## Description: <br>
-SendGrid email platform integration for sending and receiving emails, routing to sub-skills for outbound transactional emails and receiving via Inbound Parse Webhook. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Routes explicit SendGrid email-sending and inbound-parse workflows to focused guides and tools.
 
-## Publisher: <br>
-[vince-winkintel](https://clawhub.ai/user/vince-winkintel) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[vince-winkintel](https://clawhub.ai/user/vince-winkintel)
 
-## Use Case: <br>
-Developers and engineers use this skill to add SendGrid email workflows to agent-assisted projects, including transactional sends, dynamic-template guidance, inbound email parsing, MX setup, webhook handling, and troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: SendGrid workflows require an API key and can send real email to real recipients. <br>
-Mitigation: Use a narrowly scoped SendGrid API key, verify sender and recipient details before sending, and avoid sending secrets or regulated data unless appropriate controls are in place. <br>
-Risk: Inbound email bodies and attachments can contain untrusted or privacy-sensitive content. <br>
-Mitigation: Treat inbound content as untrusted, apply logging, storage, malware scanning, retention, and HTML sanitization controls, and avoid forwarding raw content into AI systems without prompt-injection defenses. <br>
-Risk: Helper scripts interact with user-provided file paths and network endpoints. <br>
-Mitigation: Review scripts before execution, use HTTPS webhook URLs, and run checks only against endpoints you control or are authorized to test. <br>
+## Use Case:
 
+Developers use this skill to send transactional email through SendGrid and configure or diagnose SendGrid Inbound Parse workflows. It also provides local payload diagnostics and setup guidance.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/vince-winkintel/skills/sendgrid-skills) <br>
-- [SendGrid Documentation](https://docs.sendgrid.com) <br>
-- [Mail Send API Reference](https://docs.sendgrid.com/api-reference/mail-send/mail-send) <br>
-- [Inbound Parse Webhook](https://docs.sendgrid.com/for-developers/parsing-email/setting-up-the-inbound-parse-webhook) <br>
-- [SendGrid Node SDK](https://github.com/sendgrid/sendgrid-nodejs) <br>
-- [send-email best practices](send-email/references/best-practices.md) <br>
-- [send-email installation](send-email/references/installation.md) <br>
-- [single email examples](send-email/references/single-email-examples.md) <br>
-- [sendgrid-inbound best practices](sendgrid-inbound/references/best-practices.md) <br>
-- [webhook examples](sendgrid-inbound/references/webhook-examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline code blocks and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce SendGrid API examples, SDK installation guidance, webhook configuration steps, DNS checks, and structured JSON from webhook parsing scripts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.3 (source: ClawHub release metadata) <br>
+Risk: Live sends transmit message content and recipient data to SendGrid and recipients, and may incur charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain approval for the sender, recipients, exact content, template data, and attachments before sending; minimize personal data.
+
+Risk: Inbound email and webhook content may be private or untrusted, and parser diagnostics can expose message bodies or attachments.
+
+Mitigation: Authenticate inbound receivers, limit and sanitize processing, scan attachments, redact logs, and keep approved diagnostic captures and output private.
+
+Risk: The security scan was partial and only partially interpreted the webhook parser.
+
+Mitigation: Review the skill and its declared tool scope before use, especially for components not covered by the scan.
+
+## Reference(s):
+
+- [SendGrid Documentation](https://docs.sendgrid.com)
+- [Mail Send API Reference](https://docs.sendgrid.com/api-reference/mail-send/mail-send)
+- [Inbound Parse Webhook Guide](https://docs.sendgrid.com/for-developers/parsing-email/setting-up-the-inbound-parse-webhook)
+- [SendGrid Node SDK](https://github.com/sendgrid/sendgrid-nodejs)
+- [Single Email Examples](send-email/references/single-email-examples.md)
+- [Inbound Webhook Examples](sendgrid-inbound/references/webhook-examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration, JSON]
+
+**Output Format:** [Markdown guidance with code examples, shell commands, configuration snippets, and JSON diagnostic output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Depends on whether the workflow covers sending, inbound setup, or local payload diagnostics.]
+
+## Skill Version(s):
+
+1.2.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

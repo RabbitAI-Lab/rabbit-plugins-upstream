@@ -1,44 +1,58 @@
-## Description: <br>
-Estimates a person's age from a facial image via the Didit standalone API, with passive liveness checking and configurable thresholds for age-gating workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers integrate Didit's selfie-based age-estimation and passive liveness API into age-gating workflows.
 
-## Publisher: <br>
-[rosasalberto](https://clawhub.ai/user/rosasalberto) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[rosasalberto](https://clawhub.ai/user/rosasalberto)
 
-## Use Case: <br>
-Developers and compliance teams use this skill to add biometric age-estimation and liveness checks to age-gated flows, including over-18 or over-21 checks and fallback paths for borderline cases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with per-country age restrictions configured by the implementing service. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Facial images are sent to Didit for biometric age estimation, which creates privacy, consent, and retention obligations. <br>
-Mitigation: Confirm user consent and legal basis before use, disclose Didit processing, and configure request saving or retention deliberately. <br>
-Risk: DIDIT_API_KEY exposure or personal identifiers in vendor_data could leak access or user information. <br>
-Mitigation: Store DIDIT_API_KEY in a secret manager, avoid logging it, and use non-identifying vendor_data values. <br>
-Risk: The sample CLI alone is not sufficient for regulated age-gating decisions. <br>
-Mitigation: Implement threshold, liveness, fallback, regional policy, and response-schema checks before relying on it in production. <br>
+## Use Case:
 
+Developers use this skill to write backend integrations for Didit's age-estimation API, configure age and liveness thresholds, and handle results in age-gating flows.
 
-## Reference(s): <br>
-- [Didit documentation](https://docs.didit.me) <br>
-- [Didit Age Estimation API reference](https://docs.didit.me/standalone-apis/age-estimation) <br>
-- [Didit Age Estimation feature guide](https://docs.didit.me/core-technology/age-estimation/overview) <br>
-- [ClawHub skill page](https://clawhub.ai/rosasalberto/didit-biometric-age-estimation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with API examples, shell commands, and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires DIDIT_API_KEY; CLI usage returns JSON API responses from user-selected facial images.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter) <br>
+Risk: A selfie and related age-estimation data are sent to an external verification service, and requests may be saved by default.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Tell users how their image will be handled before collection, and set save_api_request=false when session storage and face-search indexing are not needed.
+
+Risk: An exposed API key could allow unauthorized verification requests.
+
+Mitigation: Keep DIDIT_API_KEY in server-side secret storage and do not expose it in client code.
+
+Risk: A face-based age estimate is approximate and is not proof of legal age, especially near a cutoff.
+
+Mitigation: Use the estimate as a low-friction check and route borderline cases to document verification.
+
+## Reference(s):
+
+- [Didit Age Estimation API Reference](https://docs.didit.me/standalone-apis/age-estimation)
+- [Didit Age Estimation Feature Guide](https://docs.didit.me/core-technology/age-estimation/overview)
+
+## Skill Output:
+
+**Output Type(s):** [Code, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with Python and TypeScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes request and response handling guidance.]
+
+## Skill Version(s):
+
+1.3.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

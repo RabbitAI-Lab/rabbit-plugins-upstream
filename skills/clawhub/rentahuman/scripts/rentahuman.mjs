@@ -16,7 +16,6 @@
  *   node rentahuman.mjs create-bounty '{"title":"...","description":"...","price":35,"priceType":"fixed"}'
  *   node rentahuman.mjs list-bounties
  *   node rentahuman.mjs get-bounty <bountyId>
- *   node rentahuman.mjs start-conversation '{"humanId":"...","subject":"...","message":"..."}'
  *   node rentahuman.mjs send-message '{"conversationId":"...","content":"..."}'
  *   node rentahuman.mjs accept-application '{"bountyId":"...","applicationId":"..."}'
  *   node rentahuman.mjs reject-application '{"bountyId":"...","applicationId":"..."}'
@@ -107,7 +106,7 @@ function requireApiKey() {
     console.error(
       JSON.stringify({
         error: 'RENTAHUMAN_API_KEY required for this operation',
-        help: 'Get an API key at https://rentahuman.ai/account (requires $9.99/mo verification)',
+        help: 'Get an API key at https://rentahuman.ai/account/api-keys',
       })
     );
     process.exit(1);
@@ -338,13 +337,12 @@ Commands:
   create-bounty '{...}'   Create a bounty (needs RENTAHUMAN_API_KEY)
   list-bounties           List open bounties
   get-bounty <id>         Get bounty details
-  start-conversation      Start conversation (needs RENTAHUMAN_API_KEY)
   send-message            Send message (needs RENTAHUMAN_API_KEY)
   accept-application      Accept application (needs RENTAHUMAN_API_KEY)
   reject-application      Reject application (needs RENTAHUMAN_API_KEY)
 
 Environment:
-  RENTAHUMAN_API_KEY      Required for write operations (get at rentahuman.ai/account)`);
+  RENTAHUMAN_API_KEY      Required for write operations (get at rentahuman.ai/account/api-keys)`);
   process.exit(1);
 }
 try {
