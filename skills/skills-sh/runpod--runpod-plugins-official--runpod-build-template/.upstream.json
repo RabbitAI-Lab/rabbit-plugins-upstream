@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runpod/runpod-plugins-official/runpod-build-template",
+  "repo": "runpod/runpod-plugins-official",
+  "skillId": "runpod-build-template",
+  "branch": "main",
+  "pushedAt": "2026-11-23T17:18:14Z",
+  "contentHash": "ec6dcf42021c4ce9a6b28ffb2d534fcf6598192843028eee4cbacd2b971bf490",
+  "fetchedAt": "2026-11-23T19:20:23.002Z"
+}
