@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/tt-a1i/archify/tree/main/archify",
+  "identifier": "official/creative/archify",
+  "repo": "tt-a1i/archify",
+  "path": "archify",
+  "branch": "main",
+  "pushedAt": "2026-11-23T05:21:17Z",
+  "contentHash": "ceb1c016f5270b61407328cd0a1ceea8570ae3a886c2a41dcc9bb0c1670657e7",
+  "fetchedAt": "2026-11-23T19:17:54.357Z"
+}

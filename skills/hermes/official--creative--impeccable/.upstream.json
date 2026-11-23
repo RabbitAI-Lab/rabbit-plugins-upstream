@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/pbakaus/impeccable/tree/main/.hermes/skills/impeccable",
+  "identifier": "official/creative/impeccable",
+  "repo": "pbakaus/impeccable",
+  "path": ".hermes/skills/impeccable",
+  "branch": "main",
+  "pushedAt": "2026-11-23T17:09:28Z",
+  "contentHash": "11846bfec37957bbd3348c75573dcc360ca9c4bad3e7d8c65917c04ac0166b40",
+  "fetchedAt": "2026-11-23T19:17:54.829Z"
+}

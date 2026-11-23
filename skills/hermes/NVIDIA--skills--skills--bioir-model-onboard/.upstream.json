@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bioir-model-onboard",
+  "identifier": "NVIDIA/skills/skills/bioir-model-onboard",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bioir-model-onboard",
+  "branch": "main",
+  "pushedAt": "2026-11-23T19:07:48Z",
+  "contentHash": "b1996e394f0b981910f72e0b6ec48fc91823f64b9142d6973a50694ffd62c473",
+  "fetchedAt": "2026-11-23T19:17:56.615Z"
+}
