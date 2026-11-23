@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/kumo-model-explanations",
+  "identifier": "NVIDIA/skills/skills/kumo-model-explanations",
+  "repo": "NVIDIA/skills",
+  "path": "skills/kumo-model-explanations",
+  "branch": "main",
+  "pushedAt": "2026-11-23T19:07:48Z",
+  "contentHash": "d75a140ce6137fb7e95c050f43727bb7ad18d0cc7dc04a1e57dac87a6545c3d9",
+  "fetchedAt": "2026-11-23T19:17:56.611Z"
+}

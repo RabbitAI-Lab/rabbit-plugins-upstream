@@ -1,21 +1,77 @@
 # Video Summarization API Reference
 
-This reference documents the 3.2.0 GA video summarization API surface used by
-`vss-summarize-video`. The OpenAPI source is
-`long-video-summarization/api_spec/openapi.json`.
+This reference explains the video summarization API workflows used by
+`vss-summarize-video`. The tables and examples below are illustrative guidance
+only for live calls. The running service's `/openapi.json` is authoritative
+because its image version may expose a newer or different schema; fetch it under
+the recorded `/lvs` mount (see Runtime OpenAPI Discovery).
 
 Use `/v1/summarize` for new file-summarization examples. `/summarize` is still
 present with the same request and response schema as a compatibility route.
 
 ## Setup
 
-The OpenAPI spec declares a relative server URL (`/`), so `BASE_URL` is
-deployment-specific. For the VSS developer `lvs` profile, the default external
-URL is:
+The OpenAPI spec declares a relative server URL (`/`), so `BASE_URL` is the
+`/lvs` mount `vss configure` recorded, on Compose and Kubernetes alike. Do not
+rebuild it from `VSS_PUBLIC_URL`, `HOST_IP`, or a port:
 
 ```bash
-export BASE_URL="${LVS_BACKEND_URL:-http://localhost:38111}"
+DEPLOYMENT=$(vss configure show) || exit $?
+BASE_URL=$(printf '%s' "$DEPLOYMENT" | jq -er '.services.lvs.url')   # no /v1 suffix
 ```
+
+## Runtime OpenAPI Discovery
+
+Before constructing or issuing any live API operation, fetch the
+schema from the same service instance that will receive the request. The
+bootstrap `/openapi.json` fetch and health probes are the only exceptions.
+
+```bash
+LVS_OPENAPI=/tmp/vss-lvs-openapi.json
+curl -fsS --connect-timeout 3 --max-time 15 \
+  "$BASE_URL/openapi.json" > "$LVS_OPENAPI"
+jq -e '.openapi and (.paths | type == "object")' "$LVS_OPENAPI" >/dev/null
+```
+
+LVS is published as a Prefix mount at `/lvs`, so `${BASE_URL}/openapi.json`
+and `${BASE_URL}/models` are reachable alongside `${BASE_URL}/v1/ready` and
+`${BASE_URL}/v1/summarize`. The origin's own `/openapi.json` — no prefix — is
+the **Agent** document on Kubernetes; do not treat it as the LVS schema.
+Resolve `model` from `${BASE_URL}/models` (LVS), from `/v1/models` under
+`services.rt_vlm.url` (RT-VLM), or from `VLM_NAME`.
+
+Use the runtime document to confirm the operation exists and inspect
+its request body before building a payload. For example:
+
+```bash
+OPERATION_PATH=/v1/summarize
+OPERATION_METHOD=post
+
+jq -e --arg path "$OPERATION_PATH" --arg method "$OPERATION_METHOD" \
+  '.paths[$path][$method]' "$LVS_OPENAPI"
+
+REQUEST_REF=$(jq -r --arg path "$OPERATION_PATH" --arg method "$OPERATION_METHOD" '
+  .paths[$path][$method].requestBody.content["application/json"].schema["$ref"] // empty
+' "$LVS_OPENAPI")
+
+if [[ "$REQUEST_REF" == '#/components/schemas/'* ]]; then
+  REQUEST_SCHEMA_NAME=${REQUEST_REF##*/}
+  jq -e --arg name "$REQUEST_SCHEMA_NAME" \
+    '.components.schemas[$name]' "$LVS_OPENAPI"
+else
+  jq -e --arg path "$OPERATION_PATH" --arg method "$OPERATION_METHOD" '
+    .paths[$path][$method].requestBody.content["application/json"].schema
+  ' "$LVS_OPENAPI"
+fi
+```
+
+Follow the runtime schema's required fields, types, enums, and
+`additionalProperties` policy. Do not infer live request fields solely from
+the tables or examples below. If `/openapi.json` is unavailable or the desired
+operation is absent, stop before a mutating or inference request and report
+that the deployed API contract could not be verified. The checked-in snapshot
+may still be used to explain expected behavior, but not to guess a live
+payload.
 
 The OpenAPI declares bearer auth globally, but local VSS developer deployments
 usually expose these endpoints without an auth header. If the deployment
@@ -27,7 +83,9 @@ requires auth, add:
 
 to each `curl` call.
 
-## Endpoints
+## Endpoint Examples
+
+Confirm these paths against the runtime OpenAPI document before calling them.
 
 | Endpoint | Method | Purpose |
 |---|---|---|
@@ -59,8 +117,9 @@ curl -sf --max-time 15 "$BASE_URL/v1/metadata" | jq .
 
 ## Models
 
-Always use a model id that the serving endpoint advertises. In the VSS `lvs`
-profile, `${VLM_NAME}` must match RT-VLM's `/v1/models` response.
+Always discover the model id from the endpoint that will receive the request.
+Use `${VLM_NAME}` only when it matches an advertised id; otherwise use the sole
+advertised id. Do not guess when multiple unmatched ids are returned.
 
 ```bash
 curl -sf "$BASE_URL/models" | jq '.data[] | {id, object, owned_by, api_type}'
@@ -94,7 +153,7 @@ Common optional fields:
 |---|---|
 | `prompt`, `system_prompt` | Prompt overrides. |
 | `chunk_duration`, `chunk_overlap_duration`, `summary_duration` | Chunking and live-stream summary cadence. |
-| `num_frames_per_second_or_fixed_frames_chunk`, `use_fps_for_chunking` | Preferred 3.2 frame sampling controls. |
+| `num_frames_per_second_or_fixed_frames_chunk`, `use_fps_for_chunking` | Optional 3.2 frame sampling overrides. Omit in the standard `/v1/summarize` workflow so RT-VLM uses its model-specific deployment default. |
 | `num_frames_per_chunk` | Deprecated compatibility field; avoid in new examples. |
 | `enable_audio`, `enable_reasoning` | Optional audio and reasoning controls. |
 | `vlm_input_width`, `vlm_input_height` | VLM input dimensions. |
@@ -108,23 +167,33 @@ that are absent from the OpenAPI schema.
 Basic request:
 
 ```bash
-curl -s -X POST "$BASE_URL/v1/summarize" \
-  -H "Content-Type: application/json" \
-  -d "$(jq -n \
-    --arg model "${VLM_NAME:-nim_nvidia_cosmos3-nano-reasoner_bf16-final}" \
-    --arg url "https://www.example.com/video.mp4" \
-    --arg scenario "warehouse monitoring" \
-    --argjson events '["boxes falling","forklift stuck"]' \
-    '{
+LVS_REQUEST=/tmp/vss-summarize-video-request.json
+LVS_RESPONSE=/tmp/vss-summarize-video-response.json
+LVS_MODEL=$(curl -fsS "$BASE_URL/models" | jq -er --arg preferred "${VLM_NAME:-}" '
+  [.data[]?.id | select(type == "string" and length > 0)] | unique as $ids
+  | if $preferred != "" and ($ids | index($preferred)) != null then $preferred
+    elif ($ids | length) == 1 then $ids[0]
+    else empty end
+') || { echo "Set VLM_NAME to an advertised model id"; return 1 2>/dev/null || exit 1; }
+
+jq -n \
+  --arg model "$LVS_MODEL" \
+  --arg url "https://www.example.com/video.mp4" \
+  --arg scenario "warehouse monitoring" \
+  --argjson events '["boxes falling","forklift stuck"]' \
+  '{
       model: $model,
       url: $url,
       scenario: $scenario,
       events: $events,
       chunk_duration: 10,
-      num_frames_per_second_or_fixed_frames_chunk: 20,
-      use_fps_for_chunking: false,
       seed: 1
-    }')"
+  }' > "$LVS_REQUEST"
+
+HTTP_CODE=$(curl -sS -o "$LVS_RESPONSE" -w '%{http_code}' \
+  -X POST "$BASE_URL/v1/summarize" \
+  -H "Content-Type: application/json" \
+  --data-binary "@$LVS_REQUEST")
 ```
 
 Response shape: `CompletionResponse` with top-level fields such as `id`,
@@ -133,12 +202,19 @@ For the VSS summarization workflow, the actual summary payload is a JSON string
 inside `choices[0].message.content`.
 
 ```bash
-curl -s -X POST "$BASE_URL/v1/summarize" \
-  -H "Content-Type: application/json" \
-  -d @request.json \
-  | jq -r '.choices[0].message.content' \
-  | jq '{video_summary, events}'
+jq '{
+  usage: (.usage // {}),
+  result: (.choices[0].message.content | fromjson | {video_summary, events})
+}' "$LVS_RESPONSE"
 ```
+
+Preserve `usage.total_chunks_processed` when presenting an empty summary and
+event list. A positive value proves media was processed; zero or missing usage
+does not.
+
+The POST above is the only summarize request. Use the saved HTTP status and
+`$LVS_RESPONSE` for all error handling and diagnostics; never repeat the POST
+just to inspect the unfiltered response.
 
 ## Stream Captioning And Stream Summarization
 
@@ -148,11 +224,18 @@ summarize the stored captions.
 Start captioning:
 
 ```bash
+STREAM_MODEL=$(curl -fsS "$BASE_URL/models" | jq -er --arg preferred "${VLM_NAME:-}" '
+  [.data[]?.id | select(type == "string" and length > 0)] | unique as $ids
+  | if $preferred != "" and ($ids | index($preferred)) != null then $preferred
+    elif ($ids | length) == 1 then $ids[0]
+    else empty end
+') || { echo "Set VLM_NAME to an advertised model id"; return 1 2>/dev/null || exit 1; }
+
 curl -s -X POST "$BASE_URL/v1/generate_captions" \
   -H "Content-Type: application/json" \
   -d "$(jq -n \
     --arg id "<stream_uuid>" \
-    --arg model "${VLM_NAME:-nim_nvidia_cosmos3-nano-reasoner_bf16-final}" \
+    --arg model "$STREAM_MODEL" \
     --arg scenario "traffic monitoring" \
     --argjson events '["accident","pedestrian crossing"]' \
     '{
@@ -175,7 +258,7 @@ curl -s -X POST "$BASE_URL/v1/stream_summarize" \
   -H "Content-Type: application/json" \
   -d "$(jq -n \
     --arg id "<stream_uuid>" \
-    --arg model "${VLM_NAME:-nim_nvidia_cosmos3-nano-reasoner_bf16-final}" \
+    --arg model "$STREAM_MODEL" \
     '{
       id: $id,
       model: $model,
@@ -217,6 +300,6 @@ curl -sf "$BASE_URL/metrics" | head
 - `429` means rate limiting.
 - `503` from readiness means warming or dependencies unavailable.
 - `503` from summarize means the service is busy processing another file.
-- Treat the OpenAPI as authoritative for GA fields. Some internal sanity
+- Treat the runtime OpenAPI as authoritative for GA fields. Some internal sanity
   scripts exercise non-spec streaming flags on `/v1/summarize`; do not teach
   those as public GA fields unless the OpenAPI is updated.
