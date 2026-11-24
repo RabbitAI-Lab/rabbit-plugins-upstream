@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runpod/runpod-plugins-official/runpod-migrate",
+  "repo": "runpod/runpod-plugins-official",
+  "skillId": "runpod-migrate",
+  "branch": "main",
+  "pushedAt": "2026-11-24T18:40:25Z",
+  "contentHash": "67df4816714d0181f23a875cfc861c857ca49551838b752f082bb09b0b52dc2c",
+  "fetchedAt": "2026-11-24T18:59:35.869Z"
+}

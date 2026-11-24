@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runpod/runpod-plugins-official/runpod-pod-deploy",
+  "repo": "runpod/runpod-plugins-official",
+  "skillId": "runpod-pod-deploy",
+  "branch": "main",
+  "pushedAt": "2026-11-24T18:40:25Z",
+  "contentHash": "df88eecf7bfe9981dc5e7f978a19b6a37837aa805eadd08ae2235adf90f8fca3",
+  "fetchedAt": "2026-11-24T18:59:35.905Z"
+}

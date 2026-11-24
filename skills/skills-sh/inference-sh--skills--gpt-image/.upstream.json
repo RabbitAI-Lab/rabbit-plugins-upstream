@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/gpt-image",
+  "repo": "inference-sh/skills",
+  "skillId": "gpt-image",
+  "branch": "main",
+  "pushedAt": "2026-11-22T10:38:22Z",
+  "contentHash": "09fbbf057169c39520b45e3143bbbb074660afc09084dcb22f16cab629febb4d",
+  "fetchedAt": "2026-11-24T18:57:21.448Z"
+}
