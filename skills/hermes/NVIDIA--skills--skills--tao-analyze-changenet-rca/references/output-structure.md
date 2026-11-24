@@ -25,7 +25,7 @@ to 128×128 px (or original size if smaller). Use these thumbnails in the Markdo
 - 3.1 Golden Image Audit
      | Golden Path | Thumbnail | Mean Intensity | Visual Verdict |
      |-------------|-----------|----------------|----------------|
-     (one row per audited golden image, thumbnail = `![golden](rca_images/<name>.jpg)`)
+     (one row per audited golden image, thumbnail = `![golden] (rca_images/<filename>.jpg)`)
 
 - 3.2 Failure Mode Clustering
      | Sample | Score | Defect Type | Test Image | Golden Image | Failure Mode | Description |
@@ -129,11 +129,10 @@ Always save into a timestamped folder:
 <experiment_result_dir>/rca_results/YYYY-MM-DD_HHMMSS/
 ├── RCA_Report.md          # The full report
 ├── rca_images/            # All thumbnails embedded in the report
-├── rca_config/            # Auto-copied by hook: skill, commands, hooks, settings
+├── rca_config/            # Auto-copied by hook: skill, commands, hooks
 │   ├── skills/
 │   ├── commands/
-│   ├── hooks/
-│   └── settings.local.json
+│   └── hooks/
 └── claude_session.jsonl   # Auto-copied by hook: conversation log
 ```
 
