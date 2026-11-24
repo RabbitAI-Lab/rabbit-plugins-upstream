@@ -1,40 +1,54 @@
-## Description: <br>
-Detects git forge (GitHub/GitLab/Bitbucket) and maps CLI commands cross-platform. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects git forge (GitHub/GitLab/Bitbucket) and maps CLI commands cross-platform.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agents use this skill before running forge-specific commands so they can detect GitHub, GitLab, or Bitbucket projects and choose platform-appropriate issue, pull request, merge request, discussion, and CI/CD commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes examples for commands that can modify remote repositories, issues, pull requests, merge requests, discussions, or collaborator-facing comments. <br>
-Mitigation: Use remote write commands only for user-directed tasks, and verify the target repository, issue, PR/MR, API endpoint, and intended platform before execution. <br>
+## Use Case:
 
+Developers use this skill to identify whether a repository is hosted on GitHub, GitLab, or Bitbucket and to choose equivalent commands and configuration patterns when working across those platforms.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-git-platform) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
-- [Complete command mapping](modules/command-mapping.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, API calls, Configuration] <br>
-**Output Format:** [Markdown reference guidance with inline shell commands, API examples, and command mapping tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes platform-specific terminology and fallbacks for GitHub, GitLab, and Bitbucket forge workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release metadata) <br>
+Risk: The skill includes GitHub Discussions searches and operations that may use account credentials to create or change content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before running a discussion operation, confirm the target repository, the requested change, and the account permissions being used.
+
+Risk: The security scan had partial coverage because two referenced paths were not resolved.
+
+Mitigation: Review the complete installed skill and its referenced files before relying on its guidance.
+
+## Reference(s):
+
+- [Project homepage listed in skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/leyline)
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-leyline-git-platform)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with cross-platform command tables and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provides command and configuration guidance for GitHub, GitLab, and Bitbucket workflows.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

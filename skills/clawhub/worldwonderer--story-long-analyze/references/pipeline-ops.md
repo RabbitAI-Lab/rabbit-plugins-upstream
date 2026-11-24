@@ -1,80 +1,82 @@
-# 管道运维参考
+# 长篇拆文运行、提交、索引重建与收尾检查
 
-story-long-analyze 拆解管道的运维工具文档：`_progress.md` 模板、错误处理、恢复机制操作步骤。
+## 状态与脚本
 
-> 质量阈值（置信度 / 覆盖率 / 重叠率）见 [material-decomposition.md 质量阈值体系](material-decomposition.md)。
+运行脚本三个：`build_chapter_index.js`（机械章界与 hash）、`inspect_existing_assets.js`（只读查旧/新成果与缺口）、`manage_analysis_run.js`（计划、提交、拆批、恢复与标阶段）；Stage 4 另用 `render_relation_chart.py` 画关系图。带 `author_message` 时按 [author-facing.md](author-facing.md) 转述，不贴 JSON 或错误码。
 
----
+`chapter_index.csv` 是章界唯一依据；状态唯一落在 `_progress.md` 的 `story-long-analyze:runtime-state` 受管区；`_analysis_cache/` 存恢复证据。既有 `schema_version: 2` 原值保留（只供报告，不否定旧成果）。计划只打标准输出，不另存文件。
 
-## _progress.md 模板
+## 1. 先检查目录
 
-```markdown
-# 深度拆解进度：{书名}
-- 小说：{标题} | 总章数：{N} | 输出目录：{路径} | 开始：{日期}
-- 最终状态：{pending/paused_after_stage1/completed/completed_with_errors}
-- schema_version: 2
-## 管道进度
-| 阶段 | 状态 | 进度 | 备注 |
-|------|------|------|------|
-## 章节边界（Stage 0 章节边界子步骤产物，唯一权威）
-| 章号 | 标题 | 起始行 | 字数 |
-|------|------|--------|------|
-## 分块进度
-| 块 | 章节 | 状态 |
-## 失败记录
-| 类型 | 章节/阶段 | 错误信息 | 重试状态 |
-|------|----------|---------|---------|
-## 质量检查
-| 检查项 | 阶段 | 结果 | 修正 |
-## 角色合并
-| 合并前 | 合并后 | 依据 | 确认 |
-## 断点
-- 最后处理：第{N}章 | 当前阶段 | 下一操作
+```text
+node "{story-long-analyze skill 根}/scripts/inspect_existing_assets.js" --root "{拆文目录}" --compact
 ```
 
-**schema_version 说明**：
+路径错即停；空目录 `new_analysis`；完整旧项目 `direct_use`（不建索引不读原文）；部分项目看 `semantic_coverage.missing_ranges`，混存标 `mixed_sources: true` 仍可复用；`stage_repairs` 按 SKILL.md「Phase 2」补对应 Stage。
 
-| 版本 | 含义 |
-|------|------|
-| 2 | 当前契约：含「章节边界」表（Stage 0 章节边界子步骤产物）。Stage 1/2/6 全部以该表为切片真值，不再各自跑 regex |
+## 2. 建立或校验索引
 
-缺少 `schema_version: 2` 或「章节边界」表时不得续跑；从 Stage 0 章节边界子步骤重建 `_progress.md` 后再恢复。
+需读原文时建/校索引（完整旧成果或纯增强不建；原文变化或错位见下文「原文变化与章号对不上」）：
 
-**最终状态值说明**：
+```text
+node "{story-long-analyze skill 根}/scripts/build_chapter_index.js" --source "{拆文目录}/原文/原文.txt" --output "{拆文目录}/chapter_index.csv" --locator-path "原文/原文.txt"
+```
 
-| 状态值 | 含义 |
-|--------|------|
-| `pending` | 管道进行中，尚未跑完 |
-| `paused_after_stage1` | Stage 1 停靠点暂停——Stage 0/1 已完成，已产出 `快速预览.md`，等待用户决定是否继续 Stage 2-6。续跑时跳过 Stage 0/1，从 Stage 2 开始 |
-| `completed` | 全管道 Stage 0-6 完成 |
-| `completed_with_errors` | 全管道完成，但有单章/单阶段失败（详见「失败记录」表，拆文报告中注明） |
+## 3. 生成只读计划
 
----
+```text
+node "{story-long-analyze skill 根}/scripts/manage_analysis_run.js" plan --root "{拆文目录}" --intent continue
+```
 
-## 剧情单元清单补建（存量书）
+- `continue`：补缺章与缓存失效批次，有语义缺摘要则投影；`enhance`：为缺完整缓存的已拆章建 `REUSE` 批次提取跨章观察（有缺章同步列 `RAW`，或加 `--chapters` 只增强已拆段）。
+- 已有摘要永不覆盖；整本重拆换新目录。参数：`--next 1` 取下一批、`--next 0` 看余量、`--chapters 起-止` 只拆指定段（拆完即停不标 `stage2`）。原文读取为 0 不得派原文任务；黄金三章深拆已属语义成果不重读。
 
-触发：用户说「补剧情单元清单」，或写作侧检索发现 `剧情/README.md` 无「剧情单元清单」表。
+## 4. 执行与提交一个批次
 
-动作：读存量 `拆文库/{书名}/剧情/*.md`（或 `对标/{书名}/剧情/*.md`）各剧情单元表头的 标题 / 类型 / 桥段标签 / 章节范围 字段，按 output-templates.md「剧情单元清单」表模板机械重建 `剧情/README.md` 的清单表；项目 `对标/{书名}/` 视图存在时同步一份。不读原文、不重跑任何 Stage、不改剧情单元内容、不动 `节奏.md` / `情绪模块.md`。旧剧情单元「章节范围」行没有字数信息时，体量列只写「共{N}章」、字数记「未知」，不得编造。
+`chapter-extractor` 每次只做 1 批；**主会话不中转内容**，照抄计划字段（路径加 `{拆文目录}/`：`batch_id`、`input_kind`、`source_files`、`chapter_chars`、`min_plot_points`、`input_file`=`_analysis_cache/输入-{批次ID}.md`、`handoff_cache` 仅读 `### 跨批状态`）。子代理写完只回 `BATCH_WRITTEN`，主会话不 Read 文件直接逐个 `commit`（不并发），被拒原样重派附错误码定点修补，成功后删输入文件。
 
-写作侧消费点对无清单的书自动回退逐文件检索（见 story-long-write 的 outline-structure-theory.md「对标节奏迁移」步骤 1），补建只是加速，不是阻塞项。
+派发默认第 2 档有限并行（作者问起按 author-facing 切换）：① 串行 `plan --next 1`；② 有限并行（默认）`plan --next 3` 同轮派 3 批共用轮前 `handoff_cache`；③ 不限顺序最多 12 并发（限流/超时上限减半，多书共用）。子代理不可用时先读 [stage2-extraction.md](stage2-extraction.md) 自写，再提交（`REUSE` 不传 `--range-sha256`）：
 
-## 错误处理
+```text
+node "{story-long-analyze skill 根}/scripts/manage_analysis_run.js" commit \
+  --root "{拆文目录}" --input "{拆文目录}/_analysis_cache/输入-RAW-4-6.md" \
+  --batch-id "RAW-4-6" --range-sha256 "{plan 输出值}" --source-file "{plan 列出的来源}"
+```
 
-| 场景 | 处理 |
-|------|------|
-| 章节识别失败 | 提示确认格式；支持自定义正则 |
-| 分块中断 | 读 _progress.md 断点恢复 |
-| 聚合质量不达标 | 孤立情节二次分类；阈值放宽至 0.5 |
-| 角色合并冲突 | 记录待确认列表 |
-| 输出目录冲突 | 追加不覆盖；冲突标 `[重新分析]` |
+## 5. 失败、拆批与中断恢复
 
----
+输出不完整不提交；批次过大或连续失败先拆批（可加 `--at`）再重 `plan`；中断恢复先 `plan`，缓存已全但摘要/进度未落盘则 `repair-progress`（缺结束标记或 hash 失效则重跑该批）：
 
-## 恢复机制操作步骤
+```text
+node "{story-long-analyze skill 根}/scripts/manage_analysis_run.js" split --root "{拆文目录}" --batch-id "RAW-4-6"
+node "{story-long-analyze skill 根}/scripts/manage_analysis_run.js" repair-progress --root "{拆文目录}"
+```
 
-1. 管道启动时检查输出目录是否已有 `_progress.md`
-2. 校验 `schema_version: 2` 与「章节边界」表；任一缺失即停止，并提示从 Stage 0 章节边界子步骤重建进度文件
-3. 读取断点信息（最后处理章节 + 当前阶段 + 最终状态）
-4. **断点状态为 `paused_after_stage1`**（Stage 1 停靠点）→ 跳过 Stage 0/1，直接从 Stage 2 续跑逐章摘要，不重跑已完成的概要与黄金三章
-5. 其他断点状态 → 从断点所在块的起始章节恢复，覆盖该块已有输出
+## 6. 阶段标记
+
+黄金三章与快速预览落盘标 `stage1`；无剩余批次且摘要齐备标 `stage2`（Stage 3–5 见 [synthesis-inputs.md](synthesis-inputs.md)，Stage 6 见 [style-profile-generator.md](style-profile-generator.md)）：
+
+```text
+node "{story-long-analyze skill 根}/scripts/manage_analysis_run.js" mark-stage --root "{拆文目录}" --stage stage2
+```
+
+## 原文变化与章号对不上
+
+`build_chapter_index.js` 因原文变化非零退出，或报 `chapter_mapping_ambiguous`、`index_would_shrink` 时读本节，并按 [author-facing.md](author-facing.md) 转述 `author_message`。
+
+- **原文变更**：作者确认后加 `--rebuild`（自动沿用已有章号口径含 `--fold-prologue`；前段错位或缩水时不写索引）。追加新章只标新增/变动 `pending_chapters`；改已拆章只让该批缓存失效不覆旧摘要（刷新须删该章摘要与对应缓存再续跑）。
+- **旧成果章号错位**：写新索引前脚本核对旧章界，对不上即停（`plan` 遇错位索引亦拒）。有楔子给三选，无楔子给后两项：
+  1. **按旧章号继续（推荐）**：加 `--fold-prologue` 把楔子/序章/引子/第0章并进第 1 章（输出 `folded_into_first_chapter`），沿用旧成果并在报告「还不确定的地方」注明。
+  2. **按新章号重拆**：把除 `原文/` 外所有按旧章号写的产物（`章节/`、`剧情/`、`角色/`、`设定/`、`人物关系图/`、`快速预览.md`、`概要.md`、`拆文报告.md`、`文风.md`、`_analysis_cache/批次-*.md`、`_progress.md`）挪进 `_analysis_cache/legacy/旧章号/` 后从 Stage 0 重拆。
+  3. **换新目录整本重拆**。
+- 口径建错先删 `chapter_index.csv` 重建（`--rebuild` 不改口径）。连载跳号/重号按序连续编 `chapter`、原号留 `source_chapter` 并在 `numbering_anomalies` 报行号；正文短句误判标题时请作者修原文后 `--rebuild`。
+
+## 收尾检查
+
+拆完后逐项核对，通过后再按 [author-facing.md](author-facing.md)「全部拆完」汇报（检查结果不写入汇报）：
+
+- 重跑检查器与计划器：完整项目为 `direct_use`，本次范围 `continue` 无待处理批次；
+- 完整管道及续跑确认 `拆文报告.md`「文风一句话」已按 `文风.md` 补齐（单补旧文风不改旧报告）；
+- 核对受保护路径：常规增强/恢复未改写旧 `章节/`、`剧情/`、`角色/`、`设定/`、`文风.md`，仅补缺项与 `_progress.md` 受管区；既有 `schema_version` 未变；
+- 新投影的情节点序列、主题、基调、类型与「涉及」字段可被导入与写作读取；
+- 回填过 `选题决策.md` 时，只改了题材匹配选题那一行。

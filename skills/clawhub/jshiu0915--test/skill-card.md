@@ -1,44 +1,59 @@
-## Description: <br>
-Transcribes audio files to text with Baidu Intelligent Cloud speech recognition and writes local transcript, JSON result, and processing report files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts audio files to text using the Baidu Smart Cloud speech recognition API.
 
-## Publisher: <br>
-[jshiu0915](https://clawhub.ai/user/jshiu0915) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jshiu0915](https://clawhub.ai/user/jshiu0915)
 
-## Use Case: <br>
-Developers and Claude Code users use this skill to batch transcribe supported audio files, including Mandarin, English, Cantonese, and Sichuanese recordings, into local text and JSON outputs through Baidu Cloud speech recognition. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected audio files are sent to Baidu Cloud for transcription, which may expose confidential or regulated recordings to an external service. <br>
-Mitigation: Use only recordings approved for Baidu Cloud processing and store transcript and JSON outputs in a private directory. <br>
-Risk: Baidu API keys and secret keys are required for operation. <br>
-Mitigation: Prefer environment variables or a secrets manager and avoid committing credentials in config files or command histories. <br>
-Risk: The skill depends on the requests package and external network calls. <br>
-Mitigation: Pin or audit dependencies and confirm outbound network access is acceptable before enterprise use. <br>
+## Use Case:
 
+Developers and end users use this skill to transcribe local audio files with Baidu Smart Cloud, including batch processing for Mandarin, English, Cantonese, and Sichuanese speech. It writes transcription text, API response JSON, and processing reports to the configured output directory.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jshiu0915/skills/test) <br>
-- [README.md](artifact/README.md) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Files, Shell commands, Configuration] <br>
-**Output Format:** [Plain text transcripts, JSON API results, JSON processing reports, and Markdown usage examples with shell commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Baidu API credentials; selected audio files are sent to Baidu Cloud for transcription.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Selected audio files are sent to Baidu Smart Cloud for transcription and may contain sensitive content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use non-sensitive test audio first and run the skill only when the selected audio is appropriate to share with Baidu Smart Cloud.
+
+Risk: Baidu API credentials can be exposed through command history, committed config files, or shared logs.
+
+Mitigation: Prefer environment variables or a secret manager, keep credentials out of committed files, and rotate exposed credentials promptly.
+
+Risk: Python dependencies affect runtime security and reliability.
+
+Mitigation: Install in a virtual environment and pin and review dependencies before production use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jshiu0915/skills/test)
+- [README.md](artifact/README.md)
+- [SKILL.md](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, files]
+
+**Output Format:** [Plain text transcription files, JSON API responses, JSON processing reports, and JSON console summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Baidu Smart Cloud API credentials and sends selected audio files to Baidu Smart Cloud for transcription.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,51 @@
-## Description: <br>
-Call Vibbit OpenAPI to generate B-roll images, parse Douyin/Xiaohongshu/Bilibili links, break down viral videos, list available avatars, and initialize avatar voiceover workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Vibbit Skills helps agents manage product and media libraries, plan and create creative content, edit or localize media, and review production results.
 
-## Publisher: <br>
-[zgissing](https://clawhub.ai/user/zgissing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zgissing](https://clawhub.ai/user/zgissing)
 
-## Use Case: <br>
-External users and developers use this skill to route eligible media-generation, video-analysis, avatar-listing, and avatar voiceover tasks through Vibbit's OpenAPI-backed CLI instead of hand-writing API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation rules may cause matching media-generation or video-analysis requests to use Vibbit by default. <br>
-Mitigation: Install only when Vibbit should handle these tasks, and confirm ambiguous user intent before invoking the skill. <br>
-Risk: Prompts, media URLs, signed URLs, private media, localhost links, or intranet URLs may be sent to or fetched by Vibbit services. <br>
-Mitigation: Avoid confidential inputs and private network URLs unless the user is comfortable sharing or exposing them to Vibbit. <br>
-Risk: A custom VIBBIT_BASE_URL can redirect requests and credentials to a nonstandard endpoint. <br>
-Mitigation: Keep VIBBIT_BASE_URL pointed at a trusted endpoint and use a scoped Vibbit API key when available. <br>
+## Use Case:
 
+Creators, marketers, and media producers use the skill through an agent to research products, plan and produce images, videos, audio, and other creative work, and reuse or revise media assets.
 
-## Reference(s): <br>
-- [Vibbit SKILL on ClawHub](https://clawhub.ai/zgissing/vibbit-skills) <br>
-- [Vibbit API Key Management](https://app.vibbit.ai/api-keys) <br>
-- [Vibbit OpenAPI Base URL](https://openapi.vibbit.cn) <br>
-- [Vibbit File Info API](https://tools.vibbit.ai/api/file-info) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires VIBBIT_API_KEY and Node.js 18+; returns media URLs, parsed metadata, avatar lists, or avatar voiceover workflow links through Vibbit APIs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: frontmatter and server release evidence) <br>
+Risk: The reported automatic update uses an unpinned installer, so installed instructions can change without a fresh review; the security analysis was incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review update changes and the skill's local, network, and shell actions, and use it only in an environment where updates and those actions can be controlled.
+
+## Reference(s):
+
+- [Vibbit product site](https://vibbit.ai/)
+- [Vibbit API documentation](https://vibbit.apifox.cn/)
+- [ClawHub release page](https://clawhub.ai/zgissing/skills/vibbit-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown, JSON, Code, Shell commands, Configuration, Images, Audio, Video]
+
+**Output Format:** [Markdown, text, structured data, commands, configuration files, and generated media files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include production plans, local project files, and media task results.]
+
+## Skill Version(s):
+
+2.18.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

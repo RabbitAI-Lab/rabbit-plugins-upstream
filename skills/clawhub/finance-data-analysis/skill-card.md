@@ -1,41 +1,52 @@
-## Description: <br>
-Provides educational financial data analysis guidance for financial statements, KPI tracking, trend analysis, data visualization, and automated reporting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides methods and templates for financial statement analysis, KPI tracking, trend analysis, data visualization, and reporting for financial institutions.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Financial analysts and finance teams at licensed financial institutions use it to define metrics, check data quality, analyze operating variances, and plan dashboards and reports. It provides methodology and draft templates; it does not fetch data or provide investment advice.
+
+### Deployment Geography for Use:
+
+China (Mainland)
+
+## Known Risks and Mitigations:
+
+Risk: The security review had medium confidence because the Markdown skill was only partially inspected.
+
+Mitigation: Review the skill details and referenced paths before installing, as advised by the security evidence.
+
+Risk: Illustrative financial analysis methods or generated drafts could be mistaken for verified conclusions or formal advice.
+
+Mitigation: Have qualified business and finance reviewers check metric definitions, data provenance, and conclusions before applying them; do not use outputs as investment, audit, or regulatory advice.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External users, financial analysts, CFO offices, and data practitioners can use this skill for educational frameworks and templates for financial reporting, KPI analysis, dashboard design, and trend analysis. Outputs require qualified human review before real-world business, financial, legal, insurance, or compliance use. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Guidance, Code]
 
-## Known Risks and Mitigations: <br>
-Risk: Financial or regulatory conclusions may be incorrect, outdated, or unsuitable for a specific real-world context. <br>
-Mitigation: Treat outputs as educational guidance and verify conclusions with current official sources and a qualified human reviewer. <br>
-Risk: Broad trigger terms may activate the skill for non-finance data analysis tasks. <br>
-Mitigation: Confirm that the requested task is finance-related before applying the skill's templates or conclusions. <br>
-Risk: Illustrative Python examples could be mistaken for automatically executed or production-ready code. <br>
-Mitigation: Use the examples only as reference material; review, test, and adapt any code before execution in a controlled environment. <br>
+**Output Format:** [Markdown with analysis guidance, checklists, report and dashboard templates, and illustrative Python or SQL snippets]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [Examples are educational and are not executed by the skill; outputs require human review before real-world use.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown guidance with illustrative Python code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only; no executable files, tools, persistence, credential handling, hidden data access, or automatic data processing.] <br>
+5.0.7 (source: frontmatter)
 
-## Skill Version(s): <br>
-5.0.2 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,57 @@
-## Description: <br>
-AI-powered wealth advisory assistant for bank mobile applications that provides educational product-matching, investment-consultation, and compliance interaction templates for digital banking teams. <br>
+## Description:
 
-This skill is for demonstration purposes and not for production usage. <br>
+AI-powered wealth advisory assistant for bank mobile applications — provides product recommendations, investment consultation, and compliance-compliant customer interaction. Built for digital banking teams.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is for demonstration purposes and not for production usage.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Digital banking teams, wealth managers, and compliance reviewers use this skill as an educational reference for bank mobile-app wealth advisory flows, product-matching examples, customer interaction templates, and compliance checklists. Its outputs require qualified financial-professional and compliance review before any real customer use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global; regulatory examples in the artifact focus on China and must be validated for the user's jurisdiction. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sample product-matching and consultation examples may be mistaken for regulated financial advice or customer-ready recommendations. <br>
-Mitigation: Use the skill only as educational or internal reference material, and require licensed financial-professional review, compliance approval, suitability checks, and current regulatory validation before customer use. <br>
-Risk: Regulatory examples are date-sensitive and jurisdiction-specific. <br>
-Mitigation: Validate all regulatory statements against current official requirements for the target jurisdiction before using the material in a banking workflow. <br>
+## Use Case:
 
+Digital banking teams, wealth managers, and compliance reviewers can use this as educational reference material for product-matching methods, advisory script structure, and suitability-control checklists. It does not provide customer-specific recommendations or replace qualified human review.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/skills/bank-app-wealth-advisor) <br>
-- [Publisher Profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+China (mainland)
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown guidance with illustrative Python examples and compliance checklist content] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reference-only outputs; no tools are allowed and all financial, legal, insurance, suitability, and regulatory guidance requires qualified human review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: Educational examples could be mistaken for customer-specific financial recommendations or production-ready matching logic.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep outputs clearly labeled as reference material and require review by qualified, licensed personnel before any customer-facing or production use.
+
+Risk: Real customer or account details could be exposed when discussing example scenarios.
+
+Mitigation: Use anonymized, minimal example profiles and do not include names, contact details, account identifiers, holdings, or original risk-assessment records.
+
+Risk: Regulatory or market information in the skill may become outdated or require jurisdiction-specific interpretation.
+
+Mitigation: Verify current requirements against official sources and have the institution's compliance team review any material before external use.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/bank-app-wealth-advisor)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code]
+
+**Output Format:** [Chinese-language Markdown with checklists, tables, scripts, and illustrative Python snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference-only drafts; illustrative code is not executed by the skill.]
+
+## Skill Version(s):
+
+3.0.6 (source: frontmatter, server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

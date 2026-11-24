@@ -1,46 +1,50 @@
-## Description: <br>
-Scores feature worthiness and enforces branch-size limits against overengineering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scores feature worthiness and enforces branch-size limits against overengineering.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to evaluate proposed features before and during implementation. It helps agents score business value against complexity, compare work against backlog priorities, and keep branches within documented scope limits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can steer an agent to create GitHub issues and publish detailed Discussion context for deferred work, which may expose private project reasoning. <br>
-Mitigation: Require explicit approval before GitHub issue or Discussion creation, preview the exact content, and default to local backlog notes for sensitive repositories. <br>
-Risk: The security scan marked the release suspicious because the workflow encourages external writes even though the skill is mostly planning and scope-control guidance. <br>
-Mitigation: Install only when scope discipline is desired, and review generated commands and publication steps before execution. <br>
+## Use Case:
 
+Developers use Scope Guard during brainstorming, planning, and implementation to score proposed features, compare them with backlog priorities, and keep work within branch budgets.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-scope-guard) <br>
-- [OpenClaw metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
-- [Decision framework](modules/decision-framework.md) <br>
-- [Anti-overengineering rules](modules/anti-overengineering.md) <br>
-- [Branch threshold management](modules/branch-management.md) <br>
-- [GitHub issue integration](modules/github-integration.md) <br>
-- [Baseline testing scenarios](modules/baseline-scenarios.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with scoring tables, checklists, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose backlog entries, GitHub issue content, and GitHub Discussion content for deferred work.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter says 1.9.8) <br>
+Risk: Deferring work may publish planning context to GitHub issues or discussions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the GitHub integration and decide what planning details may be published before using the deferral workflow; skip installation if you do not need it.
+
+## Reference(s):
+
+- [Scope Guard on ClawHub](https://clawhub.ai/athola/skills/nm-imbue-scope-guard)
+- [Project homepage (skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/imbue)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown, Shell commands]
+
+**Output Format:** [Markdown scoring summaries and workflow guidance, with optional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scores, backlog comparisons, and branch checks depend on current repository context.]
+
+## Skill Version(s):
+
+1.10.4 (source: ClawHub release evidence; artifact frontmatter lists 1.10.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

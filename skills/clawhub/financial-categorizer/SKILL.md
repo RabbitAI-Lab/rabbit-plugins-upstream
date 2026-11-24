@@ -39,6 +39,27 @@ python cli.py --db ../data/finance.db categorize
 python cli.py --db ../data/finance.db stats-summary
 ```
 
+## Account Balances
+
+Bank exports that include a `Saldo` column (Nordea and ICA both do) are stored per transaction, so the account's actual cash position is available without reconstructing it from running totals.
+
+```bash
+# Latest known balance for every account
+python cli.py --db ../data/finance.db balances
+
+# Balance as of a specific date (end of that day)
+python cli.py --db ../data/finance.db balances --date 2026-01-31
+```
+
+How it behaves:
+
+- `Saldo` is the balance *after* the posting, so an account's balance is the one on its most recent balance-carrying row.
+- Pending reservations (`Reserverat`) carry no balance — the money has not left the account yet — and are skipped.
+- Exports without a `Saldo` column import normally and leave the balance empty.
+- Re-importing an export fills balances on rows that were stored before balance parsing existed. It only fills empty balances and never overwrites an existing one.
+- Reservations (`Reserverat`) carry no date of their own. They are imported only from an export that reaches back to today (reservations are stored with the export's date), so replaying an old export cannot create a pending charge dated today.
+- An account with no balance data yet prints `n/a` rather than an inferred figure.
+
 ## Data Storage Pattern
 
 **User data lives OUTSIDE the skill directory.** Recommended structure:
@@ -82,6 +103,7 @@ The following commands require confirmation:
 - `remove-rule <id> [--yes]`
 - `unlink <id> [--yes]`
 - `db-cleanup [--yes] [--dry-run]`
+- `cleanup-pending [--yes] [--dry-run] [--force-id <id>...]`
 - `remove-transfer-rule <id> [--yes]`
 - `auto-link [--yes] [--dry-run]`
 
@@ -92,6 +114,7 @@ The following commands require confirmation:
 |---------|-------------|
 | `import <files>` | Import bank CSV transactions |
 | `accounts` | List all registered bank accounts |
+| `balances [--date <YYYY-MM-DD>]` | Latest known account balance, parsed from the CSV `Saldo` column |
 | `add-account <name>` | Create a new bank account |
 | `update-account <id>` | Update account ownership ratio, type, name, etc. |
 | `delete-account <id> [--yes]` | Delete a bank account (requires confirmation or `-y`) |
@@ -121,6 +144,7 @@ The following commands require confirmation:
 | `auto-link [--dry-run] [--yes]` | Auto-detect and link internal transfers using transfer rules (requires confirmation or `-y` when not running dry-run) |
 | `recalculate` | Manually recalculate adjusted amounts for all transactions |
 | `db-cleanup [--dry-run] [--yes]` | Purge orphaned transaction links and rules (Integrity Cleanup) (requires confirmation or `-y` when not running dry-run) |
+| `cleanup-pending [--dry-run] [--yes] [--force-id <id>...]` | Delete ghost pending reservations whose settled counterpart already exists (individual, split-authorization, or inexact amount matches — e.g. merchants that authorize a buffer and settle a different final amount; inexact matches fire only when unambiguous). Unresolved pendings are kept, listed with nearby same-merchant candidates, flagged as probable cancellations when old with no counterpart, and can be deleted explicitly via `--force-id` (requires confirmation or `-y` when not running dry-run) |
 | `remove-transfer-rule <id> [--yes]` | Remove a transfer detection rule (requires confirmation or `-y`) |
 | `salary-config` | Show current salary period configuration |
 | `set-salary-mode <mode>` | Set the salary period mode (`calendar`, `fixed`, `salary`) |
@@ -129,8 +153,8 @@ The following commands require confirmation:
 | `recurring [--status <active|cancelled|all>]` | List recurring payments configurations |
 | `add-recurring <name> <pattern> [options] [--dry-run]` | Manually create a recurring payment config and link transactions |
 | `update-recurring <id> [options] [--dry-run]` | Update recurring config fields and re-run transaction linking |
-| `remove-recurring <id> [--hard] [--date <YYYY-MM-DD>]` | Cancel (soft-close with end date) or hard-delete a recurring payment configuration |
-| `discover-recurring [--dry-run]` | Auto-discover recurring transaction patterns and auto-close dead configurations |
+| `remove-recurring <id> [--hard] [--date <YYYY-MM-DD>] [--yes]` | Cancel (soft-close with end date) or hard-delete a recurring payment configuration (requires confirmation; use `--yes`/`-y` to bypass, mandatory in non-interactive mode) |
+| `discover-recurring [--dry-run] [--yes]` | Auto-discover recurring transaction patterns and auto-close dead configurations (saving, re-linking, and auto-closing require confirmation; use `--yes`/`-y` to bypass, mandatory in non-interactive mode — run `--dry-run` first to preview) |
 | `stats-recurring [query] [--month <YYYY-MM>] [--period-type <type>]` | Display subscription stats dashboard or detail reports for matching subscriptions |
 | `estimate-period [--days <int>] [--level <0|1|2>]` | Project spending and estimate total outflow remaining in current period (rollup levels: 0=none, 1=top, 2=detailed) |
 | `set-estimate-level <0|1|2>` | Set default category rollup level configuration for spending estimation |
@@ -196,6 +220,7 @@ This tool supports advanced, automated tracking and lifecycle management of recu
    Resumed subscriptions (after cancellation) are tracked as separate runs/rows in `recurring_payments`.
    * **Resumption**: If a transaction matches a pattern of a cancelled subscription (after its `end_date`), it automatically spawns a new run/configuration for the resumption.
    * **Auto-Closing**: Active configurations that are missing expected payments are automatically closed (`end_date` is set to the last matched payment date) when running `discover-recurring` or passing the `--close` flag to `import` / `categorize`.
+   * **Confirmation Gates**: `remove-recurring` and `discover-recurring` (without `--dry-run`) prompt for confirmation before making changes, like the other destructive commands. Use `--yes`/`-y` to bypass (mandatory in non-interactive mode), and `discover-recurring --dry-run` to preview first.
 3. **Flexible Date Intervals**
    Supports strict date/day checking with a configured tolerance window:
    * **Monthly**: Expected day of month (e.g. 25th, last day `-1`).
@@ -212,8 +237,8 @@ Scan transaction history to auto-identify recurring items (such as monthly subsc
 # Preview candidates without writing to the database
 python cli.py discover-recurring --dry-run
 
-# Run auto-discovery and save configurations
-python cli.py discover-recurring
+# Run auto-discovery and save configurations (prompts for confirmation; --yes to bypass)
+python cli.py discover-recurring --yes
 ```
 
 #### 2. Manually Add/Update Configurations
@@ -369,6 +394,7 @@ financial-categorizer/
     ├── categorizer.py          # Auto-categorization & rule engine
     ├── db_handler.py           # Database CRUD & raw schema setup
     ├── importer.py             # CSV Parser (Nordea & ICA formats)
+    ├── matching.py             # Shared matching helpers (diacritic folding, aggregate tolerance)
     └── stats.py                # SQL View registers and stats math
 ```
 

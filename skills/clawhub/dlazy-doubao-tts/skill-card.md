@@ -1,45 +1,56 @@
-## Description: <br>
-Synthesize text into natural and fluent speech using Doubao TTS. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Synthesize text into natural and fluent speech using Doubao TTS. 使用豆包 (Doubao) TTS 文本转语音模型，将文字合成为自然流畅的语音播报。
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to authenticate with dLazy and generate Chinese or English text-to-speech audio through the pinned dLazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected parameters are sent to dLazy's hosted API. <br>
-Mitigation: Avoid sensitive prompts unless the dLazy service is trusted for the intended use. <br>
-Risk: A persistent global CLI install may be undesirable on shared or tightly controlled systems. <br>
-Mitigation: Use the documented npx invocation when a non-persistent CLI execution path is preferred. <br>
-Risk: The skill's output example appears to use an image schema instead of an audio schema. <br>
-Mitigation: Verify returned result types before relying on generated outputs in downstream workflows. <br>
+## Use Case:
 
+Developers and other users can turn text into Chinese or English speech with selectable voices and speaking speed, then retrieve the generated audio.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-doubao-tts) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Files, Guidance] <br>
-**Output Format:** [Markdown instructions with CLI commands and JSON result metadata] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted generated output URLs; async mode can return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: The security review was partial: it could not inspect the CLI package or resolve several references, and it found no direct evidence tying the reported login or generic CLI calls to Doubao speech synthesis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI package and confirm the command behavior before installing or invoking it; use the documented dry-run option to inspect a request before generation.
+
+Risk: Text supplied for synthesis is sent to the hosted dLazy service.
+
+Mitigation: Avoid submitting confidential text unless the service is approved for that data and its terms are acceptable.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-doubao-tts)
+- [dLazy service](https://dlazy.com)
+- [CLI repository link listed in skill metadata](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Audio, JSON, Shell commands]
+
+**Output Format:** [Generated speech audio with a hosted URL or saved file, plus command result and task status]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese or English voice options and adjustable speed; generation may complete asynchronously.]
+
+## Skill Version(s):
+
+1.3.43 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

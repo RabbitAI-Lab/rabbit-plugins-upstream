@@ -1,44 +1,54 @@
-## Description: <br>
-Updates documentation after code changes with quality gates, slop detection, and accuracy checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Updates documentation after code changes with quality gates, slop detection, and accuracy checks.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and technical writers use this skill to update README files, plans, wikis, ADRs, and docstrings after code changes. It helps identify documentation targets, apply grounded edits, run style and accuracy checks, and preview the resulting changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Documentation edits or consolidation steps may remove or change useful content. <br>
-Mitigation: Review proposed deletions, merges, staged changes, and previews before accepting the workflow output. <br>
-Risk: Broad activation triggers such as writing may invoke the workflow outside focused documentation tasks. <br>
-Mitigation: Invoke the skill explicitly or narrow activation to documentation update work when broad triggers are inconvenient. <br>
+## Use Case:
 
+Developers use this skill to update project documentation after code changes, check it against repository state and style rules, and review the resulting changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-doc-updates) <br>
-- [Declared homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
-- [Accuracy scanning module](modules/accuracy-scanning.md) <br>
-- [Capabilities sync module](modules/capabilities-sync.md) <br>
-- [Directory style rules module](modules/directory-style-rules.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and file-edit guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose documentation edits, validation warnings, consolidation actions, and change previews.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The workflow includes plugin configuration and repository staging instructions that may extend beyond documentation edits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the planned configuration and staging steps for fit with the task before applying them.
+
+Risk: The security scan was partial, leaving some referenced or runtime behavior unassessed.
+
+Mitigation: Review the skill references and runtime behavior before installation or use, as the scan guidance recommends.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-sanctum-doc-updates)
+- [Sanctum plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Documentation edits and review guidance in Markdown, with code and shell examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May update multiple documentation files and report a change preview.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

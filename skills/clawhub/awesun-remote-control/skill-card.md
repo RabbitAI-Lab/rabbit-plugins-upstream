@@ -1,42 +1,63 @@
-## Description: <br>
-向日葵远程控制 provides an agent with tools for remote device management, remote session control, desktop interaction, screenshots, command execution, port forwarding, and remote power actions through the Awesun MCP service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent in using AweSun’s remote-control CLI to manage devices, connect sessions, operate remote desktops, transfer files, run commands, and configure port forwarding.
 
-## Publisher: <br>
-[cutecube](https://clawhub.ai/user/cutecube) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cutecube](https://clawhub.ai/user/cutecube)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent manage authorized Awesun remote devices, open and close remote sessions, inspect desktops, execute remote commands, configure port forwarding, and perform remote wake or shutdown operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose broad remote-control authority through generic MCP tool forwarding, including screenshots, remote commands, port forwarding, shutdown, reboot, and wake actions. <br>
-Mitigation: Install only for systems the user owns or is authorized to administer, confirm the reachable MCP server and tools before use, and require explicit confirmation before high-impact remote-control actions. <br>
-Risk: Misconfigured MCP server paths, API URLs, or tokens can connect the agent to an unintended remote-control endpoint. <br>
-Mitigation: Review the MCP configuration before deployment and restrict the configuration to the intended local Awesun service and token. <br>
+## Use Case:
 
+External users and developers use this skill to carry out remote support and administration of AweSun devices, including desktop work, file handling, command execution, and connection setup.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/cutecube/awesun-remote-control) <br>
-- [Awesun MCP service](https://github.com/OrayDev/awesun-mcp) <br>
-- [Awesun UI locator](https://github.com/OrayDev/awesun-ui-locator) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, configuration, screenshots, guidance] <br>
-**Output Format:** [Tool responses may include text, JSON-like data, command output, configuration snippets, session identifiers, and base64-encoded screenshots.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an authorized local Awesun MCP server, Awesun API URL, and Awesun API token.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and package.json) <br>
+Risk: The skill covers high-impact remote operations, including shell commands, file transfer or deletion, desktop input, and device power controls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the target and access authorization, review commands and file paths, confirm before destructive or disruptive actions, and disconnect sessions when finished.
+
+Risk: The security review is benign with medium confidence and notes that one local reference could not be resolved; setup guidance also describes claiming a free service trial.
+
+Mitigation: Review the account and connection guides, and decide whether the service-trial capability is wanted before following setup instructions.
+
+## Reference(s):
+
+- [AweSun Remote Control release](https://clawhub.ai/cutecube/skills/awesun-remote-control)
+- [Publisher profile: cutecube](https://clawhub.ai/user/cutecube)
+- [Account and service management guide](artifact/references/account-guide.md)
+- [Connection guide](artifact/references/connection-guide.md)
+- [Device management guide](artifact/references/device-guide.md)
+- [Desktop control guide](artifact/references/desktop-guide.md)
+- [File management and transfer guide](artifact/references/file-guide.md)
+- [Port forwarding guide](artifact/references/port-forwarding-guide.md)
+- [Remote command execution and SSH guide](artifact/references/remote-exec-guide.md)
+- [UI element locator guide](artifact/references/ui-locator.md)
+- [UI patterns reference](artifact/references/ui-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, JSON]
+
+**Output Format:** [Markdown guidance with CLI examples and structured JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may control remote devices and transfer or modify remote data.]
+
+## Skill Version(s):
+
+1.1.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

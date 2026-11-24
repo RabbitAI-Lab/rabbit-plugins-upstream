@@ -1,46 +1,63 @@
-## Description: <br>
-A secure data analysis workflow suite based on MGC Blackbox, providing credential protection, zero-exposure script application, script sealing collaboration, and knowledge management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A secure data analysis workflow suite based on MGC Blackbox 1.6.0+, providing credential protection, zero-exposure script & workflow application, workflow / skill-package sealed-authorization collaboration, and knowledge management. Supports 1.5.4 double-layer encryption with link authorization and free-mode sealing, plus 1.6.0 chain mode for multi-node sealed distribution (one seal → multiple independent sub-packages + distribution_index.json). Includes a Data Analyst Agent system prompt template.
 
-## Publisher: <br>
-[zkeviny](https://clawhub.ai/user/zkeviny) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zkeviny](https://clawhub.ai/user/zkeviny)
 
-## Use Case: <br>
-Data analysts, teams, and organizations use this skill to manage local credential storage, user-owned script application, secure collaboration, and reusable analysis knowledge through MGC Blackbox workflows. Developers can also use its system prompt template to configure a data-analysis agent that asks for explicit authorization before sensitive operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credential-handling examples and zero-exposure claims may not fully align with the behavior a deployment provides. <br>
-Mitigation: Review the skill before installation, especially for production credentials or business-sensitive knowledge, and verify MGC credential flow, token protection, token expiration, and revocation behavior. <br>
-Risk: MGC scripts are trusted local code that may receive raw secrets. <br>
-Mitigation: Require explicit approval for every secret or script use, avoid broad or unreviewed scripts, and run only reviewed user-owned scripts that comply with organizational policy. <br>
+## Use Case:
 
+Data analysts and developers use this suite to follow workflows for managing credentials and knowledge, storing and running analysis scripts, and collaborating through sealed workflow packages with explicit user authorization.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zkeviny/skills/data-analyst-secure-suite) <br>
-- [MGC Blackbox repository](https://github.com/zkeviny/MGC-Blackbox) <br>
-- [README](artifact/README.md) <br>
-- [Data Analyst Agent system prompt template](artifact/agent_system_prompt.md) <br>
-- [Credential management workflow](artifact/prompts/credential_management.md) <br>
-- [Script management workflow](artifact/prompts/script_management.md) <br>
-- [Knowledge management workflow](artifact/prompts/knowledge_management.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit user authorization for sensitive credential, script, or knowledge operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release metadata and artifact frontmatter) <br>
+Risk: The security review flagged potentially misleading assurances about credential rotation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm that replaced credentials are revoked with the service that issued them.
+
+Risk: The security review flagged potentially misleading assurances about knowledge privacy.
+
+Mitigation: Check whether knowledge sent to the AI can appear in its context before sharing sensitive content.
+
+Risk: The local credential API's necessity and trustworthiness should be assessed.
+
+Mitigation: Review the local API and its access requirements before relying on it for credential access.
+
+Risk: Security review coverage was partial because some referenced paths could not be resolved.
+
+Mitigation: Review unresolved references before installing or relying on the suite.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zkeviny/skills/data-analyst-secure-suite)
+- [MGC Blackbox project](https://github.com/zkeviny/MGC-Blackbox)
+- [MGC Blackbox issue tracker](https://github.com/zkeviny/MGC-Blackbox/issues)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown instructions with Python examples, shell commands, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes user authorization templates and MGC credential, workflow, collaboration, and knowledge management procedures.]
+
+## Skill Version(s):
+
+1.5.0 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

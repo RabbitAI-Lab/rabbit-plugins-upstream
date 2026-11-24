@@ -1,39 +1,57 @@
-## Description: <br>
-AI assistant for China investment-banking compliance reviews covering IPO sponsorship, M&A advisory, bond issuance, private-equity investment, AML/KYC screening, cross-border transaction checks, and regulatory monitoring. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides China-focused investment banking compliance checklists and draft review guidance for IPO, M&A, bond, private equity, AML/KYC, and regulatory monitoring workflows.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Investment-banking compliance officers, in-house counsel, and deal teams use this skill to draft compliance checklists, review frameworks, risk assessments, remediation suggestions, and monitoring prompts for China-market securities work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat regulatory summaries, checklist outputs, or sample AML/KYC code as final legal, sanctions, or compliance determinations. <br>
-Mitigation: Require review by qualified compliance or legal professionals and confirm decisions against current official regulatory sources. <br>
-Risk: Users may enter real client, counterparty, or transaction data while asking for compliance analysis. <br>
-Mitigation: Use redacted or minimized data unless organizational policy explicitly permits sharing the information with the agent. <br>
+## Use Case:
 
+Investment banking compliance officers, in-house counsel, and deal teams use the skill to draft review checklists and reference frameworks for transactions and ongoing monitoring. Qualified professionals should verify current rules and review any conclusions before use.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with checklists, tables, prompt templates, and illustrative code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are reference material and should be reviewed by qualified compliance or legal professionals before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Regulatory details and examples may be incomplete or out of date, and the security scan reported only partial coverage with medium confidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check applicable requirements against current official sources and have qualified compliance staff review the material; treat the scan as limited assurance.
+
+Risk: Draft checklists or illustrative screening guidance could be mistaken for a formal legal or compliance conclusion.
+
+Mitigation: Use outputs as working references only and require qualified professionals to verify evidence, assumptions, and conclusions before acting or submitting anything.
+
+Risk: AML/KYC and transaction reviews can involve sensitive personal, customer, and non-public information.
+
+Mitigation: Provide only the minimum necessary, de-identified or public information; do not include identity documents, account details, client lists, inside information, or other unredacted sensitive data.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/security-ib-compliance)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Code]
+
+**Output Format:** [Markdown with checklists, tables, and illustrative pseudocode]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft reference material; code examples are illustrative and are not executed by the skill.]
+
+## Skill Version(s):
+
+3.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

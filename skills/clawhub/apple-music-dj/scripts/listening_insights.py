@@ -16,17 +16,17 @@ Requires: APPLE_MUSIC_DEV_TOKEN and APPLE_MUSIC_USER_TOKEN env vars.
 """
 
 import sys
-if sys.version_info < (3, 9):
+if sys.version_info < (3, 11):
     sys.exit(
-        f"ERROR: Python 3.9+ is required (you have "
+        f"ERROR: Python 3.11+ is required (you have "
         f"{sys.version_info.major}.{sys.version_info.minor}). Please upgrade."
     )
 
 import argparse
 import json
-from collections import Counter
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 from _common import call_api, load_profile
 
@@ -38,7 +38,6 @@ SCRIPT_DIR = Path(__file__).parent
 def cmd_timeline(profile: dict) -> dict:
     """Show taste evolution across Replay years."""
     replay = profile.get("replay_highlights", {})
-    eras = profile.get("era_distribution", [])
     genres = profile.get("genre_distribution", [])
     artists = profile.get("top_artists", [])
 
@@ -49,7 +48,7 @@ def cmd_timeline(profile: dict) -> dict:
         print(f"  Fetching {year}...", file=sys.stderr)
         summary = call_api("replay-summary", str(year))
         if summary and "data" in summary and summary["data"]:
-            year_info = {"year": year}
+            year_info: dict[str, Any] = {"year": year}
             for s in summary["data"]:
                 attrs = s.get("attributes", {})
                 year_info["listen_minutes"] = attrs.get("listenTimeInMinutes")
@@ -185,6 +184,26 @@ def cmd_streaks(profile: dict) -> dict:
 
 # ── Year in Review ───────────────────────────────────────────────
 
+def year_review_caption(year: int, total_minutes: int | None, top_artist: str | None,
+                        top_genre: str | None, from_profile: bool = False) -> str:
+    """A ready-to-post caption for the year-in-review card; leaves out whatever is unknown.
+
+    `from_profile` means artist and genre are today's taste, not that year's Replay, so the
+    caption says "right now" rather than claiming them for the year.
+    """
+    parts = []
+    if total_minutes:
+        parts.append(f"{total_minutes // 60:,} hours of music")
+    if top_artist:
+        parts.append(f"#1 artist {top_artist}")
+    if top_genre:
+        parts.append(f"mostly {top_genre}")
+    if from_profile and parts:
+        return f"My Apple Music taste right now: {', '.join(parts)}. 🎧"
+    body = ", ".join(parts) if parts else "a year of music"
+    return f"My {year} on Apple Music: {body}. 🎧"
+
+
 def cmd_year_review(profile: dict, year: int) -> dict:
     """Comprehensive year-in-review — deeper than Apple Replay."""
     # Fetch year-specific Replay data
@@ -215,8 +234,6 @@ def cmd_year_review(profile: dict, year: int) -> dict:
                     year_data["top_genres"].append(str(g))
 
     # Analyze from current profile (enrichments beyond Replay)
-    current_genres = profile.get("genre_distribution", [])
-    current_artists = profile.get("top_artists", [])
     variety = profile.get("variety_score", 0.5)
     mainstream = profile.get("mainstream_score", 0.5)
 
@@ -252,8 +269,25 @@ def cmd_year_review(profile: dict, year: int) -> dict:
             if desc:
                 milestone_list.append(desc)
 
+    # Flat fields for `taste_card.py --mode year-review`. Without Replay, fall back to the
+    # current profile for artist and genre — and say so, since they aren't that year's numbers.
+    top_artist = (year_data.get("top_artists") or [None])[0]
+    top_genre = (year_data.get("top_genres") or [None])[0]
+    if not year_data:
+        top_artist = (profile.get("top_artists") or [{}])[0].get("name")
+        top_genre = (profile.get("genre_distribution") or [{}])[0].get("genre")
+        # Short enough for the SVG card, which cuts insights at 50 characters.
+        insights.insert(0, f"No {year} Replay; artist and genre are current.")
+    total_minutes = year_data.get("listen_minutes")
+
     return {
         "year": year,
+        "total_minutes": total_minutes,
+        "top_artist": top_artist,
+        "top_genre": top_genre,
+        "top_songs": year_data.get("top_songs", []),
+        "caption": year_review_caption(year, total_minutes, top_artist, top_genre,
+                                       from_profile=not year_data),
         "replay_data": year_data,
         "insights": insights,
         "obscurity_score": obscurity,
@@ -294,6 +328,9 @@ def main():
             print(f"ERROR: Year must be between 2015 and {current_year}", file=sys.stderr)
             sys.exit(1)
         result = cmd_year_review(profile, args.year)
+    else:  # argparse already restricts this; the branch keeps the variable provably assigned
+        print(f"ERROR: unknown command '{args.command}'.", file=sys.stderr)
+        sys.exit(1)
 
     print(json.dumps(result, indent=2))
 

@@ -1,44 +1,49 @@
-## Description: <br>
-Coordinates Claude agent teams via filesystem protocol. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Coordinates Claude agent teams over a filesystem protocol. Use for parallel agents with task dependencies.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to coordinate multiple Claude CLI agents on parallel implementation, review, refactoring, testing, and task handoff workflows. It is most relevant when work can be split across agents and coordinated through explicit tasks, messages, roles, and health checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Team task and message history may be stored in plaintext local files. <br>
-Mitigation: Avoid putting secrets, credentials, or sensitive data in task descriptions, team messages, or local coordination files. <br>
-Risk: The skill can launch and manage multiple local Claude agents. <br>
-Mitigation: Use it only in repositories where parallel agent work is acceptable, and review team formation, task ownership, and agent roles before starting work. <br>
-Risk: Stalled-agent recovery may terminate or replace local agent panes. <br>
-Mitigation: Review team deletion, pane-kill, restart, and replacement actions before allowing them to run. <br>
+## Use Case:
 
+Developers use this skill to coordinate Claude Code agents working on parallel tasks, manage task dependencies, and exchange team messages.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-conjure-agent-teams) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/athola) <br>
-- [Clawdis Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conjure) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces coordination patterns for local agent teams, including task files, inbox messages, team configuration, role routing, and health-monitoring guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Manually removing lock files while agents are coordinating can disrupt shared task or message updates.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before cleanup, confirm no active agent holds or needs the lock and follow the documented recovery process; do not remove an active lock file.
+
+## Reference(s):
+
+- [Project homepage (skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/conjure)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.10.4 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

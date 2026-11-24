@@ -1,44 +1,50 @@
-## Description: <br>
-Build composable skill modules with hub-and-spoke loading. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build composable skill modules with hub-and-spoke loading.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and skill authors use this skill to design, refactor, and maintain modular agent skills with hub-and-spoke modules, progressive disclosure, token budgeting, and validation workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can activate for broad architecture, modularity, skill-design, or token-optimization discussions. <br>
-Mitigation: Confirm the task is about modular skill design or maintenance before applying its workflow. <br>
-Risk: Suggested shell commands may not match every workspace layout or tool installation. <br>
-Mitigation: Review commands before execution and adapt paths or tool names to the local project. <br>
-Risk: Recursive execute-permission commands can grant broader permissions than intended. <br>
-Mitigation: Prefer making only known script files executable instead of applying execute permissions recursively under scripts/. <br>
+## Use Case:
 
+Developers use this skill to plan, build, and maintain modular agent skills. It provides hub-and-spoke design guidance, example shell commands, and advice for migration, validation, and token efficiency.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-abstract-modular-skills) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/athola) <br>
-- [OpenClaw Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/abstract) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference optional local analysis, token-estimation, and validation tools when they are available in the consuming workspace.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: Troubleshooting guidance recommends recursively marking every file in a scripts directory executable, which can grant execute permissions to files that do not need them.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect the target files and grant execute permission only to the specific scripts that need it; avoid blanket recursive permission changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-abstract-modular-skills)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/abstract)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Progressive disclosure through focused skill modules.]
+
+## Skill Version(s):
+
+1.10.4 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

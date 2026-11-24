@@ -1,43 +1,56 @@
-## Description: <br>
-Creates code-driven motion graphics such as kinetic typography, animated text videos, animated infographics, explainers, logos, and transitions using Remotion code through the dLazy hosted sandbox agent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates motion graphics, kinetic typography, animated text videos, infographics, and explainer animations as Remotion code for polishing and export.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, designers, and content teams use this skill to start or continue dLazy motion-graphics projects that produce code-driven animated graphics rather than AI-generated footage. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, options, and attached files are sent to dLazy hosted services. <br>
-Mitigation: Use the skill only with content that is appropriate for dLazy's hosted service, and avoid attaching sensitive local files unless that transfer is acceptable. <br>
-Risk: The dLazy API key may be stored locally in the user configuration file. <br>
-Mitigation: Prefer the per-invocation DLAZY_API_KEY environment variable when persistent credentials are not desired, check permissions on ~/.dlazy/config.json after login or auth set, and rotate or revoke keys from the dLazy dashboard if exposure is suspected. <br>
+## Use Case:
 
+Developers, designers, and content creators use this skill to plan and produce code-driven animated graphics, including kinetic typography and explainer videos, through a dLazy motion-graphics project.
 
-## Reference(s): <br>
-- [Dlazy Motion Graphics on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-motion-graphics) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and code-oriented guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires dLazy API authentication; attached local files are uploaded to dLazy storage before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and frontmatter) <br>
+Risk: The security review notes that use may involve dLazy login, saved API credentials, organization project listing, and sending prompts or attached files to dLazy services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review what you plan to share and the requested account and project access before authenticating; rotate or revoke the API key if needed.
+
+Risk: The security review reports that login, authentication setup, and organization project listing were not declared alongside the animation-focused description; its evidence is incomplete.
+
+Mitigation: Check that these account and project actions are expected for your use before installing or running the skill.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-motion-graphics)
+- [dLazy CLI repository (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm (listed in skill metadata)](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Video, Text, Shell commands]
+
+**Output Format:** [Remotion code and exported motion-graphics video, with text guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Project-based, multi-turn work; optional local reference files can be attached.]
+
+## Skill Version(s):
+
+1.3.43 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,56 @@
-## Description: <br>
-4MP high-resolution raster image generation for print-ready assets and large-scale use. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates high-resolution, 4-megapixel raster images suitable for print-ready and large-format assets.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative users invoke this skill to generate high-resolution raster images through the dLazy hosted Recraft V4 Pro service. It is suitable for creating print-ready visual assets and large-format imagery from prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a third-party CLI and hosted image-generation service. <br>
-Mitigation: Verify that the dLazy CLI package and service are trusted before installing or invoking the skill. <br>
-Risk: API keys may be stored in a local CLI configuration file when using persistent login. <br>
-Mitigation: Use DLAZY_API_KEY for per-invocation authentication on shared or untrusted machines, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: Local media paths supplied to the CLI may be uploaded to dLazy-hosted storage. <br>
-Mitigation: Only pass files that are appropriate to upload to the third-party service. <br>
+## Use Case:
 
+Developers and creative teams use this skill to create high-resolution raster images from prompts, with optional aspect-ratio control.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-pro) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Images, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON responses containing generated image URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated image outputs are returned as dLazy-hosted URLs; asynchronous requests may return a task identifier for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: The security assessment is benign with medium confidence and partial coverage; it notes that the relationship between required login/API-key setup and image generation is not fully established in the reviewed materials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the full instructions and CLI package before installation, and configure credentials only for an account you control.
+
+Risk: The skill sends prompts to dLazy's hosted API and uploads supplied local media files to its media storage.
+
+Mitigation: Avoid submitting sensitive prompts or files unless you are comfortable sharing them with the hosted service.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-pro)
+- [dLazy website](https://dlazy.com)
+- [dLazy CLI package on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [CLI repository (linked in skill metadata; provenance unavailable)](https://github.com/dlazy-ai/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Image files, JSON]
+
+**Output Format:** [Raster image (PNG) with JSON result metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated image is returned by URL and can be saved to a local path; asynchronous runs may return a task identifier.]
+
+## Skill Version(s):
+
+1.3.43 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

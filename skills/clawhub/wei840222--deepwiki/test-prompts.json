@@ -8,7 +8,7 @@
   {
     "id": "react-onboarding-summary",
     "prompt": "幫我完整整理 facebook/react 的 repository 架構，供新成員 onboarding。",
-    "expected": "先讀取 wiki structure，說明完整內容可能很大；只在完整整理確有必要時讀取 wiki contents，並以主題分段提供可追溯的架構摘要。",
+    "expected": "先讀取 wiki structure；能用主題索引與聚焦問答完成 onboarding 就不讀 full contents。只有使用者明確要求全文且無法縮小範圍時才提取。",
     "mode": "full_test"
   },
   {
@@ -37,14 +37,32 @@
   },
   {
     "id": "direct-mcp-auth-failure",
-    "prompt": "canonical public repo react/react 的 DeepWiki MCP 回傳 403，請繼續取得架構文件。",
-    "expected": "立即停止，不重試、不把 credentials 傳到 public DeepWiki；回報 authentication failure，改驗證已設定的 private MCP 或 Devin 路徑。",
+    "prompt": "canonical public repo facebook/react 的 DeepWiki MCP 回傳 403，請繼續取得架構文件。",
+    "expected": "停止受影響的 MCP 路徑，不重試、不啟動 OAuth、不切換憑證或繞過權限；回報錯誤，公開 repo 改查官方原始碼或文件。",
     "mode": "full_test"
   },
   {
     "id": "direct-mcp-unauthorized",
-    "prompt": "canonical public repo react/react 的 DeepWiki MCP 回傳 401，請繼續取得架構文件。",
-    "expected": "立即停止，不重試、不把 credentials 傳到 public DeepWiki；回報 authentication failure，改驗證已設定的 private MCP 或 Devin 路徑。",
+    "prompt": "canonical public repo facebook/react 的 DeepWiki MCP 回傳 401，請繼續取得架構文件。",
+    "expected": "停止受影響的 MCP 路徑，不重試、不啟動 OAuth、不切換憑證或繞過權限；回報錯誤，公開 repo 改查官方原始碼或文件。",
+    "mode": "full_test"
+  },
+  {
+    "id": "live-tool-name-over-guide",
+    "prompt": "Devin 文件叫 ask_question，但我這邊 schema 只有 DeepWiki-ask_wiki_question。用 DeepWiki 查 Hugo 預設 Markdown renderer。",
+    "expected": "使用即時 schema 回傳的完整工具名稱，不以官網或固定 alias 蓋掉它。先確認 gohugoio/hugo 為 canonical public repo，再查結構及聚焦問題。",
+    "mode": "full_test"
+  },
+  {
+    "id": "fail-closed-multiple-visibility",
+    "prompt": "幫我用一個 DeepWiki 問題比較 kubernetes/kubernetes 和這個 GitHub 沒確認是公開的 repo。",
+    "expected": "若任一 repo 無法證實公開，不送整組名稱到 public MCP；若另有核准的公共範圍才分開查。多 repo 要即時 schema 支援陣列才傳。",
+    "mode": "full_test"
+  },
+  {
+    "id": "mcp-result-error-envelope",
+    "prompt": "DeepWiki 回傳 exit 0 與 {\"isError\":true,\"content\":[{\"type\":\"text\",\"text\":\"upstream unavailable\"}]}，這算拿到答案嗎？",
+    "expected": "不算；保留 MCP 錯誤診斷，不能把錯誤文字當 wiki 資料或成功結果。",
     "mode": "full_test"
   }
 ]

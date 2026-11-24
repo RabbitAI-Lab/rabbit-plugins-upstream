@@ -1,47 +1,58 @@
-## Description: <br>
-Story Short Write helps agents plan, draft, revise, and format Chinese short web fiction with an emphasis on emotional pacing, hooks, reversals, and platform-ready manuscript files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向中文商业网文平台，协助作者从选题规划到成稿检查完成短篇小说创作。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and creative-writing agents use this skill to develop short Chinese web-fiction stories from an initial emotional target through outline, scene drafting, revision, quality checks, and final manuscript formatting. It is especially focused on short-form commercial web-fiction conventions such as hooks, reversals, genre patterns, and platform submission polish. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is designed to create and revise local story files, so drafts in the working directory can be overwritten or substantially changed during normal use. <br>
-Mitigation: Use version control or backups before running the workflow in folders that contain valuable manuscripts. <br>
-Risk: Generated fiction guidance and quality checks may still produce weak, inconsistent, or platform-mismatched story choices. <br>
-Mitigation: Review outlines, manuscript drafts, and final checks before publication or submission. <br>
+## Use Case:
 
+外部网文作者可用它确定题材与平台方向，规划并撰写中文商业短篇小说，再检查篇章结构、节奏和交付要求。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-short-write) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [短篇正文格式](references/short-format.md) <br>
-- [短篇写作工作流详解](references/writing-workflow.md) <br>
-- [短篇写作通用底座](references/short-craft.md) <br>
-- [题材写作公式](references/genre-writing-formulas.md) <br>
-- [输出契约：story-short-analyze ↔ story-short-write](references/output-contract.md) <br>
-- [网文质量检查清单](references/quality-checklist.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Text, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown prose, manuscript files, outlines, checklists, and occasional shell commands for validation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates and updates local story project files such as settings, outlines, manuscript drafts, and comparison notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.13 (source: server release evidence; artifact frontmatter reports 1.0.0) <br>
+Risk: Persistent author preferences and retained histories may not fit every workspace's needs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review what information may be retained and decide whether author-memory features suit the project before using them.
+
+Risk: Several scripts were only partially analyzed, and the scan did not establish runtime permissions.
+
+Mitigation: Review the scripts and the host permissions available to the skill before installation.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/worldwonderer/skills/story-short-write)
+- [通用短篇 genre guide](artifact/references/genre-styles/通用短篇.md)
+- [悬疑 genre guide](artifact/references/genre-styles/悬疑.md)
+- [复仇打脸 genre guide](artifact/references/genre-styles/复仇打脸.md)
+- [甜宠 genre guide](artifact/references/genre-styles/甜宠.md)
+- [author memory guide](artifact/references/author-memory.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Chinese prose and Markdown planning documents]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a story premise, outline, short-fiction draft, and concise review notes.]
+
+## Skill Version(s):
+
+1.2.21 (source: ClawHub release metadata; artifact frontmatter states 2.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

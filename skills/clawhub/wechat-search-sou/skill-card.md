@@ -1,49 +1,57 @@
-## Description: <br>
-微信搜索 provides Node.js CLI tools for real-time WeChat article and video searches by keyword, returning JSON results and saved logs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+微信搜一搜公开数据只读：按关键词搜微信文章、微信视频。触发：微信搜索、搜一搜、公众号文章、视频号、微信热门、微信最新、wechat search、wechat article、wechat video。抖音、小红书、快手、B站、微博不要用本技能。不支持图片搜索、正文抓取、账号登录。
 
-## Publisher: <br>
-[um-why](https://clawhub.ai/user/um-why) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[um-why](https://clawhub.ai/user/um-why)
 
-## Use Case: <br>
-External developers, marketers, and content analysts use this skill to query WeChat article and video search results by keyword for content planning, trend monitoring, competitor analysis, and source discovery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms are sent to an external provider service. <br>
-Mitigation: Use the skill only for non-sensitive searches unless the provider terms and data handling are acceptable for the deployment. <br>
-Risk: Full search outputs are saved locally as result logs. <br>
-Mitigation: Treat logs as potentially sensitive, restrict access to the skill workspace, and remove logs when they are no longer needed. <br>
-Risk: Documentation and evidence should reflect the supported article and video behavior. <br>
-Mitigation: Use the article and video CLI commands and schemas unless additional content-type support is separately verified. <br>
+## Use Case:
 
+Developers and content analysts use this skill to search public WeChat articles and videos by keyword for topic discovery, competitor analysis, and trend monitoring.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/um-why/skills/wechat-search-sou) <br>
-- [Publisher profile](https://clawhub.ai/user/um-why) <br>
-- [GUAIKEI API and token site](https://www.guaikei.com) <br>
-- [Complete CLI options](references/options.md) <br>
-- [Article search input schema](assets/article_cli_req.schema.json) <br>
-- [Article search output schema](assets/article_cli_resp.schema.json) <br>
-- [Video search input schema](assets/video_cli_req.schema.json) <br>
-- [Video search output schema](assets/video_cli_resp.schema.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, JSON, files, guidance] <br>
-**Output Format:** [JSON printed to stdout with saved result logs, plus concise command guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js and GUAIKEI_API_TOKEN; writes article and video result JSON under logs/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence, package.json, scripts/config/constants.js) <br>
+Risk: Search keywords are sent to the external Guaikei API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid using sensitive or private terms as search keywords.
+
+Risk: The security scan had partial coverage, so its benign verdict does not resolve all uncertainty.
+
+Mitigation: Review the skill code and consider the scan's stated coverage limits before installation.
+
+## Reference(s):
+
+- [Skill release page](https://clawhub.ai/um-why/skills/wechat-search-sou)
+- [Search options](references/options.md)
+- [Output contract](references/contract.md)
+- [Environment and usage FAQ](references/faq.md)
+- [Guaikei service](https://www.guaikei.com)
+
+## Skill Output:
+
+**Output Type(s):** [JSON]
+
+**Output Format:** [JSON output envelope containing structured article or video search results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only search results; the envelope can also report empty or error states, and may include an estimated cost.]
+
+## Skill Version(s):
+
+1.1.3 (source: SKILL.md frontmatter, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

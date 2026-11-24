@@ -1,43 +1,54 @@
-## Description: <br>
-FarmDash Trail Marshal helps agents plan guarded DeFi workflows by listing recipes, building quality gates, recording session workflow runs, and reporting status without executing wallet or trading actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when composing multi-step DeFi workflows from FarmDash tools: plan, run, inspect supervised pipelines. Wallet steps stay policy-gated and zero-custody.
 
-## Publisher: <br>
-[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic)
 
-## Use Case: <br>
-Developers and agent operators use this skill to coordinate DeFi workflow recipes, check installed companion skills, and keep state-changing actions behind separate confirmation gates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: DeFi workflow plans can lead to financial loss if stale quotes, market movement, or incomplete companion-skill coverage are ignored. <br>
-Mitigation: Verify each quote and required companion skill before confirmation, and keep execution in separately reviewed skills with their own confirmation gates. <br>
-Risk: Session workflow records and optional tokens may expose paid or session-tracking features when configured. <br>
-Mitigation: Provide FARMDASH_API_KEY or session tokens only when intentionally using those features, and do not provide wallet secrets or signing material. <br>
+## Use Case:
 
+External FarmDash users and OpenClaw agent developers use Trail Marshal to find named DeFi workflow recipes, check prerequisites and confirmation gates, and track guarded workflow plans. Separate execution skills handle any wallet actions under their own authorization rules.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-trail-marshal) <br>
-- [FarmDash agents homepage](https://www.farmdash.one/agents) <br>
-- [FarmDash API schema](https://www.farmdash.one/agents/openapi.yaml) <br>
-- [FarmDash MCP server config](https://www.farmdash.one/.well-known/mcp.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with structured workflow metadata and status records] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Plans are advisory orchestration outputs; state-changing execution remains delegated to separately installed skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.7 (source: server release metadata) <br>
+Risk: Optional onboarding sends a public agent wallet address to FarmDash, and scanner coverage was partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use onboarding only when you want to check setup or tier status, share only the listed public address, and review the skill and its separately installed execution skills before authorizing wallet actions.
+
+## Reference(s):
+
+- [FarmDash Agent Hub](https://www.farmdash.one/agents)
+- [FarmDash Trail Marshal skill manual](https://www.farmdash.one/openclaw-skills/farmdash-trail-marshal/SKILL.md)
+- [FarmDash agent integration documentation](https://www.farmdash.one/docs)
+- [Live agent capability status](https://www.farmdash.one/api/v1/agent/status)
+- [FarmDash OpenAPI contract](https://www.farmdash.one/agents/openapi.yaml)
+- [FarmDash MCP discovery manifest](https://www.farmdash.one/.well-known/mcp.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, JSON, API calls]
+
+**Output Format:** [Workflow catalog data, guarded plan and run records, and accompanying agent guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Planning and run records do not execute wallet actions; execution is handled by separately installed skills.]
+
+## Skill Version(s):
+
+0.1.12 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

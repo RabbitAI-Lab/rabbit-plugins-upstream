@@ -1,43 +1,49 @@
-## Description: <br>
-Comprehensive practical system covering China's 1 basic and 40 specific enterprise accounting standards with detailed interpretations, applications, and cases. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+中国企业会计准则全面实务体系，覆盖1项基本准则与40项具体准则，提供准则解读、会计处理与实务应用指导。
 
-## Publisher: <br>
-[yjkj999999](https://clawhub.ai/user/yjkj999999) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yjkj999999](https://clawhub.ai/user/yjkj999999)
 
-## Use Case: <br>
-Finance, accounting, audit, and reporting professionals use this skill to reference and apply Chinese Accounting Standards across common enterprise accounting scenarios, implementation Q&A, application cases, and CAS/IFRS comparison points. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Accounting guidance may be incomplete, outdated, or misapplied to entity-specific reporting facts. <br>
-Mitigation: Have qualified accounting professionals verify conclusions against current Ministry of Finance guidance and the specific reporting context before relying on the output. <br>
-Risk: The security guidance flags possible high-impact maintainer automation in inspected artifacts. <br>
-Mitigation: Review and scan the skill before deployment, and avoid granting broad local or account access unless the operating environment requires it. <br>
+## Use Case:
 
+For finance and accounting professionals working with Chinese enterprises who need a structured reference for interpreting and applying China Accounting Standards, including accounting treatments, implementation questions, and practical examples.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/yjkj999999/cas-china-mastery) <br>
-- [README](artifact/README.md) <br>
-- [Skill Source](artifact/SKILL.md) <br>
-- [Package Metadata](artifact/package.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown prose with tables and code-style accounting formulas] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-language accounting standards reference material; no executable behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and package.json) <br>
+Risk: Accounting guidance may be incomplete or may not reflect later changes to Chinese standards, interpretations, or official implementation guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check current official standards and implementation guidance, and have a qualified accounting professional review case-specific conclusions before using them in financial reporting.
+
+## Reference(s):
+
+- [CAS China Mastery on ClawHub](https://clawhub.ai/yjkj999999/skills/cas-china-mastery)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Text]
+
+**Output Format:** [Chinese-language prose with structured explanations, tables, formulas, and accounting examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference guidance organized across Chinese Accounting Standards topics, with practical treatments and examples.]
+
+## Skill Version(s):
+
+1.0.4 (source: server-resolved release metadata; artifact package.json lists 1.0.1 and SKILL.md lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

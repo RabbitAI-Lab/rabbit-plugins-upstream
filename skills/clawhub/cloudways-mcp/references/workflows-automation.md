@@ -96,15 +96,41 @@ curl -sH "Authorization: Bearer $TOKEN" \
 
 ```
 ┌─ Cron (Sunday 09:00)
-├─ HTTP: GET /api/v2/server  (Authorization: Bearer <access-token>)  → all servers
-├─ Loop servers → Loop apps:
-│   ├─ HTTP: GET /app/{id}           → including SSL info
-│   ├─ Function: parse SSL expiry date
-│   ├─ IF expiry < 30 days:
-│   │   └─ Add to "needs attention" list
+├─ ONE step — request AND projection together:
+│   ├─ GET /api/v2/server                        → servers
+│   ├─ for each app: GET /app/{id}               → certificate fields + DB credentials
+│   └─ return ONLY { label, app_fqdn, ssl_* }    ← nothing else leaves this step
+├─ IF expiry < 30 days → "needs attention"
 ├─ Aggregate
 └─ Send report
 ```
+
+> **The projection has to happen inside the step that makes the request.** `GET /app/{id}`
+> returns that application's database credentials beside the certificate fields, and on n8n or
+> Make **every node's output is persisted in the execution record** — so an HTTP node that emits
+> the whole payload has already retained every app's DB password, and a filter node after it
+> cannot take that back. A later "select these fields" step protects the *report*, not the
+> platform's own log; this is the same mistake as telling an agent to keep secrets out of its
+> summary.
+>
+> Three shapes that actually work, in order of preference:
+>
+> 1. **A plain script** — cron + `curl` + `jq`, doing its own requests and printing only the
+>    allowlisted fields. The projection happens in the same process; nothing is persisted
+>    anywhere. Note that this means a **script**, not `claude -p`: the daily-summary job below
+>    delivers its report with `curl`, but its body is an agent, and an agent asked for expiry
+>    dates has only the credential-bearing `app_get` to get them with.
+> 2. **One n8n Code node** that performs the requests itself (`this.helpers.httpRequest`) and
+>    returns only the allowlisted fields. One node, one output, and that output is the filtered
+>    one.
+> 3. **A platform whose execution logging you have turned off or redacted for this scenario** —
+>    verify it on a test run before trusting it, because "logs expire in 30 days" is retention,
+>    not absence.
+>
+> If your automation platform emits the raw response from a node you cannot collapse, and you
+> cannot disable that node's logging, do not run this job there. This is the job
+> `workflows-monitoring.md` §5 points at: the agent gets names and dates from here, never the
+> payloads.
 
 ### Workflow: Disk space alerting
 
@@ -174,24 +200,77 @@ In automation via `claude -p` (headless mode), the MCP server keeps working as u
 ```bash
 #!/bin/bash
 # scripts/cw-daily-summary.sh
+#
+# Needs: claude (Claude Code, with the Cloudways MCP connection configured for
+# the user running the cron) and jq. jq is NOT installed by default on macOS -
+# `brew install jq` - and set -e means the job would otherwise die at the
+# encode step after doing all the work.
+set -euo pipefail
+command -v jq >/dev/null || { echo "this job needs jq (brew install jq / apt install jq)" >&2; exit 1; }
+
+# A private temp file, not a fixed path. /tmp is shared: a fixed name can be
+# pre-created by another user as a symlink, so the report either overwrites
+# whatever it points at or is read back by whoever owns it.
+#
+# The X's must be at the END of the template. BSD mktemp (macOS) does not
+# substitute them anywhere else - and it does not fail either: it creates a file
+# called literally "cw-summary.XXXXXX.md", which is exactly the predictable name
+# this line exists to avoid, with a successful exit status hiding it. Measured,
+# not assumed: on macOS 26.3, `mktemp ./cw-summary.XXXXXX.md` exits 0 and leaves
+# a 0600 file of that literal name, so `set -e` never fires and nothing warns.
+umask 077
+OUT=$(mktemp "${TMPDIR:-/tmp}/cw-summary.md.XXXXXX")
+trap 'rm -f "$OUT"' EXIT
 
 # Here Claude calls the MCP tools itself and generates a summary
+# Certificate expiry is deliberately NOT asked for here. The only tool that returns it is
+# app_get, which also returns that application's database credentials - so an agent asked for
+# expiry dates across the fleet has no way to answer except the sweep this skill refuses
+# (workflows-monitoring.md section 5). SSL runs as its own direct-API job above, which projects
+# the response before anything reads it. Ask an agent only for what a credential-free tool
+# answers.
 claude -p "
 Generate today's Cloudways health summary.
 Check all servers (server_list), get alerts (copilot_insights_list), and identify:
 1. Any server not in Running status
 2. Any disk > 80%
-3. Any SSL expiring within 30 days
-4. Top 3 apps by traffic in the past 24h
+3. Top 3 apps by traffic in the past 24h
 
-Output in Hebrew, markdown format, sent to /tmp/cw-summary.md
+Call no credential-returning tool: not server_get, not app_get, not app_credentials.
+Telling you to leave secrets out of the summary would not help - by then they are in this
+transcript, and the transcript outlives the summary.
+
+Output in Hebrew, markdown format, written to $OUT
 "
 
-# Send the summary to Slack
-curl -X POST -H 'Content-type: application/json' \
-     --data "{\"text\":\"$(cat /tmp/cw-summary.md)\"}" \
-     "$SLACK_WEBHOOK_URL"
+# Failing on an HTTP error is the point: without one of these flags curl exits
+# 0 on a rejected webhook (bad URL, payload too large), so the cron looks like
+# it succeeded - and the trap below has already deleted the only copy of the
+# report. --fail-with-body keeps the server's reason in the output, but it is
+# curl >= 7.76.0; Ubuntu 20.04 ships 7.68, where it is an unknown option, curl
+# exits 2 having posted NOTHING, and every run fails the same silent way. So
+# ask the installed curl rather than assuming: an unsupported option makes curl
+# exit non-zero before it ever reaches --version.
+if curl --fail-with-body --version >/dev/null 2>&1; then
+  CURL_FAIL=--fail-with-body          # curl >= 7.76.0: status AND the reason
+else
+  CURL_FAIL=--fail                    # older curl: status only, body discarded
+fi
+
+# Build the JSON with a real encoder. Interpolating the file into a JSON
+# string breaks on the first quote, backslash or newline in the report - and a
+# report is generated text, so it WILL contain them.
+jq -Rs '{text: .}' < "$OUT" \
+  | curl "$CURL_FAIL" --silent --show-error \
+         -X POST -H 'Content-type: application/json' --data-binary @- "$SLACK_WEBHOOK_URL"
 ```
+
+> **No jq?** Any real JSON encoder will do — `python3 -c 'import json,sys; print(json.dumps({"text": sys.stdin.read()}))' < "$OUT"` is the same thing. What must not come back is
+> building the payload by interpolating the file into a string.
+
+> **What leaves the machine.** The summary goes to a channel with its own membership and
+> retention, so keep infrastructure detail out of it: status, counts and names are the point;
+> credentials, IPs and tokens are not. The `trap` removes the file even if `curl` fails.
 
 **Note:** Headless requires Claude Code to have the Cloudways MCP connection configured. Make sure the MCP config is set in the `~/.claude.json` of the user running the cron.
 
@@ -228,6 +307,23 @@ For automations that generate a lot of data (audit results, alerts log, deployme
 | resolution_notes | Long text |
 
 **Sync:** n8n / Make scenario every hour: pull state from Cloudways → upsert to Airtable. The team gets a live view.
+
+> **Map an explicit field allowlist per table — never the whole API response.** One list per
+> destination table, and nothing outside it:
+>
+> - `cloudways_servers`: `cw_id`, `label`, `provider`, `region`, `size`, `status`, `last_check`,
+>   `client`, `monthly_cost_usd`
+> - `cloudways_alerts`: `date`, `server`, `app`, `severity`, `issue`, `status`,
+>   `resolution_notes`
+>
+> Every field the tables above define, and no credential field from any payload. Copying a
+> response wholesale carries master credentials, database passwords and SFTP access out of
+> Cloudways into a third-party store with its own sharing, export and retention — and
+> `server_get` / `app_get` return those fields whether or not the sync asked for them. Pick
+> fields by name in the mapping step; do not pass the object through. The same applies to the
+> Slack and email destinations elsewhere in this file, and to anything that keeps history: a
+> credential written to a state store is still there after it has been rotated, and after the
+> engagement has ended.
 
 ---
 

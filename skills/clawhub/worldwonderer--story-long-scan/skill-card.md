@@ -1,46 +1,56 @@
-## Description: <br>
-Story Long Scan helps agents collect and analyze long-form Chinese web-novel rankings from platforms such as Qidian, Fanqie, JJWXC, Qimao, and Ciweimao to identify genre trends, topic candidates, and validation actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes rankings and new-book data on Qidian, Fanqie, Jinjiang, Qimao, and other web-fiction platforms to identify market trends and popular genres.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-External writers, publishing analysts, and agents use this skill to gather ranking samples and turn them into market scans, reader profiles, and topic decisions for long-form Chinese web novels. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs local Node.js scraper scripts and may use a browser-CDP session to visit ranking pages. <br>
-Mitigation: Review commands before execution and use a dedicated browser profile when existing login state should not be involved. <br>
-Risk: The skill writes generated reports to a local output directory. <br>
-Mitigation: Choose the output directory intentionally and review generated Markdown files before relying on them. <br>
+## Use Case:
 
+Writers use this skill to review public rankings and new-book samples, identify recurring genre signals, and create a market scan report and topic decision document.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-long-scan) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [genre-trends.md](artifact/references/genre-trends.md) <br>
-- [publishing-guide.md](artifact/references/publishing-guide.md) <br>
-- [reader-profiling.md](artifact/references/reader-profiling.md) <br>
-- [scan-output-format.md](artifact/references/scan-output-format.md) <br>
-- [topic-decision.md](artifact/references/topic-decision.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown reports, concise text guidance, and shell command suggestions for scraper execution.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write local Markdown reports and topic-decision files to a user-selected output directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.9 (source: server release evidence; artifact frontmatter says 1.0.0) <br>
+Risk: ClawScan reports medium confidence with partial inspection: 9 of 16 components were fully inspected, and runtime permissions were not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill and its required permissions before installation; use author-provided or historical data if scraping access cannot be verified.
+
+## Reference(s):
+
+- [Qidian platform guide](references/platform-qidian.md)
+- [Fanqie platform guide](references/platform-fanqie.md)
+- [Jinjiang platform guide](references/platform-jjwxc.md)
+- [Qimao platform guide](references/platform-qimao.md)
+- [Ciweimao platform guide](references/platform-ciweimao.md)
+- [Genre trend candidates](references/genre-trends.md)
+- [Topic decision guide](references/topic-decision.md)
+- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-long-scan)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown scan reports and topic decision documents, with concise findings presented as text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses platform-specific public ranking metrics; when live data is unavailable, findings are labeled as historical candidates requiring verification.]
+
+## Skill Version(s):
+
+1.1.31 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

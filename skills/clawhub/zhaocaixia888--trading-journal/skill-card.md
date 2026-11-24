@@ -1,40 +1,59 @@
-## Description: <br>
-Record and manage futures or stock trades with standardized templates, calculate P&L, analyze performance, search entries, and export journals in Markdown, CSV, or JSON. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Record and manage futures/stock trades with standardized templates, calculate P&L, analyze performance, search entries, and export journals in Markdown or CSV.
 
-## Publisher: <br>
-[zhaocaixia888](https://clawhub.ai/user/zhaocaixia888) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhaocaixia888](https://clawhub.ai/user/zhaocaixia888)
 
-## Use Case: <br>
-Traders and agents use this skill to capture futures and stock trade details, calculate P&L, review performance metrics, search local journal entries, and export records for reporting or spreadsheet analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Journal entries and exports may contain sensitive financial trading records. <br>
-Mitigation: Keep generated CSV, JSON, and Markdown exports in intended local or private locations, and avoid shared folders unless disclosure is intended. <br>
+## Use Case:
 
+External users and developers use this skill to maintain local trading journals, calculate realized P&L, summarize trading performance, search notes, and export records for review or spreadsheet analysis.
 
-## Reference(s): <br>
-- [Analysis Metrics Reference](references/analysis_metrics.md) <br>
-- [Trade Templates Reference](references/trade_templates.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/zhaocaixia888/trading-journal) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, CSV, Shell commands, Files, Guidance] <br>
-**Output Format:** [Markdown and text responses with JSON trade records plus Markdown, CSV, or JSON export files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3; journal entries and exports are stored locally.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Journal date handling can allow unsafe file paths.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate journal dates as strict YYYY-MM-DD values before reading, writing, updating, or deleting journal files.
+
+Risk: CSV exports can contain unsafe spreadsheet formulas from trade notes or imported trade data.
+
+Mitigation: Sanitize CSV cells before opening exports in spreadsheet software and treat external trade data as untrusted.
+
+Risk: Trading journal outputs may be mistaken for financial advice or complete performance assurance.
+
+Mitigation: Use the reports as record-keeping and analysis aids, and independently review calculations and trading decisions.
+
+## Reference(s):
+
+- [Trading Journal Skill Page](https://clawhub.ai/zhaocaixia888/skills/trading-journal)
+- [Analysis Metrics Reference](references/analysis_metrics.md)
+- [Trade Templates Reference](references/trade_templates.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown, JSON, CSV, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Local journal files are used for record keeping and exports.]
+
+## Skill Version(s):
+
+1.0.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

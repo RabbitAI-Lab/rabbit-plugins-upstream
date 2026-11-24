@@ -1,42 +1,56 @@
-## Description: <br>
-Read and manage a signed-in Skylight Calendar family hub, including calendar events, chores, reward stars, shared lists, frames, and device information. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read and manage Skylight Calendar events, chores, rewards, shared lists, and meal plans through the user's signed-in family hub.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and household administrators use this skill through an agent to inspect and update their own Skylight Calendar family hub data, including events, chores, reward stars, shared lists, frames, and devices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The ClawScan security summary reports an unpinned install path and broader live-account tool access than the submitted description discloses. <br>
-Mitigation: Pin and review the npm package version before use, and only enable the server after reviewing the exposed Skylight tools. <br>
-Risk: The skill requires Skylight account credentials and can change live family hub data. <br>
-Mitigation: Use project-scoped configuration, set SKYLIGHT_FRAME_ID when possible, and require explicit user confirmation before deletes, bulk changes, uploads, member or account changes, and calendar changes. <br>
+## Use Case:
 
+People using a Skylight Calendar family hub can ask an agent to review or update household events, chores, rewards, shared lists, and meal plans. The skill can also help users configure the Skylight MCP connection.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/skylight-mcp) <br>
-- [Skylight](https://www.ourskylight.com) <br>
-- [skylight-mcp npm package](https://www.npmjs.com/package/skylight-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON configuration examples, shell commands, and MCP tool guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Skylight email and password environment variables; tool actions are scoped to a Skylight frame.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.6 (source: server release metadata) <br>
+Risk: Ordinary meal or shopping requests may activate Skylight handling without clear Skylight context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review activation rules and require clear Skylight or family-hub context before accessing the connected account.
+
+Risk: Some security scanner reference checks were partial, so coverage is incomplete.
+
+Mitigation: Review the skill's activation rules and requested actions before installing or connecting a personal account.
+
+## Reference(s):
+
+- [Skylight Calendar](https://www.ourskylight.com)
+- [skylight-mcp on npm](https://www.npmjs.com/package/skylight-mcp)
+- [Repository link listed in the skill documentation](https://github.com/chrischall/skylight-mcp)
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/skylight-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Configuration instructions]
+
+**Output Format:** [Natural-language summaries, structured Skylight data, and a JSON MCP configuration example]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may reflect or confirm changes to the user's Skylight family hub.]
+
+## Skill Version(s):
+
+1.8.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

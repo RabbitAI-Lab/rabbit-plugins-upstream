@@ -17,6 +17,59 @@ if str(SCRIPT_DIR) not in sys.path:
 import merge_and_build  # noqa: E402
 
 
+class ConvertWithPandocTests(unittest.TestCase):
+    def test_renders_tex_math_as_mathml(self):
+        with mock.patch.object(merge_and_build.subprocess, "run") as run_mock:
+            run_mock.return_value.stderr = ""
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                ok = merge_and_build.convert_with_pandoc("in.md", "out.html", "Title", "zh-CN")
+
+        self.assertTrue(ok)
+        cmd = run_mock.call_args.args[0]
+        self.assertIn("--mathml", cmd)
+        self.assertEqual(cmd[cmd.index("--to") + 1], "html5")
+        self.assertNotIn("Warning", buf.getvalue())
+
+    def test_warns_about_formulas_left_as_raw_tex(self):
+        stderr = (
+            "[WARNING] Could not convert TeX math a & b, rendering as TeX:\n  a & b\n    ^\n  unexpected '&'\n"
+            "[WARNING] Could not convert TeX math x \\quad \\\\, rendering as TeX:\n  unexpected control sequence \\\\\n"
+        )
+        with mock.patch.object(merge_and_build.subprocess, "run") as run_mock:
+            run_mock.return_value.stderr = stderr
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                ok = merge_and_build.convert_with_pandoc("in.md", "out.html", "Title", "zh-CN")
+
+        self.assertTrue(ok)
+        out = buf.getvalue()
+        self.assertIn("Warning: pandoc left 2 formula(s) as raw TeX instead of MathML:", out)
+        self.assertIn("  a & b\n", out)
+        self.assertIn("  x \\quad \\\\\n", out)
+
+    @unittest.skipUnless(merge_and_build.check_pandoc_available(), "pandoc is not installed")
+    def test_real_pandoc_warning_is_recognized(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            md = Path(tmp) / "in.md"
+            md.write_text("$$a & b$$\n\n$$\\frac{1}{2}$$\n", encoding="utf-8")
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                ok = merge_and_build.convert_with_pandoc(str(md), str(Path(tmp) / "out.html"), "T", "en")
+        self.assertTrue(ok)
+        self.assertIn("pandoc left 1 formula(s) as raw TeX", buf.getvalue())
+
+    def test_uses_ascii_heading_ids(self):
+        # Non-ASCII ids lose their anchors in Calibre's split EPUB TOC.
+        with mock.patch.object(merge_and_build.subprocess, "run") as run_mock:
+            run_mock.return_value.stderr = ""
+            with contextlib.redirect_stdout(io.StringIO()):
+                merge_and_build.convert_with_pandoc("in.md", "out.html", "Title", "zh-CN")
+
+        cmd = run_mock.call_args.args[0]
+        self.assertIn("+ascii_identifiers", cmd[cmd.index("--from") + 1])
+
+
 class GenerateFormatTests(unittest.TestCase):
     def _write_file(self, path, content="data"):
         Path(path).write_text(content, encoding="utf-8")
@@ -75,7 +128,7 @@ class GenerateFormatTests(unittest.TestCase):
 
     @unittest.skipUnless(
         "cover" in inspect.signature(merge_and_build.generate_format).parameters,
-        "cover support not merged yet",
+        "cover parameter unavailable",
     )
     def test_rebuilds_epub_when_cover_is_explicitly_requested(self):
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -107,36 +160,10 @@ class GenerateFormatTests(unittest.TestCase):
             self.assertIn(cover_file, cmd)
 
 
-class CleanupIntermediateFilesTests(unittest.TestCase):
-    def _touch(self, path, content="x"):
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(content, encoding="utf-8")
-
-    @unittest.skipUnless(
-        hasattr(merge_and_build, "extract_cover_from_epub"),
-        "cover extraction support not merged yet",
-    )
-    def test_cleanup_removes_cover_extract_directory_when_present(self):
-        with tempfile.TemporaryDirectory() as temp_dir:
-            temp_path = Path(temp_dir)
-            cover_extract = temp_path / "cover_extract"
-            self._touch(cover_extract / "OPS" / "images" / "cover.jpg", "image")
-            self._touch(temp_path / "chunk0001.md", "chunk")
-            self._touch(temp_path / "output_chunk0001.md", "translated")
-            self._touch(temp_path / "input.html", "<html></html>")
-
-            merge_and_build.cleanup_intermediate_files(temp_dir)
-
-            self.assertFalse((temp_path / "chunk0001.md").exists())
-            self.assertFalse((temp_path / "output_chunk0001.md").exists())
-            self.assertFalse((temp_path / "input.html").exists())
-            self.assertFalse(cover_extract.exists())
-
-
 class MissingCoverPathTests(unittest.TestCase):
     @unittest.skipUnless(
         "cover" in inspect.signature(merge_and_build.generate_format).parameters,
-        "cover support not merged yet",
+        "cover parameter unavailable",
     )
     def test_main_rejects_missing_cover_path(self):
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -162,6 +189,289 @@ class MissingCoverPathTests(unittest.TestCase):
 
             self.assertNotEqual(exc.exception.code, 0)
             generate_formats_mock.assert_not_called()
+
+
+class ExportAliasTests(unittest.TestCase):
+    def _write(self, path, content="x"):
+        Path(path).write_text(content, encoding="utf-8")
+
+    def test_export_named_aliases_copies_canonical_outputs(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            for name in ["book.html", "book_doc.html", "book.docx", "book.epub", "book.pdf"]:
+                self._write(Path(temp_dir) / name, name)
+
+            copied = merge_and_build.export_named_aliases(temp_dir, "Translated Book")
+
+            self.assertEqual(
+                set(copied),
+                {
+                    "Translated Book.html",
+                    "Translated Book_doc.html",
+                    "Translated Book.docx",
+                    "Translated Book.epub",
+                    "Translated Book.pdf",
+                },
+            )
+            self.assertEqual(
+                (Path(temp_dir) / "Translated Book.epub").read_text(encoding="utf-8"),
+                "book.epub",
+            )
+            self.assertTrue((Path(temp_dir) / "book.epub").exists())
+
+    def test_export_name_rejects_paths(self):
+        with self.assertRaises(ValueError):
+            merge_and_build.export_named_aliases("/tmp", "../bad")
+
+    def test_export_name_rejects_canonical_collision_without_writing(self):
+        for export_name in ["book_doc", "BOOK_DOC", "  book_doc  "]:
+            with self.subTest(export_name=export_name), tempfile.TemporaryDirectory() as temp_dir:
+                root = Path(temp_dir)
+                originals = {
+                    name: name.encode("utf-8")
+                    for name in ["book.html", "book_doc.html", "book.docx", "book.epub", "book.pdf"]
+                }
+                for name, content in originals.items():
+                    (root / name).write_bytes(content)
+
+                with self.assertRaisesRegex(ValueError, "book_doc.html"):
+                    merge_and_build.export_named_aliases(temp_dir, export_name)
+
+                self.assertEqual({p.name: p.read_bytes() for p in root.iterdir()}, originals)
+
+    def test_canonical_book_export_name_is_a_noop(self):
+        for export_name in ["book", "BOOK"]:
+            with self.subTest(export_name=export_name), tempfile.TemporaryDirectory() as temp_dir:
+                root = Path(temp_dir)
+                for name in ["book.html", "book_doc.html", "book.docx", "book.epub", "book.pdf"]:
+                    self._write(root / name, name)
+                originals = {p.name: p.read_bytes() for p in root.iterdir()}
+                same_files = (root / f"{export_name}.html").exists()
+
+                copied = merge_and_build.export_named_aliases(temp_dir, export_name)
+
+                self.assertEqual(len(copied), 0 if same_files else 5)
+                for name, content in originals.items():
+                    self.assertEqual((root / name).read_bytes(), content)
+                self.assertEqual(len(list(root.iterdir())), len(originals) + len(copied))
+
+    def test_main_rejects_export_collision_before_building(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output = io.StringIO()
+            with mock.patch.object(
+                sys, "argv",
+                ["merge_and_build.py", "--temp-dir", temp_dir, "--export-name", "book_doc"],
+            ), mock.patch.object(
+                merge_and_build, "merge_markdown_files"
+            ) as merge_mock, contextlib.redirect_stdout(output):
+                with self.assertRaises(SystemExit) as exc:
+                    merge_and_build.main()
+
+            self.assertNotEqual(exc.exception.code, 0)
+            self.assertIn("book_doc.html", output.getvalue())
+            merge_mock.assert_not_called()
+
+
+class MergeBlankOutputTests(unittest.TestCase):
+    """A whitespace-only output chunk must abort the merge instead of being
+    silently dropped from the final book."""
+
+    def _write(self, path, content):
+        Path(path).write_text(content, encoding="utf-8")
+
+    def _workspace(self, tmp):
+        from manifest import create_manifest
+
+        temp_dir = Path(tmp)
+        self._write(temp_dir / "input.md", "One.\n\nTwo.\n")
+        self._write(temp_dir / "chunk0001.md", "One.\n")
+        self._write(temp_dir / "chunk0002.md", "Two.\n")
+        self._write(temp_dir / "output_chunk0001.md", "一。\n")
+        self._write(temp_dir / "output_chunk0002.md", "二。\n")
+        create_manifest(
+            str(temp_dir),
+            ["chunk0001.md", "chunk0002.md"],
+            str(temp_dir / "input.md"),
+        )
+        return temp_dir
+
+    def _merge(self, temp_dir):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            ok = merge_and_build.merge_markdown_files(str(temp_dir))
+        return ok, buf.getvalue()
+
+    def test_manifest_merge_fails_on_blank_output(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            temp_dir = self._workspace(tmp)
+            self._write(temp_dir / "output_chunk0002.md", "\n   \n")
+            ok, out = self._merge(temp_dir)
+
+            self.assertFalse(ok)
+            self.assertFalse((temp_dir / "output.md").exists())
+            self.assertIn("Blank output", out)
+
+    def test_legacy_merge_fails_on_blank_output(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            temp_dir = self._workspace(tmp)
+            (temp_dir / "manifest.json").unlink()
+            self._write(temp_dir / "output_chunk0002.md", "\n   \n")
+            ok, out = self._merge(temp_dir)
+
+            self.assertFalse(ok)
+            self.assertFalse((temp_dir / "output.md").exists())
+            self.assertIn("Blank output", out)
+
+    def test_merge_succeeds_with_substantive_outputs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            temp_dir = self._workspace(tmp)
+            ok, _ = self._merge(temp_dir)
+
+            self.assertTrue(ok)
+            merged = (temp_dir / "output.md").read_text(encoding="utf-8")
+            self.assertIn("一。", merged)
+            self.assertIn("二。", merged)
+
+
+class FootnoteValidationTests(unittest.TestCase):
+    def _write(self, path, content):
+        Path(path).write_text(content, encoding="utf-8")
+
+    def _validate(self, source, output):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self._write(Path(temp_dir) / "chunk0001.md", source)
+            self._write(Path(temp_dir) / "output_chunk0001.md", output)
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                ok = merge_and_build._validate_chunk_footnotes(temp_dir)
+        return ok, buf.getvalue()
+
+    def test_passes_when_markers_are_preserved(self):
+        ok, out = self._validate(
+            "Text.[^1] More.[^2]\n\n[^1]: Note one.\n\n[^2]: Note two.\n\n    Continued.\n",
+            "正文。[^1]更多。[^2]\n\n[^1]: 注释一。\n\n[^2]: 注释二。\n\n    续段。\n",
+        )
+        self.assertTrue(ok, msg=out)
+
+    def test_fails_when_reference_is_dropped(self):
+        ok, out = self._validate("Text.[^1]\n\n[^1]: Note.\n", "正文。\n\n[^1]: 注释。\n")
+        self.assertFalse(ok)
+        self.assertIn("output_chunk0001.md", out)
+        self.assertIn("missing references [^N] (count): [('1', 1)]", out)
+
+    def test_fails_when_definition_is_renumbered(self):
+        ok, out = self._validate("Text.[^7]\n\n[^7]: Note.\n", "正文。[^7]\n\n[^1]: 注释。\n")
+        self.assertFalse(ok)
+        self.assertIn("missing definitions [^N]: (count): [('7', 1)]", out)
+        self.assertIn("extra   definitions [^N]: (count): [('1', 1)]", out)
+
+    def test_reference_followed_by_a_colon_is_not_a_definition(self):
+        ok, out = self._validate("As noted[^3]: the rest.\n", "如前所述[^3]：其余。\n")
+        self.assertTrue(ok, msg=out)
+
+    def test_ignores_pseudo_footnotes_from_older_conversions(self):
+        ok, out = self._validate("Text.[^1^]\n\n[^1^] Note.\n", "正文。^1^\n\n^1^ 注释。\n")
+        self.assertTrue(ok, msg=out)
+
+    def test_merge_fails_and_removes_stale_output_on_footnote_divergence(self):
+        from manifest import create_manifest
+
+        with tempfile.TemporaryDirectory() as tmp:
+            temp_dir = Path(tmp)
+            self._write(temp_dir / "input.md", "Text.[^1]\n\n[^1]: Note.\n")
+            self._write(temp_dir / "chunk0001.md", "Text.[^1]\n\n[^1]: Note.\n")
+            self._write(temp_dir / "output_chunk0001.md", "正文。\n\n注释。\n")
+            create_manifest(str(temp_dir), ["chunk0001.md"], str(temp_dir / "input.md"))
+            self._write(temp_dir / "output.md", "stale merged content")
+
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                ok = merge_and_build.merge_markdown_files(str(temp_dir))
+
+            self.assertFalse(ok)
+            self.assertFalse((temp_dir / "output.md").exists())
+            self.assertIn("Footnote validation failed", buf.getvalue())
+
+    @unittest.skipUnless(merge_and_build.MARKDOWN_AVAILABLE, "python-markdown is not installed")
+    def test_python_markdown_fallback_renders_footnotes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            md = Path(tmp) / "output.md"
+            html = Path(tmp) / "output.html"
+            self._write(md, "Text.[^1]\n\n[^1]: Note.\n")
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertTrue(merge_and_build.convert_with_python_markdown(str(md), str(html), "T"))
+            rendered = html.read_text(encoding="utf-8")
+        self.assertIn('class="footnote"', rendered)
+        self.assertNotIn("[^1]", rendered)
+
+
+class FigureTextValidationTests(unittest.TestCase):
+    SOURCE = (
+        "![Flow](images/flow.png)\n\n"
+        '::: {.figure-text image="images/flow.png"}\n- Client\n- Load balancer\n:::\n\n'
+        "After.\n"
+    )
+    TRANSLATED = (
+        "![流程](images/flow.png)\n\n"
+        '::: {.figure-text image="images/flow.png"}\n- 客户端\n- 负载均衡器\n:::\n\n'
+        "之后。\n"
+    )
+
+    def _write(self, path, content):
+        Path(path).write_text(content, encoding="utf-8")
+
+    def _validate(self, source, output):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self._write(Path(temp_dir) / "chunk0001.md", source)
+            self._write(Path(temp_dir) / "output_chunk0001.md", output)
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                ok = merge_and_build._validate_chunk_figure_text(temp_dir)
+        return ok, buf.getvalue()
+
+    def test_passes_when_only_the_items_are_translated(self):
+        ok, out = self._validate(self.SOURCE, self.TRANSLATED)
+        self.assertTrue(ok, msg=out)
+
+    def test_passes_without_figure_text(self):
+        ok, out = self._validate("Text.\n", "正文。\n")
+        self.assertTrue(ok, msg=out)
+
+    def test_fails_when_the_closing_fence_is_lost(self):
+        ok, out = self._validate(self.SOURCE, self.TRANSLATED.replace("\n:::\n", "\n：：：\n"))
+        self.assertFalse(ok)
+        self.assertIn("blocks without a closing ::: line: 1", out)
+
+    def test_fails_when_the_opening_line_is_altered(self):
+        altered = self.TRANSLATED.replace('image="images/flow.png"}', 'image="图片/flow.png"}')
+        ok, out = self._validate(self.SOURCE, altered)
+        self.assertFalse(ok)
+        self.assertIn("""missing opening lines (count): [('::: {.figure-text image="images/flow.png"}', 1)]""", out)
+        self.assertIn("""extra   opening lines (count): [('::: {.figure-text image="图片/flow.png"}', 1)]""", out)
+
+    def test_fails_when_the_output_predates_the_injected_text(self):
+        ok, out = self._validate(self.SOURCE, "![流程](images/flow.png)\n\n之后。\n")
+        self.assertFalse(ok)
+        self.assertIn("translate it again", out)
+
+    def test_merge_fails_and_removes_stale_output_on_divergence(self):
+        from manifest import create_manifest
+
+        with tempfile.TemporaryDirectory() as tmp:
+            temp_dir = Path(tmp)
+            self._write(temp_dir / "input.md", self.SOURCE)
+            self._write(temp_dir / "chunk0001.md", self.SOURCE)
+            self._write(temp_dir / "output_chunk0001.md", self.TRANSLATED.replace("\n:::\n", "\n"))
+            with contextlib.redirect_stdout(io.StringIO()):
+                create_manifest(str(temp_dir), ["chunk0001.md"], str(temp_dir / "input.md"))
+            self._write(temp_dir / "output.md", "stale merged content")
+
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                ok = merge_and_build.merge_markdown_files(str(temp_dir))
+
+            self.assertFalse(ok)
+            self.assertFalse((temp_dir / "output.md").exists())
+            self.assertIn("Figure text validation failed", buf.getvalue())
 
 
 class ImageValidationTests(unittest.TestCase):
@@ -472,6 +782,91 @@ class ImageValidationTests(unittest.TestCase):
 
             sanity_ok, sanity_out = self._run_html_sanity(str(html_file))
             self.assertTrue(sanity_ok, msg=sanity_out)
+
+
+class MetadataTitleTests(unittest.TestCase):
+    def test_strips_wrapping_book_title_marks(self):
+        self.assertEqual(merge_and_build._metadata_title("《财阀、先知、主帅与君王》"), "财阀、先知、主帅与君王")
+        self.assertEqual(merge_and_build._metadata_title("  Plain Title "), "Plain Title")
+
+    def test_keeps_marks_that_do_not_wrap_the_whole_title(self):
+        title = "《A》与《B》"
+        self.assertEqual(merge_and_build._metadata_title(title), title)
+
+
+class PdfRetryTests(unittest.TestCase):
+    def test_generate_formats_retries_pdf_once(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            Path(temp_dir, "book_doc.html").write_text("<html></html>", encoding="utf-8")
+            attempts = {".pdf": 0}
+
+            def fake_generate_format(html_file, temp_dir_, ext, lang_attr, cover=None):
+                path = os.path.join(temp_dir_, "book" + ext)
+                if ext == ".pdf":
+                    attempts[".pdf"] += 1
+                    if attempts[".pdf"] == 1:
+                        return None
+                Path(path).write_bytes(b"x")
+                return path
+
+            with mock.patch.object(merge_and_build, "generate_format", side_effect=fake_generate_format), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                ok = merge_and_build.generate_formats(temp_dir, "zh-CN")
+
+            self.assertTrue(ok)
+            self.assertEqual(attempts[".pdf"], 2)
+
+
+class HeadingOutlineTests(unittest.TestCase):
+    def _write_chunks(self, temp_dir, chunks):
+        for name, text in chunks.items():
+            Path(temp_dir, name).write_text(text, encoding="utf-8")
+
+    def test_lists_headings_in_book_order_without_code(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self._write_chunks(temp_dir, {
+                "chunk0001.md": "# Source chunks are not listed\n",
+                "output_chunk0001.md": (
+                    "# 第一章 标题\n"
+                    "\n"
+                    "```bash\n"
+                    "# install deps\n"
+                    "```\n"
+                    "\n"
+                    "~~~python\n"
+                    "# comment\n"
+                    "~~~\n"
+                    "\n"
+                    "#hashtag 不是标题\n"
+                    "\n"
+                    "   ## 缩进的不是标题\n"
+                    "\n"
+                    "## 第一节\n"
+                ),
+                # An unclosed fence hides the rest of its own chunk only.
+                "output_chunk2.md": "```\n# still code\n",
+                "output_chunk10.md": "## 第三章\n",
+                "output_chunk3.md": "## 第二章\n",
+            })
+
+            self.assertEqual(merge_and_build.heading_outline(temp_dir), [
+                "output_chunk0001.md:1: # 第一章 标题",
+                "output_chunk0001.md:15: ## 第一节",
+                "output_chunk3.md:1: ## 第二章",
+                "output_chunk10.md:1: ## 第三章",
+            ])
+
+    def test_main_prints_outline_without_building(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            self._write_chunks(temp_dir, {"output_chunk0001.md": "# 标题\n\n```\n# code\n```\n"})
+            out = io.StringIO()
+            with mock.patch.object(
+                sys, "argv", ["merge_and_build.py", "--temp-dir", temp_dir, "--headings"]
+            ), contextlib.redirect_stdout(out):
+                merge_and_build.main()
+
+            self.assertEqual(out.getvalue(), "output_chunk0001.md:1: # 标题\n")
+            self.assertEqual(os.listdir(temp_dir), ["output_chunk0001.md"])
 
 
 if __name__ == "__main__":

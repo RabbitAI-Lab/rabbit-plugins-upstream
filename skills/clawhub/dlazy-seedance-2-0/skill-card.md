@@ -1,43 +1,52 @@
-## Description: <br>
-ByteDance's Seedance 2.0 video generation skill supports text-to-video, first/last-frame generation, and multi-modal image, video, and audio references through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ByteDance's latest video generation model. Supports multi-modal reference (images, video, audio) to generate videos, as well as first/last frame and text-to-video modes.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[dlazyai](https://clawhub.ai/user/dlazyai)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and creators use this skill to generate videos from text prompts, multimodal image, video, and audio references, or first and last frames. It returns generated video assets and result metadata.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Prompts and supplied local media are sent to dLazy hosted services for generation.
+
+Mitigation: Only submit content you are permitted to share, avoid sensitive material, and review the provider's terms before sending prompts or files.
+
+Risk: The security review is partial and calls out unusual spacing in SKILL-cn.md plus unresolved references and install details.
+
+Mitigation: Review the flagged document area and confirm the pinned CLI install details and referenced material before use.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External users and developers use this skill to generate videos with ByteDance Seedance 2.0 through dLazy's hosted API, using prompts plus optional image, video, audio, or first/last-frame inputs. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Video files, JSON]
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected media files are sent to dLazy's cloud service for generation. <br>
-Mitigation: Review prompts and media for sensitive content before use, and avoid submitting data that should not leave the user's environment. <br>
-Risk: Using dlazy login stores an API key in the local dLazy configuration file. <br>
-Mitigation: Use DLAZY_API_KEY for temporary sessions when persistent credentials are not desired, and rotate or revoke keys from the dLazy dashboard if exposure is suspected. <br>
+**Output Format:** [Generated video assets with JSON result metadata]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [Dlazy Seedance 2.0 on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-seedance-2-0) <br>
+**Other Properties Related to Output:** [Outputs are hosted at provider URLs; an asset can optionally be downloaded to a local path.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [CLI command guidance and JSON responses containing generated media URLs or asynchronous task status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include hosted media URLs from files.dlazy.com or a generateId for later polling.] <br>
+1.3.41 (source: server-resolved release metadata)
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server-resolved release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

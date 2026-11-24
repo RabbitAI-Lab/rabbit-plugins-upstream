@@ -1,47 +1,63 @@
-## Description: <br>
-Enforces validation and evidence before claiming work complete. Use before declaring implementation done, creating a PR, or submitting deliverables for review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enforces validation and evidence before claiming work complete. Use before declaring implementation done, creating a PR, or submitting deliverables for review
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agents use this skill before implementation completion, pull request submission, or review handoff to require reproducible tests, acceptance criteria, evidence logs, and known-issue checks before claiming work is done. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Evidence logs and command output can expose tokens, account IDs, internal hostnames, or sensitive environment values. <br>
-Mitigation: Review and redact evidence logs before sharing them outside the intended audience. <br>
-Risk: Stricter proof-of-work gates can make testing and validation tasks more process-heavy. <br>
-Mitigation: Apply the skill when completion claims, reviews, or deliverables need reproducible evidence, and keep evidence snippets focused on the claim being proven. <br>
-Risk: Validation examples include shell commands that inspect local state and may need adaptation to the user's environment. <br>
-Mitigation: Run commands in the target environment, avoid destructive variants, and record pass, fail, partial, or blocked status honestly. <br>
+## Use Case:
 
+Developers and software agents use this skill to verify implementation work against acceptance criteria and produce reproducible evidence before reporting completion or submitting deliverables for review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-proof-of-work) <br>
-- [Publisher profile](https://clawhub.ai/user/athola) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
-- [Atlassian definition of done](https://www.atlassian.com/agile/project-management/definition-of-done) <br>
-- [Cargo cult programming](https://en.wikipedia.org/wiki/Cargo_cult_programming) <br>
-- [Software Reuse in the Generative AI Era](https://dl.acm.org/doi/10.1145/3755881.3755981) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with checklists, command examples, evidence logs, acceptance criteria, and retry prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs emphasize reproducible evidence, pass/fail status, blockers, and user-verifiable completion claims.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
+Risk: ClawScan reports a suspicious verdict with medium confidence and incomplete analysis of one referenced file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill contents and available scan details before installation, and use an isolated environment when evaluating it.
+
+Risk: The security guidance flags mutable package execution and global installation.
+
+Mitigation: Review package commands before running them; prefer pinned versions and local or isolated installs where applicable.
+
+Risk: Evidence logs may contain sensitive information.
+
+Mitigation: Check and redact credentials or other sensitive values before saving or sharing evidence.
+
+Risk: A referenced command can rewrite Git history.
+
+Mitigation: Inspect the command and its target repository state before execution, and preserve a recoverable copy of important work.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-imbue-proof-of-work)
+- [Project homepage listed in skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/imbue)
+- [Acceptance criteria best practices](https://www.atlassian.com/agile/project-management/definition-of-done)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands]
+
+**Output Format:** [Markdown with checklists, evidence references, and inline command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Variable detail based on the task and available verification evidence.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

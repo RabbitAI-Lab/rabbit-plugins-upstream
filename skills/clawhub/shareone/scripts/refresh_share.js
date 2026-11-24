@@ -7,74 +7,43 @@
 // 接受完整链接、/s/<ref> 路径、裸 share_id 或 slug。
 
 const {
+    emitError,
     CREDENTIAL_MODE_SUDOWORK_PROXY,
     detectCredentialMode,
+    extractShareRef,
     printShareOneScriptError,
     requestShareOneJson,
     resolveDirectApiKey,
 } = require('./shareone_client');
 
-function usage() {
-    console.error('Usage: node refresh_share.js <share_link_or_ref> [--api-key <key>]');
-    console.error('  仅对绑定了远程源 URL 的分享有效；非 remote-bound 会返回 NOT_REMOTE_BOUND。');
-}
-
-function extractShareRef(value) {
-    const raw = String(value || '').trim();
-    if (!raw) return null;
-    try {
-        const parsed = raw.includes('://') ? new URL(raw) : null;
-        const path = parsed ? parsed.pathname : raw.split('?')[0].split('#')[0];
-        const parts = path.split('/').filter(Boolean);
-        if (parts.length === 0) return raw;
-        return parts[parts.length - 1] || raw;
-    } catch (_) {
-        return raw;
-    }
-}
-
-const args = process.argv.slice(2);
-let ref = null;
-let apiKey = null;
-
-for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
-    if (arg === '--api-key') {
-        apiKey = args[++i];
-    } else if (!arg.startsWith('--') && !ref) {
-        ref = arg;
-    } else {
-        console.error(`ERROR:UNKNOWN_ARGUMENT:${arg}`);
-        usage();
-        process.exit(1);
-    }
-}
-
-if (!ref) {
-    usage();
-    process.exit(1);
-}
+const {commandLine} = require('./cli_args');
+const {values, positional: ref} = commandLine({
+    summary: 'refetch an owner-managed remote-bound share now. A pinned GitLab/GitHub commit remains pinned; use upload_page to select another source commit.',
+    result: 'JSON with remote_fetch_status, accepted revision/digest and source error. error/busy exits nonzero; updated/not_modified confirms the fetch. Static shares return NOT_REMOTE_BOUND.',
+    positional: 'share_link_or_ref', options: {'--api-key': true},
+});
+const apiKey = values['api-key'];
 
 (async () => {
+    const shareRef = encodeURIComponent(extractShareRef(ref));
     const credentialMode = await detectCredentialMode();
     if (credentialMode.mode === CREDENTIAL_MODE_SUDOWORK_PROXY && apiKey) {
-        console.error('ERROR:SUDOWORK_MANAGED_KEY');
-        console.error('Sudowork 模式下不要传 --api-key；请通过本 skill 的 save_api_key.js 或 create_guest_key.js 设置 ShareOne API Key。');
-        process.exit(1);
+        emitError('ERROR:SUDOWORK_MANAGED_KEY', ['Sudowork 模式下不要传 --api-key；请通过本 skill 的 save_api_key.js 或 create_guest_key.js 设置 ShareOne API Key。'].join('\n'));
     }
     if (credentialMode.mode !== CREDENTIAL_MODE_SUDOWORK_PROXY && !resolveDirectApiKey(apiKey)) {
-        console.error('ERROR:KEY_NOT_FOUND');
-        process.exit(1);
+        emitError('ERROR:KEY_NOT_FOUND');
     }
 
-    const shareRef = encodeURIComponent(extractShareRef(ref));
     const result = await requestShareOneJson(`/api/v1/pages/${shareRef}/refresh`, {
         method: 'POST',
         apiKey,
     });
     process.stdout.write(JSON.stringify(result, null, 2) + '\n');
+    if (result.remote_fetch_status === 'error' || result.remote_fetch_status === 'busy' || result.remote_last_error) {
+        emitError(result.remote_error_code || (result.remote_fetch_status === 'busy' ? 'REMOTE_SOURCE_BUSY' : 'REMOTE_SOURCE_UNAVAILABLE'),
+            result.remote_last_error || 'The source was not refreshed; the accepted cache remains unchanged.');
+    }
     console.error(`SHARE_REFRESHED:${extractShareRef(ref)}`);
 })().catch((error) => {
-    printShareOneScriptError(error);
-    process.exit(1);
+    process.exit(printShareOneScriptError(error));
 });

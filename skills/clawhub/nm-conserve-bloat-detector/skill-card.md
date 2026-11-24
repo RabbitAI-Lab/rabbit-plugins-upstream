@@ -1,43 +1,58 @@
-## Description: <br>
-Detects codebase bloat via dead code, duplication, complexity, and documentation bloat scans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects codebase bloat via dead code, duplication, complexity, and doc bloat scans
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to scan repositories for dead code, duplication, dependency bloat, stale files, growth trends, and documentation bloat before cleanup, release, or refactoring work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad repository scans can include more files than intended, especially when ignore-file handling is incomplete. <br>
-Mitigation: Confirm the scan scope and maintain .bloat-ignore exclusions before running repository-wide checks. <br>
-Risk: The optional package-registry lookup can disclose package names to an external registry. <br>
-Mitigation: Skip or explicitly approve the npm view check when dependency names or network access are sensitive. <br>
-Risk: DELETE recommendations can remove useful code or documentation if treated as automatic actions. <br>
-Mitigation: Treat DELETE findings as review candidates and require tests, reference checks, dry-run review, and backups before removal. <br>
+## Use Case:
 
+Developers and engineers use the skill to inspect a codebase for dead code, duplication, complexity, documentation bloat, dependency issues, and growth trends, then prioritize review or cleanup.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-bloat-detector) <br>
-- [Project homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and YAML report examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes confidence levels, bloat scores, recommended remediation actions, and review-first cleanup guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release metadata; artifact frontmatter lists 1.9.8) <br>
+Risk: Optional registry or SonarQube access may share project information with external services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check which services are enabled and their destinations before scanning; avoid using them on sensitive projects unless that data sharing is acceptable.
+
+Risk: Scan commands may overwrite or delete files in the project directory.
+
+Mitigation: Review the commands before running them, use dry-run or preview options where available, and ensure the project is recoverable from version control or backups.
+
+Risk: The partial security scan missed two referenced local files, so its evidence is incomplete.
+
+Mitigation: Review the missing files and treat the security assessment as incomplete until they are available and assessed.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/athola/skills/nm-conserve-bloat-detector)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Terminal findings and Markdown reports, with optional YAML or JSON summaries and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tiered analysis; deeper scans may use optional local tools and Git history.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

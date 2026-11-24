@@ -1,45 +1,55 @@
-## Description: <br>
-Generates Suno music through the dLazy CLI, supporting inspiration mode, custom lyrics, vocals, or instrumental output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates Suno music from prompts in inspiration or custom mode, with or without vocals.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External creators, developers, and agents use this skill to generate music through dLazy's hosted Suno music service from prompts, custom lyrics, style controls, and vocal or instrumental settings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, generation parameters, and local files explicitly passed to media fields may be sent to dLazy's hosted service. <br>
-Mitigation: Avoid submitting sensitive content unless approved for the third-party service and review dLazy's service terms before use. <br>
-Risk: Authentication through `dlazy login` or `dlazy auth set` stores the API key in the local dLazy configuration file. <br>
-Mitigation: Use `DLAZY_API_KEY` per invocation when the key should not be saved in the local config file, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: The skill depends on a third-party CLI package installed through npm or run with npx. <br>
-Mitigation: Review the pinned `@dlazy/cli` package and source before installation, and use the documented pinned version. <br>
+## Use Case:
 
+External users and music creators use this skill to generate songs or instrumental tracks from prompts, with optional custom lyrics and style settings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-suno-music) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown instructions with bash commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return generated media URLs or an async generateId for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: The scan found a mismatch between the music-generation description and a `dlazy login` command, and some referenced CLI material was unavailable for review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the credential setup matches the intended task, then review the CLI package and its credential handling before installation.
+
+Risk: Prompts and local media supplied for generation are sent to dLazy-hosted services.
+
+Mitigation: Avoid submitting sensitive prompts or media, and review dLazy's service terms before use.
+
+## Reference(s):
+
+- [dLazy CLI project information](https://github.com/dlazy-ai/cli)
+- [dLazy CLI package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Audio files, JSON, Shell commands, Configuration instructions]
+
+**Output Format:** [Generated audio file or hosted audio URL with JSON result metadata; Markdown usage guidance with shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated audio can be saved locally; asynchronous requests can return a task ID for polling.]
+
+## Skill Version(s):
+
+1.3.42 (source: server release metadata; artifact frontmatter reports 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
