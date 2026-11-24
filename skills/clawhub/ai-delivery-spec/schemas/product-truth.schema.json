@@ -22,6 +22,10 @@
     { "required": ["features"], "properties": { "features": { "minItems": 1 } } }
   ],
   "properties": {
+    "artifact": {"const": "product_truth"},
+    "artifact_role": {"const": "supporting"},
+    "applicable_stages": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["frame", "explore", "intake", "clarify", "specify", "review", "baseline", "implementation", "change", "acceptance", "closed"]}},
+    "applies_when": {"type": "string", "minLength": 1},
     "schema_version": { "enum": ["5.0.0", "5.1.0"] },
     "truth_id": { "$ref": "#/$defs/stableId" },
     "product": {
@@ -46,6 +50,15 @@
         },
         "delivery_mode": { "enum": ["ultra_light", "lite", "standard", "full"] },
         "tier": { "enum": ["L0", "L1", "L2", "L3", "L4"] },
+        "artifact_mode": { "enum": ["direct", "card", "prd"] },
+        "risk_facets": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["state", "authority", "integration", "metric", "permission", "privacy", "regulated", "migration", "irreversible", "irreversible_ai_write", "strong_audit"]
+          }
+        },
+        "evidence_level": { "enum": ["static", "browser", "real_system", "customer_acceptance"] },
         "project_shape": { "enum": ["greenfield", "brownfield", "hybrid"] },
         "customer_profile": { "type": "array", "items": { "type": "string" } },
         "governance_profiles": { "type": "array", "items": { "type": "string" } },
@@ -175,10 +188,18 @@
       "properties": {
         "id": { "$ref": "#/$defs/stableId" },
         "kind": {
-          "enum": ["user_input", "customer_artifact", "contract", "prototype", "legacy_system", "law", "regulation", "standard", "guidance", "project_rule", "inference"]
+          "enum": ["user_input", "business_opportunity", "product_decision", "engineering_constraint", "evaluation_assignment", "customer_artifact", "contract", "prototype", "legacy_system", "law", "regulation", "standard", "guidance", "project_rule", "inference"]
         },
         "title": { "type": "string" },
         "location": { "type": "string" },
+        "content_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "sensitivity": { "enum": ["public", "internal", "confidential", "restricted"] },
+        "credential_status": { "enum": ["clear", "redacted", "secret_ref_only", "quarantined"] },
+        "secret_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^SECRET-[A-Z0-9-]+$" }
+        },
         "authority": { "enum": ["primary", "accountable", "secondary", "inferred", "unknown"] },
         "status": { "enum": ["active", "superseded", "draft", "unknown"] },
         "disposition": { "enum": ["embedded", "authoritative_annex", "deferred", "conflict", "not_applicable"] },
@@ -254,7 +275,7 @@
     "requirement": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "title", "stage", "priority", "source_refs", "behavior_refs", "acceptance_refs", "baseline_version"],
+      "required": ["id", "title", "stage", "source_refs", "behavior_refs", "acceptance_refs", "baseline_version"],
       "properties": {
         "id": { "$ref": "#/$defs/stableId" },
         "title": { "type": "string", "minLength": 1 },
@@ -274,7 +295,7 @@
     "feature": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "title", "scope_status", "priority", "source_refs", "behavior_refs", "acceptance_refs"],
+      "required": ["id", "title", "scope_status", "source_refs", "behavior_refs", "acceptance_refs"],
       "properties": {
         "id": { "$ref": "#/$defs/stableId" },
         "title": { "type": "string", "minLength": 1 },
@@ -476,7 +497,7 @@
     },
     "acceptance": {
       "type": "object",
-      "required": ["id", "title", "priority", "preconditions", "steps", "expected_visible", "expected_domain", "evidence_required"],
+      "required": ["id", "title", "preconditions", "steps", "expected_visible", "expected_domain", "evidence_required"],
       "properties": {
         "id": { "$ref": "#/$defs/stableId" },
         "title": { "type": "string" },

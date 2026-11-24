@@ -1,40 +1,57 @@
-## Description: <br>
-Automates financial office tasks including document templates, email drafting, report summarization, and workflow approval guidance for daily productivity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides templates, checklists, document drafts, and workflow maps for financial office work; it does not execute approvals, send mail, or access institutional systems.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Financial professionals use this skill to draft meeting minutes, emails, reports, and structured approval workflows. It provides bilingual templates and productivity guidance for routine office automation tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger phrases may activate the skill for emails, reports, or workflow advice when the user did not intend to use it. <br>
-Mitigation: Narrow trigger phrases or require explicit user intent before applying the skill to financial-office drafting or workflow guidance. <br>
-Risk: Generated financial-office templates or workflow guidance could be used without checking current policy or regulatory requirements. <br>
-Mitigation: Review generated documents and approval workflows against applicable internal policies and official regulatory sources before use. <br>
+## Use Case:
 
+Employees in financial institution administration, operations, and support teams can use the skill to draft meeting minutes, emails, reports, checklists, and workflow maps. Its outputs are reference drafts that require review under the institution's policies before operational use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/finance-office-automation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with structured templates and code-style snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Bilingual English and Chinese content; no external tools or credentials indicated.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: evidence release and SKILL.md frontmatter) <br>
+Risk: The security review was incomplete; the absence of scanner findings does not establish that the skill is risk-free.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Consider the review limitation before installing and review the skill contents before use.
+
+Risk: User-provided financial or personal information could be included in prompts or drafts.
+
+Mitigation: Remove unnecessary personal fields, replace identifiers with placeholders, and avoid entering non-public customer or business data.
+
+Risk: Regulatory summaries, sample thresholds, and workflow guidance may be outdated or differ from institutional requirements.
+
+Mitigation: Check current official sources and institutional policies, and have an authorized person review drafts before operational use.
+
+## Reference(s):
+
+- [Finance Office Automation on ClawHub](https://clawhub.ai/gechengling/skills/finance-office-automation)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown tables, checklists, and text drafts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference drafts and templates; require human review and validation against current institutional policy before operational use.]
+
+## Skill Version(s):
+
+3.0.6 (source: artifact frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

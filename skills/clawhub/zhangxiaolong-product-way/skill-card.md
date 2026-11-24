@@ -1,41 +1,56 @@
-## Description: <br>
-Helps product managers, founders, and app developers apply Zhang Xiaolong-inspired product minimalism to product direction, user experience, feature prioritization, and iteration tradeoffs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies a minimalist product thinking framework inspired by Zhang Xiaolong to help assess product direction, user experience, and feature priorities.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Product managers, founders, and app developers use it to examine user needs, simplify product experiences, prioritize features, and plan small validation steps. Its frameworks support human judgment and do not replace user research or qualified review.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Responses may default to Chinese when another language is preferred.
+
+Mitigation: Specify the preferred response language and review important terminology.
+
+Risk: Product frameworks or illustrative examples could be mistaken for validated findings or formal decisions.
+
+Mitigation: Treat outputs as analysis prompts; validate assumptions with user research and qualified reviewers before acting.
+
+Risk: Discussion of real customers or business performance could expose sensitive information.
+
+Mitigation: Use anonymized or aggregated details and do not include credentials, secrets, or identifiable customer data.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Product managers, founders, app developers, and product teams use this skill to evaluate whether to add, remove, or defer features; clarify product direction; and reason through user experience tradeoffs using a minimalist product philosophy. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Analysis, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The artifact includes off-topic finance, macro, regulatory, and current-events notes that may become outdated or be mistaken for investment, legal, regulatory, or news advice. <br>
-Mitigation: Use the skill as a product-thinking and UX tradeoff aid only; verify finance, macro, legal, regulatory, and current-events claims with specialized authoritative sources before relying on them. <br>
-Risk: The skill presents Zhang Xiaolong-inspired product philosophy and public-reference summaries that may be interpretive rather than authoritative. <br>
-Mitigation: Treat its recommendations as decision-support prompts and validate important product decisions against user research, business context, and primary-source references where available. <br>
+**Output Format:** [Chinese-first text or Markdown with product decision frameworks, checklists, and illustrative examples.]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/zhangxiaolong-product-way) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+**Other Properties Related to Output:** [Advisory drafts for human review; not implementation-ready product plans or formal product, legal, or investment decisions.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown or structured prose with product analysis steps, tradeoff reasoning, and recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only guidance; does not execute code, access data, or persist information.] <br>
+2.1.5 (source: server-resolved release evidence)
 
-## Skill Version(s): <br>
-2.1.1 (source: server release evidence and artifact identity section) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

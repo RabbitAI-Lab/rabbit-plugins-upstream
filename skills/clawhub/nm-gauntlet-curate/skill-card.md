@@ -1,41 +1,50 @@
-## Description: <br>
-Adds developer-authored annotations to the gauntlet knowledge base. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Adds developer-authored annotations to the gauntlet knowledge base
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers use this skill to capture tribal knowledge, rationale, and module-specific context as local gauntlet annotations for future review workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive or private information could be saved into local gauntlet annotation files. <br>
-Mitigation: Review annotation content before saving and exclude credentials, customer data, private incident details, and sensitive internal strategy. <br>
-Risk: Incorrect or incomplete rationale could make future gauntlet knowledge-base guidance misleading. <br>
-Mitigation: Confirm the module, concept, and rationale before saving the YAML annotation. <br>
+## Use Case:
 
+Developers use this skill to capture module-specific insights and rationale that are not apparent from code, then save them as YAML annotations for future gauntlet challenges.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-gauntlet-curate) <br>
-- [Gauntlet plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, configuration] <br>
-**Output Format:** [YAML annotation file with brief confirmation text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes annotations under .gauntlet/annotations/<slug>.yaml when the agent is allowed to save files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: release metadata; SKILL.md frontmatter reports 1.9.8) <br>
+Risk: An inaccurate or duplicate annotation could mislead future challenges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the concept and rationale against project context, and check for an existing entry under the same slug before saving.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-gauntlet-curate)
+- [Project homepage listed in skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet)
+
+## Skill Output:
+
+**Output Type(s):** [Configuration, Guidance]
+
+**Output Format:** [YAML annotation file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Annotation includes a concept and rationale (why); its filename slug is based on the annotated module and concept.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

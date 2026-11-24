@@ -1,40 +1,53 @@
-## Description: <br>
-A Chinese-language advisory skill that applies Steve Jobs-inspired product philosophy to product direction, user experience, feature tradeoff, branding, and startup strategy questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+基于史蒂夫·乔布斯产品哲学的产品思维与创新方法论，帮助产品经理打造极致用户体验。
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Product managers, founders, brand builders, and product teams use this skill to reason through product direction, feature cuts, user experience issues, differentiation, and Jobs-style decision frameworks. Its outputs are advisory and should be reviewed before real-world product or investment decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill provides product-strategy and macro/investment context that could be mistaken for professional advice. <br>
-Mitigation: Treat outputs as general reference material, review them with human judgment, and consult qualified professionals for financial, legal, insurance, or high-stakes business decisions. <br>
-Risk: Steve Jobs-inspired framing may overemphasize intuition, simplification, or feature cutting for situations that need broader evidence. <br>
-Mitigation: Compare recommendations against user research, operational constraints, market data, and team capacity before acting. <br>
+## Use Case:
 
+产品经理、创业者和品牌建设者可用此技能梳理产品方向、功能取舍、用户体验与创新策略，并生成供人工复核的方法论草稿。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/jobs-product-philosopher) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or structured text advisory analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-language responses with English product terminology where useful; no executable code, network calls, persistent storage, or credential collection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.3 (source: frontmatter and server release evidence) <br>
+Risk: Security scan coverage was partial because a local reference could not be resolved, so the benign verdict does not establish that all referenced material was reviewed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review referenced material before relying on it, and check time-sensitive policy or market claims against current official sources.
+
+Risk: The skill produces Chinese-primary output, which may not suit every intended audience.
+
+Mitigation: Confirm that Chinese-first responses fit the intended users before applying the framework.
+
+## Reference(s):
+
+- [Jobs Product Philosophy on ClawHub](https://clawhub.ai/gechengling/skills/jobs-product-philosopher)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-first advisory text in structured Markdown, including prompts, checklists, and comparison tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Educational product-philosophy drafts for human review; no executable code or system actions.]
+
+## Skill Version(s):
+
+2.0.7 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

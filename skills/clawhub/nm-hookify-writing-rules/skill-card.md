@@ -1,39 +1,49 @@
-## Description: <br>
-Creates behavioral rules in markdown to block dangerous commands or restrict AI behavior. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Writes hookify rules in markdown that block dangerous commands or restrict AI behavior
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to draft persistent Hookify rules for Claude Code sessions, including guardrails that warn about or block risky commands, file edits, and prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent block rules can affect later agent commands until they are disabled or deleted. <br>
-Mitigation: Review generated .claude/hookify.*.local.md files before relying on them, and disable or delete rules that are too broad. <br>
+## Use Case:
 
+Developers using Claude Code or OpenClaw use this skill to write persistent hookify rules in Markdown that warn about or block command and file patterns, helping define behavioral guardrails for agent sessions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-hookify-writing-rules) <br>
-- [Hookify homepage](https://github.com/athola/claude-night-market/tree/master/plugins/hookify) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with YAML frontmatter examples and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces guidance and rule-file examples for .claude/hookify.*.local.md files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The security scan was partial because some referenced local paths were missing, leaving related evidence incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill and its rules before installation, and test each rule against a matching input and a known-safe example.
+
+## Reference(s):
+
+- [Hookify project page](https://github.com/athola/claude-night-market/tree/master/plugins/hookify)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown rule files with YAML frontmatter, pattern examples, and explanatory messages]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Rules can define events, regex patterns or conditions, and warn or block actions.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

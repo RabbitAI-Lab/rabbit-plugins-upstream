@@ -1,43 +1,50 @@
-## Description: <br>
-Verifies math-heavy code for algorithmic correctness and numerical stability. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Verifies math-heavy code for algorithmic correctness and numerical stability
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to review mathematical, scientific, numerical, statistical, and ML code for correctness, stability, test coverage, and evidence-backed approval recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad math or algorithm topics and produce review guidance outside the user's intended scope. <br>
-Mitigation: Confirm the target files and review scope before following its recommendations. <br>
-Risk: Suggested tests, benchmarks, or notebook execution commands may run repository code. <br>
-Mitigation: Run proposed commands only in repositories and execution environments the user trusts. <br>
-Risk: Review findings or mathematical recommendations may be incorrect or incomplete. <br>
-Mitigation: Have a qualified reviewer check findings, derivations, and cited evidence before relying on the result for high-stakes decisions. <br>
+## Use Case:
 
+Developers and engineers use this skill to review mathematical models, algorithms, statistical routines, scientific code, and numerical implementations. It guides requirements mapping, derivation checks, stability assessment, test evidence collection, and grounded findings.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-pensive-math-review) <br>
-- [OpenClaw Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Analysis, Shell commands, Code, Guidance] <br>
-**Output Format:** [Markdown review report with issue lists, tables, recommendations, and inline shell or code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose tests, benchmarks, notebook execution, derivation checks, and approval or blocking recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Running tests or notebooks from an untrusted repository may execute untrusted code; the security review is incomplete because some local references were unresolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check repository trust before execution and use an isolated environment without credentials or network access; review unresolved local references before relying on the security verdict.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-math-review)
+- [Clawdis metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, JSON, Guidance, Shell commands]
+
+**Output Format:** [Markdown review report and JSON findings, with command examples where relevant]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings include source locations, exact anchors, and evidence; unverifiable findings are labeled UNVERIFIED or omitted.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

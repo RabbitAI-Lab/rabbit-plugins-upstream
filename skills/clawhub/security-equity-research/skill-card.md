@@ -1,40 +1,53 @@
-## Description: <br>
-Generates China A-share equity research report drafts, including industry analysis, coverage initiation, earnings review, valuation models, ESG notes, and short-seller response templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides China A-share analysts with research report frameworks and valuation methods for industry, company, earnings, ESG, and short-seller analysis.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-China equity research analysts, buy-side analysts, and investment bank researchers use this skill to draft research reports, valuation model sections, compliance checklists, and short-seller response frameworks. Outputs should be reviewed by qualified analysts before publication or investment use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial outputs may contain incorrect data, valuation assumptions, target prices, ratings, or regulatory claims. <br>
-Mitigation: Verify outputs against authoritative disclosures, market data, and current regulatory sources before relying on or publishing them. <br>
-Risk: Short-seller response drafts may include unsupported rebuttals or misleading statements when source facts are incomplete. <br>
-Mitigation: Require evidence-backed fact checking plus legal and compliance review before external use. <br>
+## Use Case:
 
+External equity research analysts use the skill to structure China A-share industry and company research, earnings reviews, valuation scenarios, and short-seller response drafts. Outputs are reference drafts and require qualified analyst review before use or publication.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/security-equity-research) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown report drafts with tables, checklists, and optional Python valuation snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Financial data, regulatory claims, valuation assumptions, target prices, ratings, and publication-ready language require authoritative verification and qualified analyst review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: frontmatter and server release metadata) <br>
+Risk: The security scan was benign but incomplete because the manifest could not be parsed and a referenced local path was unresolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the full skill and resolve or verify referenced files before deployment; treat the scan as reassuring but not a guarantee of safety.
+
+Risk: Research drafts may contain time-sensitive information or unverified assumptions that could mislead readers if treated as conclusions.
+
+Mitigation: Use dated public sources, distinguish facts from estimates, and have a qualified analyst review drafts before use or publication.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/security-equity-research)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Research guidance]
+
+**Output Format:** [Markdown report frameworks, tables, checklists, and illustrative valuation formulas]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft content requires source, date, assumption, and qualified analyst review; no automatic data retrieval or publication.]
+
+## Skill Version(s):
+
+3.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

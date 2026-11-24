@@ -1,42 +1,54 @@
-## Description: <br>
-AI-powered bank credit memo and credit analysis report writer that generates structured credit analysis reports, credit ratings, and facility recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Drafts structured corporate credit analyses, rating assessments, and facility recommendations for bank credit memos.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Bank credit officers, credit committee members, and relationship managers use this skill to draft internal commercial credit memos for new applications, renewals, rating changes, group credit assessments, and green credit facilities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credit memo drafting may involve borrower, customer, UBO, or other confidential banking data. <br>
-Mitigation: Use redacted or synthetic inputs unless the environment is approved for regulated financial information, and avoid pasting real confidential data into unapproved systems. <br>
-Risk: AI-generated credit analysis can be incomplete, outdated, or unsuitable for final lending decisions. <br>
-Mitigation: Have qualified credit staff review all outputs and route final decisions through authorized bank approval processes. <br>
+## Use Case:
 
+Bank credit officers, relationship managers, and risk reviewers can use it to draft paper credit analyses and memo sections from aggregated, redacted borrower information. Its rating and facility suggestions are reference drafts that need independent review by qualified staff.
 
-## Reference(s): <br>
-- [Bank Credit Memo README](README.md) <br>
-- [Bank Credit Memo Skill Definition](SKILL.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/skills/bank-credit-memo) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown credit memo drafts with structured tables and narrative analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs require review by qualified credit staff before use in lending decisions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.1 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Borrower, employee, or guarantor information could be exposed in a draft.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide aggregated financial summaries, redact company and personal identifiers, and leave sensitive source details for authorized in-bank review.
+
+Risk: Credit conclusions or regulatory and policy details may be inaccurate or out of date.
+
+Mitigation: Check current facts against authoritative sources and require an independent review by qualified credit or risk staff before using a draft.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/bank-credit-memo)
+- [Publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured credit memo drafts and analysis tables in Simplified Chinese, or English or bilingual text when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses aggregated, redacted inputs; drafts require qualified human review and do not constitute approval decisions.]
+
+## Skill Version(s):
+
+4.1.6 (source: frontmatter; server release 4.1.6)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

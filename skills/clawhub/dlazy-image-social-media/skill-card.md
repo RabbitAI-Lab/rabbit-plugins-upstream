@@ -1,45 +1,52 @@
-## Description: <br>
-A structured skill for multi-platform social-media content creation across Instagram, TikTok, YouTube, LinkedIn, Xiaohongshu, and related channels. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents plan platform-adapted social media visuals and copy for Instagram, TikTok, YouTube, LinkedIn, Xiaohongshu, and other platforms.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External creators, marketers, and agent users use this skill to plan and produce platform-specific social-media image concepts, in-image text, captions, and dLazy CLI generation commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, parameters, and selected media files may be sent to dLazy cloud endpoints during generation. <br>
-Mitigation: Use the skill only with content approved for dLazy's cloud services and avoid submitting sensitive media unless that transfer is acceptable. <br>
-Risk: The dLazy CLI requires an API key that can be stored in the local user configuration. <br>
-Mitigation: Prefer the DLAZY_API_KEY environment variable for per-session credentials, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: Global installation of the pinned npm CLI changes the local agent environment. <br>
-Mitigation: Review the pinned @dlazy/cli package source before installation or use the documented npx invocation to avoid a long-lived global install. <br>
+## Use Case:
 
+Content creators, social media teams, and agents use this skill to plan platform-specific layouts, short in-image text, separate captions, and visual iterations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-image-social-media) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with structured planning, platform checks, caption copy, inline shell commands, and generated image URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user confirmation before each image generation command and uses a pinned dLazy CLI package.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.7 (source: frontmatter and server release evidence) <br>
+Risk: Some listed components and referenced content were not fully inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation details and referenced materials before installing.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-image-social-media)
+- [dLazy CLI project link listed in skill metadata (provenance unavailable)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Text, Shell commands]
+
+**Output Format:** [Markdown plans with short in-image copy and separate platform-specific captions; may include CLI commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports platform-specific formats and iterative visual variants; generated image assets may be returned by the external dLazy service.]
+
+## Skill Version(s):
+
+1.3.44 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

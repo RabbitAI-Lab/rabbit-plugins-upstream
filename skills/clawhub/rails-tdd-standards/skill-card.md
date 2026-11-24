@@ -1,40 +1,62 @@
-## Description: <br>
-RSpec testing standards and best practices for Rails applications, covering new specs, test review, factory errors, FactoryBot setup, and single-expectation patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+RSpec testing standards and best practices for Rails applications. Use when writing new tests, reviewing test quality, debugging factory errors, setting up FactoryBot, or enforcing single-expectation patterns. Also use when a test fails due to factory misconfiguration, wrong association keys, or missing role traits. Triggers on phrases like "write a test", "add specs", "factory error", "test is failing", "how should I test this", or when reviewing test code in a Rails project.
 
-## Publisher: <br>
-[djc00p](https://clawhub.ai/user/djc00p) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[djc00p](https://clawhub.ai/user/djc00p)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to write, review, and debug RSpec tests for Rails applications, including FactoryBot usage, Rails 8 testing gotchas, CI database setup, callbacks, token authentication, ActionCable, external service stubs, and serializers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated changes involving database setup, RAILS_ENV, or disabling forgery protection can affect test and CI behavior if applied without review. <br>
-Mitigation: Review generated changes before applying them and keep the guidance scoped to Rails test code and CI workflows. <br>
-Risk: The skill provides testing advice and example code that may not match a project's exact Rails, RSpec, FactoryBot, or authentication implementation. <br>
-Mitigation: Adapt examples to the local application conventions and verify them by running the relevant test suite. <br>
+## Use Case:
 
+Rails developers use this skill to write and review RSpec tests, diagnose factory and system spec failures, and configure reliable test workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/djc00p/rails-tdd-standards) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with Ruby, YAML, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires bundle for Rails/RSpec-related commands; ClawHub metadata lists linux, darwin, and win32 support.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata) <br>
+Risk: The security scan was partial because some local references could not be resolved, leaving its review incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the complete skill and its referenced materials before applying the guidance.
+
+Risk: Some Rails controller and callback examples may not fit every application's testing focus or Rails setup.
+
+Mitigation: Check examples against the application's Rails version and requirements before adopting them.
+
+## Reference(s):
+
+- [Rails TDD Standards on ClawHub](https://clawhub.ai/djc00p/skills/rails-tdd-standards)
+- [Publisher profile: djc00p](https://clawhub.ai/user/djc00p)
+- [Browser Divergence](artifact/references/browser-divergence.md)
+- [Devise And Mailers](artifact/references/devise-and-mailers.md)
+- [Driver Setup](artifact/references/driver-setup.md)
+- [Advanced FactoryBot Patterns](artifact/references/factory-patterns.md)
+- [System Spec Failures At A Glance](artifact/references/failure-lookup.md)
+- [Rails 8 Spec Compatibility](artifact/references/rails-8-controller-gotchas.md)
+- [Stale Content And Waiting](artifact/references/stale-content-and-waiting.md)
+- [Turbo And Stimulus](artifact/references/turbo-and-stimulus.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with Ruby, shell, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Examples and recommendations for Rails and RSpec projects; adapt them to the application's setup.]
+
+## Skill Version(s):
+
+1.1.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

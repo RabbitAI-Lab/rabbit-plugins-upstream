@@ -1,42 +1,55 @@
-## Description: <br>
-Helps agents diagnose situations where one side cannot verify another side's quality, intent, or type, then identify credible costly signals such as credentials, warranties, brand investment, commitments, or certifications. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes situations with asymmetric information and helps identify credible signals whose costs differ across sender types.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and decision-support agents use this skill to structure hiring, fundraising, procurement, branding, diplomacy, and market-entry decisions where asymmetric information makes cheap claims unreliable. It produces a signaling diagnosis that tests candidate signals for cost differences, equilibrium stability, receiver response, and inflation risk. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Business and geopolitical examples can be mistaken for verified current facts or intent assessments. <br>
-Mitigation: Treat examples as analytical framing, verify current facts separately, and avoid using the framework to manufacture certainty about hidden motives. <br>
+## Use Case:
 
+Strategists, analysts, and decision-makers use this skill to diagnose asymmetric information in hiring, fundraising, procurement, branding, M&A, and policy settings. It structures hidden types, candidate signals, cost differences, likely equilibria, receiver responses, and credibility risks.
 
-## Reference(s): <br>
-- [Sources - signaling-games](references/sources.md) <br>
-- [Michael Spence, Job Market Signaling](https://doi.org/10.2307/1882010) <br>
-- [George Akerlof, The Market for Lemons](https://doi.org/10.2307/1879431) <br>
-- [Cho and Kreps, Signaling Games and Stable Equilibria](https://doi.org/10.2307/1885060) <br>
-- [deciqAI signaling-games metadata](https://www.deciqai.com/s/signaling-games.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown diagnosis with structured headings and concise recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Interactive coaching mode may stop and wait for user input before continuing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub server release metadata) <br>
+Risk: The security review did not fully inspect one referenced document, so its evidence is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the partially inspected reference before relying on its claims or installing the skill.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/signaling-games)
+- [Primary sources](references/sources.md)
+- [Spence, Job Market Signaling (1973)](https://doi.org/10.2307/1882010)
+- [Akerlof, The Market for Lemons (1970)](https://doi.org/10.2307/1879431)
+- [U.S. Bureau of Industry and Security](https://www.bis.gov)
+- [deciqAI signaling-games resource](https://www.deciqai.com/c/signaling-games)
+- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/signaling-games.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance, Text]
+
+**Output Format:** [Structured Markdown diagnosis or stepwise coaching prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Applies the framework to a concrete user situation when available.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

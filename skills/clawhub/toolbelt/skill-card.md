@@ -1,46 +1,57 @@
-## Description: <br>
-Toolbelt helps agents set up and use a shared MCP workspace for ingesting documents, querying structured and unstructured data, recording findings, and sharing state across sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Toolbelt helps agents ingest documents, query structured and unstructured data, and share findings through a persistent MCP workspace.
 
-## Publisher: <br>
-[toolbeltai](https://clawhub.ai/user/toolbeltai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[toolbeltai](https://clawhub.ai/user/toolbeltai)
 
-## Use Case: <br>
-Developers and agent users use this skill when they need persistent, shared access to uploaded documents, structured data, knowledge graph relationships, saved findings, or collaboration state through Toolbelt's MCP server. It also guides first-time setup for account provisioning and MCP client configuration with explicit user consent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create a Toolbelt account and store a bearer token in an MCP client configuration. <br>
-Mitigation: Require explicit user approval before provisioning an account or writing MCP configuration, and disclose the target config path and token purpose before storage. <br>
-Risk: Uploaded content and recorded findings can persist in a Toolbelt namespace and become available to future connected agents or teammates. <br>
-Mitigation: Upload or record only user-approved, task-relevant data, avoid sensitive material by default, and direct users to Toolbelt controls for deletion or revocation. <br>
-Risk: A share URL can grant access to a namespace when paired with its token-bound invitation flow. <br>
-Mitigation: Confirm the user's sharing intent and recipient before creating a share link, and share it only through channels the user controls. <br>
+## Use Case:
 
+Developers and agents use Toolbelt to ingest user-approved documents, query structured and unstructured workspace data, and carry findings across sessions. It is suited to tasks that benefit from persistent shared context and MCP-based retrieval.
 
-## Reference(s): <br>
-- [Toolbelt skill page](https://clawhub.ai/toolbeltai/skills/toolbelt) <br>
-- [Toolbelt website and pricing](https://toolbelt.ai) <br>
-- [Toolbelt documentation](https://toolbelt.ai/docs) <br>
-- [Agent-readable Toolbelt docs](https://toolbelt.ai/llms-full.txt) <br>
-- [Toolbelt web app](https://app.toolbelt.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP examples, shell commands, JSON configuration snippets, and YAML status output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent to use Toolbelt MCP tools after setup; user consent is required before account provisioning, config writes, uploads, saved findings, or share links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.14 (source: server release evidence and artifact frontmatter) <br>
+Risk: The security review flags possible MCP configuration access and a reported mismatch involving account details in a web request; the scan is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the onboarding request and proposed configuration changes before approving them, and protect or revoke any issued access token.
+
+Risk: Workspace uploads and recorded findings persist, and a share URL can grant access to a namespace.
+
+Mitigation: Upload only task-approved content, avoid sensitive data unless needed, and share namespace links only with intended recipients.
+
+## Reference(s):
+
+- [Toolbelt skill release](https://clawhub.ai/toolbeltai/skills/toolbelt)
+- [Toolbelt documentation](https://toolbelt.ai/docs)
+- [Toolbelt homepage](https://toolbelt.ai)
+- [Toolbelt workspace app](https://app.toolbelt.ai)
+- [Toolbelt MCP endpoint](https://mcp.toolbelt.ai/mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Configuration instructions, API calls, JSON, Text]
+
+**Output Format:** [Markdown guidance with shell and JSON examples; workspace query results and connection status as text or structured data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create an MCP client configuration after user confirmation; workspace operations depend on the user's connected Toolbelt account.]
+
+## Skill Version(s):
+
+1.1.11 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

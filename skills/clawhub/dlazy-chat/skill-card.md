@@ -1,45 +1,51 @@
-## Description: <br>
-Chat with the dlazy sandbox agent, a project-scoped assistant that runs skills end-to-end over multiple turns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chat with the dLazy sandbox agent in project-scoped, multi-turn sessions and discover available skills and projects.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to start or continue project-scoped conversations with dLazy's hosted sandbox agent, discover available skills and projects, and run multi-turn work through the dlazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger words could route ordinary chat or attached files to dLazy unintentionally. <br>
-Mitigation: Use explicit requests such as 'use dlazy chat' and review attached files before invocation. <br>
-Risk: Prompts and files passed with --files are sent to dLazy's hosted API and media storage. <br>
-Mitigation: Avoid attaching sensitive files unless use of the dLazy hosted service is acceptable for that data. <br>
-Risk: The CLI may store a dLazy API key in the local user configuration. <br>
-Mitigation: Use npx for on-demand execution when preferred, and rotate or revoke stored API keys when access should change. <br>
+## Use Case:
 
+External users and developers use this skill to start or continue project-based conversations with the dLazy hosted sandbox agent, discover available skills and projects, and manage multi-turn sessions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-chat) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or terminal text with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Streams replies through the dlazy CLI; local files attached with --files are uploaded before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.8 (source: frontmatter and server release evidence) <br>
+Risk: Generic activation phrases may route ordinary requests to dLazy's external chat service without clear intent; messages and attached files are sent to that service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Invoke the skill only for explicit dLazy chat requests, review its instructions and linked install details before use, and attach files only when you intend to upload them.
+
+## Reference(s):
+
+- [dLazy CLI source repository (listed by the skill)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Conversational text and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses come from a hosted agent; attached files are uploaded to the service.]
+
+## Skill Version(s):
+
+1.2.46 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

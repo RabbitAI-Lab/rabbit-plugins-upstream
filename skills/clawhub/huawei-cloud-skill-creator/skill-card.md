@@ -1,53 +1,54 @@
-## Description: <br>
-Huawei Cloud Skill Creator guides developers through a six-phase workflow to gather requirements, research CLI, SDK, and API options, generate skill files, prepare tests, run validation, and clean up resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers through a six-phase workflow to research, create, test, and validate Huawei Cloud skills with CLI, SDK, or REST API guidance.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud engineers use this skill to package Huawei Cloud operations into reusable agent skills with documented commands, IAM guidance, validation scripts, and test cases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles Huawei Cloud credentials and can guide live cloud command execution. <br>
-Mitigation: Use locally configured, least-privilege temporary credentials and do not paste AK/SK secrets into chat. <br>
-Risk: Generated scripts and test templates may run broad local or cloud commands. <br>
-Mitigation: Review scripts and templates before execution, restrict test inputs, and require confirmation before mutating operations. <br>
-Risk: Generated IAM policies or scanner-suppression guidance may be broader than needed for production. <br>
-Mitigation: Remove unnecessary permissions and suppression guidance, then re-run security and compliance checks before deployment. <br>
+## Use Case:
 
+Developers use this skill to turn Huawei Cloud requirements into a documented skill package, research supported CLI, SDK, or API approaches, and prepare validation and testing materials.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-skill-creator) <br>
-- [Huawei Cloud KooCLI quick start](https://support.huaweicloud.com/qs-hcli/hcli_02_003.html) <br>
-- [Huawei Cloud SDK Center](https://console.huaweicloud.com/apiexplorer/#/sdkcenter) <br>
-- [Huawei Cloud API Explorer](https://console.huaweicloud.com/apiexplorer/#/openapi) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [API Paths](references/api-paths.md) <br>
-- [BSS SDK Notes](references/bss-sdk-notes.md) <br>
-- [KooCLI Installation Guide](references/cli-installation-guide.md) <br>
-- [Data Flow Diagram](references/dataflow-diagram.md) <br>
-- [IAM Policies](references/iam-policies.md) <br>
-- [Security Audit Guide](references/security-audit-guide.md) <br>
-- [Verification Method](references/verification-method.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code blocks, shell commands, JSON templates, and generated skill files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces phase summaries, reference documents, validation scripts, test templates, and test reports for generated Huawei Cloud skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: ClawScan marked the skill suspicious because its cloud testing workflow may change or delete resources, incur charges, or expose credential or billing information; two scripts were only partially inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the reported behaviors and the partially inspected scripts before installation; use a restricted test account, confirm any resource changes and cleanup, and review credential, billing, and telemetry access.
+
+## Reference(s):
+
+- [Huawei Cloud CLI quick start](https://support.huaweicloud.com/qs-hcli/hcli_02_003.html)
+- [Huawei Cloud SDK Center](https://console.huaweicloud.com/apiexplorer/#/sdkcenter)
+- [Huawei Cloud API Explorer](https://console.huaweicloud.com/apiexplorer/#/openapi)
+- [IAM policies](references/iam-policies.md)
+- [Verification method](references/verification-method.md)
+- [Acceptance criteria](references/acceptance-criteria.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Skill package with Markdown documentation, scripts, references, and JSON templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses a guided six-phase workflow and validates generated packages against Huawei Cloud skill requirements.]
+
+## Skill Version(s):
+
+1.0.8 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

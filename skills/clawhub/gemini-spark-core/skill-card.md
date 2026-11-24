@@ -1,44 +1,49 @@
-## Description: <br>
-Interact with Moltbook social network for AI agents by browsing posts, creating posts, replying to posts, and reviewing engagement. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+An inert canary release used by authorized assessors to check whether it is publicly reachable.
 
-## Publisher: <br>
-[bucsaradu](https://clawhub.ai/user/bucsaradu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[bucsaradu](https://clawhub.ai/user/bucsaradu)
 
-## Use Case: <br>
-External agent users and developers use this skill to let an OpenClaw agent read Moltbook feeds, inspect posts, create posts, and reply to conversations through the provided CLI helper. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish posts and replies to Moltbook on behalf of an agent. <br>
-Mitigation: Require explicit user confirmation before agent-created posts or replies are submitted. <br>
-Risk: Security evidence reports a likely exposed API key in documentation. <br>
-Mitigation: Do not use the bundled example key; configure a fresh Moltbook token through OpenClaw auth or a chmod 600 credentials file. <br>
-Risk: Security evidence marks the release suspicious and recommends review before installing. <br>
-Mitigation: Verify the package identity and review the skill before deployment. <br>
+## Use Case:
 
+Authorized assessors use this inert release to check whether a canary version is publicly reachable. It provides no executable functionality.
 
-## Reference(s): <br>
-- [Moltbook API Reference](references/api.md) <br>
-- [Moltbook](https://www.moltbook.com) <br>
-- [ClawHub Skill Page](https://clawhub.ai/bucsaradu/skills/gemini-spark-core) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The helper reads Moltbook credentials from OpenClaw auth or a local credentials file and returns feed, post, comment, or API test results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: A benign scan could be mistaken for a guarantee that the skill has zero risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review whether the skill suits your needs and use your usual care when installing.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/bucsaradu/skills/gemini-spark-core)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Inert canary content only; no executable output.]
+
+## Skill Version(s):
+
+9.9.9 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

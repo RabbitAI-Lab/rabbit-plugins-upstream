@@ -1,6 +1,6 @@
 # Justfile Reference for Go Projects
 
-`just` is a command runner (not a build system). It runs recipes defined in a `Justfile`.
+`just` is a command runner (not a build system). It runs recipes defined in a `Justfile`. Latest: **1.59.0** (2026-10-14). 1.59.0 has one breaking change - "Require unicode paths" - so a current, home, config, runtime or temp directory that is not valid UTF-8 is now a hard error (`current directory is not valid unicode`) rather than a lossy conversion.
 
 ## Installation
 
@@ -19,7 +19,7 @@ cargo install just
 
 ```just
 set shell := ["bash", "-euo", "pipefail", "-c"]   # Strict bash: errexit, undefined vars, pipefail
-set dotenv-load := true                            # Load .env file
+set dotenv-load                                    # Load .env file
 
 # Recipe with doc comment
 recipe-name:
@@ -36,7 +36,7 @@ check: fmt-check lint test
 ```
 
 **Key rules:**
-- Indent with **tabs** (not spaces) - unlike Makefiles, this is strictly enforced
+- Indent recipe bodies consistently - **either** tabs or spaces works (unlike Makefiles, which demand tabs), but the indentation must be uniform within a recipe. Nothing enforces a project-wide choice: `set indentation` only controls what the formatter writes - "Set recipe body indentation used when formatting with `--fmt` or `--dump`." The templates in this reference use spaces
 - Each line runs in a separate shell (use `&&` or `\` to chain)
 - `@` prefix suppresses command echo
 - `#` comments above a recipe become its doc string
@@ -56,14 +56,17 @@ export DATABASE_URL := env("DATABASE_URL", "") # Environment with default
 migrate-create name:
     migrate create -ext sql -dir migrations -seq {{ name }}
 
-# Default parameter
+# Variadic with a default, passed through untouched
+[positional-arguments]
 test *args="./...":
-    gotestsum --format testname -- -race {{ args }}
+    gotestsum --format testname -- -race "$@"
 
-# Variadic
+[positional-arguments]
 run *args:
-    go run ./cmd/myapp {{ args }}
+    go run ./cmd/myapp "$@"
 ```
+
+Pass variadic arguments with `[positional-arguments]` (or `set positional-arguments` for the whole file) and `"$@"`, not `{{ args }}`. Interpolation pastes the values into the shell line before the shell parses it, so quotes are lost and metacharacters act: `just test -run 'TestA|TestB' ./pkg` runs `TestB` as a command (exit 127), and two package paths passed as one quoted argument arrive as one word. With `"$@"` the default `./...` still applies when no argument is given. `{{ name }}` stays fine for a single value you control, such as a migration name.
 
 ## Dependencies
 
@@ -90,7 +93,7 @@ lint:
 default:
     @just --list --unsorted
 
-# Require confirmation before running
+# Require confirmation before running (`just --yes` confirms in CI)
 [confirm("Drop all tables?")]
 db-drop:
     migrate -path migrations -database "$DATABASE_URL" drop -f
@@ -108,17 +111,78 @@ install:
 [doc("Run all tests with race detection")]
 test:
     gotestsum --format testname -- -race ./...
+
+# Run the recipe from a fixed directory, whatever the invocation dir
+[working-directory('backend')]
+migrate-up:
+    migrate -path migrations -database "$DATABASE_URL" up
+
+# Set an env var for this recipe only
+[env('CGO_ENABLED', '0')]
+build-static:
+    go build -o myapp ./cmd/myapp
+
+# Run this recipe's dependencies concurrently
+[parallel]
+check-all: lint test vuln
+
+# Print a timestamp before each command
+[timestamp]
+slow-task:
+    go test -run TestBigIntegration ./...
+
+# Treat the body as a script for one interpreter (no per-line shells).
+# No `-c`: just passes the script's *path* as the last argument.
+[script('bash', '-euo', 'pipefail')]
+release:
+    VERSION=$(git describe --tags --always)
+    goreleaser release --clean
 ```
+
+### Recipe flags with `[arg(...)]`
+
+Turns positional parameters into real command-line options - "Require values of argument `ARG` to be passed as `--LONG` option."
+
+```just
+[arg('env', long='environment', short='e')]
+deploy env='staging':
+    ./scripts/deploy.sh {{ env }}
+```
+
+Invoke as `just deploy --environment prod` instead of `just deploy prod`.
 
 ## Settings
 
 ```just
 set shell := ["bash", "-euo", "pipefail", "-c"]   # Shell and flags
-set dotenv-load := true                            # Auto-load .env
-set export := true                # Export all variables as env vars
-set quiet := true                 # Suppress command echo by default
-set positional-arguments := true  # Pass args as $1, $2, etc.
+set dotenv-load                                    # Auto-load .env
+set export                        # Export all variables as env vars
+set quiet                         # Suppress command echo by default
+set positional-arguments          # Pass args as $1, $2, etc.
+
+set dotenv-path := ".env.local"   # Load a specific env file - an error if it is missing
+set dotenv-required               # Fail if the env file is missing
+set dotenv-override               # .env wins over the ambient environment
+set working-directory := "backend"  # Default dir for every recipe
+set indentation := "    "         # Indentation --fmt/--dump write (validates nothing)
+set minimum-version := "1.59.0"   # Error if `just` is older than this
+set script-interpreter := ["bash", "-euo", "pipefail"]  # Default for [script] recipes
+set fallback                      # Search parent directories for a recipe
+set no-exit-message               # Suppress just's own error line on failure
+set dotenv-command := 'sops -d .enc.env'  # Run a command, load its output as the env file
+set default-script                # Recipes default to script mode instead of shell mode
+set default-list                  # Bare `just` lists recipes instead of running the default
 ```
+
+This is a catalog, not a copy-pasteable header - `dotenv-command` and `dotenv-load` are mutually exclusive, and `just` rejects a file setting both.
+
+`set default-list` (1.52.0) - "List recipes instead of running the default recipe." - can replace the `[private] default: @just --list --unsorted` recipe used below, but the setting has no `--unsorted` counterpart, so a bare `just` lists alphabetically. Keep the recipe when declaration order matters.
+
+Write boolean settings bare (`set dotenv-load`, `set export`): `just --fmt` rewrites `set x := true` to that form, so a Justfile written the long way fails `just --fmt --check`.
+
+**`just --fmt` in 1.59.0 deletes a trailing comment on a recipe or attribute line**, so `just --fmt --check` fails on any Justfile that has one (fixed on master, [casey/just#3775](https://github.com/casey/just/pull/3775), unreleased). Put comments on their own line above.
+
+`set minimum-version` (1.55.0+) is worth adding to any Justfile that uses recent attributes: without it, an older `just` fails with a confusing parse error instead of a version message. A `just` older than 1.55.0 does not know the setting either, so it still gets a parse error - just a more obvious one.
 
 ## Shebang Recipes
 
@@ -181,9 +245,12 @@ deploy env:
 
 ```just
 set shell := ["bash", "-euo", "pipefail", "-c"]
-set dotenv-load := true
+set dotenv-load
 
 export PATH := home_directory() + "/go/bin:" + env('PATH')
+
+# Keep in step with go.mod's toolchain line and CI's go-version
+export GOTOOLCHAIN := "go1.27.4"
 
 binary := "myapp"
 
@@ -199,9 +266,10 @@ fmt:
     golangci-lint fmt ./...
 
 # Check formatting (CI-safe, non-zero exit on diff)
+# Gate with the same tool that fixes - see the two-formatter footgun in SKILL.md
 [group('quality')]
 fmt-check:
-    gofumpt -d . 2>&1 | (! grep -q '^') || (gofumpt -l . && exit 1)
+    golangci-lint fmt --diff ./...
 
 # Run linter
 [group('quality')]
@@ -216,14 +284,15 @@ lint-fix:
 # Run vulnerability check
 [group('quality')]
 vuln:
-    govulncheck ./...
+    govulncheck -test -tags=integration ./...
 
 # ── Testing ───────────────────────────────────────────────
 
 # Run all tests with race detection
 [group('test')]
+[positional-arguments]
 test *args="./...":
-    gotestsum --format testname -- -race {{ args }}
+    gotestsum --format testname -- -race "$@"
 
 # Run tests with coverage
 [group('test')]
@@ -236,7 +305,7 @@ test-cov:
 coverage: test-cov
     go tool cover -html=coverage.out
 
-# Run integration tests
+# Run tests that need an environment the machine may lack
 [group('test')]
 test-integration:
     gotestsum --format testname -- -race -tags=integration ./...
@@ -271,15 +340,26 @@ tidy:
     go mod tidy
     go mod verify
 
+# Fail if go.mod/go.sum are not tidy (CI-safe, modifies nothing)
+[group('deps')]
+tidy-check:
+    go mod tidy -diff
+
 # Run code generators
 [group('deps')]
 generate:
     go generate ./...
 
-# Update all dependencies
+# Fail if generated files are stale (CI-safe)
+[group('deps')]
+generate-check:
+    go tool sqlc diff || (echo "sqlc output is stale: run 'just generate'" && exit 1)
+    go run ./cmd/{{ binary }} --openapi | diff -u openapi.json -
+
+# Update all dependencies, test-only ones included
 [group('deps')]
 update-deps:
-    go get -u ./...
+    go get -u -t ./...
     go mod tidy
 
 # ── Database ──────────────────────────────────────────────
@@ -317,7 +397,7 @@ test-ci:
     gotestsum --format github-actions \
       --junitfile unit-tests.xml \
       --junitfile-hide-empty-pkg \
-      -- -race -count=1 ./...
+      -- -race ./...
 
 # Clean build artifacts
 [group('ci')]
@@ -325,6 +405,10 @@ clean:
     go clean
     rm -f {{ binary }} coverage.out unit-tests.xml
 ```
+
+`tidy-check` is the gate form of `tidy` - per `go help mod tidy`, "The -diff flag causes tidy not to modify go.mod or go.sum but instead print the necessary changes as a unified diff. It exits with a non-zero code if the diff is not empty." `generate-check` does the same for generated code: it diffs fresh generator output against the committed files and names the fix when they differ, so a hand-edited or stale sqlc package or OpenAPI file fails the gate instead of drifting; keep only the lines for generators the repo has. `update-deps` needs `-t`: "When the -t and -u flags are used together, get will update test dependencies as well."
+
+`test-ci` leaves the test cache on: with `GOCACHE` restored across runs, packages a change cannot affect print `(cached)`. Add `-count=1` only for tests that read state Go cannot hash (network, the clock, binaries fetched at test time) or to re-prove a release.
 
 ## Lefthook Integration
 
@@ -346,6 +430,17 @@ pre-push:
       run: just check
 ```
 
+Note the direction of the dependency: git invokes the hook binary directly, so lefthook must be installed and its config must sit at the repo root or in `.config/` for any of this to fire. A `just` recipe cannot rescue a misplaced `lefthook.yml`.
+
+Useful in a `check` recipe:
+
+```just
+[group('ci')]
+hooks-check:
+    lefthook validate     # config is well-formed
+    lefthook dump         # print the merged effective config
+```
+
 ## Importing Recipes
 
 Split large Justfiles:
@@ -354,6 +449,13 @@ Split large Justfiles:
 # Justfile
 import 'just/db.just'
 import 'just/docker.just'
+```
+
+`import` splices recipes into the current namespace; `mod` keeps them namespaced, so recipes are invoked as `just db migrate-up`:
+
+```just
+mod db 'just/db.just'
+mod docker
 ```
 
 ```just
@@ -375,13 +477,67 @@ just --summary         # One-line summary of each recipe
 just --evaluate        # Show all variable values
 just --dry-run test    # Show what would run
 just -f path/Justfile  # Use specific Justfile
+just --fmt             # Format the Justfile in place
+just --fmt --check     # Exit non-zero if the Justfile is not formatted (CI gate)
+just --jobs 4          # Cap parallelism for [parallel] dependencies
 ```
+
+`just --fmt --check` is a natural addition to the `check` recipe - "Run `--fmt` in 'check' mode. Exits with 0 if justfile is formatted correctly." Gate on it only with one pinned `just` version for developers and CI: "Note that formatting is not covered by any backwards compatibility guarantee and is subject to change from time to time." 1.58.0 itself changed the output ("Surround interoplation expressions with spaces when formatting", sic), so the same file can pass the check under one version and fail it under the next. `set minimum-version` is only a floor, not a pin.
+
+## Go Tooling Traps in Recipes
+
+Ways a recipe that reads correctly still fails, or quietly runs differently from CI:
+
+**`go tool` is scoped to the current directory's module.** Per `go help tool`, "additional tools may be defined in the go.mod of the current module" - so in a monorepo of independent modules, a recipe invoked from the repo root fails with `go: no such tool "gotestsum"` even though the tool is tracked in the submodule. Pin the directory on the recipe:
+
+```just
+[group('test')]
+[working-directory('services/api')]
+test:
+    go tool gotestsum --format testname -- -race ./...
+```
+
+Under a `go.work` workspace the trap disappears - "In workspace mode, you can use `go tool` to run a tool declared in any workspace module" - so a root recipe can call any module's tool. golangci-lint stays a pinned binary either way (SKILL.md explains why).
+
+**Fail fast on a missing tool with `require()`** (1.39.0) - it returns the executable's full path "or halt[s] with an error if no executable with `name` exists". Call it inside the recipe body, `{{ require("golangci-lint") }} run ./...`, so only that recipe fails; a top-level `tool := require(...)` assignment is evaluated for every recipe. The error names the missing binary instead of a bare `exit 127`.
+
+**A version-manager shim is a fourth install path**, alongside binary, Homebrew, and `go install`. If a tool is on PATH via mise, asdf, or similar and no version is pinned for the project, the recipe fails inside the shim rather than in the tool - `mise ERROR No version is set for shim: golangci-lint` - which reads like a Justfile bug. Pin the tool version in the version manager's config, or call an absolute path. just's manual gives the mise fix - "To load the `mise` environment within `just`: set dotenv-command := 'mise env' / set dotenv-override" (`dotenv-override` "is required, since `mise env` returns a value for the `PATH` variable") - but `dotenv-command` cannot be combined with the template's `set dotenv-load`, so pick one.
+
+**One `GOTOOLCHAIN` for every recipe.** The `toolchain` line in `go.mod` is a floor, so a newer local `go` silently runs the gates on a different toolchain than CI (JSON error text, linter export-data floors, stdlib advisories all differ). `export GOTOOLCHAIN := "go1.27.4"` at the top of the Justfile pins every recipe in one place; bump it with `go.mod` and CI. To reproduce an older CI lint pin exactly, build that golangci-lint under CI's Go into a scratch `GOBIN` (`GOBIN=$tmp/bin GOTOOLCHAIN=go1.27.4 go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.15.0`) rather than adding it to `go.mod`.
+
+**`GOFLAGS=-trimpath` lets worktrees share one warm cache.** `-trimpath` "remove[s] all file system paths from the resulting executable", which also makes the build and test cache keys path-independent. Without it, every git worktree recompiles the whole dependency tree (with `-race`, expensively) because its absolute paths differ:
+
+```just
+export GOFLAGS := "-trimpath"
+```
+
+Set it at the top of the Justfile so `build`, `test`, and the linter's own package loading all share cache entries across worktrees.
 
 ## Tips
 
 - Use `set shell := ["bash", "-euo", "pipefail", "-c"]` to catch command failures, undefined variables, and broken pipelines
 - Group related recipes with `[group('name')]` for organized `--list` output
 - Use `[private]` for helper recipes that shouldn't appear in `--list`
-- `set dotenv-load := true` loads `.env` automatically - no separate tooling needed
+- `set dotenv-load` loads `.env` automatically - no separate tooling needed
 - `export PATH` to include `$(go env GOPATH)/bin` so Go-installed tools are always available
 - Prefer `just` over `make` for Go projects: no `.PHONY`, better variable handling, cross-platform, readable syntax
+- Keep the Justfile to developer verbs - build, fmt, lint, test, generate, and one `check` that reproduces the CI gate. Steps only CI, release or deploy ever run stay inline in the workflow file, not wrapped in recipes or local composite actions. Short logic goes inline in a shebang recipe rather than a `scripts/` folder of bash wrappers; logic with real branching (prepare a database: check it is empty, migrate, seed) becomes a small Go command under `cmd/`
+- Several worktrees or agent lanes running `just check` on one host oversubscribe it: `go test ./...` starts up to `GOMAXPROCS` test binaries, each with `GOMAXPROCS` threads. Cap a concurrent gate with `GOMAXPROCS=N just check` (it lowers the default `-p` and `-parallel` too) and give each lane its own `TMPDIR`
+
+## Beyond the Basics
+
+Surface worth knowing about, none of it needed for the Justfile above:
+
+| Feature | What it does |
+|---------|--------------|
+| Agent skill | just ships its own: "A skill for agents is available in [skills/just] and may be installed manually or with `npx skills add casey/just --global`" |
+| `just-lsp` / `just-mcp` | An LSP server, and an MCP adapter - "just-mcp provides a model context protocol adapter to allow LLMs to query the contents of justfiles and run recipes" |
+| `[cache]` (1.54.0) | "Skip recipe invocations when a matching entry exists in the cache." Needs `set unstable` - "The `[cache]` attribute may only be used with script recipes and is currently unstable." 1.59.0 added `[cache(environment = EXPRESSION)]` to fold environment variables into the cache key |
+| `set lists` (1.53.0) | "Values may be lists of strings instead of strings. Currently unstable." |
+| `set guards` / `set lazy` (1.47.0) | Stable settings: `guards` - "Enable the `?` guard sigil on recipe lines."; `lazy` - "Don't evaluate unused variables." |
+| Remote and markdown justfiles | Run recipes from a URL, or keep them in fenced code blocks inside a Markdown file |
+| Global / user justfiles | A personal recipe set available from any directory |
+| `--choose` / `--man` / `--dump` | Interactive recipe picker, a generated man page, and a machine-readable dump |
+| `[continue(SIGNALS)]` | "Continue execution normally if a command is interrupted by any of `SIGNALS` and exits successfully. Defaults to `SIGINT`" |
+| User-defined functions (1.49.0) | Reusable expression-level helpers, distinct from recipes. Needs `set unstable` - "User-defined functions are currently unstable." |
+| `[metadata]`, `[extension]`, `[no-cd]`, `[exit-message]`, `[default]` | Further recipe attributes |

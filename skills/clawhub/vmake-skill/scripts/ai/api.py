@@ -1,5 +1,6 @@
 import copy
 import json
+import math
 import os
 import sys
 from pathlib import Path
@@ -456,6 +457,38 @@ def _deep_merge_params(base, override):
     return out
 
 
+def _prepare_invoke_task(name, params=None, profile=None):
+    """Validate and merge an invoke preset without performing network side effects."""
+    import config as app_config
+
+    table = getattr(app_config, "INVOKE", None) or {}
+    if name not in table:
+        raise KeyError(f"Unknown invoke preset {name!r}; add it to config.INVOKE")
+    spec = table[name]
+    if not isinstance(spec, dict) or "task" not in spec:
+        raise ValueError(
+            f"config.INVOKE[{name!r}] must include 'task'; optional 'params'/'profile' "
+            f"(default {{}}), optional 'task_type' (default mtlab)"
+        )
+    task = str(spec.get("task") or "").strip()
+    if not task:
+        raise ValueError(f"config.INVOKE[{name!r}]['task'] must be a non-empty string")
+    cfg_params = spec.get("params")
+    if cfg_params is not None and not isinstance(cfg_params, dict):
+        raise TypeError(f"config.INVOKE[{name!r}]['params'] must be a dict or omit")
+    if params is not None and not isinstance(params, dict):
+        raise TypeError("params must be a dict or omit")
+    merged = _deep_merge_params(cfg_params or {}, params or {})
+    cfg_profile = spec.get("profile")
+    if cfg_profile is not None and not isinstance(cfg_profile, dict):
+        raise TypeError(f"config.INVOKE[{name!r}]['profile'] must be a dict or omit")
+    if profile is not None and not isinstance(profile, dict):
+        raise TypeError("profile must be a dict or omit")
+    merged_profile = _deep_merge_params(cfg_profile or {}, profile or {})
+    task_type = _default_task_type(spec.get("task_type"))
+    return task, merged, merged_profile, task_type
+
+
 def _default_connection_config():
     """Connection settings from project config.py (regions, token_policy)."""
     import config as app_config
@@ -489,7 +522,15 @@ def _merge_connection_config(base, override):
 class AiApi:
     """ ai api actions."""
 
-    def __init__(self, key, secret, region="cn-north-4", oss_region=None, config=None):
+    def __init__(
+        self,
+        key,
+        secret,
+        region="cn-north-4",
+        oss_region=None,
+        config=None,
+        notice_handler=None,
+    ):
         """
         :param key: your access key.
         :param secret: your access secret key.
@@ -497,6 +538,8 @@ class AiApi:
         :param oss_region: optional OSS bucket region when token_policy url cannot be parsed (e.g. custom domain)
         :param config: optional dict overriding config.py connection fields (regions,
             token_policy_type, token_policy_types). Invoke task names live in config.INVOKE.
+        :param notice_handler: optional callback receiving decoded service responses
+            so the Skill facade can collect server-controlled user notices.
         """
         self.Key = key
         self.Secret = secret
@@ -505,12 +548,18 @@ class AiApi:
         self.oss_region = oss_region
         self.aiStrategy = None
         self.storageStrategy = None
+        self._notice_handler = notice_handler
         # EndPoint resolved after fetch_config injects regions
         self.EndPoint = self._config.get("regions", {}).get(region)
 
         import config as app_config
         cache_file = getattr(app_config, "GID_CACHE_FILE", "~/.cache/vmake/gid_cache.json")
         self.gid_cache = GidCache(cache_file)
+
+    def _emit_response_notices(self, payload):
+        """Offer a decoded service response to the optional notice collector."""
+        if callable(self._notice_handler):
+            self._notice_handler(payload)
 
     def _token_policy_type_for(self, name):
         """name is 'upload' or 'ai' — query param for /ai/token_policy?type= """
@@ -604,7 +653,7 @@ class AiApi:
         signer = sign.Signer(self.Key, self.Secret)
         headers = {
             sign.HeaderHost: self.EndPoint,
-            "User-Agent": getattr(app_config, "USER_AGENT", "action-web-skill-v1.3.0"),
+            "User-Agent": app_config.USER_AGENT,
         }
         uri = "https://" + self.EndPoint + "/ai/token_policy?type=" + typ
         sign_request = signer.sign(uri, "GET", headers, "")
@@ -615,6 +664,7 @@ class AiApi:
         )
         if resp.status_code == 200:
             policydata=json.loads(resp.content)
+            self._emit_response_notices(policydata)
             if policydata==None :
                 return
             policy=policydata["data"]
@@ -635,6 +685,36 @@ class AiApi:
         return None
 
         
+    def _task_sync_timeout(self, policy):
+        """Use server timeout by default; published adapters can retain their policy."""
+        timeout = policy.get("sync_timeout")
+        if (type(timeout) not in (int, float) or timeout < 0
+                or (isinstance(timeout, float) and not math.isfinite(timeout))):
+            raise RuntimeError("Invalid algorithm policy: sync_timeout must be a finite non-negative number")
+        return timeout
+
+    def _validate_execution_policy(self, policy, *, polling=False):
+        """Reject unusable strategy fields before quota consumption or network submit.
+
+        Sync-only policies may omit status_query; supplied polling configuration
+        must be usable. Existing adapters retain their timeout/path conventions.
+        """
+        if not isinstance(policy, dict):
+            raise RuntimeError("Invalid algorithm policy: expected an object")
+        if not polling:
+            self._task_sync_timeout(policy)
+        if polling or "status_query" in policy or "status_path" in policy:
+            try:
+                path = self._status_query_path(policy)
+            except (KeyError, TypeError, AttributeError):
+                path = None
+            if not isinstance(path, str) or not path.strip():
+                raise RuntimeError("Invalid algorithm policy: status query path must be a non-empty string")
+
+    def _status_query_path(self, policy):
+        """Use the server's existing overseas query-path contract."""
+        return policy["status_query"]["path"]
+
     def run(
         self,
         imageUrl,
@@ -643,6 +723,7 @@ class AiApi:
         taskType,
         context="",
         on_async_submitted=None,
+        profile=None,
     ):
         """
         apply effect to the object.
@@ -651,12 +732,14 @@ class AiApi:
         :params task  task name to be apply ,
         :params taskType from INVOKE preset or token_policy; empty or missing → mtlab
         :params context context string
+        :params profile optional profile attached to the first init image
         :return: The handled result data in json.
         """
         import config as app_config
         taskType = _default_task_type(taskType)
         signer = sign.Signer(self.Key, self.Secret)
         policy=self.getAiStrategy()
+        self._validate_execution_policy(policy)
         host = policy["url"]
         if host.find("https")>-1 :
             host =host[8:]
@@ -665,16 +748,19 @@ class AiApi:
 
         headers = {
             sign.HeaderHost: host,
-            "User-Agent": getattr(app_config, "USER_AGENT", "action-web-skill-v1.3.0"),
+            "User-Agent": app_config.USER_AGENT,
         }
         
+        init_images = copy.deepcopy(imageUrl)
+        if profile and init_images and isinstance(init_images[0], dict):
+            init_images[0]["profile"] = copy.deepcopy(profile)
         data = {
             "params": json.dumps(params),
             "context": context,
             "task": task,
             "task_type": taskType,
             "sync_timeout":policy["sync_timeout"],
-            "init_images":imageUrl,
+            "init_images":init_images,
         }
         uri= policy["url"] +"/"+ policy["push_path"]
         sign_request = signer.sign(uri, "POST", headers, json.dumps(data))
@@ -686,6 +772,7 @@ class AiApi:
         resp = session.send(sign_request,timeout=policy["sync_timeout"]+10)
         if resp.status_code==200 :
             taskResult= json.loads(resp.content)
+            self._emit_response_notices(taskResult)
             if taskResult["data"]["status"]==9:
                 tid = taskResult["data"]["result"]["id"]
                 _progress_log(f"async submitted task_id={tid} → polling status until done")
@@ -701,6 +788,7 @@ class AiApi:
                 return out
         _progress_log(f"algorithm POST HTTP {resp.status_code} (see response body in error)")
         raw = json.loads(resp.content)
+        self._emit_response_notices(raw)
         return _with_output_urls(raw) if isinstance(raw, dict) else raw
 
     def status(self,taskId,policy):
@@ -710,6 +798,7 @@ class AiApi:
         :params policy query policy with retry and gaps with every retry
         :return: The handled result data in json.
         """
+        self._validate_execution_policy(policy, polling=True)
         host = policy["url"]
         if host.find("https")>-1 :
             host =host[8:]
@@ -791,7 +880,7 @@ class AiApi:
             host =host[7:]
         headers = {
             sign.HeaderHost: host,
-            "User-Agent": getattr(app_config, "USER_AGENT", "action-web-skill-v1.3.0"),
+            "User-Agent": app_config.USER_AGENT,
         }
         sign_request = signer.sign(uri, "GET", headers, "")
         read_timeout = min(int(policy.get("sync_timeout", 60)) + 10, 120)
@@ -821,6 +910,7 @@ class AiApi:
                     "is_finished": False,
                     "result": " task query invalid JSON: " + str(e),
                 }
+            self._emit_response_notices(taskResult)
             if _meta_indicates_error(taskResult.get("meta")):
                 return {
                     "is_finished": True,
@@ -843,34 +933,33 @@ class AiApi:
             return {"is_finished": False, "result": taskResult}
         return {"is_finished": False, "result": " task query failure: " + uri}
 
-    def invoke_task(self, name, url, params=None, context="", on_async_submitted=None):
+    def invoke_task(
+        self,
+        name,
+        url,
+        params=None,
+        context="",
+        on_async_submitted=None,
+        profile=None,
+    ):
         """
-        Run invoke with merged params: preset from config.INVOKE[name], overridden by ``params``.
+        Run invoke with merged params/profile from config.INVOKE[name], overridden by the caller.
         Optional ``task_type`` on the preset (server-driven); if absent or empty, uses mtlab.
         """
-        import config as app_config
-
-        table = getattr(app_config, "INVOKE", None) or {}
-        if name not in table:
-            raise KeyError(f"Unknown invoke preset {name!r}; add it to config.INVOKE")
-        spec = table[name]
-        if not isinstance(spec, dict) or "task" not in spec:
-            raise ValueError(
-                f"config.INVOKE[{name!r}] must include 'task'; optional 'params' (default {{}}), "
-                f"optional 'task_type' (default mtlab)"
+        task, merged, merged_profile, task_type = _prepare_invoke_task(name, params, profile)
+        profile_kwargs = {"profile": merged_profile} if merged_profile else {}
+        if on_async_submitted is None:
+            return self.invoke(
+                url, merged, task, context, task_type, **profile_kwargs
             )
-        cfg_params = spec.get("params")
-        if cfg_params is not None and not isinstance(cfg_params, dict):
-            raise TypeError(f"config.INVOKE[{name!r}]['params'] must be a dict or omit")
-        merged = _deep_merge_params(cfg_params or {}, params or {})
-        task_type = _default_task_type(spec.get("task_type"))
         return self.invoke(
             url,
             merged,
-            spec["task"],
+            task,
             context,
-            task_type=task_type,
+            task_type,
             on_async_submitted=on_async_submitted,
+            **profile_kwargs,
         )
 
     def txt2img(self,params, context=""):
@@ -893,9 +982,9 @@ class AiApi:
         params,
         task,
         context="",
-        on_async_submitted=None,
-        *,
         task_type=None,
+        on_async_submitted=None,
+        profile=None,
     ):
         """
         invoke ai task
@@ -906,6 +995,24 @@ class AiApi:
         :return: The handled result data in json.
         """
         task_type = _default_task_type(task_type)
+        if isinstance(url, (list, tuple)):
+            # A list already represents init_images, not one URL containing a list.
+            # Keep the legacy global profile scoped to the first input only.
+            images = copy.deepcopy(list(url))
+            images = [{"url": item} if isinstance(item, str) else item for item in images]
+            if images and profile:
+                own_profile = images[0].get("profile") or {}
+                first_type = own_profile.get("media_profiles", {}).get("media_type")
+                base = copy.deepcopy(profile)
+                base_media = base.get("media_profiles")
+                base_type = base_media.get("media_type") if isinstance(base_media, dict) else None
+                if first_type and base_type and first_type != base_type:
+                    base.pop("media_profiles", None)
+                images[0]["profile"] = _deep_merge_params(base, own_profile)
+            return self.run(
+                images, params, task, task_type, context,
+                on_async_submitted=on_async_submitted,
+            )
         if url == None :
             return self.run(
                 None,
@@ -914,6 +1021,7 @@ class AiApi:
                 task_type,
                 context,
                 on_async_submitted=on_async_submitted,
+                profile=profile,
             )
         return self.run(
             [{"url": url}],
@@ -922,6 +1030,7 @@ class AiApi:
             task_type,
             context,
             on_async_submitted=on_async_submitted,
+            profile=profile,
         )
 
     def get_gid(self, gid: str):
@@ -943,5 +1052,3 @@ class AiApi:
         Reserved: fetch GID data from API (not implemented).
         """
         pass
-
-

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/tencent-cos-skill",
   "slug": "tencent-cos-skill",
   "ownerHandle": null,
-  "version": "1.1.8",
-  "updatedAt": 1780561035065,
-  "contentHash": "410419fd8f00d9a94bfce2e79b918b847ee55dad3801d0e6e68e226bdc1353d7",
-  "fetchedAt": "2026-07-26T18:35:36.498Z"
+  "version": "1.2.4",
+  "updatedAt": 1795408733344,
+  "contentHash": "a3c6f372abad482df39b84b9e0e8b388717918932234e20b513329b52e89a92b",
+  "fetchedAt": "2026-11-24T19:01:57.926Z"
 }

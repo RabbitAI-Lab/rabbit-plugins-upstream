@@ -1,42 +1,62 @@
-## Description: <br>
-Skill Review Pro evaluates AI skills through static review, scoring, adversarial checks, and improvement guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews agent skills through static analysis, type-aware policies, scoring, adversarial checks, and actionable improvement guidance.
 
-## Publisher: <br>
-[z-zihan](https://clawhub.ai/user/z-zihan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[z-zihan](https://clawhub.ai/user/z-zihan)
 
-## Use Case: <br>
-Developers and skill authors use this agent to review skill quality, score skills against documented criteria, identify robustness issues, and prepare concrete improvement plans. When explicitly requested, it can guide a user-confirmed fix workflow for the selected skill. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read local skill files and may propose changes that affect another skill's behavior. <br>
-Mitigation: Use it on intended target files only and review proposed findings before acting on them. <br>
-Risk: The optional fix workflow can edit the selected skill after the user chooses to proceed. <br>
-Mitigation: Review proposed diffs before approving fixes, especially for broad improvement requests. <br>
+## Use Case:
 
+Skill authors and reviewers use it to assess skill quality, produce scored review reports, and plan improvements. It also supports repository audits and read-only ClawHub release checks when requested.
 
-## Reference(s): <br>
-- [Skill Review Pro on ClawHub](https://clawhub.ai/z-zihan/skill-review-pro) <br>
-- [Publisher Profile](https://clawhub.ai/user/z-zihan) <br>
-- [Project Homepage](https://github.com/z-Zihan/awesome-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown review reports with scores, issue summaries, adversarial-check results, improvement priorities, and fix checklists when applicable] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs follow the user's language and may include user-confirmed skill-edit plans during fix workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Security review reports a benign result with medium confidence and partial scanner coverage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill files and their behavior before installation; treat the scanner result as limited coverage.
+
+Risk: Unpinned package references may change over time.
+
+Mitigation: Review package sources and versions before using the related checks.
+
+Risk: The remote CI rerun option can trigger a remote workflow.
+
+Mitigation: Confirm the target workflow and intended retry before initiating a rerun.
+
+Risk: Generic fix triggers could activate outside a skill review.
+
+Mitigation: Confirm the target skill and requested fix action before applying changes.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/z-zihan/skills/skill-review-pro)
+- [Project homepage](https://github.com/z-Zihan/awesome-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance, Files]
+
+**Output Format:** [Markdown review reports, scores, recommendations, and structured checklists; optional user-confirmed skill-file edits.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese or English, following the user's language.]
+
+## Skill Version(s):
+
+2.3.2 (source: frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

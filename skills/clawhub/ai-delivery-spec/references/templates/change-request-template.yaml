@@ -1,3 +1,8 @@
+artifact: change_request
+artifact_role: main
+stage: change
+applicable_stages: [change]
+applies_when: 已定基线发生变更时记录影响与授权。
 schema_version: 5.1.0
 change_id: CHG-CORE-001
 title: "{change title}"
@@ -9,14 +14,15 @@ target_version: "1.1"
 decision_owner: "{decision owner}"
 request:
   requester: "{requester}"
-  requested_at: "2026-01-01T00:00:00Z"
+  # requested_at: 仅填写实际提出时间
   authority: "{minutes/contract/approved request}"
-  urgency: normal
   seed_refs: [REQ-CORE-001]
   before: "{approved behavior}"
   after: "{proposed behavior}"
 diff: []
 impacts:
+  # Every list item uses: {ref: REQ-CORE-001, change_type: modify, reason: "why this ID changes"}
+  # Allowed change_type: add | modify | deprecate | remove | verify_only | none
   requirements: []
   roles: []
   modules: []
@@ -35,22 +41,19 @@ impacts:
   integrations: []
   documentation: []
   data_migration:
-    required: false
-    strategy: not_applicable
-    rollback: not_applicable
-    reconciliation: not_applicable
+    required: unknown # true / false / unknown；未评估不预填“不需要”
+    decision_ref: "" # 复用实际决定或来源；false 本身不是决定依据
+    strategy: "" # 已知需要迁移但方案未定可保留草稿；依赖它的批准前补齐方案与回退
+    rollback: ""
+    reconciliation: ""
 compatibility:
-  stable_ids_preserved: true
+  stable_ids_preserved: unknown
   deprecated_ids: []
   replacement_map: {}
   consumer_actions: []
 approvals: []
 synchronization: []
-audit_log:
-  - actor: "{requester}"
-    action: submitted
-    at: "2026-01-01T00:00:00Z"
-    reason: "{change reason}"
+audit_log: []
 verification:
   acceptance_refs: []
   regression_refs: []

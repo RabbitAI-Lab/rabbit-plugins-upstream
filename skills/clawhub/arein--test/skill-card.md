@@ -1,42 +1,56 @@
-## Description: <br>
-CLI for crypto portfolio tracking, market data, and CEX history. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CLI for crypto portfolio tracking, market data, and CEX history. Use when the user asks about crypto prices, wallet balances, portfolio values, Coinbase/Binance holdings, or Polymarket predictions.
 
-## Publisher: <br>
-[arein](https://clawhub.ai/user/arein) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[arein](https://clawhub.ai/user/arein)
 
-## Use Case: <br>
-Developers and agents use this skill to query crypto market data, wallet balances, portfolio values, Coinbase and Binance account history, and Polymarket prediction-market data through the onchain CLI. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive wallet and exchange account information. <br>
-Mitigation: Use read-only exchange API keys with trading and withdrawals disabled, store secrets in protected environment variables or a secure config location, and query only accounts or wallets the user is authorized to inspect. <br>
-Risk: The skill depends on a separate onchain CLI implementation and multiple external crypto data services. <br>
-Mitigation: Confirm the CLI source is trusted before installation and account for upstream API rate limits or service errors when using the skill in agent workflows. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [DeBank Cloud](https://cloud.debank.com/) <br>
-- [Helius](https://helius.xyz/) <br>
-- [Coinbase API Key Settings](https://www.coinbase.com/settings/api) <br>
-- [Binance API Management](https://www.binance.com/en/my/settings/api-management) <br>
+## Use Case:
 
+Developers and external users use this skill to run an onchain CLI for cryptocurrency market data, wallet balances, portfolio values, CEX balances and trade history, and Polymarket market lookup.
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON-oriented CLI usage] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Use --json for programmatic agent output; API responses may be rate limited by upstream services.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-0.0.1 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Exchange API keys, wallet-linked financial data, or exchange history could be exposed through prompts, logs, or local configuration.
+
+Mitigation: Use read-only or scoped exchange API keys, keep ~/.config/onchain/config.json5 private, and avoid pasting secrets or sensitive financial history into prompts or logs.
+
+Risk: Rapid market, wallet, or exchange queries may encounter third-party API rate limits.
+
+Mitigation: Use the skill's timeout option, check exit codes, and add delays between rapid calls as described in the artifact guidance.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/arein/skills/test)
+- [DeBank API](https://cloud.debank.com/)
+- [Helius](https://helius.xyz/)
+- [Coinbase API settings](https://www.coinbase.com/settings/api)
+- [Binance API management](https://www.binance.com/en/my/settings/api-management)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash code blocks and CLI command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The CLI supports JSON output for agent-friendly parsing.]
+
+## Skill Version(s):
+
+0.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

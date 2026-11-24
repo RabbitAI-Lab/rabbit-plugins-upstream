@@ -1,41 +1,57 @@
-## Description: <br>
-Generates China C-ROSS Phase II solvency reports, capital adequacy calculations, stress tests, and SARM/IRR risk rating documentation for insurance finance, actuarial, and compliance teams. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chinese-language frameworks and draft guidance for insurance solvency reporting and stress testing under China's C-ROSS Phase II rules.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance CFOs, actuaries, and compliance teams use this skill to draft quarterly and annual China C-ROSS solvency reports, calculate capital adequacy, prepare stress testing analysis, and document risk ratings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, for China insurance solvency reporting contexts. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may require confidential company financial, capital, risk, or regulatory inputs. <br>
-Mitigation: Redact unnecessary details, avoid personal data and secrets, and confirm authorization before sharing internal reporting materials. <br>
-Risk: Generated solvency reports or regulatory interpretations may become outdated or require professional review. <br>
-Mitigation: Verify outputs against current official NFRA requirements and have qualified finance, actuarial, and compliance reviewers approve materials before filing or disclosure. <br>
+## Use Case:
 
+Insurance finance, actuarial, and compliance teams can use it to structure draft solvency reports, organize capital and stress-test analyses, and prepare review checklists. Outputs are reference drafts that require qualified review against current official rules; the skill does not file reports or provide formal actuarial opinions.
 
-## Reference(s): <br>
-- [C-ROSS Rules II Summary](references/cross_rules_ii_summary.md) <br>
-- [Solvency Capital Calculation Template](references/solvency_calculation.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown reports, tables, checklists, and calculation snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include capital adequacy calculations, stress-test scenarios, regulatory report outlines, and compliance review guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.1 (source: frontmatter and server release evidence) <br>
+Risk: Regulatory details and calculation assumptions in draft materials may be outdated or inapplicable.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check current official rules and applicable reporting guidance, and have qualified actuarial or finance staff review all assumptions and figures.
+
+Risk: Sensitive company or policyholder information could be included in prompts or drafts.
+
+Mitigation: Use aggregated figures and remove identifying details, following the skill's data-minimization guidance.
+
+Risk: The security review was partial because five referenced files were absent from the supplied artifact.
+
+Mitigation: Review the complete source set and referenced materials before relying on the skill.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/gechengling/skills/insurance-solvency-reporter)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown, Tables]
+
+**Output Format:** [Chinese-language draft guidance and report outlines in Markdown or DOCX-style structure]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft material for human review; examples may use placeholders and assumptions.]
+
+## Skill Version(s):
+
+4.1.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

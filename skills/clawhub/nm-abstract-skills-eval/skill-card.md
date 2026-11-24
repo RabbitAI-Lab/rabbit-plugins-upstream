@@ -1,48 +1,50 @@
-## Description: <br>
-Evaluate Claude skill quality through auditing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Evaluate Claude skill quality through auditing.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and skill authors use this skill to audit Claude and OpenClaw skill packages, evaluate quality, plan improvements, and verify structure, token use, integration, and performance guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Benchmarking and integration-test examples can execute commands against local skill projects. <br>
-Mitigation: Run examples only on trusted skill packages, review commands before execution, and use sandboxing for untrusted inputs. <br>
-Risk: Examples using --scan-all, --directory ., --auto-fix, chmod, pip install, or CI snippets can inspect or modify project files. <br>
-Mitigation: Review scope and flags before running examples, avoid automatic fixes until changes are understood, and keep changes under version control. <br>
+## Use Case:
 
+Developers maintaining Claude skills use this framework to audit skill structure and quality, find opportunities to improve performance and token use, and plan or verify changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-abstract-skills-eval) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/abstract) <br>
-- [Evaluation criteria](modules/evaluation-criteria.md) <br>
-- [Evaluation workflows](modules/evaluation-workflows.md) <br>
-- [Skill authoring best practices](modules/skill-authoring-best-practices.md) <br>
-- [Integration testing](modules/integration-testing.md) <br>
-- [Performance benchmarking](modules/performance-benchmarking.md) <br>
-- [Pressure testing](modules/pressure-testing.md) <br>
-- [Troubleshooting](modules/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, code, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes audit checklists, scoring rubrics, workflow steps, command examples, and configuration examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: Recovery guidance may not clearly limit which processes or temporary files and caches should be stopped or cleared; the security analysis reports partial coverage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each recovery action before running it and limit process stops or cleanup to specifically identified targets.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-abstract-skills-eval)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/abstract)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands]
+
+**Output Format:** [Markdown evaluation findings and improvement guidance, with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations depend on the target skill and available project tooling.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

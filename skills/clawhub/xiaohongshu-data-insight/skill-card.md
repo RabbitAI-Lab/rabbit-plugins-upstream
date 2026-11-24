@@ -1,43 +1,56 @@
-## Description: <br>
-小红书数据洞察大师 supports keyword search and note detail lookup for Xiaohongshu public-content analysis, helping agents find popular posts, compare competitors, and monitor content trends. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+小红书公开数据只读技能：关键词搜笔记、爆款选题、笔记详情、评论舆情、博主作品、粉丝获赞与收藏，输出 JSON，不登录不发布。
 
-## Publisher: <br>
-[um-why](https://clawhub.ai/user/um-why) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[um-why](https://clawhub.ai/user/um-why)
 
-## Use Case: <br>
-Content creators, brand marketers, market analysts, MCN teams, and agent operators use this skill to retrieve Xiaohongshu keyword results and note details for topic discovery, competitor analysis, trend monitoring, and reporting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms, note URLs, and returned public-content data are sent to a third-party Guaikei API service. <br>
-Mitigation: Use a dedicated revocable API token and avoid queries that should not leave the local environment. <br>
-Risk: Task results are saved to local log files after execution. <br>
-Mitigation: Periodically delete generated logs when local retention is not desired. <br>
-Risk: The third-party API may be rate-limited, unavailable, or changed outside the skill owner's control. <br>
-Mitigation: Keep request volume within documented limits and treat failed or empty results as operational signals rather than complete market evidence. <br>
+## Use Case:
 
+Creators, marketers, and analysts use the skill to retrieve public Xiaohongshu notes, comments, and creator statistics for topic research, competitor monitoring, KOL screening, and public-opinion analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/um-why/xiaohongshu-data-insight) <br>
-- [Publisher profile](https://clawhub.ai/user/um-why) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Markdown, Shell commands, Analysis] <br>
-**Output Format:** [JSON or Markdown emitted by Node.js command-line tools] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search output includes Xiaohongshu note metadata and interaction counts; detail output includes note information, interaction data, and comment analysis when returned by the API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata, OpenClaw metadata, and package.json) <br>
+Risk: Search keywords and note or profile links are sent to the third-party Guaikei service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only public queries and avoid including private or sensitive information in keywords or URLs.
+
+Risk: ClawScan reports a benign verdict with medium confidence, but code analysis was partial and tool-misuse analysis was degraded.
+
+Mitigation: Review the code and its network behavior before installation; the benign verdict does not resolve the portions that were not fully inspected.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/um-why/skills/xiaohongshu-data-insight)
+- [Service homepage](https://www.guaikei.com)
+- [Output contract](artifact/references/contract.md)
+- [FAQ and setup](artifact/references/faq.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [JSON envelope containing public note, comment, and creator data, or a structured empty/error result]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only data retrieval; interaction counts may be strings.]
+
+## Skill Version(s):
+
+1.2.4 (source: frontmatter, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,57 @@
-## Description: <br>
-Prometheus Fire helps a user distill their own thinking into six cognitive personas for self-reflection, decision support, and problem solving. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users distill their own thinking into six perspectives and use them for reflection, problem solving, and decision support.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users invoke this skill as a guided conversational self-reflection system to build and use six personal thinking personas. It is intended for decision exploration, problem framing, monthly reflection, and cognitive perspective-taking rather than professional advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may ask personal self-reflection questions and keep sensitive thought material in the chat context. <br>
-Mitigation: Use explicit /prometheus invocations and avoid highly sensitive medical, legal, financial, credential, or confidential workplace information unless comfortable retaining it in the conversation. <br>
-Risk: Persona responses can influence decisions without being professional advice. <br>
-Mitigation: Treat outputs as prompts for reflection and make final decisions independently or with qualified professional review when stakes are high. <br>
+## Use Case:
 
+Individuals use the skill to structure self-reflection and examine a personal question through six complementary perspectives. Its responses are prompts for the user to assess, not final decisions.
 
-## Reference(s): <br>
-- [Prometheus Fire on ClawHub](https://clawhub.ai/gechengling/prometheus-fire) <br>
-- [King Persona Example](references/king-persona.md) <br>
-- [Dialogue Examples](references/dialogue-examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Conversational Markdown with prompts, reflective questions, persona responses, and summarized guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Purely conversational output; evidence.security reports no code, tool access, network access, or file operations. Users should avoid entering highly sensitive medical, legal, financial, credential, or confidential workplace information unless comfortable keeping it in chat context.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.1.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The manual installation command may download an unpinned CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the package and release before running the command.
+
+Risk: The security scan is partial because four referenced local files were not found.
+
+Mitigation: Review the referenced files that were not covered before installing the skill.
+
+Risk: Personal reflections entered into the skill are processed by the AI platform, whose retention practices are outside the skill's control.
+
+Mitigation: Share only information needed for the current question, omit identifying or highly sensitive details, and use role labels for other people.
+
+## Reference(s):
+
+- [Prometheus Fire on ClawHub](https://clawhub.ai/gechengling/skills/prometheus-fire)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Conversational text with labeled perspectives and suggested reflection prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses are based on user-provided context; the skill declares no tool permissions and does not create files or take external actions.]
+
+## Skill Version(s):
+
+3.1.6 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

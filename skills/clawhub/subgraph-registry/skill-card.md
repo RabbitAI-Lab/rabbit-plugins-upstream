@@ -1,45 +1,59 @@
-## Description: <br>
-Discover and filter 15,500+ The Graph subgraphs by domain, network, protocol type, or natural language goal, with x402 query URLs for $0.01 USDC on Base per call and no API key required. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use to discover The Graph subgraphs by chain, protocol, entity or contract and turn a goal into a bounded GraphQL query. Bring-your-own Studio key (set up by a human operator) for execution; discovery never executes queries or signs payments, and x402 is an explicitly paid external option.
 
-## Publisher: <br>
-[paulieb14](https://clawhub.ai/user/paulieb14) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[paulieb14](https://clawhub.ai/user/paulieb14)
 
-## Use Case: <br>
-Developers and agents use this MCP server to discover, rank, and inspect The Graph subgraphs before querying them. It returns structured subgraph metadata, schema details, reliability signals, query instructions, and x402 or legacy gateway URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill returns x402 query links that can lead to paid wallet transactions if an agent follows them with signing authority. <br>
-Mitigation: Require explicit approval before signing x402 payments or using wallet credentials, and limit autonomous use of query_url_x402 links. <br>
-Risk: The runtime may download verified registry or model assets. <br>
-Mitigation: Pin the npm package version, allow network access only to approved sources, and keep registry hash verification enabled. <br>
-Risk: Optional HTTP/SSE mode exposes local endpoints when enabled. <br>
-Mitigation: Use stdio by default, and enable HTTP/SSE only in trusted or firewalled environments. <br>
+## Use Case:
 
+Developers and agent operators use this MCP server to discover and compare The Graph subgraphs, inspect their metadata, and prepare bounded GraphQL queries for a selected deployment. Live schema checks and query execution require an operator-configured Studio API key.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/paulieb14/skills/subgraph-registry) <br>
-- [Project homepage](https://github.com/PaulieB14/subgraph-registry) <br>
-- [The Graph](https://thegraph.com) <br>
-- [x402 client package](https://www.npmjs.com/package/@graphprotocol/client-x402) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, API calls, configuration, guidance] <br>
-**Output Format:** [MCP tool responses and optional HTTP JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns subgraph classifications, reliability scores, schema details, query URLs, pricing manifests, and query guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.19 (source: package.json, server.json, ClawHub release evidence) <br>
+Risk: The scanner reports a benign verdict with medium confidence because some code analysis was incomplete; the server can make optional network requests when enabled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the pinned 0.13.7 release and review its package and source before enabling opt-in network tools.
+
+Risk: A configured Studio API key enables live schema, health, and query operations against The Graph gateway.
+
+Mitigation: Have the operator store the key in the MCP host secret store; never put it in chat, tool arguments, source files, or logs.
+
+Risk: The optional HTTP/SSE listener can expose server routes when bound beyond loopback.
+
+Mitigation: Keep the listener on 127.0.0.1 unless remote access is needed; for a non-loopback bind, configure SUBGRAPH_REGISTRY_HTTP_TOKEN.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/PaulieB14/subgraph-registry)
+- [The Graph supported networks](https://thegraph.com/docs/en/supported-networks/)
+- [The Graph Studio API keys](https://thegraph.com/studio/apikeys/)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, GraphQL queries, Guidance]
+
+**Output Format:** [Structured JSON tool responses with bounded GraphQL query strings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Discovery is local to the bundled registry; live schema checks and query execution require an operator-configured Studio API key.]
+
+## Skill Version(s):
+
+0.13.7 (source: package.json, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

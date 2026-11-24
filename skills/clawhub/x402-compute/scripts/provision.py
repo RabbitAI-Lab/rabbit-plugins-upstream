@@ -33,20 +33,17 @@ from typing import Dict, Optional
 
 import requests
 
-from solana_signing import create_solana_xpayment_from_accept, ensure_solana_destination_ready
-from wallet_signing import create_compute_auth_headers, load_compute_chain, load_payment_signer
+import x402_wire
+from solana_signing import create_solana_payment_header, ensure_solana_destination_ready
+from wallet_signing import EVM_ASSETS, create_compute_auth_headers, load_compute_chain, load_payment_signer
 
 BASE_URL = "https://compute.x402layer.cc"
 
 
 def _find_accept_option(challenge: dict, requested_network: str) -> dict:
+    # Exact network match (v1 name or exact-case CAIP-2). Unknown networks never match.
     for option in challenge.get("accepts", []):
-        network = str(option.get("network", "")).lower()
-        if requested_network == "base" and (network == "base" or "8453" in network):
-            return option
-        if requested_network == "solana" and (network == "solana" or network.startswith("solana:")):
-            return option
-        if requested_network == "robinhood" and (network == "robinhood" or "4663" in network):
+        if x402_wire.network_name(option.get("network")) == requested_network:
             return option
     raise ValueError(f"No {requested_network} payment option found in 402 challenge")
 
@@ -66,6 +63,7 @@ def provision_instance(
     model_id: Optional[str] = None,
     mode: Optional[str] = None,
     skip_confirm: bool = False,
+    hours: int = 0,
 ) -> dict:
     """Provision a compute instance with x402 payment.
 
@@ -77,7 +75,12 @@ def provision_instance(
                         Sent as the nested deploy_node object {model_id}.
     ai_machine and deploy_node are mutually exclusive.
     """
-    if days > 0:
+    if hours > 0:
+        # By the hour: only when GET /compute/plans shows "hourly": {"enabled": true}. Under 24
+        # hours costs the hourly price +15% (machines) or +20% (GPUs); the 402 shows the total.
+        prepaid_hours = hours
+        duration_label = f"{hours} hour(s)"
+    elif days > 0:
         prepaid_hours = days * 24
         duration_label = f"{days} day(s)"
     else:
@@ -133,7 +136,8 @@ def provision_instance(
     if response.status_code != 402:
         return {"error": f"Unexpected status {response.status_code}", "response": response.text[:500]}
 
-    challenge = response.json()
+    # v2 PAYMENT-REQUIRED header first, v1 JSON body otherwise (x402_wire).
+    challenge = x402_wire.read_challenge(response)
 
     option = _find_accept_option(challenge, network)
     pay_to = option["payTo"]
@@ -160,32 +164,57 @@ def provision_instance(
         if confirm not in ("y", "yes"):
             return {"error": "Payment cancelled by user"}
 
-    if network in ("base", "robinhood"):
+    if network in EVM_ASSETS:
         # Both are EVM EIP-3009 transferWithAuthorization; only the EIP-712 domain differs.
         try:
             signer = load_payment_signer()
         except Exception as exc:
             return {"error": str(exc)}
-        x_payment = signer.create_x402_payment_header(pay_to=pay_to, amount=amount, network=network)
+        header_name, x_payment = signer.create_payment_header(challenge, option, network)
     else:
         ensure_solana_destination_ready(option)
-        x_payment = create_solana_xpayment_from_accept(option)
+        header_name, x_payment = create_solana_payment_header(challenge, option)
 
     # Step 2: Pay and provision
     # NOTE: Do NOT send compute auth headers here.
     # The x402 X-Payment header authenticates the payer via on-chain payment.
     # Sending auth headers causes 401 (nonce already consumed from step 1).
-    response = requests.post(
-        f"{BASE_URL}/compute/provision",
-        data=body_json,
-        headers={
-            "Content-Type": "application/json",
-            "X-Payment": x_payment,
-        },
-        timeout=120,
-    )
+    # From here the payment is SENT. A timeout or 5xx is pending, never a reason to pay again.
+    try:
+        response = requests.post(
+            f"{BASE_URL}/compute/provision",
+            data=body_json,
+            headers={
+                "Content-Type": "application/json",
+                header_name: x_payment,
+            },
+            timeout=120,
+        )
+    except requests.RequestException as exc:
+        return x402_wire.pending_result(None, exc)
 
     print(f"Response: {response.status_code}")
+
+    if response.status_code >= 500:
+        print("Payment outcome unknown (server error after paying). Do NOT pay again.")
+        return x402_wire.pending_result(response.status_code, response.text)
+
+    if response.status_code == 202:
+        # PAID, delivery not yet confirmed. The order exists and the machine is provisioning;
+        # the body is the full order (incl. any one-time keys). Do NOT re-run provisioning:
+        # that would buy a second machine. Poll the order instead.
+        data = response.json()
+        order = data.get("order", {})
+        print("⏳ Payment accepted, delivery is being confirmed. Do NOT provision again.")
+        print(f"   Order ID: {order.get('id', 'N/A')}")
+        if data.get("pending_note"):
+            print(f"   {data['pending_note']}")
+        print(f"   Poll: python instance_details.py {order.get('id', '<id>')}")
+        ai = order.get("ai") or (order.get("metadata") or {}).get("ai") or data.get("ai") or {}
+        if ai.get("api_key"):
+            print(f"   API Key:  {ai['api_key']}  (shown once — store it securely)")
+        data["pending"] = True
+        return data
 
     if response.status_code in (200, 201):
         data = response.json()
@@ -195,26 +224,32 @@ def provision_instance(
         print(f"   IP:      {order.get('ip_address', 'pending')}")
         print(f"   Plan:    {order.get('plan', plan)}")
         print(f"   Expires: {order.get('expires_at', 'N/A')}")
-        # AI Machine (private mode): the endpoint + key live in the ai object on the
-        # order metadata: order.metadata.ai = {model_id, api_key, port:8080, endpoint}.
-        # For VM providers the endpoint derives from the instance IP + port once the IP
-        # lands (http://<ip>:8080/v1); fetch GET /compute/instances/:id to read it back.
-        ai = (order.get("metadata") or {}).get("ai") or data.get("ai") or {}
+        # AI Machine (private mode): order.ai = {model_id, api_key, endpoint, ...}. `endpoint` is the
+        # HTTPS base URL (already ending in /v1), e.g. https://ai.x402compute.cc/<order-id>/v1. Never
+        # fall back to the raw box IP/port: that path is unencrypted.
+        ai = order.get("ai") or (order.get("metadata") or {}).get("ai") or data.get("ai") or {}
         endpoint = ai.get("endpoint")
         api_key = ai.get("api_key")
-        port = ai.get("port", 8080)
-        ip = order.get("ip_address")
-        if not endpoint and ip and ip != "pending":
-            endpoint = f"http://{ip}:{port}/v1"
         if endpoint:
-            print(f"   Endpoint: {endpoint}  (OpenAI-compatible: /v1/chat/completions, /v1/models; auth: Authorization: Bearer <API_KEY>)")
+            print(f"   Endpoint: {endpoint}  (HTTPS, OpenAI-compatible: /chat/completions, /models; auth: Authorization: Bearer <API_KEY>)")
         elif api_key:
-            print(f"   Endpoint: http://<ip>:{port}/v1  (once the instance IP lands — GET /compute/instances/{order.get('id','<id>')})")
+            print(f"   Endpoint: https://ai.x402compute.cc/{order.get('id','<id>')}/v1  (HTTPS; answers 'warming up' until the machine boots)")
         if api_key:
             print(f"   API Key:  {api_key}  (shown once — store it securely)")
         if data.get("tx_hash"):
             print(f"   TX:      {data['tx_hash']}")
         return data
+
+    if response.status_code == 409:
+        try:
+            body = response.json()
+        except Exception:
+            body = {}
+        if "settlement_pending" in response.text:
+            # The payment outcome is not known yet. It may have moved. Do NOT pay again: the
+            # server checks the chain and either delivers or credits it back automatically.
+            print("⏳ Payment outcome is being confirmed on-chain. Do NOT pay again.")
+            return {"pending": True, "settlement_pending": True, "response": body or response.text[:2000]}
 
     return {"error": f"Provisioning failed: {response.status_code}", "response": response.text[:2000]}
 
@@ -226,9 +261,10 @@ if __name__ == "__main__":
     duration = parser.add_mutually_exclusive_group()
     duration.add_argument("--months", type=int, default=0, help="Duration in months (default: 1 if --days not set)")
     duration.add_argument("--days", type=int, default=0, help="Duration in days (minimum: 1)")
+    duration.add_argument("--hours", type=int, default=0, help="Duration in hours when hourly rentals are on: machines from 1, GPUs and AI machines from 2; under 24h costs +15%% machines / +20%% GPUs")
     parser.add_argument("--os-id", type=int, default=2284, help="OS image ID (default: 2284 = Ubuntu 24.04)")
     parser.add_argument("--label", default="x402-instance", help="Instance label")
-    parser.add_argument("--network", default="base", choices=["base", "solana", "robinhood"], help="Payment network (base/solana = USDC, robinhood = USDG)")
+    parser.add_argument("--network", default="base", choices=["base", "solana", "robinhood", "arc"], help="Payment network (base/solana/arc = USDC, robinhood = USDG; direct arc payments min $5)")
     parser.add_argument("--ssh-public-key", help="SSH public key contents (recommended)")
     parser.add_argument("--ssh-key-file", help="Path to SSH public key file (e.g. ~/.ssh/id_ed25519.pub)")
     parser.add_argument("--model-id", help="AI Machine: LLM to deploy (e.g. llama-3.2-3b). Requires --mode.")
@@ -253,8 +289,8 @@ if __name__ == "__main__":
             print(f"Failed to read SSH key file: {exc}")
             sys.exit(1)
 
-    # Default to 1 month if neither --days nor --months specified
-    months = args.months if args.months > 0 else (0 if args.days > 0 else 1)
+    # Default to 1 month if none of --hours, --days, --months is specified
+    months = args.months if args.months > 0 else (0 if (args.days > 0 or args.hours > 0) else 1)
     days = args.days
 
     result = provision_instance(
@@ -269,6 +305,7 @@ if __name__ == "__main__":
         model_id=args.model_id,
         mode=args.mode,
         skip_confirm=args.yes,
+        hours=args.hours,
     )
     if "error" in result:
         print(json.dumps(result, indent=2))

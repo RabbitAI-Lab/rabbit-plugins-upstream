@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """DuoPlus cloud-phone lifecycle and HTTP Gateway client.
 
-Only an API key supplied by the user is required. Pass it with --api-key for
-the current invocation or provide DUOPLUS_API_KEY. Optional environment
+Use a securely injected DUOPLUS_API_KEY or a private DUOPLUS_API_KEY_FILE.
+Do not put secret values into chat, generated commands or process arguments.
+Optional environment
 variables provide deployment overrides without changing the skill:
 
   DUOPLUS_API_BASE
@@ -19,6 +20,7 @@ import base64
 import binascii
 import json
 import os
+import stat
 import re
 import sys
 import time
@@ -32,6 +34,41 @@ from urllib.request import Request, urlopen
 # Default to DuoPlus' official global production OpenAPI. Mainland production
 # deployments can override this with DUOPLUS_API_BASE or --api-base.
 DEFAULT_API_BASE = "https://openapi.duoplus.net"
+
+
+def load_api_key(api_key=None, api_key_file=None):
+    """Resolve credentials without echoing file contents or secret values."""
+    if api_key:  # Legacy caller compatibility; not a recommended public workflow.
+        return api_key
+    path = api_key_file
+    if not path:
+        key = os.environ.get("DUOPLUS_API_KEY", "")
+        if key:
+            return key
+        path = os.environ.get("DUOPLUS_API_KEY_FILE", "")
+    if not path:
+        return ""
+    descriptor = None
+    try:
+        if Path(path).is_symlink():
+            raise ValueError("symlink")
+        descriptor = os.open(path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0))
+        info = os.fstat(descriptor)
+        if not stat.S_ISREG(info.st_mode) or info.st_size > 4096:
+            raise ValueError("invalid file")
+        if os.name != "nt" and info.st_mode & 0o077:
+            raise ValueError("private file permissions required")
+        with os.fdopen(descriptor, "r", encoding="utf-8-sig") as stream:
+            descriptor = None
+            key = stream.read(4097).strip()
+        if not key or len(key) > 4096 or "\n" in key or "\r" in key:
+            raise ValueError("expected one nonempty key")
+        return key
+    except (OSError, ValueError, UnicodeError):
+        raise DuoPlusError("Cannot load private API-key file. Use a regular UTF-8 file containing one key; restrict access to its owner (0600 on POSIX).") from None
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
 DEFAULT_GATEWAY_TEMPLATE = "https://agent-gateway.duoplus.net/agent-command"
 PHONE_STATUS = {
     0: "proxy_not_configured",
@@ -192,13 +229,13 @@ def _phone_view(item: Dict[str, Any]) -> Dict[str, Any]:
     result["ai_control_supported"] = supported
     if supported:
         result["ai_control_status"] = "supported"
-        result["ai_control_message"] = "支持 AI HTTP 控制"
+        result["ai_control_message"] = "AI HTTP control is supported"
     elif result.get("http_status") in (0, "0"):
         result["ai_control_status"] = "unsupported"
-        result["ai_control_message"] = "该云机不支持 AI HTTP 控制"
+        result["ai_control_message"] = "This cloud phone does not support AI HTTP control"
     else:
         result["ai_control_status"] = "unknown"
-        result["ai_control_message"] = "未确认该云机是否支持 AI HTTP 控制"
+        result["ai_control_message"] = "AI HTTP control support has not been confirmed for this cloud phone"
     return result
 
 
@@ -260,26 +297,28 @@ def _normalize_region(value: Any) -> Optional[str]:
         return code + (compact_direct.group(2) or "")
 
     aliases = (
-        (("hongkong", "hong kong", "香港"), "hk"),
-        (("singapore", "新加坡"), "sg"),
-        (("unitedstates", "united states", "美国"), "us"),
-        (("japan", "日本"), "jp"),
-        (("southkorea", "south korea", "韩国"), "kr"),
-        (("taiwan", "台湾"), "tw"),
-        (("unitedkingdom", "united kingdom", "英国"), "gb"),
-        (("germany", "德国"), "de"),
-        (("france", "法国"), "fr"),
-        (("netherlands", "荷兰"), "nl"),
-        (("canada", "加拿大"), "ca"),
-        (("australia", "澳大利亚"), "au"),
-        (("malaysia", "马来西亚"), "my"),
-        (("thailand", "泰国"), "th"),
-        (("vietnam", "越南"), "vn"),
-        (("indonesia", "印度尼西亚"), "id"),
-        (("philippines", "菲律宾"), "ph"),
-        (("india", "印度"), "in"),
+        (("hongkong", "hong kong", "\u9999\u6e2f"), "hk"),
+        (("singapore", "\u65b0\u52a0\u5761"), "sg"),
+        (("unitedstates", "united states", "\u7f8e\u56fd"), "us"),
+        (("japan", "\u65e5\u672c"), "jp"),
+        (("southkorea", "south korea", "\u97e9\u56fd"), "kr"),
+        (("taiwan", "\u53f0\u6e7e"), "tw"),
+        (("unitedkingdom", "united kingdom", "\u82f1\u56fd"), "gb"),
+        (("germany", "\u5fb7\u56fd"), "de"),
+        (("france", "\u6cd5\u56fd"), "fr"),
+        (("netherlands", "\u8377\u5170"), "nl"),
+        (("canada", "\u52a0\u62ff\u5927"), "ca"),
+        (("australia", "\u6fb3\u5927\u5229\u4e9a"), "au"),
+        (("malaysia", "\u9a6c\u6765\u897f\u4e9a"), "my"),
+        (("thailand", "\u6cf0\u56fd"), "th"),
+        (("vietnam", "\u8d8a\u5357"), "vn"),
+        (("indonesia", "\u5370\u5ea6\u5c3c\u897f\u4e9a"), "id"),
+        (("philippines", "\u83f2\u5f8b\u5bbe"), "ph"),
+        (("india", "\u5370\u5ea6"), "in"),
     )
-    chinese_numbers = {"一": "1", "二": "2", "三": "3", "四": "4", "五": "5"}
+    chinese_numbers = {
+        "\u4e00": "1", "\u4e8c": "2", "\u4e09": "3", "\u56db": "4", "\u4e94": "5"
+    }
     suffix_match = re.search(r"(\d+)", raw)
     suffix = suffix_match.group(1) if suffix_match else ""
     if not suffix:
@@ -307,8 +346,8 @@ class DuoPlusClient:
     ) -> None:
         if not api_key:
             raise DuoPlusError(
-                "API key is required. Ask the user to provide it directly, then pass it "
-                "with --api-key for the current invocation."
+                "API key is required. Configure DUOPLUS_API_KEY through a secure host secret "
+                "or select a private file with DUOPLUS_API_KEY_FILE/--api-key-file. Do not paste keys into chat."
             )
         self.api_key = api_key
         self.api_base = api_base.rstrip("/")
@@ -490,7 +529,7 @@ class DuoPlusClient:
                 for item in support["unsupported"]
             ]
             raise DuoPlusError(
-                "该云机不支持 AI 操作云机 (AI HTTP control is not supported)",
+                "This cloud phone does not support AI cloud-phone automation",
                 details={
                     "unsupported_phones": unsupported,
                     "hint": (
@@ -522,6 +561,34 @@ class DuoPlusClient:
 
     def info(self, image_id: str) -> Dict[str, Any]:
         return self.control("/api/v1/cloudPhone/info", {"image_id": image_id})
+
+    def platform_shell(self, image_id: str, command: str) -> Dict[str, Any]:
+        normalized = command.strip()
+        if not normalized:
+            raise DuoPlusError("platform shell command must not be empty")
+        if normalized.lower().startswith("adb shell "):
+            raise DuoPlusError(
+                "platform shell command must not include the 'adb shell' prefix"
+            )
+        response = self.control(
+            "/api/v1/cloudPhone/command",
+            {"image_id": image_id, "command": normalized},
+        )
+        data = response.get("data")
+        if not isinstance(data, dict):
+            raise DuoPlusError(
+                "platform shell response is missing data",
+                response={"body": _redact(response)},
+            )
+        if data.get("success") is not True:
+            message = data.get("message") or "platform shell command failed"
+            raise DuoPlusError(
+                str(message),
+                response={"body": _redact(response)},
+            )
+        result = dict(response)
+        result["execution_route"] = "platform_openapi_fallback"
+        return result
 
     def lifecycle(self, operation: str, image_ids: List[str]) -> Dict[str, Any]:
         paths = {
@@ -649,7 +716,7 @@ class DuoPlusClient:
         phone_view = _phone_view(phone)
         if not phone_view["ai_control_supported"]:
             raise DuoPlusError(
-                "该云机不支持 AI 操作云机 (AI HTTP control is not supported)",
+                "This cloud phone does not support AI cloud-phone automation",
                 details={
                     "image_id": image_id,
                     "http_status": phone.get("http_status"),
@@ -848,8 +915,9 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--api-key",
-        help="API key supplied directly by the user for this invocation",
+        help=argparse.SUPPRESS,
     )
+    parser.add_argument("--api-key-file", help="Path to a private UTF-8 key file; never the key itself")
     parser.add_argument("--api-base", default=_env("DUOPLUS_API_BASE", DEFAULT_API_BASE))
     parser.add_argument("--lang", default=_env("DUOPLUS_LANG", "zh"))
     parser.add_argument("--timeout", type=float, default=30.0)
@@ -928,6 +996,8 @@ def _build_parser() -> argparse.ArgumentParser:
     ui.add_argument("image_id")
     ui.add_argument("--ui-lang", default="zh")
     ui.add_argument("--screenshot-out")
+    ui.add_argument("--no-screenshot", action="store_true", help="Read elements without capturing a screenshot")
+    ui.add_argument("--max-age-ms", type=int, choices=range(0, 2001), metavar="0..2000", default=300)
 
     action = sub.add_parser("action")
     action.add_argument("image_id")
@@ -935,6 +1005,13 @@ def _build_parser() -> argparse.ArgumentParser:
     action.add_argument("--params", default="{}")
     action.add_argument("--screenshot-out")
     action.add_argument("--deadline-seconds", type=float)
+
+    platform_shell = sub.add_parser(
+        "platform-shell",
+        help="fallback shell execution through the official control API",
+    )
+    platform_shell.add_argument("image_id")
+    platform_shell.add_argument("--command", dest="shell_command", required=True)
 
     query = sub.add_parser("query")
     query.add_argument("image_id")
@@ -950,7 +1027,7 @@ def _build_parser() -> argparse.ArgumentParser:
 
 def _client(args: argparse.Namespace) -> DuoPlusClient:
     return DuoPlusClient(
-        api_key=args.api_key or _env("DUOPLUS_API_KEY", "") or "",
+        api_key=load_api_key(args.api_key, getattr(args, "api_key_file", None)),
         api_base=args.api_base,
         lang=args.lang,
         timeout=args.timeout,
@@ -1101,6 +1178,8 @@ def main() -> int:
                     "task_id": task_id,
                     "action": "get_ui_state",
                     "lang": args.ui_lang,
+                    "need_screenshot": not args.no_screenshot,
+                    "max_age_ms": args.max_age_ms,
                 },
             },
             timeout=310,
@@ -1129,6 +1208,10 @@ def main() -> int:
             body["deadline_at"] = int((time.time() + args.deadline_seconds) * 1000)
         response = client.gateway(args.image_id, body, timeout=310, retries=0)
         _emit(_summarize_gateway_result(response, args.screenshot_out))
+        return 0
+
+    if args.command == "platform-shell":
+        _emit(client.platform_shell(args.image_id, args.shell_command))
         return 0
 
     if args.command == "query":

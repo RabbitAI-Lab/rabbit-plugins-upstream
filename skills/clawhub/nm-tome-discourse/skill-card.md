@@ -1,39 +1,54 @@
-## Description: <br>
-Scans HN, Lobsters, Reddit, and tech blogs for community experience reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scans HN, Lobsters, Reddit, and tech blogs for community experience reports.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers, researchers, and technical decision makers use this skill to gather public practitioner opinions and experience reports about a technology or approach from community discussion channels. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad prompts about blogs or discourse may generate external public search queries containing private or sensitive terms. <br>
-Mitigation: Avoid private or sensitive terms in requests and review source attribution before relying on the results. <br>
+## Use Case:
 
+Developers and researchers use this skill to gather practitioner opinions and experience reports about a technology or approach from community discussions. It searches at least two supported channels and returns findings with source attribution.
 
-## Reference(s): <br>
-- [Tome plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/tome) <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-tome-discourse) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown summaries with sourced findings and search queries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use public community sources such as Hacker News, Lobsters, Reddit, and technology blogs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Search topics may contain confidential details about the user's research or interests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review search topics before use and omit confidential details.
+
+Risk: The security review was partial because a local path-like reference could not be resolved.
+
+Mitigation: Treat the benign verdict as incomplete and review the unresolved reference before relying on the assessment.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-tome-discourse)
+- [Declared metadata homepage (provenance unavailable)](https://github.com/athola/claude-night-market/tree/master/plugins/tome)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Analysis]
+
+**Output Format:** [Source-attributed community finding summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Queries at least two community channels; reports explicitly when all available search methods fail.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,51 +1,64 @@
-## Description: <br>
-AI-era-career-planner helps agents guide Chinese-language career planning conversations with staged intake, interest and values assessment, AI job-impact analysis, salary and demand references, and personalized action plans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides AI-era career planning through interest and values assessment, analysis of AI's impact on career paths, and personalized recommendations, with optional insurance-channel information on request.
 
-## Publisher: <br>
-[mnetfairy](https://clawhub.ai/user/mnetfairy) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mnetfairy](https://clawhub.ai/user/mnetfairy)
 
-## Use Case: <br>
-External users and career guidance agents use this skill to plan education choices, career entry, or career transitions in the AI era. The skill supports structured intake, assessment, career recommendations, AI-resilience guidance, and concrete next-step planning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with China-focused salary and insurance company reference data. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may ask for personal career-context information. <br>
-Mitigation: Collect only information the user chooses to provide and avoid saving profiles unless the user explicitly requests a saved record. <br>
-Risk: Salary references and insurance company recommendations may be stale, incomplete, or mistaken for endorsement. <br>
-Mitigation: Treat salary and company data as reference material, keep insurance recommendations disclosed as informational, and ask users to verify details before acting. <br>
-Risk: Optional email, subscription, live-search, or saved-record actions can affect user data outside the conversation. <br>
-Mitigation: Only use optional integrations when the current environment permits them and the user has clearly approved the specific action. <br>
+## Use Case:
 
+People considering career choices, education paths, or a career transition use this skill to explore their interests and values, assess AI's effects on career options, and plan practical next steps. It lists insurance career channels only when requested; their ordering reflects the maintainer's disclosed business preference and is separate from personalized career recommendations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/ai-era-career-planner) <br>
-- [AI career impact reference](references/ai_career_impact.md) <br>
-- [Career assessment framework](references/assessment.md) <br>
-- [Career anchor reference](references/career_anchor.md) <br>
-- [Education paths](references/education_paths.md) <br>
-- [Job demand trends](references/job_demand.md) <br>
-- [Industry trends](references/industry_trends.md) <br>
-- [Salary data](references/salary_data.md) <br>
-- [Insurance broker company reference](references/insurance_broker_companies.json) <br>
-- [Optional integrations reference](references/integrations.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Files] <br>
-**Output Format:** [Markdown career planning report and conversational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May optionally generate a Markdown report file when the host environment allows it and the user explicitly requests export.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.240 (source: server release metadata) <br>
+Risk: Career, salary, and AI-impact assessments use static reference material and are planning guidance rather than predictions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat recommendations as decision support and verify current local salary, demand, and qualification information before making major career decisions.
+
+Risk: Insurance-channel ordering reflects the maintainer's disclosed commercial preference, not a personalized suitability assessment.
+
+Mitigation: Show this list only when the user asks about insurance channels, disclose the preference, and offer side-by-side comparison with other channels.
+
+Risk: The release security review is benign with medium confidence but partial because some referenced local paths were missing; report export and tracking options may also warrant user consideration.
+
+Mitigation: Review the available files and declared permissions, and keep report export or tracking opt-in as described by the skill.
+
+## Reference(s):
+
+- [Career assessment](references/assessment.md)
+- [AI career impact](references/ai_career_impact.md)
+- [Salary data](references/salary_data.md)
+- [Job demand](references/job_demand.md)
+- [Education paths](references/education_paths.md)
+- [Insurance broker channels and disclosures](references/insurance_broker_companies.json)
+- [ClawHub skill release](https://clawhub.ai/mnetfairy/skills/ai-era-career-planner)
+- [Publisher profile](https://clawhub.ai/user/mnetfairy)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Career guidance, Analysis, Markdown report]
+
+**Output Format:** [Conversational guidance and structured Markdown career-planning reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Personalized to user-provided context; optional insurance-channel lists, report export, and tracking are provided only on request.]
+
+## Skill Version(s):
+
+2.3.29 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

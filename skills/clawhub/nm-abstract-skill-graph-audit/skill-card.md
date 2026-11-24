@@ -1,43 +1,54 @@
-## Description: <br>
-Audits Skill() references to detect hubs, isolates, and dangling targets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audit Skill() refs; detect hubs, isolates, and dangling targets
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and maintainers use this skill to audit skill-composition references before documentation passes, releases, renames, retirements, and consolidation reviews. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Audit reports may be stale or incomplete if generated against the wrong plugin root or if references use unsupported syntax. <br>
-Mitigation: Run the documented test-suite check or round-trip smoke check, then review generated reports before making changes. <br>
-Risk: Dangling-reference fixes or external-plugin allowlist updates can change skill-composition behavior. <br>
-Mitigation: Review proposed changes before applying them, especially when updating external-plugin allowlists or retiring referenced skills. <br>
+## Use Case:
 
+Developers maintaining skill plugins use this skill to map Skill() references, find hubs and orchestrators, identify isolates and dangling targets, and guide documentation or refactoring reviews.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-abstract-skill-graph-audit) <br>
-- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/abstract) <br>
-- [Usage reference](artifact/modules/usage.md) <br>
-- [Interpreting graph metrics](artifact/modules/interpretation.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text, json] <br>
-**Output Format:** [Markdown guidance with shell command examples and optional text or JSON audit reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The referenced audit only parses Skill(plugin:name) invocations and does not treat module dependencies as graph edges.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter lists 1.9.8) <br>
+Risk: The security review had partial coverage because some local references could not be resolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the complete plugin and its referenced files before relying on the audit or installing the skill.
+
+Risk: Graph counts can miss references expressed through bare skill names and can overcount common words; a zero count alone does not establish that a skill is unreachable.
+
+Mitigation: Inspect likely routers, commands, and dependencies before treating counts as evidence for retiring or consolidating a skill.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-abstract-skill-graph-audit)
+- [Skill metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/abstract)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, JSON]
+
+**Output Format:** [Plain-text summary or JSON graph report, with Markdown interpretation guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports Skill(plugin:name) references; module-level dependencies and self-references are not counted.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

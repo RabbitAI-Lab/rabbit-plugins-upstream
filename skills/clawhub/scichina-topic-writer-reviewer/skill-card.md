@@ -1,41 +1,53 @@
-## Description: <br>
-科普智创审校助手。当用户提到「科普中国热点创作」「科普工作」「热点采集与科普写作」或类似意图时激活。执行以下流程：(1) 监控 kepuchina.cn 整理热门文章与关键字；(2) 根据关键字为用户拟写科普文章；(3) 执行科学性审查与引用来源核查，防止大模型幻觉。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+科普智创审校助手采集科普中国热点，按用户确认的主题撰写科普文章，并核查科学性与引用来源。
 
-## Publisher: <br>
-[binhuatochina](https://clawhub.ai/user/binhuatochina) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[binhuatochina](https://clawhub.ai/user/binhuatochina)
 
-## Use Case: <br>
-Science communication writers and editors use this skill to gather recent Kepu China topics, draft public-facing science articles, verify claims and references, and prepare reviewed content for Feishu publication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can create and share Feishu documents and retain document links locally. <br>
-Mitigation: Confirm the Feishu workspace, parent node, account, sharing permissions, content format, and local link-retention behavior before running the full workflow; use preview-only mode when remote document creation is not desired. <br>
-Risk: Science or health article drafts can include incorrect facts, unverifiable claims, or fabricated references if review steps are skipped. <br>
-Mitigation: Require the built-in scientific review, citation verification, and fact-checking steps before publishing or writing content to Feishu. <br>
+## Use Case:
 
+科普内容创作者和科普工作者可用它整理科普中国热点与关键词，围绕确认的主题起草通俗科普文章，并检查事实和参考来源。
 
-## Reference(s): <br>
-- [科普中国](https://www.kepuchina.cn/) <br>
-- [ClawHub skill page](https://clawhub.ai/binhuatochina/scichina-topic-writer-reviewer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown article draft, reference list, review report, Feishu document link, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create a Feishu document and record the resulting document link locally when the full workflow is run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.2 (source: frontmatter and server release evidence) <br>
+Risk: 内容可能被上传到固定的外部 wiki，访问范围可能不明确。
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: 上传前审阅内容和目标位置，确认外部 wiki 的访问范围，并取得用户明确批准。
+
+Risk: 重复标题清理可能删除已有页面。
+
+Mitigation: 删除前核实页面标题和标识，并确认目标页面确实是多余副本。
+
+## Reference(s):
+
+- [科普中国](https://www.kepuchina.cn/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [中文 Markdown 文章草稿、关键词列表、参考文献清单和审校报告]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [围绕用户确认的主题生成；无法验证的来源应标注待核实。]
+
+## Skill Version(s):
+
+0.1.8 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
