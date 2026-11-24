@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/kumo-model-persistence",
+  "identifier": "NVIDIA/skills/skills/kumo-model-persistence",
+  "repo": "NVIDIA/skills",
+  "path": "skills/kumo-model-persistence",
+  "branch": "main",
+  "pushedAt": "2026-11-24T18:11:20Z",
+  "contentHash": "a7b9ed623bc6a341fd4141902b9dcd6f5615928f5563db86daec2330628193a6",
+  "fetchedAt": "2026-11-24T18:57:25.144Z"
+}

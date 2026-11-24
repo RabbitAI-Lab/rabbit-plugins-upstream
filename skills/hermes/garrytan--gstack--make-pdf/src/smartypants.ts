@@ -20,7 +20,12 @@
 
 const CODE_ZONE_RE = /<(pre|code|script|style)\b[^>]*>[\s\S]*?<\/\1>/gi;
 const TAG_RE = /<[^>]+>/g;
-const URL_RE = /\bhttps?:\/\/\S+/g;
+// \u0000 is the placeholder sentinel (see PLACEHOLDER below). It must be
+// excluded here: URLs are carved AFTER tags, so a URL sitting flush against
+// a tag (`<a href="...">https://ex.com</a>`) would otherwise let \S+ swallow
+// the placeholder standing in for `</a>` — that placeholder then never
+// restores (restore is a single pass) and the tag is lost.
+const URL_RE = /\bhttps?:\/\/[^\s\u0000]+/g;
 
 /**
  * Apply smartypants to an HTML string. Zones that should not be touched:
@@ -44,7 +49,7 @@ export function smartypants(html: string): string {
     });
   };
 
-  let s = html;
+  let s = html.replace(/\u0000/g, "");  // drop stray input NUL (can't forge a placeholder)
   s = carve(s, CODE_ZONE_RE);
   s = carve(s, TAG_RE);
   s = carve(s, URL_RE);
@@ -71,7 +76,14 @@ export function smartypants(html: string): string {
  *   5. Single quotes (open/close pairing — after apostrophes)
  */
 function transformText(text: string): string {
-  let s = text;
+  // marked writes text quotes as entities. Read them as quotes here, in text
+  // only: every quote below becomes a curly one, so none can come out as
+  // attribute or tag syntax however a tag was split.
+  let s = text
+    .replace(/&quot;/g, "\"")
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&#x27;/g, "'");
 
   // Ellipsis: three literal dots (with optional spaces) → …
   s = s.replace(/\.\s?\.\s?\./g, "\u2026");
@@ -89,11 +101,11 @@ function transformText(text: string): string {
 
   // Double quotes: open if preceded by whitespace/bol, close if preceded
   // by word char or punctuation.
-  s = s.replace(/(^|[\s\(\[\{\-])"/g, "$1\u201c");     // opening "
+  s = s.replace(/(^|[\s\(\[\{\-\uff1a\uff08\u3010\u300c\u300e\u3008\u300a])"/g, "$1\u201c");     // opening "
   s = s.replace(/"/g, "\u201d");                         // remaining " are closing
 
   // Single quotes (after apostrophe pass):
-  s = s.replace(/(^|[\s\(\[\{\-])'/g, "$1\u2018");      // opening '
+  s = s.replace(/(^|[\s\(\[\{\-\uff1a\uff08\u3010\u300c\u300e\u3008\u300a])'/g, "$1\u2018");      // opening '
   s = s.replace(/'/g, "\u2019");                         // remaining ' are closing
 
   return s;

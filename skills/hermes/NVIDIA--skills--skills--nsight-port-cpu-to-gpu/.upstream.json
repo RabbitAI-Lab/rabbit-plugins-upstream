@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nsight-port-cpu-to-gpu",
+  "identifier": "NVIDIA/skills/skills/nsight-port-cpu-to-gpu",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nsight-port-cpu-to-gpu",
+  "branch": "main",
+  "pushedAt": "2026-11-24T18:11:20Z",
+  "contentHash": "e6919bc2a38ce77d01bd469c1149249268ac7b2fc7b57fee9486250da4e87c05",
+  "fetchedAt": "2026-11-24T18:57:25.205Z"
+}
