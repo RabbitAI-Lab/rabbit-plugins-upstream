@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/routines",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "routines",
+  "branch": "main",
+  "pushedAt": "2026-11-24T01:44:15Z",
+  "contentHash": "7163f09d2dba729499d886a9cd21fa2f1c4c5c38129471cb5a3fcf9833716803",
+  "fetchedAt": "2026-11-24T18:59:14.063Z"
+}

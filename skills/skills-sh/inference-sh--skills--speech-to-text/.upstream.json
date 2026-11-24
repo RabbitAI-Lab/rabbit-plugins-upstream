@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/speech-to-text",
+  "repo": "inference-sh/skills",
+  "skillId": "speech-to-text",
+  "branch": "main",
+  "pushedAt": "2026-11-22T10:38:22Z",
+  "contentHash": "9d5861173b20618722eead161c4a91a182d35976e27075163de2280798546a56",
+  "fetchedAt": "2026-11-24T18:57:21.484Z"
+}

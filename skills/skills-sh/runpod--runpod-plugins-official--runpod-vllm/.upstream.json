@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runpod/runpod-plugins-official/runpod-vllm",
+  "repo": "runpod/runpod-plugins-official",
+  "skillId": "runpod-vllm",
+  "branch": "main",
+  "pushedAt": "2026-11-24T18:40:25Z",
+  "contentHash": "06ab90519969697556753d819513d5296ab82b8e8d60250d08322095caa28f2e",
+  "fetchedAt": "2026-11-24T18:59:35.926Z"
+}
