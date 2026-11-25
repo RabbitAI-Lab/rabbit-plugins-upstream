@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-finetune-kumo-anomaly",
+  "identifier": "NVIDIA/skills/skills/tao-finetune-kumo-anomaly",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-finetune-kumo-anomaly",
+  "branch": "main",
+  "pushedAt": "2026-11-25T17:50:19Z",
+  "contentHash": "efe22209b03a8b3b8f3a1e89415f34750588d65569b7b8d8e23ea2c5ca1cefa5",
+  "fetchedAt": "2026-11-25T18:01:15.106Z"
+}

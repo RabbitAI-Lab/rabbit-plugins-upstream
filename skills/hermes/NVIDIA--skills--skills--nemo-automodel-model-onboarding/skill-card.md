@@ -9,14 +9,14 @@ NVIDIA <br>
 ### License/Terms of Use: <br>
 Apache 2.0 <br>
 ## Use Case: <br>
-Developers and engineers adding or modifying model architecture support in NeMo AutoModel, such as LLM, VLM, and MoE model files, custom layers, state-dict adapters, registry entries, and capability flags. <br>
+Developers and engineers adding new LLM, VLM, or MoE model architecture support to NeMo AutoModel, including HuggingFace config analysis, model file implementation, state-dict adapter authoring, registry registration, and validation testing. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Requirements / Dependencies: <br>
 **Requires API Key or External Credential:** [Not Specified] <br>
-**Credential Type(s):** [None identified] <br>  
+**Credential Type(s):** [None identified] <br>
 
 Do not include secrets in prompts/logs/output; use least-privilege credentials; rotate keys as appropriate. <br>
 
@@ -25,58 +25,58 @@ Risk: Review before execution as proposals could introduce incorrect or misleadi
 Mitigation: Review and scan skill before deployment. <br>
 
 ## Reference(s): <br>
-- [llm-patterns.md](llm-patterns.md) <br>
-- [moe-patterns.md](moe-patterns.md) <br>
-- [vlm-patterns.md](vlm-patterns.md) <br>
-- [capabilities-and-precision.md](capabilities-and-precision.md) <br>
+- [LLM Patterns](llm-patterns.md) <br>
+- [MoE Patterns](moe-patterns.md) <br>
+- [VLM Patterns](vlm-patterns.md) <br>
+- [Capabilities and Precision](capabilities-and-precision.md) <br>
 - [NeMo AutoModel Documentation](https://docs.nvidia.com/nemo/automodel/latest/index.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Code, Configuration instructions, Shell commands] <br>
-**Output Format:** [Markdown with inline code blocks] <br>
+**Output Type(s):** [Code, Configuration instructions, Analysis] <br>
+**Output Format:** [Markdown with inline Python and YAML code blocks] <br>
 **Output Parameters:** [1D] <br>
 **Other Properties Related to Output:** [None] <br>
 
 ## Evaluation Agents Used: <br>
-- `claude-code` <br>
-- `codex` <br>
+- Claude Code (`aws/anthropic/bedrock-claude-opus-4-8`) <br>
+- Codex (`openai/openai/gpt-5.5`) <br>
 
 
 
 ## Evaluation Tasks: <br>
-Evaluated against 3 internal skill-activation tasks in an astra-sandbox environment with 1 attempt per task and a 50% pass threshold. <br>
+Evaluated against 3 internal evaluation tasks (3 positive) in isolated k8s-sandbox pods. Dataset digest: sha256:814bfc7c94da8ea6fd1a065d7f3f0c4fcda9ef918f1da7eb46630700f241fc25. <br>
 
 ## Evaluation Metrics Used: <br>
 Reported benchmark dimensions: <br>
-- Security: Checks whether skill-assisted execution avoids unsafe behavior such as secret leakage, destructive commands, or unauthorized access. <br>
-- Correctness: Checks whether the agent follows the expected workflow and produces the correct final output. <br>
-- Discoverability: Checks whether the agent loads the skill when relevant and avoids using it when irrelevant. <br>
-- Effectiveness: Checks whether the agent performs measurably better with the skill than without it. <br>
-- Efficiency: Checks whether the agent uses fewer tokens and avoids redundant work. <br>
+- Security: Whether the skill is safe to use, based on unsafe operations, secret leakage, and unauthorized access checks. <br>
+- Correctness: Whether the skill produces correct answers, based on final-answer accuracy against reference answers. <br>
+- Discoverability: Whether the right skill was loaded when needed, based on skill execution and routing quality. <br>
+- Effectiveness: Whether the skill helps complete the user's goal, combining goal completion (50%) and expected workflow adherence (50%). <br>
+- Efficiency: Whether the skill avoids wasted tool calls and token usage, combining tool-call productivity (50%) and token efficiency (50%). <br>
 
 Underlying evaluation signals used in this run: <br>
 - `security`: Checks for unsafe operations, secret leakage, and unauthorized access. <br>
-- `skill_execution`: Verifies that the agent loaded the expected skill and workflow. <br>
-- `skill_efficiency`: Checks routing quality, decoy avoidance, and redundant tool usage. <br>
-- `accuracy`: Grades final-answer correctness against the reference answer. <br>
-- `goal_accuracy`: Checks whether the overall user task completed successfully. <br>
-- `behavior_check`: Verifies expected behavior steps, including safety expectations. <br>
-- `token_efficiency`: Compares token usage with and without the skill. <br>
+- `skill_execution`: Whether the expected skill was selected, decoys were avoided, and the workflow executed. <br>
+- `skill_efficiency`: Tool-call productivity; routing is scored under Discoverability. <br>
+- `accuracy`: Final-answer correctness against the reference answer. <br>
+- `goal_accuracy`: Whether the user's goal was achieved. <br>
+- `behavior_check`: Whether the expected workflow behavior was followed. <br>
 
 
 
 ## Evaluation Results: <br>
-| Dimension | Num | `claude-code` | `codex` |
-|---|---:|---:|---:|
-| Security | 3 | 100% (+0%) | 100% (+0%) |
-| Correctness | 3 | 100% (+48%) | 95% (+32%) |
-| Discoverability | 3 | 100% (+75%) | 83% (+49%) |
-| Effectiveness | 3 | 95% (+56%) | 94% (+41%) |
-| Efficiency | 3 | 94% (+70%) | 74% (+36%) |
+| Measure | Claude Code | Codex |
+|---|---:|---:|
+| Overall | 98.5% | 97.8% |
+| Security | 100.0% | 100.0% |
+| Correctness | 100.0% | 100.0% |
+| Discoverability | 100.0% | 91.7% |
+| Effectiveness | 92.6% | 97.2% |
+| Efficiency | 100.0% | 100.0% |
 
 ## Skill Version(s): <br>
-v1.2.1+7febc6e (source: pyproject.toml) <br>
+v1.2.1+10d4dd7 (source: pyproject.toml) <br>
 
 ## Ethical Considerations: <br>
 NVIDIA believes Trustworthy AI is a shared responsibility and we have established policies and practices to enable development for a wide array of AI applications. When downloaded or used in accordance with our terms of service, developers should work with their internal team to ensure this skill meets requirements for the relevant industry and use case and addresses unforeseen product misuse. <br>

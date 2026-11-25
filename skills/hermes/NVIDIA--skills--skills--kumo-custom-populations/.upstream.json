@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/kumo-custom-populations",
+  "identifier": "NVIDIA/skills/skills/kumo-custom-populations",
+  "repo": "NVIDIA/skills",
+  "path": "skills/kumo-custom-populations",
+  "branch": "main",
+  "pushedAt": "2026-11-25T17:50:19Z",
+  "contentHash": "5588d14785f9420e494623d536544fad58b7c709d23cfa527955f2fd577fa278",
+  "fetchedAt": "2026-11-25T18:01:14.847Z"
+}

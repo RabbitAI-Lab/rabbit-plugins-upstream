@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/kumo-data-science",
+  "identifier": "NVIDIA/skills/skills/kumo-data-science",
+  "repo": "NVIDIA/skills",
+  "path": "skills/kumo-data-science",
+  "branch": "main",
+  "pushedAt": "2026-11-25T17:50:19Z",
+  "contentHash": "4d21ac9a29aed1c4d7630d9b0f995ed013c2b623b49caedf9dfd31f32ade10db",
+  "fetchedAt": "2026-11-25T18:01:14.848Z"
+}
