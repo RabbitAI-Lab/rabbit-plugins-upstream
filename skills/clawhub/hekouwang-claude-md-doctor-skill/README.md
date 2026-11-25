@@ -11,8 +11,15 @@
 > **会勇禾口王的AI笔记** 出品 · `@huiyonghkw`
 > _不聊 AI 会不会取代你，只聊先用 AI 的人怎么取代你。_
 
-CLAUDE.md 体检器 —— 检查任意项目的 `CLAUDE.md` 是否符合"把它当**运行时配置**、
-不是项目说明书"的最佳实践，给出评分卡 + 修复建议。
+CLAUDE.md / AGENTS.md 体检器 —— 检查任意项目的运行时配置是否符合"**路由器、不是图书馆**"，
+给出评分卡 + 修复建议。
+
+## 30 秒验收
+
+```bash
+python3 check.py .                    # 体检当前项目（零依赖）
+bash scripts/run-all-doctors.sh .     # 三件套编排（连本机环境一起扫需加 --with-env-doctor）
+```
 
 <p align="center">
   <img src="examples/demo.gif" width="720" alt="hekouwang-claude-md-doctor-skill 体检演示">
@@ -64,23 +71,28 @@ python3 check.py [项目目录] --json   # 机器可读 JSON（CI 可用）
 
 ### Docker（不想装 Python 也能跑）
 ```bash
-# 拉官方镜像直接用（打 tag 时 GitHub Actions 自动发布到 GHCR）
-docker run --rm -v "$PWD:/work" ghcr.io/huiyonghkw/hekouwang-claude-md-doctor-skill
+# 拉官方镜像直接用（打 tag 时 GitHub Actions 自动发布到 GHCR，用具体版本号锁住行为）
+docker run --rm -v "$PWD:/work" ghcr.io/huiyonghkw/hekouwang-claude-md-doctor-skill:1.3.7
 
 # 或本地自建
-docker build -t claude-md-doctor .
-docker run --rm -v "$PWD:/work" claude-md-doctor            # 体检当前项目
-docker run --rm -v "$PWD:/work" claude-md-doctor /work --json
+docker build -t hekouwang-claude-md-doctor:1.3.7 .
+docker run --rm -v "$PWD:/work" hekouwang-claude-md-doctor:1.3.7            # 体检当前项目
+docker run --rm -v "$PWD:/work" hekouwang-claude-md-doctor:1.3.7 /work --json
 ```
 
 ### 接进 CI 卡关（GitHub Actions 示例）
+
+> 注意：下面这段会**下载并执行远端脚本**。执行前先打开 `check.py` 审阅一遍；
+> 要可复现，把 URL 里的 `main` 换成某个 commit SHA，并把脚本落到临时目录、别覆盖项目文件。
+
 ```yaml
 - uses: actions/setup-python@v5
   with: { python-version: "3.x" }
 - name: CLAUDE.md 体检（不合格则拦 PR）
   run: |
-    curl -sO https://raw.githubusercontent.com/huiyonghkw/hekouwang-claude-md-doctor-skill/main/check.py
-    python3 check.py .
+    # 先审阅再执行：内容来自仓库 main 分支，非本工作流签发
+    curl -fsSL -o /tmp/claude-md-doctor.py https://raw.githubusercontent.com/huiyonghkw/hekouwang-claude-md-doctor-skill/main/check.py
+    python3 /tmp/claude-md-doctor.py .
 ```
 本仓库自身的 CI 见 [`.github/workflows/ci.yml`](.github/workflows/ci.yml)（语法 + good/bad 夹具 + JSON 合法性）。
 
@@ -109,14 +121,19 @@ Claude Code 自带一个 `/doctor` 命令，名字也带 "doctor"，但**体检�
   即私有 Skill `hekouwang-content-factory`，**GitHub 上为 PRIVATE 仓库，非授权无法 clone / 获取**），
   **不随本仓库分发**。需要出图版报告，请联系 **@huiyonghkw** 获取。
 
-> 一句话：**跑检查免费，出「好看的报告图」找我。**
+> 一句话：**跑检查免费，出「好看的报告图」找我。**  
+> 联系：**GitHub / ClawHub [@huiyonghkw](https://github.com/huiyonghkw)** · 可视化报告卡私信获取
+
+## 体检器三件套
+
+与 [`skill-doctor`](https://github.com/huiyonghkw/hekouwang-claude-skill-doctor-skill)、[`env-doctor`](https://github.com/huiyonghkw/hekouwang-env-doctor-skill) 组成 **hekouwang-doctor-suite**。一键：`bash scripts/run-all-doctors.sh <项目根>`（默认只跑 md + 项目内 skill；本机环境扫描需显式加 `--with-env-doctor`，见 `references/doctor-suite.md`）。
 
 ## 设计
 
 - **机检层（`check.py`）**：确定性、零依赖、可移植，跑启发式检查并打分。
 - **定性层（`SKILL.md`）**：模型读正文复核机检盲区（图书馆 vs 路由器、规则是否可执行），
   再出最终报告与修复方案。
-- **安全**：绝不读取 `.env` / `*.key` / `*.pem` 等密钥文件；体检只读，改动需确认。
+- **安全**：绝不打开密钥文件（环境变量文件、证书、私钥等）；体检只读，改动需确认。
 
 ## 评分档位
 

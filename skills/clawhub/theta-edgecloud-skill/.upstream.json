@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/theta-edgecloud-skill",
   "slug": "theta-edgecloud-skill",
   "ownerHandle": null,
-  "version": "0.1.26",
-  "updatedAt": 1781153649766,
-  "contentHash": "c4857e7c023ea52190446ab5e8c0f164cf601d0e2b5d86f5ee10321a264f4cfc",
-  "fetchedAt": "2026-07-26T18:29:51.837Z"
+  "version": "0.3.1",
+  "updatedAt": 1795574809948,
+  "contentHash": "40780ca98193b766d2c6f61c46b167f79a28c4895a7962e30652823411c90aa8",
+  "fetchedAt": "2026-11-25T18:05:19.832Z"
 }

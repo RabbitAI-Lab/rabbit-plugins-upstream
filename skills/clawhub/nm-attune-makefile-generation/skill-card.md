@@ -1,39 +1,50 @@
-## Description: <br>
-Generates Makefiles with testing, linting, formatting, and automation targets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates Makefiles with testing, linting, formatting, and automation targets
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to create or update Makefiles for Python, Rust, and TypeScript projects with standard testing, linting, formatting, build, and workflow automation targets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated or updated Makefile targets can alter local build artifacts or affect release workflows, especially targets such as publish, clean, or deploy. <br>
-Mitigation: Review the generated Makefile before accepting changes and inspect sensitive targets before running them. <br>
+## Use Case:
 
+Developers use this skill to generate or update project Makefiles with language-specific targets for dependencies, code quality, tests, builds, and automation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-makefile-generation) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with Makefile snippets and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces Makefile-generation guidance that may result in local project-file changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The security review has medium confidence because several referenced paths were absent from the reviewed bundle, leaving evidence gaps.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the available skill contents and referenced paths before installation, accounting for the missing bundle evidence.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-attune-makefile-generation)
+- [Attune plugin homepage (metadata link)](https://github.com/athola/claude-night-market/tree/master/plugins/attune)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Code, Shell commands, Guidance]
+
+**Output Format:** [Makefile text and Markdown instructions with shell code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Language-specific development targets for Python, Rust, or TypeScript when detectable.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

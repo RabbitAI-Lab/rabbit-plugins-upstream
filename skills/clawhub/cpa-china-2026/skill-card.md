@@ -1,42 +1,49 @@
-## Description: <br>
-Provides Chinese CPA 2026 exam support across accounting, auditing, financial cost management, corporate strategy and risk management, economic law, and tax law. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+提供中国注册会计师2026年专业阶段六科目权威知识问答、准则解读、审计流程、财务计算、法条检索和税务处理辅助。
 
-## Publisher: <br>
-[yjkj999999](https://clawhub.ai/user/yjkj999999) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yjkj999999](https://clawhub.ai/user/yjkj999999)
 
-## Use Case: <br>
-CPA candidates, accounting professionals, auditors, tax practitioners, and finance teams use this skill for study support, concept explanations, calculation walkthroughs, standards interpretation, audit planning, legal lookup, and tax treatment analysis for China's 2026 CPA professional-stage subjects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Accounting, audit, legal, tax, or financial conclusions may be incomplete, outdated, or unsuitable for filings, audits, or business decisions. <br>
-Mitigation: Use the skill for study and general analysis, and verify current conclusions against official sources or a qualified professional before relying on them. <br>
-Risk: Static exam reference content may not account for the full facts of a specific enterprise or transaction. <br>
-Mitigation: Apply professional judgment and current case-specific facts when using outputs for practical accounting, audit, legal, tax, or finance work. <br>
+## Use Case:
 
+CPA candidates and accounting professionals can use the skill for study and reference across China's six professional-stage subjects, including accounting, auditing, financial management, strategy, economic law, and tax. Verify guidance against current rules and the facts of each case before relying on it.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/yjkj999999/cpa-china-2026) <br>
-- [README.md](artifact/README.md) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Natural-language answers in text or Markdown with explanations, calculations, study guidance, and professional analysis.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Static reference skill; no hidden execution, data access, persistence, or destructive behavior was identified by the security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and package.json) <br>
+Risk: Accounting, audit, legal, and tax answers may be incomplete, outdated, or unsuitable for a particular case.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check cited requirements against current official rules and have a qualified professional review decisions using the relevant facts.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/yjkj999999/skills/cpa-china-2026)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Analysis, Guidance]
+
+**Output Format:** [Chinese natural-language responses, with explanations, calculations, and structured lists as appropriate]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses depend on the question and case details; accounting, legal, and tax guidance may need checking against current official rules.]
+
+## Skill Version(s):
+
+1.0.1 (source: release evidence, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

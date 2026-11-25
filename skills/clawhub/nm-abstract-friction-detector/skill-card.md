@@ -1,41 +1,50 @@
-## Description: <br>
-Detects friction signals during agent sessions and graduates recurring patterns into reviewed rules for future guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detect friction signals; graduate patterns into rules. Use for session retrospectives
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agent operators use this skill for session retrospectives, local friction logging, and review-driven promotion of recurring agent workflow issues into durable guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Session-derived friction logs can persist local project context under ~/.claude/friction. <br>
-Mitigation: Use only where local logging is acceptable, review or purge friction logs as needed, and avoid highly sensitive projects without additional redaction or encryption controls. <br>
-Risk: Recurring patterns may influence future agent behavior through LEARNINGS.md entries or rule proposals. <br>
-Mitigation: Review proposed graduations before relying on them, and require explicit approval before any permanent CLAUDE.md or skill update. <br>
+## Use Case:
 
+Developers use the skill during session retrospectives to identify recurring friction, record signals, and prepare patterns for review as durable guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-abstract-friction-detector) <br>
-- [claude-night-market abstract plugin](https://github.com/athola/claude-night-market/tree/master/plugins/abstract) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown reports, JSON session-capture records, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write local friction session logs under ~/.claude/friction and add reviewed recurring patterns to LEARNINGS.md.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: The security review was partial because one local reference could not be resolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the unresolved local reference before relying on its contents; the benign scan verdict does not establish what that reference points to.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-abstract-friction-detector)
+- [Homepage (metadata.clawdis)](https://github.com/athola/claude-night-market/tree/master/plugins/abstract)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Guidance]
+
+**Output Format:** [Markdown friction reports and JSON session-capture records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May update friction logs and LEARNINGS.md; Tier 3 guidance changes require user approval.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,49 @@
-## Description: <br>
-Vibe Coding Coach helps users plan AI-assisted software projects, choose coding tools, structure prompts and workflows, debug issues, and prepare prototypes for deployment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Coaches users through AI-assisted software-building workflows with tool selection, prompt patterns, context management, debugging strategies, and pre-launch checklists.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users, product managers, founders, designers, students, and developers use this skill to turn app ideas into AI coding sessions, choose tools, craft prompts, debug AI-built apps, and prepare prototypes for deployment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation phrases may cause the skill to appear for general AI coding or app-building questions where its coaching is not needed. <br>
-Mitigation: Confirm that the request is about AI-assisted app-building workflow guidance before applying the skill's recommendations. <br>
-Risk: Guidance for deploying AI-generated applications can be incomplete for security-sensitive features such as authentication, payments, or private data handling. <br>
-Mitigation: Review AI-generated code and obtain qualified security or engineering review before deploying production systems with real users or sensitive data. <br>
+## Use Case:
 
+Non-technical founders, product managers, designers, students, and developers use this skill to plan AI-assisted app building, choose tools, write prompts, manage context, troubleshoot workflow problems, and review readiness before launch.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/vibe-coding-coach) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Configuration] <br>
-**Output Format:** [Markdown guidance with prompt templates, checklists, and tool recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include staged prompts, diagnostic questions, tool comparisons, and verification checklists for AI coding workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: SKILL.md frontmatter and release evidence) <br>
+Risk: The security review is incomplete because two local references could not be matched to bundled artifacts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the unresolved references before installation and complete a security review when their contents are available.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/vibe-coding-coach)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with reusable prompt templates, examples, and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Coaching material for the user to review and apply; the skill does not write files, run code, or deploy applications.]
+
+## Skill Version(s):
+
+3.0.5 (source: frontmatter, server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

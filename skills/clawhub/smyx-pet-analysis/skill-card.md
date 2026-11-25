@@ -1,44 +1,56 @@
-## Description: <br>
-Analyzes pet video or image inputs through server-side APIs to produce a Pet Safety Guardian health report and, when requested, retrieve cloud report history. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Triggers when a user provides a video URL or file of a pet (cat/dog/bird) for analysis; supports local video uploads or network URLs to call server-side APIs for health checks, analyzing features like fur, body, and face to identify potential diseases and generate a Pet Safety Guardian health report. | 猫狗宠物健康诊断分析工具，当用户提供猫/狗/鸟等宠物的视频 URL 或文件需要分析时，触发本技能进行宠物健康诊断分析；支持通过上传本地视频或网络视频 URL，调用服务端 API 进行宠物健康检查，分析毛发、身体、脸部等特征，识别潜在疾病并输出宠安卫士健康报告
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and agents use this skill to submit cat, dog, bird, or other pet media for health-oriented analysis, receive structured findings and care suggestions, and list prior cloud reports. Results are health references and are not a substitute for professional veterinary diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet videos, images, or media URLs are sent to lifeemergence.com services for analysis. <br>
-Mitigation: Use only when the user is comfortable sharing the media with that service, and avoid submitting sensitive or unrelated files. <br>
-Risk: The skill automatically creates or reuses local identity records and stores service tokens in the workspace data directory. <br>
-Mitigation: Use a private workspace for sensitive reports, review local workspace data handling, and clear stored state before sharing the workspace. <br>
-Risk: Cloud report history retrieval may expose prior pet health reports associated with the local identity. <br>
-Mitigation: Confirm the user intends to view report history and avoid running history queries in shared or untrusted sessions. <br>
+## Use Case:
 
+Pet owners and caregivers can submit a cat, dog, bird, or other pet video for an automated health screening, structured report, and care suggestions, or request their cloud report history. The analysis is informational and does not replace a veterinarian's diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-analysis) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Skill usage demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown or JSON health analysis report, with optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links, status messages, care suggestions, and cloud history tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-999.999.1001 (source: server release evidence) <br>
+Risk: ClawScan marks the skill suspicious because scanners report possible disclosure of video and credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid providing credentials or sensitive footage until reviewed, and submit video only when comfortable with the service receiving it.
+
+Risk: ClawScan reports unsafe request behavior and extra identity or history operations.
+
+Mitigation: Check that the intended service destination is honored and review the account and report-history behavior before use.
+
+## Reference(s):
+
+- [Skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](references/api_doc.md)
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured pet health report with analysis text and a report link; historical reports can be returned as JSON and formatted in a Markdown table]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes observations, potential health concerns, care suggestions, and report links; informational only and not a veterinary diagnosis]
+
+## Skill Version(s):
+
+999.999.1015 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -17,7 +17,7 @@ installer:
 argument-hint: "[session id / table / index name or describe your DBA task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["MYSQL_AIOPS_CONFIG"],"bins":["mysql-aiops"],"config":["~/.mysql-aiops/config.yaml","~/.mysql-aiops/secrets.enc"]},"optional":{"env":["MYSQL_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"MYSQL_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/MySQL-AIops","emoji":"🐬","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["mysql-aiops","uvx"]},"optional":{"env":["MYSQL_AIOPS_CONFIG","MYSQL_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/MySQL-AIops","emoji":"🐬","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed MySQL/MariaDB DBA operations. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency. Connects via PyMySQL (30s timeouts) and reads information_schema / performance_schema; the server flavor (mysql vs mariadb) is detected from version() and flavor-dependent statements branch (SHOW REPLICA STATUS vs SHOW SLAVE STATUS; performance_schema.data_lock_waits vs information_schema.innodb_lock_waits).
   All write operations are audited to a local SQLite DB under ~/.mysql-aiops/ (relocatable via MYSQL_AIOPS_HOME).
@@ -31,6 +31,8 @@ compatibility: >
 ---
 
 # MySQL AIops
+
+> **Audit availability:** Real writes require a durable audit intent. Reads and previews can continue if audit storage fails; check the warning and audit health before relying on their audit trail.
 
 > **Disclaimer**: Community-maintained open-source project, **not affiliated with, endorsed by, or sponsored by Oracle Corporation or the MariaDB Foundation.** "MySQL" and "MariaDB" trademarks belong to their owners. Source at [github.com/AIops-tools/MySQL-AIops](https://github.com/AIops-tools/MySQL-AIops) under the MIT license.
 
@@ -63,6 +65,15 @@ uv tool install mysql-aiops
 mysql-aiops init       # interactive wizard: connection + encrypted password
 mysql-aiops doctor     # connectivity + flavor + performance_schema + replica role
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/mysql-aiops
+openclaw skills info mysql-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 
@@ -198,7 +209,7 @@ permitted. That is your agent's judgement, or the permission of the account you 
 write privileges (no INSERT/UPDATE/DELETE/DDL) — writes then fail at the server). There is no
 read-only switch, policy file, or approval gate.
 
-- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.mysql-aiops/audit.db` (relocatable via `MYSQL_AIOPS_HOME`): params, result, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
+- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.mysql-aiops/audit.db` (relocatable via `MYSQL_AIOPS_HOME`): params, outcome summary, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
 - `MYSQL_AUDIT_APPROVED_BY` / `MYSQL_AUDIT_RATIONALE` are optional annotations recorded on the audit row (who/why); they are never required and never block.
 - **Runaway guard** — a safety backstop, not authorization: the same call looped in a tight window trips a circuit breaker. Disable with `MYSQL_RUNAWAY_MAX=0`.
 - Writes support `--dry-run` / `dry_run=True` and double confirmation at the CLI.

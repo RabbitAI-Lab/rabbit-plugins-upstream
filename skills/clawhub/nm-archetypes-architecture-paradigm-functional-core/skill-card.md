@@ -1,43 +1,58 @@
-## Description: <br>
-Applies Functional Core, Imperative Shell to isolate logic from side effects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies Functional Core, Imperative Shell to isolate logic from side effects
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to apply the Functional Core, Imperative Shell pattern when separating business logic from I/O, designing command schemas, and improving testability. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on common engineering terms when users only need general architecture help. <br>
-Mitigation: Review and narrow trigger wording before deployment if tighter activation is required. <br>
-Risk: Teams may move decisions into the imperative shell or duplicate business logic outside the functional core. <br>
-Mitigation: Use code review checklists and architecture tests to keep decisions in the core and side effects in the shell. <br>
-Risk: Framework lifecycle constraints can make shell adapters more complex than expected. <br>
-Mitigation: Validate adapter designs with small proofs of concept before broad refactoring. <br>
+## Use Case:
 
+Developers and engineers use this skill to separate business rules from I/O, making core logic easier to test and the imperative shell easier to change. It offers adoption steps, deliverables, and exit criteria for applying the pattern.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-functional-core) <br>
-- [Night Market archetypes homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown guidance with architecture steps, deliverables, risks, and mitigations.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include ADR, testing, adapter, and rollout metric recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Business rules may drift into the imperative shell during refactoring.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a core-owns-decisions checklist in code reviews and enforce the boundary with architecture tests.
+
+Risk: Framework lifecycle requirements may not fit the proposed shell adapters.
+
+Mitigation: Build small proof-of-concept adapters to validate the integration approach before a large rewrite.
+
+Risk: The pattern may add friction in performance-critical hot paths or teams without plans to adopt functional patterns.
+
+Mitigation: Assess the fit for the target codebase and pilot the approach in a high-churn or critical module before expanding it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-functional-core)
+- [Project homepage (Clawdis metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown prose with adoption steps, deliverables, risks, and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

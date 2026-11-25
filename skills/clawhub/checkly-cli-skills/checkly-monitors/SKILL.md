@@ -1,11 +1,13 @@
 ---
 name: checkly-monitors
-description: Create health and infrastructure monitors including heartbeat, TCP, DNS, URL, gRPC, SSL, and traceroute monitors. Use for uptime monitoring, service availability, TLS certificate validation, gRPC health or behavior checks, network path diagnostics, DNS validation, and infrastructure health without browser code. Triggers on heartbeat, TCP monitor, DNS monitor, URL monitor, gRPC monitor, SSL monitor, certificate expiry, traceroute, health check, uptime monitoring.
+description: Create health and infrastructure monitors including heartbeat, TCP, DNS, ICMP, URL, gRPC, SSL, and traceroute monitors. Use for uptime monitoring, service availability, TLS certificate validation, gRPC health or behavior checks, network path diagnostics, DNS validation, and infrastructure health without browser code. Triggers on heartbeat, TCP monitor, DNS monitor, ICMP monitor, ping monitor, URL monitor, gRPC monitor, SSL monitor, certificate expiry, traceroute, health check, uptime monitoring.
 ---
 
 # checkly monitors
 
 Health and infrastructure checks without browser code execution.
+
+Retired `me-south-1` (Bahrain) is invalid in monitor locations and inherited defaults. Remove or replace it before validation, testing or deployment.
 
 ## Monitor types
 
@@ -14,10 +16,39 @@ Health and infrastructure checks without browser code execution.
 | **Heartbeat** | Periodic ping expected | Inbound webhook calls |
 | **TCP** | Port connectivity | Socket connection |
 | **DNS** | Domain resolution | DNS records |
+| **ICMP** | Host reachability | ICMP echo |
 | **URL** | HTTP availability | Status code only |
 | **gRPC** | gRPC service health or unary behavior | Status, health, response, metadata, latency |
 | **SSL** | Certificate and TLS posture | Expiry, trust, hostname, protocol, cipher, key |
 | **Traceroute** | Network path diagnostics | Latency, hop count, packet loss |
+
+## Structured monitor intent
+
+`TcpMonitor`, `DnsMonitor`, `IcmpMonitor`, `UrlMonitor`, and `GrpcMonitor` accept structured `intent` for durable root-cause-analysis and check-repair guidance. `HeartbeatMonitor`, `SslMonitor`, and `TracerouteMonitor` do not expose it.
+
+```typescript
+new UrlMonitor('dashboard-url', {
+  name: 'Dashboard URL',
+  request: {
+    url: 'https://example.com/dashboard',
+  },
+  intent: {
+    goal: 'Verify that the dashboard remains publicly reachable.',
+    constraints: [
+      {
+        type: 'REQUIRED_OUTCOME',
+        statement: 'The dashboard returns a successful HTTP response.',
+      },
+      {
+        type: 'MUST_PRESERVE',
+        statement: 'Keep the production hostname in the monitored URL.',
+      },
+    ],
+  },
+})
+```
+
+Intent supplements executable monitor assertions; it does not replace them. Provide an object to set or update intent; omit it or set `intent: null` to have none. Both omission and `null` clear any web-authored intent on deployment. `goal` is required and limited to 2,000 trimmed characters. Constraints use exact uppercase types `REQUIRED_OUTCOME` or `MUST_PRESERVE`, with at most 20 of each type and 1,000 trimmed characters per statement.
 
 ## Heartbeat monitors
 
@@ -31,6 +62,7 @@ new HeartbeatMonitor('app-heartbeat', {
   period: 300,
   periodUnit: 'seconds',
   grace: 60,
+  graceUnit: 'seconds',
 })
 ```
 
@@ -49,8 +81,7 @@ import { TcpMonitor } from 'checkly/constructs'
 
 new TcpMonitor('database-tcp', {
   name: 'Database TCP Check',
-  host: 'db.example.com',
-  port: 5432,
+  request: { hostname: 'db.example.com', port: 5432 },
   frequency: 5,
 })
 ```
@@ -60,13 +91,15 @@ new TcpMonitor('database-tcp', {
 Validate DNS records.
 
 ```typescript
-import { DnsMonitor } from 'checkly/constructs'
+import { DnsMonitor, DnsAssertionBuilder } from 'checkly/constructs'
 
 new DnsMonitor('dns-check', {
   name: 'DNS A Record',
-  host: 'example.com',
-  recordType: 'A',
-  expectedValues: ['93.184.216.34'],
+  request: {
+    query: 'example.com',
+    recordType: 'A',
+    assertions: [DnsAssertionBuilder.jsonAnswer('$.Answer[0].data').equals('93.184.216.34')],
+  },
 })
 ```
 
@@ -75,9 +108,11 @@ Use `recordType: 'HTTPS'` when validating HTTPS/SVCB-style service-binding recor
 ```typescript
 new DnsMonitor('https-dns-check', {
   name: 'DNS HTTPS Record',
-  host: 'example.com',
-  recordType: 'HTTPS',
-  expectedValues: ['1 . alpn="h2,h3"'],
+  request: {
+    query: 'example.com',
+    recordType: 'HTTPS',
+    assertions: [DnsAssertionBuilder.textAnswer().contains('alpn')],
+  },
 })
 ```
 
@@ -90,8 +125,9 @@ import { UrlMonitor } from 'checkly/constructs'
 
 new UrlMonitor('url-check', {
   name: 'Homepage URL Check',
-  url: 'https://example.com',
-  method: 'GET',
+  request: {
+    url: 'https://example.com',
+  },
 })
 ```
 
@@ -124,7 +160,7 @@ new GrpcMonitor('grpc-health', {
 ```
 
 - In `HEALTH` mode, optionally set `grpcConfig.service`; omit it to query overall server health.
-- In `BEHAVIOR` mode, set `grpcConfig.method` and use `serviceDefinition: 'REFLECTION'` or `'PROTO_FILE'`.
+- In protobuf `BEHAVIOR` mode, set `grpcConfig.method` and use `serviceDefinition: 'REFLECTION'` or `'PROTO_FILE'`. For FlatBuffers, use `encoding: 'FLATBUFFERS'` and base64-encoded compiled schema `bfbsContent`; omit `serviceDefinition` and `protoContent`. FlatBuffers is not allowed in `HEALTH` mode.
 - `healthCheckStatus().equals()` and `.notEquals()` accept `UNKNOWN`, `SERVING`, `NOT_SERVING`, or `SERVICE_UNKNOWN` (or raw enum values `0`-`3`). Use the builder: it emits the numeric wire target required by the runner.
 - In `BEHAVIOR` mode, use `responseMessage('$.path')`, `textBody()`, or `responseMetadata('header-name')` assertions as appropriate.
 - Do not add `storeResponseBody` to the request; it is no longer part of `GrpcRequest`.
@@ -169,7 +205,7 @@ new SslMonitor('tls-certificate', {
 - Response-time thresholds are top-level monitor properties and measure TLS handshake time.
 - Put certificate settings under `request.sslConfig`.
 - For mutual TLS, set `clientCertificateMode: 'explicit'` and `sslClientCertificateId` under `sslConfig`; never embed certificate secrets in a check file.
-- SSL assertions are property-scoped. Use `certificate('<property>')` for certificate facts and `connection('<property>')` for connection and handshake facts; the pre-8.17 source-specific builders such as `certExpiresInDays()` and `tlsVersion()` are obsolete.
+- SSL assertions are property-scoped. Use `certificate('<property>')` for certificate facts and `connection('<property>')` for connection and handshake facts; migration warning: source-specific builders such as `certExpiresInDays()` and `tlsVersion()` are obsolete.
 - Certificate properties include `daysUntilExpiry`, `keySizeBits`, `subjectCN`, `issuerCN`, `serialNumber`, `fingerprintSha256`, `issuerFingerprintSha256`, `keyAlgorithm`, `signatureAlgorithm`, `sans`, `selfSigned`, and `isCA`.
 - Connection properties include `tlsVersion`, `cipherSuite`, `hostnameVerified`, `chainTrusted`, `ocspStapled`, `ocspStatus`, and `resolvedIp`.
 - The supported operator depends on the property. Numeric properties support equality and greater/less-than comparisons; booleans support `equals`; strings generally support equality and, where applicable, `contains`/`notContains`.
@@ -180,6 +216,8 @@ new SslMonitor('tls-certificate', {
 
 Use `TracerouteMonitor` for path latency, hop-count, and packet-loss diagnostics. The request `url` is a hostname without a scheme or port.
 
+Response-time limits measure final-hop average round-trip latency: defaults are 500 ms degraded and 1000 ms failed. Validation compares effective values even when only one is set: degraded above 1000 requires an explicit maximum; a positive maximum below 500 requires an explicit degraded limit. `maxResponseTime: 0` disables failure on latency and lets the degraded limit apply alone. Equal limits leave no degraded state. These defaults match what deployed monitors with unset limits already use.
+
 ```typescript
 import {
   TracerouteAssertionBuilder,
@@ -188,8 +226,8 @@ import {
 
 new TracerouteMonitor('network-path', {
   name: 'Network Path',
-  degradedResponseTime: 10000,
-  maxResponseTime: 20000,
+  degradedResponseTime: 500,
+  maxResponseTime: 1000,
   request: {
     url: 'example.com',
     protocol: 'TCP',
@@ -209,6 +247,38 @@ new TracerouteMonitor('network-path', {
 - `protocol` accepts `TCP` (default), `UDP`, `ICMP`, or `SCTP`. If `port` is omitted, the backend defaults to 443 for TCP and 33434 for UDP/SCTP; omit `port` for ICMP.
 - `responseTime()` accepts `avg` (default), `min`, `max`, or `stdDev`.
 - `hopCount()` and `packetLoss()` do not take a property.
+
+## Response-time validation
+
+Constructs send effective default limits explicitly; omitted values continue to match backend defaults. Defaults in milliseconds (degraded / maximum) are API 5000 / 20000, URL and TCP 3000 / 5000, DNS 500 / 1000, gRPC 10000 / 20000, SSL 3000 / 10000, and traceroute 500 / 1000. These are defaults, not the validation ceilings below.
+
+For `IcmpMonitor`, `degradedPacketLossThreshold` defaults to 10 and `maxPacketLossThreshold` to 20 (percent). Effective degraded must be at most effective maximum: setting only degraded above 20 fails, as does setting only maximum below 10. Set both explicitly for a different valid pair; explicit zero is preserved.
+
+`degradedResponseTime` and `maxResponseTime` are top-level monitor properties. They control degraded/failing check states and are separate from response-time assertions inside `request.assertions`.
+
+The CLI applies these standard client-side ceilings when the authenticated account does not advertise extended response-time limits:
+
+| Monitor | Standard ceiling |
+|---------|------------------|
+| TCP | 5 seconds |
+| DNS | 5 seconds |
+| URL | 30 seconds |
+| gRPC | 180 seconds |
+| SSL | 30 seconds |
+| Traceroute | 30 seconds |
+
+For accounts with extended limits, the CLI skips the fixed ceiling and lets the Checkly API enforce the account-specific limit. Do not assume the entitlement is present: validate with `npx checkly test` against the target account. Older or self-hosted APIs that do not expose account feature flags keep the standard ceilings.
+
+Ordering diagnostics depend on the construct, independently of those ceilings:
+
+| Construct | Client-side ordering comparison |
+|---|---|
+| `ApiCheck`, `UrlMonitor`, `TcpMonitor`, `DnsMonitor` | Compare only when both response-time thresholds are explicit. |
+| `GrpcMonitor`, `SslMonitor` | Also compare explicit degraded against an omitted maximum (20000 / 10000 ms respectively); an omitted degraded is not compared against explicit maximum. |
+| `TracerouteMonitor` | Compare both effective response-time thresholds, including either omitted default (500 / 1000 ms); maximum zero disables latency failure. |
+| `IcmpMonitor` | Compare both effective packet-loss thresholds, including either omitted default (10 / 20 percent). |
+
+Thus only `degradedResponseTime: 8000` on `UrlMonitor`, or only `degradedResponseTime: 25000` on `ApiCheck`, produces no response-time ordering diagnostic; synthesis still sends the omitted maximum as 5000 / 20000 ms. This does not establish total project validity or live API acceptance. Prefer setting both thresholds to an ordered pair rather than relying on this validation gap.
 
 ## Validate and deploy
 

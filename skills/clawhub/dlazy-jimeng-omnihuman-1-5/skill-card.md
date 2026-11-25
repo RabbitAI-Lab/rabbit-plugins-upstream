@@ -1,44 +1,56 @@
-## Description: <br>
-Generate realistic digital human broadcast videos from portrait images and audio/text using Jimeng OmniHuman 1.5. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate realistic digital human broadcast videos from portrait images and audio or text using Jimeng OmniHuman 1.5.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External developers and agent users use this skill to generate digital human broadcast videos through the dLazy hosted Jimeng OmniHuman 1.5 API from supplied portrait images and audio or text prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The pinned CLI may upload selected local media, including during dry-run behavior identified by the security evidence. <br>
-Mitigation: Avoid dry-run with sensitive local images or audio unless the behavior is fixed or confirmed acceptable. <br>
-Risk: Saved API keys may not have the permission hardening claimed by the skill documentation. <br>
-Mitigation: Prefer DLAZY_API_KEY per invocation or manually restrict permissions on ~/.dlazy/config.json when saving a key. <br>
-Risk: Persistent global CLI installation increases exposure to package and update risks. <br>
-Mitigation: Prefer npx for one-off use when a persistent global CLI is not required. <br>
+## Use Case:
 
+Developers and content creators use this skill to create digital human broadcast videos from a portrait and supplied audio or text.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-omnihuman-1-5) <br>
-- [dLazy homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with bash examples and JSON CLI result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [CLI responses may include generated media URLs or an async task identifier for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Portraits, audio, prompts, and parameters are sent to dLazy's hosted API or media storage; these inputs may contain personal or sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use media with the necessary permission, avoid uploading sensitive material, and review dLazy's service terms before submitting inputs.
+
+Risk: The security evidence reports medium confidence and says package and local references were unresolved because the analysis was partial.
+
+Mitigation: Review the reported whitespace and resolve the package and local references; inspect the pinned CLI package before installing it.
+
+## Reference(s):
+
+- [dLazy website](https://dlazy.com)
+- [dLazy CLI project page](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key)
+
+## Skill Output:
+
+**Output Type(s):** [Video, JSON]
+
+**Output Format:** [Generated video asset (hosted URL or saved file), with JSON task and output metadata.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generation may complete asynchronously; results are hosted by dLazy.]
+
+## Skill Version(s):
+
+1.3.43 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

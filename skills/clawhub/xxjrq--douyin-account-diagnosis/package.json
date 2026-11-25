@@ -1,0 +1,21 @@
+{
+  "name": "douyin-account-diagnosis",
+  "version": "1.0.2",
+  "description": "Analyze visible Douyin account and recent work data through Easy WebBridge.",
+  "private": false,
+  "type": "module",
+  "license": "MIT-0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node scripts/self-test.mjs"
+  },
+  "keywords": [
+    "agent-skill",
+    "douyin",
+    "account-analysis",
+    "creator-tools",
+    "easy-webbridge"
+  ]
+}

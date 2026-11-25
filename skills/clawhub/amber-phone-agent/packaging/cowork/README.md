@@ -18,11 +18,11 @@ Give Claude a phone. Amber is the first voice/telephony plugin for Claude — ma
 - [Twilio account](https://www.twilio.com/) with a phone number
 - [OpenAI API key](https://platform.openai.com/) (for voice STT/TTS)
 - [ngrok account](https://ngrok.com/) (for webhook tunneling)
-- Node.js 18+
+- Node.js 20+
 
 ## Setup
 
-1. Clone the repo and install dependencies:
+1. Clone the [Amber GitHub repository](https://github.com/batthis/amber-openclaw-voice-agent) and install dependencies. The Claude plugin manifest and its MCP configuration are in the GitHub checkout under `packaging/cowork/`.
    ```bash
    cd runtime && npm install
    ```

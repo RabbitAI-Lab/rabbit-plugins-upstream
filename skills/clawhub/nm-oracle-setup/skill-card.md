@@ -1,41 +1,49 @@
-## Description: <br>
-Provisions the oracle ML inference daemon with onnxruntime via uv. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provisions the oracle ML inference daemon with onnxruntime via uv
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to set up the oracle plugin's local ONNX inference environment for skill quality evaluation by creating a uv-managed Python environment, installing onnxruntime, and verifying provisioning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Provisioning relies on external oracle plugin code that performs the actual environment setup and may control daemon startup behavior. <br>
-Mitigation: Review the referenced oracle plugin code before running the uv command and install only when local ONNX inference setup is intended. <br>
-Risk: Initial setup downloads Python dependencies and can fail when uv or network access is unavailable. <br>
-Mitigation: Confirm uv is installed and network access is available, then report provisioning errors clearly to the user. <br>
+## Use Case:
 
+Developers use this skill to provision the local Oracle ML inference environment for skill quality evaluation, including its Python environment and ONNX Runtime dependencies.
 
-## Reference(s): <br>
-- [Nm Oracle Setup on ClawHub](https://clawhub.ai/athola/skills/nm-oracle-setup) <br>
-- [Oracle plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/oracle) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with an inline bash command block] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports provisioning success or failure and surfaces uv, network, and external plugin review guidance to the user.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: A local reference could not be matched to a bundled artifact, so the security analysis is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review whether the unresolved reference matters to your installation before installing.
+
+## Reference(s):
+
+- [Project homepage (declared in skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/oracle)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Setup guidance, Text]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports the provisioning result and the model-directory prerequisite for daemon startup.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

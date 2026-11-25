@@ -1,46 +1,56 @@
-## Description: <br>
-Generates images from text prompts with Jimeng through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Text-to-image generation with Jimeng, quickly converting text to high-quality images.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to generate Jimeng text-to-image outputs through dLazy, optionally supplying reference images and size parameters. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The dLazy API key is stored locally in the CLI configuration. <br>
-Mitigation: Use per-invocation credentials where appropriate, keep config file permissions restricted to the OS user, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: Prompts and selected local files can be sent to dLazy API and media storage endpoints. <br>
-Mitigation: Pass only intended prompts and files, avoid sensitive inputs unless approved for external processing, and use dry-run or explicit invocation before executing generation. <br>
-Risk: Pipe references such as @stdin and @* can forward broad upstream context. <br>
-Mitigation: Avoid broad pipe references unless the forwarded content is understood; prefer explicit prompt and file arguments. <br>
+## Use Case:
 
+Developers and other users can submit text prompts, optionally with reference images, to create images with Jimeng through the dLazy service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-t2i) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [CLI commands and JSON responses containing generated image URLs or async task identifiers] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; local media paths passed as inputs may be uploaded to dLazy storage.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: ClawScan reports partial coverage and a mismatch between the advertised image-generation purpose and a login-only command; it found no confirmed harmful behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing or relying on the skill, review the dLazy CLI/package and confirm that the generation command behaves as expected.
+
+Risk: The documentation says prompts are sent to dLazy and local reference images are uploaded to its media storage.
+
+Mitigation: Only submit prompts and reference images that you are authorized to share with the service.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-t2i)
+- [dLazy CLI package on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+- [dLazy API key settings](https://dlazy.com/dashboard/organization/api-key)
+
+## Skill Output:
+
+**Output Type(s):** [Images, JSON]
+
+**Output Format:** [JSON result envelope with generated image URLs and metadata; image files can be saved locally.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return a task identifier for asynchronous generation; reference images are optional inputs.]
+
+## Skill Version(s):
+
+1.3.44 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

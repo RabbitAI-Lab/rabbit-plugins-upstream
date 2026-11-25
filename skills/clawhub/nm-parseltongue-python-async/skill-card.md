@@ -1,41 +1,54 @@
-## Description: <br>
-Async Python patterns via asyncio and aiohttp for I/O-bound concurrency. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Async Python patterns via asyncio and aiohttp for I/O-bound concurrency
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to apply asyncio and aiohttp patterns for concurrent I/O, web APIs, web scraping, async database work, timeouts, cancellation, and async testing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Async code suggestions can introduce hanging operations, unbounded concurrency, or blocking calls in event-loop code. <br>
-Mitigation: Review generated changes for timeouts, cancellation handling, semaphores or rate limits, and avoidance of blocking calls before deployment. <br>
-Risk: Operational use in workspaces with sensitive credentials or production systems can expand the impact of agent-proposed commands or code changes. <br>
-Mitigation: Install only in intended workspaces and keep destructive commands, outbound communications, production deploys, and shared memory writes under explicit human approval. <br>
+## Use Case:
 
+Python developers use this skill to apply asyncio and aiohttp patterns for concurrent I/O, including task coordination, rate limiting, error handling, timeouts, and tests.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-parseltongue-python-async) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/parseltongue) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The database example interpolates values into SQL strings, which can be unsafe if values are untrusted.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use parameterized queries through the database driver's API, especially for user-controlled values.
+
+Risk: Concurrent web requests can exceed a remote service's limits or access rules.
+
+Mitigation: Respect service terms and access policies, and bound request concurrency with semaphores and timeouts.
+
+## Reference(s):
+
+- [Claude Night Market Parseltongue plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/parseltongue)
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-parseltongue-python-async)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands]
+
+**Output Format:** [Markdown guidance with Python examples and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Progressive modules cover async patterns, concurrency control, error handling, practical examples, and testing.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,38 +1,53 @@
-## Description: <br>
-基于贝索斯长期主义和客户至上理念，分析战略决策、创业取舍，助力形成可持续的长期价值与创新方案。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Bezos-inspired long-term strategy frameworks to help users examine customer value, strategic tradeoffs, and decision reversibility, primarily in Chinese.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, founders, product leaders, and business strategists use this Chinese-first skill to apply a Bezos/Amazon-style long-term strategy lens to customer value, entrepreneurship, career, and investment tradeoffs. Treat its dated market and AI commentary as framing prompts rather than verified current facts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dated market and AI commentary may be mistaken for verified current facts. <br>
-Mitigation: Use the commentary as strategic framing and verify time-sensitive claims against authoritative current sources before relying on them. <br>
+## Use Case:
 
+Business leaders, founders, and people weighing career or entrepreneurial choices use it to structure long-horizon decisions around customer value, unit economics, reversibility, and stop conditions. It produces discussion drafts and decision prompts, not investment, legal, or business commitments.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/bezos-long-term-principle) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or structured text in Chinese with strategy analysis prompts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompt-only guidance; no code execution, data access, persistence, or hidden privileged behavior per security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.1 (source: server release evidence and artifact metadata) <br>
+Risk: The skill is Chinese-first, which may not suit every user.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it with a Chinese-capable agent or translate the prompts before relying on them.
+
+Risk: Market, financial, and regulatory examples can become outdated or may not fit a specific decision.
+
+Mitigation: Verify time-sensitive claims against current official sources and have qualified decision-makers review consequential conclusions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/gechengling/skills/bezos-long-term-principle)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Chinese-first Markdown with decision prompts, tables, and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft guidance for user review; it does not execute decisions or system actions.]
+
+## Skill Version(s):
+
+2.1.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,63 @@
-## Description: <br>
-Generic test writing discipline: test quality, real assertions, anti-patterns, and rationalization resistance for writing, improving, or fixing tests across languages and frameworks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A generic test writing discipline that promotes test quality, real assertions, and resistance to anti-patterns when writing or fixing tests across languages and frameworks.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this skill when writing tests, adding test coverage, improving weak tests, or fixing failing tests. It guides test design toward behavior-focused assertions, realistic dependencies, edge-case coverage, and resistance to common rationalizations for skipping tests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Recommended test-isolation steps may involve real test databases, temporary files, containers, or manual cleanup commands. <br>
-Mitigation: Review proposed commands and configuration changes before applying them, especially in important local environments or shared test infrastructure. <br>
-Risk: Generic testing guidance may conflict with framework-specific conventions. <br>
-Mitigation: Apply framework-specific testing skills or project documentation first when they provide more precise tooling or patterns. <br>
+## Use Case:
 
+Developers use this skill when writing tests, adding coverage, or fixing failing tests. It guides them to create discriminating behavioral tests that assert user-visible outcomes and catch regressions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-writing-tests) <br>
-- [Anti-patterns extended notes](artifact/references/anti-patterns-extended.md) <br>
-- [Rationalization table](artifact/references/rationalization-table.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with examples, checklists, and occasional code or shell command suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No generated files by default; recommendations may include test cases, assertions, fixture changes, and local test commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: evidence.json release.version) <br>
+Risk: Cleanup guidance includes database or volume deletion steps that could remove persistent data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review cleanup instructions and verify targets are disposable test resources with important data backed up before deleting databases or volumes.
+
+Risk: The documentation describes an evaluation tool whose implementation was not supplied, so its behavior remains uncertain.
+
+Mitigation: Review the evaluation tool implementation or treat its behavior as unverified before relying on it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-writing-tests)
+- [anti-patterns-extended.md](references/anti-patterns-extended.md)
+- [false-pass-oracle-traps.md](references/false-pass-oracle-traps.md)
+- [generated-corpus-techniques.md](references/generated-corpus-techniques.md)
+- [isolation-and-sandbox-traps.md](references/isolation-and-sandbox-traps.md)
+- [oracle-smells.md](references/oracle-smells.md)
+- [rationalization-table.md](references/rationalization-table.md)
+- [regression-proof.md](references/regression-proof.md)
+- [test-completion.md](references/test-completion.md)
+- [test-design.md](references/test-design.md)
+- [test-smells.md](references/test-smells.md)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Guidance, Shell commands]
+
+**Output Format:** [Test code and concise guidance in the repository's existing language and framework formats, with relevant shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Follows the repository's test runner, configuration, and conventions]
+
+## Skill Version(s):
+
+5.1.7 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

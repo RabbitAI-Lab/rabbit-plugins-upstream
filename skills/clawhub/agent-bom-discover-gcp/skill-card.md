@@ -1,42 +1,50 @@
-## Description: <br>
-Discovers GCP-hosted AI agent and MCP-relevant assets from operator-approved projects, emits canonical agent-bom inventory JSON, and can scan that inventory when requested. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Inventory GCP-hosted AI agent and MCP-relevant assets, export canonical agent-bom JSON, and optionally scan the inventory using operator-controlled read-only credentials.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers, cloud engineers, and security reviewers use this skill to inventory Vertex AI, Cloud Run, Cloud Functions, GKE, and related agentic GCP infrastructure with operator-controlled credentials. It helps produce canonical agent-bom inventory and optional scan findings without handing agent-bom long-lived GCP credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Overbroad GCP credentials could expose more project inventory than intended. <br>
-Mitigation: Use read-only or short-lived GCP credentials, confirm the selected project, and avoid broad production credentials unless they are necessary for the inventory. <br>
-Risk: Inventory output may contain sensitive resource or environment metadata. <br>
-Mitigation: Write inventory only to an operator-selected path, review the JSON before sharing it, and rely on the skill's credential redaction behavior for credential-like values. <br>
+## Use Case:
 
+Developers and cloud security engineers use this skill to inventory approved GCP projects for Vertex AI, Cloud Run, Cloud Functions, GKE, and related agentic infrastructure. It writes a canonical inventory file and can scan that file when requested.
 
-## Reference(s): <br>
-- [agent-bom GitHub repository](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-discover-gcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, json] <br>
-**Output Format:** [Markdown with bash command blocks and JSON file paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operator-selected inventory JSON and optional agent-bom scan findings JSON; credentials remain in the operator environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The partial security scan classified the skill as suspicious because it flagged references to Google Cloud credential files and could not resolve a local script reference; this does not establish malicious intent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review credential handling and resolve the local script reference before installing. Use operator-approved projects and read-only credentials, and never paste or display credential values.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/koda-ai-studio/agent-bom)
+- [PyPI package](https://pypi.org/project/agent-bom/)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Analysis]
+
+**Output Format:** [Canonical agent-bom inventory JSON, with optional scan findings JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Inventory is written to an operator-selected path; scanning occurs only when requested.]
+
+## Skill Version(s):
+
+0.115.6 (source: frontmatter, release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

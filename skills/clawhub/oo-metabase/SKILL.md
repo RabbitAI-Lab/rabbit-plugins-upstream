@@ -1,11 +1,11 @@
 ---
 name: oo-metabase
-description: "Metabase (metabase.com). Use this skill for ANY Metabase request — searching and reading data. Whenever a task involves Metabase, use this skill instead of calling the API directly."
+description: "Metabase (metabase.com). Use this skill for ANY Metabase request — reading, creating, updating, and deleting data. Whenever a task involves Metabase, use this skill instead of calling the API directly."
 allowed-tools: [Bash(oo *)]
 metadata:
   title: "Metabase"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.7"
   services: ["metabase"]
   icon: "https://static.oomol.com/logo/third-party/metabase.svg"
 ---
@@ -37,6 +37,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
+- `call_tool` — Call a native Metabase MCP tool with JSON arguments matching the inputSchema returned by list_tools with toolNames. Depending on the tool, this can run queries or create, update, or archive Metabase content as the API key's user; check the tool's annotations and confirm writes first. [destructive]
 - `get_card` — Retrieve one Metabase card by ID.
 - `get_collection` — Retrieve one Metabase collection by ID.
 - `get_current_user` — Get the Metabase user associated with the API key.
@@ -46,6 +47,9 @@ Each action is listed below with a one-line description; actions that change sta
 - `list_collections` — List Metabase collections visible to the API key.
 - `list_dashboards` — List Metabase dashboards visible to the API key.
 - `list_databases` — List Metabase databases visible to the API key.
+- `list_mcp_resources` — Discover native MCP resources. Data resources can be read with read_mcp_resource; MCP Apps (ui://) resources are not supported.
+- `list_tools` — Discover the tools exposed by this Metabase instance's native MCP server. Without toolNames, returns a compact index (name, one-line summary, annotations); pass toolNames to get the full descriptions and input schemas of those tools before calling them with call_tool. Tool names and schemas follow the instance's Metabase version.
+- `read_mcp_resource` — Read a text resource listed by list_mcp_resources. MCP Apps (ui://) resources are not supported.
 - `search` — Search Metabase content visible to the API key.
 
 ## Safety
@@ -77,11 +81,14 @@ These are **one-time** steps — do not repeat them on every call. Run a step on
 - **`scope_missing` / `credential_expired` / `app_not_ready` / `app_not_found`** — Metabase is not connected, or the connection expired or lacks a scope. Connect once (auth type: API key) at:
 
   ```text
-  https://console.oomol.com/app-connections?provider=metabase
+  https://console.oomol.com/connections/metabase
   ```
 
-- **HTTP 402 / `OOMOL_INSUFFICIENT_CREDIT`** — billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+- **`OOMOL_INSUFFICIENT_CREDIT`** — OOMOL billing stop. Recharge at `https://console.oomol.com/billing/token-recharge` before retrying.
+
+- **HTTP 402 without `OOMOL_INSUFFICIENT_CREDIT`** — the third-party account itself has no active plan or credit. Report the provider error message as is; do not ask the user to recharge OOMOL.
 
 ## Resources
 
 - Metabase homepage: https://www.metabase.com
+- API documentation: https://www.metabase.com/docs/latest/api

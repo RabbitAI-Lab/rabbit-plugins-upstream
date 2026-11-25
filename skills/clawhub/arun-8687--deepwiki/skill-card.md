@@ -1,39 +1,49 @@
-## Description: <br>
-Query the DeepWiki MCP server for GitHub repository documentation, wiki structure, and AI-powered questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Query the DeepWiki MCP server for GitHub repository documentation, wiki structure, and AI-powered questions.
 
-## Publisher: <br>
-[arun-8687](https://clawhub.ai/user/arun-8687) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[arun-8687](https://clawhub.ai/user/arun-8687)
 
-## Use Case: <br>
-Developers and agents use this skill to query public GitHub repository documentation through DeepWiki, including wiki structure, topic contents, and question-answering grounded in repository documentation. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Repository names, wiki paths, and question text are sent to the DeepWiki service. <br>
-Mitigation: Use only public repository context and avoid secrets, private repository details, or confidential project information in prompts. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [DeepWiki MCP documentation](https://docs.devin.ai/work-with-devin/deepwiki-mcp) <br>
-- [DeepWiki MCP server endpoint](https://mcp.deepwiki.com/mcp) <br>
-- [ClawHub skill page](https://clawhub.ai/arun-8687/skills/deepwiki) <br>
+## Use Case:
 
+Developers and engineers use this skill to query DeepWiki for public GitHub repository documentation, wiki structure, and topic-specific answers.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown or plain text returned from DeepWiki, with shell command examples for invocation.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Queries are sent to DeepWiki for public GitHub repositories; no authentication is required.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Repository names, questions, and requested wiki paths are sent to the DeepWiki service.
+
+Mitigation: Use this skill only for public repository lookups and avoid entering private repository details, credentials, or sensitive internal information.
+
+## Reference(s):
+
+- [DeepWiki MCP documentation](https://docs.devin.ai/work-with-devin/deepwiki-mcp)
+- [DeepWiki MCP server](https://mcp.deepwiki.com/mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown or plain text returned from DeepWiki, with shell commands used to invoke repository documentation queries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Queries are scoped to public GitHub repositories and do not require authentication.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence, released 2026-01-11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

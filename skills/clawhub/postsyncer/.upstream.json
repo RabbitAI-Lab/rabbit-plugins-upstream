@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/postsyncer",
   "slug": "postsyncer",
   "ownerHandle": null,
-  "version": "2.2.1",
-  "updatedAt": 1779566873989,
-  "contentHash": "2081be31eaad9728d959380ea374d07859ddfa01c3d9bb3fb708b2e07cd750bf",
-  "fetchedAt": "2026-07-26T18:40:52.361Z"
+  "version": "2.6.0",
+  "updatedAt": 1795565912258,
+  "contentHash": "8feff0b46dae327a4ebc7a722317329d85d282b541fb79ad0497f7b97fc26dc5",
+  "fetchedAt": "2026-11-25T18:05:52.476Z"
 }

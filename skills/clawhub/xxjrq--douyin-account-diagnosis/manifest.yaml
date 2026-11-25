@@ -1,0 +1,23 @@
+name: douyin-account-diagnosis
+display_name: 抖音账号诊断
+slug: douyin-account-diagnosis
+version: 1.0.2
+license: MIT-0
+description: 通过已登录浏览器读取抖音账号公开资料和近期作品样本，生成带来源的账号定位、内容问题、结构诊断和选题建议报告。
+category: selfmedia
+repository: https://github.com/xxjrq/douyin-account-diagnosis
+runtime: easy-webbridge
+icon: assets/icon-512.png
+trigger_words:
+  - 抖音账号诊断
+  - 抖音账号分析
+  - 抖音主页分析
+  - 抖音内容诊断
+  - 今天抖音发什么
+tags:
+  - douyin
+  - account-analysis
+  - content-strategy
+  - easy-webbridge
+  - creator-tools
+self_test: node scripts/self-test.mjs

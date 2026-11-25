@@ -1,43 +1,54 @@
-## Description: <br>
-Analyzes code change impact with risk scoring and affected-node mapping so developers can understand what a change touches and what lacks test coverage before merging. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes code change impact with risk scoring and affected-node mapping.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill before merging code changes to map affected files or functions, identify missing test coverage, and prioritize review based on risk. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may read and search local repository contents to map changed files and call sites. <br>
-Mitigation: Use it only in repositories whose contents may be inspected by the agent, and review proposed commands before execution. <br>
-Risk: Repository search fallbacks using rg or grep can produce false positives. <br>
-Mitigation: Prefer graph or semantic analysis when available, and manually verify affected nodes and test gaps before acting on the results. <br>
-Risk: Risk suggestions may be incorrect or misleading if accepted without review. <br>
-Mitigation: Treat the risk table and suggested actions as review inputs, then confirm coverage, security relevance, and backward compatibility before merging. <br>
+## Use Case:
 
+Developers and engineers can use this skill before merging to see which code areas a change may affect, identify uncovered functions, and prioritize review actions.
 
-## Reference(s): <br>
-- [Pensive plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-blast-radius) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with risk tables, prioritized findings, suggested actions, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use graph-based impact results when available, or repository search fallbacks for manual analysis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The security review is partial, and its guidance recommends checking whether the plugin-directory search fits the intended environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review that search against the local environment and consider the supplied security guidance before deployment.
+
+Risk: Impact results may be incomplete when the required code graph is unavailable or stale.
+
+Mitigation: Confirm the gauntlet graph is available and current; use the documented manual analysis fallback when it is unavailable.
+
+## Reference(s):
+
+- [Project homepage (Clawdis metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-pensive-blast-radius)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Guidance]
+
+**Output Format:** [Risk-ranked Markdown results table with affected nodes, file locations, citation anchors, and review suggestions; findings can also be written as JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include untested functions and an overall risk level.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release; artifact frontmatter states 1.10.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

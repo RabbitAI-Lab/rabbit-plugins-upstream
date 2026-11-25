@@ -1,38 +1,50 @@
-## Description: <br>
-Keji Skill Showcase routes research and academic-writing requests to a curated set of 10 related skills for literature search, citation checking, knowledge bases, research methods, defense preparation, group meeting planning, novelty checks, and skill building. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A curated entry point that routes research requests to one of 20 specialized research skills and explains each skill’s scope and limits.
 
-## Publisher: <br>
-[j-levee](https://clawhub.ai/user/j-levee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[j-levee](https://clawhub.ai/user/j-levee)
 
-## Use Case: <br>
-Researchers, students, and academic writers use this skill as a discovery and routing entry point for finding the right specialty research skill for literature search, citation verification, knowledge management, research design, presentation preparation, group discussion, novelty validation, or skill creation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may follow links to specialty skills that involve paid quotas, literature downloads, personal knowledge bases, or citation-checking workflows with their own risks. <br>
-Mitigation: Review each linked specialty skill separately before use, especially where costs, downloads, personal research data, or citation decisions are involved. <br>
+## Use Case:
 
+External researchers and AI agents use this guide to choose a suitable skill for literature search, writing, citation checks, research planning, meetings, or patent workflows. It provides navigation and scope guidance; specialized skills perform the underlying tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/j-levee/skills/keji-skill-showcase) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance] <br>
-**Output Format:** [Markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Informational routing skill; it does not itself run code or request sensitive access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.2 (source: frontmatter and server release metadata) <br>
+Risk: The security scan rated the skill benign with medium confidence, but was incomplete because a referenced SKILL.ai-readable.md file was unavailable.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill instructions and any generated outputs before relying on them, as advised by the security evidence.
+
+## Reference(s):
+
+- [Clawhub skill listing](https://clawhub.ai/j-levee/skills/keji-skill-showcase)
+- [SkillHub skill listing](https://skillhub.cloud.tencent.com/skills/keji-skill-showcase)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Concise routing guidance and skill descriptions in Markdown or plain text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Routes users to a relevant specialized skill; does not perform the routed research task.]
+
+## Skill Version(s):
+
+1.3.1 (source: frontmatter and server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

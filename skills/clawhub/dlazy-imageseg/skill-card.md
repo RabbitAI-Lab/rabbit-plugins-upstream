@@ -1,45 +1,56 @@
-## Description: <br>
-Image matting tool that separates foreground from background and returns a transparent-background image URL for product image processing, character cutout, and composition. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Separates an image's foreground from its background and returns a transparent-background image URL for product processing, portrait cutouts, and compositing.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to call the dLazy image segmentation CLI for background removal and receive hosted transparent PNG output URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected local media may be uploaded to dLazy's hosted service for processing. <br>
-Mitigation: Use the skill only with media that is approved for remote processing, and avoid passing private files unless that upload is intended. <br>
-Risk: The dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Prefer DLAZY_API_KEY for temporary use when appropriate, and rotate or revoke the key if it may have been exposed. <br>
-Risk: The skill depends on the external dLazy CLI and hosted API availability. <br>
-Mitigation: Review the pinned CLI package before installation and use dry-run or async polling options where they fit the workflow. <br>
+## Use Case:
 
+External users and developers use this skill to remove image backgrounds for product photos, portrait cutouts, and compositing workflows.
 
-## Reference(s): <br>
-- [Dlazy Imageseg on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-imageseg) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The CLI returns hosted image URLs, and async mode can return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and skill frontmatter) <br>
+Risk: The security review reported a mismatch between the image-processing description and authentication commands, and its analysis was partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI authentication and API-key setup to confirm they match the expected dLazy workflow before configuring credentials.
+
+Risk: The skill documentation says local image inputs are uploaded to dLazy media storage for processing.
+
+Mitigation: Submit only images you are authorized to share with the service.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/dlazyai/skills/dlazy-imageseg)
+- [CLI repository (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Image, JSON, URLs]
+
+**Output Format:** [JSON response containing a generated image URL, or an asynchronous task identifier when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated images are hosted by dLazy; the CLI can optionally save an output locally.]
+
+## Skill Version(s):
+
+1.3.44 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,49 +1,62 @@
-## Description: <br>
-Connect, authorize, and safely use Meo Mai Moi through its OAuth MCP gateway for pet profiles, care and health records, habits, microchips, sharing, rehoming or placement, helper profiles, messages, groups, pet finances, notifications, and account workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connect to Meo Mai Moi through its OAuth MCP gateway using scopes suited to the requested task.
 
-## Publisher: <br>
-[troioi-vn](https://clawhub.ai/user/troioi-vn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[troioi-vn](https://clawhub.ai/user/troioi-vn)
 
-## Use Case: <br>
-External users and developers use this skill to connect OAuth-capable agents such as Codex, Cursor, or OpenClaw to Meo Mai Moi, choose appropriate OAuth scopes, and safely perform pet-care workflows through the MCP gateway. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Authorizing broad OAuth scopes can allow reads or writes to sensitive pet records, including finances, messages, sharing, placement, groups, profile data, and invitations. <br>
-Mitigation: Use the Everyday care preset or narrower task-specific scopes by default, and choose Full management only after explicit user selection and a sensitivity warning. <br>
-Risk: Consequential writes may affect health history, finances, access, messages, invitations, or real-world pet handoffs. <br>
-Mitigation: Read the target state before writing, use stable IDs and versions, apply a fresh idempotency key for each intended write, and verify the result with a follow-up read. <br>
-Risk: OAuth credentials, authorization codes, invitation material, personal records, health data, or financial values could be exposed in chat or logs. <br>
-Mitigation: Never request or repeat tokens or secrets; handle short-lived OAuth callback codes only in a private one-to-one flow, exchange them immediately, and keep sensitive records out of chat unless needed for the user's decision. <br>
+## Use Case:
 
+Pet owners and agents use this skill to connect with Meo Mai Moi and carry out pet care, account, placement, or other supported tasks through OAuth-authorized MCP tools. It guides scope selection and safe handling of consequential actions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/troioi-vn/skills/meo-mai-moi-mcp) <br>
-- [Connection and scope selection](references/connection.md) <br>
-- [OpenClaw native MCP onboarding](references/openclaw.md) <br>
-- [Safety and error handling](references/safety.md) <br>
-- [Meo MCP clients documentation](https://github.com/troioi-vn/meo-mcp/blob/main/docs/clients.md) <br>
-- [Meo MCP tools documentation](https://github.com/troioi-vn/meo-mcp/blob/main/docs/tools.md) <br>
-- [Meo MCP OAuth documentation](https://github.com/troioi-vn/meo-mcp/blob/main/docs/oauth.md) <br>
-- [Meo MCP errors documentation](https://github.com/troioi-vn/meo-mcp/blob/main/docs/errors.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and scope strings] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces OAuth MCP connection guidance, scope selection advice, safe operation steps, and recovery guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.1 (source: server release evidence) <br>
+Risk: Broad OAuth scopes can expose or change sensitive pet, health, finance, messaging, sharing, and account data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Request only scopes needed for the task; use Full management only when explicitly selected and explain its sensitive access.
+
+Risk: Consequential writes can affect records, access, finances, or real-world placement.
+
+Mitigation: Read the exact target and its current version before acting, then verify the resulting state.
+
+Risk: OAuth credentials and personal records could be exposed in chat or logs.
+
+Mitigation: Do not request or disclose access tokens, refresh tokens, or client secrets; keep personal records out of chat unless needed for a decision.
+
+## Reference(s):
+
+- [Meo Mai Moi MCP clients guide](https://github.com/troioi-vn/meo-mcp/blob/main/docs/clients.md)
+- [Meo Mai Moi MCP tools guide](https://github.com/troioi-vn/meo-mcp/blob/main/docs/tools.md)
+- [Meo Mai Moi MCP OAuth guide](https://github.com/troioi-vn/meo-mcp/blob/main/docs/oauth.md)
+- [Meo Mai Moi MCP errors guide](https://github.com/troioi-vn/meo-mcp/blob/main/docs/errors.md)
+- [Meo Mai Moi MCP gateway](https://mcp.meo-mai-moi.com/mcp)
+- [ClawHub skill page](https://clawhub.ai/troioi-vn/skills/meo-mai-moi-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Configuration instructions, API calls]
+
+**Output Format:** [Natural language guidance, OAuth and MCP configuration steps, and structured tool requests]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tool actions depend on the user's authorization and selected scopes; sensitive operations require current-state checks and post-action verification.]
+
+## Skill Version(s):
+
+0.5.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

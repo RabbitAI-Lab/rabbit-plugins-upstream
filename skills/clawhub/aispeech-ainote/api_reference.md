@@ -10,6 +10,7 @@
 | 统一前缀 | `/aitablet/api/skill/v2`                           |
 | 数据格式 | `application/json; charset=UTF-8`                  |
 | 鉴权方式 | `Authorization: Bearer {AIWORK_AUTH_TOKEN}`（受保护接口） |
+| 默认时区 | `UTC+8`（北京时间）；未携带时区的时间字符串均按 `UTC+8` 理解 |
 
 ### 1.2 通用响应结构
 
@@ -60,9 +61,20 @@
 | pageNum | Integer | 否 | 默认 1 |
 | pageSize | Integer | 否 | 默认 10，范围 1~100 |
 | orderBy | String | 否 | `createTime` / `updateTime` |
-| startTime | String | 否 | 格式 `yyyy-MM-dd HH:mm:ss` |
-| endTime | String | 否 | 格式 `yyyy-MM-dd HH:mm:ss` |
+| startTime | String | 否 | 格式 `yyyy-MM-dd HH:mm:ss`，默认按 `UTC+8` 解析 |
+| endTime | String | 否 | 格式 `yyyy-MM-dd HH:mm:ss`，默认按 `UTC+8` 解析 |
 | keyword | String | 否 | 标题关键字 |
+
+返回核心字段（`data.list[]` / `SkillNoteVO`）：
+
+- `noteUid`, `title`, `createTime`, `updateTime`, `labels[{name,uid,type}]`
+- `labelNames`, `type`, `groupName`, `group{name,uid}`, `version`, `top`, `encryptType`
+- `audioInfo[]`：笔记关联音频基础信息，包含 `audioUid`, `title`, `duration`, `audioType`, `sampleRate`, `sampleBytes`, `channel`, `offlineCompleted`, `cleared`, `audioUrl`
+
+音频字段说明：
+
+- `duration` 单位为毫秒。
+- `audioUrl` 为预签名播放地址，可直接用于播放；当音频已清理（`cleared=true`）时可能为空。
 
 ### 2.2 查询笔记详情
 
@@ -76,6 +88,8 @@
 - `noteUid`, `title`, `createTime`, `updateTime`, `labels[{name,uid,type}]`
 - `labelNames`, `type`, `groupName`, `group{name,uid}`, `version`, `top`, `encryptType`
 - `asrContent`, `summaryContent`, `insightContent`, `ocrContent`
+- `handwritingRegular`（手写规整原文）、`handwritingPages[]`
+- `handwritingPages[]` 字段：`pageUid`、`thumbUrl`；`thumbUrl` 为页面手写缩略图预签名地址
 
 按需策略：
 
@@ -86,7 +100,47 @@
 - 补充内容选择：原始会议细节用 `asr`；手写/页面信息用 `ocr`；AI洞察、行动项或扩展分析用 `insight`。
 - 不要调用不带 `includeContent=false` 的详情接口作为默认路径，也不要默认全量拉取 `asr`、`ocr`、`insight`，除非用户明确要求完整原文或全量内容。
 
-### 2.3 查询笔记指定内容
+### 2.3 查询纸质本列表
+
+- **GET** `/aitablet/api/skill/v2/notebook/list`
+- Scope：`NOTE_READ`
+- Header：`Authorization: Bearer {AIWORK_AUTH_TOKEN}`
+
+返回当前用户有效纸质本的简单元信息列表。Skill 只使用：`bookUid`、`title`、`bookType`、`totalPageCount`、`version`、`syncTime`、`createTime`、`updateTime`。
+
+### 2.4 查询纸质本详情
+
+- **GET** `/aitablet/api/skill/v2/notebook/{bookUid}`
+- Scope：`NOTE_READ`
+- Header：`Authorization: Bearer {AIWORK_AUTH_TOKEN}`
+
+详情包含纸质本元信息、关联有效笔记和页面信息：
+
+```json
+{
+  "bookUid": "book_001",
+  "title": "工作记录",
+  "version": 3,
+  "notes": [
+    {
+      "noteUid": "note_001",
+      "title": "会议纪要",
+      "pages": [
+        {
+          "pageUid": "page_001",
+          "sourcePageNo": 116341,
+          "logicalPageNo": 3,
+          "thumbUrl": "https://example.com/page-thumb"
+        }
+      ]
+    }
+  ]
+}
+```
+
+`sourcePageNo` 是纸质实体本原页码，`logicalPageNo` 来自 manifest 的显式页项映射；manifest 缺失或页面未匹配时为 `null`，不能按数组下标推导逻辑页码。`thumbUrl` 是页面手写缩略图预签名地址。
+
+### 2.5 查询笔记指定内容
 
 - **GET** `/aitablet/api/skill/v2/note/{noteUid}/content`
 - Scope：`NOTE_READ`
@@ -105,7 +159,7 @@
 - `type`：内容类型
 - `content`：指定类型内容
 
-### 2.4 删除笔记（入回收站）
+### 2.6 删除笔记（入回收站）
 
 - **DELETE** `/aitablet/api/skill/v2/note/{noteUid}`
 - Scope：`NOTE_WRITE`
@@ -144,11 +198,10 @@
 {
   "todo": "完成周报",
   "beginTime": 1761922800000,
-  "endTime": 1761926400000,
   "description": "可存放待办描述、会议链接等具体信息",
   "important": true,
   "done": false,
-  "notifyAhead": "30m",
+  "notifyAhead": "0",
   "repeat": "weekly",
   "repeatEndTime": 1764601200000,
   "repeatCount": 10,
@@ -162,10 +215,11 @@
 
 字段校验：
 
-- `notifyAhead` 最大长度 10
+- `notifyAhead` 提前提醒，仅支持`10m`、`30m`、`1h`、`1d`、`1w` 以及 `0`准时提醒，不要传除这些枚举外其他值
+- `notifyAhead` 默认传`0`，除非明确要求提前提醒
 - `repeat` 最大长度 40
 - `groupUid` 最大长度 45
-- `todo`和`beginTime`均不能为空
+- `todo`和`beginTime`均不能为空，beginTime填写待办的准确时间
 
 ### 3.3 更新待办
 
@@ -182,7 +236,7 @@
 
 ### 3.5 待办返回字段（`SkillTodoV2VO`）
 
-时间字段已统一为毫秒时间戳：
+时间字段统一为毫秒时间戳：
 
 - `beginTime`, `endTime`, `repeatEndTime`
 - `syncTime`, `finishTime`, `createTime`, `updateTime`
