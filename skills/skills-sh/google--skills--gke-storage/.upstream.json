@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-storage",
+  "repo": "google/skills",
+  "skillId": "gke-storage",
+  "branch": "main",
+  "pushedAt": "2026-11-25T17:54:17Z",
+  "contentHash": "d514c13a71d7424898679abe2e8b17b1abf106e9c447706e238b787875fa9dfa",
+  "fetchedAt": "2026-11-25T18:03:11.730Z"
+}

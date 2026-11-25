@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/faq",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "faq",
+  "branch": "main",
+  "pushedAt": "2026-11-25T07:32:58Z",
+  "contentHash": "a9ff00c6269acc2d04beff87b76657cc33be1e74d4f75ae52b63ed597c72f2c4",
+  "fetchedAt": "2026-11-25T18:03:13.940Z"
+}

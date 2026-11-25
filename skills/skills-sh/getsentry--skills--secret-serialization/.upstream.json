@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/skills/secret-serialization",
+  "repo": "getsentry/skills",
+  "skillId": "secret-serialization",
+  "branch": "main",
+  "pushedAt": "2026-11-14T19:39:01Z",
+  "contentHash": "2b02bf798271fae03e19fd2161023c1de0cde670742a262c22e4be3d15e03049",
+  "fetchedAt": "2026-11-25T18:01:53.079Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-cloud-networking-observability",
+  "repo": "google/skills",
+  "skillId": "google-cloud-networking-observability",
+  "branch": "main",
+  "pushedAt": "2026-11-25T17:54:17Z",
+  "contentHash": "601bc3c0e0068666ba3c4bc978644bee735754287f333fc04f6b65258ca4c8c4",
+  "fetchedAt": "2026-11-25T18:03:11.388Z"
+}
