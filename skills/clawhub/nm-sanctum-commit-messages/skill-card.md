@@ -1,41 +1,55 @@
-## Description: <br>
-Generates conventional commit messages from staged changes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates conventional commit messages from staged changes
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to inspect staged Git changes and draft a human-readable Conventional Commit message before committing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Staged Git diffs may contain secrets or sensitive business context that the agent will read while drafting the message. <br>
-Mitigation: Review staged changes before invoking the skill and use it only in repositories where the agent is allowed to inspect the staged diff. <br>
-Risk: The workflow writes commit_msg.txt in the current directory. <br>
-Mitigation: Check for an existing commit_msg.txt before use if that filename may already contain user-managed content. <br>
+## Use Case:
 
+Developers use this skill to draft conventional commit messages from staged changes, using repository status, staged diffs, recent history, and semantic diff output when available. It stops when there are no staged changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-commit-messages) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, files, guidance] <br>
-**Output Format:** [Markdown commit message text written to commit_msg.txt with a preview.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads staged Git context and produces a proposed commit subject, optional body, and optional footer.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: A draft can misstate the staged changes or incorrectly signal that a discussion finding is resolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the message against the staged diff and include an Addresses-Discussion trailer only when the commit resolves that finding.
+
+Risk: The security analysis was partial because five local references were unavailable for assessment.
+
+Mitigation: Review the missing referenced materials and scan the complete skill before deployment.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-sanctum-commit-messages)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum)
+- [Publisher profile](https://clawhub.ai/user/athola)
+
+## Skill Output:
+
+**Output Type(s):** [Text]
+
+**Output Format:** [Plain-text conventional commit message]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft only. The subject is limited to 50 characters; an optional body is wrapped at 72 characters, with applicable footers.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

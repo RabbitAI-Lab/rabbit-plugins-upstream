@@ -1,43 +1,55 @@
-## Description: <br>
-Pipedrive helps agents manage sales workflows through AgentPMT-hosted remote tool calls for CRM discovery, search, lead conversion, record updates, activities, files, notes, webhooks, pipelines, and stages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pipedrive: Manage Pipedrive sales workflows: discover fields and users, search CRM records, create and update deals, persons, organizations, activities, products, leads, and notes, move records through pipelines and stages. Use when an agent needs pipedrive, capture and convert inbound leads, create and update deals contacts and organizations, move deals through pipeline stages, schedule follow up calls and log notes, convert lead, lead id, data through AgentPMT-hosted remote tool calls.
 
-## Publisher: <br>
-[agentpmt](https://clawhub.ai/user/agentpmt) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[agentpmt](https://clawhub.ai/user/agentpmt)
 
-## Use Case: <br>
-Developers and external agents use this skill to connect Pipedrive CRM workflows to AgentPMT, capture and convert inbound leads, manage contacts and organizations, move deals through pipeline stages, schedule follow-ups, log notes, attach files, and trigger webhooks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security summary flags broader CRM capabilities than the workflow description, including persistent webhooks, file transfer, and delete actions. <br>
-Mitigation: Review the skill before installing, use least-privilege CRM credentials, and require explicit confirmation before creating webhooks, moving files, or deleting records. <br>
-Risk: Persistent webhook subscriptions can continue sending CRM change events after setup. <br>
-Mitigation: Check existing webhooks regularly and remove subscriptions that are no longer needed. <br>
+## Use Case:
 
+External sales teams and agents use this skill to manage Pipedrive records, leads, deals, pipelines, and follow-up activities through AgentPMT.
 
-## Reference(s): <br>
-- [ClawHub Pipedrive skill page](https://clawhub.ai/agentpmt/skills/pipedrive) <br>
-- [AgentPMT Pipedrive marketplace page](https://www.agentpmt.com/marketplace/pipedrive) <br>
-- [AgentPMT File Management skill](https://clawhub.ai/agentpmt/file-management) <br>
-- [AgentPMT account MCP/REST setup](https://clawhub.ai/agentpmt/agentpmt-account-mcp-rest-api-setup) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, JSON, API calls, Configuration] <br>
-**Output Format:** [Markdown instructions with JSON action examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Tool calls return JSON-wrapped raw Pipedrive responses; file actions may use AgentPMT File Manager IDs and signed URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can create persistent webhooks and delete CRM records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use these actions only when needed; verify the webhook destination and event scope, and confirm the target record before deletion.
+
+Risk: Installation guidance is unpinned, and the scan could not review some referenced material.
+
+Mitigation: Review the installer and skill source, pin them to reviewed versions, and check referenced material before relying on the skill.
+
+## Reference(s):
+
+- [AgentPMT Pipedrive marketplace page](https://www.agentpmt.com/marketplace/pipedrive)
+- [Pipedrive skill on ClawHub](https://clawhub.ai/agentpmt/skills/pipedrive)
+- [AgentPMT account MCP and REST API setup](https://clawhub.ai/agentpmt/agentpmt-account-mcp-rest-api-setup)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, JSON, Guidance]
+
+**Output Format:** [AgentPMT tool-call JSON with concise operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.1 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

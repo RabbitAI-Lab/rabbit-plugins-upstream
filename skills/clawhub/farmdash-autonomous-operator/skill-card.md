@@ -1,44 +1,56 @@
-## Description: <br>
-Session state and control-loop skill for OpenClaw. Manages sessions, FarmingContext, autopilot OODA control loops, circuit breakers, and Forensic receipts in zero-custody. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use to run supervised autopilot cycles under a bounded, revocable session grant: intents, policy checks, approvals, receipts, and zero-custody local signing.
 
-## Publisher: <br>
-[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic)
 
-## Use Case: <br>
-Developers and external DeFi agent operators use this skill to coordinate persistent FarmDash sessions, shared context, bounded autopilot control loops, policy checks, approvals, and forensic receipts. It is intended for zero-custody session and state coordination, not direct private-key custody or direct on-chain execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: DeFi autopilot coordination can create financial risk if budgets, allowlists, or execution approvals are too broad. <br>
-Mitigation: Keep budgets and allowlists tight, require explicit wallet approval for transactions, and halt workflows when risk limits or circuit breakers are reached. <br>
-Risk: FARMDASH_API_KEY and sessionToken values are sensitive credentials. <br>
-Mitigation: Store credentials only in the agent runtime or secret manager, avoid displaying session tokens in user-facing prose, and rotate credentials if exposed. <br>
-Risk: The skill coordinates intent routing and approval records but does not itself provide private-key custody or direct on-chain execution. <br>
-Mitigation: Use separate signing or execution skills for state-changing actions and verify that policy, simulation, and approval gates pass before execution. <br>
+## Use Case:
 
+Developers and agent operators use this skill to maintain FarmDash sessions, coordinate DeFi intent workflows, and run supervised or bounded autonomous cycles with execution authority checked against policy and user authorization.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-autonomous-operator) <br>
-- [FarmDash Agents](https://www.farmdash.one/agents) <br>
-- [FarmDash Autonomous Operator Skill Manual](https://www.farmdash.one/openclaw-skills/farmdash-autonomous-operator/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown and structured session or intent guidance for agent workflows] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference session tokens, API keys, approval payloads, receipt IDs, and risk-state data that should be handled as sensitive operational context.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: ClawHub release metadata; artifact frontmatter reports 2.0.0) <br>
+Risk: The scanner judged the package benign with medium confidence, but its inspection was partial because four local references could not be verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the referenced targets and scan the complete package when those files are available.
+
+Risk: Incorrect plans or stale authority checks could lead to unintended DeFi actions.
+
+Mitigation: Check current domain readiness and scoped execution authority, follow policy and approval gates, and stop when status or settlement is unclear.
+
+## Reference(s):
+
+- [FarmDash Agent Hub](https://www.farmdash.one/agents)
+- [Canonical Autonomous Operator skill manual](https://www.farmdash.one/agents/skills/farmdash-autonomous-operator)
+- [FarmDash security and authority boundaries](https://www.farmdash.one/security)
+- [ClawHub release page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-autonomous-operator)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, JSON]
+
+**Output Format:** [Natural-language guidance and structured JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Session and execution results depend on current service status, policy checks, and valid user authorization.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

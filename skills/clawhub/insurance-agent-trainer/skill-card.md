@@ -1,42 +1,53 @@
-## Description: <br>
-AI-powered insurance agent training coach that generates question banks, skill assessments, personalized training plans, and role-play practice for insurance-agent development. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides an educational coaching framework for insurance agents, with illustrative product analysis, practice questions, role-play, assessments, and training-plan templates.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is for demonstration purposes and not for production usage.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance training teams and agents use this skill to create training content, assessment prompts, role-play scenarios, and daily practice plans for insurance sales development. Generated guidance is for training support and should be reviewed by licensed insurance or compliance staff before real-world use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with China-specific regulatory examples and compliance references. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated insurance scripts, product comparisons, and regulatory claims may be incomplete or inaccurate if used as compliance or sales advice. <br>
-Mitigation: Have licensed insurance or compliance staff review generated materials before use with agents or customers. <br>
-Risk: Users may provide real customer PII or sensitive business data while preparing training scenarios. <br>
-Mitigation: Use approved local handling controls and avoid entering real customer PII unless the organization has authorized that workflow. <br>
-Risk: Document-upload parsing claims may be misunderstood as a verified document-processing implementation. <br>
-Mitigation: Treat document parsing behavior as a training-content framework capability unless separately validated in the deployment environment. <br>
+## Use Case:
 
+Insurance agents and training staff can use the framework to draft practice scenarios, question sets, skill assessments, and training plans. Its examples are educational references and require qualified human review before real-world use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/insurance-agent-trainer) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text with example JSON and Python snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces training materials, question banks, role-play prompts, assessment reports, and practice-plan guidance that require human review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.2.3 (source: server evidence and frontmatter) <br>
+Risk: Training examples or records may expose personal or client information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use anonymized descriptions and placeholder identifiers; minimize retained records and obtain consent before keeping conversation details.
+
+Risk: Product, regulatory, or sales guidance may be inaccurate or out of date if used as real-world advice.
+
+Mitigation: Check current official product terms and regulatory sources, and have qualified insurance and compliance professionals review materials before use with customers.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/insurance-agent-trainer)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown, JSON]
+
+**Output Format:** [Markdown and text guidance with illustrative JSON examples and templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft training materials; review by qualified insurance and compliance professionals before real-world use.]
+
+## Skill Version(s):
+
+5.2.9 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,52 @@
-## Description: <br>
-agent-bom runtime helps agents analyze context graphs, correlate runtime audit logs with CVE findings, and query vulnerability analytics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI runtime security monitoring — context graph analysis, runtime audit log correlation with CVE findings, and vulnerability analytics queries. Use when the user mentions runtime monitoring, context graphs, lateral movement analysis, audit log correlation, or vulnerability analytics.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers and security engineers use this skill to inspect agent runtime posture, investigate lateral movement in context graphs, correlate user-provided audit logs with CVE findings, and query vulnerability trends. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided runtime audit logs may contain sensitive operational details. <br>
-Mitigation: Review and minimize audit logs before providing them to the skill. <br>
-Risk: Optional ClickHouse storage can persist vulnerability analytics and runtime data. <br>
-Mitigation: Configure ClickHouse only when persistent analytics storage is intended and approved. <br>
+## Use Case:
 
+Developers and security engineers use this skill to analyze agent context graphs, correlate runtime audit logs with vulnerability findings, and query security analytics.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-runtime) <br>
-- [Project homepage](https://github.com/msaad00/agent-bom) <br>
-- [PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with concise analysis and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference user-provided audit log paths and optional ClickHouse configuration; no API keys are required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The referenced proxy-audit.jsonl file was unavailable for scanner review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before use, confirm whether you expect the skill to use this file and review the user-provided audit log.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/msaad00/skills/agent-bom-runtime)
+- [Project homepage](https://github.com/koda-ai-studio/agent-bom)
+- [PyPI package](https://pypi.org/project/agent-bom/)
+- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/koda-ai-studio/agent-bom)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text]
+
+**Output Format:** [Text and structured analysis results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Analysis is based on supplied scan results and user-provided audit logs; optional ClickHouse analytics is operator-configured.]
+
+## Skill Version(s):
+
+0.115.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

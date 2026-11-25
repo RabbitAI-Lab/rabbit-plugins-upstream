@@ -1,48 +1,63 @@
-## Description: <br>
-Provides read-only OKX public market data commands for prices, order books, candles, funding and open-interest data, market screeners, instruments, and technical indicators without requiring API credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides read-only OKX public market data commands for prices, order books, candles, funding rates, open interest, instruments, screeners, and technical indicators without API credentials.
 
-## Publisher: <br>
-[numpy0001](https://clawhub.ai/user/numpy0001) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[numpy0001](https://clawhub.ai/user/numpy0001)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve public OKX market data, discover instruments, screen markets, and run technical indicator queries through the OKX CLI. It is intended for data lookup and analysis support, not account management, order placement, bot operation, or trading recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Market data and technical indicators can be mistaken for trading advice. <br>
-Mitigation: Treat outputs as raw data only; interpretation and trading decisions remain with the user. <br>
-Risk: Large historical candle requests can consume excessive context. <br>
-Mitigation: Estimate candle count first and ask for confirmation before fetching more than 500 candles. <br>
-Risk: Derivative, option, stock token, metals, commodities, forex, and bond instruments require valid identifiers and may have trading-hour constraints. <br>
-Mitigation: Verify instrument format, live state, and ticker data before relying on the returned market data. <br>
+## Use Case:
 
+External users and developers use this skill to query OKX public market data, instrument metadata, derivative metrics, screeners, and technical indicators. It is intended for market-data retrieval and command guidance, not account management, order placement, bots, or trading recommendations.
 
-## Reference(s): <br>
-- [OKX](https://www.okx.com) <br>
-- [Price & Market Data Commands](artifact/references/price-data-commands.md) <br>
-- [Derivatives & Contract Data Commands](artifact/references/derivatives-commands.md) <br>
-- [Instrument Discovery Commands](artifact/references/instrument-commands.md) <br>
-- [Technical Indicator Command Reference](artifact/references/indicator-commands.md) <br>
-- [Cross-Skill Workflows & MCP Tool Reference](artifact/references/workflows.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/numpy0001/okx-cex-market) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and optional JSON market data output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only public market data workflows; raw OKX API v5 responses are available when commands use --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.8 (source: server release evidence) <br>
+Risk: The install guidance may fetch a globally installed, unpinned CLI version instead of the reviewed @okx_ai/okx-trade-cli@1.3.7 package.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin the npm install to @okx_ai/okx-trade-cli@1.3.7 or use a locally scoped install before use.
+
+Risk: Market data and technical indicators can be mistaken for trading advice.
+
+Mitigation: Treat outputs as raw data only; keep interpretation and trading decisions with the user.
+
+Risk: Some instrument categories and historical data requests have constraints that can produce invalid or overly large queries.
+
+Mitigation: Follow the documented instrument formats, verify live instrument state where relevant, and ask for confirmation before large historical ranges.
+
+## Reference(s):
+
+- [OKX Homepage](https://www.okx.com)
+- [ClawHub Skill Page](https://clawhub.ai/numpy0001/skills/okx-cex-market)
+- [Price & Market Data Commands](references/price-data-commands.md)
+- [Derivatives & Contract Data Commands](references/derivatives-commands.md)
+- [Instrument Discovery Commands](references/instrument-commands.md)
+- [Technical Indicator Command Reference](references/indicator-commands.md)
+- [Cross-Skill Workflows & MCP Tool Reference](references/workflows.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, JSON, guidance]
+
+**Output Format:** [Markdown responses with inline shell commands and optional JSON command output.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only public market data; no API credentials required.]
+
+## Skill Version(s):
+
+1.3.8 (source: server release metadata; artifact frontmatter metadata.version is 1.3.7)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

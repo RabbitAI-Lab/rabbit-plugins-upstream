@@ -1,43 +1,55 @@
-## Description: <br>
-Read-only Lose It nutrition extractor that authenticates with a user's Lose It credentials or an export ZIP, fetches the user's data export, and emits per-day nutrition as JSON. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves a user's Lose It! nutrition data and emits daily nutrition and meal breakdowns as JSON.
 
-## Publisher: <br>
-[stozo04](https://clawhub.ai/user/stozo04) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[stozo04](https://clawhub.ai/user/stozo04)
 
-## Use Case: <br>
-External users and agents use this skill to retrieve their own Lose It nutrition history as structured per-day JSON for downstream analysis, logging, or personal automation. It is intended for read-only extraction of nutrition data, not for modifying a Lose It account or storing application state. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles Lose It exports and nutrition JSON that may contain personal health data. <br>
-Mitigation: Treat exported ZIPs and nutrition output as sensitive data; avoid sharing, logging, syncing, or backing them up unless the user explicitly intends that. <br>
-Risk: The skill can read plaintext Lose It credentials from config.json and cache a reusable session token locally. <br>
-Mitigation: Prefer environment variables or the --zip flow on shared machines, keep config.json private, and store the token cache only in an owner-only local directory. <br>
+## Use Case:
 
+Individuals and personal assistant agents use the skill to retrieve a user's Lose It! nutrition history for review or downstream analysis.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/stozo04/skills/loseit) <br>
-- [Source Repository](https://github.com/stozo04/loseit-cli) <br>
-- [README](artifact/README.md) <br>
-- [Agent Contract](artifact/AGENTS.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, configuration] <br>
-**Output Format:** [JSON nutrition objects on stdout, with setup and command guidance in Markdown.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The core days command emits a JSON object keyed by ISO date; human hints and errors are kept on stderr.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: The configuration file can contain a plaintext Lose It! password, and the cached session token is a reusable credential that can expose nutrition data if accessed by others.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: On shared machines, prefer LOSEIT_EMAIL and LOSEIT_PASSWORD environment variables; keep configuration and token files in owner-only locations and do not share or back them up.
+
+Risk: Nutrition data is retrieved from the account export and printed for the calling agent to use.
+
+Mitigation: Use the skill only in a trusted agent environment and limit downstream handling or sharing to the nutrition data the user intends to disclose.
+
+## Reference(s):
+
+- [Lose It CLI project](https://github.com/stozo04/loseit-cli)
+- [Lose It CLI releases](https://github.com/stozo04/loseit-cli/releases)
+- [Machine contract and exit codes](https://github.com/stozo04/loseit-cli/blob/main/docs/MACHINE_CONTRACT.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text]
+
+**Output Format:** [JSON keyed by date with nutrition totals and meal details; the CLI can also print a human-readable table.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only nutrition data is printed to stdout; login may save a session token locally.]
+
+## Skill Version(s):
+
+1.0.9 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

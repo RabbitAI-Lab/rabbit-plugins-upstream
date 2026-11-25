@@ -1,46 +1,55 @@
-## Description: <br>
-Generates text in a learned writing voice. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates text in a learned writing voice.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Writers and content teams use this skill to draft prose in an authorized, extracted writing voice. The skill loads local voice profiles, selects an appropriate register, frames source material as working notes, and produces polished text for review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads local voice profile files and optional project voice overrides, which may contain personal writing samples or sensitive context. <br>
-Mitigation: Install only where the agent may access those files, and review profile and override contents before use. <br>
-Risk: Generated text may imitate a writing voice that the user is not authorized to use. <br>
-Mitigation: Use only voice profiles you are authorized to imitate and review generated text before publication. <br>
-Risk: The workflow may silently rewrite banned phrases or punctuation before showing the final draft. <br>
-Mitigation: Review the final output against the source material and style requirements before sharing it. <br>
+## Use Case:
 
+Writers and agents use this skill to draft text in a user's extracted writing voice. It selects a suitable register, frames source material, and can send generated text for review.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-scribe-voice-generate) <br>
-- [Scribe Plugin Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
-- [Generation Pipeline Module](artifact/modules/generation-pipeline.md) <br>
-- [Register Selection Module](artifact/modules/register-selection.md) <br>
-- [Source Framing Module](artifact/modules/source-framing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or prose text with optional inline guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May silently clean banned phrases and punctuation before presenting the draft.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: release evidence; artifact frontmatter says 1.9.8) <br>
+Risk: Learning mode may save a pre-review snapshot; the security scan did not establish consent or deletion safeguards.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before enabling learning mode, confirm snapshot storage is expected, consent is handled, and deletion behavior is understood.
+
+Risk: The security analysis was partial because some referenced paths were unavailable to scanners.
+
+Mitigation: Review the complete referenced skill files before relying on this assessment.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/athola/skills/nm-scribe-voice-generate)
+- [Publisher profile](https://clawhub.ai/user/athola)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Prose text, optionally formatted as Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Length and format follow the user's request; generated text may be accompanied by review advisories.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

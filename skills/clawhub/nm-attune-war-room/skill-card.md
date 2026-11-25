@@ -1,48 +1,61 @@
-## Description: <br>
-Convenes a multi-LLM expert panel to pressure-test hard-to-reverse decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Convenes a multi-LLM expert panel to pressure-test hard-to-reverse decisions
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and technical decision makers use this skill to assess reversibility, convene multiple AI expert perspectives, pressure-test trade-offs, and synthesize a decision for high-stakes architecture or strategy choices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Project context may be sent to configured external model tools during expert-panel analysis. <br>
-Mitigation: Install only when this data flow is acceptable, and avoid using the skill with confidential or restricted project material unless the configured tools are approved. <br>
-Risk: Decision summaries may be offered for GitHub Discussions publication by default. <br>
-Mitigation: Decline publishing for confidential work and review any proposed discussion body before allowing publication. <br>
-Risk: The artifact documents a GLM fallback that skips permissions. <br>
-Mitigation: Do not use the permission-skipping fallback or alias unless it has been explicitly reviewed and approved for the environment. <br>
-Risk: Local decision archives can retain sensitive deliberation content. <br>
-Mitigation: Review and delete local Strategeion archives when they contain sensitive material or are no longer needed. <br>
+## Use Case:
 
+Product and engineering teams use the skill to evaluate consequential decisions with competing approaches. It assesses reversibility, structures expert review and challenge, and produces a decision record with rationale and follow-up actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-war-room) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
-- [Farnam Street: Reversible and Irreversible Decisions](https://fs.blog/reversible-irreversible-decisions/) <br>
-- [One-Way and Two-Way Door Decision-Making](https://tapandesai.com/one-way-two-way-doors-decision-making/) <br>
-- [Amazon Type 1 vs Type 2 Decisions](https://ashikuzzaman.com/2025/03/03/amazons-type-1-vs-type-2-decisions-a-framework-for-effective-decision-making/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown decision documents with command examples and local session records.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce reversibility scores, expert-panel summaries, premortems, dissenting views, and optional GitHub Discussion summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter reports 1.9.8) <br>
+Risk: Decision summaries may be published to GitHub Discussions by default when available, potentially exposing sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and redact the decision record before publication, and decline publishing when it contains information that should remain private.
+
+Risk: Deliberation context may be shared with external model providers.
+
+Mitigation: Remove confidential details and use external delegation only when it is permitted for the information involved.
+
+Risk: The security assessment is partial because three referenced local paths were missing; their contents were not assessed.
+
+Mitigation: Obtain and review the missing referenced files before relying on or installing the skill.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-attune-war-room)
+- [Project homepage (skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/attune)
+- [Reversible and irreversible decisions](https://fs.blog/reversible-irreversible-decisions/)
+- [One-way and two-way door decisions](https://tapandesai.com/one-way-two-way-doors-decision-making/)
+- [Type 1 and Type 2 decision framework](https://ashikuzzaman.com/2025/03/03/amazons-type-1-vs-type-2-decisions-a-framework-for-effective-decision-making/)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown decision report with assessment tables and recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes a reversibility assessment, alternatives, rationale, action items, watch points, and dissenting views; content may be shared with external model providers or published to GitHub Discussions.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

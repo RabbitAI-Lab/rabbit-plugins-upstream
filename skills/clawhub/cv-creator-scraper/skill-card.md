@@ -1,50 +1,59 @@
-## Description: <br>
-Creativault Creator Scraper helps agents search, collect, export, and contact creators across TikTok, YouTube, Instagram, and Twitter. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents find and compare creators, analyze videos and account authenticity, export search results, and manage creator outreach through CreatiVault.
 
-## Publisher: <br>
-[creativault](https://clawhub.ai/user/creativault) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[creativault](https://clawhub.ai/user/creativault)
 
-## Use Case: <br>
-External marketers, creator partnership teams, and agents use this skill to discover creator prospects, collect creator data, export campaign files, and manage outreach workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can collect creator contact data and export creator/contact files. <br>
-Mitigation: Use it only with a lawful, policy-compliant basis and handle exported files as sensitive data. <br>
-Risk: The skill can send real outreach emails, including batch sends. <br>
-Mitigation: Verify recipient lists, message content, and user authorization before sending any outreach. <br>
-Risk: The scanner summary flags an overbroad self-update mechanism that can rewrite or delete skill files. <br>
-Mitigation: Keep CV_SKILL_AUTO_UPDATE disabled unless remote updates are intentional, and review update manifests before running confirmed updates. <br>
-Risk: The skill requires sensitive credentials for API access and operator identity. <br>
-Mitigation: Store CV_API_KEY and CV_USER_IDENTITY securely and limit access to trusted operators. <br>
+## Use Case:
 
+Marketing teams and creator researchers use the skill to discover creators across TikTok, Instagram, and YouTube, review creator and video signals, export search results, and coordinate outreach. It can also summarize short-video content and estimate account authenticity risks.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/creativault/cv-creator-scraper) <br>
-- [API Reference](references/api-reference.md) <br>
-- [Platform Parameters](references/platform-params.md) <br>
-- [Industry Categories](references/industry-categories.md) <br>
-- [Country Codes](references/country-codes.md) <br>
-- [Language Codes](references/language-codes.md) <br>
-- [Error Codes](references/error-codes.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands, JSON API inputs, and exported xlsx/csv/html files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce creator/contact datasets and signed download links through the Creativault API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.0 (source: release evidence, target metadata, artifact frontmatter, skill.json) <br>
+Risk: The security review reports exposed credentials and unsafe data handling; some components were only partially inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Follow the review guidance to remove or rotate the shared credential before installation and review any credential handling.
+
+Risk: The security review reports an update process that can replace skill files without independent release verification.
+
+Mitigation: Independently verify and pin the updater and installer before installation.
+
+Risk: Collection and outreach actions can affect external services or people.
+
+Mitigation: Require clear user intent and confirmation before collection or outreach actions.
+
+## Reference(s):
+
+- [CreatiVault API Reference](artifact/references/api-reference.md)
+- [Platform Parameters](artifact/references/platform-params.md)
+- [Creativault Creator Scraper on ClawHub](https://clawhub.ai/creativault/skills/cv-creator-scraper)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, CSV files, Analysis, Guidance]
+
+**Output Format:** [Markdown summaries and tables, CSV exports, and structured audit results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results reflect data returned by CreatiVault; creator and video coverage depends on its indexed data.]
+
+## Skill Version(s):
+
+1.8.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

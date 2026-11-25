@@ -2,6 +2,58 @@
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [1.3.7] - 2026-11-18
+
+安全审查修复（ClawHub 上 1.3.4 被判 suspicious）。检查项与评分逻辑不变。
+
+### 修复
+- **描述如实声明能力**：`description` 写明同时覆盖 AGENTS.md / CLAUDE.md 与项目 skills，
+  宿主环境体检为可选能力（`run-all-doctors.sh --with-env-doctor`，env-doctor 缺失则跳过），
+  并声明「仅静态检测密钥模式，不读取密钥文件，不读取环境变量做判断」。
+- **env-doctor 改为显式开关**：`run-all-doctors.sh` 默认不扫本机环境，加 `--with-env-doctor` 才调用。
+- **不再读环境变量**：`check.py` 内 `HEKOUWANG_CONTENT_FACTORY` 开关改为 `--content-factory` 参数。
+- **密钥表述去路径字面**：docstring 与报告提示改说「环境变量 / 密钥管理器」，检测能力不变。
+- **报告语言跟随用户**：`SKILL.md` 由「中文输出」改为「跟随用户输入语言（默认中文）」，测试夹具同步。
+- **镜像锁 tag**：README 中英与 Dockerfile 示例统一改用 `:1.3.7`。
+- **CI 片段加警示**：注明会下载远端脚本，建议先审阅、锁定 commit、落临时目录而非覆盖项目文件。
+
+### 已知残留
+- `CHANGELOG` 历史条目里的 `docker run --rm` 示例保持原样（不改写历史），扫描可能仍报该行。
+- 版本号跳过 1.3.5 / 1.3.6：注册表均报「Version … already exists」（公开列表查不到），故本次发 1.3.7。
+
+## [1.3.3] - 2026-10-12
+
+### 修复
+- `docs/` 指针识别带上前面的目录段：`free/docs/index.html` 不再被截成 `docs/index.html` 误报死链
+
+## [1.3.2] - 2026-08-12
+
+### 变更
+- ClawHub 分类：`development`
+
+## [1.3.1] - 2026-08-12
+
+### 新增
+- `scripts/run-all-doctors.sh`：hekouwang-doctor-suite 三件套一键体检
+- `references/doctor-suite.md`：套件说明与免费/付费对照
+
+### 变更
+- `check.py`：无 `HEKOUWANG_CONTENT_FACTORY` 时提示付费报告卡 CTA
+- README：30 秒验收 + 三件套互链；summary 补英文 SEO 关键词
+
+## [1.3.0] - 2026-08-12
+
+### 新增
+- **`check.py` 支持 AGENTS.md**：根目录优先体检 `AGENTS.md`，其次 `CLAUDE.md` / `CLAUDE.local.md`；
+  子目录扫描同时认两份本地配置。
+- **#0b 双文件去重**：根目录 `AGENTS.md` + `CLAUDE.md` 同时存在且都不是薄指针 → WARN（双倍上下文费）。
+- **#4c Skill 路由**：正文应把细则指针到 `.agents/skills/`（或 `.cursor/skills/`），别堆在常驻正文。
+- 报告标题改为 **AGENT CONFIG DOCTOR**；JSON 输出增加 `root_configs` 字段。
+
+### 文档
+- `SKILL.md` 触发词补 `AGENTS.md` / `agents.md` / `运行时配置体检`；评分表扩至 12 项。
+- 新增测试夹具 `tests/fixtures/good-agents/`、`tests/fixtures/dual/`。
+
 ## [1.2.2] - 2026-07-09
 
 ### 文档

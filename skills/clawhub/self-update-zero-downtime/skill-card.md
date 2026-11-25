@@ -1,44 +1,50 @@
-## Description: <br>
-Updates a global npm installation of OpenClaw with release-note review, backup, npm install, service restart, health check, and rollback. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides OpenClaw upgrades by checking release information and Node.js compatibility, creating a backup, installing the update, and checking or rolling back the service.
 
-## Publisher: <br>
-[luffertlu](https://clawhub.ai/user/luffertlu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[luffertlu](https://clawhub.ai/user/luffertlu)
 
-## Use Case: <br>
-Developers and operators use this skill when they deliberately want an agent to update OpenClaw itself while preserving a fallback path. It is intended for npm global installations on Linux systems, with checks for install type, path consistency, prefix writability, service restart, and rollback. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change installed OpenClaw code and restart services. <br>
-Mitigation: Use it only after an explicit request naming OpenClaw, review the target version and release notes, and require user confirmation before execution. <br>
-Risk: Loose activation could apply an OpenClaw self-update to a generic update request. <br>
-Mitigation: Do not run the skill for generic update prompts; scope activation to OpenClaw self-update requests only. <br>
-Risk: Incorrect npm or systemd path detection could affect the wrong installation or leave the service inconsistent. <br>
-Mitigation: Confirm the detected npm global directory, systemd service, running directory, install type, and npm prefix writability before proceeding. <br>
-Risk: A failed upgrade can interrupt the OpenClaw service. <br>
-Mitigation: Keep the side-by-side backup, use the built-in health check, and be prepared to rollback and restart the previous service version. <br>
+## Use Case:
 
+Developers and OpenClaw operators use this skill to plan and carry out an OpenClaw upgrade on a supported Linux installation, including compatibility checks and service recovery steps.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/luffertlu/self-update-zero-downtime) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance, Configuration] <br>
-**Output Format:** [Markdown with shell commands and status summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local upgrade logs and rollback guidance for the OpenClaw service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and package.json) <br>
+Risk: Upgrade or rollback steps can delete or replace files before they are safely validated or approved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the commands before execution, confirm the target version, and verify that a recoverable backup exists before allowing installation or rollback steps to change files.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/luffertlu/skills/self-update-zero-downtime)
+- [OpenClaw GitHub releases](https://github.com/openclaw/openclaw/releases)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands and code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Step-by-step upgrade guidance and a Bash script for supported installations.]
+
+## Skill Version(s):
+
+1.1.0 (source: evidence.json release.version, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

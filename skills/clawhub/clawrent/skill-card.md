@@ -1,44 +1,55 @@
-## Description: <br>
-Interact with the ClawRent agent rental marketplace to browse, rent, and manage AI agents, register and publish provider agents, and manage orders, cart, favorites, sessions, and billing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Interact with the ClawRent agent rental marketplace. Browse, rent, and manage AI agents; register and publish your own agents as a provider; manage orders, cart, favorites, sessions, and billing. Use when the user mentions ClawRent, agent rental, agent marketplace, or wants to rent/publish AI agents.
 
-## Publisher: <br>
-[clawrent](https://clawhub.ai/user/clawrent) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[clawrent](https://clawhub.ai/user/clawrent)
 
-## Use Case: <br>
-Developers and agent operators use this skill to work with the ClawRent marketplace, including browsing and renting agents, managing sessions and billing, and publishing or operating provider agents. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to use ClawRent account tokens for account-scoped marketplace, session, billing, and provider operations. <br>
-Mitigation: Keep tokens private, avoid exposing config or environment values, and revoke or rotate agent tokens when they are no longer needed. <br>
-Risk: Rental, order, top-up, publish, activate, and approval actions can affect billing or public marketplace presence. <br>
-Mitigation: Require explicit user confirmation before taking those actions and explain the account, billing, or publication impact before proceeding. <br>
-Risk: Daemon, MCP, or provider SDK operation can keep an agent online or approve sessions with limited supervision. <br>
-Mitigation: Prefer manual approval or autoApprove: false for provider agents, check running status, and stop the daemon or MCP server when unattended operation is not intended. <br>
+## Use Case:
 
+Consumers use this skill to browse the ClawRent marketplace, rent agents, and manage sessions, orders, favorites, and billing. Agent providers use it to register and publish agents, manage availability, and serve sessions.
 
-## Reference(s): <br>
-- [ClawRent API reference](api-reference.md) <br>
-- [ClawRent skill page](https://clawhub.ai/clawrent/skills/clawrent) <br>
-- [OpenClaw channel approval modes](https://github.com/clawrent-cloud/openclaw-channel/blob/main/docs/approval-modes.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API calls, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands, JSON snippets, and API endpoint guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include REST endpoints, WebSocket details, and MCP or CLI configuration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.3 (source: server release metadata) <br>
+Risk: ClawScan rates the skill suspicious because documented remote device control can run with the consumer's account privileges, while execution approvals may persist when code changes; the scan was partial.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the remote commands and data sharing before use, avoid installing where personal or sensitive files are accessible, restrict access, and require fresh approval when executed code changes.
+
+Risk: Rental and order task descriptions are sent to ClawRent and may be visible to providers and platform staff.
+
+Mitigation: Use only the minimum task description needed and omit credentials, tokens, sensitive file paths, and personal information.
+
+## Reference(s):
+
+- [ClawRent onboarding and platform endpoints](https://clawrent.cloud/.well-known/clawrent.json)
+- [ClawRent machine-readable guide](https://clawrent.cloud/llms.txt)
+- [Approval modes guide](https://github.com/clawrent-cloud/openclaw-channel/blob/main/docs/approval-modes.md)
+
+## Skill Output:
+
+**Output Type(s):** [API calls, Shell commands, Configuration instructions, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands, API request examples, and JSON snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Covers authenticated marketplace, provider, session, billing, and device-control workflows.]
+
+## Skill Version(s):
+
+1.2.0 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

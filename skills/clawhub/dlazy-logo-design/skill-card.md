@@ -1,45 +1,59 @@
-## Description: <br>
-Dlazy Logo Design helps agents create, refine, or evaluate logo and brand identity work through the dLazy hosted logo-design template. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+logo design, logo maker, make a logo, brand identity, brand kit, VI design — brand-gene analysis, strategy, concepts, refinement, multi-context delivery, evaluation. Use to create, upgrade, or evaluate a logo / brand mark; ships a transparent-background logo with a live multi-context preview.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, designers, and developers use this skill to create, upgrade, or evaluate logos and brand identity concepts through the dLazy hosted logo-design template. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and any files attached with --files are sent to dLazy services. <br>
-Mitigation: Avoid confidential brand assets unless dLazy's terms and data handling are acceptable; attach only the files needed for the task. <br>
-Risk: The dLazy CLI can save an API key in the local user configuration. <br>
-Mitigation: Use OS-user protected configuration or the DLAZY_API_KEY environment variable, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: A global npm installation persists the pinned dLazy CLI on the host. <br>
-Mitigation: Use the pinned npx invocation when a persistent global CLI is not desired. <br>
+## Use Case:
 
+Brand owners, designers, and product teams can use this skill to create, refine, upgrade, or evaluate a logo and its visual identity, then review the mark across multiple contexts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-logo-design) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown or terminal text from the dLazy CLI, with generated logo assets or preview links when the service returns them] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; optional local attachments are uploaded via the dLazy CLI when --files is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter, server release metadata) <br>
+Risk: Prompts and options are sent to dLazy's hosted API, and attached local files are uploaded to its media storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sending sensitive material unless approved for this service, and review the service terms before use.
+
+Risk: The CLI requires an API key and stores it in the local dLazy configuration unless supplied through the environment.
+
+Mitigation: Protect the configuration file, use a scoped key, and rotate or revoke it if exposed.
+
+Risk: Security evidence notes that the reported project and CLI behavior may extend beyond logo design and that some references were not fully checked.
+
+Mitigation: Review the CLI package and its requested behavior before authenticating or using project commands.
+
+## Reference(s):
+
+- [dLazy CLI package on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+- [CLI repository listed by the skill](https://github.com/dlazy-ai/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Images, Files, Text]
+
+**Output Format:** [Logo image assets, multi-context previews, and streamed text responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Logo assets are described as transparent-background; local files attached to a request are uploaded to the hosted service.]
+
+## Skill Version(s):
+
+1.3.42 (source: server-resolved release metadata; artifact frontmatter says 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

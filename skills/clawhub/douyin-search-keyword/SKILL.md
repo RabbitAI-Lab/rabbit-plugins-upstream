@@ -1,191 +1,182 @@
 ---
 name: douyin-search-keyword
-description: 抖音公开数据智能获取工具。支持抖音关键词搜索、抖人作品抓取、获取作品评论、实时热榜跟踪，适用于短视频营销、竞品分析、舆情分析和热点监控，助力爆款内容策划与流量追踪。
-version: 1.1.5
+description: 抖音公开数据只读：关键词搜视频/图文、用户/达人搜索、博主作品、作品详情、评论、热榜；可做公域获客/竞品截流（search→comment）与需求挖掘。触发：抖音搜索、搜用户、找达人、找对标账号、获客、线索、截流、高意向、热搜、评论、需求挖掘、痛点、作品详情、博主作品、播放量、选题、舆情、竞品。小红书、快手、B站、微博、公众号不要用本技能。sec_uid、aweme_id、douyin search、douyin user search、douyin hot、douyin detail、douyin comments。
 license: MIT
+version: 1.5.2
 metadata:
-  enabled: true
-  type: command
-  runtime: "nodejs@16.14.0+"
-  requires:
-    bins:
-      - "node"
-    env:
-      - "GUAIKEI_API_TOKEN"
-  category:
-    - "Data&APIs"
-    - "内容创作"
+  openclaw:
+    primaryEnv: GUAIKEI_API_TOKEN
+    requires:
+      bins:
+        - node
+      env:
+        - GUAIKEI_API_TOKEN
   tags:
+    - "抖音搜索"
+    - "抖音用户搜索"
+    - "抖音热榜"
+    - "抖音评论"
+    - "作品详情"
+    - "博主作品"
+    - "对标账号"
+    - "需求挖掘"
+    - "获客"
+    - "竞品截流"
+    - "舆情监控"
+    - "选题"
     - "douyin"
-    - "抖音"
-    - "search"
-    - "搜索"
-    - "数据挖掘"
-    - "content-analysis"
-    - "营销分析"
-    - "数据分析"
-    - "competitor-analysis"
-    - "竞品分析"
-    - "评论分析"
-    - "热点追踪"
-    - "marketing"
-    - "trend-tracking"
-    - "workflow"
-    - "insight"
-    - "automation"
-  schemas:
-    - name: "搜索入参"
-      file: "assets/search_cli_req.schema.json"
-    - name: "搜索出参"
-      file: "assets/search_cli_resp.schema.json"
-    - name: "作品入参"
-      file: "assets/post_cli_req.schema.json"
-    - name: "作品出参"
-      file: "assets/post_cli_resp.schema.json"
-    - name: "热榜出参"
-      file: "assets/hot_cli_resp.schema.json"
-    - name: "评论入参"
-      file: "assets/comment_cli_req.schema.json"
-    - name: "评论出参"
-      file: "assets/comment_cli_resp.schema.json"
   examples:
-    - name: 搜索"AI 教程"的抖音内容
-      command: 'node src/douyin/search-cli.js --keyword "AI 教程"'
-      description: 快速获取关键词相关视频数据，助力内容创作灵感
-    - name: 搜索 AI 获取最多点赞的抖音内容
-      command: 'node src/douyin/search-cli.js --keyword "AI" --sort 1'
-      description: 挖掘爆款视频特征，优化内容策略
-    - name: 搜索近7天"AI 模型"的抖音内容
-      command: 'node src/douyin/search-cli.js --keyword "AI 模型" --time 7'
-      description: 追踪近期热点趋势，把握内容窗口期
-    - name: 搜索半年内最新20条"AI 教程"的抖音内容
-      command: 'node src/douyin/search-cli.js --keyword "AI 教程" --sort 2 --time 180 --limit 20'
-      description: 监控长期内容趋势，制定内容规划
-    - name: 获取抖人 MS4wLjABxxx 已发布的作品
-      command: 'node src/douyin/post-cli.js --url "https://www.douyin.com/user/MS4wLjABxxx"'
-      description: 获取抖人已发布的作品，助力竞品分析
-    - name: 获取抖音作品 https://www.douyin.com/video/xxx 评论区内容
-      command: 'node src/douyin/comment-cli.js --url "https://www.douyin.com/video/xxx"'
-      description: 获取抖音评论详情，分析舆情方向
-    - name: 获取抖音实时热搜榜单
-      command: "node src/douyin/hot-cli.js"
-      description: 实时掌握平台热点，快速响应热门话题
+    - '抖音上"AI 教程"最火的视频 → node "<SKILL_ROOT>/src/douyin/search-cli.js" --keyword "AI 教程" --sort 1'
+    - '找做 AI 的对标账号 / 搜达人 → node "<SKILL_ROOT>/src/douyin/user-search-cli.js" --keyword "AI" --limit 20'
+    - '这个博主最近 30 条作品 → node "<SKILL_ROOT>/src/douyin/post-cli.js" --url "https://www.douyin.com/user/MS4wLjABxxx" --limit 30'
+    - '这条视频的评论区都在说什么 → node "<SKILL_ROOT>/src/douyin/comment-cli.js" --url "https://www.douyin.com/video/xxx" --limit 40'
+    - '这条视频的评论里有什么痛点 → 先确认至少取 50 条，同意后 node "<SKILL_ROOT>/src/douyin/comment-cli.js" --url "https://www.douyin.com/video/xxx" --limit 50，再读 references/demand-mining.md'
+    - '这条视频多少播放、点赞和文案 → node "<SKILL_ROOT>/src/douyin/detail-cli.js" --url "https://www.douyin.com/video/xxx"'
 ---
 
-# 🚀 抖音关键词搜索、竞品分析、舆情监控与热点跟踪工具 (Douyin Search & Analytics)
+# 抖音关键词搜索、竞品分析、舆情监控与热榜跟踪工具 (Douyin Search & Analytics)
 
-> **💡一句话价值**：一键抓取抖音公开视频/作者/评论/热榜数据，帮你做爆款选题、竞品分析、舆情监控、热点追踪。
->
-> **🔥核心优势**
->
-> - 安全: 无需登录你的抖音账号，不担心风控风险 / 封号问题
-> - 强大: 一次可获取最多1W条数据，技能内置批量操作，使用简单方便
-> - 全面: 各功能出参数据全面，可见及有价值数据都会返回
-> - 灵活: 支持多维度筛选、批量操作
-> - 轻量: 无需部署服务，Node.js 一键运行
-> - 低耗: 日志自动归档，适配营销报告 / 内容策划场景 ，便于数据二次分析
+抖音公开数据只读：关键词搜视频/图文、用户/达人搜索、博主作品、作品详情、评论、热榜；输出结构化 JSON。适用于选题、对标账号、竞品、舆情、热点、需求挖掘、公域获客。
 
-## 1. ✅ 我能帮你解决什么（10 秒判断）
+## 1. ⚠️ 执行前置（每次必过）
 
-- 🔍 按关键词搜抖音视频（点赞/最新排序）：找爆款选题、分析高赞视频规律
-- 🦸 竞品监控：批量抓取对标账号所有公开作品数据，分析内容策略
-- 💬 评论分析：获取抖音评论详情，分析舆情方向
-- 📡 热点追流：实时获取抖音热榜，抢占流量风口
-- 📊 数据导出：自动生成JSON日志，方便对比分析和使用
+1. **用绝对路径执行**：`node "<SKILL_ROOT>/src/douyin/<命令>.js" …`。`<SKILL_ROOT>` = 含本 `SKILL.md` 的那一层真实目录（以当前会话为准；勿套用其它宿主示例路径，勿用 frontmatter `name` 冒充目录名）。已 `cd` 到技能根时可用相对路径 `node src/douyin/…`（见 [faq.md](references/faq.md)）。
+2. **确认 `GUAIKEI_API_TOKEN` 已配置**。未配置 → 不执行，走 `AUTH_REQUIRED`（见 §7 / [errors.md](references/errors.md)），禁止先跑「试试看」。
+3. **一次只跑一条命令，等进程自己结束**。查询最多约 20 次退避；`--limit` 很大时最长约 22 分钟。**未退出前不要判定失败，不要并发/重复同一命令。**
+4. **必填参数不齐先追问**（话术见 [ask.md](references/ask.md)），禁止猜测关键词或链接。
+5. **Windows 拼参：cmd 只用双引号**包含空格/中文/URL 的参数；不要用 bash 单引号。引号仍拆坏 → 改用 `--json-args`（[faq.md](references/faq.md)）。Windows / 弱模型优先 `--json-args`。
 
-## 2. 🚀 最快上手（复制就能跑，30 秒出结果）
+> 开通[抖音关键词搜索](https://www.guaikei.com) TOKEN， 配 TOKEN / 落盘 / FAQ → [faq.md](references/faq.md)。
 
-> **Note:** 请先通过微信 <13395823479> 申请TOKEN ，或访问[抖音搜索技能官网](https://www.guaikei.com)开通TOKEN，配置环境变量 `GUAIKEI_API_TOKEN` 后才能正常运行。
+## 2. 💎 价值与典型场景（10 秒判断该不该用）
 
-### 2.1 🔎 抖音关键词搜索（最简单）
+| 你是谁 | 你要做的事 | 用哪个命令 |
+| --- | --- | --- |
+| 短视频运营 | 找爆款选题、看高赞内容的共同点 | `search-cli.js --sort 1` |
+| 运营 / 投放 | 按关键词找对标账号、达人 | `user-search-cli.js` |
+| 品牌 / 投放 | 监控已知账号的发文节奏与内容策略 | `post-cli.js` |
+| 内容分析 | 看一条视频的文案、播放和互动 | `detail-cli.js` |
+| 舆情 / 客服 | 判断一条视频的评论区在骂还是在夸 | `comment-cli.js` |
+| 产品 / 运营 | 从评论里看痛点和诉求 | `comment-cli.js`，再读 [demand-mining.md](references/demand-mining.md) |
+| 销售 / 增长 | 按关键词在评论区挖高意向线索 | `search`→`comment`，再读 [customer-acquisition.md](references/customer-acquisition.md) |
+| 所有人 | 今天抖音在火什么 | `hot-cli.js` |
+
+**典型产出**：结构化 JSON（标题、作者、互动、链接、时间），可导入 Excel/BI 或交给 AI 做选题/竞品/舆情/线索表。默认不落盘；需要留底时加 `--save` 或设 `GUAIKEI_ENABLE_LOG=1`（热榜除外，见 [faq.md](references/faq.md)）。
+
+**为什么用它**：无需登录抖音；零第三方依赖；按量单次最多 1 万条；stdout 纯 JSON、日志走 stderr。
+
+> **合规**：调用会把关键词/链接发到 `www.guaikei.com`。不上传本地文件、不登录、无写操作。仅公开数据，限个人/团队内部分析。
+
+## 3. 🎯 识别卡（选命令，命中即停）
+
+执行：`node "<SKILL_ROOT>/src/douyin/<脚本>" …`（下表只写脚本名）。
+
+| 用户要什么 | 命令 | 最少要有 |
+| --- | --- | --- |
+| 搜视频/图文、爆款、选题 | `search-cli.js` | `--keyword` |
+| 搜用户/达人/账号、按词找对标 | `user-search-cli.js` | `--keyword` |
+| 已知博主的作品、粉丝数据 | `post-cli.js` | 主页链接或 `sec_uid` |
+| 某条视频/图文的评论（含痛点） | `comment-cli.js` | 视频链接或 `aweme_id` |
+| 某条视频/图文的详情、播放、文案 | `detail-cli.js` | 视频链接或 `aweme_id` |
+| 热搜、热榜 | `hot-cli.js` | 无参数 |
+
+- 痛点 / 需求挖掘：仍用 `comment-cli`；**成功后必须读** [demand-mining.md](references/demand-mining.md)。
+- 获客 / 线索 / 截流：`search-cli`（常 `--sort 1`）→ `aweme_id` 跑 `comment-cli`；**成功后必须读** [customer-acquisition.md](references/customer-acquisition.md)。
+- 「找客户」与「挖痛点」同时出现：**先追问**要哪一种（[ask.md](references/ask.md)）。
+
+## 4. 🛠️ 命令一行例（详参下沉）
+
+> **详参 / 枚举**：可视化浏览查看 [options.md](references/options.md)；也可参见 [readme.md](readme.md)（含命令参数详表）。**仅在需要确认枚举或拼参时再读，不要每次都读。**
+> **Windows**：cmd **只用双引号**；PowerShell 含空格也优先双引号。仍拆坏或弱模型 → `--json-args`。双壳例 → [faq.md](references/faq.md)。
 
 ```bash
-node src/douyin/search-cli.js --keyword "AI"
+node "<SKILL_ROOT>/src/douyin/search-cli.js" --keyword "AI 教程" --sort 1 --limit 10
+node "<SKILL_ROOT>/src/douyin/user-search-cli.js" --keyword "AI" --limit 20
+node "<SKILL_ROOT>/src/douyin/post-cli.js" --url "https://www.douyin.com/user/MS4wLjABxxx" --limit 30
+node "<SKILL_ROOT>/src/douyin/post-cli.js" --url "https://www.douyin.com/user/MS4wLjABxxx" --limit 0
+node "<SKILL_ROOT>/src/douyin/comment-cli.js" --url "https://www.douyin.com/video/xxx" --limit 40
+node "<SKILL_ROOT>/src/douyin/detail-cli.js" --url "https://www.douyin.com/video/xxx"
+node "<SKILL_ROOT>/src/douyin/hot-cli.js"
 ```
 
-### 2.2 🔎 按点赞排序找爆款（最常用）
+**Windows 双壳（同一条搜索；把 `<SKILL_ROOT>` 换成真实技能根）**：
 
-```bash
-node src/douyin/search-cli.js --keyword "AI" --sort 1
+```bat
+REM cmd —— 参数必须用双引号；也可用 --json-args（内层 \"）
+node "<SKILL_ROOT>\src\douyin\search-cli.js" --keyword "AI 教程" --sort 1 --limit 10
+node "<SKILL_ROOT>\src\douyin\search-cli.js" --json-args "{\"keyword\":\"AI 教程\",\"sort\":1,\"limit\":10}"
 ```
 
-### 2.3 🦸 抓取抖音抖人全部作品
-
-```bash
-node src/douyin/post-cli.js --url "https://www.douyin.com/user/MS4wLjABxxx"
+```powershell
+# PowerShell —— 含空格/中文同样用双引号；或改用 --json-args（外单内双）
+node "<SKILL_ROOT>/src/douyin/search-cli.js" --keyword "AI 教程" --sort 1 --limit 10
+node "<SKILL_ROOT>/src/douyin/search-cli.js" --json-args '{"keyword":"AI 教程","sort":1,"limit":10}'
 ```
 
-### 2.4 💬 获取抖音作品评论内容
+**数量 / 套餐**：未指定 `--limit` 默认 10；不要擅自抓 10000。技能硬上限 10000（按量）。**包月**超限 → `PLAN_LIMIT`：视频搜索/用户搜索/作品 ≤30，评论 ≤50；详情与热榜无此条数限制。
 
-```bash
-node src/douyin/comment-cli.js --url "https://www.douyin.com/video/xxx"
+口语 → flag 对照 → [routing.md](references/routing.md)。
+
+## 5. 🔀 意图路由（按序命中即停）
+
+```
+1. 热榜/热搜/今天什么火 → hot-cli
+2. 获客+痛点同时出现 → 先追问（ask.md），禁止两边都做
+3. 获客/线索/截流/高意向 → search→comment；结束后读 customer-acquisition.md
+4. 评论/留言/痛点/需求挖掘 + 有视频 → comment-cli；痛点类结束后读 demand-mining.md
+5. 痛点/需求挖掘但无视频链接 → 先追问链接
+6. 单条详情/播放/点赞/文案 → detail-cli
+7. 搜用户/达人/对标账号（关键词、无主页链接）→ user-search-cli
+8. 已有主页/sec_uid 或要某账号作品列表 → post-cli
+9. 有关键词且无以上信号 → search-cli
+10. 都不明确 → 先追问（ask.md）
 ```
 
-### 2.5 📡 获取抖音实时热榜
+消歧：单独「视频」不要默认 post/detail。`/user/` → 只能 post；`/video|note/` + 评论 → comment，+ 播放/文案 → detail，都没说 → 追问。「对标」仅关键词 → user-search；已有链接 → post。
 
-```bash
-node src/douyin/hot-cli.js
-```
+## 6. 📜 输出（摘要）
 
-## 3. 📌 适用场景（我该不该用？）
+- stdout = 统一 JSON 信封；stderr = 日志。向用户**只摘关键字段**，勿整份粘贴。取数成功/empty 时信封顶层可能有 `cost`（花费估算，见 [contract.md](references/contract.md)）。
+- `status=empty` + `NO_MATCH` 退出码 0，**不是失败**。
+- `results`：搜/用户/评论/热榜 = 数组；作品 = `{post,user}`；详情 = 单对象。
 
-- 你需要做短视频选题 → 关键词搜索 + 点赞排序
-- 你需要模仿爆款文案 → 查看高赞视频详情
-- 你需要监控竞品账号 → 批量抓取对方作品
-- 你需要分析内容舆情 → 获取抖音评论详情
-- 你需要快速追热点 → 实时获取抖音热榜
-- 你需要做营销报告 → 导出结构化数据
+完整信封与形态 → [contract.md](references/contract.md)（含上游 Create `id` → `/info` 只传 `id`；CLI schema 不含任务 uuid）。JSON Schema 文件在 `assets/`（入参/出参/信封），清单见 [readme.md](readme.md) 参数章。
 
-## 4. 🔧 参数详解表
+## 7. 🚨 错误应对（摘要）
 
-> 详细选项参数说明， 可参阅 [完整选项说明](references/options.md)
->
-> LLM理解技能的详细选项，可参阅技能 `assets` 目录中文件，其遵循 JSON Schema draft-07 版本规范。
->
-> - 抖音关键词搜索，[入参规范](assets/search_cli_req.schema.json)
-> - 抖音关键词搜索，[出参规范](assets/search_cli_resp.schema.json)
-> - 抖音抖人作品获取，[入参规范](assets/post_cli_req.schema.json)
-> - 抖音抖人作品获取，[出参规范](assets/post_cli_resp.schema.json)
-> - 抖音评论获取，[入参规范](assets/comment_cli_req.schema.json)
-> - 抖音评论获取，[出参规范](assets/comment_cli_resp.schema.json)
-> - 抖音热榜获取，[出参规范](assets/hot_cli_resp.schema.json)
+| error_code | 退出码 | Agent |
+| --- | --- | --- |
+| `AUTH_*` | 3 | **禁止重试**；引导官网检查/开通/续期 TOKEN（含停用 410、未开通 405；勿当成接口下线） |
+| `PLAN_LIMIT` | 1 | **禁止同参重试**；降 limit 须用户同意 |
+| `INSUFFICIENT_BALANCE` / `DAILY_LIMIT` | 1 | **禁止同参重试**；充值或明日/调限额 |
+| `RATE_LIMITED` | 1 | **禁止立即重试** |
+| `INVALID_*` | 1/2 | 换词/换链/按 help 改一次；禁止擅自改默认再跑 |
+| `NO_MATCH` | 0 | 如实无结果 |
+| `TIMEOUT` / `NETWORK_ERROR` | 1 | 同参续等最多 1 次（搜/用户约 9 分钟、作品/详情/评论约 20 分钟复用）；禁止改参「重做」 |
 
-## 5. ⚠️ 重要限制（不踩坑）
+全表 → [errors.md](references/errors.md)。
 
-- 仅抓取抖音公开数据，不支持私密 / 隐藏内容
-- 需要配置 GUAIKEI_API_TOKEN 才能正常运行
-- 数据仅限个人 / 团队内部使用，禁止违规分发
+## 8. 🛑 硬性禁止
 
-## 6. ❓ 常见问题（秒解决）
+- 不得编造数据；不得把空结果说成有结果。
+- 不得未征得同意就自动改搜索条件重试。
+- `AUTH_*` / `PLAN_LIMIT` / `INSUFFICIENT_BALANCE` / `RATE_LIMITED` / `DAILY_LIMIT` 后不得同参或立即重试。
+- 不得把 stderr 原文转述给用户。
+- 不得做登录态/私密获取或任何写操作；不得编造手机号/微信号或骚扰脚本。
+- 相对路径 `node src/douyin/*.js` 仅在已处于 `<SKILL_ROOT>` 时可用；否则必须用 `node "<SKILL_ROOT>/src/douyin/….js"`。
 
-> **💡Q：运行报错，提示无权限？**
->
-> A：配置环境变量：
->
-> - Windows: `set GUAIKEI_API_TOKEN=你的TOKEN`
-> - Linux/MacOS: `export GUAIKEI_API_TOKEN=你的TOKEN`
->
-> - 私有TOKEN申请后请留意使用安全，避免泄露给他人
->
-> **💡Q：搜索结果为空？**
->
-> A：换常用关键词，或把 `--time` 改为 0（全部时间）
->
-> **💡Q：输出文件在哪里？**
->
-> A：自动保存在技能目录的 `logs` 文件夹下
->
-> - 搜索任务日志: 默认保存为「时间戳\_关键词\_排序\_时间\_时长\_search.json」
-> - 抖人作品获取日志: 默认保存为「时间戳\_(抖人sec_uid)\_post.json」
-> - 抖音评论获取日志: 默认保存为「时间戳\_(视频aweme_id)\_comment.json」
->
-> **💡Q：支持 Windows/Mac/Linux 吗？**
->
-> A：全平台支持，仅需安装 Node.js 环境
+## 9. 📚 何时读 references（入口总表）
 
-## 7. 📞 帮助与支持
-
-- 联系微信 13395823479（备注抖音技能）开通TOKEN或获得技能使用支持；
-- 或通过 [抖音关键词搜索技能官网](https://www.guaikei.com) 自助开通TOKEN或查阅使用帮助。
-
-> 🆕 [更新日志](references/changelog.md) 可查阅这里
+| 时机 | 打开 |
+| --- | --- |
+| 确认枚举/参数取值 | [options.md](references/options.md) |
+| 口语指令 → flag | [routing.md](references/routing.md) |
+| 信封 / `results` 形态 | [contract.md](references/contract.md) |
+| 完整错误表 | [errors.md](references/errors.md) |
+| 缺参追问话术 | [ask.md](references/ask.md) |
+| 环境 / FAQ | [faq.md](references/faq.md) |
+| 需求挖掘（取数成功后） | [demand-mining.md](references/demand-mining.md) |
+| 公域获客（取数成功后） | [customer-acquisition.md](references/customer-acquisition.md) |
+| 版本变更 | [changelog.md](references/changelog.md) |
+| 技术人员总览（含命令参数详表 / Schema 清单） | [readme.md](readme.md) |
+| 机器可校验 Schema | `assets/*.schema.json` |

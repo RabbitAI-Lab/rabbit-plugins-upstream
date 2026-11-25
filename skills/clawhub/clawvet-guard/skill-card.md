@@ -1,42 +1,54 @@
-## Description: <br>
-Vet any OpenClaw skill for prompt injection, credential theft, and RCE before you install it. Runs a clawvet scan and blocks risky installs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scan a third-party agent skill with ClawVet and act on its grade before installing, enabling, or running it. Use when the user asks to scan, vet, or check a skill they did not write, or whether a skill from ClawHub or another untrusted source is safe to install.
 
-## Publisher: <br>
-[mohibshaikh](https://clawhub.ai/user/mohibshaikh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mohibshaikh](https://clawhub.ai/user/mohibshaikh)
 
-## Use Case: <br>
-Developers and agent users use this skill to scan OpenClaw skills before installation, review risk grades and findings, and block skills that show high-risk behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can ask the agent to run Bash commands with npx to execute clawvet scans. <br>
-Mitigation: Install only when that execution model is acceptable, and review the exact command and target before running scans. <br>
-Risk: Scanner results may miss issues in unknown third-party skills or be treated as stronger assurance than they provide. <br>
-Mitigation: Treat scan results as evidence for review, surface high and critical findings, and require user approval before proceeding on moderate risk results. <br>
+## Use Case:
 
+Developers and agent users use this skill to scan third-party skills before installing, enabling, or running them. It guides users to check scan coverage, findings, recommendations, and declared capabilities before deciding what to do.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mohibshaikh/skills/clawvet-guard) <br>
-- [Server-resolved GitHub provenance](https://github.com/MohibShaikh/clawvet/tree/master/skills/clawvet-guard) <br>
-- [Source repository](https://github.com/MohibShaikh/clawvet) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON scan-result interpretation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May invoke npx clawvet scans that return riskGrade, riskScore, findingsCount, and findings details.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: release evidence) <br>
+Risk: The ClawVet command is unpinned, so an upstream change could alter what runs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin a ClawVet version before installing or relying on the scan.
+
+Risk: Skillspector coverage was partial because two local references could not be resolved, so the scan evidence is incomplete.
+
+Mitigation: Resolve the missing local references and rerun the scan before relying on its results.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/mohibshaikh/skills/clawvet-guard)
+- [ClawVet project repository](https://github.com/MohibShaikh/clawvet)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Shell commands, Guidance, JSON]
+
+**Output Format:** [Markdown guidance summarizing scan coverage, findings, recommendation, and capabilities, based on ClawVet results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can include grade and sensitive capability information reported by ClawVet.]
+
+## Skill Version(s):
+
+1.0.10 (source: server-resolved release metadata; artifact frontmatter reports 1.0.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

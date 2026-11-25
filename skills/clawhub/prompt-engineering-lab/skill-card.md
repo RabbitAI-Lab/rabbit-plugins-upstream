@@ -1,40 +1,53 @@
-## Description: <br>
-AI-powered prompt engineering workbench that helps developers, prompt engineers, and AI product teams draft, test, diagnose, version, and optimize prompts for LLM applications. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides structured guidance for drafting, diagnosing, comparing, and maintaining prompts with rubrics, examples, and review checklists.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, prompt engineers, AI product teams, and other external users use this skill to improve prompts, design prompt evaluations, compare variants, and structure production prompt workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated prompts or prompt-analysis guidance may be incorrect, incomplete, or unsuitable for regulated medical, legal, financial, or customer-facing systems. <br>
-Mitigation: Review generated prompts before production use and require domain-expert review for regulated or high-impact use cases. <br>
-Risk: Prompt performance can vary across model providers and model versions. <br>
-Mitigation: Test prompt variants on the target model and monitor results across deployment environments before adopting changes. <br>
+## Use Case:
 
+Developers, prompt engineers, and AI product teams use the skill to draft and diagnose prompts, plan comparisons and regression checks, and prepare prompt review materials.
 
-## Reference(s): <br>
-- [Prompt Engineering Lab on ClawHub](https://clawhub.ai/gechengling/prompt-engineering-lab) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Analysis, Markdown, Code, Configuration] <br>
-**Output Format:** [Markdown with prompt templates, comparison tables, rubrics, and example prompt text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No direct API execution; outputs should be reviewed before use in regulated or production settings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The security review was partial because two local references could not be resolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Resolve and review those references before relying on the clean verdict; the scan does not guarantee the skill is risk-free.
+
+Risk: Shared prompt examples may contain customer or internal information.
+
+Mitigation: Share only relevant excerpts and replace names, identifiers, internal details, and credentials with placeholders.
+
+## Reference(s):
+
+- [Prompt Engineering Lab on ClawHub](https://clawhub.ai/gechengling/skills/prompt-engineering-lab)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prompt drafts, rubrics, comparison plans, and review checklists; model calls, evaluations, and file or system actions are performed by the user outside this skill.]
+
+## Skill Version(s):
+
+3.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,10 @@
+interface:
+  display_name: "Project Onboarding"
+  short_description: "Role-based project onboarding brief"
+  brand_color: "#C25A2C"
+  default_prompt: "Onboard me to my active Flow Relay project as a backend engineer."
+policy:
+  products:
+    - CHAT
+    - CODEX
+  allow_implicit_invocation: true

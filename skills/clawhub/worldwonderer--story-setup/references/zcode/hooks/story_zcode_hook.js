@@ -10,6 +10,8 @@ const path = require("node:path")
 const { spawnSync } = require("node:child_process")
 const core = require("./story_hook_core.js")
 const {
+  readSentinel,
+  agentsVersionNotice,
   existingDir,
   safeRelative,
   resolveTarget,
@@ -21,8 +23,9 @@ const {
   extractProseTargets,
   extractPatchTargets,
   proseBlockReason,
+  prosePreWriteWarnings,
+  formatPreWriteAdvisory,
   isProsePath,
-  wordcountFinding,
   duplicateTitleFindings,
   proseAfterWrite,
   shellWords,
@@ -33,14 +36,17 @@ const {
 } = core
 
 let hookInput = {}
-try {
-  const raw = fs.readFileSync(0, "utf8")
-  if (raw.trim()) {
-    const parsed = JSON.parse(raw)
-    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) hookInput = parsed
-  }
-} catch {
-  hookInput = {}
+
+function readHookInput() {
+  if (process.stdin.isTTY) return {}
+  try {
+    const raw = fs.readFileSync(0, "utf8")
+    if (raw.trim()) {
+      const parsed = JSON.parse(raw)
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) return parsed
+    }
+  } catch {}
+  return {}
 }
 
 function emit(value) {
@@ -80,6 +86,7 @@ function projectRoot() {
       cwd,
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"],
+      windowsHide: true,
     })
     if (result.status === 0 && result.stdout.trim()) return path.resolve(result.stdout.trim())
   } catch {}
@@ -89,14 +96,14 @@ function projectRoot() {
 function sessionStart() {
   const root = projectRoot()
   const messages = []
-  const sentinel = path.join(root, ".story-deployed")
-  if (fs.existsSync(sentinel)) {
-    let text = ""
-    try { text = fs.readFileSync(sentinel, "utf8") } catch {}
-    const match = text.match(/^target_cli:\s*(.+)$/m)
-    if (!match) {
+  const sentinel = readSentinel(root)
+  if (sentinel !== null) {
+    const versionNotice = agentsVersionNotice(root, { sentinel, setupCommand: "$story-setup" })
+    if (versionNotice) messages.push(versionNotice)
+    const targetCli = sentinel.target_cli || ""
+    if (!targetCli) {
       messages.push("[story-setup] .story-deployed 缺少 target_cli；建议重新运行 $story-setup。")
-    } else if (!match[1].split(",").map((item) => item.trim()).includes("zcode")) {
+    } else if (!targetCli.split(",").map((item) => item.trim()).includes("zcode")) {
       messages.push("[story-setup] 当前部署标记未包含 zcode；如需 ZCode 项目适配，请重新运行 $story-setup 并选择 ZCode。")
     }
   }
@@ -125,8 +132,19 @@ function toolPayload(input) {
   return {}
 }
 
+function isPathInside(root, candidate, pathApi = path) {
+  const relation = pathApi.relative(root, candidate)
+  return relation === "" || (
+    !pathApi.isAbsolute(relation)
+    && relation !== ".."
+    && !relation.startsWith(`..${pathApi.sep}`)
+  )
+}
+
 function targetPaths(input) {
   const root = projectRoot()
+  const inputCwd = existingDir(input.cwd)
+  const base = inputCwd && isPathInside(root, inputCwd) ? inputCwd : root
   const name = toolName(input)
   const payload = toolPayload(input)
   const rawTargets = []
@@ -141,11 +159,12 @@ function targetPaths(input) {
   for (const key of ["patch", "content", "text"]) {
     if (typeof payload[key] === "string" && /applypatch|patch/i.test(name)) rawTargets.push(...extractPatchTargets(payload[key]))
   }
-  return [...new Set(rawTargets.filter(Boolean).map((value) => resolveTarget(root, value)))]
+  return [...new Set(rawTargets.filter(Boolean).map((value) => resolveTarget(root, value, base)))]
 }
 
 function preToolProseGuard() {
   const root = projectRoot()
+  const warnings = []
   for (const target of targetPaths(hookInput)) {
     const reason = proseBlockReason(root, target)
     if (reason) {
@@ -158,7 +177,10 @@ function preToolProseGuard() {
       })
       return
     }
+    warnings.push(...prosePreWriteWarnings(root, target))
   }
+  const advisory = formatPreWriteAdvisory(warnings)
+  if (advisory) emit(hookContext("PreToolUse", advisory))
 }
 
 function preToolCommitAdvisory() {
@@ -177,6 +199,7 @@ function postToolProseCheck() {
 
 function main() {
   const event = process.argv[2] || ""
+  hookInput = readHookInput()
   try {
     if (event === "session-start") sessionStart()
     else if (event === "pre-tool-prose-guard") preToolProseGuard()
@@ -195,4 +218,11 @@ function main() {
 
 if (require.main === module) main()
 
-module.exports = { continuityFindings, proseNetFindings, extractProseTargets, extractPatchTargets, isGitCommitCommand }
+module.exports = {
+  continuityFindings,
+  proseNetFindings,
+  extractProseTargets,
+  extractPatchTargets,
+  isGitCommitCommand,
+  isPathInside,
+}

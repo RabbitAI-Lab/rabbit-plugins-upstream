@@ -1,46 +1,56 @@
-## Description: <br>
-Enables OpenClaw agents to access AISpeech office notebook and recording-card product capabilities for notes, meeting records, todos, personal knowledge search, label knowledge bases, and hotword management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects OpenClaw with 思必驰 AI office notebooks and recording cards to manage notes, paper notebooks, todos, personal and label knowledge, and hotwords.
 
-## Publisher: <br>
-[fairylong](https://clawhub.ai/user/fairylong) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fairylong](https://clawhub.ai/user/fairylong)
 
-## Use Case: <br>
-External users and developers use this skill to let an OpenClaw agent retrieve, create, update, and delete AISpeech notes, todos, labels, knowledge-base entries, and hotwords through the AIWork APIs. It is intended for controlled access to a user's own AIWork account data with explicit care around write and delete actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can write or delete personal notes, todos, groups, labels, and hotwords. <br>
-Mitigation: Require the agent to show the exact target and obtain explicit confirmation before delete, bulk-change, or other destructive actions. <br>
-Risk: The skill uses an AIWork authorization token and can access account data according to granted scopes. <br>
-Mitigation: Install only for trusted AIWork accounts, grant the minimum scopes needed, and store AIWORK_AUTH_TOKEN only in the intended OpenClaw environment. <br>
-Risk: Broad note-content retrieval can expose unnecessary meeting transcripts, OCR text, summaries, or AI insights. <br>
-Mitigation: Fetch lightweight note metadata first, use summaries before full content, and retrieve ASR, OCR, or insight content only when the user's request requires it. <br>
+## Use Case:
 
+Employees using 思必驰 AI office notebooks or recording cards can retrieve and manage notes, paper notebooks, and todos; search personal and label knowledge; and manage hotwords.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fairylong/aispeech-ainote) <br>
-- [AIWork service](https://aiworks.cn) <br>
-- [API reference](api_reference.md) <br>
-- [API details](references/api-details.md) <br>
-- [README](README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP API endpoints, JSON request and response examples, and configuration snippets.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires AIWORK_AUTH_TOKEN for protected API access; content retrieval should be incremental and write or delete actions should identify the exact target before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release metadata) <br>
+Risk: The skill accesses personal notebook, note, and todo data using an authorization token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Protect AIWORK_AUTH_TOKEN in the OpenClaw environment and grant only the scopes needed for the requested tasks.
+
+Risk: The skill documents operations that delete notes, note groups, and todos.
+
+Mitigation: Confirm the target item and intended deletion before invoking a delete operation.
+
+## Reference(s):
+
+- [API Reference](api_reference.md)
+- [API Details](references/api-details.md)
+- [AIWorks](https://aiworks.cn)
+- [ClawHub Release](https://clawhub.ai/fairylong/skills/aispeech-ainote)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Natural-language responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may contain personal notebook, note, and todo information.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

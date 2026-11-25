@@ -1,45 +1,58 @@
-## Description: <br>
-Verifies identity documents via the Didit standalone API for passports, ID cards, driver's licenses, and residence permits, including OCR extraction, MRZ parsing, authenticity checks, and KYC document validation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents write backend integrations with Didit's standalone APIs for identity document verification and digital ID wallet sign-in.
 
-## Publisher: <br>
-[rosasalberto](https://clawhub.ai/user/rosasalberto) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[rosasalberto](https://clawhub.ai/user/rosasalberto)
 
-## Use Case: <br>
-Developers and identity-verification teams use this skill to submit user-provided identity document images to Didit and interpret verification status, extracted document fields, and warnings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends user-selected identity document images to Didit for verification. <br>
-Mitigation: Use it only when authorized to process the document holder's ID images and when the user understands the data will be sent to Didit. <br>
-Risk: The Didit API key is required for requests. <br>
-Mitigation: Store DIDIT_API_KEY as a secret environment variable and avoid placing it in source files, command history, logs, or shared transcripts. <br>
-Risk: Returned JSON can include highly sensitive identity data such as document numbers, birth dates, addresses, portraits, and document images. <br>
-Mitigation: Protect the response as sensitive personal data, minimize retention, avoid unnecessary vendor_data, and use --no-save when provider-side saving is not needed. <br>
+## Use Case:
 
+Developers use this skill to build integrations that submit identity document images or PDFs to Didit's verification APIs, handle verification results, or start supported digital ID wallet sign-ins.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/rosasalberto/didit-id-document-verification) <br>
-- [Didit Documentation](https://docs.didit.me) <br>
-- [Didit ID Verification API Reference](https://docs.didit.me/standalone-apis/id-verification) <br>
-- [Didit ID Verification Feature Guide](https://docs.didit.me/core-technology/id-verification/overview) <br>
-- [Didit Supported Documents](https://docs.didit.me/core-technology/id-verification/supported-documents-id-verification) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands, code examples, and JSON API responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires DIDIT_API_KEY and a front document image; may use an optional back image, vendor_data, and --no-save.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: frontmatter and server release evidence) <br>
+Risk: Verification requests involve identity document images and an API key, and saved API requests may retain verification sessions and images.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share document data only when approved for the use case, keep DIDIT_API_KEY in a secret store, and set save_api_request to false when session storage is unnecessary.
+
+Risk: The security review reports incomplete reference-resolution coverage, so its benign verdict does not establish that the artifact is risk-free.
+
+Mitigation: Review the skill and its referenced components before deployment, and confirm that the required data sharing and credential scope fit the application.
+
+## Reference(s):
+
+- [Didit ID Verification API Reference](https://docs.didit.me/standalone-apis/id-verification)
+- [Didit Digital ID Wallets API Reference](https://docs.didit.me/standalone-apis/digital-id-wallets)
+- [ID Verification Feature Guide](https://docs.didit.me/core-technology/id-verification/overview)
+- [ID Verification Warnings](https://docs.didit.me/core-technology/id-verification/warnings-id-verification)
+- [Supported Documents](https://docs.didit.me/core-technology/id-verification/supported-documents-id-verification)
+- [Didit Pricing](https://docs.didit.me/getting-started/pricing)
+
+## Skill Output:
+
+**Output Type(s):** [Code, API Calls, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with Python and TypeScript examples, JSON payloads, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes request setup, response handling, and operational guidance for identity verification integrations.]
+
+## Skill Version(s):
+
+1.4.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -25,8 +25,9 @@ LATEX_REF = re.compile(r"\\(?:ref|pageref|nameref|autoref|eqref|cref|Cref|vref|V
 HEADING = re.compile(r"^\s*#{1,6}\s+")
 TABLE_ROW = re.compile(r"^\s*\|")
 LATEX_CONTROL_LINE = re.compile(r"^\s*\\(?:label|ref|pageref|nameref|autoref|eqref|cref|Cref|vref|Vref)\{[^{}\n]+\}\s*$")
-FENCED_CODE = re.compile(r"(?ms)^\s*(?P<fence>`{3,}|~{3,})[^\n]*\n.*?^\s*(?P=fence)\s*$")
+FENCE_LINE = re.compile(r"^ {0,3}(?P<fence>`{3,}|~{3,})(?P<info>[^\r\n]*)$")
 LATEX_CODE_ENV = re.compile(r"(?s)\\begin\{(?:verbatim|Verbatim|lstlisting|minted|comment)\}.*?\\end\{(?:verbatim|Verbatim|lstlisting|minted|comment)\}")
+LATEX_CODE_TOKEN = re.compile(r"\\(?P<action>begin|end)\{(?P<name>verbatim|Verbatim|lstlisting|minted|comment)\}")
 INLINE_CODE = re.compile(r"`+[^`\n]*`+")
 LATEX_COMMENT = re.compile(r"(?m)(?<!\\)%[^\n]*$")
 
@@ -100,9 +101,56 @@ def mask_preserving_newlines(text: str, pattern: re.Pattern[str]) -> str:
     return pattern.sub(lambda match: re.sub(r"[^\n]", " ", match.group(0)), text)
 
 
+def mask_fenced_code(text: str) -> str:
+    """Mask top-level fences, including longer closers and unclosed blocks.
+
+    CommonMark 0.31.2 section 4.5: same marker, closing run at least as long,
+    up to three leading spaces, and no backticks in a backtick info string.
+    """
+    output: list[str] = []
+    marker = ""
+    minimum_length = 0
+    literal_environment = ""
+    for line in text.splitlines(keepends=True):
+        match = FENCE_LINE.fullmatch(line.rstrip("\r\n"))
+        if marker:
+            output.append(re.sub(r"[^\r\n]", " ", line))
+            if (match and match["fence"][0] == marker
+                    and len(match["fence"]) >= minimum_length
+                    and not match["info"].strip(" \t")):
+                marker = ""
+            continue
+        if not literal_environment and match and (match["fence"][0] == "~" or "`" not in match["info"]):
+            marker = match["fence"][0]
+            minimum_length = len(match["fence"])
+            output.append(re.sub(r"[^\r\n]", " ", line))
+        else:
+            output.append(line)
+            # A fence inside literal LaTeX is data. Conversely, the branch
+            # above ignores LaTeX commands inside a Markdown code fence.
+            position = 0
+            while position < len(line):
+                if literal_environment:
+                    end = re.search(r"\\end\{" + re.escape(literal_environment) + r"\}", line[position:])
+                    if not end:
+                        break
+                    position += end.end()
+                    literal_environment = ""
+                else:
+                    visible = mask_preserving_newlines(line[position:], INLINE_CODE)
+                    visible = mask_preserving_newlines(visible, LATEX_COMMENT)
+                    token = LATEX_CODE_TOKEN.search(visible)
+                    if not token:
+                        break
+                    position += token.end()
+                    if token["action"] == "begin":
+                        literal_environment = token["name"]
+    return "".join(output)
+
+
 def latex_scan_text(text: str) -> str:
-    masked = text
-    for pattern in (FENCED_CODE, LATEX_CODE_ENV, INLINE_CODE, LATEX_COMMENT):
+    masked = mask_fenced_code(text)
+    for pattern in (LATEX_CODE_ENV, INLINE_CODE, LATEX_COMMENT):
         masked = mask_preserving_newlines(masked, pattern)
     return masked
 
@@ -112,6 +160,65 @@ def parse_term_group(value: str) -> tuple[str, ...]:
     if len(terms) < 2:
         raise argparse.ArgumentTypeError("--term-group needs at least two terms separated by |")
     return terms
+
+
+STATE_TERM_GROUP = re.compile(r"^\s*(?:[-*+]\s*)?术语组\s*[:：]\s*(.+)$")
+STATE_ABBREVIATION = re.compile(r"^\s*(?:[-*+]\s*)?缩写\s*[:：]\s*(.+)$")
+
+
+def load_state_rules(
+    path_arg: str, encoding: str | None
+) -> tuple[list[tuple[str, ...]], list[str], list[Finding]]:
+    path_label, content = read_text(path_arg, encoding)
+    masked = mask_fenced_code(content)
+    term_groups: list[tuple[str, ...]] = []
+    abbreviations: list[str] = []
+    state_findings: list[Finding] = []
+    canonical_owners: dict[frozenset[str], tuple[str, int]] = {}
+    for line_no, line in enumerate(masked.splitlines(), start=1):
+        term_match = STATE_TERM_GROUP.match(line)
+        if term_match:
+            normalized_group = term_match.group(1).replace("｜", "|")
+            terms = tuple(dict.fromkeys(part.strip() for part in normalized_group.split("|") if part.strip()))
+            if len(terms) < 2:
+                state_findings.append(
+                    Finding(
+                        path_label,
+                        line_no,
+                        "low",
+                        "state-config",
+                        "invalid-state-term-group",
+                        "状态文件中的术语组至少需要两个不同术语，已忽略该行",
+                        line.strip()[:100],
+                    )
+                )
+                continue
+            group_set = frozenset(terms)
+            prev = canonical_owners.get(group_set)
+            if prev is not None and prev[0] != terms[0]:
+                state_findings.append(
+                    Finding(
+                        path_label,
+                        line_no,
+                        "medium",
+                        "state-config",
+                        "conflicting-state-term-group",
+                        f"术语组与第 {prev[1]} 行的首选规范词 {prev[0]!r} 冲突",
+                        line.strip()[:100],
+                    )
+                )
+            else:
+                canonical_owners.setdefault(group_set, (terms[0], line_no))
+            if terms not in term_groups:
+                term_groups.append(terms)
+            continue
+        abbr_match = STATE_ABBREVIATION.match(line)
+        if abbr_match:
+            for item in re.split(r"[,，|｜、;；]+", abbr_match.group(1)):
+                token = item.strip()
+                if token and token not in abbreviations:
+                    abbreviations.append(token)
+    return term_groups, abbreviations, state_findings
 
 
 def find_term_group_locations(
@@ -274,6 +381,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("files", nargs="+", help="Text/Markdown/LaTeX/DOCX files, or '-' for stdin.")
     parser.add_argument("--term-group", action="append", type=parse_term_group, default=[], help="Terms separated by |; first term is the expected canonical form from the project state.")
     parser.add_argument("--abbreviation", action="append", default=[], help="Explicit abbreviation to check for definition order; repeat as needed.")
+    parser.add_argument("--state-file", help="Optional read-only paper-state.md file providing 术语组 and 缩写 lines.")
     parser.add_argument("--minimum-duplicate-chars", type=int, default=80)
     parser.add_argument("--encoding", help="Encoding for plain-text inputs.")
     parser.add_argument("--json", action="store_true")
@@ -284,6 +392,19 @@ def main(argv: list[str] | None = None) -> int:
 
     documents: list[tuple[str, str]] = []
     read_error = False
+    state_term_groups: list[tuple[str, ...]] = []
+    state_abbreviations: list[str] = []
+    state_findings: list[Finding] = []
+    if args.state_file:
+        if args.state_file == "-" and "-" in args.files:
+            print("ERROR: --state-file '-' cannot share stdin with input files", file=sys.stderr)
+            return 2
+        try:
+            state_term_groups, state_abbreviations, state_findings = load_state_rules(args.state_file, args.encoding)
+        except InputReadError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 2
+
     for file_arg in args.files:
         try:
             path_label, content = read_text(file_arg, args.encoding)
@@ -293,12 +414,17 @@ def main(argv: list[str] | None = None) -> int:
             continue
         documents.append((path_label, content))
 
+    merged_term_groups = list(dict.fromkeys([*state_term_groups, *args.term_group]))
+    merged_abbreviations = list(dict.fromkeys([*state_abbreviations, *args.abbreviation]))
     report = analyze(
         documents,
-        term_groups=args.term_group,
-        abbreviations=args.abbreviation,
+        term_groups=merged_term_groups,
+        abbreviations=merged_abbreviations,
         minimum_duplicate_chars=args.minimum_duplicate_chars,
     )
+    if state_findings:
+        report["findings"] = [*(asdict(item) for item in state_findings), *report["findings"]]
+        report["summary"]["findings"] = len(report["findings"])
     if args.json:
         print(json.dumps(report, ensure_ascii=False, indent=2))
     else:

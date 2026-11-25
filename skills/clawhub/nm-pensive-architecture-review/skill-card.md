@@ -1,44 +1,55 @@
-## Description: <br>
-Assesses architecture decisions, ADR compliance, and coupling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses architecture decisions, ADR compliance, and coupling.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to review architecture changes before merge, including ADR compliance, module coupling, design invariants, security and performance checks, and follow-up actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger wording may cause the skill to activate during general design or pattern discussions. <br>
-Mitigation: Narrow the trigger wording or invoke the skill explicitly when architecture review is intended. <br>
-Risk: Architecture recommendations can be incorrect if the agent silently revises existing design invariants. <br>
-Mitigation: Use the skill's invariant-conflict workflow to present preserve, layer, and revise options and escalate the final decision to a human reviewer. <br>
+## Use Case:
 
+Developers and architects use this skill to review design changes, refactors, and new services for ADR compliance, coupling, and design principle issues before merging.
 
-## Reference(s): <br>
-- [Pensive plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
-- [ADR Audit Module](modules/adr-audit.md) <br>
-- [Coupling Analysis Module](modules/coupling-analysis.md) <br>
-- [Principle Checks Module](modules/principle-checks.md) <br>
-- [FPF Architecture Review Methodology](modules/fpf-methodology.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands, checklists, diagrams, findings, recommendations, and follow-up actions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include approve, approve-with-actions, or block recommendations for architecture reviews.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: release evidence) <br>
+Risk: Review examples may not fit the architecture task, and an existing `.review/findings.json` may affect a run.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the examples against the review scope and inspect the existing findings file before using the workflow.
+
+Risk: Some referenced paths may be missing, leaving the review evidence incomplete.
+
+Mitigation: Confirm referenced paths are available and treat findings as unverified when their supporting evidence cannot be checked.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-pensive-architecture-review)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+- [FPF Framework](https://github.com/ailev/FPF)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown, JSON]
+
+**Output Format:** [Markdown review report and JSON findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings should include verified file locations and quoted anchors, or be labeled UNVERIFIED.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

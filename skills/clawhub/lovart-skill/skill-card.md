@@ -1,45 +1,50 @@
-## Description: <br>
-Lovart Skill enables agents to generate images, videos, audio, and music through Lovart AI while managing Lovart projects, conversation threads, uploads, downloads, user settings, and generation modes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate images, videos, and audio through Lovart AI, and manage Lovart projects, conversation threads, and settings.
 
-## Publisher: <br>
-[lovart-admin](https://clawhub.ai/user/lovart-admin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lovart-admin](https://clawhub.ai/user/lovart-admin)
 
-## Use Case: <br>
-External users and developers use this skill to request Lovart AI media generation or manage Lovart project and thread state from an agent. It supports reference uploads, generated artifact downloads, project canvas links, and mode or model selection for Lovart generation workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, selected attachments, and generated-artifact traffic are sent to Lovart using the user's Lovart API keys. <br>
-Mitigation: Install and use the skill only when this Lovart data flow is acceptable for the user's content and account. <br>
-Risk: The skill can reuse local Lovart project and thread history stored in ~/.lovart/state.json. <br>
-Mitigation: Review or clear ~/.lovart/state.json when project or conversation continuity should not be reused. <br>
-Risk: TLS verification can be weakened when LOVART_INSECURE_SSL is set. <br>
-Mitigation: Avoid setting LOVART_INSECURE_SSL unless the user knowingly accepts weaker TLS protection. <br>
-Risk: Some high-cost generation operations may consume Lovart credits. <br>
-Mitigation: Require explicit user confirmation before running confirmation commands for credit-consuming operations. <br>
+## Use Case:
 
+Agents use this skill to help users generate images, videos, and audio through Lovart AI, upload and download media, and manage Lovart projects and conversation threads.
 
-## Reference(s): <br>
-- [Lovart Skill on ClawHub](https://clawhub.ai/lovart-admin/skills/lovart-skill) <br>
-- [Lovart Project Canvas](https://www.lovart.ai/canvas?projectId={project_id}) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON command output, and downloaded media files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Lovart API credentials; generated artifacts may be downloaded to local paths and project/thread state may be persisted in ~/.lovart/state.json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: ClawScan rates this skill suspicious with medium confidence; the scan covered 50% of components and one analyzer was degraded, so its evidence is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, consider whether the reported remote project changes and external media uploads are acceptable, and review the upload destination and intended permissions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/lovart-admin/skills/lovart-skill)
+- [Project link](https://github.com/lovartai/lovart-skill)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Text, Guidance]
+
+**Output Format:** [Generated image, video, and audio files; text responses and JSON result data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Media downloads may be accompanied by project and thread identifiers or links.]
+
+## Skill Version(s):
+
+1.1.1 (source: frontmatter; ClawHub release 1.1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
