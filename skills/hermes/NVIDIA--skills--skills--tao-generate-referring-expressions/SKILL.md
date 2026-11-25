@@ -24,6 +24,8 @@ allowed-tools: Read Bash Write
 
 # Image Referring Expression Pipeline
 
+> **Standalone install?** If this session was not initialized by the TAO skill bank plugin, run the `tao-setup` skill first (host preflight, credentials, cross-skill discovery).
+
 Generate referring-expression and grounding annotations from images with KITTI-format bounding box labels. A single VLM (Gemini or any OpenAI-compatible endpoint) runs four steps: per-object region descriptions, holistic image captions, grouped grounding expressions tied to bboxes, and an optional double-check verification pass.
 
 ## Purpose
@@ -56,7 +58,7 @@ When a user wants to run this pipeline, walk through these steps:
 3. **Resume from existing annotations**: If the user already has a unified `annotations.jsonl` from a previous run, set `data.input_annotations_jsonl` to that file instead of seeding from `data.image_dir` and `data.kitti_label_dir`.
 4. **API access**: Ask the user which VLM endpoint they want to use. Present these five options and act on the choice:
    1. **Gemini** — set `vlm.backend: "gemini"`; require `GOOGLE_API_KEY` (env var or `vlm.gemini.api_key`).
-   2. **NIM** (e.g. `https://inference-api.nvidia.com/v1`) — set `vlm.backend: "openai"`; collect `base_url`, `model_name`, and `api_key`.
+   2. **NIM** (e.g. `https://<your-endpoint>/v1`) — set `vlm.backend: "openai"`; collect `base_url`, `model_name`, and `api_key`.
    3. **TAO inference microservice** (self-hosted, OpenAI-compatible). Confirm whether the server is already running:
       - **Running** — collect `base_url`, `model_name`, and (optionally) `api_key`; set `vlm.backend: "openai"`.
       - **Not running** — guide the user through the `skills/applications/tao-run-inference-service` skill, which stands up a local TAO inference microservice with an OpenAI-compatible API. Before promising a specific model, check `skills/applications/tao-run-inference-service/references/service.yaml` for `valid_network_arch_config_basenames`. Once the server is up, collect `base_url`, `model_name`, and (optionally) `api_key`; set `vlm.backend: "openai"`.
@@ -137,6 +139,6 @@ All outputs go to `results_dir/`:
 
 ## Prerequisites
 
-- **Container**: `nvcr.io/nvidia/tao/tao-toolkit:6.26.3-pyt`
+- **Container**: `nvcr.io/nvidia/tao/tao-toolkit:7.3.0-data-services` <!-- versions-key: images.tao_toolkit.data_services -->
 - **API access**: At least one VLM endpoint (Gemini API key or OpenAI-compatible endpoint capable of image input)
 - **PIL / Pillow**: Required to read image dimensions during seeding (already present in the TAO container)

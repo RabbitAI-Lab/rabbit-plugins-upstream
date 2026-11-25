@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvflare-convert-huggingface",
+  "identifier": "NVIDIA/skills/skills/nvflare-convert-huggingface",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvflare-convert-huggingface",
+  "branch": "main",
+  "pushedAt": "2026-11-25T17:50:19Z",
+  "contentHash": "fc0551bacea0c8a98a484c2a29d158fd561447b6a276630e4eea6becb95b1e14",
+  "fetchedAt": "2026-11-25T18:01:14.945Z"
+}

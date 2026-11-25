@@ -20,6 +20,8 @@ export const COMMANDS = new Map<string, {
     usage: "generate <input.md> [output.pdf] [options]",
     category: "Primary",
     flags: [
+      // Look
+      "--style",
       // Page layout
       "--margins", "--margin-top", "--margin-right", "--margin-bottom", "--margin-left",
       "--page-size", "--format",
@@ -41,6 +43,7 @@ export const COMMANDS = new Map<string, {
     usage: "preview <input.md> [options]",
     category: "Primary",
     flags: [
+      "--style",
       "--cover", "--toc", "--no-chapter-breaks", "--watermark",
       "--no-confidential", "--allow-network",
       "--title", "--author", "--date",
@@ -48,7 +51,7 @@ export const COMMANDS = new Map<string, {
     ],
   }],
   ["setup", {
-    description: "Verify browse + Chromium + pdftotext, then run a smoke test",
+    description: "Verify the browser (Aside, or gstack's own fallback) + pdftotext, then run a smoke test",
     usage: "setup",
     category: "Setup",
     flags: [],

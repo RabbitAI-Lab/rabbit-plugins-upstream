@@ -12,7 +12,9 @@ math in `local_app/input_controller.py` and `local_app/camera_controller.py`:
 - Support orbit, pan, dolly/zoom, wheel zoom, fit-to-stage, and optional WASD fly mode when requested.
 - If selected-prim transform is enabled, test transform-gizmo presses before normal left-drag orbit and before click selection.
 - Sanitize camera state before input handling and before writing matrices.
-- Write the viewer camera transform to the camera prim through ovrtx live attributes.
+- Enqueue the viewer camera's local `omni:xform` through the OVStage runtime
+  adapter, then publish it before rendering the committed ordinal. Use direct
+  renderer writes only for an explicitly standalone compatibility path.
 
 Critical contracts:
 
@@ -46,6 +48,12 @@ Read for depth: see `references/viewer-input-routing`, `references/camera-contro
 
 ## 8. Add Picking, Selection, And Highlighting
 
+Read `references/native-picking-selection`, `references/object-selection`, and
+`references/selection-feedback` before implementing this section. Those
+references own the current native OVRTX picking and selection shapes; this recipe should route to
+those contracts instead of generating compatibility branches or fallback picker
+modules.
+
 Do this in `local_app/selection_controller.py`; the completed click or marquee
 gesture should come from `references/viewer-input-routing`:
 
@@ -54,17 +62,54 @@ gesture should come from `references/viewer-input-routing`:
 - Maintain selected tree path and selected mesh paths separately when an Xform or Scope expands to descendant geometry.
 - Keep selection state in runtime memory and update viewport highlight, tree row selection, and prim info from that single source.
 - Clear selection on scene reset, scene switch, empty tree selection, or explicit clear command.
-- Apply visual selection feedback by writing native selection outline group attributes on the runtime stage, not by permanently editing the user USD.
+- Apply visual selection feedback with native renderer selection-group helpers,
+  not by writing legacy attributes or permanently editing the user USD.
+
+Use the current shapes from `native-picking-selection`; the essential contracts
+are a normalized synchronous enqueue, renderer-owned selection groups, and an
+automatic pick-hit output:
+
+```python
+renderer.enqueue_pick_query(
+    render_product_path=render_product_path,
+    left_ndc=left / render_width,
+    top_ndc=top / render_height,
+    right_ndc=right / render_width,
+    bottom_ndc=bottom / render_height,
+)
+path = renderer.resolve_prim_path_id(int(prim_path_id))
+renderer.set_selection_group_styles({
+    1: ovrtx.SelectionGroupStyle(
+        outline_color=(1.0, 0.6, 0.0, 1.0),
+        fill_color=(0.0, 0.0, 0.0, 0.0),
+    )
+})
+renderer.set_selection_outline_group_strings(
+    paths,
+    groups_uint8.tolist(),
+)
+```
+
+Decode the post-step synthetic pick render var with
+`ovrtx.OVRTX_RENDER_VAR_PICK_HIT`, validate `magic`, `version`, and `hitCount`,
+read the named `primPath` tensor, and resolve IDs before mutating selection.
+Do not scaffold `GpuPicker`, CPU ray/AABB fallback, segmentation ID maps, or
+Warp outline systems for new generated apps.
 
 Critical contracts:
 
 - The pick query rectangle uses render-product pixel space after letterbox/scaling correction.
+- Convert those pixels to normalized top-left bounds for `enqueue_pick_query()`;
+  do not add `ovrtx_pick_hit` to `orderedVars` because the query produces it.
 - Picking coordinates must use render-pixel space after letterbox and scaling correction.
 - Selection state is local-runtime authoritative. Widgets mirror it; they do not independently mutate it.
 - Enable selection outlines at renderer creation and set per-group outline/fill colors with `Renderer.set_selection_group_styles(...)`.
-- Clear previous outlines by writing group `0`; assign selected prims to a non-zero group such as `1`.
+- Clear previous outlines with group `0`; assign selected prims to a non-zero
+  group such as `1` through `set_selection_outline_group_strings()`.
 - Do not let selection picking run while the scene is loading or the renderer is resetting.
-- Check operation status for the stage load, render step, and pick query before changing selection. An empty or failed pick should not corrupt the previous selected state.
+- Check operation status for the stage load and render step before changing
+  selection. `enqueue_pick_query()` registers synchronously; use the async form
+  only when its returned operation is explicitly awaited.
 
 Decision points:
 
@@ -80,47 +125,32 @@ Common failure modes:
 - Highlight persists across scene loads when old selection outline groups are not cleared.
 - Tree selection and viewport selection diverge when each widget tracks its own selected path.
 
-Read for depth: see `references/viewer-input-routing`, `references/object-selection`, `references/selection-feedback`, `references/prim-info-display`, and `references/stage-hierarchy` for the full input, picking, highlighting, and info contracts.
+Read for depth: see `references/viewer-input-routing`, `references/native-picking-selection`, `references/object-selection`, `references/selection-feedback`, `references/prim-info-display`, and `references/stage-hierarchy` for the full input, picking, highlighting, and info contracts.
 
 ## 9. Add Scene Switching And Asset Browsing
 
-Do this in `local_app/scene_manager.py` and `local_app/widgets/scene_picker.py`:
+Put the scene registry and load state in `local_app/scene_manager.py`; the scene
+picker displays friendly labels and submits stable paths or asset IDs. Use
+`references/stage-management` for one preparation-and-handoff flow, and
+`references/cloud-assets` for remote preparation.
 
-- Build a scene registry from configured local sample paths or an allowed asset root.
-- Display user-friendly scene labels while storing validated absolute paths or registry IDs internally.
-- When the user selects a scene, enter loading state, stop stepping the old scene, reset renderer stage state, create the new inline root/session data, load the new stage, restore persistent settings, fit or restore camera, clear selection, refresh hierarchy, and resume rendering.
-- Keep the previous valid scene alive until the new load succeeds when the UX requires non-destructive scene switching.
-- Provide a reload current scene action that rebuilds all derived state from the original source.
+Keep the current scene interactive while resolving/downloading the next asset.
+Only the latest requested replacement may reach the runtime handoff. At that
+point, retire old scene queries/picks, populate a fresh Stage, and restore the
+chosen settings/camera policy before reporting its first valid frame. A failed
+handoff keeps the last image visible with an error state and a retry action.
 
-Critical contracts:
-
-- Never call `renderer.step()` concurrently with scene reset/load.
-- Preserve render settings across scene switches unless the user explicitly asks for per-scene settings.
-- Preserve camera across scenes only when that policy is requested and the old camera state is valid for the new bounds; otherwise fit to the new stage.
-- Recompute hierarchy, properties cache, variants cache, bounds, pickability filters, and selection outline state for the new stage.
-- Validate user-selected paths against an allowed root before loading them.
-
-Decision points:
-
-- If assets are local files, scan `.usd`, `.usda`, and `.usdc` files under an allowed root.
-- If assets are cloud-backed, use `references/cloud-assets` and keep cloud logic behind the same asset registry interface.
-- If scene load fails, keep the previous scene visible if it is still valid, or enter idle/error state with a clear status message.
-- If variant changes require stage reload, route them through the same load lock and loading-state path as scene switching.
-
-Common failure modes:
-
-- Leaving the render loop active during reset produces intermittent crashes or corrupted frames.
-- Not clearing caches after scene switch shows stale tree children or properties.
-- Persisting a camera blindly can place the viewer far away from a very different scene.
-- Displaying raw absolute paths in the UI leaks local filesystem structure and makes labels noisy.
-
-Read for depth: see `references/stage-management`, `references/stage-loading`, `references/stage-hierarchy`, and `references/cloud-assets` for the full scene switching and asset contracts.
+Use the same replacement path for Reload. If the product needs to retain the
+old live scene until the new scene succeeds, budget for both generations rather
+than assuming reset provides rollback. Additive edits use the separate
+composition path in `references/ovstage-population`.
 
 ## 10. Add Stage Hierarchy, Properties, And Variants
 
 Do this in `local_app/stage_queries.py`, `local_app/widgets/stage_tree.py`, and `local_app/widgets/prim_info_panel.py`:
 
-- Open or attach the current stage for query operations using the chosen direct or subprocess `pxr` mode.
+- Query the current stage through native runtime queries first, then through the
+  chosen `pxr` subprocess mode for OpenUSD features that still require it.
 - Query root children after a scene loads.
 - Load tree children lazily when a row expands.
 - Represent each prim with name, path, type, and child-load state.
@@ -139,8 +169,10 @@ Critical contracts:
 
 Decision points:
 
-- If direct `pxr` imports are stable in the local process, direct query helpers are acceptable.
-- If imports conflict, use a subprocess query mode and keep logs on stderr while requests and responses use structured data.
+- Use direct `pxr` imports only after verifying the exact local process import
+  path for the selected OVRTX/OVStage/USD wheels.
+- Otherwise, use a subprocess query mode and keep logs on stderr while requests
+  and responses use structured data.
 - If the user asks for variant editing, treat it as a scene mutation and route it through scene management.
 - If the user asks for full property editing, treat it as a separate feature and add explicit edit/apply/reload contracts.
 
@@ -181,6 +213,11 @@ Decision points:
 - If the user wants material or renderer internals, read `references/render-settings` before exposing them.
 - If the setting can be applied live through ovrtx attributes, apply it from the render loop.
 - If the setting requires stage reload, expose it as an explicit render-profile or scene-load action rather than a live control.
+- If the user wants pick-driven effects, runtime transforms, or physics
+  impulses, expose them as separate optional capabilities and route accepted
+  changes through the runtime owner. OVPhysX USD population should run in a
+  worker unless `PhysX.attach_ovstage(stage, read_ordinal=...)` is verified for the exact installed
+  OVStage/OVPhysX ABI.
 
 Common failure modes:
 

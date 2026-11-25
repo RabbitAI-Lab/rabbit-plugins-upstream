@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/garrytan/gstack/tree/main/build-check",
+  "identifier": "garrytan/gstack/build-check",
+  "repo": "garrytan/gstack",
+  "path": "build-check",
+  "branch": "main",
+  "pushedAt": "2026-11-25T17:57:23Z",
+  "contentHash": "07b1384360d7830e134e0689f152ed148c30f60376c85591ee28dc3482d9c9f8",
+  "fetchedAt": "2026-11-25T18:01:17.110Z"
+}
