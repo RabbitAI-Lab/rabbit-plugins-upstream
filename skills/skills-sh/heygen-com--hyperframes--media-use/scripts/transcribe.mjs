@@ -1,21 +1,16 @@
 #!/usr/bin/env node
 
+import "./lib/windows-exe-search.mjs";
 import { execFileSync } from "node:child_process";
-import {
-  existsSync,
-  readFileSync,
-  writeFileSync,
-  copyFileSync,
-  renameSync,
-  mkdtempSync,
-  rmSync,
-} from "node:fs";
+import { existsSync, readFileSync, writeFileSync, renameSync, mkdtempSync, rmSync } from "node:fs";
+import { randomBytes } from "node:crypto";
 import { homedir, tmpdir } from "node:os";
 import { basename, extname, join, resolve } from "node:path";
-import { parseArgs } from "node:util";
+import { parseArgs, stripVTControlCharacters } from "node:util";
 import { mergeTokensToWords } from "./lib/parakeet-words.mjs";
 import { track } from "./lib/telemetry.mjs";
 import { resolveNpxInvocation } from "./lib/npx-sync.mjs";
+import { terminalText } from "./lib/terminal-text.mjs";
 
 // The DEFAULT local transcription path. Prefers NVIDIA Parakeet-TDT via
 // parakeet-mlx, which beats whisper.cpp on the Open ASR Leaderboard (~6.05% vs
@@ -49,7 +44,8 @@ Usage:
 
 Parakeet (default) beats whisper.cpp on accuracy + speed for English/European
 languages; whisper.cpp (99 languages) is the fallback. Install Parakeet once:
-  uv venv ~/.venvs/parakeet && VIRTUAL_ENV=~/.venvs/parakeet uv pip install parakeet-mlx`);
+  npx hyperframes models install parakeet   (macOS, Windows, Linux with glibc 2.32+)
+  uv venv ~/.venvs/parakeet && VIRTUAL_ENV=~/.venvs/parakeet uv pip install parakeet-mlx   (Apple Silicon)`);
   process.exit(0);
 }
 
@@ -59,7 +55,7 @@ if (!args.input) {
 }
 const inputPath = resolve(args.input);
 if (!existsSync(inputPath)) {
-  console.error(`error: input not found: ${inputPath}`);
+  console.error(terminalText(`error: input not found: ${inputPath}`));
   process.exit(2);
 }
 const outPath = resolve(
@@ -71,8 +67,10 @@ const outPath = resolve(
 // just PATH) is what keeps a user who followed the install docs verbatim from
 // silently falling through to whisper. Returns the runner path, or null.
 function resolveParakeet() {
+  // An override with a folder in it means the caller's folder; the runner itself starts elsewhere.
+  const override = process.env.HYPERFRAMES_PARAKEET;
   for (const p of [
-    process.env.HYPERFRAMES_PARAKEET,
+    override && /[\\/]/.test(override) ? resolve(override) : override,
     join(homedir(), ".venvs", "parakeet", "bin", "parakeet-mlx"),
   ]) {
     if (p && existsSync(p)) return p;
@@ -90,18 +88,32 @@ function resolveParakeet() {
 
 // Write via a sibling temp + atomic rename so a SIGKILL mid-write can't leave a
 // truncated transcript at outPath (downstream reads it as valid JSON).
+// The temp name is random and created exclusively, so a link beside the target is never written through.
 function atomicWrite(target, data) {
-  const tmp = `${target}.tmp-${process.pid}`;
-  writeFileSync(tmp, data);
-  renameSync(tmp, target);
+  const tmp = `${target}.hf${randomBytes(3).toString("hex")}.tmp`;
+  writeFileSync(tmp, data, { flag: "wx" });
+  try {
+    renameSync(tmp, target);
+  } catch (error) {
+    rmSync(tmp, { force: true });
+    throw error;
+  }
 }
 
 function report(engine, wordCount) {
   if (args.json) console.log(JSON.stringify({ ok: true, out: outPath, engine, words: wordCount }));
   else
     console.log(
-      `transcribed ${basename(inputPath)} -> ${outPath}${wordCount != null ? ` (${wordCount} words,` : " ("}${engine})`,
+      terminalText(
+        `transcribed ${basename(inputPath)} -> ${outPath}${wordCount != null ? ` (${wordCount} words,` : " ("}${engine})`,
+      ),
     );
+}
+
+// parakeet-mlx reads a model id as a folder when one exists in its working directory, so it runs in
+// the home folder. A model written as a relative path (./ or ../) still means the caller's folder.
+function modelFor(model, cwd = process.cwd()) {
+  return /^\.\.?[\\/]/.test(model) ? resolve(cwd, model) : model;
 }
 
 function runParakeet(runner) {
@@ -109,8 +121,16 @@ function runParakeet(runner) {
   try {
     execFileSync(
       runner,
-      [inputPath, "--model", args.model, "--output-format", "json", "--output-dir", workDir],
-      { stdio: ["ignore", "pipe", "pipe"], timeout: 1_800_000 },
+      [
+        inputPath,
+        "--model",
+        modelFor(args.model),
+        "--output-format",
+        "json",
+        "--output-dir",
+        workDir,
+      ],
+      { cwd: homedir(), stdio: ["ignore", "pipe", "pipe"], timeout: 1_800_000 },
     );
     const jsonPath = join(workDir, `${basename(inputPath, extname(inputPath))}.json`);
     if (!existsSync(jsonPath)) throw new Error("parakeet produced no JSON");
@@ -122,33 +142,55 @@ function runParakeet(runner) {
   }
 }
 
-// whisper.cpp via the hyperframes CLI (fetched/built on first use — see
+// The hyperframes CLI (its Parakeet, else whisper.cpp built on first use — see
 // SKILL.md): writes transcript.json into --dir; relocate to --out.
-function runWhisper() {
+function runCli(cliEngine) {
   const workDir = mkdtempSync(join(tmpdir(), "media-use-whisper-"));
   try {
     // On Windows a bare "npx" is npx.cmd, which execFileSync cannot exec
     // (spawnSync npx ENOENT) — resolveNpxInvocation reroutes it through
     // node + npx-cli.js (and throws actionably when it can't), same
     // mechanism as the audio engine's TTS spawns.
+    // Under auto or parakeet the CLI may run its own Parakeet; --json says which engine ran.
     const resolved = resolveNpxInvocation(
-      ["hyperframes", "transcribe", inputPath, "--dir", workDir],
+      ["hyperframes", "transcribe", inputPath, "--dir", workDir, "--engine", cliEngine, "--json"],
       { stdio: ["ignore", "pipe", "pipe"], timeout: 1_800_000 },
     );
-    execFileSync(resolved.cmd, resolved.args, resolved.opts);
+    let stdout;
+    try {
+      stdout = String(execFileSync(resolved.cmd, resolved.args, resolved.opts));
+    } catch (e) {
+      // stderr holds spinner redraws and --json prints the reason on stdout, so keep the last lines.
+      const tail = stripVTControlCharacters(`${e.stderr ?? ""}\n${e.stdout ?? ""}`)
+        .split(/[\r\n]+/)
+        .map((l) => l.trim())
+        .filter((l) => l && l !== "│")
+        .slice(-3)
+        .join("\n");
+      throw new Error(
+        `hyperframes transcribe failed (exit ${e.status ?? e.code})${tail ? `:\n${tail}` : ""}`,
+      );
+    }
     const produced = join(workDir, "transcript.json");
-    if (!existsSync(produced)) throw new Error("whisper produced no transcript.json");
-    const tmp = `${outPath}.tmp-${process.pid}`;
-    copyFileSync(produced, tmp);
-    renameSync(tmp, outPath); // atomic publish
+    if (!existsSync(produced))
+      throw new Error("hyperframes transcribe produced no transcript.json");
+    atomicWrite(outPath, readFileSync(produced));
     let words;
     try {
       const t = JSON.parse(readFileSync(outPath, "utf8"));
-      words = Array.isArray(t?.words) ? t.words.length : undefined;
+      // The CLI writes a flat word array, not { words }.
+      words = Array.isArray(t) ? t.length : undefined;
     } catch {
       /* leave undefined */
     }
-    report("whisper", words);
+    let ran = "whisper";
+    try {
+      ran = JSON.parse(stdout.trim().split("\n").at(-1)).engine === "parakeet" ? "parakeet" : ran;
+    } catch {
+      /* no JSON line: keep whisper */
+    }
+    report(ran, words);
+    return ran;
   } finally {
     rmSync(workDir, { recursive: true, force: true });
   }
@@ -156,25 +198,17 @@ function runWhisper() {
 
 try {
   const parakeetBin = resolveParakeet();
-  const engine =
-    args.engine === "parakeet" || args.engine === "whisper"
-      ? args.engine
-      : parakeetBin
-        ? "parakeet"
-        : "whisper";
-  if (engine === "parakeet") {
-    if (!parakeetBin) {
-      throw new Error(
-        "parakeet-mlx not found (checked $HYPERFRAMES_PARAKEET, ~/.venvs/parakeet, and PATH). Install: uv venv ~/.venvs/parakeet && VIRTUAL_ENV=~/.venvs/parakeet uv pip install parakeet-mlx (or use --engine whisper)",
-      );
-    }
-    runParakeet(parakeetBin);
-  } else {
-    runWhisper();
-  }
+  const asked = args.engine === "parakeet" || args.engine === "whisper" ? args.engine : "auto";
+  // Without parakeet-mlx, the CLI's own Parakeet (any OS, `hyperframes models install parakeet`).
+  let engine = "parakeet";
+  if (asked !== "whisper" && parakeetBin) runParakeet(parakeetBin);
+  else engine = runCli(asked);
   await track("media_use_transcribe", { engine });
 } catch (err) {
   if (args.json) console.log(JSON.stringify({ ok: false, error: err.message }));
-  else console.error(`error: transcription failed: ${err.message}`);
+  else
+    console.error(
+      `error: transcription failed: ${err.message}`.split("\n").map(terminalText).join("\n"),
+    );
   process.exit(1);
 }
