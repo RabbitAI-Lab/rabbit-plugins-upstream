@@ -1,6 +1,6 @@
 # rune-verification
 
-> Rune L3 Skill | validation | model: tier:light
+> Rune L3 Skill | validation | model: tier:mid
 
 
 # verification
@@ -176,8 +176,7 @@ Report which level failed for each file in the Verification Report.
 
 ### Artifact Output Verification
 
-> Inspired by CLI-Anything (HKUDS/CLI-Anything, 14.5k★): "Never trust exit 0."
-> Many tools exit 0 even when they fail silently. Always verify ACTUAL output.
+**Never trust exit 0.** Many tools exit 0 even when they fail silently. Always verify ACTUAL output.
 
 After each phase command, verify that the expected artifact or indicator is present:
 
@@ -247,7 +246,7 @@ Run this loop whenever a deliverable carries a mechanically checkable surface co
 <HARD-GATE name="surface-constraint">
 "The output satisfies the constraint" is a verified claim only after step 3 has run against
 the EXACT delivered text. Asserted from a re-read, it is an assumption wearing the grammar of
-an observation — see `completion-gate` → `references/claim-discipline.md`. Report the check
+an observation — see `completion-gate` → `rune-completion-gate/references/claim-discipline.md`. Report the check
 that was run, not the conclusion.
 </HARD-GATE>
 
@@ -316,7 +315,7 @@ Overall:   [PASS/FAIL]
 
 ## Output Completion Enforcement
 
-> From taste-skill (Leonxlnx/taste-skill, 3.4k★): Truncated code is worse than no code — it passes reviews but breaks at runtime.
+Truncated code is worse than no code — it passes reviews but breaks at runtime.
 
 When verifying code files (Level 2 SUBSTANTIVE check), also scan for **truncation patterns** — signs that the agent generated partial output and stopped:
 
@@ -357,6 +356,7 @@ When any skill calls verification and then reports results upstream:
 2. **Pass requires proof** — PASS means "tool ran AND output shows zero errors" (not "tool ran without crashing")
 3. **Silence is not success** — if a command produces no output, note it explicitly ("0 errors, 0 warnings")
 4. **Partial runs are labeled** — if only 2 of 4 checks ran, Overall = INCOMPLETE (not PASS)
+5. **A zero is only evidence once the instrument is shown live** — "nothing failed" and "nothing was measured" produce identical output, and the silent instrument always wins. Every clean result must carry the size of what it examined: tests **collected**, files **matched**, rules **applied**, rows **returned**. `0 failed` out of `0 collected` is not a pass; a linter that matched no files is not a clean lint; a scanner whose target path was renamed reports the same green as one that found nothing. Where a population count is not available, prove the check can fail — run it against a known-bad input once — before letting it promote a claim.
 
 ### Red Flags — Agent is Lying
 
@@ -367,6 +367,10 @@ When any skill calls verification and then reports results upstream:
 | "Build succeeds" | Build command stdout | REJECTED — re-run and show output |
 | "I verified it" | Verification Report | REJECTED — run verification skill properly |
 | "Fixed and working" | Before/after test output | REJECTED — show the diff in results |
+| "0 tests failed" | A non-zero collected/ran count in the same output | REJECTED — a run that collected 0 tests also reports 0 failures |
+| "Clean scan / no findings" | The count of files, rules, or rows actually examined | REJECTED — an empty target set is indistinguishable from a clean one |
+| "No diff / no change detected" | Evidence the probe can report a difference at all | REJECTED — show it non-zero on a case known to differ |
+| "Tests pass" after this diff changed test files | `rune verify --integrity` clean (or a recorded `Test-Change-Approved` / `RUNE_TEST_CHANGE_APPROVED` override) | REJECTED — a green suite that was weakened is not evidence. See [test-integrity-gate](rune-test/references/test-integrity-gate.md) |
 
 ## Constraints
 
@@ -414,7 +418,7 @@ Known failure modes for this skill. Check these before declaring done.
 ~$0.01-0.03 per run. Haiku + Bash commands. Fast and cheap.
 
 ---
-> **Rune Skill Mesh** — 66 skills, 248 connections + 45 signals, 14 extension packs
+> **Rune Skill Mesh** — 67 skills, 248 connections + 46 signals, 14 extension packs
 > [Landing Page](https://rune-kit.github.io/rune) · [Source](https://github.com/rune-kit/rune) (MIT)
-> **Rune Pro** ($49 lifetime) — 9 domain packs + context intelligence → [rune-kit/rune-pro](https://github.com/rune-kit/rune-pro)
-> **Rune Business** ($149 lifetime) — finance, legal, HR, enterprise-search packs → [rune-kit/rune-business](https://github.com/rune-kit/rune-business)
+> **Rune Pro** ($49 lifetime) — 9 domain packs + context intelligence → [rune-kit.github.io/rune#pricing](https://rune-kit.github.io/rune#pricing)
+> **Rune Business** ($149 lifetime) — finance, legal, HR, enterprise-search packs → [rune-kit.github.io/rune#pricing](https://rune-kit.github.io/rune#pricing)

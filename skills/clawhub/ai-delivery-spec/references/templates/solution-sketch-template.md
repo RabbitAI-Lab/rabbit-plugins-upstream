@@ -1,6 +1,9 @@
 ---
 artifact: solution_sketch
+artifact_role: main
 stage: explore
+applicable_stages: [explore]
+applies_when: 需要比较解决路径及验证假设时使用。
 schema_version: 5.4.0
 version: "0.1"
 status: draft
@@ -8,12 +11,18 @@ document_language: zh-CN
 project_id: PROJECT-EXAMPLE
 resume_context:
   completed_stages: [frame]
+  # 续跑对象示例（全新任务保持空数组）：
+  # - path: prior/problem-brief.md
+  #   sha256: "0000000000000000000000000000000000000000000000000000000000000000"
+  #   stage: frame
   prior_artifacts: []
   open_threads: []
   next_stage_options: [intake, frame]
 ---
 
 # 方案探索：{问题名称}
+
+用于比较会改变结果的选项，可接在问题说明后；方向已确定时不补做一轮方案表。模板内机器声明只在使用阶段检查时保留。
 
 <!-- ADS:problem_ref -->
 ## 问题与约束
@@ -49,7 +58,7 @@ resume_context:
 
 | ID | 假设 | 影响选项 | 验证方法 | 责任人 | 状态 |
 |---|---|---|---|---|---|
-| `ASM-001` | {假设} | OPT-001 | {验证} | {责任人} | untested |
+| `ASM-001` | {假设} | OPT-001 | {验证} | {责任人} | 未验证（`untested`） |
 
 <!-- ADS:recommendation -->
 ## 推荐与取舍

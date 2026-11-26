@@ -1,85 +1,40 @@
 ---
 name: ai-delivery-spec
-description: 将一句话想法、客户材料、存量系统或 ToC/ToB/ToG 需求，按使用者指定的进入阶段和停止阶段，转化为可评审、可实施、可追溯、可验收的人类与 Coding Agent 共用需求产物。支持问题定义、方案探索、需求准入、澄清、统一 PRD、工程原型、评审基线、变更影响和验收证据；不负责排期、编码、CI/CD、部署和运营。
+license: MIT
+description: Clarify, create, review or change product, service and office workflow requirements, PRDs and interactive prototypes. Use for vague goals, process improvements, spreadsheet/form rules, small UI edits and changes to existing systems, even without the word requirement. 中文：产品、服务及办公流程的需求判断、深挖澄清、PRD、原型、变更与验收；一句话想法、表单/表格规则和微小改动也适用。明确的纯翻译、排版、抄录或既定步骤执行由对应工具直接处理。
 ---
 
-# AI Delivery Spec 5.4.0 — Requirement Lifecycle Workstations｜需求全生命周期工作站
+# AI Delivery Spec 5.5.7 — 需求判断与交付
 
-本 Skill 是 Requirement Management Kernel：让业务、产品、设计、前后端、架构、需求交付/技术负责人、测试、合规和 Coding Agent 在需求任一阶段进入，得到当前需要的最小合格产物后离开；也可在用户明确要求时持续完成端到端闭环。
+帮助团队做值得做的产品，让人和 AI 少猜、少返工。按当前目标选择方法与工具；本 Skill 保留业务事实、决定权和交付依据，不规定思考步骤、固定角色队列或整套产物。
 
-默认跟随用户当前语言生成标题、正文、表格、问题与测试；稳定 ID、代码、API/字段名和专有名词保持原样。双语必须由用户明确要求。
-只使用 Agent 完成需求工作不要求安装 Python；运行本地零模型门禁时需要 Python 3.10+：`python -m pip install -r scripts/requirements.txt`。Stable ID 是长期不变的需求编号；Gate 是静态结构门禁，不等于业务、浏览器、实现或客户验收。
+## 保留这些约束
 
-## 先确定进入点和停止点
+- **范围与决定权**：继承当前授权、项目约定及仍有效的决定。建议、示例、原型默认值和领域经验不自动成为业务政策；最新决定覆盖同主题旧说法，待同步不等于待批准。未决事项只限制依赖它的判断和交付；产品是否禁止某个操作，另按已授权规则判断。
+- **来源与版本**：区分事实、观察、推断、建议和未知；冲突回到对象、适用范围与来源，不凭新旧、模型一致或文字流畅裁决。当前法规、标准及易变信息核实版本和适用性；原文访问失败可用权威佐证，说明实际核实范围。
+- **业务行为与复杂度**：说清谁在什么条件下操作哪个对象、成功改变什么、失败保留什么以及如何继续。先判断去掉新增机制会破坏哪项已知业务结果，再比较现有能力或系统自动处理能否承担。把决定交给确实需要作判断的人。增加设置前，说明谁会在什么场景改变它，以及使用结果有何差异。已有样式、默认值和系统可推导的信息直接沿用。首版只写接收者为本次结果必须知道的事。未经授权的建议即使容易实现，也不混入交付条件。
+- **存量保真**：定位实际入口、对象、消费者和旧数据，保护未取消的路径、合法操作、字段含义及视觉约定。同一规则在受影响原处同步；新默认不自动改写旧对象，演示数据重置和文案修改不能掩盖执行问题。
+- **覆盖与完成**：长任务、跨模块多轮变更或明确逐一核验时，沿用计划或检查点记录来源、范围、完成条件、版本和证据；反查原始要求，不能只核对生成的计划。小改只处理受影响项，不新建过程文件。验证操作时，从约定入口按实际分工走到结果使用处。结论引用同一对象的操作与可复查结果；为绕过阻断而切身份、改道或代造状态，另记诊断结果。未到终点按实际进度报告。详见[覆盖记录](references/context.md#覆盖与执行)。
 
-内部识别两个字段，不要求用户学习参数：
+## 按具体缺口取参考
 
-- `entry_stage`：从现有材料和当前工作位置进入。
-- `target_stage`：本次要拿到的产物/停止点。
+按下一位使用者需要的结果选入口。跨阶段沿用有效决定与对象，带上实际证据及缺口；清晰小改直接回填。下表可按问题跳读。
 
-工作站为 `frame → explore → intake → clarify → specify → review → baseline`，基线可进入 `change` 或 `acceptance`，变更须重新基线。`frame/explore` 是准入前工作区；正式 `REQ-*` 生命周期从 intake 开始。用户可从任意有证据的阶段进入，不强迫补跑无关前序。
-
-显式目标最高优先；“不要写 PRD，只做澄清”等否定约束高于关键词。目标未明时选择能解决当前问题的最小产物，并继续可逆工作；只有产物选择会实质改变范围时才提问。单次任务到目标即停，明确端到端任务则持续到目标且不得把中间模板或静态 PASS 当成完成。
-
-需要跨会话或检查旧产物时才运行确定性路由；它不解析自然语言：
-
-`python scripts/ai_delivery_spec_cli.py route-stage --target <stage> --artifact <path>`
-
-## 每次只加载一个有效切片
-
-| 当前任务 | 只读取 |
+| 当前需要 | 可选资源 |
 |---|---|
-| 任意阶段进入/停止、角色交接、断点 | `references/stages.md` |
-| 来源盘点、问题发现、竞品/现状研究 | `references/discover.md` |
-| 正式生命周期、准入、评审、基线 | `references/lifecycle.md` |
-| PRD、字段、规则、指标、接口、机器附录 | `references/specify.md` |
-| 页面合同、Stage 0、原型、视觉路线 | `references/prototype.md` |
-| 变更、双向追溯、验收结果 | `references/change-acceptance.md` |
-| 大输入、ID 切片、检查点、Agent 工作区 | `references/context.md` |
-| Coding/需求协作工具投影 | `references/tool-adapters.md` |
-| 故障恢复、FAQ、反模式 | `references/troubleshooting.md` |
-| 领域证据 | `scripts/query_domain.py --domain <pack> --section "<heading>"` |
-| 私有领域/模板/规则 | `init-custom --sharing local|team`；候选知识用 `candidate record-usage/assess`，只人工晋级 |
+| 判断机会、比较方案、澄清关键未知 | [discover](references/discover.md) |
+| 写业务规则、正式角色权限、办公流程或验收规格 | [specify](references/specify.md) |
+| 选演示权限、修改页面或检查配置能否实际使用 | [prototype](references/prototype.md)；[机制取舍与消费示例](examples/configuration-to-consumption.md) |
+| 找受影响入口、复核测试记录或判断能否宣称闭环 | [change-acceptance](references/change-acceptance.md) |
+| 恢复大材料、交接或接着按规格开发 | [context](references/context.md) |
+| 团队资料、评审工作台或显式生命周期 | [team-customization](references/team-customization.md)、[review-workspace](references/review-workspace.md)、[lifecycle](references/lifecycle.md) |
+| 长任务反复漏项、适配接收工具或比较模型 | [tool-adapters](references/tool-adapters.md) |
+| 核对阶段输入输出、领域知识或已有契约 | [stages](references/stages.md)；`python scripts/query_domain.py --list`，不需通读目录 |
 
-一次只加载当前阶段参考、一个精确领域章节和当前 ID 切片。不要加载 README、`maintainer/`、全模板/示例/领域包或整个仓库。frame/explore 仅在法规、安全或行业物理约束会改变选项时加载领域知识。
+## 按接收者下一步交付
 
-## 默认最小产物，不为阶段机械建文件
+沿用指定形式、项目模板和设计原件，只交当前必要内容，小改回填原处。未指定形式时选择能支持下一步的最小产物，不默认同时制作 PRD、原型、台账或工程工作包。有角色差异的规格在正文交代谁能对哪些对象做什么。演示权限沿用项目选择；浏览器实操、模拟依赖、生产授权各按所见交付。
 
-- frame：一份 `problem-brief.md`，说清用户、痛点时刻、成功信号、事实/假设和下一步。
-- explore：一份 `solution-sketch.md`，至少两个选项和不做选项，包含可证伪 `ASM-*`、最小验证与停止条件。
-- intake：复用 triage 结果与 requirement register；Start with intake for formal governed requirements。
-- clarify：一份 `requirement-brief.md`，内嵌 `DEC-*`、规则、开放 `UNK-*` 和退路；多决策人/审计才拆侧车。
-- specify：一份需求卡或 one human-readable 统一 PRD；Product Truth 只在受控多投影、反复跨模块变更、血缘或强审计时按需启用。
-- review/baseline：复用同一规格；`required_review_types` 全部结构化签署后绑定权威来源、版本/hash 和消费方。
-- change/acceptance：现有 `CHG-*` 与 `ARUN-*` 回链当前基线。
+跨文件冲突、复杂角色链或明显接收歧义可用独立冷读；要求逐模块审查时覆盖全部约定模块，代表任务不能代替。其余按风险取样，不强制小改全角色、全页面复核。局部结论不扩大到全项目；缺少某项检查证据不等于用户未做测试，也不自动新增产品发布门槛。
 
-假设寄存器仅在跨会话、跨角色复用或治理时单独导出。YAML/JSON 是工具投影，不是另一份 PRD。
-
-## 需求闭环与禁止推断
-
-1. 先检查用户材料、现有产物、权威层级和适用领域；存量 HTML/系统重写前先执行 Stage 0。
-2. 事实问题按依赖成批澄清；方向、冲突和路线逐项给出推荐、依据与取舍。无法取得的事实登记 `UNK-*`，包含责任人、范围、`blocks_stage` 和回退路径。
-3. `ASM-*` 是待验证解释；`UNK-*` 是缺失事实/决策。两者不得互换。P0 未知项只阻断受影响且已到达的阶段。
-4. 规格按模块纵切闭环：目标 → 角色旅程 → 页面/数据 → 规则/状态 → 指标口径 → 异常恢复 → 验收；横切权限、接口、事件、审计、兼容和 NFR 作为同一基线合同。
-5. 每个 `REQ-*` 绑定来源、行为、字段/规则、AC、测试与证据，并支持 both directions 追溯；缺少语义时开发与 Agent 必须回报 GAP，不能发明。
-6. 评审后才基线；变更必须登记 diff、影响、审批、同步、回归和版本；验收记录执行结果、证据、缺陷、条件和签署。
-
-## 门禁只做轻量守门员
-
-统一状态只有 `PASS`、`REVIEW_COMPLETE_WITH_GAPS`、`BLOCKED_BY_P0_UNKNOWN`、`BLOCKED`。早期阶段：
-
-```bash
-python scripts/ai_delivery_spec_cli.py gate --profile frame --artifact problem-brief.md
-python scripts/ai_delivery_spec_cli.py gate --profile explore --artifact solution-sketch.md
-python scripts/ai_delivery_spec_cli.py gate --profile clarify --artifact requirement-brief.md
-```
-
-正式规格沿用 `gate --profile requirement|prd|prototype|handoff|full`。静态门禁必须输出 `not_proven`，不能把结构通过宣传为领域正确、真实运行或客户签收。
-
-5.4 模板用语言无关的 `<!-- ADS:* -->` 锚点，标题可按团队语言/模板改变。`resume_context` 记录相对路径、阶段和 SHA-256；漂移、缺失和路径越界必须阻断。大项目仍用执行检查点和 ID Slice，产物断点不能替代执行状态。
-
-## 边界与扩展
-
-`schemas/agent-handoff.schema.json` 只把已基线需求投影给 Coding Agent；`schemas/domain-candidate.schema.json` 只登记本地候选知识。私有扩展优先于官方默认，但绑定规则冲突必须形成 `DEC-CONFLICT-*`，禁止静默覆盖或联网外发。
-
-研发排期、Sprint/任务、代码生成、CI/CD、部署、监控和运营属于下游系统。本 Skill 管到需求验收；外部状态只记引用，线上反馈以新来源回流 intake/CHG，并保留人类问责。
+`/ads`、`/dig`、`/prd`、`/proto`见[README](README.md#shortcuts)。用户接着要求开发时，以原规格为准，转工程流程实现已定部分。发布、文档渲染及运营沿用相应流程，各按实证交付。

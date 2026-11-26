@@ -1,38 +1,50 @@
-## Description: <br>
-Builds or updates a local code knowledge graph for a repository using tree-sitter AST parsing and SQLite. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds or updates the code knowledge graph via tree-sitter AST and SQLite.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and coding agents use this skill to build or refresh a repository code graph before codebase search, blast-radius analysis, or flow tracing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill scans the selected directory and writes local graph files under .gauntlet/. <br>
-Mitigation: Run it only on repositories intended for indexing, confirm the target path before execution, and review generated .gauntlet files before relying on them. <br>
+## Use Case:
 
+Developers and engineers can build or refresh a structural knowledge graph of a codebase before searching it or analyzing the impact of changes. The skill reports build results and suggests graph search or blast-radius analysis as next steps.
 
-## Reference(s): <br>
-- [Gauntlet plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update .gauntlet/graph.db and .gauntlet/.gitignore in the selected repository.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The skill creates or updates `.gauntlet/graph.db` in the selected codebase, and the security scan could not fully resolve references to that local path.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the target directory and confirm that creating or updating the graph database is intended before running the skill.
+
+## Reference(s):
+
+- [ClawHub graph-build release](https://clawhub.ai/athola/skills/nm-gauntlet-graph-build)
+- [Related project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [JSON build report with a concise Markdown summary and next-step guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The report includes parsed file, node, edge, and duration counts when available.]
+
+## Skill Version(s):
+
+1.10.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

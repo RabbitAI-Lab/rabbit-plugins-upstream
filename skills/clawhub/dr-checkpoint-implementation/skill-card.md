@@ -1,41 +1,54 @@
-## Description: <br>
-Guides Codex through complex or production-risk implementation work in small validated checkpoints. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guide Codex through consequential multi-stage implementation work in small validated checkpoints. Use for production rollouts or mutations, external delivery, scheduled automation, secrets/permissions/billing/customer-data changes, destructive work, major dependency or rollback risk, or explicit step review. Avoid routine direct work.
 
-## Publisher: <br>
-[daniel-refahi-ikara](https://clawhub.ai/user/daniel-refahi-ikara) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[daniel-refahi-ikara](https://clawhub.ai/user/daniel-refahi-ikara)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to guide agents through staged implementation, validation, plan revision, and approval checkpoints for complex or production-risk work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Applying the optional workspace policy block can make checkpoint reviews persistent for future matching implementation tasks. <br>
-Mitigation: Review and intentionally scope the policy before applying it to workspace or agent instructions. <br>
-Risk: The workflow can pause work before live side effects, production mutations, or uncertain validation. <br>
-Mitigation: Plan approval gates explicitly and keep dry-run validation separate from live rollout. <br>
+## Use Case:
 
+Developers and engineers use this skill to guide consequential multi-stage implementation work through reviewable checkpoints, with validation and approval decisions at each stage.
 
-## Reference(s): <br>
-- [Apply dr-checkpoint-implementation](references/APPLY.md) <br>
-- [ClawHub skill page](https://clawhub.ai/daniel-refahi-ikara/skills/dr-checkpoint-implementation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown guidance and checkpoint review text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes checkpoint review fields and an optional workspace policy block.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release metadata) <br>
+Risk: Consequential implementation steps may affect production systems or create external side effects.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only discovery and dry runs first, obtain approval before unauthorized live effects, and read back results after an approved batch.
+
+Risk: Unresolved or weak validation can leave a change unsafe to continue.
+
+Mitigation: Set acceptance criteria for each checkpoint and stop for review if validation remains missing, weak, or contradictory.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/daniel-refahi-ikara/skills/dr-checkpoint-implementation)
+- [APPLY.md](references/APPLY.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown guidance and checkpoint records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

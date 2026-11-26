@@ -1,6 +1,6 @@
 ---
 name: execution-window-optimizer
-description: Identifies optimal execution windows based on volatility and liquidity
+description: "Paid x402 endpoint: $0.007 USDC per call on Base. Returns an execute-now-or-wait verdict before a large order: scores the current execution window 0-100 from session, regime, Fear & Greed and volatility."
 metadata:
   openclaw:
     requires:
@@ -13,12 +13,12 @@ metadata:
 # execution-window-optimizer
 
 ## What It Does
-Identifies optimal execution windows based on volatility and liquidity. This signal is computed in real time from APEX Runner's live autonomous trading system operating across Kraken, Coinbase Advanced Trade, and Hyperliquid — not from backtests or third-party aggregators.
+An execute-now-or-wait verdict before a large order: scores the current execution window 0-100 from session, regime, Fear & Greed and volatility. Computed by APEX Runner from live market data, not from backtests.
 
 ## When to Use
-- To time order placement for lowest impact
-- During high-volatility periods
-- When latency-sensitive execution is required
+- Before sending a large order: a check costing at most $0.01 says execute now or wait
+- To pick market vs limit for the current session and volatility
+- Together with slippage-forecast, which prices your exact order size
 
 ## How to Use
 The agent makes an x402-authenticated GET request to:
@@ -27,46 +27,71 @@ The agent makes an x402-authenticated GET request to:
 https://apexrunner.ai/signals/execution-window-optimizer
 ```
 
-The x402 client handles payment authorisation automatically. No API key, no account, no subscription required — just an EVM wallet with USDC on Base mainnet.
+The x402 client handles payment automatically. No API key, no account, no subscription — just an EVM wallet with USDC on Base mainnet (no ETH needed).
 
 ```python
-# Example using the x402-python client
-from x402.client import x402_get
+# pip install "x402[evm,requests]"
+import os
 
-response = x402_get(
-    url="https://apexrunner.ai/signals/execution-window-optimizer",
-    private_key=os.environ["EVM_PRIVATE_KEY"]
-)
+import requests
+from eth_account import Account
+from x402 import max_amount, x402ClientSync
+from x402.http.clients import wrapRequestsWithPayment
+from x402.mechanisms.evm.exact import register_exact_evm_client
+from x402.mechanisms.evm.signers import EthAccountSigner
+
+client = x402ClientSync()
+register_exact_evm_client(client, EthAccountSigner(Account.from_key(os.environ["EVM_PRIVATE_KEY"])))
+client.register_policy(max_amount(10000))  # never sign more than the list price ($0.01 USDC)
+
+session = wrapRequestsWithPayment(requests.Session(), client)
+response = session.get("https://apexrunner.ai/signals/execution-window-optimizer")
 print(response.json())
 ```
 
 ## Example Response
 ```json
 {
-  "current_window_rating": "GOOD",
-  "execute_now_recommendation": true,
-  "best_windows": [
-    {"utc_hours": "02:00-04:00", "avg_quality_score": 92}
-  ],
-  "timestamp": "2026-06-23T14:00:00Z"
+  "coin": "BTC",
+  "window_score": 83,
+  "verdict": "EXECUTE_NOW",
+  "recommended_order_type": "market",
+  "rationale": "Historically favorable execution conditions",
+  "components": {
+    "time_of_day": {
+      "score": 95,
+      "utc_hour": 14,
+      "session": "US"
+    },
+    "regime": {
+      "score": 80,
+      "regime": "RANGING"
+    },
+    "fear_greed": {
+      "score": 70,
+      "value": 24
+    },
+    "volatility": {
+      "score": 75,
+      "atr_pct": 1.812
+    }
+  },
+  "next_optimal_window": "15:00 UTC (+1h)",
+  "timestamp": "2026-11-20T14:05:00Z",
+  "valid_for_seconds": 300
 }
 ```
 
 ## Pricing
-**$0.20/call** — standard price
+**$0.01/call** — standard price
 
-Early adopters automatically receive 30% off ($0.14/call) until 2026-09-21. Discount tiers apply automatically based on wallet call history:
-- Early Adopter (0–9 calls): 30% off
-- Engaged (10–49 calls): 15% off
-- Loyal (50–199 calls): 15% permanent
-- VIP (200+ calls): 20% permanent
-
-Check your tier: `https://apexrunner.ai/signals/my-pricing`
+Every caller is charged $0.007/call until 2027-01-01 under the
+early-adopter discount (30% off the standard price). No tier, no wallet
+history, no enrolment — that is simply the price.
 
 ## Related Signals
 - [slippage-forecast](https://apexrunner.ai/signals/slippage-forecast)
 - [optimal-order-routing](https://apexrunner.ai/signals/optimal-order-routing)
-- [live-atr-sizing](https://apexrunner.ai/signals/live-atr-sizing)
 
 ---
 *APEX Runner — autonomous AI crypto trading signals. [apexrunner.ai](https://apexrunner.ai)*

@@ -1,0 +1,22 @@
+{
+  "examples_zh": [
+    "周五下午2点半在302开信息安全培训，各部门来2个骨干，自带电脑提前10分钟签到，帮我写个150字以内的通知发群里。",
+    "这段汇报AI味太重了，帮我改得自然点，里面的数字别动：“三季度我办多措并举全面赋能安全排查，共检查企业120家，整改隐患32处，剩下3处月底前弄完，注：数据为初步汇总，仅供参考。”",
+    "帮我把刚开会的记录理成会议纪要：18号王副总开会定了门禁改造控制在30万以内，信息部下月20号前上线；访客收费标准还没定，等法务核完政策下次再议。",
+    "我要给领导打一份设备采购请示，采购清单、几家报价和预算我都准备好了，发你帮我写成正式请示。",
+    "这几个月的零散工作记录我贴给你，帮我理成一份工作总结，下周汇报要用。",
+    "这份汇报写太长了，领导只要800字以内，帮我压一下，关键数字和还没办完的事别删掉。",
+    "这份稿子快要发出去了，帮我把把关，看看有没有写错的地方，或者哪里读着别扭。",
+    "这份通知的内容已经定好了，帮我直接排成规范的公文 Word 发我。"
+  ],
+  "examples_en": [
+    "Info-security training is this Friday at 2:30 PM in Room 302—2 key staff per team, bring laptops, sign in 10 minutes early. Write me a Chinese notice under 150 chars to drop in our group chat.",
+    "This Chinese update sounds too robotic—rewrite it naturally without changing the numbers: 'In Q3 our office took multiple measures to empower safety checks of 120 firms, fixed 32 hazards with 3 due by month-end; note: figures are preliminary and for reference only.'",
+    "Turn these meeting notes into Chinese minutes: on the 18th VP Wang approved the access-control upgrade within 300k yuan for IT launch by the 20th next month; visitor fee rules aren't decided yet pending Legal's policy check.",
+    "I need to send a hardware purchase request to management—I have the item list, vendor quotes, and budget ready, please turn them into a formal Chinese request.",
+    "Here are my scattered work notes from the past few months—help me turn them into a Chinese work summary for next week's briefing.",
+    "This Chinese report is too long—please trim it under 800 characters for management, keeping the key figures and unfinished items.",
+    "This Chinese draft is about to go out—please review it and let me know if anything looks wrong or reads awkwardly.",
+    "The notice text is finalized—please format it into a clean standard official Word document for me."
+  ]
+}

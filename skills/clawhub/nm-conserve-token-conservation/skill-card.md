@@ -1,39 +1,50 @@
-## Description: <br>
-Enforces token quota management at session start with conservation and compression checks for large context loads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enforces token quota management at session start with conservation and compression checks.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agent users use this skill to keep long sessions within token and context budgets. It guides quota checks, read budgeting, delegation decisions, compression review, and concise next actions before large analyses or context-heavy work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can add process overhead to short or low-context tasks. <br>
-Mitigation: Skip or disable the skill for short tasks where token planning overhead is not useful. <br>
+## Use Case:
 
+Developers and other agent users can apply the checklist at session start or before large context loads to review quotas, plan context use, consider delegation, and compress or log work.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-token-conservation) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown checklist and concise procedural guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include token budget notes, compression recommendations, and next-action lists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: release evidence) <br>
+Risk: Quota checks and workflow steps may not fit every session or available usage source.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check that the guidance fits the current task and available status information; the skill itself says to skip simple queries and cases already handled by context optimization.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-conserve-token-conservation)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown checklist and session guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations are tailored to the current session and task.]
+
+## Skill Version(s):
+
+1.10.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

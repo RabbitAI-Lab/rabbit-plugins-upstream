@@ -1,41 +1,58 @@
-## Description: <br>
-Applies event-driven async messaging to decouple producers and consumers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Event-driven async messaging.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and architects use this skill to decide when to apply event-driven architecture and outline adoption steps for asynchronous, loosely coupled systems. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Architecture guidance can be incomplete or unsuitable for a specific production system. <br>
-Mitigation: Review recommendations against system requirements, consistency needs, operational capacity, and security controls before adopting them. <br>
-Risk: Event-driven designs can introduce hidden coupling and operational complexity. <br>
-Mitigation: Use event catalogs or schema registries, consumer-driven contract tests, observability, retry policies, and dead-letter handling when applying the guidance. <br>
+## Use Case:
 
+Developers and architects use this skill to assess when event-driven architecture fits and plan asynchronous systems, including event schemas, messaging topology, failure handling, and observability.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-event-driven) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with architecture recommendations and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable tools, API calls, credential access, or file writes are evident from the reviewed artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release metadata) <br>
+Risk: Consumers may become coupled through undocumented event meanings or fields.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Maintain an event catalog or schema registry and validate event structures.
+
+Risk: Failures across asynchronous consumers can be difficult to diagnose.
+
+Mitigation: Use distributed tracing and standardized alerts, and monitor consumer lag, throughput, schema failures, and dead-letter queue depth.
+
+Risk: Event modeling can become prolonged without clear scope.
+
+Mitigation: Time-box modeling sessions and start with high-value business contexts.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-event-driven)
+- [Homepage listed in release metadata](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Markdown guidance and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provides architecture decision guidance, adoption steps, risks, and operational exit criteria; does not itself implement the architecture.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

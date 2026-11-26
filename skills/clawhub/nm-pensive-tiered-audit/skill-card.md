@@ -1,43 +1,50 @@
-## Description: <br>
-Runs a three-tier codebase audit with git-history triage, targeted area review, and gated full-codebase review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Runs a three-tier codebase audit (git history, targeted scans, full review) with gating
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and maintainers use this skill to audit branch or release changes, identify churn and instability, and escalate only when evidence supports deeper review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill writes local audit findings under .coordination/agents, which may include incomplete or sensitive review notes if committed without checking. <br>
-Mitigation: Review generated findings files before committing or sharing them. <br>
-Risk: Broad review prompts may trigger a multi-tier audit workflow when a narrower review was intended. <br>
-Mitigation: Use explicit prompts that define the desired audit scope and tier. <br>
-Risk: Full-codebase Tier 3 audits can consume substantial context, compute, and reviewer attention. <br>
-Mitigation: Proceed to Tier 3 only after documented Tier 2 justification and explicit user approval. <br>
+## Use Case:
 
+Developers and engineers use the skill to assess codebase quality, review branch changes before merging, and investigate unstable areas before a release or after an incident.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-tiered-audit) <br>
-- [Project homepage from metadata](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown findings files with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes tiered audit findings under .coordination/agents and requires explicit approval before Tier 3 full-codebase audits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The skill's “review” trigger may conflict with an existing command or skill, and some references were not resolved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check for naming conflicts before enabling the skill, and verify its referenced dependencies and guidance in the intended environment.
+
+## Reference(s):
+
+- [Pensive plugin project](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-pensive-tiered-audit)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Guidance]
+
+**Output Format:** [Evidence-backed audit findings in Markdown, with optional JSON output for Tier 1]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings use evidence tags and recommendations; deeper audits require explicit escalation criteria, and a full codebase audit requires user approval.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

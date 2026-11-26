@@ -1,43 +1,54 @@
-## Description: <br>
-Alibaba Bailian qwen3-tts text-to-speech that lets agents choose curated system voices, including dialects, or design a custom voice from a natural-language description. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates speech from text with Alibaba Bailian qwen3-tts using system voices or a custom voice description.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to request qwen3-tts speech generation through the dLazy CLI, selecting a preset voice or describing a custom voice for text-to-speech output. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: TTS prompts and any explicitly provided media inputs are sent to dLazy's hosted service. <br>
-Mitigation: Use the skill only when sending those inputs to dLazy is acceptable for the user's data handling requirements. <br>
-Risk: The dLazy API key can authorize paid SaaS usage if exposed. <br>
-Mitigation: Prefer DLAZY_API_KEY for temporary sessions on shared machines, verify permissions on ~/.dlazy/config.json, and rotate or revoke keys from the dLazy dashboard after suspected exposure. <br>
+## Use Case:
 
+Developers and other dLazy users can turn provided text into speech using a curated system voice or a voice described in natural language.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-qwen-tts) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The generated speech result is returned through dLazy-hosted output URLs; asynchronous runs may return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Text prompts are sent to the hosted dLazy API for speech generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting confidential or personal text unless its use with the service is approved.
+
+Risk: The skill invokes `dlazy login`, which stores an API key locally; the security scan could not determine the CLI's credential handling, and reference checks were incomplete.
+
+Mitigation: Review the CLI credential flow before logging in, and rotate or revoke the key if it may have been exposed.
+
+## Reference(s):
+
+- [dLazy service](https://dlazy.com)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Audio files, JSON]
+
+**Output Format:** [Generated audio asset returned by URL in a JSON response]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return an asynchronous task identifier when requested.]
+
+## Skill Version(s):
+
+1.3.44 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

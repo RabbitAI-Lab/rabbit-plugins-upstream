@@ -1,55 +1,54 @@
-## Description: <br>
-This skill helps agents draft standardized functional, API, platform-specific, and AI agent test cases, including exception scenarios, boundary values, complex interactions, security boundaries, linkage, routing, compatibility, adaptation, and UI visual coverage. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to generate, write, or design test cases for a specific scenario or feature, add negative scenarios and boundary values, design test cases for complex interactions, or output standardized test cases — e.g., functional testing, compatibility testing, adaptability testing, API testing, UI visual testing, mobile / app / mini program / H5 / desktop / PC web testing, AI agent testing, linkage testing, or routing testing. Focuses only on writing test cases; does not cover test plans, test strategies, or automation scripts.
 
-## Publisher: <br>
-[cassianran](https://clawhub.ai/user/cassianran) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cassianran](https://clawhub.ai/user/cassianran)
 
-## Use Case: <br>
-Developers, QA engineers, and product teams use this skill to generate executable Markdown test cases for functional, API, AI agent, and platform-specific scenarios. It is intended for test case drafting and coverage review, not test planning, automation scripting, vulnerability scanning, or performance testing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The broad Agent trigger may activate the skill when the user did not intend AI agent test case design. <br>
-Mitigation: Use specific phrasing such as "AI agent testing" or "agent test case design" when requesting agent test cases. <br>
-Risk: Generated test cases may be incomplete or may not match the product's actual requirements. <br>
-Mitigation: Review generated cases against the requirement source and the applicable checklist before using them for QA execution. <br>
-Risk: The skill is scoped to drafting test cases and may not safely satisfy requests for planning documents, automation scripts, vulnerability scanning, or load testing. <br>
-Mitigation: Keep use to test case design and route out-of-scope testing, security, or automation work to appropriate specialist processes. <br>
+## Use Case:
 
+QA engineers, software testers, and developers use this skill to turn feature requirements or existing cases into structured test case tables for functional, API, agent, and platform-specific testing, including negative and boundary scenarios. It focuses on designing and supplementing test cases rather than test plans or automation scripts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/cassianran/software-test-case-design) <br>
-- [General Test Case Rules](references/templates/common-rules.md) <br>
-- [Functional Testing](references/core-capabilities/functional-testing.md) <br>
-- [API Testing](references/core-capabilities/api-testing.md) <br>
-- [AI Agent Testing](references/core-capabilities/agent-testing.md) <br>
-- [Test Case Output Format Specification](references/examples/format-spec.md) <br>
-- [General Testing Checklist](references/checklists/common-checklist.md) <br>
-- [API Testing Checklist](references/checklists/api-checklist.md) <br>
-- [AI Agent Test Case Design Checklist](references/checklists/agent-checklist.md) <br>
-- [PC Web Platform-Specific Testing](references/platform/pc-web.md) <br>
-- [Mobile App Platform-Specific Testing](references/platform/mobile-app.md) <br>
-- [Mobile Web Platform-Specific Testing](references/platform/mobile-web.md) <br>
-- [Desktop Platform-Specific Testing](references/platform/desktop.md) <br>
-- [Mini-Program Platform-Specific Testing](references/platform/mini-program.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance] <br>
-**Output Format:** [Markdown table] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces drafted test cases and self-check guidance; does not produce test plans, automation scripts, vulnerability scans, or performance test execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: Security analysis was partial: one referenced functional-testing document could not be fully evaluated, so the benign verdict has medium confidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the referenced document and consider this evidence gap when deciding whether to install the skill.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/cassianran/skills/software-test-case-design)
+- [Test case output format specification](artifact/references/examples/format-spec.md)
+- [Common test case design rules](artifact/references/templates/common-rules.md)
+- [Functional testing guidance](artifact/references/core-capabilities/functional-testing.md)
+- [API testing guidance](artifact/references/core-capabilities/api-testing.md)
+- [AI agent testing guidance](artifact/references/core-capabilities/agent-testing.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Test cases]
+
+**Output Format:** [Markdown tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include assumptions when requirements are incomplete. Does not produce test plans, strategies, schedules, automation scripts, or load, stress, stability, and capacity test cases.]
+
+## Skill Version(s):
+
+1.0.8 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

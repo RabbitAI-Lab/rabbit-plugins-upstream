@@ -1,41 +1,58 @@
-## Description: <br>
-Selects architecture paradigm via research before scaffolding. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Selects architecture paradigm via research before scaffolding.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering teams use this skill when starting a project whose architecture is undecided. It gathers project context, supports current-pattern research, selects an architecture paradigm, adapts scaffolding guidance, and records the decision in an ADR. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Architecture recommendations can be a poor fit if the project context or research synthesis is incomplete. <br>
-Mitigation: Review the selected paradigm, rationale, trade-offs, and ADR before relying on the recommendation. <br>
-Risk: Following scaffolding or script examples can create files in an unintended location. <br>
-Mitigation: Use a fresh or intended output directory and inspect generated changes before keeping them. <br>
+## Use Case:
 
+Developers starting a project with an undecided architecture use this skill to gather requirements, compare architectural paradigms, adapt a scaffold, and document the decision in an ADR.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-architecture-aware-init) <br>
-- [Attune homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with code blocks, shell command examples, and project scaffolding or ADR content.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use online research and the declared night-market.archetypes:architecture-paradigms configuration for guided paradigm selection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Online architecture research may share project details with an external search provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove secrets and confidential details from research queries, and check that external search fits the project's privacy requirements.
+
+Risk: Broad activation terms may cause the skill to run in workflows where architecture selection is not intended.
+
+Mitigation: Review the activation conditions in the local skill configuration and invoke it when architecture is undecided.
+
+Risk: The security scan had partial coverage because two referenced local paths could not be matched to bundled files.
+
+Mitigation: Check the full installation for those referenced files and review them before relying on the workflow.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-attune-architecture-aware-init)
+- [Skill homepage in metadata](https://github.com/athola/claude-night-market/tree/master/plugins/attune)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration, Project files]
+
+**Output Format:** [Markdown briefs and ADRs, code and shell examples, and paradigm-specific project scaffolds.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations and scaffolds depend on the project context and selected architecture paradigm.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

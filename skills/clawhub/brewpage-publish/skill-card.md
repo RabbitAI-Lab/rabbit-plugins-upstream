@@ -1,44 +1,64 @@
-## Description: <br>
-Publish HTML, markdown, text, files, or multi-file sites to brewpage.app and return an instant public URL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Draft, publish, and update BrewPage pages and sites from supplied content, including forms that save visitor responses.
 
-## Publisher: <br>
-[kochetkov-ma](https://clawhub.ai/user/kochetkov-ma) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[kochetkov-ma](https://clawhub.ai/user/kochetkov-ma)
 
-## Use Case: <br>
-Developers and agent users use this skill to publish selected text, files, built static directories, or zip archives to brewpage.app for temporary public sharing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish content to a public hosting service, which may expose files or text more broadly than intended. <br>
-Mitigation: Use it only for content intended to become public, avoid secrets and private files, and review the selected content before upload. <br>
-Risk: Broad invocation triggers may cause the skill to be selected for publishing requests where the user has not clearly chosen public hosting. <br>
-Mitigation: Require an explicit confirmation step before calling brewpage.app and confirm namespace, password, TTL, and content type. <br>
-Risk: Publishing a directory can accidentally include source files or generated artifacts. <br>
-Mitigation: Publish built static output only and keep the documented exclusions for secrets, VCS data, dependencies, sourcemaps, logs, and editor files. <br>
+## Use Case:
 
+Developers and site owners use this skill to prepare BrewPage drafts, publish pages or static sites, and update a specific publication. It can also create forms that save visitor responses.
 
-## Reference(s): <br>
-- [BrewPage homepage](https://brewpage.app) <br>
-- [ClawHub listing](https://clawhub.ai/kochetkov-ma/brewpage-publish) <br>
-- [OpenClaw skills documentation](https://docs.openclaw.ai/tools/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell command blocks and a final public URL] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or append a workspace-local brewpage-history.md file containing private owner tokens.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: Published pages may be open to anyone with the link, and public pages may be discoverable.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the content and access settings before publishing; remove sensitive information or use password protection when appropriate.
+
+Risk: Workspace history or recovery receipts may contain owner keys that can manage anonymous publications.
+
+Mitigation: Keep those files private and out of shared logs, prompts, and uploaded content.
+
+Risk: The skill uses shell, network, and local file-writing capabilities to prepare and publish content.
+
+Mitigation: Review the requested action and runtime permissions, and use a local draft when no remote publication is intended.
+
+## Reference(s):
+
+- [BrewPage](https://brewpage.app)
+- [BrewPage REST API](https://brewpage.app/api/)
+- [BrewPage Page data guide](https://brewpage.app/llms-page-data.txt)
+- [BrewPage templates](https://brewpage.app/templates)
+- [BrewPage custom domains guide](https://brewpage.app/llms-full.txt#custom-domains)
+- [OpenClaw skill documentation](https://docs.openclaw.ai/tools/skills)
+- [ClawHub release](https://clawhub.ai/kochetkov-ma/skills/brewpage-publish)
+- [Publisher profile](https://clawhub.ai/user/kochetkov-ma)
+
+## Skill Output:
+
+**Output Type(s):** [HTML, Markdown, JSON, Files, Guidance, Links]
+
+**Output Format:** [Draft page or site content and a concise publication result, including a reader link when a publish succeeds.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can include forms that save visitor responses and published content with selected access settings.]
+
+## Skill Version(s):
+
+1.1.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

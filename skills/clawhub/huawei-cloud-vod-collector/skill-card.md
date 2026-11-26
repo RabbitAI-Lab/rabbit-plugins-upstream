@@ -1,48 +1,56 @@
-## Description: <br>
-Captures Huawei Cloud developer feedback from errors, user rejections, and reports, records it as markdown feedback, and can deliver selected reports as GitCode issues. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures Huawei Cloud developer feedback, sanitizes and deduplicates reports, and helps prepare and deliver them to a configured GitCode repository.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and support engineers use this skill to collect poor Huawei Cloud experiences, extract useful context from failed actions or user reports, and prepare issue-ready Voice of Developer feedback. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad automatic hooks can record tool errors, rejection-like prompts, and nearby conversation context. <br>
-Mitigation: Review and narrow the hook configuration before enabling the skill, and disable automatic capture where sensitive conversations may occur. <br>
-Risk: Feedback files may contain sensitive context, assistant thinking, or secrets before delivery. <br>
-Mitigation: Inspect and redact .vod feedback files before submission, and use the sanitizer on existing records when needed. <br>
-Risk: Delivery can install and run AtomGit-GO and store a local plaintext access token. <br>
-Mitigation: Run the installer only after accepting the third-party dependency and token storage model, keep the token file private, and remove it when it is no longer needed. <br>
-Risk: Reports can be submitted externally to GitCode. <br>
-Mitigation: Confirm the configured repository and review each issue body before delivery or batch notification. <br>
+## Use Case:
 
+Developers using Huawei Cloud tools can capture errors, corrections, and dissatisfaction as structured feedback, then review and submit useful reports to a configured GitCode project.
 
-## Reference(s): <br>
-- [Hook configuration and deployment guide](references/hooks-setup.md) <br>
-- [OpenClaw platform integration](references/openclaw-integration.md) <br>
-- [AtomGit-GO](https://gitcode.com/weixin_45218422/AtomGit-GO) <br>
-- [ClawHub skill page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-vod-collector) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/huaweiclouddev) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls, Guidance] <br>
-**Output Format:** [Markdown feedback records, issue text, JSON command responses, and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates local .vod feedback files and may submit selected feedback to GitCode when configured and authorized.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: ClawScan rates this release suspicious with medium confidence, citing broad cloud-command access, automatic feedback collection and delivery, and installation of supporting tools. The scan was incomplete, and the verdict does not establish malicious intent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the workflow only when needed and review its commands, reporting behavior, and configured destinations before installation. Set SKILL_QUALITY_REPORT=0 to opt out of quality reporting.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-vod-collector)
+- [CLI installation guide](references/cli-installation-guide.md)
+- [Deduplication and notifications](references/dedup-and-notify.md)
+- [IAM policies and security notes](references/iam-policies.md)
+- [Hooks setup](references/hooks-setup.md)
+- [OpenClaw integration](references/openclaw-integration.md)
+- [Huawei Cloud KooCLI documentation](https://support.huaweicloud.com/cli/index.html)
+- [AtomGit-GO source](https://gitcode.com/weixin_45218422/AtomGit-GO)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown feedback reports with shell command and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Feedback is stored as project-local Markdown; issue delivery uses the configured destination and authentication.]
+
+## Skill Version(s):
+
+1.0.10 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,58 @@
-## Description: <br>
-Applies client-server architecture for web/mobile apps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies client-server architecture for web/mobile apps.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to reason about client-server, peer-to-peer, and offline-first application architecture, including trust boundaries, API contracts, version negotiation, and rollout deliverables. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad architecture triggers may cause the skill to influence conversations where client-server guidance is not desired. <br>
-Mitigation: Narrow or disable triggers when installing the skill in environments where architecture guidance should be opt-in. <br>
-Risk: Architecture recommendations can be incomplete or misleading if adopted without project-specific review. <br>
-Mitigation: Review generated guidance against the actual system requirements, security model, and operational constraints before using it for implementation decisions. <br>
+## Use Case:
 
+Developers and architects use this skill to plan client-server or peer-to-peer systems, define trust boundaries and API contracts, and document versioning, connectivity, and rollout decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-client-server) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration] <br>
-**Output Format:** [Markdown guidance with architecture steps, deliverables, and risk mitigations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces advisory architecture content only; no tools, scripts, credentials, or external services are invoked by the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence; artifact frontmatter says 1.9.8) <br>
+Risk: Frequent small client requests can hurt performance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Consolidate API calls through a façade or gateway and use client-side or edge caching.
+
+Risk: Duplicated business logic in clients can drift out of sync with server rules.
+
+Mitigation: Share validation logic in a common library or make the server the definitive owner of those rules.
+
+Risk: Peer-to-peer synchronization can produce conflicting data updates.
+
+Mitigation: Choose and document a conflict-resolution approach, such as CRDTs or last-write-wins, before implementation.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-client-server)
+- [Publisher profile](https://clawhub.ai/user/athola)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Architecture recommendations and documentation outlines, including ADR, API or protocol specification, compatibility criteria, and rollout runbook guidance.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata; artifact frontmatter lists 1.10.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

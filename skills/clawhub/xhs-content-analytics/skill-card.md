@@ -1,40 +1,53 @@
-## Description: <br>
-小红书自动化运营工具，支持搜索笔记、查看笔记详情及评论，用于小红书、Xiaohongshu 或 RedNote 内容调研。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过关键词或链接查询小红书公开笔记、评论、博主作品与互动数据，并返回 JSON，供选题、竞品、KOL 和舆情分析使用。
 
-## Publisher: <br>
-[um-why](https://clawhub.ai/user/um-why) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[um-why](https://clawhub.ai/user/um-why)
 
-## Use Case: <br>
-Content operators, marketers, and analysts use this skill to search public Xiaohongshu notes, inspect note details and comments, compare engagement metrics, and export results for content planning or marketing reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Keywords, note URLs, and GUAIKEI_API_TOKEN are sent to the guaikei.com API. <br>
-Mitigation: Use the skill only when that third-party API use is acceptable, and keep the token in a protected environment variable. <br>
-Risk: Generated log files may contain sensitive content research records. <br>
-Mitigation: Review, protect, and delete local logs when they are no longer needed, especially on shared or backed-up machines. <br>
+## Use Case:
 
+创作者、运营人员、品牌团队和内容分析人员可用此技能检索小红书公开笔记、评论及博主互动数据，用于内容选题、竞品跟踪、KOL 筛选和舆情分析。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/um-why/xhs-content-analytics) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [CLI text with JSON or Markdown result files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires GUAIKEI_API_TOKEN; writes local JSON logs under the skill logs directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and artifact metadata) <br>
+Risk: The security review flags concerns about undeclared tool scope and data handling, and notes that some executable files were only partially inspected; this does not establish malicious intent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the commands and information sent to the third-party service before use, and avoid sending sensitive keywords, links, or request data.
+
+## Reference(s):
+
+- [参数与查询限制](references/options.md)
+- [意图路由](references/routing.md)
+- [JSON 输出契约](references/contract.md)
+- [错误处理](references/errors.md)
+- [服务网站](https://www.guaikei.com)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Analysis]
+
+**Output Format:** [JSON response envelope containing public note, comment, or creator data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Searches require a keyword; detail, comment, and creator queries require a matching public link or identifier. Results cover publicly visible data only.]
+
+## Skill Version(s):
+
+1.2.4 (source: frontmatter, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

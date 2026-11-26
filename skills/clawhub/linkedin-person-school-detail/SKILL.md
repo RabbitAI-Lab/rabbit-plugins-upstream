@@ -1,7 +1,7 @@
 ---
 name: linkedin-person-school-detail
 description: "Pull detailed school information from LinkedIn. Verify education institutions and analyze academic networks for recruiters and research specialists.\n\nTrigger: LinkedIn school data lookup, educational institution verification, academic‑network research, institutional‑data enrichment, degree validation"
-metadata: {"version":"1.0.4","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"🏫","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
+metadata: {"version":"1.0.6","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"🏫","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
 ---
 
 # LinkedIn School Detail Query
@@ -62,6 +62,15 @@ Use this script to get account information for UPKUAJING_API_KEY: `auth.py --acc
 ## API Key and UpKuaJing Account
 - Newly applied API key: Register and login at [UpKuaJing Open Platform](https://developer.upkuajing.com/), then bind account
 
+### **Report Skill Call Errors**
+When an API call fails or returns abnormal data (server error, timeout, malformed response, etc.), explain the anomaly to the user in natural language and ask whether to report it to the platform for troubleshooting. Only run the report after user confirmation:
+```bash
+python scripts/error_report.py --params '{"requestPath":"/agent/search/linkedin/person/school/detail","requestId":"f47ac10b58cc4372a5670e02b2c3d479","context":"LinkedIn school detail query failed with a server error"}'
+```
+- Do not report normal business conditions (insufficient balance, invalid API key, parameter errors) — handle them via their own flows
+- Error reporting does not incur query fees
+- **Parameters**: See [Error Report API](references/skill-error-report-api.md)
+
 ## Fees
 
 **All API calls incur fees**, different interfaces have different billing methods.
@@ -81,6 +90,21 @@ Billed by **number of calls**, each query returns the complete school details:
 ### Fee Confirmation Principle
 
 **Any operation that incurs fees must first inform and wait for explicit user confirmation. Do not execute in the same message as the notification.**
+
+### Plan Billing and Balance Fallback
+
+Search, customs and map calls are **plan-first**: scripts automatically send `"planMode": 2`.
+
+- **Plan unavailable** (no valid plan, or quota exhausted): the script stops before executing the request, prints a line starting with `PLAN_UNAVAILABLE ` (single-line JSON) on stdout, and exits with **code 3**. Never retry automatically.
+- **Ask the user first**: explain the reason in plain language (no plan / quota exhausted, plus the reset time when known), state that continuing will be charged to the API balance (unit price: `python scripts/auth.py --price_info`), then wait for an explicit answer in a separate message.
+- **User agrees**: re-run the same command with `UPKUAJING_PLAN_MODE=1` (PowerShell: `$env:UPKUAJING_PLAN_MODE='1'`) and report `fee` from the response.
+- **User declines**: stop; nothing is executed or charged. Offer three options — retry later / upgrade plan / use balance — and do not ask again in the same turn.
+- **Insufficient balance after switching** (code 95): guide the user to top up and stop; do not retry.
+- **Before a large or batch run**: check quota once with `python scripts/auth.py --plan_quota` (tier limits: `--plan_config`). If `available` is 0 or the target window has `remaining` 0, ask about balance up front instead of making a call that must fail.
+- **On success**: relay the `[套餐] ...` usage line printed on stderr to the user.
+- **Never** switch to balance silently, and never expose internal error codes verbatim.
+
+Full contract: [references/plan-billing.md](references/plan-billing.md)
 
 ## Workflow
 
@@ -103,11 +127,15 @@ python scripts/linkedin_school_detail.py --sid S_001
 
 - **API key invalid/non-existent**: Check `UPKUAJING_API_KEY` in `~/.upkuajing/.env` file
 - **Insufficient balance**: Guide user to top up
+- **Plan unavailable (exit code 3 / `PLAN_UNAVAILABLE`)**: explain the reason and ask whether to continue with the API balance; do not retry automatically. See [Plan Billing](references/plan-billing.md)
 - **Invalid parameters**: **Must first check the corresponding API documentation in references/ directory**, get correct parameter names and formats from documentation, do not guess
+- **Skill call errors / abnormal responses**: Explain to the user and, with user confirmation, report to the platform via `python scripts/error_report.py` (see [Report Skill Call Errors](#report-skill-call-errors))
 
 ### API Documentation Reference
 
 - School Detail: Check [references/linkedin-school-detail-api.md](references/linkedin-school-detail-api.md)
+- Error Report: Check [references/skill-error-report-api.md](references/skill-error-report-api.md)
+- Plan Billing and Balance Fallback: [references/plan-billing.md](references/plan-billing.md)
 
 ## Best Practices
 

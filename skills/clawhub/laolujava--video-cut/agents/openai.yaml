@@ -1,0 +1,4 @@
+interface:
+  display_name: "视频剪辑"
+  short_description: "Cut talking videos and other footage: remove fillers, trim, caption, change speed, add a background."
+  default_prompt: "用 $video-cut 剪这段口播，保留完整内容，去掉语气词，并加同步中文字幕。"

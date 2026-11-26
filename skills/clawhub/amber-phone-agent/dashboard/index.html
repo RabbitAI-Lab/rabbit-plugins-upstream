@@ -527,12 +527,12 @@
             <label>Realtime model</label>
             <div class="model-switch">
               <label>
-                <input type="radio" name="setting-realtime-model" value="gpt-realtime" />
-                <span>Regular</span>
+                <input type="radio" name="setting-realtime-model" value="gpt-realtime-2.1" />
+                <span>Realtime 2.1</span>
               </label>
               <label>
-                <input type="radio" name="setting-realtime-model" value="gpt-realtime-mini" />
-                <span>Mini</span>
+                <input type="radio" name="setting-realtime-model" value="gpt-realtime-2.1-mini" />
+                <span>Realtime 2.1 Mini</span>
               </label>
             </div>
           </div>
@@ -618,7 +618,7 @@
       bridgeToken: '',
       testTo: '',
       testObjective: 'Place a short Amber test call. Say hello, confirm two-way audio is working, and end politely.',
-      realtimeModel: 'gpt-realtime',
+      realtimeModel: 'gpt-realtime-2.1',
       currency: 'USD',
       telecomPerMinute: 0.013,
       realtimeInputPer1M: 4,
@@ -662,8 +662,11 @@
       document.getElementById('setting-bridge-token').value = settings.bridgeToken;
       document.getElementById('setting-test-to').value = settings.testTo;
       document.getElementById('setting-objective').value = settings.testObjective;
-      const modelInput = document.querySelector(`input[name="setting-realtime-model"][value="${settings.realtimeModel}"]`);
-      if (modelInput) modelInput.checked = true;
+      if (settings.realtimeModel === 'gpt-realtime-mini') settings.realtimeModel = 'gpt-realtime-2.1-mini';
+      const modelInputs = Array.from(document.querySelectorAll('input[name="setting-realtime-model"]'));
+      const modelInput = modelInputs.find(input => input.value === settings.realtimeModel) || modelInputs[0];
+      modelInput.checked = true;
+      settings.realtimeModel = modelInput.value;
       document.getElementById('setting-currency').value = settings.currency;
       document.getElementById('setting-telecom-rate').value = settings.telecomPerMinute;
       document.getElementById('setting-input-rate').value = settings.realtimeInputPer1M;
@@ -676,7 +679,7 @@
         bridgeToken: document.getElementById('setting-bridge-token').value,
         testTo: document.getElementById('setting-test-to').value.trim(),
         testObjective: document.getElementById('setting-objective').value.trim(),
-        realtimeModel: document.querySelector('input[name="setting-realtime-model"]:checked')?.value || 'gpt-realtime',
+        realtimeModel: document.querySelector('input[name="setting-realtime-model"]:checked')?.value || 'gpt-realtime-2.1',
         currency: document.getElementById('setting-currency').value.trim() || 'USD',
         telecomPerMinute: Number(document.getElementById('setting-telecom-rate').value || 0),
         realtimeInputPer1M: Number(document.getElementById('setting-input-rate').value || 0),
@@ -687,11 +690,15 @@
 
     function saveSettings() {
       readSettingsFromForm();
-      const { bridgeToken, ...persistedSettings } = settings;
-      localStorage.setItem('calllog-settings', JSON.stringify(persistedSettings));
+      persistSettings();
       updateStats();
       applyFilters();
       showCallStatus('Settings saved. Bridge token stays in memory only.', '#8ff0b2');
+    }
+
+    function persistSettings() {
+      const { bridgeToken, ...persistedSettings } = settings;
+      localStorage.setItem('calllog-settings', JSON.stringify(persistedSettings));
     }
 
     function showCallStatus(msg, color = '#ffb86b') {
@@ -961,26 +968,25 @@
         showCallStatus('Add a call objective first.');
         return;
       }
-      const ok = window.confirm(`Start an Amber test call to ${settings.testTo}?`);
-      if (!ok) return;
 
       btn.disabled = true;
       showCallStatus('Starting call...', '#00d4ff');
       try {
+        const plan = { bridgeUrl: settings.bridgeUrl, bridgeToken: settings.bridgeToken,
+          to: settings.testTo, objective: settings.testObjective, model: settings.realtimeModel };
+        const previewResp = await fetch(apiUrl('/api/call/preview'), {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(plan)
+        });
+        const preview = await parseJsonResponse(previewResp, apiUrl('/api/call/preview'));
+        if (!previewResp.ok || !preview.approvalToken) throw new Error(preview.error || 'Preview failed');
+        if (!window.confirm(`Call ${plan.to}?\nObjective: ${plan.objective}\nModel: ${plan.model}\nCarrier/API charges may apply.`)) return;
         const resp = await fetch(apiUrl('/api/call'), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            bridgeUrl: settings.bridgeUrl,
-            bridgeToken: settings.bridgeToken,
-            to: settings.testTo,
-            objective: settings.testObjective,
-            model: settings.realtimeModel
-          })
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...plan, confirmed: true, approvalToken: preview.approvalToken })
         });
         const result = await parseJsonResponse(resp, apiUrl('/api/call'));
         if (!resp.ok || !result.success) throw new Error(result.error || 'Call failed');
-        localStorage.setItem('calllog-settings', JSON.stringify(settings));
+        persistSettings();
         showCallStatus(`Call started: ${result.sid || 'bridge accepted request'}`, '#8ff0b2');
       } catch (err) {
         showCallStatus(`Call failed: ${err.message}`, '#ff7777');
@@ -1058,7 +1064,7 @@
       showToast('⏳ Syncing call logs…', '#00d4ff');
 
       try {
-        const resp = await fetch(apiUrl('/api/sync'), { method: 'POST' });
+        const resp = await fetch(apiUrl('/api/sync'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
         const result = await parseJsonResponse(resp, apiUrl('/api/sync'));
         if (result.success) {
           showToast('✅ Sync complete — reloading…', '#00c853');

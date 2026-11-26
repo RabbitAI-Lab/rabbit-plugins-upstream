@@ -1,43 +1,54 @@
-## Description: <br>
-Delegates tasks to Gemini or Qwen with quota tracking and error handling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Delegates execution tasks to external CLIs and providers, including Gemini, Qwen, MiniMax, GLM, Muse, Codex, OpenCode, and Glimmer.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agent operators use this skill to decide when external LLM delegation is appropriate, plan handoffs, estimate costs, and validate delegated results before integration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Delegation may expose secrets or sensitive data to external LLM services. <br>
-Mitigation: Review each delegation plan before execution, redact sensitive inputs, and avoid sending secrets or sensitive data. <br>
-Risk: Delegated outputs may be incorrect, incomplete, or misleading. <br>
-Mitigation: Validate output format and correctness before integration, and keep high-reasoning or security-sensitive work local. <br>
-Risk: OAuth client secrets and service credentials may be mishandled during setup. <br>
-Mitigation: Handle OAuth and client secrets carefully, verify authentication prerequisites, and prefer redacted audit logs. <br>
+## Use Case:
 
+Developers use this skill to decide which execution work can be delegated to external AI providers, prepare handoffs, estimate costs, and validate returned results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conjure-delegation-core) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conjure) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with checklists, decision matrices, templates, and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces delegation plans, suitability assessments, cost estimates, troubleshooting steps, and validation guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The security evidence reports an undeclared MCP server registration capability.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, review the MCP registration instructions and verify and approve each server and permission.
+
+Risk: The security evidence reports telemetry guidance that may include personal identifiers.
+
+Mitigation: Review telemetry guidance before use and avoid sending personal identifiers unless their collection and handling are approved.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-conjure-delegation-core)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conjure)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and delegation plan templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes provider selection, handoff, cost, validation, and troubleshooting guidance.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release evidence; artifact frontmatter lists 1.10.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

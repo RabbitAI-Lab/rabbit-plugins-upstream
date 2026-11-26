@@ -1,41 +1,62 @@
-## Description: <br>
-Applies data-grid architecture for high-traffic stateful workloads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies data-grid architecture for high-traffic stateful workloads
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and architects use this skill to decide when a space-based, in-memory data-grid architecture fits high-traffic stateful workloads and to outline adoption steps, deliverables, and operational risks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Architecture recommendations may be unsuitable for low-traffic systems or systems that require strong consistency over availability. <br>
-Mitigation: Use the guidance as design input and validate workload, consistency, latency, and cost requirements before implementation. <br>
-Risk: Operational use in agent workspaces can become sensitive if paired with broader write, deploy, send, delete, credential, or shared-memory capabilities. <br>
-Mitigation: Install only in expected workspaces and review configured credentials and confirmation prompts before allowing consequential actions. <br>
+## Use Case:
 
+Developers and architects use this skill to assess when space-based architecture fits high-traffic stateful workloads and to plan data partitioning, replication, persistence, failover, and scalability validation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-space-based) <br>
-- [OpenClaw metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown architecture guidance with lists of adoption steps, deliverables, risks, mitigations, and component vocabulary.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No tools, shell commands, credentials, or API calls are required by the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The scanner's benign verdict does not guarantee zero risk, and architecture guidance may not fit a workload's requirements.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the instructions and validate recommendations against the workload's consistency, durability, and operational requirements.
+
+Risk: Asynchronous replication can expose eventual consistency and stale data.
+
+Mitigation: Define data-freshness service levels and implement compensation logic for data that is not immediately consistent.
+
+Risk: Operating a distributed data grid adds orchestration and recovery complexity.
+
+Mitigation: Invest in mature automation and exercise scaling and failover recovery procedures before production use.
+
+Risk: In-memory data grids can consume substantial resources and increase cost.
+
+Mitigation: Monitor resource utilization and use autoscaling policies to manage capacity and cost.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-space-based)
+- [Project homepage (skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Architecture recommendations]
+
+**Output Format:** [Markdown prose with adoption steps, architecture deliverables, risks, mitigations, and validation criteria.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Context-driven recommendations; no fixed output schema.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

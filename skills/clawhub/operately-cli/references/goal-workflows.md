@@ -197,6 +197,7 @@ operately goals update_target_value \
 
 # Reorder targets
 operately goals update_target_index \
+  --goal-id g1 \
   --target-id t1 \
   --index 0
 ```
@@ -206,6 +207,29 @@ operately goals update_target_index \
 ```bash
 operately goals delete_target --goal-id g1 --target-id t1
 ```
+
+## Checklist Items
+
+Goal checklist items track completion independently of numeric targets and Markdown task lists.
+
+```bash
+# Read the current items and their IDs
+operately goals get --id g1 --include-checklist
+
+# Add an item; the response includes check_id
+operately goals create_check --goal-id g1 --name "Publish onboarding guide"
+
+# Rename an item
+operately goals update_check --goal-id g1 --check-id c1 --name "Publish revised onboarding guide"
+
+# Switch between complete and incomplete
+operately goals toggle_check --goal-id g1 --check-id c1
+
+# Remove an item
+operately goals delete_check --goal-id g1 --check-id c1
+```
+
+Read the current state before toggling: `toggle_check` reverses it, so retrying blindly can undo the intended change. Use item and target IDs from the goal you are updating.
 
 ## Check-in Patterns
 
@@ -251,8 +275,10 @@ operately goals create_check_in \
 
 ### Acknowledging Check-ins
 
+The CLI endpoints for goal check-ins and retrospectives require edit access and reject acknowledgment by the author. They are not restricted to the reviewer role. Check-ins must be published, and an entry can only be acknowledged once.
+
 ```bash
-# Reviewer acknowledges check-in
+# Acknowledge check-in
 operately goals acknowledge_check_in --id ci1
 
 # List check-ins
@@ -261,10 +287,9 @@ operately goals list_check_ins --goal-id g1
 # Get specific check-in
 operately goals get_check_in --id ci1
 
-# Update check-in
+# Edit the content and keep the current due date and status
 operately goals update_check_in \
-  --check-in-id ci1 \
-  --status on_track \
+  --id ci1 \
   --content "# Updated Status\n\nRevised after team discussion."
 ```
 
@@ -326,21 +351,42 @@ operately goals create_check \
 
 ```bash
 # Toggle check completion
-operately goals toggle_check --check-id c1
+operately goals toggle_check --goal-id g1 --check-id c1
 
 # Update check
 operately goals update_check \
+  --goal-id g1 \
   --check-id c1 \
   --name "Updated check name"
 
 # Reorder checks
 operately goals update_check_index \
+  --goal-id g1 \
   --check-id c1 \
   --index 0
 
 # Delete check
-operately goals delete_check --check-id c1
+operately goals delete_check --goal-id g1 --check-id c1
 ```
+
+## Goal Docs & Files
+
+Goals have their own Docs & Files hub. Scope commands with `--goal-id`:
+
+```bash
+operately documents list_contents --goal-id g1
+
+operately documents create_document \
+  --goal-id g1 \
+  --name "Goal Playbook" \
+  --content "# Playbook\n\nHow we track this goal."
+
+operately documents create_file \
+  --goal-id g1 \
+  --file ./metrics-dashboard.pdf
+```
+
+See [Docs & Files](docs-and-files.md) for search, version history, and notification options.
 
 ## Goal Discussions
 
@@ -424,7 +470,9 @@ Access levels:
 ### Reopen Goal
 
 ```bash
-operately goals get --id g1
+operately goals reopen \
+  --id g1 \
+  --message "Reopening after new planning input."
 ```
 
 Use cases:
@@ -435,12 +483,14 @@ Use cases:
 ### Close Goal
 
 ```bash
-# Achieved
+# Close goal with notification controls
 operately goals close \
   --goal-id g1 \
   --success achieved \
   --success-status achieved \
-  --retrospective "# Success!\n\nExceeded target by 15%."
+  --retrospective "# Success!\n\nExceeded target by 15%." \
+  --send-notifications-to-everyone false \
+  --subscriber-ids u2
 
 # Not achieved
 operately goals close \
@@ -448,6 +498,9 @@ operately goals close \
   --success no \
   --success-status missed \
   --retrospective "# Lessons Learned\n\nMarket conditions changed significantly."
+
+# Acknowledge retrospective — authors cannot acknowledge their own. From list_assignments, use origin.id.
+operately goals acknowledge_retrospective --goal-id g1
 ```
 
 ## Common Patterns

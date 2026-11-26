@@ -1,45 +1,51 @@
-## Description: <br>
-Analyzes cage images or videos to estimate feces and urine coverage, score cleanliness, trigger threshold-based cleaning alerts, and return reports for pet boarding, shop, hospital, or breeding settings. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes images or video of pet enclosure floors to estimate waste coverage, assess cleanliness, and report when a threshold is exceeded.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External pet-care facility operators and developers use this skill to analyze cage floor media, estimate waste coverage, and retrieve cloud-backed reports for hygiene monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cage images or videos and report activity are sent to the publisher's cloud service. <br>
-Mitigation: Use the skill only for footage that is approved for cloud processing by the publisher, and review retention expectations before deployment. <br>
-Risk: The skill may create or reuse a local identity and persist account tokens in a workspace SQLite database. <br>
-Mitigation: Run it in an isolated workspace and review or remove stored local identity and token data when access is no longer needed. <br>
-Risk: Cloud report history can be retrieved automatically when report-list intents are triggered. <br>
-Mitigation: Limit use to operators authorized to view the associated reports and avoid using shared workspaces for sensitive facility footage. <br>
+## Use Case:
 
+Pet boarding, retail, veterinary, and breeding facility staff use the skill to review enclosure cleanliness from camera images or video and prioritize cleaning when detected waste exceeds a set threshold.
 
-## Reference(s): <br>
-- [API 接口文档](references/api_doc.md) <br>
-- [API接口文档](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-cage-cleanliness-detection-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, files] <br>
-**Output Format:** [Markdown or JSON structured analysis report, with optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cleanliness scores, threshold alerts, report links, and history tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release metadata) <br>
+Risk: ClawScan rates this release suspicious with high confidence, citing credential handling, external requests, and unclear handling of local media; scan coverage was partial and did not verify the stated detection and alert workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the publisher, credential use, external destinations, and media-transfer behavior before installing, and independently confirm the detection and alert workflow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-cage-cleanliness-detection-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [API reference](artifact/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Structured cleanliness analysis report with measurements, findings, and cleaning alerts; Markdown table for history results.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Visual estimates depend on image or video clarity; results are for environmental hygiene management and are not medical advice.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

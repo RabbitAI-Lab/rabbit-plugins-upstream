@@ -1,7 +1,7 @@
 ---
 name: customs-analysis-trends-zh
 description: "查询分析报告-贸易趋势 — 查询指定HS编码在最近N个月的进出口贸易趋势数据。\n\nTrigger: 贸易趋势，进出口分析，HS编码趋势，月度贸易数据，贸易时间序列分析"
-metadata: {"version":"1.0.0","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"📈","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
+metadata: {"version":"1.0.2","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"📈","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
 ---
 
 # 海关分析报告-贸易趋势
@@ -60,6 +60,15 @@ UPKUAJING_API_KEY=your_api_key_here
 ## API密钥与跨境魔方账户
 - 新申请的API密钥：前往[跨境魔方开放平台](https://developer.upkuajing.com/)注册登录，然后绑定账户
 
+### **上报Skill调用异常**
+当API调用失败或返回异常数据（服务端错误、超时、响应格式错误等）时，先用自然语言向用户解释异常情况，并询问是否需要上报给平台追踪；用户确认后才执行上报：
+```bash
+python scripts/error_report.py --params '{"requestPath":"/agent/customs/analysis/trends","requestId":"f47ac10b58cc4372a5670e02b2c3d479","context":"贸易趋势查询失败，服务端异常"}'
+```
+- **不要上报正常业务情况**（余额不足、API密钥无效、参数错误等），按各自原有流程处理
+- 异常上报不产生查询费用
+- **参数说明**：参见 [异常上报API](references/skill-error-report-api.md)
+
 ## 费用
 
 **所有API调用均产生费用**，不同接口计费方式不同。
@@ -78,6 +87,21 @@ UPKUAJING_API_KEY=your_api_key_here
 ### 费用确认原则
 
 **任何产生费用的操作都必须先告知用户并等待用户明确确认。不得在通知用户的同一条消息中执行。**
+
+### 套餐计费与余额降级
+
+搜索/海关/地图接口**默认走套餐**：脚本会自动携带 `"planMode": 2`。
+
+- **套餐不可用**（无有效套餐或额度已用完）：脚本在业务执行前停止，不会产生扣费；stdout 会输出一行以 `PLAN_UNAVAILABLE ` 开头的 JSON，退出码为 **3**。**禁止自动重试**。
+- **先询问用户**：用自然语言说明原因（无套餐 / 额度用完及恢复时间），说明改用余额将按接口定价扣费（单价用 `python scripts/auth.py --price_info` 查询），然后等待用户在独立消息中明确回复。
+- **用户同意**：用同一条命令加环境变量 `UPKUAJING_PLAN_MODE=1` 重跑（PowerShell：`$env:UPKUAJING_PLAN_MODE='1'`），成功后向用户展示 `fee` 扣费信息。
+- **用户拒绝**：本次不执行、不扣费；给出「稍后重试 / 升级套餐 / 使用余额」三个出口，同一轮不要重复弹窗。
+- **改余额后仍余额不足**（95）：提示充值并停止，不再重试。
+- **批量调用前**：先用 `python scripts/auth.py --plan_quota` 预检额度（档位上限用 `--plan_config`）；`available=0` 或目标窗口 `remaining=0` 时，直接先问是否用余额，避免必然失败的调用。
+- **调用成功**：把 stderr 中 `[套餐]` 开头的用量信息转述给用户。
+- **禁止**静默改走余额，**禁止**向用户暴露内部错误码原文。
+
+完整契约见 [references/plan-billing.md](references/plan-billing.md)
 
 ## 工作流程
 
@@ -112,11 +136,15 @@ python scripts/customs_analysis_trends.py --params '{"hscode":"04021000","recent
 
 - **API密钥无效/不存在**：检查 `~/.upkuajing/.env` 文件中的 `UPKUAJING_API_KEY`
 - **余额不足**：引导用户充值
+- **套餐不可用（退出码 3 / `PLAN_UNAVAILABLE`）**：说明原因并询问是否改用余额，不要自动重试；参见 [套餐计费与余额降级](references/plan-billing.md)
 - **参数错误**：**必须首先查看 references/ 目录下对应的API文档**，从文档中获取正确的参数名称和格式，不要猜测
+- **Skill调用异常/响应异常**：先友好告知用户，经用户确认后用 `python scripts/error_report.py` 上报给平台（参见 [上报Skill调用异常](#上报skill调用异常)）
 
 ### API文档参考
 
 - 贸易趋势：查看 [references/customs-analysis-trends-api.md](references/customs-analysis-trends-api.md)
+- 异常上报：查看 [references/skill-error-report-api.md](references/skill-error-report-api.md)
+- 套餐计费与余额降级：[references/plan-billing.md](references/plan-billing.md)
 
 ## 最佳实践
 

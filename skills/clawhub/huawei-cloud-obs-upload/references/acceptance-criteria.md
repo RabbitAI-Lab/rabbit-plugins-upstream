@@ -9,7 +9,6 @@
 - [Correct SDK Code Patterns](#correct-sdk-code-patterns)
 - [Response Validation Criteria](#response-validation-criteria)
 - [Security Criteria](#security-criteria)
-- [Month-over-Month Calculation Criteria](#month-over-month-calculation-criteria)
 - [References](#references)
 
 ---
@@ -91,19 +90,21 @@ hcloud CES ShowMetricData \
 
 ### 4. obsutil Upload Commands
 
+> **⚠️ For directory uploads, ask the customer first whether to preserve the source directory structure, then pick the command. Never default.**
+
 #### ✅ Correct
 ```bash
-obsutil cp /home/user/file.txt obs://my-bucket/path/file.txt -flat    # Single file: -flat is fine
-obsutil cp /home/user/data/ obs://my-bucket/data/ -r                   # Directory: preserves structure (default)
-obsutil cp /home/user/data/ obs://my-bucket/data/ -r -p=10             # Directory with concurrency
-obsutil cp /home/user/data/ obs://my-bucket/data/ -r -flat             # Directory: -flat only if user explicitly requests
+obsutil cp /home/user/file.txt obs://my-bucket/path/file.txt -flat    # Single file: -flat is fine (no need to ask)
+obsutil cp /home/user/data/ obs://my-bucket/data/ -r                   # Directory: customer chose to preserve structure
+obsutil cp /home/user/data/ obs://my-bucket/data/ -r -p=10             # Directory with concurrency (customer chose preserve)
+obsutil cp /home/user/data/ obs://my-bucket/data/ -r -flat             # Directory: customer chose to flatten files
 ```
 
 #### ❌ Incorrect
 ```bash
 obsutil upload /home/user/file.txt obs://my-bucket/  # Incorrect: obsutil upload command is cp, not upload
 obsutil cp /home/user/file.txt my-bucket/path/file.txt  # Incorrect: Target must start with obs://
-obsutil cp /home/user/data/ obs://my-bucket/ -r -flat  # Incorrect: -flat discards directory structure by default; do not use unless user explicitly requests
+obsutil cp /home/user/data/ obs://my-bucket/ -r -flat  # Incorrect: using -flat without asking the customer first; -flat must follow the customer's explicit answer
 ```
 
 ### 5. CES Namespace and Metric Names
@@ -120,7 +121,6 @@ obsutil cp /home/user/data/ obs://my-bucket/ -r -flat  # Incorrect: -flat discar
 --namespace=OBS              # Incorrect: Should be SYS.OBS
 --namespace=SYS.OBJECT_STORAGE  # Incorrect: Should be SYS.OBS
 --metric_name=capacityTotal  # Incorrect: Should be capacity_total (snake_case)
---metric_name=download_bytes  # Incorrect: Not used in this skill; capacity_total is the actual metric
 --dim.0=bucketName,my-bucket  # Incorrect: Dimension key should be bucket_name
 --dim.0=bucket,my-bucket      # Incorrect: Dimension key should be bucket_name
 ```
@@ -138,6 +138,60 @@ obsutil cp /home/user/data/ obs://my-bucket/ -r -flat  # Incorrect: -flat discar
 --from=1746057600     # Incorrect: Second-level timestamp; CES requires millisecond-level (13 digits)
 --from=2025-05-01     # Incorrect: CES requires Unix timestamp, not date string
 ```
+
+### 7. Large file upload (200MB+) — multipart assertions
+
+A large-file command must actually enable multipart upload, keep a checkpoint, and use the config
+file (not `-t`) for timeout tuning.
+
+#### ✅ Correct
+```bash
+# 200MB single file: threshold < file size, explicit part size, explicit checkpoint, part concurrency
+obsutil cp /data/records-200mb.tar.gz obs://my-bucket/datasets/records-200mb.tar.gz \
+  -flat -threshold=9MB -ps=9MB -p=5 -cpd="$HOME/.obsutil_checkpoint" -f
+
+# Resume: rerun the exact same command after an interruption
+obsutil cp /data/records-200mb.tar.gz obs://my-bucket/datasets/records-200mb.tar.gz \
+  -flat -threshold=9MB -ps=9MB -p=5 -cpd="$HOME/.obsutil_checkpoint" -f
+
+# 1GB: larger parts; 10GB: even larger parts (keep ceil(size/ps) <= 10000)
+obsutil cp /data/archive-1gb.tar obs://my-bucket/datasets/archive-1gb.tar \
+  -flat -threshold=16MB -ps=16MB -p=8 -cpd="$HOME/.obsutil_checkpoint" -f
+obsutil cp /data/backup-10gb.tar obs://my-bucket/backups/backup-10gb.tar \
+  -flat -threshold=32MB -ps=64MB -p=8 -cpd="$HOME/.obsutil_checkpoint" -f
+
+# Timeout/retry tuning belongs in ~/.obsutilconfig
+# connectTimeout=60
+# socketTimeout=600
+# maxRetryCount=5
+```
+
+#### ❌ Incorrect
+```bash
+# Incorrect: threshold >= file size -> direct upload, no checkpoint, no resume
+obsutil cp /data/records-200mb.tar.gz obs://my-bucket/records-200mb.tar.gz -threshold=500MB -p=5
+
+# Incorrect: -t is the security token, not an upload timeout
+obsutil cp /data/records-200mb.tar.gz obs://my-bucket/records-200mb.tar.gz -t=600
+
+# Incorrect: -fr only generates a result manifest; it does not enable resume
+obsutil cp /data/records-200mb.tar.gz obs://my-bucket/records-200mb.tar.gz -fr
+
+# Incorrect: 10GB with 1MB parts = 10240 parts, above the 10000-part limit
+obsutil cp /data/backup-10gb.tar obs://my-bucket/backup-10gb.tar -threshold=1MB -ps=1MB
+```
+
+**Assertions for a large-file upload answer:**
+
+- The 200MB sample MUST include `-threshold`, `-ps`, `-p`, and `-cpd`; `-threshold` MUST be less
+  than 200MB.
+- The answer MUST state that rerunning the same command resumes from the checkpoint; `-fr` MUST NOT
+  be presented as a resume switch.
+- The answer MUST state that `-t` is the security token, not a timeout; timeout tuning MUST point
+  to `socketTimeout` (default 310s) in `~/.obsutilconfig`.
+- 200MB / 1GB / 10GB samples MUST keep the part count at or below 10000.
+- Multipart failures MUST be diagnosed in the order: `-threshold` vs file size → checkpoint
+  presence → bandwidth/part concurrency → Region/Endpoint → AK/SK permission → clock.
 
 ---
 
@@ -165,8 +219,8 @@ from huaweicloudsdkobs import Client  # Incorrect: Missing correct module path
 from huaweicloudsdkcore.auth.credentials import BasicCredentials
 
 credentials = BasicCredentials() \
-    .with_ak(os.getenv("HUAWEICLOUD_SDK_AK")) \
-    .with_sk(os.getenv("HUAWEICLOUD_SDK_SK")) \
+    .with_ak(os.getenv("HW_ACCESS_KEY")) \
+    .with_sk(os.getenv("HW_SECRET_KEY")) \
     .with_project_id(os.getenv("HUAWEICLOUD_SDK_PROJECT_ID"))
 ```
 
@@ -184,8 +238,8 @@ credentials = BasicCredentials() \
 from obs import ObsClient
 
 obs_client = ObsClient(
-    access_key_id=os.getenv("HUAWEICLOUD_SDK_AK"),
-    secret_access_key=os.getenv("HUAWEICLOUD_SDK_SK"),
+    access_key_id=os.getenv("HW_ACCESS_KEY"),
+    secret_access_key=os.getenv("HW_SECRET_KEY"),
     server='obs.cn-south-1.myhuaweicloud.com'
 )
 ```
@@ -193,8 +247,8 @@ obs_client = ObsClient(
 #### ❌ Incorrect
 ```python
 obs_client = ObsClient(
-    access_key_id="XXXXXXXXXX",      # Prohibited: Hardcoded AK
-    secret_access_key="YYYYYYYYYY",   # Prohibited: Hardcoded SK
+    access_key_id="XXXXXXXXXX",      # FORBIDDEN: Hardcoded AK
+    secret_access_key="YYYYYYYYYY",   # FORBIDDEN: Hardcoded SK
     server='obs.cn-south-1.myhuaweicloud.com'
 )
 ```
@@ -236,40 +290,16 @@ obs_client = ObsClient(
 
 ### ⛔ Prohibited Operations (Security Constraints)
 
-> **The following delete operations are strictly forbidden, regardless of user requests:**
+> **The following operations are strictly forbidden, regardless of user requests. They are described semantically; the skill never provides executable destructive command examples.**
 
 #### ❌ Absolutely Prohibited
-```bash
-hcloud obs rm obs://my-bucket -r           # Prohibited: Recursively delete all objects in bucket
-hcloud obs rm obs://my-bucket              # Prohibited: Delete bucket
-```
+- Recursively deleting all objects in a bucket
+- Deleting a bucket
 
 #### ✅ Correct: Refuse delete request and direct to console
 ```
 "Per security constraints, this skill does not allow delete operations (delete bucket/object/batch delete/empty bucket). Please use the Huawei Cloud OBS console or obsutil manually."
 ```
-
----
-
-## Month-over-Month Calculation Criteria
-
-### ✅ Correct Calculation
-```
-MoM (%) = (Current Month Value - Last Month Value) / Last Month Value × 100%
-
-Example:
-Current month = 125.3 GB, Last month = 98.7 GB
-MoM = (125.3 - 98.7) / 98.7 × 100% = +26.95%
-```
-
-### Special Case Handling
-
-| Case | Correct Handling | Incorrect Handling |
-|------|-----------------|-------------------|
-| Last month=0, Current>0 | Display "New (last month was 0)" | ❌ Display +∞% |
-| Last month=0, Current=0 | Display "N/A" | ❌ Display 0% |
-| Last month>0, Current>0 | Calculate percentage, rounded to 2 decimal places | ❌ Integer truncation |
-| Current<Last month | Display negative (e.g., -15.30%) | ❌ Display 0% |
 
 ---
 

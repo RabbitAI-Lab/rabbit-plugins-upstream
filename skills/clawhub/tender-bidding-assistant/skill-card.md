@@ -1,41 +1,54 @@
-## Description: <br>
-Tender Bidding Assistant helps agents analyze tender and RFP documents, draft bid materials, develop bidding strategy, run compliance checks, and plan post-bid follow-up for China government procurement and commercial projects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps teams analyze procurement bid documents, plan responses, draft bid materials, review risks, and prepare post-bid follow-up.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Procurement, commercial, and legal reviewers use this skill to analyze bid requirements, prepare tender response materials, review elimination risks, and produce bid strategy guidance. Outputs should be reviewed by qualified procurement or legal staff before submission. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global; outputs are tailored primarily to China procurement and tender workflows. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender materials can contain confidential prices, client data, identity details, technical secrets, and authorization information. <br>
-Mitigation: Redact sensitive data before use, limit file access to project-scoped documents, and process only procurement material the organization permits an AI assistant to handle. <br>
-Risk: Generated bid strategy, regulatory claims, and bid documents may be incomplete or incorrect for a specific procurement. <br>
-Mitigation: Have qualified procurement or legal staff verify generated documents, compliance claims, and strategy before submission. <br>
+## Use Case:
 
+Procurement and bid teams working on mainland China government or commercial projects can use it to examine tender requirements, organize response strategy, prepare draft materials, and check submission risks. Outputs are reference drafts that need verification by qualified personnel against current rules and project requirements.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/tender-bidding-assistant) <br>
-- [Bid document templates](references/bid-document-templates.md) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance, bid-document templates, shell commands, Python code, and optional JSON analysis reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read user-provided tender documents and produce checklists, draft bid sections, compliance risk reports, and strategy recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.2.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Bid documents may contain confidential pricing, client, or technical information, and third-party AI handling or deletion may not be guaranteed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Sanitize sensitive details, confirm authorization, and check organizational data policies before submitting documents to an AI service.
+
+Risk: Procurement guidance may be outdated or differ by jurisdiction, project, or platform.
+
+Mitigation: Verify current requirements with official sources and have qualified personnel review conclusions and drafts before use.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/gechengling/skills/tender-bidding-assistant)
+- [Publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown, Draft text]
+
+**Output Format:** [Structured analysis, checklists, and draft Markdown or text materials]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are reference drafts for qualified human review.]
+
+## Skill Version(s):
+
+3.2.7 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
