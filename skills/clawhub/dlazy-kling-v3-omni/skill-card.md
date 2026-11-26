@@ -1,43 +1,55 @@
-## Description: <br>
-Versatile video generation with Kling v3 Omni, supporting multi-modal image and prompt inputs for dynamic video generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+使用可灵 (Kling) v3 Omni 全能视频生成模型，支持多模态输入（图片、提示词）生成震撼的动态视频。
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to call the dLazy Kling v3 Omni CLI for text-to-video and image or video reference generation workflows, including synchronous generation and asynchronous task polling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local media paths supplied to the CLI can be uploaded to dLazy's hosted service. <br>
-Mitigation: Use the skill only with content approved for dLazy cloud processing and avoid sending sensitive media or confidential prompts unless the user's policy permits it. <br>
-Risk: The dLazy CLI may save an API key in the local user configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-invocation credentials when persistent local storage is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Creators and developers use this skill to generate videos from text prompts and image or video references, then retrieve or save the resulting assets.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-kling-v3-omni) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is returned through dLazy-hosted output URLs or an asynchronous task identifier.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release metadata) <br>
+Risk: ClawScan reports a benign verdict with medium confidence and notes that the shown login command is not clearly connected to video generation; reference checks were incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI install details and login flow before authenticating.
+
+Risk: The skill sends prompts to a hosted service and uploads local media supplied for generation.
+
+Mitigation: Use only prompts and media that are appropriate to send to the dLazy service.
+
+## Reference(s):
+
+- [dLazy service](https://dlazy.com)
+- [dLazy API key instructions](https://dlazy.com/dashboard/organization/api-key)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video assets, JSON result metadata]
+
+**Output Format:** [Hosted video asset URLs and JSON task/result responses; optionally saved video files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generation may run asynchronously; task IDs can be polled for completion.]
+
+## Skill Version(s):
+
+1.3.43 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

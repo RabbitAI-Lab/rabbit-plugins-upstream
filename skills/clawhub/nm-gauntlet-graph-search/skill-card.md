@@ -1,40 +1,54 @@
-## Description: <br>
-Searches the code knowledge graph by function, class, or type using FTS5 full-text search. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches the code knowledge graph by function, class, or type using FTS5 full-text search
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and coding agents use this skill to find functions, classes, and types in a prebuilt Gauntlet code knowledge graph, then inspect matching source locations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs a local Python query command in the agent workspace. <br>
-Mitigation: Review the command before execution and run it only in the intended workspace with the expected .gauntlet/graph.db file. <br>
-Risk: Search results depend on a prebuilt graph database and may be stale or incomplete. <br>
-Mitigation: Build or refresh the graph before relying on results, and inspect source files before making code changes. <br>
+## Use Case:
 
+Developers use this skill to find functions, classes, and types in a built code knowledge graph. They can search by name or qualified path, review matching locations and relevance, and open a result for further inspection.
 
-## Reference(s): <br>
-- [Gauntlet plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with shell command examples and text search results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search results include qualified names, file paths, line numbers, and relevance scores when the graph query succeeds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The security scan was partial because it could not resolve several local path references.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review unresolved references and the skill requirements before installation if additional assurance is needed.
+
+Risk: A missing or stale code graph can prevent useful search results.
+
+Mitigation: Build or refresh the graph before searching, and check its status before interpreting zero matches.
+
+## Reference(s):
+
+- [Gauntlet plugin documentation](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet)
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-gauntlet-graph-search)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Markdown list or table of matching code entities, with qualified names, file paths, line numbers, and relevance scores]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Up to 20 matches by default; optional filters can limit results to functions or classes.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

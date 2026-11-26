@@ -1,44 +1,55 @@
-## Description: <br>
-Turns product photos, specifications, catalogs, or ecommerce listings into conversion-focused shopping ad videos with multilingual voiceover and an optional virtual host. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turn a product, product photos, or a store listing into a conversion-focused ecommerce video, with multilingual voiceover and an optional virtual host.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External creators, ecommerce teams, and developers use this skill to start or continue dLazy projects that generate product, shopping, TikTok Shop, and ecommerce ad videos from product files or listing links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, project context, and files passed with `--files` are sent to dLazy-hosted services. <br>
-Mitigation: Avoid sending sensitive content unless approved for that service, and review dLazy terms before use. <br>
-Risk: The dLazy API key may be saved in `~/.dlazy/config.json`, while the referenced CLI package may not enforce the private file permissions claimed by the skill. <br>
-Mitigation: Use a dedicated, revocable API key; prefer `DLAZY_API_KEY` per invocation when persistence is not needed; and verify local config file permissions after login. <br>
-Risk: Global installation adds a third-party CLI package to the local environment. <br>
-Mitigation: Review the dLazy CLI before installing and consider using the pinned `npx @dlazy/cli@1.2.3` path instead of a persistent global install. <br>
+## Use Case:
 
+External users and ecommerce teams use this skill to create product ads and shopping videos for storefronts, TikTok, and cross-border sales from product details, images, or listing links.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a pinned dLazy CLI invocation and may reference project IDs, prompts, API-key setup, and local files supplied by the user.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: The skill sends prompts to dLazy and uploads any attached local files to its media service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sending sensitive information or files unless sharing them with the service is authorized.
+
+Risk: ClawScan reports a benign verdict with medium confidence, notes project-listing and whitespace findings, and says some references were unresolved.
+
+Mitigation: Review the project-listing behavior and whitespace-flagged area before use, keeping in mind that scanner evidence is incomplete.
+
+## Reference(s):
+
+- [dLazy](https://dlazy.com)
+- [dLazy CLI package](https://www.npmjs.com/package/@dlazy/cli)
+- [CLI source repository (referenced by the skill; provenance is unavailable)](https://github.com/dlazy-ai/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video, Text]
+
+**Output Format:** [Generated ecommerce video with streamed text responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include multilingual voiceover and an optional virtual host; work is organized in project-based sessions.]
+
+## Skill Version(s):
+
+1.0.43 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

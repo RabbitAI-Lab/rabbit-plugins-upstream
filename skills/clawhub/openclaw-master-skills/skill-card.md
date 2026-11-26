@@ -1,41 +1,51 @@
-## Description: <br>
-A curated, weekly updated catalog of OpenClaw skills spanning AI tools, productivity, marketing, frontend, mobile, backend, DevOps, and related agent workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a daily refreshed, harness-agnostic catalog of agent skills across AI, productivity, development, marketing, and other areas.
 
-## Publisher: <br>
-[leoyeai](https://clawhub.ai/user/leoyeai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[leoyeai](https://clawhub.ai/user/leoyeai)
 
-## Use Case: <br>
-OpenClaw users and agent operators use this catalog to discover installable skills across AI, search, productivity, development, marketing, media, finance, communication, smart home, memory, security, data, and social-content workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Catalog entries can point to skills with materially different behaviors, including credential use, browser automation, posting, memory, or background updates. <br>
-Mitigation: Vet each selected skill separately before installation or use, using the security evidence for that specific skill. <br>
-Risk: Manual clone or copy installation can bypass package-level review of the specific skill being installed. <br>
-Mitigation: Prefer reviewed ClawHub installation when available, or scan and review the copied skill before enabling it for an agent. <br>
+## Use Case:
 
+Agent users and developers use the catalog to discover skills for tasks across supported agent harnesses and to find installation guidance for the collection.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/leoyeai/skills/openclaw-master-skills) <br>
-- [Install guide](references/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Catalog guidance only; the inspected artifact contains markdown and no executable behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.21.4 (source: server-resolved release metadata) <br>
+Risk: Catalog descriptions may lead an agent to invoke skills during unrelated tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review a selected skill's scope and instructions before installing or invoking it, and choose only skills relevant to the current task.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/leoyeai/skills/openclaw-master-skills)
+- [Project page](https://github.com/LeoYeAI/agent-master-skills)
+- [MyClaw.ai](https://myclaw.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Shell commands]
+
+**Output Format:** [Markdown, including installation commands when relevant]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Catalog descriptions and installation guidance selected for the user's request.]
+
+## Skill Version(s):
+
+0.22.14 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

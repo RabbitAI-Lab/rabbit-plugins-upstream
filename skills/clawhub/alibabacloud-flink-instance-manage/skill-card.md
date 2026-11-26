@@ -1,52 +1,57 @@
-## Description: <br>
-Manage Alibaba Cloud Flink VVP instances and namespaces through create and query operations only, including regions, zones, tags, and namespace lookups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Alibaba Cloud Flink instances, namespaces, regions, availability zones, tags, and regional Flink AI service status, quota, activation, and closure protection.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to create or query Alibaba Cloud Flink VVP instances, namespaces, regions, zones, and tags through a scoped wrapper workflow. It is not intended for Flink SQL, job execution, update/delete operations, or unrelated Alibaba Cloud services. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create billable Alibaba Cloud Flink resources. <br>
-Mitigation: Use a dedicated least-privilege RAM role or user and review every create command before providing the required confirmation flag. <br>
-Risk: Cloud credentials could be exposed or overprivileged if handled manually. <br>
-Mitigation: Use the default credential chain or RAM roles, avoid plaintext AccessKey or SecretKey values in prompts and outputs, and apply only the documented Flink RAM actions. <br>
-Risk: Requests outside the supported create/query scope could lead to inappropriate cloud operations or misleading results. <br>
-Mitigation: Limit use to Flink VVP instance and namespace create/query workflows, reject update/delete, Flink SQL/job, and unrelated cloud-service requests, and verify create outcomes with read-back checks. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to create or inspect Alibaba Cloud Flink instances and namespaces, discover supported regions, zones, and tags, and manage regional Flink AI service settings. Write actions require confirmation and are followed by a state check.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sdk-team/alibabacloud-flink-instance-manage) <br>
-- [Quick Start](references/quick-start.md) <br>
-- [Core Execution Flow](references/core-execution-flow.md) <br>
-- [Command Templates](references/command-templates.md) <br>
-- [Parameter Validation](references/parameter-validation.md) <br>
-- [Required Confirmation Model](references/required-confirmation-model.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [RAM Policies](references/ram-policies.md) <br>
-- [Related APIs](references/related-apis.md) <br>
-- [Alibaba Cloud Flink OpenAPI overview](https://help.aliyun.com/zh/flink/realtime-flink/developer-reference/api-foasconsole-2021-10-28-overview) <br>
-- [Alibaba Cloud Flink OpenAPI RAM actions](https://help.aliyun.com/zh/flink/realtime-flink/developer-reference/api-foasconsole-2021-10-28-ram) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Create operations require explicit confirmation and read-back verification; query operations return JSON with success, operation, data, and request_id fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.2 (source: server release evidence) <br>
+Risk: ClawScan rates the release suspicious with medium confidence because local evaluation-file preparation may not fit its stated Flink management purpose; the scan was incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, review the evaluation-file preparation behavior and its inputs; the scan did not inspect every component.
+
+Risk: Creating instances or namespaces and changing regional Flink AI service settings can modify cloud resources.
+
+Mitigation: Confirm the exact target and parameters before each write, then query the resource to verify the resulting state.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/sdk-team/skills/alibabacloud-flink-instance-manage)
+- [Publisher profile](https://clawhub.ai/user/sdk-team)
+- [Quick start](artifact/references/quick-start.md)
+- [Flink AI service guide](artifact/references/flink-ai-service.md)
+- [RAM permissions](artifact/references/ram-policies.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Guidance]
+
+**Output Format:** [JSON operation results with concise natural-language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write operations require explicit confirmation and follow-up state verification.]
+
+## Skill Version(s):
+
+0.0.3 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

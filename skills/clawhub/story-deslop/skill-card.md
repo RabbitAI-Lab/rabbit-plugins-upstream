@@ -1,44 +1,54 @@
-## Description: <br>
-Detects and edits Chinese web-fiction prose to reduce AI-flavored, formulaic writing while preserving plot, character details, and author intent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Diagnoses and revises AI-like web fiction prose across expression, narrative emphasis, and story causality while preserving the author's voice and established plot.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and editors use Story Deslop to scan Chinese web-fiction drafts for formulaic AI-style prose and receive targeted rewrite guidance, reports, or file edits that make the text read more naturally. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT License
 
-## Known Risks and Mitigations: <br>
-Risk: File mode can rewrite provided manuscript files and normalize punctuation after editing. <br>
-Mitigation: Keep backups and request detection-only behavior when review is needed before any edits are applied. <br>
-Risk: Aggressive style cleanup can remove useful plot, character, or pacing detail if applied too broadly. <br>
-Mitigation: Review the change report, preserve story intent, and use the skill's review markers for uncertain edits. <br>
+## Use Case:
 
+Authors and editors of Chinese web fiction use this skill to find and revise formulaic prose, pacing issues, and unsupported story transitions while preserving the intended voice and plot.
 
-## Reference(s): <br>
-- [Story Deslop on ClawHub](https://clawhub.ai/worldwonderer/skills/story-deslop) <br>
-- [Publisher profile](https://clawhub.ai/user/worldwonderer) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Anti-AI Writing Guide](references/anti-ai-writing.md) <br>
-- [Banned Words and Patterns](references/banned-words.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance, Files] <br>
-**Output Format:** [Markdown reports with edited prose, inline shell commands, and optional file edits] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [File mode can update user-supplied manuscript files and return short representative excerpts for long inputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.11 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
+Risk: The security review is incomplete: 6 of 10 components were fully inspected and 4 were only partially inspected; confidence is medium.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Consider this uncertainty before installing, especially when relying on the scripts, and review relevant behavior before use.
+
+## Reference(s):
+
+- [Three-layer deslop guide](artifact/references/deslop-guide.md)
+- [Short-form fiction guidance](artifact/references/short-deslop.md)
+- [Style resolution guidance](artifact/references/style-resolution.md)
+- [AI-pattern signal reference](artifact/references/banned-words.md)
+- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-deslop)
+- [Project link listed in skill metadata](https://github.com/zenstory-ai/oh-story-claudecode)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Revised Chinese prose and Markdown diagnostics]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scope follows the user's request; changes to events, motives, outcomes, or reveal timing are proposed for approval.]
+
+## Skill Version(s):
+
+1.1.62 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,53 @@
-## Description: <br>
-Executes implementation plans with progress tracking, checkpoint validation, and quality gates after planning is complete and tasks are ready to implement. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Executes implementation plans with progress tracking, checkpoint validation, and quality gates. Use after planning is complete and tasks are ready to implement.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to execute existing implementation plans in dependency order, track task progress, apply TDD and checkpoint validation, and prepare completion reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow may guide high-impact production migration or data-change work. <br>
-Mitigation: Keep dry-run, explicit confirmation, verification, and cleanup gates in place before applying changes. <br>
-Risk: Task progress or completion reports could be inaccurate if checkpoints are skipped. <br>
-Mitigation: Validate acceptance criteria, tests, quality checks, and blockers at each checkpoint before marking tasks complete. <br>
+## Use Case:
 
+Developers use this skill after planning to carry out implementation tasks in dependency order, track progress, and check work against acceptance criteria and quality gates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-project-execution) <br>
-- [Attune plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with code, shell command, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Delegation may share project context with external model providers without warning.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review which providers receive project context and confirm that sharing is acceptable before using delegation.
+
+Risk: The security scan was incomplete because some referenced paths were missing from the bundle.
+
+Mitigation: Review the complete release contents and rescan before deployment.
+
+## Reference(s):
+
+- [Project homepage (skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/attune)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Code and text, including Markdown reports, shell command examples, and JSON configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Output depends on the implementation plan and may include progress and checkpoint reports.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

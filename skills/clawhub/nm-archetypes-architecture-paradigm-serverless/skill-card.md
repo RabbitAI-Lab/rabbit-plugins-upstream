@@ -1,43 +1,58 @@
-## Description: <br>
-Applies serverless FaaS patterns for event-driven workloads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Serverless FaaS patterns for bursty event-driven workloads that benefit from pay-per-execution pricing and minimal infrastructure management.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and architects use this skill to evaluate when serverless FaaS patterns fit event-driven, bursty workloads and to plan state management, deployment, observability, cost, and risk considerations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Serverless architecture guidance may not match a user's deployment, IAM, cost, or compliance constraints. <br>
-Mitigation: Validate recommendations against the target cloud environment, organizational policies, and workload requirements before acting. <br>
-Risk: Long-running processes, persistent connections, and local state requirements can make a serverless FaaS design unsuitable. <br>
-Mitigation: Check workload duration, connection, and state requirements before adopting serverless patterns. <br>
-Risk: Cold starts, provider limits, and provider-specific APIs can affect latency, reliability, and portability. <br>
-Mitigation: Plan cold-start mitigation, monitor provider quotas, and isolate provider-specific integrations where portability matters. <br>
+## Use Case:
 
+Developers and cloud architects use this skill to assess whether serverless functions fit an event-driven workload and plan state management, deployment, observability, cost controls, and key tradeoffs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-serverless) <br>
-- [Configured OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown guidance with architecture checklists and recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; cloud deployment, IAM, cost, and compliance decisions should be validated against the user's own environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Cold starts, function timeouts, and provider quotas can make serverless unsuitable for latency-sensitive or long-running workloads.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check latency and execution limits against the workload, and monitor cold starts, concurrency, and memory quotas; use provisioned concurrency or sharding where appropriate.
+
+Risk: Distributed functions can be difficult to debug, and repeated event delivery can create unintended side effects.
+
+Mitigation: Use structured logs and tracing, and make handlers idempotent with replay tests.
+
+Risk: Provider-specific services can increase cloud vendor lock-in.
+
+Mitigation: Where practical, isolate provider APIs behind interfaces or use portable deployment frameworks.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-serverless)
+- [Project homepage (skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown guidance, planning recommendations, and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

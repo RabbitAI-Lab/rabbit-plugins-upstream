@@ -1,41 +1,50 @@
-## Description: <br>
-Detects workflow failures and inefficient patterns then files GitHub issues. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects workflow failures and inefficient patterns then files GitHub issues.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to monitor agent workflow executions for failures, timeouts, retry loops, context pressure, and inefficient tool usage, then prepare structured issue reports for follow-up. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad workflow-related trigger wording may activate the skill during ordinary workflow discussions. <br>
-Mitigation: Review trigger wording before installation and narrow activation if the deployment needs stricter scope. <br>
-Risk: Automated issue drafting or creation can produce noisy, duplicate, or misleading workflow issues if findings are not reviewed. <br>
-Mitigation: Keep approval required, check for duplicate issues, rate-limit issue creation, and review evidence before filing. <br>
+## Use Case:
 
+Developers and workflow maintainers use this skill to detect failures and inefficiencies, then prepare evidence-backed reports and file improvement issues on the configured Git platform.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-workflow-monitor) <br>
-- [OpenClaw homepage metadata](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown reports, issue templates, YAML configuration examples, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose GitHub or GitLab issue creation after duplicate checks and user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Command output or session details sent to GitHub or GitLab may contain sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and remove sensitive details from content before sending it, and check the destination and content before issue creation or searches.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-imbue-workflow-monitor)
+- [Related plugin page (listed in skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/imbue)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown reports and issue bodies, with shell examples and YAML configuration]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports can include reproducible command evidence, output excerpts, and session details.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,59 @@
-## Description: <br>
-Local-first document-to-Markdown converter supporting HTML, DOCX, PDF, XLSX, CSV, JSON, XML, and PPTX inputs with GitHub, CommonMark, Slack, Discord, Reddit, Confluence, R Markdown, and custom Markdown outputs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts local documents or stdin to Markdown in platform-specific formats, with optional server-side URL extraction.
 
-## Publisher: <br>
-[britrik](https://clawhub.ai/user/britrik) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[britrik](https://clawhub.ai/user/britrik)
 
-## Use Case: <br>
-Developers and agents use this skill to convert local documents, pasted HTML, web URLs, or batches of files into Markdown tailored for common publishing and collaboration platforms. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: URL extraction can send sensitive or internal link content to server-side processing. <br>
-Mitigation: Use local file or stdin conversion for private material, and avoid --url unless server-side processing is acceptable. <br>
-Risk: Optional API and license keys may be used for URL extraction and premium batch mode. <br>
-Mitigation: Prefer environment variables or temporary credentials until the CLI documents how stored credentials are protected. <br>
-Risk: The skill depends on an external Node.js CLI being installed and trusted. <br>
-Mitigation: Install only from trusted package sources and review conversion commands before execution. <br>
+## Use Case:
 
+Developers and agent operators use the skill to convert documents and web content into Markdown tailored to their target platform.
 
-## Reference(s): <br>
-- [FormatFerry homepage](https://github.com/britrik/FormatFerry) <br>
-- [FormatFerry CLI Reference](references/cli-reference.md) <br>
-- [ClawHub skill page](https://clawhub.ai/britrik/formatferry-markdown) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Files, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown text or Markdown files with optional shell commands for conversion workflows] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports selectable Markdown flavours and optional file, stdin, URL, or batch inputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.5 (source: server release metadata) <br>
+Risk: URL extraction sends the URL and API key to the FormatFerry API for server-side fetching.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use URL mode only with the user's agreement, and avoid internal, private, or signed URLs.
+
+Risk: A stored license key can trigger an entitlement check with the license service during local conversion.
+
+Mitigation: Use --offline for local conversions when you want to skip the entitlement check.
+
+Risk: The benign security verdict has limited assurance because one scanner's review was partial.
+
+Mitigation: Treat the verdict as a summary of completed checks, not a guarantee of zero risk.
+
+## Reference(s):
+
+- [FormatFerry project homepage](https://github.com/britrik/FormatFerry)
+- [ClawHub skill release](https://clawhub.ai/britrik/skills/formatferry-markdown)
+- [FormatFerry CLI reference](artifact/references/cli-reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands]
+
+**Output Format:** [Markdown text in the selected flavor, with optional CLI command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Converts supported local inputs or stdin; output flavor can be selected.]
+
+## Skill Version(s):
+
+1.1.6 (source: SKILL.md frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

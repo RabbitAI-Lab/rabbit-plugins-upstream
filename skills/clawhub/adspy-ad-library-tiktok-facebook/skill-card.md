@@ -1,40 +1,55 @@
-## Description: <br>
-Research TikTok and Facebook ads plus Meta Ad Library results in one combined cross-platform PipiAds skill. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Research TikTok and Facebook ads plus Meta Ad Library results in one combined cross-platform PipiAds skill.
 
-## Publisher: <br>
-[fanyanggod](https://clawhub.ai/user/fanyanggod) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fanyanggod](https://clawhub.ai/user/fanyanggod)
 
-## Use Case: <br>
-Marketers, analysts, and growth teams use this skill to research and compare TikTok, Facebook adspy, and Meta Ad Library results for creatives, products, advertisers, stores, and cross-platform trends. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The installed PipiAds MCP server can access broader PipiAds account features than simple ad search, including monitoring changes, notification settings, group deletion, and image submission. <br>
-Mitigation: Install only if comfortable sharing the PipiAds API key with the MCP server; keep calls user-directed and avoid autonomous use of account-changing tools unless explicitly needed. <br>
+## Use Case:
 
+External marketers, advertisers, and ecommerce researchers use the skill to find and compare ads, products, advertisers, and stores across TikTok, Facebook, and Meta Ad Library.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/fanyanggod/adspy-ad-library-tiktok-facebook) <br>
-- [PipiAds](https://www.pipiads.com) <br>
-- [PipiSpy API Key and Billing](https://www.pipispy.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, API calls, configuration] <br>
-**Output Format:** [Markdown guidance with MCP tool-call recommendations and setup details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires PIPIADS_API_KEY; broad searches and detail requests may consume PipiAds account credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Search criteria and requested identifiers may be transmitted to PipiAds.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid including confidential business information or personal data in queries.
+
+Risk: Broad searches and detail requests consume PipiAds account credits.
+
+Mitigation: Clarify whether the user wants adspy, ad library, or both before running broad searches.
+
+## Reference(s):
+
+- [PipiAds](https://www.pipiads.com)
+- [PipiSpy API key and account management](https://www.pipispy.com/)
+- [ClawHub release page](https://clawhub.ai/fanyanggod/skills/adspy-ad-library-tiktok-facebook)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text]
+
+**Output Format:** [Text summaries and cross-platform comparisons]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings depend on the selected search criteria and available ad data.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

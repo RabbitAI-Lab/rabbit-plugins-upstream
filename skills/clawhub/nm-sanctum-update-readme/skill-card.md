@@ -1,43 +1,50 @@
-## Description: <br>
-Refreshes README structure and content using repo context and exemplar research. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Refreshes README structure favoring concision (an index, not a manual)
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and documentation maintainers use this skill to restructure a README after meaningful project changes, using repository context, language detection, exemplar research, and review steps to guide edits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad documentation and research triggers may activate the workflow for requests that are not intended to update a README. <br>
-Mitigation: Confirm the target file and README scope before allowing edits. <br>
-Risk: README restructuring can introduce inaccurate claims, stale links, or misleading guidance. <br>
-Mitigation: Review the README diff, verify links and citations, and keep claims grounded in repository evidence before relying on the output. <br>
+## Use Case:
 
+Developers maintaining a repository use this skill to reshape its README as a concise entry point, with installation guidance and links to deeper documentation. It guides repository review, language auditing, exemplar research, editing, and verification.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-update-readme) <br>
-- [Sanctum plugin homepage from metadata](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
-- [Language Audit Patterns](modules/language-audit.md) <br>
-- [Exemplar Research Patterns](modules/exemplar-research.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown prose, README edits, command snippets, and verification notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May edit README.md or a specified documentation file and may include citations from exemplar research.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter lists 1.9.8) <br>
+Risk: Security analysis could not resolve two local references, so their contents were not fully assessed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the referenced skills and their files before installing or running them.
+
+## Reference(s):
+
+- [Skill release on ClawHub](https://clawhub.ai/athola/skills/nm-sanctum-update-readme)
+- [Related project homepage (Clawdis metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Files, Analysis]
+
+**Output Format:** [README Markdown edits and a concise verification summary]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include repository-specific findings, links, and review commands.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

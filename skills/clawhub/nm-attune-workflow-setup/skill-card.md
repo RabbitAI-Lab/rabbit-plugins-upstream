@@ -1,41 +1,50 @@
-## Description: <br>
-Configures GitHub Actions CI/CD workflows for testing, linting, and deployment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Configures GitHub Actions CI/CD workflows for testing, linting, and deployment.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to create or update GitHub Actions workflows for Python, Rust, and TypeScript projects, including testing, linting, type checking, build, release, and deployment pipelines. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated GitHub Actions workflows can affect publishing, deployment, repository secrets, or external services. <br>
-Mitigation: Review all generated .github/workflows files before committing, especially publish or deploy workflows. <br>
-Risk: Broad activation phrases may trigger workflow setup guidance when an agent is working near CI/CD automation tasks. <br>
-Mitigation: Install only when you want agent assistance creating or updating GitHub Actions workflows. <br>
+## Use Case:
 
+Developers use this skill to add or update GitHub Actions workflows for testing, linting, type checking, building, and deployment in Python, Rust, and TypeScript projects.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-workflow-setup) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, Python snippets, and GitHub Actions YAML examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance may lead to new or updated .github/workflows files; review generated workflow files before committing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Workflow generation may overwrite existing CI workflow files or remove custom checks and safeguards without warning or confirmation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the generated workflow changes and confirm existing files, custom checks, and safeguards are preserved before use.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-attune-workflow-setup)
+- [Attune plugin homepage (metadata link)](https://github.com/athola/claude-night-market/tree/master/plugins/attune)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown with shell commands, code examples, and GitHub Actions workflow configuration.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

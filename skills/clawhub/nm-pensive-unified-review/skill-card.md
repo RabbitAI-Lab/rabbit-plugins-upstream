@@ -1,41 +1,50 @@
-## Description: <br>
-Orchestrates multi-domain review across code, architecture, tests, security, and related quality areas in a single pass. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Orchestrates multi-domain review (code, arch, tests, security) in a single pass.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to coordinate comprehensive repository reviews, select relevant review domains, synthesize findings, and produce an integrated action plan before merges or releases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad review-related requests. <br>
-Mitigation: Invoke it only for explicit comprehensive review work or use a narrower review skill when the desired review domain is already known. <br>
-Risk: The skill may run a local backlog-capture write command without asking. <br>
-Mitigation: Require user confirmation before executing write commands and review generated backlog entries before keeping them. <br>
+## Use Case:
 
+Developers use this skill before merging substantial changes or when a review spans several areas. It selects applicable review lenses and combines findings into prioritized recommendations and an action plan.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-unified-review) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown review report with findings, evidence, recommendations, and action items] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include prioritized severity levels, evidence appendices, and suggested local commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The security assessment marks the skill suspicious because Makefile examples include package installation and file changes beyond its review purpose; scan coverage is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the Makefile execution and package-installation examples before installing or using the skill, and treat the scan as incomplete rather than as assurance that all risks were found.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-pensive-unified-review)
+- [Homepage listed in skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Shell commands, Configuration instructions]
+
+**Output Format:** [Structured Markdown review report with findings, recommendations, and an action plan]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Review scope and selected domains vary with the repository. May require the configured Night Market proof-of-work, review-core, and structured-output dependencies.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

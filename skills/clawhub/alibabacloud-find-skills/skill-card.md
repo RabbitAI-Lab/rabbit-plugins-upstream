@@ -1,47 +1,51 @@
-## Description: <br>
-Searches, browses, and inspects Alibaba Cloud agent skills, then guides installation when the user requests it. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and browse Alibaba Cloud agent skills, inspect skill details, and guide installation when requested.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Developers and agents use this skill to find Alibaba Cloud skills by intent, keyword, or category; inspect relevant skill details; and install selected skills only when installation is requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installation examples can persistently add selected skills globally and skip confirmation. <br>
-Mitigation: Install only when the user explicitly requests it; prefer interactive or project-local installation, and review the selected skill source before use. <br>
-Risk: Search queries may be sent to the external AgentExplorer service. <br>
-Mitigation: Avoid including secrets, credentials, personal data, or internal project details in search terms. <br>
+## Use Case:
 
+Developers and cloud users can find Alibaba Cloud skills by task or product, browse categories, inspect skill details, and install a selected skill when they ask.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sdk-team/skills/alibabacloud-find-skills) <br>
-- [AgentExplorer HTTP API reference](references/agentexplorer-api.md) <br>
-- [Search examples](references/search-examples.md) <br>
-- [Verification methods](references/verification-method.md) <br>
-- [Curl shell compatibility guide](references/curl-shell-compatibility.md) <br>
-- [Category examples](references/category-examples.md) <br>
-- [Supported npx skills agents](references/npx-skills-agents.md) <br>
-- [Acceptance criteria](references/acceptance-criteria.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with tables and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search results may include skill names, display names, descriptions, categories, install counts, detail summaries, and installation guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.10 (source: release evidence) <br>
+Risk: The security review flags installation beyond the stated request, broad activation phrases, privacy gaps in external searches, and unpinned installer packages; some references were unresolved, so the review is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Consider avoiding installation until the author clarifies when installation can occur, what data searches send to Alibaba Cloud, and how installer versions can be pinned.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/sdk-team/skills/alibabacloud-find-skills)
+- [AgentExplorer HTTP API reference](references/agentexplorer-api.md)
+- [Verification methods](references/verification-method.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands]
+
+**Output Format:** [Markdown summaries and tables with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search results are summarized for the user's requested task; installation guidance is provided only when requested.]
+
+## Skill Version(s):
+
+0.0.16 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

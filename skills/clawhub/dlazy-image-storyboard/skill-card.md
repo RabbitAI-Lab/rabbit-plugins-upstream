@@ -1,42 +1,52 @@
-## Description: <br>
-A professional storyboard skill for film, advertising, short video, and educational narrative scenarios, built around a strict 'plan first, render later' flow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A professional storyboard skill for film, advertising, short video, and educational narrative scenarios, built around a strict 'plan first, render later' flow.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Creators, marketers, educators, and production teams use this skill to plan cinematic or narrative storyboards, confirm character and script gates, and generate storyboard images through the dLazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Storyboard prompts, parameters, and referenced media may be sent to dLazy cloud services for generation. <br>
-Mitigation: Avoid sensitive content in prompts or uploaded files, and use this skill only when remote prompt and media processing is acceptable. <br>
-Risk: The dLazy CLI stores an API key for authenticated generation workflows. <br>
-Mitigation: Use npx for non-persistent CLI use when preferred, and rotate or revoke the stored dLazy API key if needed. <br>
+## Use Case:
 
+Creators, filmmakers, advertisers, and educators use the skill to turn a creative brief into a structured storyboard plan, character references, and image-generation prompts. It guides a staged workflow for reviewing requirements and scripts before generating and assembling storyboard visuals.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-image-storyboard) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown with storyboard plans, prompts, confirmation gates, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces staged storyboard planning guidance and generation commands; generated image URLs are returned by the dLazy CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: frontmatter and server release evidence) <br>
+Risk: The workflow depends on an external dLazy CLI and API key authentication; the available scan did not establish the CLI's internal behavior or credential handling.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and trust the CLI package before installing it, and use the dLazy account controls to rotate or revoke the API key if needed.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-image-storyboard)
+- [dLazy CLI repository (linked in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Text, Shell commands, Images, PDF]
+
+**Output Format:** [Structured storyboard plans, character and panel descriptions, image-generation prompts, and generated image links; final storyboard layouts are specified for PDF export.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses staged review gates for requirements, character design, and script approval before image generation.]
+
+## Skill Version(s):
+
+1.3.46 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

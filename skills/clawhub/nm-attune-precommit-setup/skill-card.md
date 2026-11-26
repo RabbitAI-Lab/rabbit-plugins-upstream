@@ -1,45 +1,58 @@
-## Description: <br>
-Configures pre-commit hooks for linting, type checking, formatting, and testing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Configures pre-commit hooks for linting, type checking, formatting, and testing
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to add or improve pre-commit quality gates for linting, formatting, type checking, tests, security scans, component-level checks, and CI-aligned validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated or adopted pre-commit hooks can execute local scripts automatically during commits. <br>
-Mitigation: Review the generated .pre-commit-config.yaml and any referenced local scripts or Makefile targets before installing hooks. <br>
-Risk: CI examples can upload coverage data to Codecov if the optional workflow step is enabled. <br>
-Mitigation: Review CI configuration and remove or configure coverage upload for the project's data-sharing policy. <br>
+## Use Case:
 
+Developers use this skill to configure pre-commit quality checks for linting, type checking, tests, and project-specific validation. It also provides examples for coordinating local checks with CI, including monorepo workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-attune-precommit-setup) <br>
-- [OpenClaw Metadata Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
-- [pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks) <br>
-- [Ruff pre-commit](https://github.com/astral-sh/ruff-pre-commit) <br>
-- [mypy pre-commit mirror](https://github.com/pre-commit/mirrors-mypy) <br>
-- [Bandit](https://github.com/PyCQA/bandit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with YAML, TOML, and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes layered pre-commit patterns, CI examples, and troubleshooting guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: The skill demonstrates `git add .`, which can stage files beyond the intended change.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Stage specific paths where practical and review `git status` and the staged diff before committing.
+
+Risk: The sample CI workflow uploads coverage data to Codecov; the scan flags this external upload as unqualified.
+
+Mitigation: Check that sending coverage data to Codecov is acceptable for the project before enabling the upload.
+
+Risk: ClawScan reports incomplete coverage because several referenced paths could not be resolved.
+
+Mitigation: Treat the scan as incomplete and inspect the referenced configuration and workflow paths before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-precommit-setup)
+- [Attune plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune)
+
+## Skill Output:
+
+**Output Type(s):** [Configuration, Shell commands, Code, Guidance]
+
+**Output Format:** [Markdown with YAML, TOML, Python, and shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Setup instructions and reusable examples for pre-commit hooks and CI checks.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

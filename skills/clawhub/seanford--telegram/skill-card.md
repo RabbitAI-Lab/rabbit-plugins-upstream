@@ -1,45 +1,58 @@
-## Description: <br>
-OpenClaw skill for designing Telegram Bot API workflows and command-driven conversations using direct HTTPS requests (no SDKs). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenClaw skill for designing Telegram Bot API workflows and command-driven conversations using direct HTTPS requests (no SDKs).
 
-## Publisher: <br>
-[seanford](https://clawhub.ai/user/seanford) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[seanford](https://clawhub.ai/user/seanford)
 
-## Use Case: <br>
-Developers and engineers use this skill to design Telegram Bot API command flows, update routing, and operational checklists for bots that use direct HTTPS requests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated Telegram API requests may expose or misuse a real bot token if copied into logs, tickets, or shared transcripts. <br>
-Mitigation: Treat bot tokens as secrets, avoid logging them, and review generated requests before using methods that send, edit, delete, or configure Telegram messages. <br>
-Risk: Webhook or message-operation guidance may affect live Telegram chats if applied without review. <br>
-Mitigation: Validate update payloads and chat context, use webhook secret token headers when possible, and test request payloads before production use. <br>
+## Use Case:
 
+Developers and engineers use this skill to design Telegram bots with clear command UX, reliable webhook or polling update flows, and practical operational checklists for direct HTTPS Bot API integrations.
 
-## Reference(s): <br>
-- [Telegram Bot API Field Notes](references/telegram-bot-api.md) <br>
-- [Telegram Command Playbook](references/telegram-commands-playbook.md) <br>
-- [Telegram Request Templates](references/telegram-request-templates.md) <br>
-- [Telegram Update Routing](references/telegram-update-routing.md) <br>
-- [Telegram Bot API](https://core.telegram.org/bots/api) <br>
-- [Telegram Bots FAQ](https://core.telegram.org/bots/faq) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown with HTTP request examples and JSON payload templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; no executable code. Security evidence verdict: clean.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: Telegram bot tokens, webhook secret tokens, or message content could be exposed through logs, commits, or shared prompts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep tokens and webhook secrets out of logs, commits, and shared prompts; only send message content to Telegram that the bot is intended to process.
+
+Risk: Direct HTTPS Bot API workflows can produce unreliable behavior if updates are not validated, routed, and retried carefully.
+
+Mitigation: Validate incoming update payloads and chat context, use secret-token webhooks where possible, keep handlers idempotent, and back off on Telegram 429 responses.
+
+## Reference(s):
+
+- [Telegram Bot API](https://core.telegram.org/bots/api)
+- [Telegram Bots FAQ](https://core.telegram.org/bots/faq)
+- [Telegram Bot API Field Notes](references/telegram-bot-api.md)
+- [Telegram Command Playbook](references/telegram-commands-playbook.md)
+- [Telegram Request Templates](references/telegram-request-templates.md)
+- [Telegram Update Routing](references/telegram-update-routing.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Configuration instructions]
+
+**Output Format:** [Markdown with HTTP request examples and JSON payload snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only; produces plans, checklists, and request templates rather than executable tooling.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

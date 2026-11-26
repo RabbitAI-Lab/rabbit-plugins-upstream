@@ -1,43 +1,55 @@
-## Description: <br>
-Delegates tasks to Qwen CLI via delegation-core for Alibaba's models. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Delegates to the Qwen CLI (Alibaba).
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to delegate large-context analysis, summarization, batch processing, and multi-file review tasks to a configured Qwen CLI environment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected prompts and file contents can be processed by the external Qwen CLI or provider. <br>
-Mitigation: Limit delegated prompts and file sets to intended, non-sensitive material and review what will be sent before execution. <br>
-Risk: Broad activation triggers such as cli can make the skill available in situations where Qwen delegation was not intended. <br>
-Mitigation: Narrow or disable generic triggers and invoke Qwen delegation explicitly when that behavior is desired. <br>
-Risk: Delegated model output can be incomplete, incorrect, or unsuitable for direct application. <br>
-Mitigation: Review Qwen responses before applying generated code, configuration, or operational guidance. <br>
+## Use Case:
 
+Developers use this skill when the shared delegation workflow selects Qwen, including for batch processing, summarization, and multi-file analysis through the Qwen CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conjure-qwen-delegation) <br>
-- [Conjure homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conjure) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with bash command examples and CLI usage guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Output may include Qwen CLI commands, model selection guidance, authentication setup, and delegation patterns; structured output depends on the requested Qwen format.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter says 1.9.8) <br>
+Risk: Selected local files may be sent to an external AI provider, and automatic provider selection may not match the Qwen-specific purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm which provider will receive the request and review the selected files; exclude confidential or sensitive material unless you have authorization to send it.
+
+Risk: The security scan was partial because the delegation executor and other local paths were unavailable for inspection.
+
+Mitigation: Review those paths before relying on the skill's behavior.
+
+## Reference(s):
+
+- [Night Market Conjure plugin](https://github.com/athola/claude-night-market/tree/master/plugins/conjure)
+- [Qwen model configuration resolver](https://github.com/QwenLM/qwen-code/blob/main/packages/core/src/models/modelConfigResolver.ts)
+- [Alibaba Cloud Model Studio pricing](https://www.alibabacloud.com/help/en/model-studio/model-pricing)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Text or Markdown; JSON when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Delegated results can be saved to timestamped Markdown files.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

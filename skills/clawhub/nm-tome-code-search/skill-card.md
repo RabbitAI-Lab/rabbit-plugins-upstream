@@ -1,41 +1,49 @@
-## Description: <br>
-Searches GitHub for existing implementations, libraries, or patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches GitHub for existing implementations, libraries, or patterns
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and research agents use this skill to find existing GitHub implementations, libraries, examples, and prior art during code research workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generic triggers such as code and search may activate the skill during unrelated conversations. <br>
-Mitigation: Narrow triggers or invocation rules when the host agent supports them, and review whether GitHub search assistance is intended before use. <br>
-Risk: Search terms may be sent to WebSearch or GitHub during GitHub implementation research. <br>
-Mitigation: Avoid submitting confidential code names, private repository details, secrets, or sensitive proprietary implementation details as search queries. <br>
+## Use Case:
 
+Developers use this skill to find existing GitHub implementations, libraries, and patterns for a topic during research. It returns ranked findings with repository metadata.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-tome-code-search) <br>
-- [Tome plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/tome) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code] <br>
-**Output Format:** [Markdown guidance with GitHub search findings and implementation references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce ranked Finding objects when used as part of the Tome research workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter lists 1.9.8) <br>
+Risk: Search topics may reveal confidential information when queries are sent to external services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid including confidential or sensitive terms in search topics; use public, non-sensitive queries.
+
+## Reference(s):
+
+- [Tome Plugin Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/tome)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Structured data]
+
+**Output Format:** [Ranked Finding objects with repository metadata and relevance scores]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports explicitly when a search returns no results]
+
+## Skill Version(s):
+
+1.10.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
