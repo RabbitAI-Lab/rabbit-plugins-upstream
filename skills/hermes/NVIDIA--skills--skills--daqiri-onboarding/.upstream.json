@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/daqiri-onboarding",
+  "identifier": "NVIDIA/skills/skills/daqiri-onboarding",
+  "repo": "NVIDIA/skills",
+  "path": "skills/daqiri-onboarding",
+  "branch": "main",
+  "pushedAt": "2026-11-26T17:42:26Z",
+  "contentHash": "6a8ef5e76d50cb4252b64a79122c554905e05e30106a21bb6981a0ee54a7cf6b",
+  "fetchedAt": "2026-11-26T17:47:09.629Z"
+}

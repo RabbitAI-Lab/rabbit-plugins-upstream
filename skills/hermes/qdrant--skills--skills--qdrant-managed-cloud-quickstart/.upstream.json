@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/qdrant/skills/tree/main/skills/qdrant-managed-cloud-quickstart",
+  "identifier": "qdrant/skills/skills/qdrant-managed-cloud-quickstart",
+  "repo": "qdrant/skills",
+  "path": "skills/qdrant-managed-cloud-quickstart",
+  "branch": "main",
+  "pushedAt": "2026-11-26T15:28:20Z",
+  "contentHash": "4e0a47262dfdfb9f71462b8ee5b11dd6fb01c178ad63171c646ec566c1dfdc55",
+  "fetchedAt": "2026-11-26T17:47:03.815Z"
+}

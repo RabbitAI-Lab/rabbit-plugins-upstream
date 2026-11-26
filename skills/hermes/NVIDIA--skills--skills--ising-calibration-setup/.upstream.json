@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/ising-calibration-setup",
+  "identifier": "NVIDIA/skills/skills/ising-calibration-setup",
+  "repo": "NVIDIA/skills",
+  "path": "skills/ising-calibration-setup",
+  "branch": "main",
+  "pushedAt": "2026-11-26T17:42:26Z",
+  "contentHash": "fdfc329162fe765a31122c30384876748da6208e5a4b7ca77912390076dbd63a",
+  "fetchedAt": "2026-11-26T17:47:09.705Z"
+}
