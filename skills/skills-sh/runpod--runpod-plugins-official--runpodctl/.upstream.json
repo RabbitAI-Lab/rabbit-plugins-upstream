@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runpod/runpod-plugins-official/runpodctl",
+  "repo": "runpod/runpod-plugins-official",
+  "skillId": "runpodctl",
+  "branch": "main",
+  "pushedAt": "2026-11-25T00:15:07Z",
+  "contentHash": "1d0813edd12d7fe8872701b508015ccc2ba5c9f10ca7274ba3828730b50fd512",
+  "fetchedAt": "2026-11-26T17:49:04.092Z"
+}

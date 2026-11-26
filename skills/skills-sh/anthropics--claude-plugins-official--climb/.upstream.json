@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/climb",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "climb",
+  "branch": "main",
+  "pushedAt": "2026-11-26T07:31:28Z",
+  "contentHash": "2a516bd8b4ae84ad787ec4b0324605800d282623eb43906d7a3c5072c1438da1",
+  "fetchedAt": "2026-11-26T17:48:58.664Z"
+}
