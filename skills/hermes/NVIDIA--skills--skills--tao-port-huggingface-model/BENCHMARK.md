@@ -1,82 +1,173 @@
-# Evaluation Report
+# Skill Benchmark: tao-port-huggingface-model
 
-Evaluation of the `tao-port-huggingface-model` skill before publication through NVSkills-Eval.
-
-This benchmark summarizes 3-Tier Evaluation from NVSkills-Eval results for the skill. The goal is to document whether the skill is safe, discoverable, effective, and useful for agents before it is published for broader workflow use.
-
-## Evaluation Summary
-
-- Skill: `tao-port-huggingface-model`
-- Evaluation date: 2026-06-22
-- NVSkills-Eval profile: `external`
-- Environment: `astra-sandbox`
-- Dataset: 1 evaluation tasks
-- Attempts per task: 1
-- Pass threshold: 50%
-- Overall verdict: PASS
-
-## Agents Used
-
-- `claude-code`
-- `codex`
-
-## Metrics Used
-
-Reported benchmark dimensions:
-
-- Security: checks whether skill-assisted execution avoids unsafe behavior such as secret leakage, destructive commands, or unauthorized access.
-- Correctness: checks whether the agent follows the expected workflow and produces the correct final output.
-- Discoverability: checks whether the agent loads the skill when relevant and avoids using it when irrelevant.
-- Effectiveness: checks whether the agent performs measurably better with the skill than without it.
-- Efficiency: checks whether the agent uses fewer tokens and avoids redundant work.
-
-Underlying evaluation signals used in this run:
-
-- `security` (Security): checks for unsafe operations, secret leakage, and unauthorized access.
-- `skill_execution` (Skill Execution): verifies that the agent loaded the expected skill and workflow.
-- `skill_efficiency` (Efficiency): checks routing quality, decoy avoidance, and redundant tool usage.
-- `accuracy` (Accuracy): grades final-answer correctness against the reference answer.
-- `goal_accuracy` (Goal Accuracy): checks whether the overall user task completed successfully.
-- `behavior_check` (Behavior Check): verifies expected behavior steps, including safety expectations.
-- `token_efficiency` (Token Efficiency): compares token usage with and without the skill.
-
-## Test Tasks
-
-The benchmark dataset contained 1 evaluation tasks:
-
-- Positive tasks: 1 tasks where the skill was expected to activate.
-- Negative tasks: 0 tasks where no skill was expected.
-- Unlabeled tasks: 0 tasks where positive/negative intent could not be inferred.
-
-Task composition is derived from the evaluation dataset when possible. Entries with `expected_skill` set are treated as positive skill-activation cases, while entries with `expected_skill: null` are treated as negative activation cases.
-
-## Results
-
-| Dimension | Num | `claude-code` | `codex` |
-|---|---:|---:|---:|
-| Security | 1 | 100% (+0%) | 100% (+0%) |
-| Correctness | 1 | 90% (+90%) | 97% (+97%) |
-| Discoverability | 1 | 100% (+100%) | 97% (+97%) |
-| Effectiveness | 1 | 50% (+36%) | 90% (+66%) |
-| Efficiency | 1 | 95% (+68%) | 96% (+68%) |
-
-Score values show skill-assisted performance. Values in parentheses show uplift versus the no-skill baseline when baseline data is available.
-
-## Tier 1: Static Validation Summary
-
-Tier 1 validation passed with observations. NVSkills-Eval ran 1 checks and found 4 total findings.
-
-Top findings:
-
-- MEDIUM SCHEMA/folder_hierarchy: Unexpected nesting depth for general skill (`skills/applications/tao-port-huggingface-model`)
-- MEDIUM SCHEMA/body_recommended_section: Missing recommended section: '## Instructions' (`skills/applications/tao-port-huggingface-model/SKILL.md`)
-- MEDIUM SCHEMA/body_recommended_section: Missing recommended section: '## Examples' (`skills/applications/tao-port-huggingface-model/SKILL.md`)
-- LOW SCHEMA/author_format: Author must be of the form 'Name <email@host>' (`skills/applications/tao-port-huggingface-model/SKILL.md`)
-
-## Tier 2: Deduplication Summary
-
-This tier was not run or did not produce findings in this report.
+> ✅ **Overall verdict: PASS — Recommended for publication**
 
 ## Publication Recommendation
 
-The skill is suitable to proceed toward NVSkills-Eval publication based on this benchmark. Skill owners should keep this file with the skill and refresh it when the evaluation dataset, skill behavior, or target agents materially change.
+Recommended for publication based on the completed evaluation evidence in this report.
+
+## Evaluation Metadata
+
+- Skill: `tao-port-huggingface-model`
+- Validation status: `passed`
+- Evaluation date: 2026-11-20
+- Evaluator version: `1.6.10`
+- Agents: Claude Code (`aws/anthropic/bedrock-claude-opus-5-5`), Codex (`openai/openai/gpt-6.1-sol`)
+- Tasks: 1 evaluation tasks (1 positive)
+- Dataset digest: `sha256:869987f79b7b8a038ed3b27d9d9655c8c91a7c9828287023214b222b7e66aff7` (skill-evaluator-dataset-snapshot/1)
+- Attempts per task: 1
+- Environment: `k8s-sandbox`
+- Tier 2 evidence: required for publication
+- Tier 3 evidence: required for publication
+
+Each task attempt ran in its own isolated sandbox pod.
+
+## Tier 1 LLM Provenance
+
+SkillSpector provider, model, analyzer revision, and determinism evidence retained for this scan.
+
+| Skill | Provider | Adapter | Analyzer | Model | Revision | Determinism |
+| --- | --- | --- | --- | --- | --- | --- |
+| tao-port-huggingface-model | nv_inference | openai | mcp_tool_poisoning | `aws/anthropic/bedrock-claude-opus-5-5` | `2.13.5` | nondeterministic / provider_defaults |
+| tao-port-huggingface-model | nv_inference | openai | semantic_developer_intent | `aws/anthropic/bedrock-claude-opus-5-5` | `2.13.5` | nondeterministic / provider_defaults |
+| tao-port-huggingface-model | nv_inference | openai | semantic_quality_policy | `aws/anthropic/bedrock-claude-opus-5-5` | `2.13.5` | nondeterministic / provider_defaults |
+| tao-port-huggingface-model | nv_inference | openai | semantic_security_discovery | `aws/anthropic/bedrock-claude-opus-5-5` | `2.13.5` | nondeterministic / provider_defaults |
+| tao-port-huggingface-model | nv_inference | openai | meta_analyzer | `aws/anthropic/bedrock-claude-opus-5-5` | `2.13.5` | nondeterministic / provider_defaults |
+
+- Controls for `tao-port-huggingface-model`: temperature=not set (source=provider_default, forwarded=no); seed=not set (source=unset, forwarded=no); reasoning_effort=not set (source=provider_default, forwarded=no)
+
+## What This Report Answers
+
+The three-tier evaluation checks whether the skill:
+
+- is safe to use;
+- produces correct answers;
+- is discovered and activated when needed;
+- helps the agent complete the user's goal and expected workflow; and
+- avoids wasted skill and tool usage.
+
+## Results at a Glance
+
+| Measure | Claude Code (Baseline → Skill Uplift) | Codex (Baseline → Skill Uplift) |
+|---|---:|---:|
+| Overall | 99.5% — baseline ran, but no comparable score was available; uplift unavailable | 61.4% — baseline ran, but no comparable score was available; uplift unavailable |
+| Security | 100.0% → 100.0% (±0.0 points) | 100.0% → 100.0% (±0.0 points) |
+| Correctness | 20.0% → 100.0% (+80.0 points) | 20.0% → 80.0% (+60.0 points) |
+| Discoverability | 100.0% — baseline ran, but no comparable score was available; uplift unavailable | 0.0% — baseline ran, but no comparable score was available; uplift unavailable |
+| Effectiveness | 33.3% → 100.0% (+66.7 points) | 33.3% → 33.3% (±0.0 points) |
+| Efficiency | 97.5% — baseline ran, but no comparable score was available; uplift unavailable | 93.8% → 93.6% (-0.2 points) |
+
+**How to read this table:** baseline is the same task attempted without the target skill. Scores are rounded to one decimal; threshold-adjacent values use additional precision so their displayed band matches the verdict. Uplift is derived from those displayed scores and shown in percentage points.
+
+Example: `47.0% → 92.0% (+45.0 points)` means the skill-assisted run scored 92.0%, 45.0 percentage points above its 47.0% no-skill baseline.
+
+A partial dimension was calculated from only the available configured signals; review the detailed report before relying on it.
+
+### Comparison details
+
+Shared-source comparisons use the same signals and weights on both conditions. They do not replace the full dimension scores above or change the publication verdict.
+
+| Agent | Dimension | Basis | Baseline → With skill (uplift) | Explanation |
+| --- | --- | --- | --- | --- |
+| claude-code | Discoverability | Dimension comparison | N/A | Discoverability is not applicable to the no-skill baseline; there is no installed skill to discover. |
+| claude-code | Efficiency | Token-only comparison | 99.1% → 94.9% (-4.2 points) | Only Token Efficiency is comparable; the full dimension scores use different evaluator sources. |
+| codex | Discoverability | Dimension comparison | N/A | Discoverability is not applicable to the no-skill baseline; there is no installed skill to discover. |
+
+## Token Usage
+
+Actual Tier 3 execution usage is reported for every observed agent/case pair and both conditions.
+
+| Agent | Dataset case | With skill | Without skill | Delta | Change | Coverage |
+|---|---|---:|---:|---:|---:|---|
+| claude-code | All cases | 79,443 | 35,543 | +43,900 | +123.51% | skill 1/1; base 1/1 |
+| claude-code | tao-port-huggingface-model-basic | 79,443 | 35,543 | +43,900 | +123.51% | skill 1/1; base 1/1 |
+| codex | All cases | 13,702 | 13,329 | +373 | +2.80% | skill 1/1; base 1/1 |
+| codex | tao-port-huggingface-model-basic | 13,702 | 13,329 | +373 | +2.80% | skill 1/1; base 1/1 |
+| ALL AGENTS | Dataset aggregate | 93,145 | 48,872 | +44,273 | +90.59% | skill 2/2; base 2/2 |
+
+Prompt tokens include cached reads, so total tokens are `prompt + completion` (cached is not added twice). The Efficiency score uses `(prompt - cached) + completion`. Change is `100 * (with - without) / without`; negative means fewer tokens. N/A comparisons include their reason in the coverage column; coverage is never estimated.
+
+## Tier Status
+
+| Tier | Purpose | Status | Evidence |
+|---|---|---|---|
+| Tier 1 | Static validation | **PASSED WITH OBSERVATIONS** | 11 validator(s); 30 finding(s) |
+| Tier 2 | Semantic deduplication | **PASSED WITH OBSERVATIONS** | 2 validator(s); 25 finding(s) |
+| Tier 3 | Live agent evaluation | **PASS** | 2 agent(s); 1 task(s) |
+
+## Findings and Observations
+
+<details>
+<summary>Show detailed findings and successful checks</summary>
+
+- **HIGH** DUPLICATE/duplicate: Duplicate content found across references/phase-4-deploy.md and references/workflow-consistency.md:
+  "### Step 9 — Implement TensorRT Engine Builder (`tao-deploy`)" in references/phase-4-deploy.md (lines 106-114)
+  vs "# Build engine" in references/workflow-consistency.md (lines 744-758) (`references/phase-4-deploy.md:106`)
+- **HIGH** DUPLICATE/duplicate: Duplicate content found across references/cross-cutting.md and references/docker-patterns.md and references/hf-inspection.md and references/repo-structure.md and references/tao-patterns.md and references/task-type-guide.md and references/workflow-consistency.md:
+  "(preamble)" in references/cross-cutting.md (lines 1-16)
+  vs "(preamble)" in references/docker-patterns.md (lines 1-16)
+  vs "(preamble)" in references/hf-inspection.md (lines 1-16)
+  vs "(preamble)" in references/repo-structure.md (lines 1-16)
+  vs "(preamble)" in references/tao-patterns.md (lines 1-16)
+  vs "(preamble)" in references/task-type-guide.md (lines 1-16)
+  vs "(preamble)" in references/workflow-consistency.md (lines 1-16) (`references/cross-cutting.md:1`)
+- **HIGH** DUPLICATE/duplicate: Duplicate content found across references/phase-4-deploy.md and references/workflow-consistency.md:
+  "### Step 9 — Implement TensorRT Engine Builder (`tao-deploy`)" in references/phase-4-deploy.md (lines 118-130)
+  vs "### Standard EvaluateConfig / InferenceConfig fields:" in references/workflow-consistency.md (lines 213-222)
+  vs "### Standard GenTrtEngineConfig fields:" in references/workflow-consistency.md (lines 236-256)
+  vs "### gen_trt_engine.yaml:" in references/workflow-consistency.md (lines 419-432) (`references/phase-4-deploy.md:118`)
+- **HIGH** DUPLICATE/duplicate: Duplicate content found across SKILL.md and references/cross-cutting.md and references/phase-1-inspection.md and references/repo-structure.md:
+  "## Submodule Override Strategy" in SKILL.md (lines 33-38)
+  vs "## Submodule Override Strategy (full detail)" in references/cross-cutting.md (lines 23-46)
+  vs "# Only clone what's needed — skip repos the user already has" in references/phase-1-inspection.md (lines 45-53)
+  vs "## Git submodule relationships" in references/repo-structure.md (lines 220-234) (`SKILL.md:33`)
+- **HIGH** DUPLICATE/duplicate: Duplicate content found across references/phase-3-implementation.md and references/phase-5-packaging.md and references/repo-structure.md and references/tao-patterns.md and references/workflow-consistency.md:
+  "# Then in experiment_spec.yaml: model.backbone.pretrained_backbone_path: /path/to/newarch_hf_weights.pth" in references/phase-3-implementation.md (lines 523-526)
+  vs "### Step 12 — Package Native DL Backend (`tao-pytorch`)" in references/phase-5-packaging.md (lines 21-31)
+  vs "### Step 13 — Package Deployment Backend (`tao-deploy`)" in references/phase-5-packaging.md (lines 32-40)
+  vs "### `tao-pytorch/setup.py`" in references/repo-structure.md (lines 198-207)
+  vs "### `tao-deploy/setup.py`" in references/repo-structure.md (lines 208-219)
+  vs "### CLI Entrypoint (model-level CLI)" in references/tao-patterns.md (lines 369-385)
+  vs "# In tao-pytorch/setup.py, entry_points.console_scripts:" in references/tao-patterns.md (lines 515-518)
+  vs "# In tao-deploy/setup.py, entry_points.console_scripts:" in references/tao-patterns.md (lines 521-528)
+  vs "# tao-pytorch entrypoint: nvidia_tao_pytorch/cv/<model_name>/entrypoint/<model_name>.py" in references/workflow-consistency.md (lines 111-122)
+  vs "# tao-deploy entrypoint: nvidia_tao_deploy/cv/<model_name>/entrypoint/<model_name>.py" in references/workflow-consistency.md (lines 123-139) (`references/phase-3-implementation.md:523`)
+- 50 additional finding(s) are available in the full evaluation artifacts.
+
+</details>
+
+## Scoring Methodology
+
+<details>
+<summary>Show dimension definitions, source signals, and thresholds</summary>
+
+| Dimension | Question | Scored signals |
+|---|---|---|
+| Security | Is it safe to use? | `security` (100%) |
+| Correctness | Is the answer correct? | `accuracy` (100%) |
+| Discoverability | Was the right skill loaded when needed? | `skill_execution` (100%) |
+| Effectiveness | Did the skill help complete the task? | `goal_accuracy` (50%) + `behavior_check` (50%) |
+| Efficiency | Did it avoid wasted tool calls and token usage? | `skill_efficiency` (50%) + `token_efficiency` (50%) |
+
+- Dimension bands: PASS at 50% or above; NEUTRAL from 40% to below 50%; FAIL below 40%.
+- Overall Tier 3 lift: PASS at +5 points or more; FAIL at -10 points or less; values between those bands are NEUTRAL.
+- Overall verdict: PASS only when every configured dimension passes for at least one supported agent. Lift is reported as diagnostic evidence and does not override this gate.
+- The 50% attempt pass threshold is a separate per-task gate; it is not the dimension pass threshold.
+- Effectiveness is the equal-weight mean of goal completion (`goal_accuracy`) and expected workflow adherence (`behavior_check`).
+- Efficiency is 50% tool-call productivity (the backward-compatible `skill_efficiency` wire id) and 50% `token_efficiency`. Positive-case skill routing is scored under Discoverability, not Efficiency; a negative case without a routing target is N/A. N/A sources are omitted, remaining weights are renormalized, and the dimension is marked partial.
+
+Signals present in this run:
+
+- `security` (Security): unsafe operations, secret leakage, and unauthorized access.
+- `skill_execution` (Skill Execution): whether the expected skill was selected, decoys were avoided, and the workflow executed.
+- `skill_efficiency` (Tool Productivity): tool-call productivity (legacy wire id; routing is scored under Discoverability).
+- `accuracy` (Accuracy): final-answer correctness against the reference answer.
+- `goal_accuracy` (Goal Accuracy): whether the user's goal was achieved.
+- `behavior_check` (Behavior Check): whether the expected workflow behavior was followed.
+- `token_efficiency` (Token Efficiency): actual uncached prompt plus completion usage (50% of Efficiency).
+
+</details>
+
+## Freshness
+
+Regenerate this benchmark when the skill, evaluation dataset, target agent/model, evaluator version, environment, or scoring policy changes.

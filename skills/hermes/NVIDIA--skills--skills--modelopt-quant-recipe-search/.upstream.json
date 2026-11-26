@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/modelopt-quant-recipe-search",
+  "identifier": "NVIDIA/skills/skills/modelopt-quant-recipe-search",
+  "repo": "NVIDIA/skills",
+  "path": "skills/modelopt-quant-recipe-search",
+  "branch": "main",
+  "pushedAt": "2026-11-26T17:42:26Z",
+  "contentHash": "19e1147131ac2d40ed1374e7a57811fd49e6388168ba804f59c36b800405b558",
+  "fetchedAt": "2026-11-26T17:47:09.721Z"
+}

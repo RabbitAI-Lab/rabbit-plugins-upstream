@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvflare-autofl-report",
+  "identifier": "NVIDIA/skills/skills/nvflare-autofl-report",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvflare-autofl-report",
+  "branch": "main",
+  "pushedAt": "2026-11-26T17:42:26Z",
+  "contentHash": "a14a0fdb1e0b13c61c416d72cb43c5c51424eb72045ec74bd70d83828309ee90",
+  "fetchedAt": "2026-11-26T17:47:09.774Z"
+}

@@ -1,13 +1,13 @@
 /**
  * Renderer unit tests — pure-function assertions for render.ts, smartypants.ts,
- * and print-css.ts. No Playwright, no PDF generation.
+ * and print-css.ts. No browser, no PDF generation.
  */
 
 import { describe, expect, test } from "bun:test";
 
 import { render, sanitizeUntrustedHtml } from "../src/render";
 import { smartypants } from "../src/smartypants";
-import { printCss } from "../src/print-css";
+import { printCss, screenCss } from "../src/print-css";
 
 // ─── smartypants ──────────────────────────────────────────────
 
@@ -56,9 +56,90 @@ describe("smartypants", () => {
     expect(out).toContain("\u201cdetails\u201d");
   });
 
+  // A URL flush against a following tag (no whitespace between) used to let
+  // URL_RE's \S+ swallow the placeholder standing in for that tag. The
+  // placeholder never restored, so the tag vanished and its styling bled
+  // into the rest of the document. The test above misses this because its
+  // URL is followed by a space.
+  test("does not leak placeholders for a bare autolinked URL", () => {
+    const input = `<p>see <a href="https://ex.com">https://ex.com</a> ok</p>`;
+    const out = smartypants(input);
+    expect(out).not.toContain("SMARTPANTS_PRESERVED");
+    expect(out).toContain("</a>");
+    expect(out).toBe(input);
+  });
+
+  test("does not leak placeholders for a bold URL", () => {
+    const input = `<p>see <strong><a href="https://ex.com">https://ex.com</a></strong> ok</p>`;
+    const out = smartypants(input);
+    expect(out).not.toContain("SMARTPANTS_PRESERVED");
+    expect(out).toContain("</a></strong>");
+    expect(out).toBe(input);
+  });
+
+  test("does not leak placeholders when a URL is followed by punctuation", () => {
+    const input = `<p>see <a href="https://ex.com">https://ex.com</a>, ok</p>`;
+    const out = smartypants(input);
+    expect(out).not.toContain("SMARTPANTS_PRESERVED");
+    expect(out).toContain("</a>");
+  });
+
+  // A quote that opens a paragraph, heading or list item sits right after a
+  // tag, and was read as a closing quote: "Hello," rendered as ”Hello,”.
+  test("opens a quote at the start of a paragraph, heading or list item", () => {
+    expect(smartypants(`<p>"Hello," she said.</p>`)).toBe(`<p>\u201cHello,\u201d she said.</p>`);
+    expect(smartypants(`<h1>"Quoted" title</h1>`)).toBe(`<h1>\u201cQuoted\u201d title</h1>`);
+    expect(smartypants(`<ul>\n<li>'one'</li>\n</ul>`)).toBe(`<ul>\n<li>\u2018one\u2019</li>\n</ul>`);
+    expect(smartypants(`<p>x</p><p>"y"</p>`)).toBe(`<p>x</p><p>\u201cy\u201d</p>`);
+    expect(smartypants(`<p><em>"quoted"</em> word</p>`)).toBe(`<p><em>\u201cquoted\u201d</em> word</p>`);
+  });
+
+  test("reads a quote after an inline tag by the text before the tag", () => {
+    expect(smartypants(`<p>He said "<em>stop</em>" twice.</p>`)).toBe(`<p>He said \u201c<em>stop</em>\u201d twice.</p>`);
+    expect(smartypants(`<p><em>Garry</em>'s book</p>`)).toBe(`<p><em>Garry</em>\u2019s book</p>`);
+  });
+
+  test("a flag at the start of a cell, list item or bold run keeps its dashes", () => {
+    expect(smartypants(`<td>--og</td><li>--check</li><p><strong>--resume</strong></p>`))
+      .toBe(`<td>--og</td><li>--check</li><p><strong>--resume</strong></p>`);
+  });
+
+  test("dashes at the end of a run before a tag keep their dashes", () => {
+    expect(smartypants(`<p>wait --</p><p>run --<code>x</code></p>`))
+      .toBe(`<p>wait --</p><p>run --<code>x</code></p>`);
+  });
+
+  test("a quote after an image or an unknown tag still closes", () => {
+    expect(smartypants(`<p>"check out <PR link>" today</p>`)).toBe(`<p>\u201ccheck out <PR link>\u201d today</p>`);
+    expect(smartypants(`<p>"see <img src="a.png">" here</p>`)).toBe(`<p>\u201csee <img src="a.png">\u201d here</p>`);
+  });
+
+  test("renders a document whose paragraph and heading open with a quote", () => {
+    const html = render({ markdown: `# "Quoted" title\n\n"Hello," she said.\n` }).html;
+    expect(html).toContain(`\u201cQuoted\u201d title`);
+    expect(html).toContain(`<p>\u201cHello,\u201d she said.</p>`);
+    expect(html).not.toContain(`\u201dQuoted`);
+    expect(html).not.toContain(`\u201dHello`);
+  });
+
   test("does NOT touch HTML attribute values", () => {
     const out = smartypants(`<a href="it's-a-test.html">link</a>`);
     expect(out).toContain(`href="it's-a-test.html"`);
+  });
+
+  test("curls quote entities in text and leaves them encoded inside tags", () => {
+    const out = smartypants(`<p>She said &quot;hi&quot; and it&#39;s &apos;ok&#x27;.</p><img alt="a &quot;b&quot; c&#39;s">`);
+    expect(out).toBe(`<p>She said \u201chi\u201d and it\u2019s \u2018ok\u2019.</p><img alt="a &quot;b&quot; c&#39;s">`);
+  });
+
+  // A tag split differently than the browser splits it (a ">" inside a quoted
+  // value) must not turn the entities after it into straight quotes: the
+  // browser reads them as part of the attribute, where a straight quote would
+  // end the value and start a live onerror attribute.
+  test("never turns a quote entity into a straight quote", () => {
+    const input = `<img a"b="c>&quot;/onerror=&quot;alert(1)&quot;/x=&#39;y&apos;z&#x27;>`;
+    const count = (s: string) => (s.match(/["']/g) ?? []).length;
+    expect(count(smartypants(input))).toBe(count(input));
   });
 
   test("does NOT convert -- in CLI flags", () => {
@@ -162,6 +243,16 @@ describe("render (end-to-end)", () => {
     expect(result.meta.title).toBe("My Title");
   });
 
+  // Quote entities were decoded inside tags too, so alt="A &quot;quoted&quot;
+  // caption" became alt="A "quoted" caption" and the attribute ended at "A ".
+  test("keeps quotes inside image alt and link title attributes", () => {
+    const md = `![A "quoted" caption](pic.png)\n\nSee [the site](https://example.com 'The "best" site') and <abbr title="it&#39;s &quot;x&quot;">X</abbr>.\n`;
+    const html = render({ markdown: md }).bodyHtml;
+    expect(html).toContain(`alt="A &quot;quoted&quot; caption"`);
+    expect(html).toContain(`title="The &quot;best&quot; site"`);
+    expect(html).toContain(`<abbr title="it&#39;s &quot;x&quot;">X</abbr>`);
+  });
+
   test("uses --title override when provided", () => {
     const result = render({
       markdown: `# Auto-derived\n\nBody.`,
@@ -249,13 +340,372 @@ describe("render (end-to-end)", () => {
     expect(result.printCss).toContain("Hiragino Kaku Gothic");
     expect(result.printCss).toContain("Noto Sans CJK");
   });
+
+  // ─── blank-first-page regression (#1904) ────────────────────────
+  // Any content before the first <h1> used to become a standalone preamble
+  // .chapter. That section takes the `:first-of-type { break-before: auto }`
+  // exception, so the first real chapter inherits `break-before: page` and
+  // starts on page 2 — leaving a blank/near-blank page 1.
+
+  test("a leading <style> preamble does not get its own chapter (no blank page 1)", () => {
+    const result = render({ markdown: `<style>h1{color:#000}</style>\n\n# Hello\n\nBody.\n` });
+    const chapters = result.html.match(/class="chapter"/g) ?? [];
+    // One chapter, not two — the invisible <style> no longer forces a page break.
+    expect(chapters.length).toBe(1);
+    // ...and the style is preserved (folded into the first chapter, not dropped).
+    expect(result.html).toContain("<style>h1{color:#000}</style>");
+    expect(result.html).toMatch(/<section class="chapter"><style>[\s\S]*?<\/style>[\s\S]*?<h1/);
+  });
+
+  test("leading YAML frontmatter is stripped, not rendered as body text", () => {
+    const result = render({
+      markdown: `---\ntitle: My Doc\ntype: memo\ntags: [a, b]\n---\n\n# Hello\n\nBody.\n`,
+    });
+    // Frontmatter keys must not leak into the rendered body.
+    expect(result.html).not.toContain("type: memo");
+    expect(result.html).not.toContain("tags: [a, b]");
+    // No preamble chapter -> single chapter, first H1 on page 1.
+    const chapters = result.html.match(/class="chapter"/g) ?? [];
+    expect(chapters.length).toBe(1);
+    expect(result.meta.title).toBe("Hello");
+  });
+
+  test("a real text preamble still gets its own chapter (unchanged behavior)", () => {
+    const result = render({ markdown: `Intro paragraph.\n\n# Hello\n\nBody.\n` });
+    const chapters = result.html.match(/class="chapter"/g) ?? [];
+    expect(chapters.length).toBe(2);
+  });
+
+  test("a `---` thematic break that is not frontmatter is left intact", () => {
+    // Opening with visible text means the later `---` is a real <hr>, not frontmatter.
+    const result = render({ markdown: `# Hello\n\nBefore.\n\n---\n\nAfter.\n` });
+    expect(result.html).toContain("<hr>");
+    expect(result.html).toContain("After.");
+  });
+});
+
+// ─── attribute injection ──────────────────────────────────────────────
+
+/** Every attribute the browser's tokenizer would see, start tags only. */
+function browserAttrs(html: string): Array<{ tag: string; name: string; value: string }> {
+  const out: Array<{ tag: string; name: string; value: string }> = [];
+  let i = 0;
+  while ((i = html.indexOf("<", i)) !== -1) {
+    const open = /^<([a-zA-Z][^\s/>]*)/.exec(html.slice(i));
+    if (!open) { i++; continue; }
+    const tag = open[1]!.toLowerCase();
+    i += open[0].length;
+    while (i < html.length && html[i] !== ">") {
+      if (/[\s/]/.test(html[i]!)) { i++; continue; }
+      let name = html[i++]!;
+      while (i < html.length && !/[\s/>=]/.test(html[i]!)) name += html[i++];
+      while (/\s/.test(html[i] ?? "")) i++;
+      let value = "";
+      if (html[i] === "=") {
+        i++;
+        while (/\s/.test(html[i] ?? "")) i++;
+        const q = html[i];
+        if (q === '"' || q === "'") {
+          const end = html.indexOf(q, i + 1);
+          value = html.slice(i + 1, end < 0 ? html.length : end);
+          i = end < 0 ? html.length : end + 1;
+        } else {
+          while (i < html.length && !/[\s>]/.test(html[i]!)) value += html[i++];
+        }
+      }
+      out.push({ tag, name: name.toLowerCase(), value });
+    }
+  }
+  return out;
+}
+
+function decodeAttr(v: string): string {
+  return v.replace(/&(?:#x([0-9a-f]+)|#(\d+)|(quot|apos|amp)|(Tab|NewLine|colon););?/gi, (m, hex, dec, named, withSemi) =>
+    hex ? String.fromCodePoint(parseInt(hex, 16))
+      : dec ? String.fromCodePoint(parseInt(dec, 10))
+      : named ? ({ quot: '"', apos: "'", amp: "&" } as Record<string, string>)[named.toLowerCase()]!
+      : ({ Tab: "\t", NewLine: "\n", colon: ":" } as Record<string, string>)[withSemi] ?? m);
+}
+
+/** A URL the way the browser reads it: decoded, tabs and line breaks removed. */
+function browserUrl(v: string): string {
+  return decodeAttr(v).replace(/[\t\n\r]/g, "");
+}
+
+function liveScript(html: string): string[] {
+  return browserAttrs(html)
+    .filter((a) => a.name.startsWith("on") ||
+      (/^(?:href|src|xlink:href|action|formaction)$/.test(a.name) && /^[\x00-\x20]*javascript:/i.test(browserUrl(a.value))))
+    .map((a) => `<${a.tag} ${a.name}=${a.value}>`);
+}
+
+function attrsOf(html: string, tag: string): string[] {
+  return browserAttrs(html).filter((a) => a.tag === tag).map((a) => a.name);
+}
+
+describe("render() — quote entities never open attributes or tags", () => {
+  test("an image alt cannot grow an onerror handler", () => {
+    const html = render({ markdown: `![x"/onerror="alert(1)](pic.png)\n` }).bodyHtml;
+    expect(liveScript(html)).toEqual([]);
+    expect(attrsOf(html, "img")).toEqual(["src", "alt"]);
+  });
+
+  test("an image title cannot grow an onload handler or swallow the next paragraph", () => {
+    const html = render({ markdown: `![a](pic.png 'p" onload="alert(1)')\n\nAfter.\n` }).bodyHtml;
+    expect(liveScript(html)).toEqual([]);
+    expect(attrsOf(html, "img")).toEqual(["src", "alt", "title"]);
+    expect(attrsOf(html, "p")).toEqual([]);
+    expect(html).toContain("<p>After.</p>");
+    expect(browserAttrs(html).find((a) => a.name === "title")!.value).not.toContain("<");
+  });
+
+  test("a link title cannot grow a second href", () => {
+    const html = render({ markdown: `[a](https://example.com 't" href="javascript:alert(1)')\n` }).bodyHtml;
+    expect(liveScript(html)).toEqual([]);
+    expect(attrsOf(html, "a")).toEqual(["href", "title"]);
+  });
+
+  test("a raw-HTML title cannot become a javascript: href", () => {
+    const html = render({ markdown: `<a title="x&quot; href=&quot;javascript:alert(1)&quot; y=&quot;">link</a>\n` }).bodyHtml;
+    expect(liveScript(html)).toEqual([]);
+    expect(attrsOf(html, "a")).toEqual(["title"]);
+  });
+
+  test("single-quote entities in a raw-HTML attribute cannot end it", () => {
+    for (const q of ["&#39;", "&apos;", "&#x27;"]) {
+      const html = render({ markdown: `<abbr title='it${q}s/onmouseover=${q}alert(1)${q}'>X</abbr>\n` }).bodyHtml;
+      expect(liveScript(html)).toEqual([]);
+      expect(attrsOf(html, "abbr")).toEqual(["title"]);
+    }
+  });
+
+  test("raw HTML blocks cannot start a handler or javascript: href after / or a closing quote", () => {
+    const md = [
+      "<div>",
+      `<img src="pic.png"/onerror="alert(1)">`,
+      `<img src="pic.png"onerror="alert(1)">`,
+      `<img src='pic.png'onerror='alert(1)'>`,
+      "<svg/onload=alert(1)></svg>",
+      `<a title="t"href="javascript:alert(1)">j</a>`,
+      `<a/href="javascript:alert(1)">k</a>`,
+      "</div>",
+      "",
+    ].join("\n");
+    const html = render({ markdown: md }).bodyHtml;
+    expect(liveScript(html)).toEqual([]);
+    expect(html).toContain(">j</a>");
+    expect(html).toContain(">k</a>");
+  });
+
+  // Handler removal runs over the whole page, so handler-looking text in a
+  // code span is removed; it must stop before the closing </code> tag.
+  test("removing handler-looking text never eats a tag", () => {
+    const html = render({ markdown: "See `a/onset=2` and `b onset=3` here.\n" }).bodyHtml;
+    expect(liveScript(html)).toEqual([]);
+    expect(html).toContain("<p>See <code>a/</code> and <code>b</code> here.</p>");
+  });
+
+  // An unquoted value can't hold a space, but the parser decodes &#10; to a
+  // line break, so onerror=<!--&#10;code runs "code" after the comment.
+  test("a handler whose unquoted value starts with < or a quote is still removed", () => {
+    for (const value of ["<!--a", "<!--&#10;document.title=1", "\"x", "'x", ""]) {
+      const html = render({ markdown: `<div>\n<img src=pic.png onerror=${value}>\n</div>\n` }).bodyHtml;
+      expect(liveScript(html)).toEqual([]);
+      expect(html).not.toMatch(/onerror/i);
+    }
+  });
+
+  test("ordinary quotes still curl and ordinary attributes stay", () => {
+    const html = render({ markdown: `She said "hi" -- it's fine. ![a](pic.png "A title")\n` }).bodyHtml;
+    expect(html).toContain("\u201chi\u201d");
+    expect(html).toContain("it\u2019s");
+    expect(html).toContain(`title="A title"`);
+    expect(attrsOf(html, "img")).toEqual(["src", "alt", "title"]);
+  });
+});
+
+describe("render() — characters dropped after sanitizing cannot revive script", () => {
+  // The typography pass drops U+0000 after the sanitizer has run, so the
+  // sanitizer has to see the page without it.
+  test("a NUL inside a handler name, a javascript: scheme or a tag name is no way around the sanitizer", () => {
+    const md = [
+      "<div>",
+      "<img src=pic.png on\u0000error=alert(1)>",
+      "<img src=\"pic.png\" o\u0000nload=\"alert(1)\">",
+      "<a href=\"java\u0000script:alert(1)\">j</a>",
+      "<a href=java\u0000script:alert(1)>k</a>",
+      "<scr\u0000ipt>alert(1)</script>",
+      "</div>",
+      "",
+    ].join("\n");
+    const html = render({ markdown: md }).bodyHtml;
+    expect(liveScript(html)).toEqual([]);
+    expect(html).not.toMatch(/<script/i);
+    expect(html).not.toContain("\u0000");
+    expect(html).toContain(">j</a>");
+    expect(html).toContain(">k</a>");
+  });
+
+  test("sanitizeUntrustedHtml drops NUL itself, for callers that skip the typography pass", () => {
+    const out = sanitizeUntrustedHtml("<svg on\u0000load=alert(1)><circle r=\"2\"/></svg>");
+    expect(out).not.toContain("\u0000");
+    expect(liveScript(out)).toEqual([]);
+  });
+});
+
+describe("sanitizeUntrustedHtml — handlers and javascript: links in any spelling the browser reads", () => {
+  // A ">" inside a quoted handler value is still part of that value, so the
+  // whole handler goes and the attributes after it stay.
+  test("a handler whose quoted value holds > is removed with its value", () => {
+    expect(sanitizeUntrustedHtml(`<div onclick="return a > b" class="notice">Keep me</div>`))
+      .toBe(`<div class="notice">Keep me</div>`);
+    expect(sanitizeUntrustedHtml(`<div onclick='return a > b' class="notice">Keep me</div>`))
+      .toBe(`<div class="notice">Keep me</div>`);
+    expect(sanitizeUntrustedHtml(`<input disabled onclick="a > b" x=1 onfocus='c > d' name=n>`))
+      .toBe(`<input disabled x=1 name=n>`);
+  });
+
+  // Handler-looking text inside another attribute's value is not an
+  // attribute, so a quote after it may be text: only the name goes.
+  test("handler text inside an attribute value never swallows the text after the tag", () => {
+    const out = sanitizeUntrustedHtml(`<div title="docs/onload='example">Keep me ' and the rest</div>`);
+    expect(out).toContain("Keep me ' and the rest</div>");
+    expect(liveScript(out)).toEqual([]);
+  });
+
+  // &#x3ab; is the character U+03AB, not a colon followed by "b".
+  test("an entity that only starts like a colon is left alone", () => {
+    for (const href of ["javascript&#x3ab;guide", "javascript&#5899;guide", "javascript&#x3A0;x"]) {
+      const html = `<a href="${href}">g</a>`;
+      expect(sanitizeUntrustedHtml(html)).toBe(html);
+    }
+    expect(liveScript(sanitizeUntrustedHtml(`<a href="javascript&#x3a;alert(1)">g</a>`))).toEqual([]);
+    expect(liveScript(sanitizeUntrustedHtml(`<a href="javascript&#58alert(1)">g</a>`))).toEqual([]);
+  });
+
+  // Browsers drop tabs and line breaks from a URL and decode entities first,
+  // so all of these still run as javascript: links.
+  test("javascript: written with tabs, line breaks or entity letters is neutralized", () => {
+    const spellings = [
+      "java\tscript:alert(1)", "java\nscript:alert(1)", "java\rscript:alert(1)",
+      "java&Tab;script:alert(1)", "java&#9;script:alert(1)", "java&#x9;script:alert(1)", "java&NewLine;script:alert(1)",
+      "&#106;avascript:alert(1)", "&#x6A;avascript:alert(1)", "&#106avascript:alert(1)",
+      "&#32;javascript:alert(1)", "j&#97;v&#97;script&colon;alert(1)",
+    ];
+    for (const v of spellings) {
+      for (const attr of [`href="${v}"`, `href='${v}'`, `src="${v}"`, `formaction="${v}"`]) {
+        const out = sanitizeUntrustedHtml(`<a ${attr}>j</a>`);
+        expect(liveScript(out)).toEqual([]);
+        expect(out).toContain(">j</a>");
+      }
+      if (!/\s/.test(v)) expect(liveScript(sanitizeUntrustedHtml(`<a href=${v}>j</a>`))).toEqual([]);
+    }
+  });
+
+  test("a javascript: value holding < or > keeps its quotes and loses its scheme", () => {
+    const out = sanitizeUntrustedHtml(`<a href='java&#9;script:a>b' title="t">j</a><p>after</p>`);
+    expect(liveScript(out)).toEqual([]);
+    expect(attrsOf(out, "a")).toEqual(["href", "title"]);
+    expect(out).toContain("<p>after</p>");
+  });
+
+  test("a later attribute is checked even when an earlier quote pairs with it", () => {
+    const out = sanitizeUntrustedHtml(`<p title=' href='>x</p><a href='java&#9;script:alert(1)'>j</a>`);
+    expect(liveScript(out)).toEqual([]);
+    for (const v of ["&#106;avascript:alert(1)", "java&Tab;script:alert(1)"]) {
+      expect(liveScript(sanitizeUntrustedHtml(`<a title='x href='href=${v}>b</a>`))).toEqual([]);
+    }
+  });
+
+  test("ordinary links are untouched", () => {
+    const html = `<a href="https://example.com/a?b=1&amp;c=2">a</a><a href="#top">t</a><a href="java.html">j</a><img src="javascript.png">`;
+    expect(sanitizeUntrustedHtml(html)).toBe(html);
+  });
+
+  test("render() neutralizes the same spellings in raw HTML and links", () => {
+    const md = [
+      "<div>",
+      `<a href="java&#9;script:alert(1)">a</a>`,
+      `<a href="&#106;avascript:alert(1)">b</a>`,
+      "</div>",
+      "",
+      "[c](java&#9;script:alert(1)) [d](&#106;avascript:alert(1))",
+      "",
+    ].join("\n");
+    const html = render({ markdown: md }).bodyHtml;
+    expect(liveScript(html)).toEqual([]);
+    for (const t of [">a</a>", ">b</a>"]) expect(html).toContain(t);
+  });
+});
+
+describe("render() — removing script keeps the page's structure", () => {
+  test("handler-looking text inside a quoted attribute never eats the elements after it", () => {
+    for (const md of [
+      `<div title="docs/onload='example">Keep me</div><p title='other'>Next</p>\n`,
+      `<div title='docs/onload="example'>Keep me</div><p title="other">Next</p>\n`,
+    ]) {
+      const html = render({ markdown: md }).bodyHtml;
+      expect(liveScript(html)).toEqual([]);
+      expect(html).toContain(">Keep me</div>");
+      expect(html).toContain(">Next</p>");
+      expect(attrsOf(html, "div")).toEqual(["title"]);
+      expect(attrsOf(html, "p")).toEqual(["title"]);
+    }
+  });
+
+  test("a handler value holding < or > loses its handler without spilling into the page", () => {
+    const html = render({ markdown: `<div>\n<img src="pic.png" onerror="a>b<img src=x onload=alert(1)>">\n</div>\n` }).bodyHtml;
+    expect(liveScript(html)).toEqual([]);
+    expect(html).not.toMatch(/onerror|onload/i);
+  });
+
+  test("a javascript: href holding < or > is still neutralized", () => {
+    const html = render({ markdown: `<div>\n<a href="javascript:a>b">j</a>\n</div>\n` }).bodyHtml;
+    expect(liveScript(html)).toEqual([]);
+  });
+
+  test("an ordinary link whose path contains /href=javascript: keeps its attributes and text", () => {
+    const html = render({ markdown: "[Reference](https://example.com/docs/href=javascript:overview) after\n" }).bodyHtml;
+    expect(liveScript(html)).toEqual([]);
+    expect(attrsOf(html, "a")).toEqual(["href"]);
+    expect(html).toContain(">Reference</a> after");
+    expect(browserAttrs(html).find((a) => a.name === "href")!.value).toMatch(/^https:\/\/example\.com\/docs\//);
+  });
+
+  test("removing an attribute cannot join the halves of a dangerous tag name", () => {
+    for (const x of [
+      `<scr onx="a"ipt>alert(1)</script>`,
+      `<scr onx='a'ipt>alert(1)</script>`,
+      `<scr srcdoc="a"ipt>alert(1)</script>`,
+      `<ifr onx="a"ame src="pic.png"></iframe>`,
+      `<ob onx="a"ject data="pic.png"></object>`,
+    ]) {
+      const html = render({ markdown: `<div>\n${x}\n</div>\n` }).bodyHtml;
+      expect(html).not.toMatch(/<(?:script|iframe|object)\b/i);
+      expect(liveScript(html)).toEqual([]);
+    }
+  });
+
+  test("a javascript: value after leading spaces or with an encoded colon is neutralized", () => {
+    for (const a of [`href=" javascript:alert(1)"`, `href="\tjavascript:alert(1)"`, "href=javascript&colon;alert(1)", `href="javascript&#58;alert(1)"`, "href=javascript&#x3A;alert(1)"]) {
+      const html = render({ markdown: `<div>\n<a ${a}>j</a>\n</div>\n` }).bodyHtml;
+      expect(liveScript(html)).toEqual([]);
+      expect(html).toContain(">j</a>");
+    }
+  });
+
+  test("an unquoted javascript: value is replaced without adding quotes", () => {
+    const out = sanitizeUntrustedHtml("<a href=javascript:alert(1)>j</a>");
+    expect(liveScript(out)).toEqual([]);
+    expect(out).not.toContain('"');
+  });
 });
 
 // ─── print-css ──────────────────────────────────────────────
 
 describe("printCss", () => {
   test("emits 1in margins by default", () => {
-    const css = printCss();
+    const css = printCss({ style: "plain" });
     expect(css).toContain("margin: 1in");
   });
 
@@ -267,7 +717,7 @@ describe("printCss", () => {
   test("per-side margins reach the CSS @page rule (preferCSSPageSize parity)", () => {
     // Under a landscape promotion Chromium honors the CSS margins, not the
     // CDP per-side options — render() must compose them into the shorthand.
-    const r = render({ markdown: "# T", marginLeft: "0.5in", marginRight: "0.5in" });
+    const r = render({ markdown: "# T", marginLeft: "0.5in", marginRight: "0.5in", style: "plain" });
     expect(r.printCss).toContain("margin: 1in 0.5in 1in 0.5in");
   });
 
@@ -343,7 +793,7 @@ describe("printCss", () => {
   });
 
   test("typography floor: body 12pt, poster cover, readable TOC", () => {
-    const css = printCss({ cover: true, toc: true });
+    const css = printCss({ cover: true, toc: true, style: "plain" });
     expect(css).toContain("font-size: 12pt"); // body
     expect(css).toMatch(/\.cover h1\.cover-title\s*\{[^}]*font-size:\s*56pt/);
     expect(css).toMatch(/\.cover \.cover-meta\s*\{[^}]*font-size:\s*13pt/);
@@ -519,5 +969,15 @@ describe("render() — no double HTML entity escaping", () => {
       // Never contains a double-encoded entity.
       expect(titleMatch[1]).not.toMatch(/&amp;(amp|lt|gt|quot|#\d+);/);
     }
+  });
+});
+
+describe("screenCss", () => {
+  test("screenCss is media-scoped and readable-width", () => {
+    const css = screenCss();
+    expect(css).toContain("@media screen");
+    // 42em at 12pt ≈ 70-75 chars/line — the readable ceiling (design review).
+    expect(css).toContain("max-width: 42em");
+    expect(css).toContain(".watermark { display: none; }");
   });
 });
