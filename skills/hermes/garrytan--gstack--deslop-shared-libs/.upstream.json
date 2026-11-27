@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/garrytan/gstack/tree/main/deslop-shared-libs",
+  "identifier": "garrytan/gstack/deslop-shared-libs",
+  "repo": "garrytan/gstack",
+  "path": "deslop-shared-libs",
+  "branch": "main",
+  "pushedAt": "2026-11-27T16:54:38Z",
+  "contentHash": "fa7c3f8eb4c1e9e1659f35ec77f5ff79a3203ff0b3f54d33b52c8c9fd183d3b3",
+  "fetchedAt": "2026-11-27T17:31:41.577Z"
+}

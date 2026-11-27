@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bioir-bench-perf-oss",
+  "identifier": "NVIDIA/skills/skills/bioir-bench-perf-oss",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bioir-bench-perf-oss",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "140e6f1e776a58c59318534a218f40a3330f63c81e0e7ef3ac13728c37fb9da8",
+  "fetchedAt": "2026-11-27T17:31:39.789Z"
+}

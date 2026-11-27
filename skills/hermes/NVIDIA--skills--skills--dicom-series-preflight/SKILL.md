@@ -3,13 +3,15 @@ name: dicom-series-preflight
 description: Used for header-only preflight of one DICOM series folder before conversion or inference. Not for de-identification or clinical clearance.
 license: Apache-2.0
 allowed-tools: Bash
+permissions: [file_read, file_write, shell]
 metadata:
-  author: NVIDIA MedTech Team
+  author: 'NVIDIA MedTech Team'
   tags:
     - MedTech
     - DICOM
     - preflight
 ---
+
 
 # DICOM Series Preflight
 
@@ -31,7 +33,8 @@ metadata:
 
 ## Prerequisites
 - Runtime requirements: Python packages listed in `runtime.side_effects.pip_packages`.
-- Run commands from the repository root unless an existing section below says otherwise.
+- NiBabel 5.4 or newer is required so extreme-oblique axes remain labeled consistently across reorientation.
+- Run the Python commands from the installed skill directory. Run the optional Make targets from the repository root.
 
 ## Limitations
 - Header-only; does not decode pixel data or detect burnt-in PHI.
@@ -55,7 +58,27 @@ Emits JSON with inventory, orientation axcodes, PHI flags, findings, and a
 python scripts/preflight_series.py PATH_TO_DICOM_DIR
 ```
 
-Pair with `verifiers/dicom_preflight_quality_v1` for a trusted preflight pack:
+For the bundled synthetic examples, generate the DICOM files in a writable
+directory and pass the requested series to the same entrypoint. The generator
+requires pydicom 3.0.2 or later. If dependencies are missing, install them in
+a disposable virtual environment.
+
+```bash
+work_dir=$(mktemp -d)
+python -m venv "$work_dir/venv"
+"$work_dir/venv/bin/python" -m pip install 'pydicom>=3.0.2,<4' 'nibabel>=5.4,<6' 'numpy>=1.25,<3' 'typer>=0.9'
+"$work_dir/venv/bin/python" fixtures/generate_fixtures.py --out-dir "$work_dir/fixtures"
+"$work_dir/venv/bin/python" scripts/preflight_series.py "$work_dir/fixtures/clean_no_phi"
+```
+
+Choose `clean_no_phi`, `clean_axial`, or `flipped_lr` for a requested demo.
+For caller data, pass the supplied DICOM directory directly. Read
+`preflight.verdict` and `findings` from the actual run. A pass covers these
+header checks for engineering use. If PHI tags are populated, de-identify
+before sharing. If orientation fails, hold downstream segmentation and
+confirm the source geometry.
+
+Pair with `verifiers/dicom-preflight-quality-v1` for a trusted preflight pack:
 
 ```bash
 make run-trusted SKILL=dicom_series_preflight \

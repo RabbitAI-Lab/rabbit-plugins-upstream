@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvidia-ontology-query",
+  "identifier": "NVIDIA/skills/skills/nvidia-ontology-query",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvidia-ontology-query",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "6064a33782db8961d03fe1805a462486196cd50ccaaf56fafd8c4854820aaeb8",
+  "fetchedAt": "2026-11-27T17:31:40.361Z"
+}

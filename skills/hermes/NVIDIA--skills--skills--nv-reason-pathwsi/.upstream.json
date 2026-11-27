@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nv-reason-pathwsi",
+  "identifier": "NVIDIA/skills/skills/nv-reason-pathwsi",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nv-reason-pathwsi",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "6b94f6072a66f536d73cf95f260b7eacab4f22c8c8b581808b5301968ab2fc22",
+  "fetchedAt": "2026-11-27T17:31:40.333Z"
+}

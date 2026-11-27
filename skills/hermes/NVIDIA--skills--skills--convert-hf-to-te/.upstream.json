@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/convert-hf-to-te",
+  "identifier": "NVIDIA/skills/skills/convert-hf-to-te",
+  "repo": "NVIDIA/skills",
+  "path": "skills/convert-hf-to-te",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "578b29622f73b39a6ee7f8f86ea574ef4f25f32b7e5ba4c808de613c36dfffb3",
+  "fetchedAt": "2026-11-27T17:31:39.828Z"
+}

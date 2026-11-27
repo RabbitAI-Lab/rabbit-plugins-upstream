@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/mcp/mcp-oauth-remote-gateway",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "ae368ea6d9be56765ed45fffd2ecfb67317092103ecb205162d454fadbe4472f",
-  "fetchedAt": "2026-07-26T17:03:56.994Z"
+  "pushedAt": "2026-11-27T17:29:19Z",
+  "contentHash": "33fd42be1940d5b518fc956dc0c96b1f0e53bcf92c93f8f4a26d7d09d4ffd90c",
+  "fetchedAt": "2026-11-27T17:31:49.463Z"
 }

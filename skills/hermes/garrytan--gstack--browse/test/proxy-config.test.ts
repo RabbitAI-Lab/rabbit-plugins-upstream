@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { parseProxyConfig, computeConfigHash, ProxyConfigError } from '../src/proxy-config';
+import { parseProxyConfig, computeConfigHash, directProxyLogLine, explicitDirect, forcesDirect, serverProxyEnv, ProxyConfigError } from '../src/proxy-config';
 import { extractGlobalFlags } from '../src/cli';
 
 describe('parseProxyConfig', () => {
@@ -114,6 +114,16 @@ describe('extractGlobalFlags', () => {
     expect(result.headed).toBe(true);
   });
 
+  // #4662: `browse --session inventory goto …` read --session as the command.
+  test('a --session before the command moves after it, where the session is read', () => {
+    expect(extractGlobalFlags(['--session', 'inventory', 'goto', 'https://x'], ENV_EMPTY).args).toEqual(['goto', '--session', 'inventory', 'https://x']);
+    expect(extractGlobalFlags(['--session', 'a', 'chain'], ENV_EMPTY).args).toEqual(['chain', '--session', 'a']);
+    expect(extractGlobalFlags(['--session', 'a', 'goto', 'https://x', '--session', 'b'], ENV_EMPTY).args).toEqual(['goto', '--session', 'a', 'https://x', '--session', 'b']);
+    expect(extractGlobalFlags(['--headed', '--session', 'a', 'tabs'], ENV_EMPTY).args).toEqual(['tabs', '--session', 'a']);
+    expect(extractGlobalFlags(['goto', 'https://x', '--session', 'b'], ENV_EMPTY).args).toEqual(['goto', 'https://x', '--session', 'b']);
+    expect(extractGlobalFlags(['fill', '@e1', '--session'], ENV_EMPTY).args).toEqual(['fill', '@e1', '--session']);
+  });
+
   test('supports --proxy=value form', () => {
     const result = extractGlobalFlags(
       ['goto', 'https://x', '--proxy=socks5://h:1080'],
@@ -185,5 +195,67 @@ describe('extractGlobalFlags', () => {
       ENV_EMPTY,
     );
     expect(a.configHash).not.toBe(b.configHash);
+  });
+});
+
+describe('forcesDirect (#3440 item 8)', () => {
+  test('Linux always makes a direct connection explicit, because Chromium reads the proxy variables there', () => {
+    expect(forcesDirect({}, 'linux')).toBe(true);
+    expect(forcesDirect({ HTTPS_PROXY: 'http://b:2' }, 'linux')).toBe(true);
+  });
+
+  test('macOS and Windows keep the system proxy settings unless the user chose direct', () => {
+    for (const platform of ['darwin', 'win32'] as const) {
+      expect(forcesDirect({}, platform)).toBe(false);
+      expect(forcesDirect({ HTTPS_PROXY: 'http://b:2' }, platform)).toBe(false);
+      expect(forcesDirect({ BROWSE_PROXY_URL: 'direct' }, platform)).toBe(true);
+    }
+  });
+});
+
+describe('explicitDirect (#3440 item 8)', () => {
+  test('is the opt-out on macOS and Windows and nothing on Linux, where direct is already explicit', () => {
+    expect(explicitDirect({ BROWSE_PROXY_URL: 'direct' }, 'darwin')).toBe(true);
+    expect(explicitDirect({ BROWSE_PROXY_URL: 'direct' }, 'win32')).toBe(true);
+    expect(explicitDirect({ BROWSE_PROXY_URL: 'direct' }, 'linux')).toBe(false);
+    expect(explicitDirect({ BROWSE_PROXY_URL: 'http://p:1' }, 'darwin')).toBe(false);
+    expect(explicitDirect({}, 'darwin')).toBe(false);
+  });
+
+  test('the config hash separates an explicit direct from no proxy, and ignores it beside a proxy', () => {
+    const plain = computeConfigHash({ proxyUrl: null, headed: false });
+    expect(computeConfigHash({ proxyUrl: null, headed: false, explicitDirect: false })).toBe(plain);
+    expect(computeConfigHash({ proxyUrl: null, headed: false, explicitDirect: true })).not.toBe(plain);
+    expect(computeConfigHash({ proxyUrl: 'http://p:1', headed: false, explicitDirect: true }))
+      .toBe(computeConfigHash({ proxyUrl: 'http://p:1', headed: false }));
+  });
+
+  test('the daemon reads the opt-out from its own environment for the state file, on the platforms where it matters', () => {
+    expect(serverProxyEnv({ BROWSE_PROXY_URL: 'direct' }, 'darwin').direct).toBe(true);
+    expect(serverProxyEnv({ BROWSE_PROXY_URL: 'direct' }, 'win32').direct).toBe(true);
+    expect(serverProxyEnv({ BROWSE_PROXY_URL: 'direct' }, 'linux').direct).toBe(false);
+    expect(serverProxyEnv({}, 'darwin').direct).toBe(false);
+    expect(serverProxyEnv({ BROWSE_PROXY_URL: 'http://p:1' }, 'darwin').direct).toBe(false);
+  });
+});
+
+describe('directProxyLogLine (#3440 item 8)', () => {
+  test('names the switch alone when no standard variable is set', () => {
+    expect(directProxyLogLine({}, 'linux')).toBe('[browse] [proxy] none: direct connection (--proxy-server=direct://)');
+  });
+
+  test('names every set standard variable in precedence order, and nothing else', () => {
+    const line = directProxyLogLine({ all_proxy: 'socks5://a:1', HTTPS_PROXY: 'http://b:2', BROWSE_PROXY_URL: 'direct', NO_PROXY: 'x', PATH: '/bin' }, 'linux');
+    expect(line).toBe('[browse] [proxy] none: direct connection (--proxy-server=direct://; ignoring HTTPS_PROXY, all_proxy)');
+  });
+
+  test('an explicit direct on macOS or Windows names the system proxy settings, never variables Chromium did not read', () => {
+    const line = directProxyLogLine({ HTTPS_PROXY: 'http://b:2', BROWSE_PROXY_URL: 'direct' }, 'win32');
+    expect(line).toBe('[browse] [proxy] none: direct connection (--proxy-server=direct://; ignoring the system proxy settings)');
+  });
+
+  test('no proxy on macOS or Windows reports the system proxy settings Chromium follows', () => {
+    expect(directProxyLogLine({ HTTPS_PROXY: 'http://b:2' }, 'darwin'))
+      .toBe("[browse] [proxy] none: system proxy settings (Chromium's default on darwin; BROWSE_PROXY_URL=direct connects directly)");
   });
 });

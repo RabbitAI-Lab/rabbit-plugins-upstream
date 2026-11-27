@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/qdrant/skills/tree/main/skills/qdrant-scaling",
+  "identifier": "qdrant/skills/skills/qdrant-scaling",
+  "repo": "qdrant/skills",
+  "path": "skills/qdrant-scaling",
+  "branch": "main",
+  "pushedAt": "2026-11-26T15:28:20Z",
+  "contentHash": "38216a003c58e4b24d180508e283b825c0db0c1360f0036c8d4b6dbb418265fc",
+  "fetchedAt": "2026-11-27T17:31:34.031Z"
+}

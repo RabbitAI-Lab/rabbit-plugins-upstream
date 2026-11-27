@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvflare-fed-stats",
+  "identifier": "NVIDIA/skills/skills/nvflare-fed-stats",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvflare-fed-stats",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "386bf1f859e818e242a2e16ae44f7ba436914964997aaf401c9d98263b6ed99e",
+  "fetchedAt": "2026-11-27T17:31:40.356Z"
+}

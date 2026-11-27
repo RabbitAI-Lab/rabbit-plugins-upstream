@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvflare-shared",
+  "identifier": "NVIDIA/skills/skills/nvflare-shared",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvflare-shared",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "2db9cb1a4c3db34a9b1250afbb17e9be639f2d50800948d8c8fa5547b9d3129d",
+  "fetchedAt": "2026-11-27T17:31:40.358Z"
+}
