@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/compileiq-validate-result",
+  "identifier": "NVIDIA/skills/skills/compileiq-validate-result",
+  "repo": "NVIDIA/skills",
+  "path": "skills/compileiq-validate-result",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "89d3db91d465229e43b82082d332c52b5ae5ab1aede198366f5039228115bc72",
+  "fetchedAt": "2026-11-27T17:31:39.820Z"
+}

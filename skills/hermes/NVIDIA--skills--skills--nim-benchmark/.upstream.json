@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nim-benchmark",
+  "identifier": "NVIDIA/skills/skills/nim-benchmark",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nim-benchmark",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "fdd97362315de6d96ac15d0dd508c29c583e19758de3ff86610d6c01738a8d7f",
+  "fetchedAt": "2026-11-27T17:31:40.292Z"
+}

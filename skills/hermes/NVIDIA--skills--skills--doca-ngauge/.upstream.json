@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-ngauge",
+  "identifier": "NVIDIA/skills/skills/doca-ngauge",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-ngauge",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "2357b99a5aed192da18698ac27fe8f9ae2222c952536945589988356038270b3",
+  "fetchedAt": "2026-11-27T17:31:39.950Z"
+}

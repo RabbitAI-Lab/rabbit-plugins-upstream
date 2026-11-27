@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cuda-python",
+  "identifier": "NVIDIA/skills/skills/cuda-python",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cuda-python",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "2571f38f54e99dbe03992e43f0d157bf6b0d58b97b44b8b78a902100205f3dee",
+  "fetchedAt": "2026-11-27T17:31:39.829Z"
+}

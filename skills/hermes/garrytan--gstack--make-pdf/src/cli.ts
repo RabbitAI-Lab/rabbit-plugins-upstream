@@ -1,4 +1,4 @@
-#!/usr/bin/env bun
+#!/usr/bin/env -S bun --no-env-file --config=/dev/null
 /**
  * make-pdf CLI — argv parse, dispatch, exit.
  *
@@ -7,12 +7,14 @@
  *   stderr: progress spinner per stage, final "Done in Xs. N pages."
  *   --quiet: suppress progress. Errors still print.
  *   --verbose: per-stage timings.
- *   exit 0 success / 1 bad args / 2 render error / 3 Paged.js timeout / 4 browse unavailable.
+ *   exit 0 success / 1 bad args / 2 render error / 3 TOC page numbers failed / 4 no browser
+ *   (Aside not running AND gstack's own browser not built).
  */
 
 import { COMMANDS } from "./commands";
-import { ExitCode, BrowseClientError } from "./types";
-import type { GenerateOptions, PreviewOptions } from "./types";
+import { ExitCode, BrowserUnavailableError } from "./types";
+import type { GenerateOptions, PreviewOptions, Style } from "./types";
+import { STYLES } from "./style-swiss";
 
 interface ParsedArgs {
   command: string;
@@ -20,12 +22,27 @@ interface ParsedArgs {
   flags: Record<string, string | boolean>;
 }
 
-function parseArgs(argv: string[]): ParsedArgs {
+/**
+ * Flags that never take a value (#2514). The parser used to treat ANY
+ * following non-flag token as the flag's value, so the skill's own
+ * documented usage — `$P generate --cover --toc essay.md essay.pdf` — worked
+ * only by luck of flag adjacency, while `$P generate --toc essay.md` ate
+ * `essay.md` as --toc's value and failed with "missing input".
+ */
+export const BOOLEAN_FLAGS = new Set([
+  "cover", "toc", "no-chapter-breaks", "confidential", "no-confidential",
+  "page-numbers", "no-page-numbers", "tagged", "no-tagged",
+  "outline", "no-outline", "quiet", "verbose", "allow-network", "strict",
+]);
+
+export function parseArgs(argv: string[]): ParsedArgs {
   const args = argv.slice(2);
   if (args.length === 0) {
     printUsage();
     process.exit(ExitCode.Success);
   }
+  // setup's and gstack-doctor's launch probe (#2595): the version command needs no browser.
+  if (args[0] === "--version") return { command: "version", positional: [], flags: {} };
 
   // First non-flag arg is the command.
   let command = "";
@@ -37,7 +54,7 @@ function parseArgs(argv: string[]): ParsedArgs {
     if (a.startsWith("--")) {
       const key = a.slice(2);
       const next = args[i + 1];
-      if (next !== undefined && !next.startsWith("--")) {
+      if (!BOOLEAN_FLAGS.has(key) && next !== undefined && !next.startsWith("--")) {
         flags[key] = next;
         i++;
       } else {
@@ -69,13 +86,19 @@ function printUsage(): void {
   lines.push("                            html = single self-contained file, no network refs.");
   lines.push("                            docx = content fidelity, diagrams as PNG.");
   lines.push("");
+  lines.push("Look:");
+  lines.push("  --style swiss|plain       swiss (default): bold Swiss layout, black heading bars,");
+  lines.push("                            red accents, a left field for sub-headings.");
+  lines.push("                            plain: the look before swiss, unchanged.");
+  lines.push("");
   lines.push("Page layout:");
-  lines.push("  --margins <dim>           All four margins (default: 1in). in, pt, cm, mm.");
+  lines.push("  --margins <dim>           All four margins (default: 0.7in 0.75in 0.85in 0.75in");
+  lines.push("                            under swiss, 1in under plain). in, pt, cm, mm.");
   lines.push("  --page-size letter|a4|legal  (aliases: --format — page SIZE, not output format)");
   lines.push("");
   lines.push("Document structure:");
   lines.push("  --cover                   Add a cover page.");
-  lines.push("  --toc                     Generate clickable table of contents.");
+  lines.push("  --toc                     Generate clickable table of contents with page numbers.");
   lines.push("  --no-chapter-breaks       Don't start a new page at every H1.");
   lines.push("");
   lines.push("Branding:");
@@ -106,8 +129,17 @@ function printUsage(): void {
   lines.push("  $P generate --watermark DRAFT memo.md draft.pdf");
   lines.push("  $P preview letter.md");
   lines.push("");
-  lines.push("Run `$P setup` to verify browse + Chromium + pdftotext install.");
+  lines.push("Run `$P setup` to verify the browser (Aside, or gstack's own fallback) + pdftotext install.");
   console.error(lines.join("\n"));
+}
+
+function styleFromFlags(f: Record<string, string | boolean>, command: string): Style | undefined {
+  if (f.style === undefined) return undefined;
+  const value = typeof f.style === "string" ? f.style.toLowerCase() : "";
+  if ((STYLES as readonly string[]).includes(value)) return value as Style;
+  const got = typeof f.style === "string" ? `'${f.style}'` : "no value";
+  console.error(`$P ${command}: invalid --style (got ${got}). Expected ${STYLES.join(" or ")}, for example --style plain.`);
+  process.exit(ExitCode.BadArgs);
 }
 
 function generateOptionsFromFlags(parsed: ParsedArgs): GenerateOptions {
@@ -133,6 +165,7 @@ function generateOptionsFromFlags(parsed: ParsedArgs): GenerateOptions {
     input: p[0],
     output: p[1],
     to: to as GenerateOptions["to"],
+    style: styleFromFlags(f, "generate"),
     margins: f.margins as string | undefined,
     marginTop: f["margin-top"] as string | undefined,
     marginRight: f["margin-right"] as string | undefined,
@@ -176,6 +209,7 @@ function previewOptionsFromFlags(parsed: ParsedArgs): PreviewOptions {
   };
   return {
     input: p[0],
+    style: styleFromFlags(f, "preview"),
     cover: f.cover === true,
     toc: f.toc === true,
     watermark: typeof f.watermark === "string" ? f.watermark : undefined,
@@ -252,17 +286,17 @@ async function main(): Promise<void> {
         process.exit(ExitCode.BadArgs);
     }
   } catch (err: any) {
-    if (err instanceof BrowseClientError) {
+    if (err instanceof BrowserUnavailableError) {
       console.error(`$P: ${err.message}`);
-      process.exit(ExitCode.BrowseUnavailable);
+      process.exit(ExitCode.BrowserUnavailable);
     }
     if (err?.code === "ENOENT") {
       console.error(`$P: file not found: ${err.path ?? err.message}`);
       process.exit(ExitCode.BadArgs);
     }
-    if (err?.name === "PagedJsTimeout") {
-      console.error(`$P: ${err.message}`);
-      process.exit(ExitCode.PagedJsTimeout);
+    if (err?.name === "TocPaginationError") {
+      console.error(`$P: --toc: ${err.message}`);
+      process.exit(ExitCode.TocPagination);
     }
     console.error(`$P: ${err?.message ?? String(err)}`);
     if (parsed.flags.verbose && err?.stack) {
@@ -272,4 +306,7 @@ async function main(): Promise<void> {
   }
 }
 
-main();
+// Guarded so tests can import parseArgs/BOOLEAN_FLAGS without running the CLI.
+if (import.meta.main) {
+  main();
+}

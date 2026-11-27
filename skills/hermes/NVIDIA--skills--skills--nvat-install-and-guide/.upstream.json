@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvat-install-and-guide",
+  "identifier": "NVIDIA/skills/skills/nvat-install-and-guide",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvat-install-and-guide",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "55f6f994ff63ae7ff1e1e0054c7b9f916d48fa4f6f86803a6e52e745e6aad016",
+  "fetchedAt": "2026-11-27T17:31:40.346Z"
+}

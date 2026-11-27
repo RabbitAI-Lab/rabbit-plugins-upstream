@@ -1,6 +1,6 @@
 /**
  * Unit tests for the image width policy + conservative auto-landscape
- * (image-policy.ts). Pure HTML-in/HTML-out — no browse daemon.
+ * (image-policy.ts). Pure HTML-in/HTML-out, no browser.
  *
  * The promotion heuristic is deliberately conservative (eng-review P4):
  * false negatives are cheap (add {page=landscape}), false positives feel
@@ -205,6 +205,12 @@ describe("auto-landscape: diagram figures", () => {
       fig(`width="100%" viewBox="0 0 400 300"`, ` data-gstack-page="landscape"`),
       OPTS,
     );
+    expect(r.hasLandscape).toBe(true);
+  });
+  // stroke-width="2" sat before width= on the root, and the width lookup
+  // matched inside it: a 3000px diagram measured 2px wide and stayed portrait.
+  test("measures width and height, not stroke-width or data-height", () => {
+    const r = applyImagePolicy(fig(`stroke-width="2" data-height="9" width="3000" height="600"`), OPTS);
     expect(r.hasLandscape).toBe(true);
   });
   test("diagnostic blocks are never promoted", () => {

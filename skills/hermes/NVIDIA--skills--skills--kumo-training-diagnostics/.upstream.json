@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/kumo-training-diagnostics",
+  "identifier": "NVIDIA/skills/skills/kumo-training-diagnostics",
+  "repo": "NVIDIA/skills",
+  "path": "skills/kumo-training-diagnostics",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "b1153251bc05f6f0690699319748fd55885d04cc2fffa1ba678d8362dca2a8d3",
+  "fetchedAt": "2026-11-27T17:31:40.223Z"
+}

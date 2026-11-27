@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/compileiq-run-search",
+  "identifier": "NVIDIA/skills/skills/compileiq-run-search",
+  "repo": "NVIDIA/skills",
+  "path": "skills/compileiq-run-search",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "101ecec19e30f8a362079d7aaf011b06db1a0b6077fbf1f6dc3e0e4cf5d349ce",
+  "fetchedAt": "2026-11-27T17:31:39.819Z"
+}

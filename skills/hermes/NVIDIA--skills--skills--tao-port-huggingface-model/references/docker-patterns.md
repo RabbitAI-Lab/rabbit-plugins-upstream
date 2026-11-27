@@ -45,7 +45,7 @@ Concrete patterns extracted from the TAO repos for running tests in containers, 
 
 > **Note:** For testing, we run directly inside the prepared TAO Toolkit containers (image tags built in Phase 0) — no Docker build is involved in the test loop. Release Docker images are optional and only for distribution validation. All work must be **local only** (`--load`, not `--push`). Do NOT push images to any registry.
 
-> **Authority for generic flags:** the `--gpus`, `--ipc=host` / `--shm-size`,
+> **Authority for generic flags:** the `--gpus`, `--shm-size=8g` / `--shm-size`,
 > `-v host:container`, `-e VAR` passthrough, container-name reuse, and
 > `docker inspect` / `docker logs` patterns are owned by
 > [`tao-skill-bank:tao-run-on-docker`](../../../platform/tao-run-on-docker/SKILL.md). The host GPU
@@ -74,7 +74,7 @@ The skill runs every test inside a TAO Toolkit container image on `nvcr.io`. Pha
 
 | Repo | Local tag (prepared in Phase 0) | Underlying TAO Toolkit image (user-supplied) |
 |------|---------------------------------|----------------------------------------------|
-| **tao-core** | `tao-pytorch-base:latest` (or `nvcr.io/nvidia/pytorch:24.03-py3`) | public NGC PyTorch image, or reuses the prepared tao-pytorch image |
+| **tao-core** | `tao-pytorch-base:latest` (or `nvcr.io/nvidia/pytorch:24.03-py3`) | public NGC PyTorch image, or reuses the prepared tao-pytorch image | <!-- unpinned: example public NGC base image -->
 | **tao-pytorch** | `tao-pytorch-base:latest` | tao-pytorch image (e.g. `nvcr.io/<org>/tao-toolkit:<version>-pyt`) |
 | **tao-deploy** | `tao-deploy-base:latest` | tao-deploy image (e.g. `nvcr.io/<org>/tao-toolkit:<version>-deploy`) |
 | **tao-dataservices** | `tao-dataservices-base:latest` (optional) | tao-dataservices image (e.g. `nvcr.io/<org>/tao-toolkit:<version>-data-services`) |
@@ -269,7 +269,7 @@ docker run -it --rm --gpus all \
 
 ### Static lint (vanilla `pylint` / `pydocstyle` / `flake8`)
 
-The internal NVIDIA TAO mirrors ship a `ci/run_static_tests.py` helper that wraps `pylint` + `pydocstyle` + `flake8` with module discovery and `--changed-files-only` plumbing. The public github mirrors do NOT ship this helper — invoke the tools directly instead:
+The public `github.com/NVIDIA-TAO/` repos do not ship a `ci/run_static_tests.py` helper — invoke `pylint`, `pydocstyle` and `flake8` directly:
 
 ```bash
 # Errors only — fast path, suitable for the Phase 6 Step 20 gate
@@ -285,13 +285,13 @@ Tools: `pylint`, `pydocstyle`, `flake8` — install with `pip install pylint pyd
 
 ### Functional tests (vanilla `pytest`)
 
-Same story: the internal `ci/run_functional_tests.py` wrapper adds testmon (incremental retest) and a CI-mode shortcut. The public mirrors do not ship it — invoke `pytest` directly:
+The public repos do not ship a `ci/run_functional_tests.py` wrapper either — invoke `pytest` directly:
 
 ```bash
 # New model only (fast iteration)
 pytest tests/cv_unit_test/<model_name>/ -v --color=yes -m 'cv_unit'
 
-# Full functional suite, skip slow tests (equivalent to internal CI default)
+# Full functional suite, skip slow tests
 pytest tests/ -v --color=yes -m 'not slow'
 
 # Optional: incremental retest if you've installed testmon yourself
@@ -300,7 +300,7 @@ pip install pytest-testmon && pytest tests/ -v --color=yes --testmon
 
 ### Generating the `docker run` prefix
 
-The internal `ci/utils.py` exposes `get_docker_information()` (parses `docker/manifest.json`) and `get_docker_command()` (generates a docker run prefix with the right `--gpus` flag for the host's Docker API version). The public mirrors do not ship `ci/utils.py` — and this skill no longer parses `manifest.json` either, since Phase 0 produces the canonical local image tags. Use the patterns shown in §7 above to construct the `docker run` prefix manually, or invoke `tao-pytorch-base:latest` / `tao-deploy-base:latest` directly.
+The public repos do not ship `ci/utils.py`, and this skill does not parse `docker/manifest.json` — Phase 0 produces the canonical local image tags. Use the patterns shown in §7 above to construct the `docker run` prefix manually, or invoke `tao-pytorch-base:latest` / `tao-deploy-base:latest` directly.
 
 ---
 

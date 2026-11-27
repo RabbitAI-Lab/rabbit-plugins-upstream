@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-gym-analyzing-results",
+  "identifier": "NVIDIA/skills/skills/nemo-gym-analyzing-results",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-gym-analyzing-results",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "72d7fd71de98ff13d114e4644c1a93c8cc5e07be265754c6b2c86adf99b20088",
+  "fetchedAt": "2026-11-27T17:31:40.243Z"
+}

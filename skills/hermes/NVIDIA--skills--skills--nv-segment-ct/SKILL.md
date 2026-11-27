@@ -3,6 +3,7 @@ name: nv-segment-ct
 description: Used for running NV-Segment-CT VISTA3D on CT NIfTI volumes and recording label-map evidence.
 license: Apache-2.0
 allowed-tools: Bash
+permissions: [file_read, file_write, network, shell]
 metadata:
   author: NVIDIA MedTech Team
   tags:
@@ -10,6 +11,7 @@ metadata:
     - CT
     - segmentation
 ---
+
 
 # NV-Segment-CT
 
@@ -158,6 +160,6 @@ paired verifier's job.
 Anatomy plausibility (per-class volume bounds, fragmentation, bilateral
 symmetry, liver larger than spleen) and optional per-class Dice/IoU against
 the recorded ground truth are checked by
-`verifiers/ct_segmentation_quality_v1`.
+`verifiers/ct-segmentation-quality-v1`.
 
 Not for clinical interpretation, production deployment, or non-CT modalities.

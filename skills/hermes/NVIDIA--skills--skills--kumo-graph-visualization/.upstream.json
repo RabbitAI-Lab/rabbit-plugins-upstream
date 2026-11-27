@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/kumo-graph-visualization",
+  "identifier": "NVIDIA/skills/skills/kumo-graph-visualization",
+  "repo": "NVIDIA/skills",
+  "path": "skills/kumo-graph-visualization",
+  "branch": "main",
+  "pushedAt": "2026-11-27T09:55:51Z",
+  "contentHash": "cbd568a03806aa063839a1ce1db4c46a7ee5debd69ff858f08173acb3d6f8093",
+  "fetchedAt": "2026-11-27T17:31:40.221Z"
+}
