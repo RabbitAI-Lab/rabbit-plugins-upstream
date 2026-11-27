@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/iap-agent-platform-troubleshooting",
+  "repo": "google/skills",
+  "skillId": "iap-agent-platform-troubleshooting",
+  "branch": "main",
+  "pushedAt": "2026-11-27T14:41:43Z",
+  "contentHash": "505e04bd8f62008b766fcf2332b33a46d4a7e1f362ac29f9cf47b7fca61e08c8",
+  "fetchedAt": "2026-11-27T17:33:23.166Z"
+}

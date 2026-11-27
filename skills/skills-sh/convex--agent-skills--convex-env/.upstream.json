@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/convex/agent-skills/convex-env",
+  "repo": "convex/agent-skills",
+  "skillId": "convex-env",
+  "branch": "main",
+  "pushedAt": "2026-11-20T20:13:49Z",
+  "contentHash": "66def852c99007368a1d008b9967b7e6749ffe5bb4c83de2f191347c343591ff",
+  "fetchedAt": "2026-11-27T17:31:32.379Z"
+}

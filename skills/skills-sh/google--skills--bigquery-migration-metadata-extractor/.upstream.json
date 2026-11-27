@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/bigquery-migration-metadata-extractor",
+  "repo": "google/skills",
+  "skillId": "bigquery-migration-metadata-extractor",
+  "branch": "main",
+  "pushedAt": "2026-11-27T14:41:43Z",
+  "contentHash": "4323be2fb8d537062002b5d2dd134f997278690dd456742a4e854ac2d712c77c",
+  "fetchedAt": "2026-11-27T17:33:23.185Z"
+}

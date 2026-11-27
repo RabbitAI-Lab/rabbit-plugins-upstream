@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-cloud-filestore-auditing",
+  "repo": "google/skills",
+  "skillId": "google-cloud-filestore-auditing",
+  "branch": "main",
+  "pushedAt": "2026-11-27T14:41:43Z",
+  "contentHash": "93cc77d2b24b44cb339c7461bf6722f001e5d0a8cbcfccf356fae75821b5fa4a",
+  "fetchedAt": "2026-11-27T17:33:22.549Z"
+}

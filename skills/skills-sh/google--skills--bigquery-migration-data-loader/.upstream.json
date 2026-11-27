@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/bigquery-migration-data-loader",
+  "repo": "google/skills",
+  "skillId": "bigquery-migration-data-loader",
+  "branch": "main",
+  "pushedAt": "2026-11-27T14:41:43Z",
+  "contentHash": "1f7f9a8b3a86b71205819e81bec564e13dec547a7b42c85348d9683aa4bb95a0",
+  "fetchedAt": "2026-11-27T17:33:23.194Z"
+}
