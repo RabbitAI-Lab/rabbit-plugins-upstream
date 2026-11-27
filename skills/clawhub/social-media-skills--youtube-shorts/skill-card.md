@@ -1,47 +1,62 @@
-## Description: <br>
-Guides an agent to plan, draft, and diagnose YouTube Shorts scripts using a retention-first workflow, with publishing routed through a scheduler and analytics read in YouTube Studio. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Youtube Shorts helps agents draft shootable YouTube Shorts scripts and growth guidance focused on swipe-through, retention, unique angles, captions, and compliant publishing handoff.
 
-## Publisher: <br>
-[social-media-skills](https://clawhub.ai/user/social-media-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[social-media-skills](https://clawhub.ai/user/social-media-skills)
 
-## Use Case: <br>
-External creators, marketers, and channel operators use this skill to draft shootable YouTube Shorts scripts and diagnose Shorts performance with a retention-first workflow. It also guides handoff to scheduling and to native YouTube Studio analytics without fabricating metrics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Publishing and analytics handoffs can lead users to assume the skill can post videos or measure results directly. <br>
-Mitigation: Review final scripts and scheduled posts before publication; validate scheduled posts before release and read swipe-through, retention, and engaged views in YouTube Studio. <br>
-Risk: Users may request bought views, sub4sub, template spam, or fabricated performance metrics. <br>
-Mitigation: Refuse manipulation and fabricated metrics; use unique angles, human review, platform disclosures where relevant, and native analytics. <br>
-Risk: AI-assisted Shorts may require platform disclosure or may be harmed by repetitive, low-novelty production. <br>
-Mitigation: Apply the Altered Content disclosure when relevant, add real creative direction and information gain, and avoid mass-produced template reuse. <br>
+## Use Case:
 
+External creators, marketers, and channel operators use this skill to plan YouTube Shorts, diagnose weak Shorts performance, and generate scripts with on-screen text, voiceover, shot direction, captions, titles, and publishing guidance.
 
-## Reference(s): <br>
-- [Hooks, retention, captions + two worked Shorts](references/hooks-retention-and-captions.md) <br>
-- [Publishing, the funnel + tools layer](references/publishing-funnel-and-tools.md) <br>
-- [YouTube Shorts algorithm 2026 - the verified signal stack](references/shorts-algorithm-2026.md) <br>
-- [The Retention Ladder - climb four rungs, in order](references/the-retention-ladder.md) <br>
-- [WoopSocial MCP endpoint](https://api.woopsocial.com/mcp) <br>
-- [WoopSocial REST endpoint](https://api.woopsocial.com/v1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown with structured script sections, titles, captions, publishing notes, and analytics guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Drafts scripts and guidance; does not directly publish videos or read analytics.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and release evidence) <br>
+Risk: The agent may use brand and voice context while drafting Shorts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that context is appropriate for agent use, and review generated scripts before filming or publishing.
+
+Risk: Publishing requests may hand finished Shorts to WoopSocial for scheduling.
+
+Mitigation: Confirm account permissions and validate scheduled posts before publishing or deleting content.
+
+Risk: Performance metrics could be inaccurate if inferred outside YouTube Studio.
+
+Mitigation: Read Viewed vs Swiped Away, average percentage viewed, and engaged views directly in YouTube Studio; do not fabricate metrics.
+
+## Reference(s):
+
+- [Hooks, retention, captions + two worked Shorts](references/hooks-retention-and-captions.md)
+- [Publishing, the funnel + tools layer](references/publishing-funnel-and-tools.md)
+- [YouTube Shorts algorithm 2026 - the verified signal stack](references/shorts-algorithm-2026.md)
+- [The Retention Ladder - climb four rungs, in order](references/the-retention-ladder.md)
+- [ClawHub skill page](https://clawhub.ai/social-media-skills/skills/youtube-shorts)
+- [Publisher profile](https://clawhub.ai/user/social-media-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration]
+
+**Output Format:** [Markdown guidance with structured script elements, titles, captions, workflow notes, and refusal or compliance guidance when needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference brand and voice context, route publishing through scheduling-and-queue to WoopSocial, and require native YouTube Studio analytics for performance metrics.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

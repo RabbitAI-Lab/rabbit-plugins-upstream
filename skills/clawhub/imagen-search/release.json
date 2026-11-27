@@ -1,0 +1,15 @@
+{
+  "version": "1.2.1",
+  "released_at": "2026-11-27",
+  "requires_node": ">=22",
+  "changes": [
+    "改进中英文同义词和多关键词搜索，优先展示匹配标题的图片，减少无关的部分匹配。",
+    "CLI 校验搜索参数，支持中文方向值，显示结果总数、下一页和页码越界提示。",
+    "JSON 中的空标签统一返回数组。"
+  ],
+  "changes_en": [
+    "Improve bilingual aliases and multi-term search, prioritize title matches, and reduce irrelevant partial matches.",
+    "Validate CLI search options, accept Chinese orientation labels, and show totals, next pages, and out-of-range guidance.",
+    "Return empty tags as arrays in JSON."
+  ]
+}

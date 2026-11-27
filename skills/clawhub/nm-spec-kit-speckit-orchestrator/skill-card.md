@@ -1,41 +1,50 @@
-## Description: <br>
-Orchestrates Spec Driven Development by coordinating spec, plan, and task skills. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Orchestrates Spec Driven Development by coordinating spec, plan, and task skills.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to coordinate spec-driven workflows across specification, planning, task generation, implementation, and verification phases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be invoked by generic planning or workflow language outside an intended spec-kit project. <br>
-Mitigation: Confirm the active project uses spec-kit before applying the skill to read or update specification, planning, task, and checklist files. <br>
-Risk: Generated workflow guidance can produce incorrect or misleading changes to project artifacts if used without review. <br>
-Mitigation: Review proposed artifact changes and run project-specific validation before deployment or release. <br>
+## Use Case:
 
+Developers use this skill to coordinate a spec-driven development workflow from specification through planning, task generation, implementation, and verification. It tracks workflow progress and helps load the relevant supporting skills.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-spec-kit-speckit-orchestrator) <br>
-- [Project Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/spec-kit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown guidance with checklists, workflow steps, and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Coordinates existing spec-kit artifacts and related skills; no executable payloads are included in the release artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Some referenced paths were unavailable to the security scanner, so review coverage is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill and its intended use before installing.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-spec-kit-speckit-orchestrator)
+- [Project homepage listed in skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/spec-kit)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown workflow artifacts and progress guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Coordinates spec, plan, task, and verification work across a development workflow.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

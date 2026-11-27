@@ -1,45 +1,53 @@
-## Description: <br>
-Provides entertainment-oriented SSQ lottery data analysis and number-selection assistance using statistical summaries such as missing values, frequency, sum value, AC value, span, odd-even ratio, size ratio, and interval distribution. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+双色球彩票数据分析与号码选择辅助工具。综合统计分析和趋势分析，提供遗漏值、频率、和值、AC值、跨度、奇偶比、大小比、区间分布等14个维度的数据，帮助生成号码组合。仅供娱乐参考。
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users use this skill for entertainment-oriented SSQ lottery analysis, including statistical summaries, historical-pattern discussion, and optional number-combination suggestions. Outputs should be treated as non-predictive guidance because lottery draws are random independent events. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lottery analysis recommendations may be mistaken for reliable predictions or purchase advice. <br>
-Mitigation: Present outputs as entertainment-only, non-predictive analysis and remind users that historical data cannot improve the odds of random lottery draws. <br>
-Risk: The documentation overstates that the package contains no executable code, while the artifact includes a runnable local Python script. <br>
-Mitigation: Review the local script before execution and run it only intentionally in a local environment. <br>
-Risk: The security guidance notes that the blue-ball analysis path appears to have an accuracy bug. <br>
-Mitigation: Treat blue-ball analysis as unreliable until manually reviewed or corrected, and avoid relying on it for decisions. <br>
+## Use Case:
 
+双色球 users can provide historical draw data and use the skill to describe number patterns, explain probability concepts, or draft candidate combinations for entertainment. It does not predict draws or improve winning odds.
 
-## Reference(s): <br>
-- [双色球分析方法论详细参考](references/methodology.md) <br>
-- [双色球的数理分析](https://zhuanlan.zhihu.com/p/142332075) <br>
-- [彩宝网 - 走势分析](https://www.00038.cn/) <br>
-- [中彩网 - 官方数据](https://www.zhcw.com/) <br>
+### Deployment Geography for Use:
 
+China (Mainland)
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown analysis with optional terminal command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include entertainment-only SSQ number combinations and statistical summaries; recommendations are non-predictive.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The security review is incomplete: two local references could not be resolved despite the benign overall verdict.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Resolve and review the missing references before relying on their content, and reassess any behavior they introduce.
+
+Risk: Lottery statistics or candidate combinations could be mistaken for predictions or purchasing advice.
+
+Mitigation: State that draws are random and analysis does not change the odds; use user-provided, source-checked data and verify current prize or rule claims against official sources.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/chance-ssq-predictor)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Text, Markdown]
+
+**Output Format:** [Simplified Chinese prose and Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Entertainment reference only; calculations require user-provided draw data; no executable code or actual draw prediction.]
+
+## Skill Version(s):
+
+4.2.4 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

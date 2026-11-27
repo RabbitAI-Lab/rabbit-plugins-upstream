@@ -1,39 +1,58 @@
-## Description: <br>
-Improves code quality across duplication, efficiency, and architectural fit. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Improves code quality across duplication, efficiency, and architectural fit.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to analyze working code for duplication, algorithmic inefficiency, clean-code issues, architectural fit, error handling gaps, and refactoring opportunities before releases or technical-debt reduction work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security summary flags an under-disclosed module that can publish repository findings to GitHub Discussions. <br>
-Mitigation: Review before installing, use only where repository-wide analysis and possible refactoring are acceptable, and enable insight posting only after checking findings for sensitive paths, snippets, or internal issues. <br>
+## Use Case:
 
+Developers and engineers use this skill to review existing code for duplication, algorithmic efficiency, clean-code issues, error handling, and architectural fit, then produce a prioritized refactoring plan with supporting evidence. It can apply fixes when execution is explicitly requested.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-code-refinement) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown analysis with file references, code snippets, proposed refactoring plans, and optional shell commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or apply refactors when explicitly invoked to execute findings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: ClawScan marks this release suspicious, citing a possible command-execution issue.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review command snippets and confirm their effects before running them.
+
+Risk: ClawScan cites a code-findings posting capability to GitHub Discussions that it says is not disclosed in the stated purpose.
+
+Mitigation: Review findings and the destination before posting; only enable posting when it is intended.
+
+Risk: The scan was partial because four local references could not be resolved, so their contents were not assessed.
+
+Mitigation: Resolve and inspect those references before relying on the skill.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-pensive-code-refinement)
+- [Project homepage (Clawdis metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown findings and refactoring plans; code changes when execution is requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include evidence references, prioritized recommendations, and applied changes.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

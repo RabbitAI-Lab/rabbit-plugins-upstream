@@ -1,45 +1,58 @@
-## Description: <br>
-Build a lightweight routing layer across existing knowledge sources such as MEMORY.md, daily memory files, self-improving notes, skill references, and audit records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Knowledge Router builds a lightweight routing layer across existing knowledge sources such as MEMORY.md, daily memory files, self-improving notes, skill references, and audit records.
 
-## Publisher: <br>
-[lethehades](https://clawhub.ai/user/lethehades) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lethehades](https://clawhub.ai/user/lethehades)
 
-## Use Case: <br>
-Developers and engineers use this skill to decide which existing knowledge source to read first for rules, facts, methods, evidence, or workflow improvements before loading broad context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may inspect local memory, skill reference, audit, and ~/self-improving note files. <br>
-Mitigation: Use narrower --scope values when possible and keep secrets out of knowledge files. <br>
-Risk: The optional --output argument can create or overwrite a report path. <br>
-Mitigation: Write reports only to paths you intend to create or overwrite. <br>
+## Use Case:
 
+Developers and agent operators use this skill to decide which local knowledge source to read first for a query, then generate a short routing report with primary sources, secondary sources, reasoning, and promotion hints.
 
-## Reference(s): <br>
-- [Knowledge Router ClawHub Page](https://clawhub.ai/lethehades/knowledge-router) <br>
-- [Source Types](artifact/references/source-types.md) <br>
-- [Routing Rules](artifact/references/routing-rules.md) <br>
-- [Promotion Rules](artifact/references/promotion-rules.md) <br>
-- [Report Format](artifact/references/report-format.md) <br>
-- [Release Minimal](artifact/references/release-minimal.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown routing report with optional saved text file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports include query intent, primary sources, secondary sources, rationale, and promotion hints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence.release.version) <br>
+Risk: Default-scope routing may preview local memory files, skill references, audit logs, and ~/self-improving notes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use narrower --scope values for sensitive workspaces or when a query only needs one knowledge layer.
+
+Risk: The --output option writes to a caller-provided local path and could overwrite an important file.
+
+Mitigation: Choose an explicit non-critical report path and review the target before writing output.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/lethehades/skills/knowledge-router)
+- [source-types.md](artifact/references/source-types.md)
+- [routing-rules.md](artifact/references/routing-rules.md)
+- [promotion-rules.md](artifact/references/promotion-rules.md)
+- [report-format.md](artifact/references/report-format.md)
+- [release-minimal.md](artifact/references/release-minimal.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown routing report with source recommendations and promotion hints]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write the report to a caller-provided local output path.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

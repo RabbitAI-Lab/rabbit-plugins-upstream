@@ -1,43 +1,56 @@
-## Description: <br>
-AI-powered insurance anti-fraud analysis skill that provides an advisory framework for claim fraud detection, underwriting risk control, investigation workflows, and insurance risk review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a reference framework for identifying insurance fraud signals, assessing claims and underwriting risks, and organizing investigation and risk-control workflows in the Chinese insurance market.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Claims, underwriting, risk-control, compliance, and investigation teams can use it to organize insurance fraud indicators and review workflows. It provides reference material and draft analysis that require qualified human review.
+
+### Deployment Geography for Use:
+
+China
+
+## Known Risks and Mitigations:
+
+Risk: The scanner reports a benign result with medium confidence after a partial inspection; five referenced guides are absent from the supplied artifact and the manifest could not be parsed.
+
+Mitigation: Review the complete skill, its five companion guides, and a valid manifest before relying on the material when stronger assurance is needed.
+
+Risk: Illustrative risk scores or fraud indicators could be mistaken for definitive findings about a person or claim.
+
+Mitigation: Treat indicators as leads for qualified human review; verify supporting evidence and do not use scores alone for rejection or formal fraud determinations.
+
+Risk: Fraud analysis may involve sensitive personal and health information or access to external records.
+
+Mitigation: Minimize and de-identify inputs, and use external records only with documented authorization and business need.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Insurance claims, risk control, compliance, and underwriting teams use this skill to structure fraud-risk review, identify common claim and underwriting red flags, and prepare investigation or review guidance. Outputs are advisory and require authorized human professional review before use in real claim, underwriting, or compliance decisions. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-China <br>
+**Output Type(s):** [Analysis, Guidance, Markdown, Code]
 
-## Known Risks and Mitigations: <br>
-Risk: Fraud indicators, scoring thresholds, and underwriting examples could be mistaken for final legal, financial, medical, or insurance advice. <br>
-Mitigation: Use the skill only as an advisory reference and require authorized human professional review before applying outputs to claim, underwriting, compliance, or customer decisions. <br>
-Risk: The workflow discusses personal data checks, medical records, claim histories, and fraud flags that may involve sensitive or regulated information. <br>
-Mitigation: Apply the guidance only with proper authorization, privacy controls, data-minimization practices, and organization-approved investigation procedures. <br>
+**Output Format:** [Markdown text with tables and illustrative code examples]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/gechengling/insurance-anti-fraud) <br>
-- [Insurance Anti-Fraud Expert README](README.md) <br>
-- [Anti-Fraud Guide](references/anti_fraud_guide.md) <br>
-- [Underwriting Risk Assessment](references/underwriting_risk_assessment.md) <br>
+**Other Properties Related to Output:** [Reference material and draft analysis; examples are illustrative and require human review.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown advisory analysis with tables, scoring guidance, checklists, and review workflows] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code, network access, persistent storage, or credential collection is included in the artifact.] <br>
+5.0.9 (source: frontmatter)
 
-## Skill Version(s): <br>
-5.0.2 (source: server release evidence; artifact frontmatter says 2.0.0) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,62 @@
-## Description: <br>
-微信搜一搜实时搜索工具，支持获取微信生态中的文章、视频和图片搜索数据；当前 artifact 实现了关键词视频搜索。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search public WeChat articles and video content by keyword and return structured JSON results.
 
-## Publisher: <br>
-[um-why](https://clawhub.ai/user/um-why) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[um-why](https://clawhub.ai/user/um-why)
 
-## Use Case: <br>
-External users and developers use this skill to search WeChat content by keyword, especially for real-time video results, market monitoring, competitor analysis, and content planning. It requires a GUAIKEI_API_TOKEN and Node.js runtime. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search keywords are sent to guaikei.com using the configured GUAIKEI_API_TOKEN. <br>
-Mitigation: Use only with keywords appropriate to share with the service, protect the token, and rotate it if exposed. <br>
-Risk: Successful search results are saved locally under the skill's logs directory. <br>
-Mitigation: Review generated log files and manage retention according to the user's data-handling requirements. <br>
-Risk: The release description mentions article, video, and image search, while the current artifact implements video search. <br>
-Mitigation: Treat this version as a video-search tool unless additional article or image modes are separately verified. <br>
+## Use Case:
 
+External users and developers can search publicly available WeChat articles or video content by keyword for topic discovery, competitor monitoring, and trend analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/um-why/wechat-sou) <br>
-- [Guaikei service site](https://www.guaikei.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Files] <br>
-**Output Format:** [JSON object printed to stdout and saved as a local JSON log file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search results include status, keyword, limit, total count, timestamp, runtime metadata, and result records when the upstream service returns matches.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and package.json) <br>
+Risk: Search keywords are sent to the third-party Guaikei service to retrieve public WeChat search data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sensitive or confidential search terms and confirm the service is appropriate for your use.
+
+Risk: Security inspection was partial, and scanner guidance notes undeclared tool scope.
+
+Mitigation: Review the skill files and required runtime and network access before installation.
+
+Risk: Timestamps use a fixed Beijing-time format that may differ from the reader's local time.
+
+Mitigation: Account for Beijing time when interpreting result timestamps.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/um-why/skills/wechat-sou)
+- [Guaikei service](https://www.guaikei.com)
+- [Search options](references/options.md)
+- [FAQ and environment setup](references/faq.md)
+- [Output contract](references/contract.md)
+- [Changelog](references/changelog.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text]
+
+**Output Format:** [Structured JSON envelope containing article or video results, request details, and status information.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns up to the requested result limit; timestamps use Beijing time.]
+
+## Skill Version(s):
+
+1.1.3 (source: SKILL.md frontmatter, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

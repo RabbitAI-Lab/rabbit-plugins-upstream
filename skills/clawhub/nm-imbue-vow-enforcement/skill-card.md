@@ -1,43 +1,50 @@
-## Description: <br>
-Classifies and enforces constraints via soft vows, hard vows, and Nen Court layers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Classifies and enforces constraints via soft vows, hard vows, and Nen Court layers
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to classify project rules, audit enforcement gaps, and decide whether constraints belong in skill guidance, hooks, or external validation gates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger words may make the skill appear in more governance or compliance conversations than intended. <br>
-Mitigation: Treat its recommendations as advisory unless the user intentionally implements separate hooks or validators. <br>
-Risk: Guidance about enforcement layers could be mistaken for active enforcement. <br>
-Mitigation: Confirm that any required hooks, permissions, or validator agents are implemented and tested outside this documentation-only skill. <br>
-Risk: Soft rules can fail when model goals conflict with project constraints. <br>
-Mitigation: Promote high-risk binary constraints to hard hooks and route judgment-heavy checks through external validation gates. <br>
+## Use Case:
 
+Developers use this skill to classify project constraints and choose whether to rely on written guidance, enforce rules with hooks and permissions, or audit work with validator agents. They can also use it to review existing enforcement and decide when a constraint should move to a stronger layer.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-vow-enforcement) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with tables, examples, and command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only release artifact with no executable code included.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
+Risk: The security review has medium confidence because some referenced files were unavailable for scanning.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the referenced plugin files before adopting or enabling its hooks, permissions, or validators.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/athola/skills/nm-imbue-vow-enforcement)
+- [Imbue plugin reference (metadata homepage)](https://github.com/athola/claude-night-market/tree/master/plugins/imbue)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Configuration, Shell commands, Code]
+
+**Output Format:** [Markdown with YAML, JSON, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes constraint classification criteria, enforcement recommendations, and validator invocation examples.]
+
+## Skill Version(s):
+
+1.10.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

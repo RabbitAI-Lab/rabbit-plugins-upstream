@@ -2,21 +2,33 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.codeofaxel/kiln",
   "title": "Kiln",
-  "description": "Kiln MCP server for agents: design, slice, print, monitor, and recover physical objects safely.",
-  "version": "1.2.0",
+  "description": "Spawn an object into existence: describe it, and your agent designs it, checks it, and 3D prints it.",
+  "version": "1.6.0",
   "repository": {
     "url": "https://github.com/codeofaxel/Kiln",
     "source": "github"
   },
-  "websiteUrl": "https://kiln3d.com",
+  "websiteUrl": "https://kiln3d.com/?utm_source=mcp-registry&utm_medium=listing",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/codeofaxel/Kiln/main/mcpb/icon.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "1024x1024"
+      ]
+    }
+  ],
   "packages": [
     {
       "registryType": "pypi",
       "identifier": "kiln3d",
-      "version": "1.2.0",
+      "version": "1.6.0",
       "runtimeHint": "uvx",
       "packageArguments": [
-        { "type": "positional", "value": "serve" }
+        {
+          "type": "positional",
+          "value": "serve"
+        }
       ],
       "transport": {
         "type": "stdio"
@@ -41,6 +53,12 @@
           "isSecret": false
         }
       ]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.kiln3d.com/mcp"
     }
   ]
 }

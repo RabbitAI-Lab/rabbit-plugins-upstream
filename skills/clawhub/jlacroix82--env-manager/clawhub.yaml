@@ -1,7 +1,7 @@
-slug: env-mgr
-name: env-mgr
-description: Scaffolds dev project files (package.json, Dockerfile, Cargo.toml, etc.) and returns toolchain commands for the calling agent to run. Writes files only inside the agent workspace. Environment names are strictly sanitized to a conservative allowlist (lowercase letters, digits, hyphen, underscore, dot) and rejected if they contain path separators, parent-directory references, or shell metacharacters. Does not run shell commands.
-version: 1.4.0
+slug: env-manager
+name: env-manager
+description: Scaffolds dev project files (package.json, Dockerfile, Cargo.toml, etc.) and returns toolchain commands for the calling agent to run. Writes files only inside the project workspace (repo root), or a descendant set via the ENV_MANAGER_WORKSPACE env var (confined to within the repo root — paths outside are refused). Environment types are restricted to a fixed allowlist (python, node, docker, go, rust) and environment names to a conservative character allowlist (lowercase letters, digits, hyphen, underscore, dot), both validated before any path is constructed; invalid input writes nothing. Every path is additionally re-checked for workspace containment immediately before each mkdir/write. Does not run shell commands.
+version: 3.0.9
 type: skill
 author: OpenClaw
 license: MIT

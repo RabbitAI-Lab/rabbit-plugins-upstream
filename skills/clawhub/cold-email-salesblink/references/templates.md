@@ -34,7 +34,7 @@ Body:
 | `name` | string | ✅ | Template name |
 | `subject_line` | string | ✅ | Email subject (supports `{{variables}}`) |
 | `content` | string | ✅ | HTML body (supports `{{first_name}}`, `{{company}}`, etc.) |
-| `folder` | string | | Folder ID (UUID) |
+| `folder` | string | | General folder ID (UUID). Must be a folder created without a `type` (i.e., not an email-sender folder). |
 | `starred` | boolean | | Star the template |
 | `attachments` | file[] | | Files to attach (**max 3 total**). Use FormData field name `attachment` |
 
@@ -77,6 +77,7 @@ Body:
 | `name` | string | New template name |
 | `subject_line` | string | New subject line |
 | `content` | string | New HTML body |
+| `folder` | string | Move template to a general folder (a folder created without a `type`, not an email-sender folder). Pass an empty string to remove from folder. |
 | `starred` | boolean | Star/unstar |
 | `attachments` | file[] | New files to **append** (total must not exceed 3). Use FormData field name `attachment` |
 | `remove_attachments` | string[] | Names of existing attachments to **remove** |
@@ -94,4 +95,17 @@ Headers:
 Body:
 ```json
 { "archived": true }
+```
+
+Set `"archived": false` to unarchive.
+
+If a sequence uses the template, the request returns `409` with `code: "IN_USE"` and the sequences that use it. Nothing is changed. Tell the user which sequences use it, and only repeat the request with `"force": true` in the body (or `?force=true`) if they confirm:
+
+```json
+{
+  "success": false,
+  "code": "IN_USE",
+  "message": "...",
+  "sequences": [{ "id": "sequence_uuid", "name": "Q4 Outreach" }]
+}
 ```

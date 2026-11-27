@@ -1,40 +1,58 @@
-## Description: <br>
-Analyze and optimize retrieval-augmented generation pipelines for 100K-2M token documents using hybrid search, chunking, reasoning, and structured reporting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyze and optimize retrieval-augmented generation pipelines for 100K–2M token documents using hybrid search, chunking, reasoning, and structured reporting.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, analysts, legal professionals, and researchers use this skill to design, evaluate, and improve long-context RAG workflows for large document collections, including financial reports, legal contracts, research papers, and regulatory filings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Confidential financial or legal documents could be exposed if embeddings or model calls are sent to third-party providers without review. <br>
-Mitigation: Decide whether embeddings and model calls must stay local before using the skill with confidential documents. <br>
-Risk: High-stakes RAG outputs can be misleading if generated without source grounding. <br>
-Mitigation: Require citations, page references, and confidence signals for financial, legal, or regulatory answers. <br>
+## Use Case:
 
+Developers, analysts, legal professionals, and researchers use it to plan and evaluate RAG workflows for large document collections and draft structured, source-aware analyses. Its outputs are methodological drafts for human review, not professional advice or publication-ready conclusions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/long-context-rag-analyzer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, configuration, shell commands] <br>
-**Output Format:** [Markdown with tables, structured reports, configuration snippets, and code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include citations, confidence scores, retrieval metrics, action plans, and export recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.2 (source: frontmatter and release evidence) <br>
+Risk: The supplied security scan covered only part of the artifact, so its benign verdict does not establish that the skill is risk-free.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the complete artifact before relying on the scan result.
+
+Risk: Documents processed using this guidance may contain sensitive personal, financial, legal, or business information.
+
+Mitigation: Use only the documents needed for the task, redact or aggregate sensitive fields, or confirm authorization before indexing.
+
+Risk: Draft analyses may be mistaken for professional conclusions or reports ready for external release.
+
+Mitigation: Have a qualified reviewer check sources, figures, and assumptions, and obtain explicit approval of the complete preview before exporting or sending.
+
+## Reference(s):
+
+- [Long Context RAG Analyzer on ClawHub](https://clawhub.ai/gechengling/skills/long-context-rag-analyzer)
+- [Publisher profile: gechengling](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Structured Markdown with prose, tables, citations, and illustrative code/configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference drafts for human review; the skill describes methods and does not execute pipelines or perform system operations.]
+
+## Skill Version(s):
+
+3.0.6 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

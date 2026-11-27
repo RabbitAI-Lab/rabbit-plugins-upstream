@@ -1,41 +1,49 @@
-## Description: <br>
-Searches and navigates stored knowledge in memory palaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches and navigates stored knowledge in memory palaces.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and knowledge workers use this skill to search, navigate, and cross-reference information stored in memory palaces, including review-chamber knowledge from prior project work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad retrieval, search, indexing, and recall triggers may activate during ordinary requests and surface private memory-palace or review-chamber context. <br>
-Mitigation: Review the invoked context and intended palace or room scope before using results, especially when working with private notes or review history. <br>
+## Use Case:
 
+Developers and AI agents use this skill to find and connect information stored in one or more memory palaces through spatial, semantic, sensory, associative, and temporal queries.
 
-## Reference(s): <br>
-- [Index Structure](artifact/modules/index-structure.md) <br>
-- [Search Strategies](artifact/modules/search-strategies.md) <br>
-- [Memory Palace homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace) <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-memory-palace-knowledge-locator) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and retrieval guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; no embedded executable code or hidden install behavior was reported by server security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter lists 1.9.8) <br>
+Risk: The referenced CLI script was not available for verification, and the pr-review trigger may overlap with other search workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the CLI commands match the installed memory-palace tools and review whether the pr-review trigger fits your workflow before use.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands]
+
+**Output Format:** [Search results and guidance in text or Markdown, with optional shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings and cross-references depend on the memory palaces and indices available to the agent.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

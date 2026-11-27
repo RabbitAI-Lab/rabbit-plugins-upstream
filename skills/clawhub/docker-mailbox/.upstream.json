@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/docker-mailbox",
   "slug": "docker-mailbox",
   "ownerHandle": null,
-  "version": "1.2.2",
-  "updatedAt": 1785032997676,
-  "contentHash": "6fcccf30a3162ea29b1d249a9052477d77a5835d106e70247d2f6d0c46aac43c",
-  "fetchedAt": "2026-07-26T18:03:45.086Z"
+  "version": "1.2.12",
+  "updatedAt": 1795524027058,
+  "contentHash": "72167f31ba9673d83c30072ff8dc49c4ef17674dd8e9c9a9ebcd7c019e6b1111",
+  "fetchedAt": "2026-11-27T17:41:48.484Z"
 }

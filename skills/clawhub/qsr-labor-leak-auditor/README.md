@@ -1,9 +1,17 @@
 # QSR Labor Leak Auditor
-**v2.0.0 · McPherson AI · San Diego, CA**
+**v3.1.5 · McPherson AI · San Diego, CA**
 
 AI-powered weekly labor cost auditor for QSR operators: tracks labor as a percentage of revenue, catches clock padding and scheduling drift, and flags mid-week risks before payroll closes.
 
 **v2 update:** now uses contextual windows like catering, promotions, events, and weather before recommending labor cuts, with manager override and a full audit trail.
+
+## Observa Edge Basic Beta
+
+Observa Edge Basic Beta is a separate, optional OpenClaw plugin from McPherson AI for local guardrails on covered tool routes. Installing this restaurant skill leaves Guard inactive. Accountless Shadow previews covered requests locally. Guard enrollment is restricted and requires approval and a separate local owner activation.
+
+[**Explore Observa Edge Basic Beta →**](https://mcphersonai.com/observa/edge-basic?utm_source=github&utm_medium=skill-readme&utm_campaign=observa-edge-basic-beta&utm_content=qsr-labor-leak-auditor)
+
+*Publisher notice. The QSR skill’s behavior and data handling are unchanged.*
 
 ---
 
@@ -122,17 +130,7 @@ It fits alongside skills focused on:
 
 ## License
 
-This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license with an operational-use clarification.
-
-See the [LICENSE](LICENSE) file for full details.
-
-### Plain-English Summary
-
-You are free to use, adapt, and share this skill for personal use and internal business operations.
-
-You may not commercially redistribute it by reselling, repackaging, sublicensing, or offering it as a paid competing product without permission.
-
-Operating this skill inside your own restaurant, franchise group, or business is allowed under this license clarification.
+McPherson AI distributes this ClawHub edition under MIT-0. The GitHub source edition is available under Apache License 2.0. See [LICENSE](LICENSE). Third-party materials remain subject to their applicable terms.
 
 ---
 
@@ -147,6 +145,15 @@ Builder of practical AI systems for restaurant operations, labor control, and ex
 ---
 
 ## Version
+
+**v3.1.4**
+Publisher-notice refresh: Observa CTA updated to the current Getting Started flow. No functional changes.
+
+**v3.1.3**
+Publisher-note release; the Observa private beta is now open. No functional changes.
+
+**v3.1.2**
+Publisher-note release; operational behavior and license unchanged.
 
 **v2.0.0**  
 Adds contextual audit support, manager override logging, and weather-aware labor review.

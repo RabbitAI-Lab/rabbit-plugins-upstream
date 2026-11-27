@@ -1,42 +1,50 @@
-## Description: <br>
-Defines testing quality metrics, coverage thresholds, and anti-patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Defines test quality metrics, coverage thresholds, anti-patterns, and pytest configuration.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to establish testing quality gates, coverage targets, and review criteria for validating test suites. It provides coverage thresholds, testing checklists, anti-pattern examples, and content assertion guidance for agent-interpreted markdown. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger terms may activate the skill in more situations than intended and present general testing thresholds as policy guidance. <br>
-Mitigation: Review the guidance before use and adapt coverage thresholds or quality gates to the project's existing policy and risk level. <br>
+## Use Case:
 
+Developers use this skill to set testing quality gates and coverage targets, improve pytest suites, and apply reusable fixture and CI patterns. It provides checklists and examples for assessing test structure, coverage, maintainability, and reliability.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-testing-quality-standards) <br>
-- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
-- [Testing anti-patterns](artifact/modules/anti-patterns.md) <br>
-- [Testing best practices](artifact/modules/best-practices.md) <br>
-- [Content assertion levels](artifact/modules/content-assertion-levels.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands] <br>
-**Output Format:** [Markdown with checklists, tables, inline code, and Python or shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No hidden execution; markdown-only guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: The security review is partial and marks the release suspicious because it found checks outside the stated testing-quality purpose and a Codecov upload in CI examples; this does not establish malicious intent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the less clearly disclosed checks and Git repository helper before installing. For CI examples, check whether coverage data would leave the environment, especially for private or sensitive repositories.
+
+## Reference(s):
+
+- [ClawHub skill release page](https://clawhub.ai/athola/skills/nm-leyline-testing-quality-standards)
+- [Homepage listed in skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/leyline)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance with Python, shell, YAML, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reusable checklists, code examples, and configuration templates to adapt to the project.]
+
+## Skill Version(s):
+
+1.10.4 (source: ClawHub release metadata; artifact frontmatter reports 1.10.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,142 @@
+# Personas, Memory & Personality
+
+Read this when managing personas (named people with saved reference photos and
+voice clips), persistent user preferences, custom agent personality, or
+multi-persona scenes, or style transformations of a referenced individual.
+
+## Persona System
+
+Personas enable identity-preserving generation across sessions. Stored at
+`~/.config/sogni/personas/`.
+
+### Personas saved in your Sogni account
+
+The Web and Chat share account Personas. The CLI keeps its local library and offers an explicit snapshot import; it never syncs or replaces local Personas automatically.
+
+```bash
+sogni-agent --persona-list-account --json
+sogni-agent --persona-list-account --persona-account-after "<nextCursor>" --json
+sogni-agent --persona-import-account "<persona-id>" --json
+sogni-agent --persona "Alice" -o ./portrait.png "Alice in a sunlit courtyard"
+```
+
+Listing reads one page and returns `nextCursor`. Import copies the selected Persona’s original reference files through the authenticated API, including saved photos, character sheets and audio voice recordings. It also saves the description, appearance, attire, voice description and transcript. A matching local name is refused without replacing anything. The imported snapshot keeps working locally; later account edits require an explicit new import after you resolve the name conflict. The first identity photo anchors a frame-guided video; image edits and explicit reference-to-video runs can use its other saved images. All downloaded reference paths appear in the imported Persona JSON. A voice supplied only as a video is retained as a file, but must be extracted as audio before using it as a local voice clip.
+
+### Managing Personas
+
+```bash
+# Add a persona with a reference photo
+sogni-agent --persona-add "Mark" --ref face.jpg --relationship self --description "30s male, brown hair, brown eyes"
+
+# Add with voice clip for video voice cloning (plus a voice description)
+sogni-agent --persona-add "Sarah" --ref sarah.jpg --relationship partner --voice-clip sarah-voice.webm --voice "warm alto with British accent"
+
+# List all personas
+sogni-agent --persona-list --json
+
+# Resolve a persona by name, tag, or pronoun
+sogni-agent --persona-resolve "me" --json
+
+# Generate using a persona (auto-injects photo as context)
+sogni-agent --persona "Mark" -o ./hero.png "superhero in dramatic lighting"
+
+# Video using a persona photo + saved voice identity
+sogni-agent --video --persona "Sarah" 'SARAH: "This is my voice."'
+
+# Remove a persona
+sogni-agent --persona-remove "Mark"
+```
+
+`--relationship` accepts `self|partner|child|friend|pet` (default `friend`).
+
+### Persona Pipeline Rules
+
+When a user mentions a persona by explicit saved name, id, or tag/alias:
+
+1. **For images:** use `--persona "Name" "prompt"` — auto-injects the persona's reference photo as context and edits with Krea 2 Identity Edit (`krea2_identity_edit_v1_2`), which keeps the person's likeness. Add `-m dark_beast_krea2_identity_edit_v1_2` for an NSFW scene.
+2. **For video with voice cloning:** the persona's voice clip is used as `--reference-audio-identity` automatically when `--video` is combined with `--persona`. `--voice-persona <name>` selects just the voice identity.
+3. **For video without a voice clip:** describe the voice in the prompt ("speaks in a warm alto with a British accent").
+
+**Important:** user-uploaded photos are NOT personas. Only use `--persona`
+when referring to a saved persona by explicit name, id, or tag/alias;
+relationship phrases alone are not persona identifiers. For ad-hoc photos,
+use `-c` (context image) directly.
+
+### Multi-Persona Scene
+
+1. Resolve all personas: `--persona-resolve "Mark" --json` and `--persona-resolve "Sarah" --json`
+2. Generate the scene with both photos: `-c mark-photo.jpg -c sarah-photo.jpg "Mark and Sarah at a cafe, use face from picture 1 for Mark, face from picture 2 for Sarah"`
+3. Animate with one persona's voice identity: `--video --ref <scene.png> --reference-audio-identity <mark-voice.webm> "MARK: \"Exact spoken words.\""`
+
+## Memory System (persistent preferences)
+
+Memories are persistent key-value preferences stored at
+`~/.config/sogni/memories.json`.
+
+```bash
+sogni-agent --memory-set preferred_style "watercolor and soft lighting"
+sogni-agent --memory-set aspect_ratio "16:9"
+sogni-agent --memory-set favorite_artist "Studio Ghibli"
+sogni-agent --memory-list --json
+sogni-agent --memory-get preferred_style --json
+sogni-agent --memory-remove preferred_style
+```
+
+**Agent behavior:** before generating, check memories with `--memory-list` and
+respect saved preferences. If the user says "I always want watercolor style",
+save it with `--memory-set`. Categories via `--memory-category`: `preference`
+(default), `fact`, `context`.
+
+## Personality (custom agent instructions)
+
+Custom instructions that shape agent behavior, stored at
+`~/.config/sogni/personality.txt`.
+
+```bash
+sogni-agent --personality-set "Be concise, always use cinematic lighting, suggest bold creative ideas"
+sogni-agent --personality-get --json
+sogni-agent --personality-clear
+```
+
+**Agent behavior:** check personality on startup and adopt those instructions.
+Personality overrides default style but not hard constraints (safety, tool
+usage rules).
+
+## Style Transfer recipes
+
+```bash
+# Apply a named artist style
+sogni-agent -c photo.jpg -o ./styled.png "Apply style: Andy Warhol pop art with bold primary colors"
+
+# Studio Ghibli transformation
+sogni-agent -c photo.jpg -o ./ghibli.png "Apply style: Studio Ghibli watercolor with soft pastel sky and lush greenery"
+
+# Translate the particular person's likeness into the requested visual language
+sogni-agent -c portrait.jpg -o ./styled.png "Reimagine the person from this portrait in a Vermeer-inspired oil painting, with a recognizable individual likeness expressed through the painted forms."
+```
+
+**Tips:** use the requested artist or visual language and concrete art direction.
+For a bounded edit, preserve genuinely untargeted content. For a creative
+transformation, the complete brief can imply changed proportions, anatomy,
+expression, pose, framing, accessories or skin treatment. Make the particular
+individual recognizable within that design; source observations are evidence,
+not an unchanged-feature inventory. Honor explicit locks and choose facial
+exposure with artistic judgment. Do not append universal face-preservation or
+beauty boilerplate to every prompt.
+
+## Photo Restoration recipes
+
+```bash
+# Basic restoration
+sogni-agent -c damaged_photo.jpg -o restored.png \
+  "professionally restore this vintage photograph, remove damage and scratches"
+
+# Detailed restoration with preservation hints
+sogni-agent -c old_photo.jpg -o restored.png -w 1024 -h 1280 \
+  "restore this vintage photo, remove peeling, tears and wear marks, \
+  preserve natural features and expression, maintain warm nostalgic color tones"
+```
+
+**Tips:** describe the damage ("peeling", "scratches", "tears", "fading");
+specify what to preserve ("natural features", "eye color", "expression");
+mention the era for color tones ("1970s warm tones", "vintage sepia").

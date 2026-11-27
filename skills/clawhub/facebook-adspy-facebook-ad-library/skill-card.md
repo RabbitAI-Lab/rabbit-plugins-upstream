@@ -1,44 +1,55 @@
-## Description: <br>
-Research Facebook ad creatives and Meta Ad Library results using PipiAds adspy and ad library tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Research Facebook ad creatives and Meta Ad Library results using PipiAds adspy and ad library tools.
 
-## Publisher: <br>
-[fanyanggod](https://clawhub.ai/user/fanyanggod) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fanyanggod](https://clawhub.ai/user/fanyanggod)
 
-## Use Case: <br>
-External users and marketing researchers use this skill for one-off Facebook ad research, including finding ads, advertisers, products, creatives, landing pages, and Meta Ad Library records through PipiAds tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill globally installs and runs a third-party npm MCP server. <br>
-Mitigation: Vet the npm package before deployment and consider running it in a contained environment. <br>
-Risk: The MCP server receives access to the PipiAds API key for service calls. <br>
-Mitigation: Use a dedicated or least-privilege API key and rotate or revoke it if usage looks abnormal. <br>
-Risk: PipiAds API calls consume account credits and can affect billing. <br>
-Mitigation: Ask users to narrow platform, region, keyword, and result limits before broad searches, and monitor PipiAds credit and billing usage. <br>
+## Use Case:
 
+Marketing analysts and advertisers use this skill to research Facebook ad creatives, products, advertisers, and Meta Ad Library activity by keyword, region, engagement, and store patterns.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/fanyanggod/facebook-adspy-facebook-ad-library) <br>
-- [PipiAds homepage](https://www.pipiads.com) <br>
-- [PipiSpy account and billing portal](https://www.pipispy.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with tool-selection recommendations and PipiAds MCP tool calls] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npm and a PIPIADS_API_KEY; API calls consume PipiAds account credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Search criteria may be sent to PipiAds, creating a low-probability privacy disclosure concern.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid including confidential or personal information in search criteria.
+
+Risk: Each API call consumes PipiAds credits.
+
+Mitigation: Specify the platform and region, then narrow searches with relevant filters before requesting results.
+
+## Reference(s):
+
+- [PipiAds](https://www.pipiads.com/)
+- [PipiSpy API key and billing](https://www.pipispy.com/)
+- [ClawHub skill release](https://clawhub.ai/fanyanggod/skills/facebook-adspy-facebook-ad-library)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Analysis, Guidance]
+
+**Output Format:** [Text summaries and structured ad, product, advertiser, and Ad Library results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search results and details depend on the selected platform, region, and filters; API calls consume PipiAds credits.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

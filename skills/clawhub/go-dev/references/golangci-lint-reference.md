@@ -1,21 +1,37 @@
 # golangci-lint v2 Reference
 
-Latest: **v2.11.4** (March 2026). Requires `version: "2"` in config.
+Latest: **v2.15.0** (2026-10-16). Requires `version: "2"` in config.
+
+**Go version floor:** "golangci-lint supports Go versions lower or equal to the Go version used to compile it." Go 1.27 support arrived in v2.13.0 ("🎉 go1.27 support"), so a Go 1.27 project needs v2.13 or newer - an older pin fails outright rather than degrading. The floor can move inside one Go minor: v2.13.2 handles go1.27.1 and go1.27.2 but fails on go1.27.3 with `could not load export data: ... export data version 5 is greater than maximum supported version 4` as a `typecheck` issue on every import, while v2.14.0 and v2.15.0 pass. `go install` of v2.15.0 itself requires Go 1.26 (its `go.mod` says `go 1.26.0`).
 
 ## Installation
 
 ```bash
 # Binary (recommended)
-curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.11.4
+curl -sSfL https://golangci-lint.run/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.15.0
 
-# Homebrew
+# Homebrew - "Homebrew can use an unexpected version of Go to build the binary",
+# and it cannot pin a version. Prefer the binary installer.
 brew install golangci-lint
 
 # Docker
-docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v2.11.4 golangci-lint run
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v2.15.0 golangci-lint run
+
+# mise (uses the aqua backend, so it fetches the GitHub binary)
+mise use -g golangci-lint@2.15.0
 
 # go install (not recommended - dependency conflicts possible)
-go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.11.4
+go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.15.0
+```
+
+**Upstream recommends binary installation and warns against the tools pattern:** "Using `go install`/`go get`, \"tools pattern\", and `tool` command/directives installations aren't guaranteed to work. We recommend using binary installation." Seven reasons are listed, the load-bearing one for shared repos being that "the dependencies of a tool can modify the dependencies of another tool or your project". There is a blunt "We don't recommend using `go tool`" on top.
+
+If you need it in `go.mod` anyway, isolate it behind a dedicated module file so it cannot perturb your project's graph - "the best approach is to use a dedicated module or module file to isolate golangci-lint from other tools or dependencies":
+
+```bash
+go mod init -modfile=golangci-lint.mod github.com/org/repo/golangci-lint
+go get -tool -modfile=golangci-lint.mod github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.15.0   # rerun with a new tag to update
+go tool -modfile=golangci-lint.mod golangci-lint run
 ```
 
 ## Commands
@@ -30,16 +46,41 @@ golangci-lint linters          # List enabled linters
 golangci-lint help linters     # List all available linters
 golangci-lint formatters       # List enabled formatters
 golangci-lint config path      # Show which config file is used
-golangci-lint cache clean      # Clear analysis cache
+golangci-lint cache clean      # Clear analysis cache (fixes phantom issues from stale results)
+golangci-lint cache status     # Show cache directory and size
+golangci-lint custom           # Build a binary with module plugins (.custom-gcl.yml)
+golangci-lint version          # Print version
 golangci-lint run --fast-only  # Run fast linters only (for editors)
 golangci-lint run --default=none --enable=govet  # Run specific linters
 ```
 
+`run` also runs the enabled formatters and reports their issues, "but it does not format the code"; "To apply both linter fixes and formatting, use `golangci-lint run --fix`" (docs/content/docs/configuration/cli.md). So a separate `golangci-lint fmt --diff` gate duplicates the formatter check that `run` already fails on - harmless, and its diff is easier to read than a lint issue.
+
 ## Config File Structure
 
-Config file: `.golangci.yml` (searched in CWD, then parent dirs, then home).
+Config file: `.golangci.yml`, `.golangci.yaml`, `.golangci.toml` or `.golangci.json`. golangci-lint "looks for config files in the following paths from the current working directory" first, then "searches for config files in all directories from the directory of the first analyzed path up to the root", then the home directory (the search list starts with `./`, `pkg/config/base_loader.go:133`). So a root config beats `sub/.golangci.yml` when you run `golangci-lint run ./sub/...` from the root; run from `sub/` or pass `--config` to use the nested one, and check the winner with `golangci-lint config path`.
 
-JSON Schema: `https://golangci-lint.run/jsonschema/golangci.jsonschema.json`
+JSON Schema: use the **versioned** URL matching your binary, e.g. `https://golangci-lint.run/jsonschema/golangci.v2.15.jsonschema.json`. The unversioned `golangci.jsonschema.json` follows the *latest release* - the release bot rewrites it after each tag ("docs: update documentation assets") - so it drifts ahead of an older pinned binary. Master is `golangci.next.jsonschema.json`, the file embedded in the binary for `config verify` (`jsonschema/jsonschema.go:12`). `golangci-lint config verify` against the installed binary is the authoritative check.
+
+`.golangci.reference.yml` in the repo lists every supported option with descriptions and defaults - "There is a `.golangci.reference.yml` file with all supported options, their descriptions, and default values." It is not schema-checked: at v2.15.0 it still shows the old `exhaustive` names (`ignore-enum-members`, `explicit-exhaustive-switch`) that v2.15.0's own `config verify` rejects, so trust `config verify` or the versioned schema over a copied snippet.
+
+**Cache isolation:** golangci-lint honours `GOLANGCI_LINT_CACHE`. Give each git worktree its own value so a deleted branch's cached results cannot resurface as issues in files that no longer exist. On v2.15.0 the cache salt is the version string, `linters.settings`, `run.build-tags` and the full `go.mod` of the current directory (`pkg/commands/run.go:625-725`), so any settings or `go.mod` edit makes the next run cold - batch `.golangci.yml` edits (enabling several linters at once) before one run. The salt misses `GOOS`, `GOARCH`, `CGO_ENABLED` and the other modules' `go.mod` in a workspace: on a shared cache, `GOOS=linux` then `GOOS=darwin` both report `0 issues.` while a cold darwin run finds the issue. Main salts `GOOS`, `GOARCH` and `CGO_ENABLED` ([#6918](https://github.com/golangci/golangci-lint/pull/6918), unreleased), but the maintainer does not support linting several targets from one cache either way - "if an element does not work as expected due to the manipulation of `GOOS/GOARCH`, I do not consider this a bug, as we have never claimed that this scenario is supported or working" ([#6917](https://github.com/golangci/golangci-lint/issues/6917)) - so keep one cache path per target after the next release too. A sibling workspace module's `go.mod` stays outside the salt.
+
+`GOLANGCI_LINT_CACHE` overrides the default `golangci-lint` dir under the user cache dir, and "the path must be absolute" (docs/content/docs/configuration/cli.md). `golangci-lint cache clean` deletes whatever `GOLANGCI_LINT_CACHE` resolves to in the shell that runs it (`cache.DefaultDir()`), so running it by hand outside a recipe that sets the var wipes the default dir and leaves the recipe's cache untouched. Clean from inside the same environment the lint runs in.
+
+**Exit 7 after "0 issues." is a failure, not a pass.** Exit codes are `1` issues found, `2` a warning was logged while `FAIL_ON_WARNINGS=1` is set (`pkg/commands/run.go:472`), `3` failure, `4` timeout, `5` no Go files, `6` no config file detected, `7` an error was logged (`pkg/exitcodes/exitcodes.go`) - e.g. a typecheck error the linter "couldn't parse and ... just logged" (`pkg/commands/run.go:479`). The common trigger is a cache that cannot be written - a sandboxed agent, read-only `HOME`, a locked-down CI runner - which logs `operation not permitted` under `go-build` and also drops analyzer facts on every run, the same root cause as the phantom-nolintlint footgun. Point both `GOCACHE` and `GOLANGCI_LINT_CACHE` at writable absolute paths, and read stderr before trusting the summary line.
+
+**Cache isolation does not buy you concurrency.** The run lock is a single file in the system temp dir - `filepath.Join(os.TempDir(), "golangci-lint.lock")` - so two runs collide no matter how their caches are separated. A second run retries for five seconds and then exits with `parallel golangci-lint is running`. Two knobs change this:
+
+```yaml
+run:
+  allow-parallel-runners: true   # "Allow multiple parallel golangci-lint instances running." Drops the lock.
+  allow-serial-runners: true     # "Allow multiple golangci-lint instances running, but serialize them around a lock." Waits instead of failing.
+```
+
+Reach for one of them before putting `golangci-lint fmt` and `golangci-lint run` in the same `just` recipe under `[parallel]`, or in concurrent CI steps - otherwise the failure lands on green code and looks like a lint bug.
+
+**Debugging the nolint filter.** When nolintlint claims a live `//nolint` directive is unused, `GL_DEBUG=nolint_filter` prints what the filter actually received - the fastest way to tell a stale cache from a genuinely dead suppression before you delete a real one. Other useful keys: `GL_DEBUG=exec` (the lock file), `pkgcache`, `linters_context`, `enabled_linters`.
 
 ```yaml
 version: "2"  # REQUIRED
@@ -51,6 +92,11 @@ run:
   go: ""                  # Default: from go.mod
   concurrency: 0          # 0 = auto (CPU count)
   relative-path-mode: cfg # cfg | gomod | gitroot | wd
+  issues-exit-code: 1     # Exit code when issues were found
+  modules-download-mode: readonly  # mod | readonly | vendor
+  allow-parallel-runners: false    # Drop the global run lock
+  allow-serial-runners: false      # Queue on the lock instead of failing
+  enable-build-vcs: false          # Default false, which implies `-buildvcs=false`
 
 linters:
   default: standard       # standard | all | none | fast
@@ -64,14 +110,14 @@ linters:
       enable-all-rules: true
   exclusions:
     generated: strict      # strict | lax | disable
-    warn-unused: true
+    warn-unused: true      # "Log a warning if an exclusion rule is unused" (default false) - prune dead rules
     presets:               # NOT enabled by default in v2
       - comments
       - std-error-handling
       - common-false-positives
     rules:
       - path: _test\.go
-        linters: [gocyclo, errcheck, dupl, gosec]
+        linters: [errcheck, dupl, gosec]
     paths:
       - third_party$
       - vendor$
@@ -80,7 +126,10 @@ formatters:
   enable: [gofumpt, goimports]
   settings:
     gofumpt:
-      extra-rules: true
+      extra:                 # not `extra-rules: true` - deprecated, and it also enables balance_calls
+        group-params: true
+        clothe-returns: true
+        balance-calls: false
     gci:
       sections: [standard, default, "prefix(github.com/myorg/myrepo)"]
   exclusions:
@@ -89,7 +138,7 @@ formatters:
 issues:
   max-issues-per-linter: 50   # 0 = unlimited
   max-same-issues: 3          # 0 = unlimited
-  new: false
+  new: false                  # unsafe in CI: skips the patch if a script left unstaged files
   new-from-merge-base: ""     # e.g., "main"
   fix: false
 
@@ -101,6 +150,8 @@ output:
       colors: true
   sort-order: [linter, file]
   show-stats: true
+  path-mode: ""           # "abs" shows absolute paths instead of relative ones
+  path-prefix: ""         # Prepended to every reported path
 
 severity:
   default: ""
@@ -125,21 +176,26 @@ Enabled when `default: standard` (the default):
 
 | Linter | Description | Autofix |
 |--------|-------------|---------|
+| asasalint | `[]any` passed as a single `any` to a `...any` func | |
+| bidichk | "Checks for dangerous unicode character sequences" (Trojan Source) | |
 | bodyclose | HTTP response body not closed | |
 | contextcheck | Non-inherited context usage | |
 | durationcheck | Two durations multiplied together | |
 | errcheck | Unchecked errors (default) | |
 | errchkjson | Types passed to json encoding | |
-| errorlint | Go 1.13+ error wrapping issues | Yes |
-| exhaustive | Enum switch exhaustiveness | |
+| errorlint | Go 1.13+ error wrapping issues. Its autofix is semantic: `%v` -> `%w` and `err ==` -> `errors.Is` change error identity, so review `--fix` output | Yes |
+| exhaustive | "Check that expression switches and type switches are exhaustive." v0.15.0 (golangci-lint v2.15.0) renamed options - `explicit-exhaustive-switch`/`-map` -> `explicit-exhaustive`, `check: [map]` -> `mapliteral`, `ignore-enum-members` -> `ignore-constants`, `ignore-enum-types` -> `ignore-types` - and the old names fail `config verify`. Report messages changed too, which breaks text-matching `exclusions.rules` | |
 | fatcontext | Nested contexts in loops | Yes |
-| gosec | Security problems | |
+| gosec | Security problems. Not a CodeQL substitute: even with the G701-G708 taint rules it caught none of CodeQL's five real alerts in one repo. G404 flags `math/rand` outside tests, so a seeded data generator needs a justified `//nolint:gosec`. G703 (taint) flags config-derived paths reaching `os.ReadFile`, `os.Rename` and friends: confine them with `os.Root` or `filepath.IsLocal` (see the [Go Correctness Reference](go-correctness-reference.md)), or narrow an exclusion with `text:` | |
 | govet | Suspicious constructs (default) | Yes |
 | makezero | Slices with non-zero initial length | |
-| musttag | Field tags in marshaled structs | |
+| musttag | Field tags in marshaled structs. Fires on untagged structs passed to `json.Marshal`/`Unmarshal`, test fixtures included - add the tags, which also pins the wire names | |
+| loggercheck | Odd key-value pairs in slog/zap/logr/klog calls | |
 | nilerr | Returns nil when err is not nil | |
 | nilnesserr | err != nil but returns different nil error | |
 | noctx | Missing context.Context usage | |
+| nosprintfhostport | `Sprintf` building `host:port` (breaks IPv6; use `net.JoinHostPort`) | |
+| reassign | Package variables reassigned (e.g. `io.EOF = ...`) | |
 | rowserrcheck | Rows.Err not checked | |
 | sqlclosecheck | sql.Rows/Stmt not closed | |
 | staticcheck | Comprehensive static analysis (default) | Yes |
@@ -169,13 +225,13 @@ Enabled when `default: standard` (the default):
 | intrange | Integer range in for loops | Yes |
 | mirror | bytes/strings mirror patterns | Yes |
 | misspell | Misspelled English words | Yes |
-| modernize | Suggests modern Go language features | |
+| modernize | Suggests modern Go language features; `run --fix` rewrites code through it | Yes |
 | nakedret | Naked returns | Yes |
 | nestif | Deeply nested if statements | |
 | nolintlint | Ill-formed nolint directives | Yes |
 | nonamedreturns | Named returns | |
 | predeclared | Shadowing predeclared identifiers | |
-| revive | Fast, configurable meta-linter | |
+| revive | Fast, configurable meta-linter | Yes |
 | sloglint | log/slog code style | Yes |
 | thelper | Missing t.Helper() in test helpers | |
 | unconvert | Unnecessary type conversions | |
@@ -184,7 +240,53 @@ Enabled when `default: standard` (the default):
 | usetesting | Use testing package replacements | Yes |
 | wastedassign | Wasted assignments | |
 | whitespace | Unnecessary newlines | Yes |
-| wrapcheck | Error wrapping from external packages | |
+| wrapcheck | Error wrapping from external packages. Your own sibling packages (sqlc output included) count as external unless `ignore-package-globs` names the module path - and a module rename silently breaks those globs | |
+| wsl_v5 | Whitespace/cuddling style (replaces `wsl`) | Yes |
+
+### Also Available (not in the sets above)
+
+| Linter | Description | Autofix |
+|--------|-------------|---------|
+| arangolint | ArangoDB query issues, incl. injection | |
+| canonicalheader | Non-canonical HTTP header keys | Yes |
+| clickhouselint | ClickHouse driver misuse (v2.12.0+) | |
+| containedctx | "detects struct contained context.Context field" | |
+| cyclop | "Checks function and package cyclomatic complexity" | |
+| depguard | "checks if package imports are in a list of acceptable packages" - allow/deny rules that enforce package and architecture boundaries | |
+| embeddedstructfieldcheck | Embedded-field placement in structs | |
+| forbidigo | "Forbids identifiers" by regexp; default forbids `fmt.Print*`, `print`, `println` | |
+| forcetypeassert | "Find forced type assertions" - `x.(T)` without the `, ok` form | |
+| funcorder | Constructor/method ordering within a file | |
+| gocheckcompilerdirectives | "Checks that go compiler directive comments (//go:) are valid" | |
+| gochecksumtype | Exhaustiveness for sum types | |
+| gocognit | "Computes and checks the cognitive complexity of functions" | |
+| godoclint | Godoc comment conventions | |
+| gomoddirectives | Validates go.mod directives: `toolchain-pattern`, `tool-forbidden`, `go-version-pattern`, `replace-*` - the enforcement side of pinning the toolchain | |
+| gomodguard_v2 | Allow/blocklist direct module dependencies | |
+| iface | Interface misuse, incl. unused methods | Yes |
+| importas | "Enforces consistent import aliases" | Yes |
+| iotamixing | Mixed iota and explicit values in a const block | |
+| nilnil | Returning both a nil value and a nil error | |
+| noinlineerr | Inline `if err := f(); err != nil` declarations | Yes |
+| paralleltest | "Detects missing usage of t.Parallel() method in your Go test" | |
+| protogetter | Direct proto field access instead of getters | Yes |
+| recvcheck | Mixed pointer/value receivers on one type | |
+| spancheck | OpenTelemetry/Census span mistakes | |
+| tagalign | Struct tag alignment | Yes |
+| testableexamples | Examples without an `// Output:` comment (compiled, never run) | |
+| testpackage | Requires the external `_test` package | |
+| tparallel | "detects inappropriate usage of t.Parallel() method in your Go test codes" | |
+| unqueryvet | `SELECT *`, N+1 queries, SQL injection, tx leaks | |
+
+### Deprecated Names
+
+| Deprecated | Replacement | Since |
+|-----------|-------------|-------|
+| `wsl` | `wsl_v5` | v2.2.0 |
+| `gomodguard` | `gomodguard_v2` | v2.12.0 |
+| `exhaustruct` | `exhaustruct_v5` | v2.13.0 |
+
+Deprecated names still resolve but will be removed; `golangci-lint help linters` marks them `[deprecated]`.
 
 ## Recommended Linter Sets
 
@@ -247,11 +349,13 @@ linters:
 
 ### Maximum (enable all, disable noisy ones)
 
+Pin the golangci-lint version exactly when using `all` - upstream: "It's important to have reproducible CI: don't start to fail all builds at the same time. With golangci-lint this can happen if you use option `linters.default: all` and a new linter is added" (docs/content/docs/welcome/install/ci.md). `version: latest` in the Action or a `brew upgrade` pulls in new linters unannounced; a minor pin like `v2.15` still floats across patch releases. Upstream calls a patch release "intended to not break your lint build", but patches bump linter versions, so pin the full `v2.15.0` when the build must be reproducible ("or even without `linters.default: all` when one upstream linter is upgraded").
+
 ```yaml
 linters:
   default: all
   disable:
-    - exhaustruct      # Too strict for most projects
+    - exhaustruct_v5   # Too strict for most projects (v2.13.0+ name; was `exhaustruct`)
     - gochecknoglobals # Impractical for many codebases
     - gochecknoinits   # Too restrictive
     - ireturn          # Controversial
@@ -260,7 +364,7 @@ linters:
     - lll              # Line length is editor config territory
     - funlen           # Arbitrary length limits
     - godox            # FIXME/TODO are normal in active dev
-    - wsl              # Deprecated, use wsl_v5
+    - wsl_v5           # Very opinionated whitespace rules
 ```
 
 ## Nolint Directive Syntax
@@ -280,7 +384,7 @@ func complexFunction() { ... }
 //nolint:unparam
 package pkg
 
-// With justification (recommended, enforced by nolintlint):
+// With justification (enforced by nolintlint only with `require-explanation: true`; default false):
 var x int //nolint:revive // legacy code, scheduled for cleanup
 ```
 
@@ -298,18 +402,129 @@ linters:
   exclusions:
     presets:
       - comments              # Suppress exported-should-have-comment checks
-      - std-error-handling    # Suppress errcheck on stdout/stderr/Close/Flush
-      - common-false-positives # Suppress common gosec false positives
-      - legacy                # Suppress legacy govet/staticcheck patterns
+      - std-error-handling    # errcheck on Close/Flush, os.Remove(All), print*, os.(Un)Setenv
+      - common-false-positives # Exactly gosec G103, G204 and G304
+      - legacy                # Legacy govet/staticcheck patterns, plus gosec G104 and G301/G302/G307 (file permissions)
 ```
 
-Not enabled by default in v2 - you must opt in explicitly.
+Not enabled by default in v2 - you must opt in explicitly. Read what a preset hides before enabling it: `common-false-positives` drops G304 "Potential file inclusion via variable" everywhere, which is the finding the [Go Correctness Reference](go-correctness-reference.md)'s filesystem-confinement section is about (`pkg/result/processors/exclusion_presets.go:53-89`).
+
+`path-except` / `paths-except` are the inverses, letting a linter run *only* on matching files - "Run some linter only for test files by excluding its issues for everything else. - path-except: `_test\.go`".
+
+## Repo Rules as Lint Config
+
+Express code invariants in `.golangci.yml`, not as shell checks (`go list -deps | grep`), CI scripts or checked-in baseline lists:
+
+```yaml
+linters:
+  enable: [depguard, forbidigo]
+  settings:
+    depguard:
+      rules:
+        no-test-doubles-in-binaries:
+          files: ["!$test"]
+          deny:
+            - pkg: github.com/yourorg/myapp/internal/testutil
+              desc: test helpers must not link into cmd/ binaries
+    forbidigo:
+      analyze-types: true
+      forbid:
+        - pattern: ^sql\.DB\.(Query|Exec)(Context)?$
+          msg: use the generated sqlc queries
+  exclusions:
+    rules:
+      - path: internal/storage/legacy/
+        linters: [forbidigo]
+        text: "use the generated sqlc queries"   # narrow: only this rule's message
+```
+
+- **Prove each new rule fires.** Add a deliberate violation in a probe file, run lint, then delete the file: a rule whose pattern or path matches nothing passes silently.
+- **A path-wide exclusion mutes new rules too.** An existing `path:` plus `linters: [forbidigo]` entry silences every forbidigo finding in those files, so a new pattern is muted exactly where the violations live. Narrow such rules with `text:`, a regexp over the finding message (for forbidigo it includes the configured `msg`).
+- **Mark existing violations, don't baseline them.** `//nolint:forbidigo // legacy raw SQL` on each existing site lets nolintlint keep the list honest as it shrinks; `exclusions.warn-unused: true` reports rules that no longer suppress anything, and `FAIL_ON_WARNINGS=1` in the CI environment turns that warning into exit 2, so a dead rule fails the gate instead of scrolling past.
+- When merging repos, keep a module's `errcheck` `exclude-functions` as path-scoped rules rather than global settings.
+- When no stock linter can express the rule, write a Go test instead - see the [Go Testing Reference](go-testing-reference.md).
+
+## Output Formats
+
+`output.formats.text` is only one of nine. All can be written simultaneously, each to its own path:
+
+```yaml
+output:
+  formats:
+    text:
+      path: stdout
+      print-linter-name: true
+      colors: true
+    sarif:
+      path: golangci-lint.sarif
+    junit-xml:
+      path: golangci-lint-report.xml
+```
+
+Available: `text`, `json`, `tab`, `html`, `checkstyle`, `code-climate`, `junit-xml`, `teamcity`, `sarif`.
+
+`sarif` is the path into GitHub code scanning - upload the file with `github/codeql-action/upload-sarif` and findings appear as annotations in the Security tab. `junit-xml` and `checkstyle` cover most other CI systems. Keep `text` on stdout when you add them: golangci-lint-action's inline PR annotations need it - "For annotations to work, use the default format output (`text`) and either use `actions/setup-go` in the job or enable the internal problem matchers" - and the second half bites when the job installs Go another way, such as mise.
+
+## Incremental Adoption
+
+Beyond the Action's `only-new-issues`, the binary can restrict reporting to changed code:
+
+```bash
+golangci-lint run --new-from-merge-base=main   # only issues absent from the merge base
+golangci-lint run --new-from-rev=HEAD~1        # only issues introduced since a revision
+golangci-lint run --new-from-patch=changes.patch
+golangci-lint run --whole-files                # report all issues in a changed file, not just changed lines
+golangci-lint run --enable-only=errcheck       # run exactly one linter, ignoring config
+```
+
+The same knobs exist in config under `issues.new`, `issues.new-from-merge-base`, and `issues.new-from-rev`. Avoid `--new` / `issues.new` in CI: "For CI setups, prefer --new-from-rev=HEAD~, as --new can skip linting the current patch if any scripts generate unstaged files before golangci-lint runs."
+
+## Module Plugins
+
+Linters not bundled with golangci-lint can be compiled into a custom binary. Define the build in `.custom-gcl.yml`, then "Run the command `golangci-lint custom`" to produce it:
+
+```yaml
+# .custom-gcl.yml
+version: v2.15.0
+name: custom-golangci-lint
+destination: ./bin
+plugins:
+  - module: github.com/example/my-linter
+    version: v1.0.0
+```
+
+The resulting binary reads the same `.golangci.yml`, but a plugin's linters run only once declared and enabled there - "Define the plugin inside the `linters.settings.custom` section with the type `module`.":
+
+```yaml
+linters:
+  enable: [my-linter]
+  settings:
+    custom:
+      my-linter:
+        type: module
+        description: Repo-specific checks
+```
+
+golangci-lint-action builds the custom binary itself: "The action will automatically detect the custom build configuration file `.custom-gcl.yml`".
+
+Module plugins are one of two plugin systems. **Go plugins** (`.so` files loaded at runtime, built with `go build -buildmode=plugin`) are the other; they avoid the rebuild step but are fragile across toolchain versions and unsupported on Windows. Prefer module plugins unless you specifically need runtime loading.
+
+## Editor and Shell Integration
+
+Beyond the editor settings below, two integrations are easy to miss:
+
+- **`golangci-lint-langserver`** exposes the linter over LSP for NeoVim, Vim, and Emacs, so findings appear inline without a save-and-run cycle.
+- **`golangci-lint completion`** generates shell completion: "Golangci-lint can generate Bash, fish, PowerShell, and Zsh completion files."
+
+## Other CI Systems
+
+The GitHub Action is the best-supported path, but upstream documents GitLab CI and Buildkite recipes as well. The portable shape is the install script plus a cached `$GOLANGCI_LINT_CACHE`; use the `junit-xml` or `checkstyle` output format to surface findings natively in those systems.
 
 ## Formatters Section (v2)
 
 Formatters are separate from linters in v2. They have their own `enable`, `settings`, and `exclusions`.
 
-Available formatters: `gci`, `gofmt`, `gofumpt`, `goimports`, `golines`
+Available formatters: `gci`, `gofmt`, `gofumpt`, `goimports`, `golines`, `swaggo` (added v2.2.0)
 
 ```yaml
 formatters:
@@ -318,37 +533,114 @@ formatters:
     - goimports
   settings:
     gofumpt:
-      extra-rules: true
+      # `extra.*` since v2.13.0. `extra-rules: true` is deprecated and also enables balance_calls.
+      extra:
+        group-params: true
+        clothe-returns: true
+        balance-calls: false
     goimports:
-      local-prefixes: github.com/myorg/myrepo
+      local-prefixes:          # a list in v2 - a bare string fails `config verify`
+        - github.com/myorg/myrepo
 ```
 
-Run: `golangci-lint fmt` or `golangci-lint fmt --diff`
+Run: `golangci-lint fmt`, `golangci-lint fmt --diff`, or `golangci-lint fmt --diff-colored`.
+
+Do not pair `golangci-lint fmt` as the CI gate with a standalone `gofumpt -w` as the fixer - they can disagree on the same file, so the gate fails on code the fixer just formatted. Pick one for both roles.
 
 ## GitHub Actions
 
 Official action: `golangci/golangci-lint-action@v9`
 
 ```yaml
-- uses: actions/checkout@v6
-- uses: actions/setup-go@v6
-  with:
-    go-version: stable
-- uses: golangci/golangci-lint-action@v9
-  with:
-    version: v2.11
-    # only-new-issues: true  # For incremental adoption
+permissions:
+  contents: read
+  pull-requests: read   # only needed with only-new-issues
+
+jobs:
+  golangci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: stable
+      - uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.15
+          # only-new-issues: true  # For incremental adoption
 ```
+
+Keep `version:` at or above the Go version `setup-go` resolves. With `go-version: stable` that is the newest Go release, so a pin left behind after a Go major bump breaks the job.
+
+`pull-requests: read` is what `only-new-issues` needs - the README's permissions block: "Optional: allow read access to pull requests. Use with `only-new-issues` option." On `pull_request` and `push` the action fetches the diff from the GitHub API; on `merge_group` it uses `--new-from-rev` and needs `fetch-depth: 0` on checkout.
+
+**Config verification is built in.** Before `run`, the action runs `golangci-lint config verify` itself whenever it finds a config file (`src/run.ts`, `runVerify`): "If the GitHub Action detects a configuration file, validation will be performed unless this option is set to `false`." A separate verify step in the workflow is redundant; `config verify` stays useful locally and in hooks. Before v2.12.0 ("Embed the JSON schema in the binary"), `config verify` downloaded the versioned schema from golangci-lint.run, so a slow site failed CI before lint started (`validate: compile schema: failing loading "https://golangci-lint.run/jsonschema/golangci.v2.11.jsonschema.json" ... context deadline exceeded`). Raise the pin rather than setting `verify: false` or wrapping the step in retries.
 
 Key options:
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `version` | required | e.g. `v2.11` or `v2.11.4` |
-| `only-new-issues` | false | Show only new issues on PRs |
-| `verify` | true | Validate config against JSON Schema |
+| `version` | *(optional)* | e.g. `v2.15`, `v2.15.0`, or `latest`. Omitted, the action reads `github.com/golangci/golangci-lint/v2 vX` from `go.mod` in `working-directory`, then `version-file`, then falls back to `latest` (`src/version.ts`). A pin kept in a separate `-modfile=golangci-lint.mod` is invisible to it, so set `version:` explicitly |
+| `args` | - | Extra CLI flags. Write `--timeout=10m`, not `--timeout 10m`: "Adding a `=` between the flag name and its value is important because the action parses the arguments on spaces." |
+| `version-file` | - | Read the version from `.golangci-lint-version` or `.tool-versions` |
+| `install-mode` | `binary` | `binary`, `goinstall`, or `none` (use a golangci-lint already on `PATH`, e.g. from mise). "`goinstall` is not recommended" |
+| `install-only` | false | Install the binary without running it |
+| `working-directory` | repo root | "The golangci-lint working directory, useful for monorepos" |
+| `only-new-issues` | false | Show only new issues on PRs (needs `pull-requests: read`) |
+| `verify` | true | Run `config verify` before `run` when a config file exists |
+| `experimental` | - | Comma-separated: `automatic-module-directories`, `no-run-logs-group` |
 | `cache-invalidation-interval` | 7 | Days before cache refresh |
 | `skip-save-cache` | false | Restore but don't save cache |
+
+**Monorepos and Go workspaces.** The README's pattern for a multi-module repo or a `go.work` workspace is one run per module. Its "Go Workspace Example" lists modules with `go list -m -json`, which returns every module in `go.work`, and fans out with a matrix:
+
+```yaml
+jobs:
+  detect-modules:
+    runs-on: ubuntu-latest
+    outputs:
+      modules: ${{ steps.set-modules.outputs.modules }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: stable
+      - id: set-modules
+        run: echo "modules=$(go list -m -json | jq -s '.' | jq -c '[.[].Dir]')" >> $GITHUB_OUTPUT
+
+  golangci-lint:
+    needs: detect-modules
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        modules: ${{ fromJSON(needs.detect-modules.outputs.modules) }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version: stable
+      - uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.15
+          working-directory: ${{ matrix.modules }}
+```
+
+The single-job alternative is `experimental: "automatic-module-directories"`, which "will run golangci-lint in each module directory" under `working-directory` (or the root). Caveats from the README: all runs share one cache key, "The version detection will only work if the project has a single module", and a custom build file must sit in the root (or `working-directory`).
+
+**A `go.work` workspace needs neither.** With every module in the workspace, one run from the root covers them all: `golangci-lint run $(go list -m -f '{{.Dir}}/...')`. A bare `./...` fails at a root that has no `go.mod` (`directory prefix . does not contain modules listed in go.work`), and under `go work vendor` the `work` package pattern also matches vendored third-party packages, so list the module directories explicitly.
+
+### Other CI pieces
+
+- **govulncheck:** `golang/govulncheck-action@v1` takes `go-version-file`, `cache-dependency-path`, `work-dir`, and `output-format` (`text`, `json`, `sarif`). Only `text` gates the job - "Specifying the output format 'json' or 'sarif' will return success even if there are some vulnerabilities detected." Use `sarif` for the Security tab, `text` for a failing check. **`go-version-file` alone is silently ignored:** `go-version-input` defaults to `'stable'` and setup-go prefers `go-version` ("Both go-version and go-version-file inputs are specified, only go-version will be used"), so stdlib advisories are judged against the newest Go, not yours. Pass `go-version-input: ''` with it. The action also installs `govulncheck@latest`, and it cannot pass flags: its run line is fixed (`govulncheck -C "$WORK_DIR" -format "$OUTPUT_FORMAT" "$GO_PACKAGE"`, with the package input quoted as one argument), so `-test` ("analyze test files (only valid for source mode, default false)") and `-tags` never reach it, and test-only dependencies and tagged suites go unscanned. For a pinned scanner that sees them, use the plain `go install ...@v1.10.0` step from SKILL.md with `-test -tags=...`.
+- **Keeping pins current:** "Renovate can update both the action and the `golangci-lint` version it uses" (action README) through its github-actions manager, which beats bumping the `version:` input by hand.
+- **just:** CI never runs the Justfile unless the job installs `just`. `extractions/setup-just@v4` (latest tag v4.0.0, input `just-version`) or `taiki-e/install-action@just`:
+
+```yaml
+- uses: extractions/setup-just@v4
+  with:
+    just-version: 1.59.0
+- run: just check
+```
 
 ## Editor Integration
 
@@ -357,6 +649,16 @@ Key options:
 {
   "go.lintTool": "golangci-lint",
   "go.lintFlags": ["--path-mode=abs", "--fast-only"]
+}
+```
+
+Format on save through golangci-lint itself, so the editor runs the same formatter set and settings as the `fmt --diff` gate (gopls' own `gofumpt` switch cannot select `extra.*` rules or run goimports):
+
+```json
+{
+  "go.formatTool": "custom",
+  "go.alternateTools": { "customFormatter": "golangci-lint" },
+  "go.formatFlags": ["fmt", "--stdin"]
 }
 ```
 
@@ -387,4 +689,18 @@ Run `golangci-lint migrate` to auto-convert v1 configs.
 | v2.5.0 | `godoclint`, `unqueryvet`, `iotamixing` linters |
 | v2.6.0 | `modernize` analyzer suite |
 | v2.9.0 | Go 1.26 support |
-| v2.11.0 | New gosec rules, revive `package-naming` |
+| v2.11.0 | New gosec rules, revive `package-naming` (⚠️ breaking: package checks moved out of `var-naming`) |
+| v2.12.0 | `clickhouselint` linter, `gomodguard_v2` major bump, JSON schema embedded in the binary |
+| v2.13.0 | **Go 1.27 support**; `exhaustruct` deprecated in favour of `exhaustruct_v5`; gofumpt 0.11.0 with granular `extra.*` options; `govet-modernize` 0.49.0 |
+| v2.13.1 | Linter bug fixes |
+| v2.13.2 | Cache-entropy fix; linter deps bumped (`staticcheck` 0.8.1, `iface` 1.5.1, `unparam`); `canonicalheader` moved to a temporary fork. No config-schema change |
+| v2.14.0 | gofumpt 0.11.0 -> 0.12.0; "fix: cache of facts reloading" (#6810, fixes #6807); "fix: ignore TextEdits outside the analyzed file" (#6816); revive 1.15.0 -> 1.17.0 (new rules `marshal-receiver`, `multiline-if-init`, `use-slices-concat`); gosec 2.29.0 "re-enable G407"; bodyclose `//bodyclose:handled` directive; `exhaustruct_v5` option `allow-empty-blank-assignments`. No new linters |
+| v2.15.0 | Linter bumps only, no new linters or formatters; still bundles gofumpt v0.12.0. `exhaustive` 0.13.0 -> 0.15.0 (renamed options, new messages, now a slow linter); errcheck 1.20.0 -> 1.30.0; wrapcheck 2.13.0; revive 1.17.1 (`add-constant` inspects more code); `govet-modernize` 0.52.0; gosec concurrency defaults to `GOMAXPROCS`; gofumpt deprecation warning now names both `extra.*` options (#6835). Current release |
+
+## Upgrading the Pin
+
+**Triage a bump with the caps off.** The default `max-same-issues: 3` prints at most three findings per rule, so the first run hides the size of the fallout - rerun with `--max-same-issues=0 --max-issues-per-linter=0` before deciding whether to fix or `disable` a new rule (one new revive rule produced 260 findings in one existing repo). An upgrade can also move the line an issue is reported on, so a working `//nolint` stops matching and nolintlint reports it unused - a different cause from the stale-cache footgun in SKILL.md.
+
+**Upgrading to v2.14.0 surfaces new findings on unchanged code.** With `revive: enable-all-rules: true` the three new revive rules switch on automatically, and gosec re-enables G407, so budget a cleanup pass (or `disable` those rules) when bumping. #6816 fixes `--fix` corrupting code when an analyzer splits one fix's edits across files - #6671, where modernize `atomictypes` appended `b.go`'s edit onto the end of `a.go`; the fix drops the out-of-file edits rather than applying them ("Not the perfect fix, but good enough for now"), so such a fix now lands only in the reported file. Build after `--fix` and finish the other files by hand.
+
+**Upgrading to v2.15.0 breaks configs, not just code.** A config that sets the old `exhaustive` option names fails `config verify` (exit 3: `additional properties 'explicit-exhaustive-switch' ... not allowed`) even though the changelog says "The replaced options still exists, and partially works, but they are deprecated." - the embedded schema dropped them, and golangci-lint-action verifies before every run. Rename them in the same commit as the pin bump. revive 1.17.1 warns that `add-constant` "now inspects nested call arguments and function literal signatures (#1843), so existing projects may see new findings after upgrading", and `enable-all-rules` turns it on.

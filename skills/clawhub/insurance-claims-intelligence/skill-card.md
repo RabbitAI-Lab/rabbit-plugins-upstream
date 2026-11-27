@@ -1,40 +1,57 @@
-## Description: <br>
-Provides advisory templates, checklists, and decision-support frameworks for insurance claim OCR, liability review, anti-fraud assessment, and claim reporting, with human review required for every decision. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides templates, checklists, and decision-support frameworks for medical OCR, liability determination, anti-fraud assessment, and claims reporting, with human review required for all claim decisions.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance claims teams, reviewers, and developers use this skill to draft claim analysis reports, OCR integration guidance, liability review checklists, anti-fraud review prompts, and standardized claim notices. Outputs are decision-support drafts and require licensed human review before customer, payment, denial, or fraud actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [Insurance Claims Intelligence release page](https://clawhub.ai/gechengling/insurance-claims-intelligence) <br>
-- [Claims OCR technical reference](references/claims_ocr_tech.md) <br>
-- [Claims liability engine reference](references/claims_liability_engine.md) <br>
-- [Claims report templates](references/claims_report_templates.md) <br>
+Insurance professionals and analysts can use the skill's advisory frameworks to structure receipt review, liability and fraud assessment, and claims report drafts. A licensed insurance professional must review and confirm all claim decisions.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with checklists, report templates, structured draft outputs, and example code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Draft-only decision support; OCR examples require user-provided credentials and data, and claim decisions require licensed human review.] <br>
+China-focused; validate insurance and data-protection requirements for other jurisdictions.
 
-## Skill Version(s): <br>
-5.0.3 (source: server release metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Claim approvals, denials, payout estimates, or fraud labels could be mistaken for final decisions.
+
+Mitigation: Require a licensed insurance professional to review every output and verify it against policy terms and source records before acting.
+
+Risk: Medical and claimant records may contain sensitive personal information.
+
+Mitigation: Obtain consent, minimize and redact data, confirm OCR vendor retention and transfer terms, and prefer private processing for production use.
+
+Risk: The benign security verdict has medium confidence and incomplete coverage, with a manifest parse issue and three missing references.
+
+Mitigation: Review the manifest and unresolved references before installation, and treat the scan as partial evidence rather than full verification.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/insurance-claims-intelligence)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Text, Code]
+
+**Output Format:** [Markdown checklists, decision trees, report drafts, and illustrative Python snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory drafts only; requires licensed human review; includes no executable models or production OCR integration.]
+
+## Skill Version(s):
+
+5.0.8 (source: server-resolved release metadata, SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

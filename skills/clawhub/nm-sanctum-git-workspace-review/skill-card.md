@@ -1,41 +1,54 @@
-## Description: <br>
-Verifies workspace state and staged changes as a preflight before commits or PRs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Verifies workspace state and staged changes as a read-only preflight. Use before commits or PRs to confirm staged set is clean and correct.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to inspect repository status, staged changes, and diffs before commit, pull request, or release-note workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security summary says the skill claims to be read-only while instructing agents to stage or unstage files, run Makefile targets, and fix files. <br>
-Mitigation: Require explicit confirmation before staging, unstaging, formatting, linting, merge-abort, make commands, or file edits. <br>
-Risk: The security verdict is suspicious for normal use because the skill can move from repository inspection into modifying the workspace. <br>
-Mitigation: Install only when that behavior is intended, and narrow triggers or edit the skill if a truly read-only review helper is required. <br>
+## Use Case:
 
+Developers use this skill before commit, pull request, or release-note workflows to review repository status, staged and unstaged changes, and diff details.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-git-workspace-review) <br>
-- [ClawHub metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, markdown] <br>
-**Output Format:** [Markdown with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include git status, diff statistics, detailed diff review notes, and code-quality check results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The security review flags the skill as suspicious because some steps direct changes to files and Git state despite its read-only preflight description, and reported checks may not verify the staged changes or workspace state described.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands before running them, avoid staging, unstaging, or other workspace changes without explicit approval, and independently confirm repository status and the diff.
+
+Risk: The security scan is partial because a referenced local test path was missing.
+
+Mitigation: Treat the review as incomplete until the referenced test path and the applicable checks are confirmed in the target repository.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-sanctum-git-workspace-review)
+- [Sanctum project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Markdown]
+
+**Output Format:** [Markdown review notes with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Summarizes repository status and diff findings for downstream workflows.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

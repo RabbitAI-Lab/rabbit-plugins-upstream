@@ -1,183 +1,105 @@
 ---
 name: yzl-aiot
-description: "YZL-AIoT 云智联 AIoT 设备管理技能。新版 API（2026-06-15），路径以 /open/ 开头。一句话说就能获取传感器数据和发送控制指令。激活语：云智联设备，钥匙是xxxxxx，帮我打开开关/获取数据"
-homepage: https://github.com/openclaw/skills/tree/main/yzl-aiot
-metadata: { "openclaw": { "requires": { "bins": ["python3"], "env": ["YZLIOT_API_KEY"] } } }
+description: "YZL-AIoT 平台入口（aiot.yzlkj.com）：南向设备接入与北向应用接入的总入口。用户说『加载 yzl-aiot』时，必须先加载本技能，再依次加载北向 `yzl-aiot-north` 与南向 `yzl-aiot-south` 两个技能；用户说『加载 yzl-aiot 北向 / 南向』时，只加载对应那个技能。开放平台 open.yzlkj.com 的 API Key 取数 / 开关请用 `yzl-open-api`。本技能只做平台总览、认证与分流，不直接提供接入代码细节。"
+homepage: https://github.com/yzlkj/yzl-aiot
+metadata: { "openclaw": { "requires": { "bins": ["python"] } } }
 ---
+
+> 🧭 **平台边界**：本技能是 `aiot.yzlkj.com` 的总入口，只做分流与总览。
+> 北向应用接入 → `yzl-aiot-north`；南向设备端固件 → `yzl-aiot-south`。
+> 开放平台 `open.yzlkj.com`（API Key 取数 / 开关水阀）→ `yzl-open-api`，与本平台不是同一套系统。
+
+## 🚦 加载规则（先执行，再回答）
+
+| 用户说 | 你必须做的 |
+|---|---|
+| 「加载 yzl-aiot」「加载 YZL-AIoT 技能」 | 先加载本技能，**再依次加载 `yzl-aiot-north` 与 `yzl-aiot-south` 两个技能**（两个都要，不得用本页摘要代替） |
+| 「加载 yzl-aiot 北向技能」 | **只**加载 `yzl-aiot-north` |
+| 「加载 yzl-aiot 南向技能」 | **只**加载 `yzl-aiot-south` |
+| 提到开放平台：液位 / 温湿度 / 水阀 / 「云智联YZL」小程序密钥 / open.yzlkj.com | 用 `yzl-open-api`（未安装就先 `clawhub install yzl-open-api`） |
+
+- 用户只说「加载 yzl-aiot」而子技能未安装：先给安装命令（`clawhub install yzl-aiot-north`、`yzl-aiot-south`），不要编造接口细节。
+- 已安装的子技能按名字加载即可（技能名来自 SKILL.md 的 `name`，与目录名无关）。
+- 三个技能的分工见下表，**不要跨平台套用**。
 
 ## ⚙️ 运行时要求
 
-- **Python 3.6+** （需要 json, os, sys, http.client, time, collections 等标准库）
-- **环境变量 `YZLIOT_API_KEY`** - 必需，请从「云智联YZL」微信小程序获取
+- **Python 3.6+**（仅标准库）：本技能自带的 `tool.py` 用于环境自检与迁移引导。
+- **不需要 API Key**：`status`、`migrate`、`check-update` 均可直接运行。
+- 兼容层的开放平台命令才需要 `YZLIOT_API_KEY`（见「从 1.x 升级」）。
 
-## 🌱 YZL-AIoT 云智联 AIoT 设备管理
+## 🌱 YZL-AIoT 平台（aiot.yzlkj.com）
 
-**一句话就能获取设备数据和发送控制指令！** 基于云智联开放接口（v2，2026-06-15 更新），所有 API 路径使用 `/open/` 前缀。
+**一句话：设备用南向连上来，应用用北向把数据接走。**
 
-> 💡 如果你之前使用的是 `yzl-iot-api`，请迁移至此技能获取后续更新支持。
+- 南向：`lgn` 登录、`facs` 实时上报、`hear` 心跳、下行 `set/get`、历史补传、OTA；
+- 北向：设备 / 实时值 / 历史 / 聚合 / 指令 / 告警 REST，北向 MQTT 订阅，Bridge / Webhook；
+- 测点（设施）属性可在平台上按需改：可控制、可查询、改类型、改显示名、隐藏。
+
+## 🧭 三条线路
+
+| 方向 | 技能 | 入口 / 协议 | 典型任务 |
+|---|---|---|---|
+| 北向 | `yzl-aiot-north` | `aiot.yzlkj.com` REST、北向 MQTT、Bridge / Webhook | 后端 / 看板 / 小程序 / 数据管道、历史与告警、改测点属性 |
+| 南向 | `yzl-aiot-south` | TCP 41032、UDP 40501、MQTT 1883、OTA | MCU 固件、4G 模组、lwIP / W5500 移植 |
+| 开放平台 | `yzl-open-api` | `open.yzlkj.com` Open API v2（API Key） | 快速取数、开关水阀 |
 
 ## ⚡ 快速使用
 
 用户只需说：
 
-- "获取传感器数据" → 自动获取所有土壤温湿度云传感器的温湿度
-- "获取液位" / "液位数据" → 自动获取液位传感器的液位数据
-- "打开电磁阀" / "开启水阀" → 开启远程电磁阀
-- "关闭电磁阀" / "关闭水阀" → 关闭远程电磁阀
+- “把设备数据接进我的后端 / 看板” → 北向，给 Python / Node 示例；
+- “给这块 MCU 写接入固件” → 南向，给 C SDK 集成步骤；
+- “让这个测点可以下发指令” → 北向，改该测点 `access`；
+- “看下昨天的液位历史” → 先判断平台：开放平台走 `yzl-open-api`，AIoT 平台走北向。
 
-## 📋 支持的设备
+## 🏗️ 平台速览（细节在子技能里）
 
-### 土壤温湿度云传感器
+- **北向认证**：JWT（`POST /auth/login`）、账号密码自动登录、平台 API Key（`X-API-Key`）
+- **北向数据**：设备列表 / 实时值 / 历史 / 聚合 / 指令 / 告警；测点属性用 `PATCH /open/product/{型号}/metric/{key}` 单点修改
+- **南向链路**：设备号 + 密码 `lgn`、`facs` 上报、`hear` 心跳、`set` / `get` 回执、`facs_his` 补传、OTA
+- **域名**：南向测试 `ciot.yzlkj.com`、生产 `siot.yzlkj.com`；北向统一 `aiot.yzlkj.com`
+- **安全**：token、密码、API Key 只放环境变量，不写进代码或仓库
 
-| 型号前缀 | 说明 |
-|----------|------|
-| YZLSTM1 | 土壤温湿度云传感器标准款 |
-| STMCBL | 土壤温湿度云传感器加长款 |
-| STMCS1 | 土壤温湿度云传感器太阳能款 |
+## 🚦 限频（只针对北向 REST）
 
-**获取数据：** 温度(wd)、湿度(sf)
+- **用户配额 = 基础配额 + 设备数 × 每台追加**（例：基础 60 + 100 台 × 10 = **1060 次/秒**，具体数值以账号页面为准，`rate_config` 可热调）；
+- **写接口（POST / PUT / DELETE）按 3 倍配额计**；超限返回 `429`；
+- 配额数据由接口返回，**查询配额本身也受限速约束**；
+- 南向设备链路（TCP / UDP / MQTT）**不走**这条 REST 配额；
+- 开放平台 `open.yzlkj.com` 的按接口限速、并发 2、非 0 返回封 IP，**只属于 `yzl-open-api`**，不要套到本平台。
 
-### 远程电磁阀
+## 🔄 从 1.x 升级（2.0.0 说明）
 
-| 型号前缀 | 说明 |
-|----------|------|
-| WA1CB1 | 远程电磁阀低功耗版本 |
-| WANCD1 | 4G水阀（目前支持远程控制） |
-
-**控制指令：** 通过 kk1 设施控制开(1)/关(0)
-
-### 低功耗液位传感器
-
-| 型号前缀 | 说明 |
-|----------|------|
-| YZLWP01 | 低功耗液位传感器 |
-
-**获取数据：** 液位(yw)
-
-## 📖 自然语言示例
-
-```
-用户: "帮我看看传感器数据"
-→ 返回所有土壤温湿度云传感器的温湿度
-
-用户: "获取液位"
-→ 返回液位传感器的液位数据
-
-用户: "打开电磁阀"
-→ 开启远程电磁阀
-
-用户: "关闭水阀"
-→ 关闭远程电磁阀
-```
+- 2.0.0 起本技能拆为平台入口：北向 → `yzl-aiot-north`，南向 → `yzl-aiot-south`，开放平台 → `yzl-open-api`
+- **兼容层**：本技能仍自带 1.x 的 `tool.py`（`all` / `send` / `history` 等），继续可用到 **3.0.0**；这些命令只对接 `open.yzlkj.com`
+- **迁移**：`python tool.py migrate` 给出步骤；`python tool.py status` 查看环境与同族技能安装情况
+- 3.0.0 将移除兼容层，定时脚本请提前迁移到 `yzl-open-api`
 
 ## 🔧 手动命令（可选）
 
-如果需要更精细控制：
-
 ```bash
-# 获取所有设备（简易信息，不含设施集）
-python3 tool.py all
-
-# 分页获取设备列表（含设施集）
-python3 tool.py list
-
-# 查看设备详情（新版：路径参数）
-python3 tool.py device WANCD1-0000000001
-
-# 获取历史数据
-python3 tool.py history <设施ID> [天数]
-
-# 开启电磁阀（新版：参数上限5个，超时范围5~20秒）
-python3 tool.py send WANCD1-0000000001 SetFac '["WANCD1-0000000001","kk1","1"]'
-
-# 关闭电磁阀
-python3 tool.py send WANCD1-0000000001 SetFac '["WANCD1-0000000001","kk1","0"]'
+python tool.py status        # 环境与技能安装情况（不需要 API Key）
+python tool.py migrate       # 开放平台迁移引导（不需要 API Key）
+python tool.py check-update  # 检查 yzl-aiot 自身版本
+python tool.py all           # 兼容层：开放平台设备列表（需要 YZLIOT_API_KEY）
+python tool.py send ...      # 兼容层：开放平台下发指令
 ```
 
-## 🔄 自动版本更新检测 (v1.1.0+)
+## 📞 联系与官网
 
-本技能内置自动版本更新检测功能。
-
-### 工作方式
-
-1. **自动检测**: 每次运行工具时，静默向 ClawHub 查询最新版本
-2. **缓存机制**: 每 12 小时只检测一次，减少网络请求
-3. **智能提醒**: 检测到有新版本时，在命令输出结果末尾追加更新提醒
-4. **离线容错**: 网络不可用时使用上次缓存结果，不阻塞操作
-
-### 手动检查更新
-
-```bash
-python3 tool.py check-update
-```
-
-### 更新方法
-
-```bash
-# 更新到最新稳定版
-clawhub update yzl-aiot
-
-# 或指定版本
-clawhub update yzl-aiot --version 1.1.0
-```
-
-## ⚡ 请求频率限制
-
-工具已内置请求频率控制，自动处理以下限制（新版 API 限制与旧版一致）：
-
-| 接口 | 路径 | 限制速率 |
-|------|------|----------|
-| 获取所有设备 | `GET /open/device/all` | 10次/10秒 |
-| 获取设备列表 | `GET /open/device/list` | 5次/10秒 |
-| 获取设备详情 | `GET /open/device/{id}` | 10次/10秒 |
-| 获取历史数据 | `GET /open/history` | 2次/10秒 |
-| 发送指令 | `POST /open/command/send` | 2次/5秒 |
-| 获取指令详情 | `GET /open/command/{id}` | 2次/5秒 |
-| 获取指令列表 | `GET /open/command/list` | 2次/10秒 |
-
-## 📡 API 接口参考（新版 v2）
-
-> 新版 API 变更日期: 2026-06-15
-> Base URL: `https://open.yzlkj.com`
-> 认证: Header `YZLIOT-APIKEY`
-> 并发限制: 2
-
-### 变更要点
-
-| 变更项 | 旧版 (v1) | 新版 (v2) |
-|--------|-----------|-----------|
-| 路径前缀 | `/openv1/` | `/open/` |
-| 设备详情 | `GET /openv1/device?id=X` | `GET /open/device/{id}` (路径参数) |
-| 指令详情 | `GET /openv1/command/detail?id=X` | `GET /open/command/{id}` (路径参数) |
-| 历史日期格式 | ISO 8601 `2026-03-07T00:00:00` | `2026-03-07 00:00:00` |
-| `/open/device/all` 返回 | 含设施集 | 简易信息(不含设施集)，需通过详情接口补查 |
-| `/open/device/list` | — | 新增 `Filter` 筛选参数，`MaxResultCount` 上限50 |
-
-### 状态码
-
-| 码值 | 说明 |
-|------|------|
-| 0 | 成功 |
-| 400 | 参数错误 |
-| 401 | 未授权/无效APIKey |
-| 403 | 权限不足 |
-| 429 | 请求频率超限 |
-| 500 | 服务器错误 |
+- 电话：089836692518/18689850608
+- 邮箱：yzlkj@yzlkj.com
+- 官网：www.yzlkj.com
 
 ## 版本历史
 
-### v1.1.0 (2026-06-18) — API v2 适配
-- 🔄 **适配新版 API**：所有接口路径从 `/openv1/` 迁移至 `/open/`
-- 🔧 **设备详情**：改用路径参数 `GET /open/device/{id}`
-- 🔧 **指令详情**：改用路径参数 `GET /open/command/{id}`
-- 🔧 **历史数据**：改为纯 Query 参数请求，日期格式更新
-- ⚡ **发送指令**：超时范围调整至 5~20 秒
-- 📝 **文档更新**：同步新版 API 接口参考
+### v2.0.0 (2026-11-27) — 拆分为平台入口
+- 🧭 **改为平台总入口**：不再承载开放平台接入细节，改为 `aiot.yzlkj.com` 的入口与分流
+- 🧩 **三向拆分**：北向 `yzl-aiot-north`、南向 `yzl-aiot-south`、开放平台 `yzl-open-api`
+- 🚦 **加载规则**：说「加载 yzl-aiot」时同时加载南北向；指定方向时只加载对应技能
+- 🛡️ **兼容层**：保留 1.x 的 `tool.py`（开放平台命令）到 3.0.0，避免老用户脚本直接失效
+- 🧰 **新增命令**：`status`、`migrate`（均可无 API Key 运行）
+- 📏 **限速口径**：北向 REST 按用户配额（基础 + 设备数 × 每台追加，按秒计；写接口 3 倍）；开放平台限速只属于 `yzl-open-api`
 
-### v1.0.0 (2026-06-03) — 初始版本
-- 🎉 从 yzl-iot-api 迁移，全新发布
-- ✨ 自动版本更新检测
-- ✨ 缓存机制：12 小时内不重复请求
-- ✨ 离线容错：网络不可用时使用缓存结果
-- 🔧 完整支持：设备列表、详情、历史数据、控制指令
-- 🗣️ 自然语言命令（智能识别设备型号和执行意图）
+> 2.0.0 之前，本技能是 `open.yzlkj.com` 的取数技能；该能力已整体迁至 `yzl-open-api`。
