@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "skill": "gitlab-agent",
+      "job": {
+        "name": "GitLab Agent",
+        "description": "Process assigned GitLab work using the GitLab Agent skill.",
+        "enabled": false,
+        "deleteAfterRun": false,
+        "schedule": {
+          "kind": "every",
+          "everyMs": 900000
+        },
+        "pacing": {
+          "min": "5m",
+          "max": "10m"
+        },
+        "sessionTarget": "isolated",
+        "wakeMode": "now",
+        "payload": {
+          "kind": "agentTurn",
+          "message": "Read skill `gitlab-agent` and run. Use the full one-hour work window while actionable work remains. If an item is waiting on CI, review, or a maintainer, move to the next item. Before ending early, refresh the whole queue and relevant CI, and state in the run summary why no remaining item can be advanced.",
+          "thinking": "xhigh",
+          "timeoutSeconds": 3600,
+          "model": "openai/gpt-6.2-sol"
+        },
+        "delivery": {
+          "mode": "none",
+          "bestEffort": false
+        }
+      }
+    }
+  ]
+}

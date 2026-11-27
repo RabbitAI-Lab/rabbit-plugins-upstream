@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/translate-book",
   "slug": "translate-book",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778491928981,
-  "contentHash": "ac2ee4f03e65601d957e1746e4b62b873e391b359155664f3ac83e8cb147714f",
-  "fetchedAt": "2026-07-26T20:05:29.793Z"
+  "version": "2.0.0",
+  "updatedAt": 1795763680534,
+  "contentHash": "f41e57710795040cb175be4583f89b62fdc908ef6b5c7214f4a8e489d590cdc0",
+  "fetchedAt": "2026-11-27T17:34:12.218Z"
 }

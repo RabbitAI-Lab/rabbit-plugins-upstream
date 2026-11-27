@@ -21,9 +21,9 @@ import pandas as pd
 sys.path.insert(0, os.path.dirname(__file__) if "__file__" in dir() else ".")
 
 try:
-    from proxy_demo import get_client
+    from proxy_demo import get_client, enable_utf8_stdout
 except ImportError:
-    from scripts.proxy_demo import get_client
+    from scripts.proxy_demo import get_client, enable_utf8_stdout
 
 
 def full_finance_snapshot(pro: "ts.pro_api", ts_code: str, period: str) -> dict:
@@ -56,7 +56,7 @@ def trend_8_quarters(pro: "ts.pro_api", ts_code: str) -> pd.DataFrame:
     """
     拉最近 8 个季度 ROE 趋势 (LLM 拿这个画趋势图 / 写摘要)
 
-    注意: tushare 财务接口 period 是报告期末 (YYYYMMDD), 季度报告期是 0331/0630/0930/1231.
+    注意: 财务接口 period 是报告期末 (YYYYMMDD), 季度报告期是 0331/0630/0930/1231.
     """
     quarters = ["20231231", "20240331", "20240630", "20240930",
                 "20241231", "20250331", "20250630", "20250930"]
@@ -74,6 +74,7 @@ def trend_8_quarters(pro: "ts.pro_api", ts_code: str) -> pd.DataFrame:
 # ============================================================
 
 if __name__ == "__main__":
+    enable_utf8_stdout()
     pro = get_client()
     print(f"✅ 拉财务快照: 600519.SH / 20241231")
 

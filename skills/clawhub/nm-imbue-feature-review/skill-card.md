@@ -1,47 +1,54 @@
-## Description: <br>
-Scores backlog items with RICE/WSJF/Kano and files GitHub issues for top candidates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scores backlog items with RICE/WSJF/Kano and files GitHub issues for top candidates.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and product teams use this skill to inventory implemented features, score roadmap or backlog items with RICE, WSJF, and Kano criteria, identify gaps, and prepare prioritized suggestions or GitHub issues. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may run a local deferred-capture script for skipped high-scoring suggestions without a separate prompt. <br>
-Mitigation: Install it only in repositories where the deferred-capture script is understood, and review or disable deferred capture before using suggestion workflows. <br>
-Risk: The issue creation workflow can publish recommendations to GitHub when --create-issues is used. <br>
-Mitigation: Use --create-issues only after reviewing accepted suggestions, labels, target repository permissions, and any local backlog persistence. <br>
+## Use Case:
 
+Developers use this skill during roadmap reviews, retrospectives, and sprint planning to inventory features, compare priorities, identify gaps, and prepare issues for accepted suggestions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-feature-review) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
-- [Classification System](modules/classification-system.md) <br>
-- [Configuration](modules/configuration.md) <br>
-- [Multi-Metric Evaluation Methodology](modules/multi-metric-evaluation-methodology.md) <br>
-- [Research Enrichment](modules/research-enrichment.md) <br>
-- [Scoring Framework](modules/scoring-framework.md) <br>
-- [Tradeoff Dimensions](modules/tradeoff-dimensions.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown tables, suggestion reports, GitHub issue drafts, shell commands, and YAML configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can optionally enrich scores with research evidence and can create GitHub issues when the user selects that workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Research mode may send feature-derived topics to external services, and the scan could not verify the referenced implementation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the data shared and the missing implementation details before using research mode; avoid sending sensitive project topics until that use is acceptable.
+
+## Reference(s):
+
+- [Scoring Framework](artifact/modules/scoring-framework.md)
+- [Classification System](artifact/modules/classification-system.md)
+- [Tradeoff Dimensions](artifact/modules/tradeoff-dimensions.md)
+- [Research Enrichment](artifact/modules/research-enrichment.md)
+- [Configuration](artifact/modules/configuration.md)
+- [Multi-Metric Evaluation Methodology](https://claude-night-market/plugins/abstract/skills/skills-eval/modules/multi-metric-evaluation-methodology.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, GitHub issues]
+
+**Output Format:** [Markdown tables and recommendation reports; GitHub issues for accepted suggestions when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Feature inventories, scoring and tradeoff summaries, and prioritized suggestions; backlog processing is limited to 25 items.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

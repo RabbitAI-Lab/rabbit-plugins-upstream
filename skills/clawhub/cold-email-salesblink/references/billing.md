@@ -1,10 +1,8 @@
 # Billing & Payment Methods
 
-> **Payment Safety**: These endpoints generate magic login links to manage saved payment methods. Do not request these links unless the user explicitly asks to add or remove a payment card.
-
 ## Add Card Login Link
 
-**POST** `/billing/add-card`
+**GET** `/billing/add-card-link`
 
 Headers:
 - `Authorization`: `SALESBLINK_API_KEY`
@@ -17,7 +15,7 @@ Response:
   "success": true,
   "message": "Add card login link generated successfully",
   "data": {
-    "login_link": "https://run.salesblink.io/magic?token=...&redirect=%2Faccount%2Fbilling%3Ftab%3Dcard",
+    "login_link": "https://run.salesblink.io/magic?code=sc_...&redirect=%2Faccount%2Fbilling%3Ftab%3Dcard",
     "destination": "/account/billing?tab=card",
     "purpose": "add_card"
   }
@@ -26,7 +24,7 @@ Response:
 
 ## Remove Card Login Link
 
-**POST** `/billing/remove-card`
+**GET** `/billing/remove-card-link`
 
 Headers:
 - `Authorization`: `SALESBLINK_API_KEY`
@@ -39,7 +37,7 @@ Response:
   "success": true,
   "message": "Remove card login link generated successfully",
   "data": {
-    "login_link": "https://run.salesblink.io/magic?token=...&redirect=%2Faccount%2Fbilling%3Ftab%3Dcard",
+    "login_link": "https://run.salesblink.io/magic?code=sc_...&redirect=%2Faccount%2Fbilling%3Ftab%3Dcard",
     "destination": "/account/billing?tab=card",
     "purpose": "remove_card"
   }

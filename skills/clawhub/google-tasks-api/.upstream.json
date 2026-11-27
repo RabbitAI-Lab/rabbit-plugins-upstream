@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/google-tasks-api",
   "slug": "google-tasks-api",
   "ownerHandle": null,
-  "version": "1.0.6",
-  "updatedAt": 1782600242544,
-  "contentHash": "a91f2e80fdad86338af65cf409c1b1804fa8a3522eaf25de20640f18eae402e8",
-  "fetchedAt": "2026-07-26T18:22:54.657Z"
+  "version": "1.2.6",
+  "updatedAt": 1795781669013,
+  "contentHash": "a91eac80ee27ac5ff68b13f81134bfeda561c2f04a7b6b42d4c96785bf8941a4",
+  "fetchedAt": "2026-11-27T17:32:51.588Z"
 }

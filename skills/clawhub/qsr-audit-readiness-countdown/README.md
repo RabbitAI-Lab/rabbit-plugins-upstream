@@ -10,6 +10,14 @@ It is designed for:
 
 Instead of treating audit prep like a last-minute scramble, this skill guides operators through a milestone-based countdown that spreads the work across 30 days. The goal is simple: make audit readiness the normal state of operations.
 
+## Observa Edge Basic Beta
+
+Observa Edge Basic Beta is a separate, optional OpenClaw plugin from McPherson AI for local guardrails on covered tool routes. Installing this restaurant skill leaves Guard inactive. Accountless Shadow previews covered requests locally. Guard enrollment is restricted and requires approval and a separate local owner activation.
+
+[**Explore Observa Edge Basic Beta →**](https://mcphersonai.com/observa/edge-basic?utm_source=github&utm_medium=skill-readme&utm_campaign=observa-edge-basic-beta&utm_content=qsr-audit-readiness-countdown)
+
+*Publisher notice. The QSR skill’s behavior and data handling are unchanged.*
+
 ## What It Does
 
 This skill acts like an audit preparation coach.
@@ -79,10 +87,7 @@ Clone this repository or copy the `SKILL.md` into your OpenClaw skills environme
 
 ## License
 
-This project uses custom McPherson AI usage terms included in `SKILL.md`.
-
-Free to use, share, and adapt for internal business operations.  
-Commercial redistribution, resale, or inclusion in paid external products or services requires written permission from McPherson AI.
+McPherson AI distributes this ClawHub edition under MIT-0. The GitHub source edition is available under Apache License 2.0. See [LICENSE](LICENSE). Third-party materials remain subject to their applicable terms.
 
 ## Author
 
@@ -92,6 +97,15 @@ San Diego, CA
 Built by a franchise GM with 16 years in QSR operations and multiple consecutive years of 100% EcoSure compliance.
 
 ## Status
+
+**Version:** 1.0.3
+Publisher-notice refresh: Observa CTA updated to the current Getting Started flow. No functional changes.
+
+**Version:** 1.0.2
+Publisher-note release; the Observa private beta is now open. No functional changes.
+
+**Version:** 1.0.1
+Publisher-note release; operational behavior and license unchanged.
 
 **Version:** 1.0.0  
 Initial release

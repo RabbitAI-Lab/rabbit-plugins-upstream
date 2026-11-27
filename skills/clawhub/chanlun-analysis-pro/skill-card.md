@@ -1,40 +1,52 @@
-## Description: <br>
-Chanlun Analysis Pro helps agents produce Chanlun-style technical analysis for A-share indexes, individual stocks, and sectors, including fractals, strokes, line segments, central hubs, divergence, multi-timeframe structure, and buy/sell point research. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides educational A-share market analysis using Chanlun concepts such as fractals, strokes, central hubs, divergence, and multi-timeframe structure.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is for demonstration purposes and not for production usage.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+A-share learners and quantitative analysis researchers can use it to study Chanlun concepts and draft structural and multi-timeframe analysis notes. Its examples are educational and should be independently checked against authorized market data before use.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Broad trigger terms could route unrelated requests into financial analysis.
+
+Mitigation: Review and narrow activation terms to explicit Chanlun or A-share analysis requests.
+
+Risk: The security scan had incomplete coverage of the manifest and some referenced paths.
+
+Mitigation: Review the manifest and referenced paths before installation.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers, analysts, and market-research agents use this skill to draft Chanlun technical-analysis reports, algorithm notes, Python examples, and trading-plan templates for educational research. Generated signals should not be treated as personalized financial advice, and market data should be independently verified before trading. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Code, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+**Output Format:** [Markdown prose with tables, structured analysis notes, and illustrative Python snippets.]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/chanlun-analysis-pro) <br>
-- [Chanlun algorithm Python reference](references/chanlun_algorithm_python.md) <br>
-- [Chanlun analysis templates](references/chanlun_analysis_templates.md) <br>
-- [Chanlun practice guide](references/chanlun_practice_guide.md) <br>
+**Output Parameters:** [1D]
 
+**Other Properties Related to Output:** [Educational examples and structure labels require independent validation against authorized market data; outputs are reference drafts.]
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports with Python snippets, shell commands, checklists, and structured trading-analysis templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Financial-risk guidance applies: treat generated buy/sell points, price zones, stop-losses, and position sizes as educational research rather than personalized investment advice.] <br>
+## Skill Version(s):
 
-## Skill Version(s): <br>
-5.2.1 (source: server release and SKILL.md frontmatter) <br>
+5.2.7 (source: frontmatter)
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

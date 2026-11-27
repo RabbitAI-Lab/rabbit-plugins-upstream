@@ -1,6 +1,6 @@
 ---
 name: env-manager
-description: Scaffolds dev project files (package.json, Dockerfile, Cargo.toml, etc.) for Python, Node, Docker, Go, and Rust. Returns a list of toolchain commands for the calling agent to run. Writes files only inside the agent workspace.
+description: Scaffolds dev project files (package.json, Dockerfile, Cargo.toml, etc.) for Python, Node, Docker, Go, and Rust, AND tracks project service/port inventory and runtime state (metadata only — no process control). Returns a list of toolchain commands for the calling agent to run. Writes scaffold files and JSON state (environments/ports/services) only inside the project workspace (repo root), or a descendant directory set via the ENV_MANAGER_WORKSPACE env var (confined to within the repo root).
 ---
 
 # Env Manager
@@ -11,32 +11,35 @@ Creates the initial project files for a new dev environment and returns a list o
 
 For each language (`python`, `node`, `docker`, `go`, `rust`), it:
 
-1. **Writes starter files** to a project directory inside the agent workspace using `fs.writeFileSync`:
+1. **Validates `type` and `name`** (see Trust model). Invalid input is rejected before any path is built; nothing is written.
+2. **Writes starter files** to a project directory inside the agent workspace using `fs.writeFileSync`:
    - `node` → `package.json`, `index.js`, `.gitignore`
    - `docker` → `Dockerfile`, `docker-compose.yml`
    - `go` → `main.go`
    - `rust` → `Cargo.toml`, `src/main.rs`
    - `python` → `.env.example`
-2. **Returns a list of toolchain commands** the agent should run, like `python3 --version`, `go mod init`, etc. The agent (not this skill) executes those commands.
-3. **Tracks state** in `memory/environments/` so the agent can list environments, ports, and services later.
+3. **Returns a list of toolchain commands** the agent should run, like `python3 --version`, `go mod init`, etc. The agent (not this skill) executes those commands.
+4. **Tracks state** in `memory/environments/` so the agent can list environments, ports, and services later.
 
 ## What it does not do
 
 - It does not run shell commands, scripts, or binaries.
 - It does not start any system process.
-- It does not modify files outside the agent workspace.
-- It does not touch `ENV_DIR` from the environment or accept a `--dir` flag for runtime path redirection.
-- It does not provide its own network or file-system scanning.
+- It does not modify files outside the project workspace (repo root). An optional
+  `ENV_MANAGER_WORKSPACE` env var can relocate the workspace, but it is
+  CONFINED to a descendant of the repo root — paths outside the repo are refused.
+- It does not accept a `--dir` CLI flag for runtime path redirection.
+- It does not perform network scanning or file-system traversal. Note: it DOES maintain service/port inventory and runtime-state metadata (services.json, ports.json) inside the workspace — `startService`/`stopService` only toggle a `running` flag; they never signal or control a real OS process.
 
 ## Important: file writes happen on every call
 
-Every call to `setupEnvironment(type, name)` will:
+Every call to `setupEnvironment(type, name)` that passes validation will:
 
 - Create a directory at `environments/<name>/` inside the agent workspace.
 - Write starter files into that directory.
 - Update `memory/environments/environments.json`.
 
-These writes happen unconditionally before the toolchain commands are returned. If you do not want files written, do not call `setupEnvironment`. There is no preview / no confirm step.
+These writes happen before the toolchain commands are returned. They happen only after `type` and `name` have been validated — a rejected call writes nothing. If you do not want files written, do not call `setupEnvironment`. There is no preview / no confirm step.
 
 ## Output shape
 
@@ -114,12 +117,17 @@ All state is written to `memory/environments/` inside the agent workspace:
 - `ports.json` — port tracking
 - `services.json` — service metadata (name, port, type, running flag)
 
-The data directory is the only thing the skill writes to. No other paths are touched.
+In addition, `--setup` writes the scaffold starter files (see the table in README.md)
+into a per-project directory (`environments/<name>/`). All writes stay inside the
+project workspace; no other paths are touched.
 
 ## Trust model
 
 - The skill writes files only inside the agent workspace, in a known data directory (`memory/environments/` plus per-project scaffolding inside the workspace).
+- **Environment type validation**: The `type` argument must be exactly one of `python`, `node`, `docker`, `go`, `rust`. Anything else is rejected with an `INVALID_TYPE` error and **no files are written**. This is a path-safety control, not only a template selector: when `name` is omitted the directory name is derived from the type (`<type>-env-<timestamp>`), so an unvalidated type would reach `path.join` directly.
 - **Environment name validation**: The `name` argument is strictly sanitized before any path is constructed. Names must match `^[a-z0-9_.-]+$` (lowercase letters, digits, hyphen, underscore, dot), be 1-64 characters, and contain no parent-directory references. Names that fail validation are rejected with an `INVALID_NAME` error and **no files are written**. This prevents path traversal (e.g. `../escape`) and shell-metacharacter injection in scaffolded file content.
+- **Path containment (independent second layer)**: Every path is re-checked immediately before `mkdir`/`write`. If it does not resolve to a descendant of the active workspace, the operation is refused with `PATH_ESCAPE`. This applies to the exported functions as well as the CLI, so a caller reaching `generateScaffoldFiles` directly cannot bypass the input validation above.
+- **Validation precedes all writes.** Rejected input produces an error result (`environment: null`, `filesGenerated: false`, message in `warnings[]`) and leaves the filesystem untouched. The CLI exits non-zero.
 - File writes are limited to well-known starter files (`package.json`, `index.js`, `.gitignore`, `Dockerfile`, `docker-compose.yml`, `main.go`, `Cargo.toml`, `src/main.rs`, `.env.example`) plus three small JSON state files. No other paths are touched.
 - The skill does not run any external process.
 - The skill does not call network functions.
@@ -128,7 +136,7 @@ The data directory is the only thing the skill writes to. No other paths are tou
 
 ## Risk surface
 
-- **File writes are the only side effect.** Every successful `setupEnvironment` call creates or overwrites the files listed above. There is no preview, no confirm step, and no `--dry-run` mode in v2.0.1. If a file with the same name already exists in the project directory, it is overwritten.
+- **File writes are the only side effect.** Every *successful* `setupEnvironment` call creates or overwrites the files listed above. There is no preview and no confirm step. (A call rejected by type/name validation writes nothing.) If a file with the same name already exists in the project directory, it is overwritten.
 - **State lives in the workspace.** `memory/environments/*.json` files are written and updated on each call. `cleanupEnvs()` removes inactive entries from those files; it does not delete project directories.
 - **Returned commands are not run by the skill.** The `commands[]` array is a JSON description of work the agent should do. The skill never invokes those binaries.
 - **Service/port tracking is metadata only.** `startService` / `stopService` toggle a `running` flag in `services.json`. They do not start, stop, or signal any real OS process.
@@ -138,7 +146,10 @@ The data directory is the only thing the skill writes to. No other paths are tou
 ```js
 em.setupEnvironment(type, name)             // → { environment, commands, commandsText, warnings, filesGenerated, message }
 em.buildSetupCommands(type, name)           // → { commands, environment }
-em.generateScaffoldFiles(type, name, dir)   // → void; writes files with fs.writeFileSync
+em.generateScaffoldFiles(type, name, dir)   // → void; revalidates args, then writes with fs.writeFileSync
+em.sanitizeEnvType(type)                    // → type;  throws INVALID_TYPE
+em.sanitizeEnvName(name)                    // → name;  throws INVALID_NAME
+em.assertInsideWorkspace(path)              // → path;  throws PATH_ESCAPE
 em.listEnvironments / em.listPorts / em.listServices
 em.startService / em.stopService
 em.buildServiceHealthCommands

@@ -1,46 +1,50 @@
-## Description: <br>
-Plans, drafts, and refines technical tutorials for developers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Plans, drafts, and refines technical tutorials for developers.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and technical writers use this skill to plan, draft, and verify hands-on tutorials for libraries, CLI tools, APIs, and developer workflows. It emphasizes scoped outcomes, tested code examples, progressive complexity, expected outputs, troubleshooting, and quality checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated tutorials may include code or shell commands that are unsuitable for the user's environment. <br>
-Mitigation: Review generated commands and test runnable examples in an environment where execution is acceptable before publishing or sharing the tutorial. <br>
-Risk: The skill can activate on broad documentation requests even when a hands-on tutorial is not the right format. <br>
-Mitigation: Confirm the intended output is a step-by-step technical tutorial before applying the workflow. <br>
-Risk: The artifact expects a companion slop-detector review for its quality gate. <br>
-Mitigation: Run the referenced companion review when available, or apply an equivalent prose-quality review before final approval. <br>
+## Use Case:
 
+Developers use the skill to plan, draft, and refine step-by-step technical tutorials with working code, clear prerequisites, expected results, and troubleshooting guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-tech-tutorial) <br>
-- [Project homepage from skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
-- [Tutorial outline and structure module](artifact/modules/outline-structure.md) <br>
-- [Code examples module](artifact/modules/code-examples.md) <br>
-- [Progressive complexity module](artifact/modules/progressive-complexity.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with fenced code blocks, expected output blocks, checklists, and troubleshooting sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include tutorial outlines, tested code snippets, TODO items, quality gates, and review guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence; artifact frontmatter reports 1.9.8) <br>
+Risk: Tutorial examples may affect local files or connected services when run.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each command and code example against your environment before running; the server security guidance reports medium confidence and partial reference coverage, with two referenced local paths missing.
+
+## Reference(s):
+
+- [Skill homepage (metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/scribe)
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-scribe-tech-tutorial)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown tutorial drafts with runnable code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include commands and examples for readers to review before running.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,59 @@
-## Description: <br>
-Monitor, query, and manage New Relic observability data via the newrelic CLI, including NRQL queries, APM performance triage, deployment markers, alert policy and condition management, notification channel setup, infrastructure monitoring, and agent diagnostics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Query New Relic observability data and manage approved deployment, NRQL macro, dataset, diagnostic, and identity and access workflows with the New Relic CLI.
 
-## Publisher: <br>
-[vince-winkintel](https://clawhub.ai/user/vince-winkintel) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vince-winkintel](https://clawhub.ai/user/vince-winkintel)
 
-## Use Case: <br>
-Developers, SREs, and observability engineers use this skill to inspect New Relic telemetry, triage application and infrastructure issues, record deployment markers, and manage selected alerting resources through the New Relic CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Alert policy, alert condition, notification channel, deployment marker, and alert condition deletion commands can change New Relic account state. <br>
-Mitigation: Review write and delete commands before execution and use a least-privileged New Relic key scoped only to intended accounts. <br>
-Risk: New Relic CLI profile setup can store credentials and change the default profile on the machine. <br>
-Mitigation: Use a dedicated profile for agent workflows, protect stored credentials, and verify the active profile before running commands. <br>
-Risk: Queries and scripts can expose sensitive observability data from the configured New Relic account. <br>
-Mitigation: Install and run the skill only for accounts the agent is intended to inspect or manage. <br>
-Risk: Untrusted values embedded in NRQL can alter query behavior. <br>
-Mitigation: Validate user-provided query inputs and preserve the artifact scripts' escaping behavior when adapting commands. <br>
+## Use Case:
 
+Developers and site reliability engineers use this skill to inspect New Relic telemetry, troubleshoot application and host performance, review incidents, and carry out approved operational changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/vince-winkintel/skills/newrelic-cli-skills) <br>
-- [NRQL Patterns Reference](references/nrql-patterns.md) <br>
-- [Performance Triage Guide](references/performance-triage.md) <br>
-- [New Relic CLI releases](https://github.com/newrelic/newrelic-cli/releases) <br>
-- [New Relic data exploration](https://one.newrelic.com/data-exploration) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash and NRQL code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the newrelic CLI plus NEW_RELIC_API_KEY and NEW_RELIC_ACCOUNT_ID; outputs may include New Relic account observability data returned by CLI commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: SKILL.md frontmatter, VERSION, and release evidence) <br>
+Risk: ClawScan marks the skill suspicious because of broad activation triggers and guidance for potentially disruptive or persistent changes; the scan was partial and its tool-poisoning analysis was degraded.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review activation scope and skill content before installation, and use it only for relevant New Relic tasks.
+
+Risk: Some workflows can change profiles, restart services, or make organization-wide changes.
+
+Mitigation: Require explicit approval for the exact target and scope, use the minimum required access, and verify changes by reading the target back.
+
+## Reference(s):
+
+- [CLI installation and checksum verification](references/installation.md)
+- [NRQL patterns reference](references/nrql-patterns.md)
+- [Performance triage guide](references/performance-triage.md)
+- [AI Monitoring datasets and versions](aimonitoring/references/datasets.md)
+- [CLI configuration validation and safeguards](diagnostics/references/config-validation.md)
+- [New Relic NRQL macro documentation](https://docs.newrelic.com/docs/nrql/nrql-macros/create-manage-nrql-macros/)
+- [New Relic CLI release list](https://github.com/newrelic/newrelic-cli/releases)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands, NRQL examples, and result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Content depends on the requested New Relic task and the account data available.]
+
+## Skill Version(s):
+
+1.0.13 (source: frontmatter, server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

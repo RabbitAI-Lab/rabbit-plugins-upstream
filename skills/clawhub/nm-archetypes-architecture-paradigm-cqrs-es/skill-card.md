@@ -1,41 +1,58 @@
-## Description: <br>
-Applies CQRS and Event Sourcing for read/write separation and audit trails. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides guidance on applying the CQRS and Event Sourcing architecture paradigm.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and architects use this skill to evaluate and apply CQRS and Event Sourcing when systems need separated read/write models, complex domain behavior, durable event history, or audit trails. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may appear in broad architecture or scalability discussions where CQRS and Event Sourcing are not actually warranted. <br>
-Mitigation: Use it only when the system needs complex domain logic, separate read/write scaling, or full state-change history; avoid it for simple CRUD applications. <br>
-Risk: CQRS and Event Sourcing can add operational overhead, eventual consistency, and event schema drift risks. <br>
-Mitigation: Plan observability, replay and recovery tooling, read-model update expectations, schema versioning, and validation gates before adopting the paradigm. <br>
+## Use Case:
 
+Developers and architects use this skill to assess when CQRS and Event Sourcing fit a system and to plan aggregates, command and event schemas, read projections, consistency expectations, and operational practices.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-cqrs-es) <br>
-- [OpenClaw homepage metadata](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown guidance with architecture steps, deliverables, risks, and component vocabulary] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only architecture guidance; no tools, credentials, or privileged actions are requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Event ordering and replay issues can make operations difficult to diagnose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Automate replay workflows, route failed events to dead-letter queues, and regularly test resilience with controlled failure drills.
+
+Risk: Eventual consistency can delay read-model updates and confuse users.
+
+Mitigation: Document read-model update service levels and provide immediate feedback from the command side.
+
+Risk: Unplanned event-schema changes can break consumers.
+
+Mitigation: Maintain a schema registry or explicit versioning policy, and gate event versions in CI before they can be emitted.
+
+## Reference(s):
+
+- [Related Night Market archetypes project](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-cqrs-es)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Markdown prose with structured lists and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Architecture planning recommendations; no implementation files are specified.]
+
+## Skill Version(s):
+
+1.10.4 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

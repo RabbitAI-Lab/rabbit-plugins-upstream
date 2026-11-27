@@ -1,43 +1,52 @@
-## Description: <br>
-MCP server security registry and trust assessment - look up servers in the 1013-entry server security metadata registry, run pre-install marketplace checks, batch fleet risk scoring, assess skill file trust, and run SAST code scans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MCP server security registry and trust assessment — look up servers in the 1356-entry server security metadata registry, run pre-install marketplace checks, batch fleet risk scoring, assess skill file trust, and run SAST code scans. Use when the user mentions MCP server trust, registry lookup, marketplace check, or skill trust assessment.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers and security reviewers use this skill to evaluate MCP server trust, run pre-install marketplace checks, assess skill files, and perform SAST-oriented code scans before adopting agent tooling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run security lookups and scans over MCP servers, skill files, or code, so results may depend on the exact targets selected for analysis. <br>
-Mitigation: Keep scans pointed at directories, skill files, and server inventories that the operator intends to analyze, and review findings before using them for deployment decisions. <br>
-Risk: Optional Snyk enrichment may contact a third-party vulnerability service when SNYK_TOKEN is provided. <br>
-Mitigation: Provide SNYK_TOKEN only when third-party enrichment is desired, and keep the token in the operator environment rather than embedding it in skill output. <br>
+## Use Case:
 
+Developers and security engineers use this skill to look up MCP server security metadata, check packages before installation, score server inventories, assess skill files, and run SAST scans.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-registry) <br>
-- [Project homepage](https://github.com/msaad00/agent-bom) <br>
-- [PyPI project](https://pypi.org/project/agent-bom/) <br>
-- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and plain text with inline shell commands and structured security findings] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May report local registry lookup results, skill trust findings, fleet risk scores, and optional Semgrep or Snyk-enriched scan guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Optional Snyk vulnerability enrichment for code scans uses the sensitive SNYK_TOKEN credential.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the token in the operator environment and out of prompts and skill output; bundled registry lookups do not require it.
+
+## Reference(s):
+
+- [agent-bom project](https://github.com/koda-ai-studio/agent-bom)
+- [agent-bom on PyPI](https://pypi.org/project/agent-bom/)
+- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/koda-ai-studio/agent-bom)
+- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-registry)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Security findings, Risk scores, Shell commands]
+
+**Output Format:** [Structured text and security analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Registry matches, trust assessments, marketplace checks, fleet risk scores, and SAST findings; registry lookups use bundled data.]
+
+## Skill Version(s):
+
+0.115.6 (source: frontmatter; ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

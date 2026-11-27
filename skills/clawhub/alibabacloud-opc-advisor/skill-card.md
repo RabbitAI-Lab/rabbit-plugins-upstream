@@ -1,52 +1,59 @@
-## Description: <br>
-Alibaba Cloud OPC Advisor helps non-technical solo founders choose a standard Alibaba Cloud OPC package with pricing, purchase guidance, and a plain-language launch or migration path. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Advises non-technical solo founders, in Chinese, on Alibaba Cloud OPC package selection, pricing, purchase links, and launch or migration paths without deploying resources.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-External users and agents use this skill to triage one-person-company cloud hosting needs, distinguish first launches from migrations, and recommend an appropriate Alibaba Cloud OPC SKU before any deployment action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: SKU recommendations can influence cloud spend and production architecture decisions. <br>
-Mitigation: Confirm the SKU, region, monthly price, billing impact, and account eligibility before purchase or provisioning. <br>
-Risk: Migration guidance may lead to DNS, data, or availability changes if another agent executes it. <br>
-Mitigation: Require backups, a rollback plan, and explicit user approval before any deployment, DNS, or data-migration step. <br>
-Risk: The skill is recommendation-oriented but discusses assisted purchasing and deployment flows. <br>
-Mitigation: Keep this skill in advisory mode until a separate, authorized execution workflow is invoked. <br>
+## Use Case:
 
+External users and agents use this skill to guide Chinese-speaking one-person-company founders through Alibaba Cloud OPC SKU selection for first launches or migrations. It asks for scale and user-data signals, recommends one standard package, explains assumptions and upgrade triggers, and points to purchase or deployment handoff paths.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sdk-team/skills/alibabacloud-opc-advisor) <br>
-- [A1 Branch Output Template: Zero-Start Five-Section Format](references/a1-zero-start.md) <br>
-- [A2 Branch Output Template: Migration Five-Section Format](references/a2-migration.md) <br>
-- [OPC SKU Matrix](references/skus.md) <br>
-- [SKU Sizing Questionnaire - Pre-Engagement Scale Assessment](references/sku-sizing-questionnaire.md) <br>
-- [Concurrent Users Triage & SKU Mapping Guide](references/concurrency-to-sku.md) <br>
-- [Purchase / Console Entry-Point Canonical Registry](references/purchase-url-canonical.md) <br>
-- [Domain & ICP Filing Appendix](references/domain-and-icp.md) <br>
-- [UGC Application Hardening - Public UGC Site Security Checklist](references/ugc-application-hardening.md) <br>
-- [Alibaba Cloud OPC Package Page](https://opc.aliyun.com/products) <br>
-- [Alibaba Cloud Domain Registration](https://wanwang.aliyun.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration] <br>
-**Output Format:** [Chinese Markdown prescription with optional structured YAML for deployment handoff] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only recommendation output; the skill does not deploy resources by itself.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.1 (source: server release metadata) <br>
+Risk: The advisor may make package recommendations for paid Alibaba Cloud resources feel like approval to create or order those resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it as read-only selection guidance only; require a separate deployment or checkout flow with explicit price, resource, recurring-billing, DNS, and account-ownership confirmation before any paid action.
+
+## Reference(s):
+
+- [Alibaba Cloud OPC Advisor](SKILL.md)
+- [A1 Zero-Start Output Template](references/a1-zero-start.md)
+- [A2 Migration Output Template](references/a2-migration.md)
+- [SKU Sizing Questionnaire](references/sku-sizing-questionnaire.md)
+- [OPC SKU Matrix](references/skus.md)
+- [Concurrent Users Triage & SKU Mapping Guide](references/concurrency-to-sku.md)
+- [OPC Cloud Advisor Self-Check Checklists](references/checklists.md)
+- [UGC Application Hardening Checklist](references/ugc-application-hardening.md)
+- [Purchase / Console Entry-Point Canonical Registry](references/purchase-url-canonical.md)
+- [OPC Package Page](https://opc.aliyun.com/products)
+- [Alibaba Cloud Domain Registration](https://wanwang.aliyun.com/)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, configuration]
+
+**Output Format:** [Chinese conversational Markdown with a structured recommendation and plain-language next steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only advisor output; no files, shell commands, or resource deployment are produced by this skill.]
+
+## Skill Version(s):
+
+0.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

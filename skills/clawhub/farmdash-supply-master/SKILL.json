@@ -1,0 +1,216 @@
+{
+  "name": "FarmDash Supply Master",
+  "version": "1.1.2",
+  "description": "Use when comparing lending and yield pools by net expected APY, TVL depth, stablecoin and impermanent-loss risk. Read-only; deposits need user-signed approval.",
+  "tags": [
+    "defi",
+    "defi-yield",
+    "yield-farming",
+    "yield-aggregator",
+    "apy-comparison",
+    "aave",
+    "lido",
+    "curve",
+    "stablecoin-yield",
+    "liquidity-pools",
+    "defi-analytics",
+    "yield-optimization",
+    "impermanent-loss",
+    "tvl-analysis",
+    "reward-token-risk",
+    "openclaw",
+    "ai-agent",
+    "mcp",
+    "web3",
+    "farmdash"
+  ],
+  "author": "FarmDash Pioneers (@Parmasanandgarlic)",
+  "homepage": "https://www.farmdash.one/agents",
+  "icon": "vault",
+  "tools": [
+    {
+      "name": "compare_yields",
+      "description": "",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "chains": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 128
+            }
+          },
+          "assets": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 128
+            }
+          },
+          "projects": {
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 128
+            }
+          },
+          "riskPreference": {
+            "type": "string",
+            "enum": [
+              "conservative",
+              "balanced",
+              "aggressive"
+            ]
+          },
+          "minTvlUsd": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "stableOnly": {
+            "type": "boolean"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
+      },
+      "outputHints": [],
+      "category": "read"
+    }
+  ],
+  "operatingRules": [],
+  "requiredEnv": {
+    "FARMDASH_API_KEY": {
+      "description": "Optional Bearer token for higher FarmDash limits.",
+      "required": false
+    }
+  },
+  "links": {
+    "website": "https://www.farmdash.one/",
+    "agentHub": "https://www.farmdash.one/agents",
+    "canonicalSkill": "https://www.farmdash.one/agents/skills/farmdash-supply-master",
+    "documentation": "https://www.farmdash.one/docs",
+    "status": "https://www.farmdash.one/api/v1/agent/status",
+    "openApi": "https://www.farmdash.one/agents/openapi.yaml",
+    "hostedMcp": "https://www.farmdash.one/api/mcp",
+    "mcpDiscovery": "https://www.farmdash.one/.well-known/mcp.json",
+    "workflows": "https://www.farmdash.one/api/v1/agent/workflows",
+    "operatingModel": "https://www.farmdash.one/openclaw-skills/FARMDASH_AGENT_OPERATING_MODEL.md",
+    "fees": "https://www.farmdash.one/fees",
+    "security": "https://www.farmdash.one/security"
+  },
+  "capability_truth": {
+    "spot.USER_SIGNED": {
+      "status": "operational",
+      "prerequisite": "Healthy execution governor, quote provider, RPC and durable receipt store; customer signs and submits."
+    },
+    "spot.BOUNDED_AUTONOMOUS": {
+      "status": "operational",
+      "prerequisite": "Owner-signed EVM grant, exact simulation/calldata binding, durable budget and customer-local signer authority."
+    },
+    "futures.USER_SIGNED": {
+      "status": "operational",
+      "prerequisite": "Venue account ownership, local action signature, builder approval, risk/research gates and durable order control."
+    },
+    "futures.BOUNDED_AUTONOMOUS": {
+      "status": "operational",
+      "prerequisite": "Authenticated owner-bound futures policy, authorized local API-wallet signature, durable nonce/budget/order controls."
+    },
+    "solana.USER_SIGNED": {
+      "status": "operational",
+      "prerequisite": "Native Jupiter/RPC route, durable preparation and finality store; customer signs and broadcasts."
+    },
+    "solana.BOUNDED_AUTONOMOUS": {
+      "status": "operational",
+      "prerequisite": "Native owner-signed Solana policy; local key must be an actual required transaction signer. Policy creates no on-chain authority."
+    },
+    "ERC4337_SERVER_SUBMISSION": {
+      "status": "operational",
+      "prerequisite": "Authenticated session, tenant-bound active ERC-4337 session-key grant, ABI-verified execute/executeBatch calldata within allowedProtocols/budget/gas bounds, and configured bundler RPC (BUNDLER_RPC_URL/PIMLICO_API_KEY/ALCHEMY_4337_RPC_URL)."
+    },
+    "GENERIC_SERVER_INTENT_EXECUTION": {
+      "status": "operational",
+      "prerequisite": "Curated executable adapter prepared_payload + payload_digest, policy/simulation/approval gates, exact cryptographic signed-transaction binding, and canonical on-chain receipt verification."
+    },
+    "MEE": {
+      "status": "operational",
+      "prerequisite": "Owner EIP-712 MEE signature, configured HTTPS MEE_COORDINATOR_URL, and authoritative dual-chain on-chain receipt verification."
+    },
+    "ACP": {
+      "status": "deployment_prerequisite",
+      "prerequisite": "AcpReadinessService paidWorkflowReady, evaluator/client identities, migrations, funding/finality workers and Base RPC."
+    }
+  },
+  "installation_attribution": {
+    "header": "X-FarmDash-Installation-ID",
+    "optional": true,
+    "analytics_only": true,
+    "generation": "locally generated random UUIDv4, stable per installation, shared across skills",
+    "server_storage": "domain-separated salted hash only",
+    "authority": "none; cannot authenticate, grant quota/payment/trial capacity, own wallets, delegate or sign"
+  },
+  "ecosystem_handoffs": [
+    {
+      "slug": "farmdash-trail-intelligence",
+      "stage": "Discovery & Intelligence",
+      "role": "Trail Heat, protocol risk, wallet balances, sybil audits, points simulations",
+      "manual": "https://www.farmdash.one/agents/skills/farmdash-trail-intelligence"
+    },
+    {
+      "slug": "farmdash-wagon-steward",
+      "stage": "Portfolio & Reserves",
+      "role": "Portfolio summary, idle capital scan, position health & drift checks",
+      "manual": "https://www.farmdash.one/agents/skills/farmdash-wagon-steward"
+    },
+    {
+      "slug": "farmdash-camp-guard",
+      "stage": "Pre-Sign Safety Gate",
+      "role": "Allowance audits, Risk Sentinel net-edge/depeg checks, unsigned-tx verdicts",
+      "manual": "https://www.farmdash.one/agents/skills/farmdash-camp-guard"
+    },
+    {
+      "slug": "farmdash-hedge-warden",
+      "stage": "Delta-Neutral Sizing",
+      "role": "Spot beta hedge sizing (confidence >= 0.60 gate) handing off to Futures Strategist",
+      "manual": "https://www.farmdash.one/agents/skills/farmdash-hedge-warden"
+    },
+    {
+      "slug": "farmdash-trail-marshal",
+      "stage": "Workflow Orchestration",
+      "role": "18-recipe multi-skill catalog (list/plan/run/status) across all FarmDash skills",
+      "manual": "https://www.farmdash.one/agents/skills/farmdash-trail-marshal"
+    },
+    {
+      "slug": "farmdash-signal-architect",
+      "stage": "Spot & Swap Execution",
+      "role": "EVM (LI.FI & Relay; 0x paused) & Solana (Jupiter) quote, simulation, prep & confirm",
+      "manual": "https://www.farmdash.one/agents/skills/farmdash-signal-architect"
+    },
+    {
+      "slug": "farmdash-futures-strategist",
+      "stage": "Hyperliquid Perps",
+      "role": "Funding/regime scans, sizing, builder approval, EIP-712 order prep & reconciliation",
+      "manual": "https://www.farmdash.one/agents/skills/farmdash-futures-strategist"
+    },
+    {
+      "slug": "farmdash-autonomous-operator",
+      "stage": "Sessions & Autonomy",
+      "role": "Persistent sessions, FarmingContext, intent resolution, MEE & bounded delegations",
+      "manual": "https://www.farmdash.one/agents/skills/farmdash-autonomous-operator"
+    },
+    {
+      "slug": "farmdash-ledger-keeper",
+      "stage": "Post-Trade Accounting",
+      "role": "Confirmed activity/cost summaries and CSV tax exports (read-only)",
+      "manual": "https://www.farmdash.one/agents/skills/farmdash-ledger-keeper"
+    }
+  ]
+}

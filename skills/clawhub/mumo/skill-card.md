@@ -1,52 +1,57 @@
-## Description: <br>
-Mumo guides OpenClaw agents through structured multi-model deliberations via mumo's MCP server for architecture decisions, design reviews, red-team reviews, uncertainty expansion, and other high-regret choices. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Runs a multi-model deliberation across models from different labs (Claude, GPT, Gemini, Grok, DeepSeek, Kimi, and more) via mumo's MCP server, returning full responses plus typed cross-model reactions. Use when independent perspectives are needed on architecture/product decisions, design and plan review before implementation, pre-launch pressure tests, tradeoffs with multiple defensible framings, or explicit user requests for a mumo panel. Especially valuable for pre-implementation review of anything touching auth, security, tokens, payments, data exposure, or migrations. Requires a mumo platform API key (mmo_live_*) registered with `openclaw mcp set mumo`.
 
-## Publisher: <br>
-[ericatmumo](https://clawhub.ai/user/ericatmumo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ericatmumo](https://clawhub.ai/user/ericatmumo)
 
-## Use Case: <br>
-Developers and engineering teams use Mumo to ask an OpenClaw agent to run a multi-model panel before high-regret product, architecture, security, migration, and launch decisions, then synthesize claim-map evidence into actionable guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a mumo platform API key in the MCP server configuration. <br>
-Mitigation: Store the key only in the local OpenClaw MCP configuration, review the registration command before running it, and rotate keys that are exposed or no longer needed. <br>
-Risk: Mumo panel output is advisory and can be incomplete or wrong even when models agree. <br>
-Mitigation: Use the claim map to inspect assumptions and disagreement, then verify recommendations with tests, source evidence, or user confirmation before changing the workspace. <br>
-Risk: Security guidance flags powerful authenticated actions in the reviewed release context. <br>
-Mitigation: Review commands before confirming writes, especially bans, role changes, package transfers, production migrations, and outbound email. <br>
+## Use Case:
 
+Developers and product teams use the skill to gather independent model perspectives on architecture, design, launch, and other high-impact decisions, then review areas of agreement and disagreement before choosing a course of action.
 
-## Reference(s): <br>
-- [Mumo MCP documentation](https://mumo.chat/docs/mcp) <br>
-- [Mumo REST API documentation](https://mumo.chat/docs/api) <br>
-- [Mumo OpenClaw install guide](https://mumo.chat/install/openclaw) <br>
-- [Mumo product site](https://mumo.chat) <br>
-- [ClawHub listing](https://clawhub.ai/ericatmumo/mumo) <br>
-- [Claim Maps](references/claim-maps.md) <br>
-- [Model Selection](references/model-selection.md) <br>
-- [Operating Notes](references/operating-notes.md) <br>
-- [Recap and Synthesis](references/recap.md) <br>
-- [Snippets](references/snippets.md) <br>
-- [Synthesis](references/synthesis.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a mumo platform API key and registered MCP server; deliberation output is advisory and should be verified before workspace changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.0 (source: changelog, released 2026-06-19; server release metadata agrees) <br>
+Risk: Decision context provided to the skill may be shared with participating external model providers; safeguards for sensitive decisions are not fully clear.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not include secrets or sensitive information unless sharing it is appropriate and authorized. Review the context before submitting it to a panel.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/ericatmumo/skills/mumo)
+- [mumo product](https://mumo.chat)
+- [mumo MCP documentation](https://mumo.chat/docs/mcp)
+- [mumo API documentation](https://mumo.chat/docs/api)
+- [OpenClaw documentation](https://docs.openclaw.ai)
+- [Reading reactions](artifact/references/reading-reactions.md)
+- [Writing reactions](artifact/references/writing-reactions.md)
+- [Synthesis](artifact/references/synthesis.md)
+- [Model selection](artifact/references/model-selection.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Guidance]
+
+**Output Format:** [Text and Markdown containing model responses, typed reactions, and a synthesized summary]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Response length and detail vary with the deliberation and participating models.]
+
+## Skill Version(s):
+
+0.9.1 (source: CHANGELOG, released 2026-11-24)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

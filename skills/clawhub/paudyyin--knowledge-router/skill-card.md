@@ -1,40 +1,49 @@
-## Description: <br>
-Knowledge Router is a unified knowledge-query entry point that routes questions to the best available source across compiled wiki knowledge, conversation memory, ontology graphs, vector search, and domain ontologies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Knowledge Router routes knowledge queries to the most appropriate source based on question type, covering wiki-kb, memory-tencentdb, Ontology, memorySearch, and domain-kit.
 
-## Publisher: <br>
-[paudyyin](https://clawhub.ai/user/paudyyin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[paudyyin](https://clawhub.ai/user/paudyyin)
 
-## Use Case: <br>
-Developers and agent users use this skill to classify knowledge questions, route searches across wiki, memory, ontology, vector, and domain sources, and return sourced answers with confidence or no-result guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad prompts could trigger searches over prior conversation memory without clear user consent. <br>
-Mitigation: Require explicit memory-recall wording or confirmation before querying prior conversations. <br>
-Risk: Memory-derived answers could expose or blur sensitive personal, business, or project information. <br>
-Mitigation: Review the skill before installing in environments with sensitive memory stores and clearly label memory-derived answers. <br>
+## Use Case:
 
+External users and developers use this skill to classify knowledge questions and route searches across curated wiki content, conversation memory, ontology relationships, vector search, and domain-specific knowledge sources.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/paudyyin/skills/knowledge-router) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with sourced query results, confidence labels, conflict notes, and no-result guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include source labels for wiki-kb, Ontology, memory, or domain-kit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The skill may search conversation history and persistent memory stores from broad prompts without clear consent or access limits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only where the underlying tools enforce user, tenant, project, and session boundaries; narrow triggers and require confirmation before raw conversation or persistent memory searches.
+
+## Reference(s):
+
+- [Knowledge Router on ClawHub](https://clawhub.ai/paudyyin/skills/knowledge-router)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include source labels, confidence levels, conflict notes, and no-result suggestions.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

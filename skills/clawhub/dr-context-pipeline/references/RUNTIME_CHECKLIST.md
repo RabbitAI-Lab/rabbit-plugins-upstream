@@ -1,29 +1,58 @@
 # Runtime Evidence Checklist — dr-context-pipeline
 
-Agents **must** follow this checklist on every task once the context pipeline is installed.
+Agents must load the small always-on policy on every task. They follow this
+full checklist only when the Trigger Gate below applies.
+
+## Trigger Gate
+
+Run the full retrieval → bundle → compression → lint workflow only when:
+
+- persistent memory or a prior decision is materially relevant;
+- the task is complex, risky, production-facing, or depends on historical
+  context for correctness; or
+- the user asks for debug, audit, tracing, receipts, or an evidence dump.
+
+For a routine, self-contained task where persistent memory is not needed:
+
+1. Load `memory/always_on.md`.
+2. Record retrieval mode as `not_needed`.
+3. Answer or act directly.
+
+Do not require a Retrieval Bundle, Context Pack, lint, runtime artifacts, or a
+pipeline-specific footer for that path. Do not block routine work because
+memory tooling is unavailable.
+
+If history may materially affect the result, retrieve the smallest relevant
+context. If required history is unavailable, use fresh read-only evidence or
+ask one targeted question. Stop only an action whose correctness depends on the
+missing historical state.
 
 ## Runtime modes
 The pipeline supports three modes:
 - `normal` — compact operation for everyday use
 - `debug` — full pipeline artifacts for diagnosis
-- `audit` — full artifacts plus Receipt Ledger for high-trust review
+- `audit` — sanitized artifacts plus Receipt Ledger for high-trust review
 
 Default to `normal` unless the user explicitly asks for debugging, tracing, receipts, or a full evidence dump.
 
-## Rules that apply in all modes
+## Rules for triggered pipeline work
 1. Load `memory/always_on.md`.
 2. Route + retrieve according to `context_pipeline/router.yml` caps.
    - When persistent memory is relevant, prefer semantic/hybrid memory search.
    - Record retrieval mode as `semantic`, `hybrid`, `file_fallback`, or `not_needed`.
-   - If semantic memory is unavailable or not attempted, normal mode must say so compactly; debug/audit must include the reason.
+   - If semantic memory is unavailable, use file/keyword fallback when
+     sufficient. Mention the limitation in normal mode only when it materially
+     affects the result; debug/audit must include the reason.
 3. Build a Retrieval Bundle object internally.
 4. Compress to a Context Pack internally.
 5. Lint the Context Pack.
 6. If lint fails, use the documented fallback behavior.
-7. If any required step cannot be completed, reply exactly `NOT EXECUTED: <reason>` and stop.
+7. If a required triggered-pipeline step cannot be completed, use the
+   documented fallback. Reply exactly `NOT EXECUTED: <reason>` only when the
+   affected action cannot be correct without that missing safeguard.
 8. Do **not** claim a bundle, pack, or step was produced unless it actually was.
 
-For `debug` and `audit`, persist runtime artifacts using `references/RUNTIME_ARTIFACTS.md` before emitting final evidence.
+For `debug` and `audit`, persist sanitized runtime artifacts using `references/RUNTIME_ARTIFACTS.md` before emitting final evidence.
 
 ## Required transcript output by mode
 
@@ -43,8 +72,7 @@ Do **not** emit the full Retrieval Bundle JSON or full Context Pack JSON unless 
 
 ### `debug`
 Emit:
-- full Retrieval Bundle JSON
-- full Context Pack JSON
+- sanitized Retrieval Bundle and Context Pack summaries
 - dropped entries with reasons
 - snippet summary + pass-through
 - retrieval mode and fallback/degradation reason, if any
@@ -68,4 +96,7 @@ Receipt Ledger requirements:
 - if a required audit-mode receipt is missing, the task must fail with `NOT EXECUTED`
 
 ## Failure contract
-If any required step above cannot be completed, reply exactly `NOT EXECUTED: <reason>` and stop. Do **not** invent bundles, packs, or receipts.
+Do not invent bundles, packs, or receipts. A routine `not_needed` task is not
+blocked by unavailable memory tooling. For triggered work, fall back to
+file/keyword retrieval where sufficient; otherwise stop only the affected
+action with `NOT EXECUTED: <reason>`.

@@ -1,8 +1,8 @@
 ---
 name: qsr-ghost-inventory-hunter
-version: 1.0.0
+version: 1.0.4
 description: Identifies unaccounted inventory loss in restaurant operations by cross-referencing sales volume against theoretical recipe yields. Pinpoints whether missing product is theft, over-portioning, unrecorded waste, or prep errors. Built by a QSR GM with 16 years in restaurant operations.
-license: CC-BY-NC-4.0
+license: MIT-0
 tags:
   - restaurant
   - franchise
@@ -15,8 +15,16 @@ tags:
   - theft-prevention
 ---
 
+## Observa Edge Basic Beta
+
+Observa Edge Basic Beta is a separate, optional OpenClaw plugin from McPherson AI for local guardrails on covered tool routes. Installing this restaurant skill leaves Guard inactive. Accountless Shadow previews covered requests locally. Guard enrollment is restricted and requires approval and a separate local owner activation.
+
+[**Explore Observa Edge Basic Beta →**](https://mcphersonai.com/observa/edge-basic?utm_source=clawhub&utm_medium=skill&utm_campaign=observa-edge-basic-beta&utm_content=qsr-ghost-inventory-hunter)
+
+*Publisher notice. The QSR skill’s behavior and data handling are unchanged.*
+
 # QSR Ghost Inventory Hunter
-**v1.0.0 · McPherson AI · mcphersonai.com · San Diego, CA**
+**v1.0.4 · McPherson AI · mcphersonai.com · San Diego, CA**
 
 You are an inventory variance investigator for a restaurant or franchise location. Your job is to find "ghost inventory" — product that disappeared from the shelf but never appeared on a sales receipt or a waste log. It was ordered, it was received, but it's gone — and nobody can account for where it went.
 
@@ -178,11 +186,7 @@ After 3+ investigations, surface patterns:
 
 ## LICENSE
 
-**Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**
-
-Free to use, share, and adapt for personal and business operations. For the purposes of this license, operating this skill within your own business is not considered commercial redistribution. Commercial redistribution means repackaging, reselling, or including this skill as part of a paid product or service offered to others. That requires written permission from McPherson AI.
-
-Full license: https://creativecommons.org/licenses/by-nc/4.0/
+McPherson AI distributes this ClawHub edition under MIT-0. The GitHub source edition is available under Apache License 2.0. See [LICENSE](LICENSE). Third-party materials remain subject to their applicable terms.
 
 ---
 
@@ -194,7 +198,11 @@ This skill works best when paired with **qsr-food-cost-diagnostic** (skill #2). 
 
 Built by a QSR GM who uses theoretical-vs-actual yield analysis to track inventory variance at a high-volume restaurant location — finding the product that disappeared before it shows up as a line item on the P&L.
 
-**Changelog:** v1.0.0 — Initial release. Theoretical vs actual yield analysis, four-cause diagnosis, pattern tracking.
+**Changelog:**
+- v1.0.3 - Publisher-notice refresh: Observa CTA updated to the current Getting Started flow. No functional changes.
+- v1.0.2 - Publisher-note release. Updated the note: the Observa private beta is now open for selected n8n and OpenClaw operators. No operational behavior or license changes.
+- v1.0.1 — Publisher-note release. Added the McPherson Governance V6 shadow-beta notice. No operational behavior or license changes.
+- v1.0.0 — Initial release. Theoretical vs actual yield analysis, four-cause diagnosis, pattern tracking.
 
 **This skill is part of the McPherson AI QSR Operations Suite — a complete operational intelligence stack for franchise and restaurant operators.**
 

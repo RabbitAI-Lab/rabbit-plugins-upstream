@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/go-dev",
   "slug": "go-dev",
   "ownerHandle": null,
-  "version": "0.2.2",
-  "updatedAt": 1784746072911,
-  "contentHash": "3f6cbf4863915901b496dde7019d20503917c35770c5ac95836d7e6346b6ecfa",
-  "fetchedAt": "2026-07-26T18:07:48.224Z"
+  "version": "0.9.0",
+  "updatedAt": 1795725587281,
+  "contentHash": "24641737d6310b732056d321917005e8fce68c07db5f48bef9e5b81dfa738ea0",
+  "fetchedAt": "2026-11-27T17:35:23.019Z"
 }
