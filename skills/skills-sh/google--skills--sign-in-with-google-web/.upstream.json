@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/sign-in-with-google-web",
+  "repo": "google/skills",
+  "skillId": "sign-in-with-google-web",
+  "branch": "main",
+  "pushedAt": "2026-11-27T14:41:43Z",
+  "contentHash": "db0fdd44d5362f052ce9479d85260b185f2336fa7c3ccc4a5cd79807465398a9",
+  "fetchedAt": "2026-11-27T17:33:22.692Z"
+}

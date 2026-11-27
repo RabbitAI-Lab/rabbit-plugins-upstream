@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/patterns",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "patterns",
+  "branch": "main",
+  "pushedAt": "2026-11-27T06:00:28Z",
+  "contentHash": "a40f37fe6f114efe389ec8c5d328d02459a828f6c5a56371cc2241b428745b48",
+  "fetchedAt": "2026-11-27T17:33:23.687Z"
+}

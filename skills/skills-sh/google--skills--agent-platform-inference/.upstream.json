@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/agent-platform-inference",
+  "repo": "google/skills",
+  "skillId": "agent-platform-inference",
+  "branch": "main",
+  "pushedAt": "2026-11-27T14:41:43Z",
+  "contentHash": "47332cce40505f36a74cfa1cce3779da1fdd0cd8d21328e3e3d7cd5e55f68c36",
+  "fetchedAt": "2026-11-27T17:33:21.550Z"
+}

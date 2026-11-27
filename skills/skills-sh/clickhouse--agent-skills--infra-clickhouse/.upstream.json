@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/clickhouse/agent-skills/infra-clickhouse",
+  "repo": "clickhouse/agent-skills",
+  "skillId": "infra-clickhouse",
+  "branch": "main",
+  "pushedAt": "2026-11-24T15:58:16Z",
+  "contentHash": "d4c0dcfad7935e5269081ab7b1f7771c843a046e6089a148df040572ccb7f7d5",
+  "fetchedAt": "2026-11-27T17:31:57.890Z"
+}

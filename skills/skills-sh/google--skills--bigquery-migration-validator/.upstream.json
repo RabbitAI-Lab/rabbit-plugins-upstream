@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/bigquery-migration-validator",
+  "repo": "google/skills",
+  "skillId": "bigquery-migration-validator",
+  "branch": "main",
+  "pushedAt": "2026-11-27T14:41:43Z",
+  "contentHash": "505ad65cee527e93c502d7b39acd925afc1bac4db32de2248c64ae1d983b4117",
+  "fetchedAt": "2026-11-27T17:33:23.176Z"
+}

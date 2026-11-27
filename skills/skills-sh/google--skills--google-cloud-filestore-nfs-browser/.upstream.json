@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-cloud-filestore-nfs-browser",
+  "repo": "google/skills",
+  "skillId": "google-cloud-filestore-nfs-browser",
+  "branch": "main",
+  "pushedAt": "2026-11-27T14:41:43Z",
+  "contentHash": "9ef46a319accbe0c563767ef8bd8c041ec5c76016131caeebdf3a8403e741fd9",
+  "fetchedAt": "2026-11-27T17:33:22.531Z"
+}

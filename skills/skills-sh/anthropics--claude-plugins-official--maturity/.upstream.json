@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/maturity",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "maturity",
+  "branch": "main",
+  "pushedAt": "2026-11-27T06:00:28Z",
+  "contentHash": "864e791404815aee37e239745fa6d0441ce61ded3767749ffa6783b8ed8aca5b",
+  "fetchedAt": "2026-11-27T17:33:23.711Z"
+}

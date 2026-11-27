@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/recall",
+  "repo": "cursor/plugins",
+  "skillId": "recall",
+  "branch": "main",
+  "pushedAt": "2026-11-26T09:04:53Z",
+  "contentHash": "436d5e7ad6e003a5947383aedb70ffc47ead35381477131599fb21d3b47d4cb7",
+  "fetchedAt": "2026-11-27T17:31:39.497Z"
+}
