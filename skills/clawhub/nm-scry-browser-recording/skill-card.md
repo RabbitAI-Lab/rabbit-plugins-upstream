@@ -1,43 +1,56 @@
-## Description: <br>
-Records browser sessions via Playwright and converts video to GIF. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Records browser sessions with Playwright and guides conversion to GIFs for web UI demos and tutorials.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to record automated browser interactions with Playwright for UI demos, tutorials, and documentation, then locate WebM output and convert it to GIF when needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Browser recordings may capture sensitive page content and are saved to disk as WebM or GIF files. <br>
-Mitigation: Use test accounts and sanitized data, store generated recordings in an appropriate location, and review videos before sharing. <br>
-Risk: Automated browser specs can exercise live web applications and create misleading demos if pages are not fully loaded or actions are flaky. <br>
-Mitigation: Use explicit waits, stable test data, and validate the generated recording before using it as documentation or a tutorial asset. <br>
+## Use Case:
 
+Developers and tutorial creators use this skill to run Playwright specs that capture web UI workflows as videos, then prepare recordings for GIF conversion.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scry-browser-recording) <br>
-- [Source homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scry) <br>
-- [Spec execution module](modules/spec-execution.md) <br>
-- [Video capture module](modules/video-capture.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with bash and TypeScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces Playwright commands, configuration examples, and output path guidance; recordings are WebM files that may be converted to GIF by a dependent gif-generation skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence; artifact frontmatter reports 1.9.8) <br>
+Risk: Recordings may capture credentials or personal information shown in browser pages.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use sanitized pages and accounts, and review recordings before sharing.
+
+Risk: The package-version concern was flagged but disputed, and the scanner review was partial because some referenced paths were absent from the bundle.
+
+Mitigation: Review dependency versions and the complete installed skill bundle before running recordings.
+
+## Reference(s):
+
+- [Spec execution guide](modules/spec-execution.md)
+- [Video capture guide](modules/video-capture.md)
+- [Homepage (Clawdis metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/scry)
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-scry-browser-recording)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions, Video recordings]
+
+**Output Format:** [Markdown guidance with shell commands and TypeScript configuration examples; Playwright WebM recordings, with GIF conversion handled by the companion skill.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Video resolution, viewport, recording duration, and GIF conversion settings can be adjusted.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

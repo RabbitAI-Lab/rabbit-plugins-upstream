@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "assets": {
+    "thinking-character": {
+      "file": "thinking-character.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1254x1254 pixels (aspect 1254:1254). Subject and layout: Square 1:1 cutout on a fully transparent background (RGBA PNG). A fictional adult in a light-grey sweater, photographed in clean bright studio light, upper body, one hand under the chin in a thoughtful questioning pose, looking slightly up and to the side. Natural, friendly, premium photography. Only the person, no background, no shadow box, no text.\n\nSTYLE (this overrides every colour, lighting, paper or material description above): premium 'clean modern studio' look. Bright, cool, neutral palette of white, very light grey, warm grey and graphite; soft diffused daylight; crisp medium-format detail; generous negative space; no clutter; no warm beige, cream paper, sepia, wood-heavy or cosy-cottage styling; at most one small saturated yellow accent. For photographs: architectural white or light-grey studio or interior, pale concrete, light oak only as a minor material, natural fictional adults (not models), faces natural and in focus. No logos, no watermark, no real brands. Save as ./thinking-character.png at 1254x1254 with a transparent background (RGBA). Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "66438e632b73d70c58243b797ad85ec8f39665d737906fbdf38b5082c7fffaeb",
+      "generatedAt": "2026-10-29T14:48:47.343244+00:00",
+      "generationId": "codex-image-gen-thinking-character",
+      "sourceSha256": "57ca14cc5059936bc095a73abd5202a64bd0484c2eb03a4eaa5aa1a9d01fdc36",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean modern studio"
+    }
+  },
+  "effects": {
+    "bs-creatormotion-diagram-decompose-scan": {
+      "thinking-character": "thinking-character"
+    }
+  }
+}

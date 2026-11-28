@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "agent-arena": {
+      "url": "https://fmf-flex-arena.fmf-x402.workers.dev/mcp"
+    },
+    "agent-arena-coop": {
+      "command": "npx",
+      "args": ["-y", "agent-arena-mcp"]
+    }
+  }
+}

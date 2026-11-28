@@ -1,0 +1,890 @@
+import csv
+import importlib.util
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+
+SKILL_ROOT = Path(__file__).resolve().parents[1]
+SCRIPT = SKILL_ROOT / "scripts" / "run_expense_audit.py"
+EXAMPLE = SKILL_ROOT / "examples" / "input" / "expenses.csv"
+POLICY = SKILL_ROOT / "examples" / "input" / "policy.json"
+EXPECTED = SKILL_ROOT / "examples" / "expected" / "expectations.json"
+
+
+def read_jsonl(path):
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+
+
+XLRD_SHIM = '''
+"""测试替身：只实现 run_expense_audit 用到的那部分 xlrd API。"""
+
+__version__ = "2.0.1-shim"
+
+XL_CELL_EMPTY = 0
+XL_CELL_TEXT = 1
+XL_CELL_NUMBER = 2
+XL_CELL_DATE = 3
+XL_CELL_BOOLEAN = 4
+XL_CELL_ERROR = 5
+XL_CELL_BLANK = 6
+
+
+class _Cell(object):
+    def __init__(self, ctype, value):
+        self.ctype = ctype
+        self.value = value
+
+
+class _Sheet(object):
+    def __init__(self, name, grid):
+        self.name = name
+        self._grid = grid
+        self.nrows = len(grid)
+        self.ncols = max([len(r) for r in grid] + [0])
+
+    def cell(self, r, c):
+        row = self._grid[r]
+        if c < len(row):
+            return row[c]
+        return _Cell(XL_CELL_EMPTY, "")
+
+
+class _Book(object):
+    datemode = 0
+
+    def __init__(self, name, grid):
+        self._sheets = [_Sheet(name, grid)]
+
+    def sheet_names(self):
+        return [s.name for s in self._sheets]
+
+    def sheet_by_index(self, i):
+        return self._sheets[i]
+
+    def sheet_by_name(self, n):
+        for s in self._sheets:
+            if s.name == n:
+                return s
+        raise KeyError(n)
+
+
+# 两行：同员工、同商户、相隔 1 天、金额 480 + 490（合计 970 > 示例制度的 900 审批阈值）
+_GRID = [
+    [_Cell(XL_CELL_TEXT, "expense_id"), _Cell(XL_CELL_TEXT, "employee_id"),
+     _Cell(XL_CELL_TEXT, "expense_type"), _Cell(XL_CELL_TEXT, "expense_date"),
+     _Cell(XL_CELL_TEXT, "amount"), _Cell(XL_CELL_TEXT, "currency"),
+     _Cell(XL_CELL_TEXT, "vendor_name")],
+    [_Cell(XL_CELL_TEXT, "EXP-X1"), _Cell(XL_CELL_TEXT, "E001"),
+     _Cell(XL_CELL_TEXT, "office"), _Cell(XL_CELL_DATE, 44259.0),
+     _Cell(XL_CELL_NUMBER, 480.0), _Cell(XL_CELL_TEXT, "CNY"),
+     _Cell(XL_CELL_TEXT, "文具店")],
+    [_Cell(XL_CELL_TEXT, "EXP-X2"), _Cell(XL_CELL_TEXT, "E001"),
+     _Cell(XL_CELL_TEXT, "office"), _Cell(XL_CELL_DATE, 44260.0),
+     _Cell(XL_CELL_NUMBER, 490.0), _Cell(XL_CELL_TEXT, "CNY"),
+     _Cell(XL_CELL_TEXT, "文具店")],
+]
+
+
+def open_workbook(path):
+    return _Book("费用明细", _GRID)
+
+
+def xldate_as_datetime(value, datemode):
+    import datetime
+    return datetime.datetime(2021, 1, 1) + datetime.timedelta(days=int(value) - 44197)
+'''
+
+
+def _find_out(directory, name):
+    """v0.2.40：产出文件名带数据源前缀，按后缀查找（dashboard-* 已是唯一名，原样返回）。"""
+    directory = Path(directory)
+    if name.startswith("dashboard-"):
+        return directory / name
+    hits = sorted(directory.glob("*-" + name))
+    return hits[0] if hits else directory / name
+
+
+class ExpenseAuditEndToEndTest(unittest.TestCase):
+    def run_example(self, input_path=EXAMPLE):
+        temp = tempfile.TemporaryDirectory()
+        output = Path(temp.name) / "out"
+        completed = subprocess.run(
+            [sys.executable, str(SCRIPT), "--input", str(input_path), "--policy", str(POLICY), "--output", str(output)],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", env={**os.environ, "PYTHONIOENCODING": "utf-8"}
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        return temp, output
+
+    def test_fixture_finds_injected_patterns_and_keeps_evidence_traceable(self):
+        temp, output = self.run_example()
+        try:
+            findings = read_jsonl(_find_out(output, "findings.jsonl"))
+            evidence = read_jsonl(_find_out(output, "evidence.jsonl"))
+            expectations = json.loads(EXPECTED.read_text(encoding="utf-8"))
+            finding_types = {item["finding_type"] for item in findings}
+            self.assertTrue(set(expectations["must_include_finding_types"]).issubset(finding_types))
+            evidence_ids = {item["evidence_id"] for item in evidence}
+            for finding in findings:
+                self.assertTrue(finding["human_review_required"])
+                self.assertTrue(finding["evidence_refs"])
+                self.assertTrue(set(finding["evidence_refs"]).issubset(evidence_ids))
+                self.assertNotIn("judgment", finding)
+            with (_find_out(output, "bad_rows.csv")).open(encoding="utf-8-sig", newline="") as handle:
+                bad_rows = list(csv.DictReader(handle))
+            self.assertEqual(len(bad_rows), expectations["must_have_bad_rows"])
+        finally:
+            temp.cleanup()
+
+    def test_reasonable_weekend_cases_remain_weak_low_priority_signals(self):
+        temp, output = self.run_example()
+        try:
+            weekend = [f for f in read_jsonl(_find_out(output, "findings.jsonl")) if f["finding_type"] == "weekend-signal"]
+            self.assertGreaterEqual(len(weekend), 1)
+            self.assertTrue(all(f["risk_priority"] == "low" for f in weekend))
+            self.assertTrue(all(f["evidence_strength"] == "weak" for f in weekend))
+            joined = json.dumps(weekend, ensure_ascii=False)
+            self.assertIn("值班", joined)
+            self.assertNotIn("舞弊成立", joined)
+        finally:
+            temp.cleanup()
+
+    def test_manifest_records_offline_run_and_parameters(self):
+        temp, output = self.run_example()
+        try:
+            manifest = json.loads((_find_out(output, "run_manifest.json")).read_text(encoding="utf-8"))
+            self.assertFalse(manifest["network_access"])
+            self.assertEqual(manifest["skill"], "expense-audit-v2")
+            # 版本取自本 skill 的 manifest.json，避免每次发版都要改测试字面量
+            expected_version = json.loads((SKILL_ROOT / "manifest.json").read_text(encoding="utf-8"))["version"]
+            self.assertEqual(manifest["skill_version"], expected_version)
+            self.assertEqual(manifest["parameters"]["policy_version"], "SYNTHETIC-EXPENSE-POLICY-1.0")
+            self.assertTrue(manifest["input_files"][0]["sha256"])
+        finally:
+            temp.cleanup()
+
+    def test_xlsx_input_when_openpyxl_is_available(self):
+        try:
+            from openpyxl import Workbook
+        except ImportError:
+            self.skipTest("openpyxl not installed")
+        with tempfile.TemporaryDirectory() as directory:
+            xlsx = Path(directory) / "expenses.xlsx"
+            workbook = Workbook()
+            sheet = workbook.active
+            sheet.title = "费用明细"
+            with EXAMPLE.open(encoding="utf-8-sig", newline="") as handle:
+                for row in csv.reader(handle):
+                    sheet.append(row)
+            workbook.save(xlsx)
+            temp, output = self.run_example(xlsx)
+            try:
+                manifest = json.loads((_find_out(output, "run_manifest.json")).read_text(encoding="utf-8"))
+                self.assertEqual(manifest["input_files"][0]["sheet"], "费用明细")
+            finally:
+                temp.cleanup()
+
+
+    def test_xls_input_via_injected_xlrd_shim(self):
+        """v0.2.28：可选支持 .xls（Excel 97-2003）——审计/财务现场的老账本大量是这个格式。
+
+        用 PYTHONPATH 注入 xlrd 替身 → 不依赖真实安装该包也能覆盖整条 .xls 路径。
+        重点验证：**Excel 日期序列号必须被还原成日期**（否则日期类规则会全部失效）。
+        """
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shim = root / "shim"
+            shim.mkdir()
+            (shim / "xlrd.py").write_text(XLRD_SHIM, encoding="utf-8")
+            xls = root / "expenses.xls"
+            xls.write_bytes(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1stub")  # 内容由替身模块提供
+            output = root / "out"
+            completed = subprocess.run(
+                [sys.executable, str(SCRIPT), "--input", str(xls), "--policy", str(POLICY),
+                 "--output", str(output)],
+                capture_output=True, text=True, encoding="utf-8", errors="replace",
+                env={**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONPATH": str(shim)},
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            clean = (_find_out(output, "clean_expenses.csv")).read_text(encoding="utf-8")
+            self.assertIn("2021-03-04", clean)
+            self.assertIn("2021-03-05", clean)
+            findings = (_find_out(output, "findings.csv")).read_text(encoding="utf-8")
+            self.assertIn("split-expense", findings)
+            manifest = json.loads((_find_out(output, "run_manifest.json")).read_text(encoding="utf-8"))
+            self.assertEqual(manifest["network_access"], False)
+
+    def test_xls_without_xlrd_gives_readable_hint(self):
+        """没装 xlrd 时：给出**可读的安装提示**，而不是静默失败。"""
+        try:
+            import xlrd  # noqa: F401
+            self.skipTest("本机已安装 xlrd，无法验证缺失路径")
+        except ImportError:
+            pass
+        with tempfile.TemporaryDirectory() as directory:
+            xls = Path(directory) / "expenses.xls"
+            xls.write_bytes(b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1stub")
+            completed = subprocess.run(
+                [sys.executable, str(SCRIPT), "--input", str(xls),
+                 "--output", str(Path(directory) / "out")],
+                capture_output=True, text=True, encoding="utf-8", errors="replace",
+                env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+            )
+            self.assertNotEqual(completed.returncode, 0)
+            self.assertIn("xlrd", completed.stderr + completed.stdout)
+
+    def test_check_env_reports_xls_support(self):
+        """--check-env 要如实报告 .xls 支持（与 xlsx_support 同款口径），且仍声明不联网。"""
+        completed = subprocess.run([sys.executable, str(SCRIPT), "--check-env"],
+                                   capture_output=True, text=True, encoding="utf-8", errors="replace")
+        payload = json.loads(completed.stdout.strip().splitlines()[-1])
+        self.assertIn("xls_support", payload)
+        self.assertIn("xlsx_support", payload)
+        self.assertEqual(payload["network_required"], False)
+
+    def test_status_filter_and_resubmit_rule_are_opt_in(self):
+        """v0.2.8：状态过滤与新规则必须「默认不影响旧行为，配置后才生效」。"""
+        csv_text = (
+            "单据号,工号,费用类型,发生日期,提交日期,金额,商户,审批状态\n"
+            "E1,EMP1,差旅,2025-03-01,2025-03-02,500,酒店A,已撤回\n"
+            "E2,EMP1,差旅,2025-03-01,2025-03-05,800,酒店A,已同意\n"
+            "E3,EMP2,餐饮,2025-03-03,2025-03-03,200,餐厅B,已同意\n"
+            "E4,EMP2,餐饮,2025-03-03,2025-03-03,200,餐厅B,已撤回\n"
+        )
+
+        def run(data, policy=None, out=None):
+            cmd = [sys.executable, str(SCRIPT), "--input", str(data), "--output", str(out)]
+            if policy:
+                cmd += ["--policy", str(policy)]
+            completed = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            return [json.loads(l)["finding_type"]
+                    for l in (_find_out(out, "findings.jsonl")).read_text(encoding="utf-8").splitlines() if l.strip()]
+
+        with tempfile.TemporaryDirectory() as td:
+            data = _find_out(td, "expenses.csv")
+            data.write_text(csv_text, encoding="utf-8")
+
+            # ① 不配置 status_filter（= 旧行为）：撤回行照样参与 → 出现假重复，且没有新规则
+            naive = Path(td) / "naive"
+            types = run(data, None, naive)
+            self.assertIn("exact-duplicate-employee-date-amount", types)
+            self.assertNotIn("resubmit-after-rejection-amount-increase", types)
+            self.assertFalse((_find_out(naive, "excluded_by_status.csv")).exists())
+
+            # ② 配置 status_filter：假重复消失，新规则出现，被排除行单独落盘（不静默丢弃）
+            policy = _find_out(td, "policy.json")
+            policy.write_text(json.dumps({"policy_version": "T", "default_currency": "CNY",
+                                          "status_filter": {"include": ["已同意"]}}), encoding="utf-8")
+            filtered = Path(td) / "filtered"
+            types = run(data, policy, filtered)
+            self.assertNotIn("exact-duplicate-employee-date-amount", types)
+            self.assertIn("resubmit-after-rejection-amount-increase", types)
+            self.assertIn("已撤回", (_find_out(filtered, "excluded_by_status.csv")).read_text(encoding="utf-8"))
+
+            # ③ 反例：撤回后重提但金额未增加 → 不应触发新规则
+            data2 = _find_out(td, "no_increase.csv")
+            data2.write_text(csv_text.replace(",2025-03-05,800,", ",2025-03-05,500,"), encoding="utf-8")
+            types = run(data2, policy, Path(td) / "out2")
+            self.assertNotIn("resubmit-after-rejection-amount-increase", types)
+
+
+    def test_travel_cross_check_is_opt_in(self):
+        """v0.2.9：不给辅助数据 → 行为不变；给了出差申请/打卡 → 自动唤醒交叉核验。"""
+        base = ("单据号,工号,费用类型,发生日期,提交日期,金额,商户,目的城市\n"
+                "E1,EMP1,差旅,2025-04-01,2025-04-02,800,酒店,北京\n"
+                "E2,EMP2,差旅,2025-04-03,2025-04-03,900,酒店,北京\n"
+                "E3,EMP3,差旅,2025-04-05,2025-04-05,700,酒店,北京\n"
+                "E4,EMP4,差旅,2025-04-07,2025-04-07,600,酒店,北京\n")
+        travel = ("工号,姓名,出差开始日期,出差结束日期,目的城市\n"
+                  "EMP2,张三,2025-04-03,2025-04-03,北京\n"
+                  "EMP3,李四,2025-04-05,2025-04-05,北京\n"
+                  "EMP4,王五,2025-04-07,2025-04-07,北京\n"
+                  "EMP5,赵六,2025-04-01,2025-04-01,广州\n")
+        attendance = ("工号,日期,打卡地点,是否在公司\n"
+                      "EMP2,2025-04-03,上海总部,是\n"
+                      "EMP3,2025-04-05,广州市天河区,否\n"
+                      "EMP4,2025-04-07,北京市朝阳区,否\n")
+        policy = {"policy_version": "T", "default_currency": "CNY",
+                  "travel_cross_check": {"company_cities": ["上海"], "company_location_keywords": ["上海", "总部"],
+                                         "travel_types": ["差旅", "住宿", "机票"]}}
+        with tempfile.TemporaryDirectory() as td:
+            data = _find_out(td, "e.csv"); data.write_text(base, encoding="utf-8")
+            trv = _find_out(td, "t.csv"); trv.write_text(travel, encoding="utf-8")
+            att = _find_out(td, "a.csv"); att.write_text(attendance, encoding="utf-8")
+            pol = _find_out(td, "p.json"); pol.write_text(json.dumps(policy), encoding="utf-8")
+
+            def types(extra, out):
+                cmd = [sys.executable, str(SCRIPT), "--input", str(data), "--policy", str(pol), "--output", str(out)] + extra
+                r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+                self.assertEqual(r.returncode, 0, r.stderr)
+                return [json.loads(l)["finding_type"]
+                        for l in (_find_out(out, "findings.jsonl")).read_text(encoding="utf-8").splitlines() if l.strip()]
+
+            # ① 不给辅助数据 → 一条都不触发（等价于旧行为）
+            t0 = types([], Path(td) / "o0")
+            for ft in ("expense-without-travel-request", "office-swipe-on-offsite-claim", "attendance-city-mismatch"):
+                self.assertNotIn(ft, t0)
+
+            # ② 给了辅助数据 → 自动唤醒；且合理情形不误报（E4 有申请+当地打卡，应为 0）
+            t1 = types(["--travel-requests", str(trv), "--attendance", str(att)], Path(td) / "o1")
+            self.assertIn("expense-without-travel-request", t1)   # E1：无出差申请
+            self.assertIn("office-swipe-on-offsite-claim", t1)    # E2：当天公司打卡
+            self.assertIn("attendance-city-mismatch", t1)         # E3：打卡地与出差地不同城
+            self.assertEqual(len(t1), 3)                          # E4 不应误报
+
+    # ── v0.2.13（来自真实审计师反馈第 1、4 条）───────────────────────────────
+    def test_chinese_date_formats_are_parsed(self):
+        """中文日期「2026年10月09日 12:30」必须能识别——旧版识别不了，会当成坏行。"""
+        spec = importlib.util.spec_from_file_location("expense_audit_mod", SCRIPT)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        cases = {
+            "2026年10月09日 12:30": "2026-10-09",
+            "2026年10月9日": "2026-10-09",
+            "2026年10月09日12:30": "2026-10-09",
+            "20261009": "2026-10-09",
+            "2026-10-09T12:30": "2026-10-09",
+            "不是日期": None,
+            "2026年13月40日": None,
+        }
+        for raw, want in cases.items():
+            self.assertEqual(mod.parse_date(raw), want, "解析 %r" % raw)
+
+        csv_text = ("单据号,工号,金额,发生日期\n"
+                    "E1,EMP1,100,2026年10月09日 12:30\n"
+                    "E2,EMP1,200,2026年10月9日\n")
+        with tempfile.TemporaryDirectory() as td:
+            data = _find_out(td, "cn.csv"); data.write_text(csv_text, encoding="utf-8")
+            out = Path(td) / "out"
+            r = subprocess.run([sys.executable, str(SCRIPT), "--input", str(data), "--output", str(out)],
+                               capture_output=True, text=True, encoding="utf-8", errors="replace",
+                               env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+            self.assertEqual(r.returncode, 0, r.stderr)
+            bad = [l for l in (_find_out(out, "bad_rows.csv")).read_text(encoding="utf-8").splitlines() if l.strip()]
+            self.assertEqual(len(bad) - 1, 0, "中文日期不应进坏行：%s" % bad)
+
+    def test_self_approval_accepts_name_and_hints_on_mismatch(self):
+        """报销人可用姓名；口径不一致时必须提示，不得静默漏检。"""
+        def run_csv(csv_text, out):
+            with tempfile.TemporaryDirectory() as td:
+                data = _find_out(td, "e.csv"); data.write_text(csv_text, encoding="utf-8")
+                o = Path(out)
+                r = subprocess.run([sys.executable, str(SCRIPT), "--input", str(data), "--output", str(o)],
+                                   capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                   env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+                self.assertEqual(r.returncode, 0, r.stderr)
+                types = [json.loads(l)["finding_type"]
+                         for l in (_find_out(o, "findings.jsonl")).read_text(encoding="utf-8").splitlines() if l.strip()]
+                manifest = json.loads((_find_out(o, "run_manifest.json")).read_text(encoding="utf-8"))
+                return types, manifest.get("skipped_rules", [])
+
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            # ① 只有姓名、没有工号：应能运行，且姓名命中 → 自审自批
+            types, _ = run_csv("单据号,姓名,金额,发生日期,审批人\nB1,张三,100,2026-10-09,张三\n", base / "n")
+            self.assertIn("self-approval", types)
+            # ② 报销人是工号、审批人是姓名 → 不得静默漏检，必须提示口径不一致
+            types, skipped = run_csv("单据号,工号,金额,发生日期,审批人\nA1,E001,100,2026-10-09,张三\n", base / "m")
+            self.assertNotIn("self-approval", types)
+            self.assertTrue(any("口径" in s for s in skipped), "应提示口径不一致：%s" % skipped)
+            # ③ 工号 + 姓名都有、审批人是姓名 → 命中
+            types, _ = run_csv("单据号,工号,姓名,金额,发生日期,审批人\nC1,E001,张三,100,2026-10-09,张三\n", base / "b")
+            self.assertIn("self-approval", types)
+
+    def _run_with_policy(self, csv_text, policy, out):
+        with tempfile.TemporaryDirectory() as td:
+            data = _find_out(td, "e.csv"); data.write_text(csv_text, encoding="utf-8")
+            cmd = [sys.executable, str(SCRIPT), "--input", str(data), "--output", str(out)]
+            if policy is not None:
+                pol = _find_out(td, "p.json"); pol.write_text(json.dumps(policy), encoding="utf-8")
+                cmd += ["--policy", str(pol)]
+            r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                               env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+            self.assertEqual(r.returncode, 0, r.stderr)
+            return {json.loads(l)["finding_type"]
+                    for l in (_find_out(out, "findings.jsonl")).read_text(encoding="utf-8").splitlines() if l.strip()}
+
+    def test_optional_v0213_rules_are_opt_in(self):
+        """跨商户拆单 / 绝对大额 / 商户集中度：默认关闭，配置后才生效（帕累托）。"""
+        base = Path(tempfile.mkdtemp())
+        cm = ("单据号,工号,费用类型,发生日期,金额,商户\n"
+              "X1,EMP1,办公,2026-10-09,400,V1\nX2,EMP1,办公,2026-10-09,400,V2\nX3,EMP1,办公,2026-10-09,400,V3\n")
+        thr = {"policy_version": "T", "default_currency": "CNY",
+               "approval_thresholds": [{"amount": 1000, "currency": "CNY"}], "split_window_days": 0}
+        self.assertNotIn("split-expense-cross-merchant", self._run_with_policy(cm, thr, base / "cm_off"))
+        self.assertIn("split-expense-cross-merchant",
+                      self._run_with_policy(cm, dict(thr, split_cross_merchant=True), base / "cm_on"))
+
+        la = "单据号,工号,费用类型,发生日期,金额\nZ1,EMP1,差旅,2026-10-09,6000\n"
+        self.assertNotIn("large-amount", self._run_with_policy(la, {"policy_version": "T", "default_currency": "CNY"}, base / "la_off"))
+        self.assertIn("large-amount", self._run_with_policy(
+            la, {"policy_version": "T", "default_currency": "CNY", "large_amount_threshold": 5000, "large_amount_check": True}, base / "la_on"))
+
+        vc = ("单据号,工号,费用类型,发生日期,金额,商户\n"
+              + "".join("W%d,EMP9,办公,2026-10-%02d,100,集中商户A\n" % (i, i) for i in range(1, 7))
+              + "".join("W%d,EMP9,办公,2026-10-%02d,100,其他商户B\n" % (i, i - 6) for i in range(7, 9)))
+        self.assertNotIn("vendor-concentration", self._run_with_policy(vc, {"policy_version": "T", "default_currency": "CNY"}, base / "vc_off"))
+        self.assertIn("vendor-concentration", self._run_with_policy(
+            vc, {"policy_version": "T", "default_currency": "CNY", "vendor_concentration_check": True}, base / "vc_on"))
+
+    def test_allowlist_suppresses_but_records(self):
+        """白名单：只移出「全部行都命中」的告警，且完整写进 suppressed_findings.csv（不静默丢弃）。"""
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            data = _find_out(base, "e.csv")
+            data.write_text("单据号,工号,费用类型,发生日期,金额,商户\n"
+                            "D1,EMP5,餐饮,2026-10-09,200,餐厅B\nD2,EMP5,餐饮,2026-10-09,200,餐厅B\n", encoding="utf-8")
+            # 无白名单：重复告警应在，且没有 suppressed 文件
+            o1 = base / "o1"
+            self._run_with_policy(data.read_text(encoding="utf-8"), None, o1)
+            self.assertIn("exact-duplicate-employee-date-amount",
+                          (_find_out(o1, "findings.jsonl")).read_text(encoding="utf-8"))
+            self.assertFalse((_find_out(o1, "suppressed_findings.csv")).exists())
+            # 有白名单：重复告警被移出，但 suppressed_findings.csv 完整留痕
+            allow = _find_out(base, "allow.csv")
+            allow.write_text("expense_id,employee_id,vendor_name,invoice_number,expense_type,amount_max,reason\n"
+                             ",,餐厅B,,餐饮,500,园区餐厅工作餐\n", encoding="utf-8")
+            o2 = base / "o2"
+            r = subprocess.run([sys.executable, str(SCRIPT), "--input", str(data), "--output", str(o2), "--allowlist", str(allow)],
+                               capture_output=True, text=True, encoding="utf-8", errors="replace",
+                               env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertNotIn("exact-duplicate-employee-date-amount", (_find_out(o2, "findings.jsonl")).read_text(encoding="utf-8"))
+            supp = (_find_out(o2, "suppressed_findings.csv")).read_text(encoding="utf-8")
+            self.assertIn("园区餐厅工作餐", supp)
+
+    def test_travel_verification_and_vouchers_are_opt_in(self):
+        """v0.2.15：外部行程核验（不联网、文件驱动）与两条可选凭证规则的默认零回归 + 红线。"""
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+
+            def run(cmd):
+                r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                   env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+                self.assertEqual(r.returncode, 0, r.stderr)
+                out = Path(cmd[cmd.index("--output") + 1])
+                findings = [json.loads(l) for l in (_find_out(out, "findings.jsonl")).read_text(encoding="utf-8").splitlines() if l.strip()]
+                return findings
+
+            ledger = _find_out(base, "m.csv")
+            ledger.write_text("单据号,工号,费用类型,发生日期,金额,出发城市,目的城市,航班号\n"
+                              "F1,EMP1,机票,2026-10-09,3000,北京,上海,CA1234\n", encoding="utf-8")
+            # ① 不提供核验文件 → 零 travel-verification（默认零回归）
+            f = run([sys.executable, str(SCRIPT), "--input", str(ledger), "--output", str(base / "o0")])
+            self.assertFalse([x for x in f if x["finding_type"].startswith("travel-verification")])
+            # ② 方向相反 → mismatch
+            rev = _find_out(base, "v.csv")
+            rev.write_text("expense_id,depart_city,arrive_city,source\nF1,上海,北京,航司官网\n", encoding="utf-8")
+            f = run([sys.executable, str(SCRIPT), "--input", str(ledger), "--output", str(base / "o1"),
+                     "--travel-verification", str(rev)])
+            self.assertTrue(any(x["finding_type"] == "travel-verification-mismatch" for x in f))
+            # ③ 查不到 → 只报弱信号，且**写明不等于虚构**（红线）
+            nf = _find_out(base, "nf.csv")
+            nf.write_text("expense_id,source\nF1,航旅纵横\n", encoding="utf-8")
+            f = run([sys.executable, str(SCRIPT), "--input", str(ledger), "--output", str(base / "o2"),
+                     "--travel-verification", str(nf)])
+            nf_findings = [x for x in f if x["finding_type"] == "travel-verification-not-found"]
+            self.assertEqual(len(nf_findings), 1)
+            self.assertEqual(nf_findings[0]["evidence_strength"], "weak")
+            self.assertIn("不等于", json.dumps(nf_findings[0], ensure_ascii=False))
+            # ④ 同一凭证多人：默认关，开启生效
+            sh = _find_out(base, "sh.csv")
+            sh.write_text("单据号,工号,费用类型,发生日期,金额,订座号\n"
+                          "P1,EMP1,机票,2026-10-09,3000,PNRAAA\nP2,EMP2,机票,2026-10-09,3000,PNRAAA\n", encoding="utf-8")
+            self.assertNotIn("shared-voucher-multiple-employees",
+                             [x["finding_type"] for x in run([sys.executable, str(SCRIPT), "--input", str(sh), "--output", str(base / "o3")])])
+            pol = _find_out(base, "p.json"); pol.write_text(json.dumps({"policy_version": "T", "default_currency": "CNY", "shared_voucher_check": True}), encoding="utf-8")
+            self.assertIn("shared-voucher-multiple-employees",
+                          [x["finding_type"] for x in run([sys.executable, str(SCRIPT), "--input", str(sh), "--output", str(base / "o4"), "--policy", str(pol)])])
+            # ⑤ 凭证完备性：默认关，开启生效
+            self.assertNotIn("voucher-incomplete",
+                             [x["finding_type"] for x in run([sys.executable, str(SCRIPT), "--input", str(sh), "--output", str(base / "o5")])])
+            pol2 = base / "p2.json"; pol2.write_text(json.dumps({"policy_version": "T", "default_currency": "CNY", "voucher_completeness_check": True}), encoding="utf-8")
+            self.assertIn("voucher-incomplete",
+                          [x["finding_type"] for x in run([sys.executable, str(SCRIPT), "--input", str(sh), "--output", str(base / "o6"), "--policy", str(pol2)])])
+
+    def test_voucher_consistency_is_offline_and_opt_in(self):
+        """v0.2.16：凭证内部一致性（**完全离线**）——默认关闭，开启后三条规则生效。"""
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            data = _find_out(base, "d.csv")
+            data.write_text("单据号,工号,费用类型,发生日期,金额,票号,出票日期,订座号,出发城市,目的城市\n"
+                            "T1,EMP1,机票,2026-09-10,3000,9991234567890,2026-09-12,PXA,北京,上海\n"
+                            "T2,EMP2,机票,2026-09-11,3000,9991234567890,2026-09-01,PXB,广州,成都\n"
+                            "T3,EMP1,机票,2026-09-20,2000,9999999999999,2026-09-01,PYC,北京,上海\n"
+                            "T4,EMP1,机票,2026-09-20,2100,9998888888888,2026-09-02,PYC,上海,北京\n", encoding="utf-8")
+
+            def types(cmd):
+                r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                   env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+                self.assertEqual(r.returncode, 0, r.stderr)
+                out = Path(cmd[cmd.index("--output") + 1])
+                return {json.loads(l)["finding_type"]
+                        for l in (_find_out(out, "findings.jsonl")).read_text(encoding="utf-8").splitlines() if l.strip()}
+
+            rule_ids = ("ticket-number-reused", "ticket-issue-after-flight", "itinerary-segment-conflict")
+            off = types([sys.executable, str(SCRIPT), "--input", str(data), "--output", str(base / "off")])
+            for rid in rule_ids:
+                self.assertNotIn(rid, off)
+            pol = _find_out(base, "p.json")
+            pol.write_text(json.dumps({"policy_version": "T", "default_currency": "CNY", "voucher_consistency_check": True}), encoding="utf-8")
+            on = types([sys.executable, str(SCRIPT), "--input", str(data), "--output", str(base / "on"), "--policy", str(pol)])
+            for rid in rule_ids:
+                self.assertIn(rid, on)
+
+    def test_flight_hint_only_when_flight_data_present(self):
+        """v0.2.17：只有台账含航班/订座号信息时才在报告里提示「去哪查」；不含则不打扰。"""
+        def summary_of(csv_text, verif=None, out=None):
+            with tempfile.TemporaryDirectory() as td:
+                data = _find_out(td, "e.csv"); data.write_text(csv_text, encoding="utf-8")
+                cmd = [sys.executable, str(SCRIPT), "--input", str(data), "--output", str(out)]
+                if verif:
+                    vp = _find_out(td, "v.csv"); vp.write_text(verif, encoding="utf-8")
+                    cmd += ["--travel-verification", str(vp)]
+                r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                   env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+                self.assertEqual(r.returncode, 0, r.stderr)
+                return (_find_out(out, "summary.md")).read_text(encoding="utf-8")
+
+        base = Path(tempfile.mkdtemp())
+        noflight = "单据号,工号,费用类型,发生日期,金额,商户\nA1,E1,餐饮,2026-10-09,100,餐厅\n"
+        withflight = "单据号,工号,费用类型,发生日期,金额,航班号,订座号\nB1,E1,机票,2026-10-09,3000,CA1234,PNRAAA\n"
+        self.assertNotIn("行程/单据真实性", summary_of(noflight, None, base / "o1"))
+        self.assertIn("行程/单据真实性", summary_of(withflight, None, base / "o2"))
+        self.assertNotIn("行程/单据真实性", summary_of(
+            withflight, "expense_id,flight_no,travel_date,source\nB1,CA1234,2026-10-09,航司官网\n", base / "o3"))
+
+    def test_lodging_cross_check_is_offline_and_opt_in(self):
+        """v0.2.18：住宿凭证交叉核验（**完全离线**）——默认关闭，开启后三条规则生效。"""
+        rows = ["单据号,工号,费用类型,发生日期,金额,商户,房号,入住日期,离店日期,晚数"]
+        for i in range(1, 6):   # ① 连续逐晚开票（E1，10-01..10-05）
+            rows.append("N%d,E1,住宿,2026-10-0%d,800,酒店A,101,2026-10-0%d,2026-10-0%d,1" % (i, i, i, i + 1))
+        for i in (7, 8, 9):     # ② 同商户同额且无发票号（E2，酒店B，同额 500）
+            rows.append("M%d,E2,住宿,2026-10-0%d,500,酒店B,202,2026-10-0%d,2026-10-0%d,1" % (i, i, i, i + 1))
+        rows.append("Q1,E3,住宿,2026-09-03,1500,酒店C,303,2026-09-03,2026-09-05,3")  # ③ 写 3 晚、实际 2 晚
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            data = _find_out(base, "d.csv"); data.write_text("\n".join(rows) + "\n", encoding="utf-8")
+
+            def types(cmd):
+                r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                   env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+                self.assertEqual(r.returncode, 0, r.stderr)
+                out = Path(cmd[cmd.index("--output") + 1])
+                return {json.loads(l)["finding_type"]
+                        for l in (_find_out(out, "findings.jsonl")).read_text(encoding="utf-8").splitlines() if l.strip()}
+
+            ids = ("consecutive-nightly-invoicing", "same-amount-no-invoice", "lodging-night-mismatch")
+            off = types([sys.executable, str(SCRIPT), "--input", str(data), "--output", str(base / "off")])
+            for rid in ids:
+                self.assertNotIn(rid, off)
+            pol = _find_out(base, "p.json")
+            pol.write_text(json.dumps({"policy_version": "T", "default_currency": "CNY", "lodging_cross_check": True}), encoding="utf-8")
+            on = types([sys.executable, str(SCRIPT), "--input", str(data), "--output", str(base / "on"), "--policy", str(pol)])
+            for rid in ids:
+                self.assertIn(rid, on)
+
+    def test_payee_and_weekday_checks_are_opt_in(self):
+        """v0.2.20：开票方↔收款方（文件驱动）与日期↔周几（flag 驱动）——默认零回归。"""
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+
+            def run(rows_csv, policy=None, payments=None, name="x"):
+                data = base / (name + ".csv"); data.write_text(rows_csv, encoding="utf-8")
+                out = base / ("o_" + name)
+                cmd = [sys.executable, str(SCRIPT), "--input", str(data), "--output", str(out)]
+                if policy:
+                    pol = base / ("p_" + name + ".json"); pol.write_text(json.dumps(policy), encoding="utf-8")
+                    cmd += ["--policy", str(pol)]
+                if payments:
+                    pay = base / ("pay_" + name + ".csv"); pay.write_text(payments, encoding="utf-8")
+                    cmd += ["--payments", str(pay)]
+                r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                   env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+                self.assertEqual(r.returncode, 0, r.stderr)
+                return {json.loads(l)["finding_type"]
+                        for l in (_find_out(out, "findings.jsonl")).read_text(encoding="utf-8").splitlines() if l.strip()}
+
+            ledger = ("单据号,工号,费用类型,发生日期,金额,商户,发票号,周几\n"
+                      "R1,E1,维修,2024-05-01,12000,甲维修厂,INV001,周日\n"
+                      "R2,E1,维修,2024-06-01,8000,甲维修厂,INV002,周日\n")
+            # ① 两者都不触发：findings 必须为空（"原来场景不变"的关键断言）
+            self.assertEqual(run(ledger, name="off"), set())
+            # ② 提供收款记录 → 替票命中（R1 收款方≠开票方；R2 一致，不报）
+            pay = "expense_id,payee,invoice_issuer,amount\nR1,丙公司,甲维修厂,12000\nR2,甲维修厂,甲维修厂,8000\n"
+            self.assertIn("invoice-payee-mismatch", run(ledger, payments=pay, name="pay"))
+            # ③ 开启 weekday_check → 日期与周几不符命中
+            self.assertIn("weekday-mismatch",
+                          run(ledger, policy={"policy_version": "T", "default_currency": "CNY", "weekday_check": True}, name="wd"))
+
+    def test_price_reference_is_opt_in(self):
+        """v0.2.21：单价合理性——不提供价格参考时零回归；提供后按参考上限比对。"""
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            data = _find_out(base, "d.csv")
+            data.write_text("单据号,工号,费用类型,发生日期,金额,商户,项目,单位,单价\n"
+                            "S1,E1,维修,2024-05-01,1850,甲厂,起动机,个,1850\n"
+                            "S2,E1,维修,2024-05-02,300,甲厂,冷媒,瓶,120\n", encoding="utf-8")
+
+            def types(cmd):
+                r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                   env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+                self.assertEqual(r.returncode, 0, r.stderr)
+                out = Path(cmd[cmd.index("--output") + 1])
+                return {json.loads(l)["finding_type"]
+                        for l in (_find_out(out, "findings.jsonl")).read_text(encoding="utf-8").splitlines() if l.strip()}
+
+            self.assertNotIn("unit-price-above-market",
+                             types([sys.executable, str(SCRIPT), "--input", str(data), "--output", str(base / "o1")]))
+            ref = _find_out(base, "ref.csv")
+            ref.write_text("item,unit,max_price,source\n起动机,个,1200,市场比价\n冷媒,瓶,60,市场比价\n", encoding="utf-8")
+            self.assertIn("unit-price-above-market",
+                          types([sys.executable, str(SCRIPT), "--input", str(data), "--output", str(base / "o2"),
+                                 "--price-reference", str(ref)]))
+
+    def test_field_sales_precision_knobs(self):
+        """v0.2.23：降噪旋钮——不开时会有结构性误报；开启后只剩真线索（帕累托：默认不变）。"""
+        ledger = ("单据号,工号,费用类型,发生日期,提交日期,金额,币种,商户,发票号,审批人\n"
+                  "FS01,SLS1,餐费补贴,2026-09-07,2026-09-07,100.00,CNY,补贴-餐,,MGR-1\n"
+                  "FS02,SLS1,餐费补贴,2026-09-08,2026-09-08,100.00,CNY,补贴-餐,,MGR-1\n"
+                  "FS03,SLS1,餐费补贴,2026-09-09,2026-09-09,100.00,CNY,补贴-餐,,MGR-1\n"
+                  "FS06,SLS1,停车费,2026-09-07,2026-09-07,20.00,CNY,V-P01,INV-331001,MGR-1\n"
+                  "FS07,SLS1,停车费,2026-09-08,2026-09-08,25.00,CNY,V-P02,INV-331002,MGR-1\n"
+                  "FS08,SLS1,停车费,2026-09-09,2026-09-09,30.00,CNY,V-P03,INV-331003,MGR-1\n"
+                  "FS09,SLS1,停车费,2026-09-10,2026-09-10,35.00,CNY,V-P04,INV-331004,MGR-1\n"
+                  "FS10,SLS1,停车费,2026-09-11,2026-09-11,40.00,CNY,V-P05,INV-331005,MGR-1\n"
+                  "FS11,SLS1,停车费,2026-09-14,2026-09-14,200.00,CNY,V-P06,INV-331006,MGR-1\n"
+                  "FS12,SLS1,路桥费,2026-09-15,2026-09-15,15.00,CNY,V-T01,INV-331101,MGR-1\n"
+                  "FS13,SLS1,路桥费,2026-09-15,2026-09-15,15.00,CNY,V-T02,INV-331102,MGR-1\n"
+                  "FS14,SLS2,差旅招待-餐饮,2026-09-09,2026-09-09,260.00,CNY,V-R1,INV-770012,MGR-1\n"
+                  "FS15,SLS3,差旅招待-餐饮,2026-09-16,2026-09-16,180.00,CNY,V-R2,INV-770012,MGR-1\n")
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            data = _find_out(base, "fs.csv"); data.write_text(ledger, encoding="utf-8")
+
+            def types(policy):
+                pol = _find_out(base, "p.json"); pol.write_text(json.dumps(policy), encoding="utf-8")
+                out = base / ("o_%d" % len(list(base.glob("o_*"))))
+                r = subprocess.run([sys.executable, str(SCRIPT), "--input", str(data), "--output", str(out), "--policy", str(pol)],
+                                   capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                   env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+                self.assertEqual(r.returncode, 0, r.stderr)
+                return {json.loads(l)["finding_type"]
+                        for l in (_find_out(out, "findings.jsonl")).read_text(encoding="utf-8").splitlines() if l.strip()}
+
+            base_pol = {"policy_version": "T", "default_currency": "CNY", "as_of_date": "2026-12-31"}
+            noisy = types(base_pol)
+            self.assertIn("cross-employee-invoice", noisy)                 # 真线索
+            self.assertIn("robust-outlier", noisy)                         # 200 元停车费被叫“异常高额”
+            self.assertIn("exact-duplicate-employee-date-amount", noisy)   # 同日两段同价路桥费
+            tuned = types({**base_pol, "outlier_min_amount": 300,
+                           "fixed_amount_types": ["餐费补贴", "里程补贴"],
+                           "multi_occurrence_types": ["路桥费", "停车费", "的士"]})
+            self.assertEqual(tuned, {"cross-employee-invoice"})
+
+    def test_shipment_check_is_opt_in(self):
+        """v0.2.25：运单↔报销勾稽 / 缺运单号 / 私址——不提供运单台账时零回归。"""
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            led = _find_out(base, "l.csv")
+            led.write_text("单据号,工号,费用类型,发生日期,金额,商户\n"
+                           "K1,E1,快递费,2024-05-01,111.00,快递A\n"
+                           "K2,E1,快递费,2024-05-02,50.00,快递A\n", encoding="utf-8")
+
+            def types(cmd):
+                r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                   env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+                self.assertEqual(r.returncode, 0, r.stderr)
+                out = Path(cmd[cmd.index("--output") + 1])
+                return {json.loads(l)["finding_type"]
+                        for l in (_find_out(out, "findings.jsonl")).read_text(encoding="utf-8").splitlines() if l.strip()}
+
+            self.assertNotIn("shipment-amount-mismatch",
+                             types([sys.executable, str(SCRIPT), "--input", str(led), "--output", str(base / "o1")]))
+            ship = _find_out(base, "s.csv")
+            ship.write_text("expense_id,tracking_no,amount,from_addr,to_addr\n"
+                            "K1,SF1001,100.00,上海XX小区3号楼,公司园区A\n"
+                            "K1,SF1002,20.00,公司园区A,客户B\n"
+                            "K2,,50.00,公司园区A,客户C\n", encoding="utf-8")
+            got = types([sys.executable, str(SCRIPT), "--input", str(led), "--output", str(base / "o2"),
+                         "--shipments", str(ship)])
+            self.assertIn("shipment-amount-mismatch", got)        # K1: 111 vs 100+20
+            self.assertIn("shipment-without-tracking", got)       # K2 无运单号
+            self.assertNotIn("shipment-from-private-address", got)  # 未开 private_address_check
+            pol = _find_out(base, "p.json")
+            pol.write_text(json.dumps({"policy_version": "T", "default_currency": "CNY",
+                                       "private_address_check": True}), encoding="utf-8")
+            got2 = types([sys.executable, str(SCRIPT), "--input", str(led), "--output", str(base / "o3"),
+                          "--shipments", str(ship), "--policy", str(pol)])
+            self.assertIn("shipment-from-private-address", got2)
+
+    def test_self_approval_multi_approver_list(self):
+        """v0.2.26：审批人是多人列表（分号/顿号/逗号）时也要能识别出自审自批。"""
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            data = _find_out(base, "e.csv")
+            data.write_text("单据号,工号,费用类型,发生日期,金额,商户,审批人\n"
+                            "A1,E1,餐饮,2024-05-02,100,X,经理A;E1\n"
+                            "A2,E2,餐饮,2024-05-03,100,X,经理A\n", encoding="utf-8")
+            out = base / "out"
+            r = subprocess.run([sys.executable, str(SCRIPT), "--input", str(data), "--output", str(out)],
+                               capture_output=True, text=True, encoding="utf-8", errors="replace",
+                               env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+            self.assertEqual(r.returncode, 0, r.stderr)
+            findings = [json.loads(l) for l in (_find_out(out, "findings.jsonl")).read_text(encoding="utf-8").splitlines() if l.strip()]
+            self_approval = [f for f in findings if f["finding_type"] == "self-approval"]
+            self.assertEqual(len(self_approval), 1, findings)
+            blob = json.dumps(self_approval[0], ensure_ascii=False)
+            self.assertIn("E1", blob)   # 命中的是「经理A;E1」那条
+
+    def test_csv_formula_injection_and_outlier_degenerate(self):
+        """v0.2.26：① 导出 CSV 防公式注入（纯数字不动）；② 缺费用类型时不判离群。"""
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            data = _find_out(base, "e.csv")
+            data.write_text("单据号,工号,费用类型,发生日期,金额,商户,审批人\n"
+                            "B1,E1,餐饮,2024-05-02,-100,=cmd|'/C calc'!A0,M1\n"
+                            "B2,E1,餐饮,2024-05-03,50,+8613800138000,M1\n", encoding="utf-8")
+            out = base / "o1"
+            r = subprocess.run([sys.executable, str(SCRIPT), "--input", str(data), "--output", str(out)],
+                               capture_output=True, text=True, encoding="utf-8", errors="replace",
+                               env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+            self.assertEqual(r.returncode, 0, r.stderr)
+            rows = list(csv.DictReader((_find_out(out, "clean_expenses.csv")).open(encoding="utf-8")))
+            self.assertEqual(rows[0]["amount"], "-100.0")                 # 纯数字：不动
+            self.assertEqual(rows[0]["vendor_name"], "'=cmd|'/C calc'!A0")  # 危险文本：加前导单引号
+            self.assertEqual(rows[1]["vendor_name"], "+8613800138000")     # 电话型：不动
+
+            # ② 没有费用类型列 → 不判离群（避免把整张表当成一个同侪组）
+            thin = _find_out(base, "thin.csv")
+            thin.write_text("单据号,工号,发生日期,金额,商户\n" + "".join(
+                "C%d,E1,2024-05-%02d,%d,X\n" % (i, i + 1, 100 + i) for i in range(1, 6)) + "C6,E1,2024-05-06,99999,X\n",
+                encoding="utf-8")
+            out2 = base / "o2"
+            r = subprocess.run([sys.executable, str(SCRIPT), "--input", str(thin), "--output", str(out2)],
+                               capture_output=True, text=True, encoding="utf-8", errors="replace",
+                               env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+            self.assertEqual(r.returncode, 0, r.stderr)
+            types = {json.loads(l)["finding_type"]
+                     for l in (_find_out(out2, "findings.jsonl")).read_text(encoding="utf-8").splitlines() if l.strip()}
+            self.assertNotIn("robust-outlier", types)
+            manifest = json.loads((_find_out(out2, "run_manifest.json")).read_text(encoding="utf-8"))
+            self.assertTrue(any("费用类型" in s for s in manifest["skipped_rules"]))
+
+
+class TimeSegmentRulesTest(unittest.TestCase):
+    """v0.2.33：时间级「物理不可能」。
+
+    硬验收：① 退房晚于交通出发 → 必须报；② 同人两段交通时段重叠 → 必须报；
+    ③ **只有日期没有时间**的台账 → 一条都不报（帕累托）。
+    """
+
+    HEADER = ("expense_id,employee_id,expense_type,expense_date,arrive_at,amount,currency,"
+              "vendor_name,origin_city,dest_city,check_in,check_out\n")
+
+    def _run(self, body):
+        temp = tempfile.TemporaryDirectory()
+        root = Path(temp.name)
+        data = _find_out(root, "data.csv")
+        data.write_text(self.HEADER + body, encoding="utf-8")
+        out = root / "out"
+        proc = subprocess.run(
+            [sys.executable, str(SCRIPT), "--input", str(data), "--output", str(out)],
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        return temp, out
+
+    def _types(self, out):
+        with (_find_out(out, "findings.csv")).open(encoding="utf-8") as handle:
+            return [row["finding_type"] for row in csv.DictReader(handle)]
+
+    def test_checkout_after_transport_departure(self):
+        """退房 12:00 vs 火车 09:30（同城同人）→ 必须报 checkout-before-transport。"""
+        temp, out = self._run(
+            "A-HOTEL,E1,hotel,2026-07-01,,800,CNY,某酒店,,上海,2026-07-01,2026-07-03 12:00\n"
+            "A-TRAIN,E1,train,2026-07-03 09:30,,553,CNY,铁路12306,上海,北京,,\n")
+        try:
+            self.assertIn("checkout-before-transport", self._types(out))
+        finally:
+            temp.cleanup()
+
+    def test_overlapping_transport_segments(self):
+        """航班 08:00–11:00 与火车 09:30–12:30（同一人）→ 必须报 segment-overlap。"""
+        temp, out = self._run(
+            "B-FLIGHT,E2,flight,2026-07-05 08:00,2026-07-05 11:00,1200,CNY,中国国航,上海,北京,,\n"
+            "B-TRAIN,E2,train,2026-07-05 09:30,2026-07-05 12:30,300,CNY,铁路12306,上海,南京,,\n")
+        try:
+            self.assertIn("segment-overlap", self._types(out))
+        finally:
+            temp.cleanup()
+
+    def test_same_rows_without_times_produce_nothing(self):
+        """同样的矛盾，但只有日期没有时间 → 时段规则一条都不许报（帕累托）。"""
+        temp, out = self._run(
+            "C-HOTEL,E3,hotel,2026-07-01,,800,CNY,某酒店,,上海,2026-07-01,2026-07-03\n"
+            "C-TRAIN,E3,train,2026-07-03,,553,CNY,铁路12306,上海,北京,,\n"
+            "D-FLIGHT,E4,flight,2026-07-05,,1200,CNY,中国国航,上海,北京,,\n"
+            "D-TRAIN,E4,train,2026-07-05,,300,CNY,铁路12306,上海,南京,,\n")
+        try:
+            types = self._types(out)
+            self.assertNotIn("checkout-before-transport", types)
+            self.assertNotIn("segment-overlap", types)
+        finally:
+            temp.cleanup()
+
+
+class TimeExampleTest(unittest.TestCase):
+    """时间级专用示例：`examples/input/expenses-time.csv`
+
+    硬验收：
+      ① 两条「物理不可能」规则**各命中一次**（不多不少）；
+      ② 两组正常对照**不得误报**；
+      ③ **主示例仍是 11 findings / 72 evidence**（帕累托：新增示例不影响原基线）。
+    """
+
+    TIME_CSV = SKILL_ROOT / "examples" / "input" / "expenses-time.csv"
+
+    def _run(self, data, policy=None):
+        temp = tempfile.TemporaryDirectory()
+        out = Path(temp.name) / "out"
+        cmd = [sys.executable, str(SCRIPT), "--input", str(data)]
+        if policy:
+            cmd += ["--policy", str(policy)]
+        cmd += ["--output", str(out)]
+        proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8",
+                              errors="replace", env={**os.environ, "PYTHONIOENCODING": "utf-8"})
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        return temp, out
+
+    def test_time_example_hits_exactly_two_rules(self):
+        temp, out = self._run(self.TIME_CSV)
+        try:
+            with (_find_out(out, "findings.csv")).open(encoding="utf-8") as handle:
+                types = sorted(row["finding_type"] for row in csv.DictReader(handle))
+            self.assertEqual(types, ["checkout-before-transport", "segment-overlap"],
+                             "时间级示例应恰好命中两条规则（不多不少）：%s" % types)
+        finally:
+            temp.cleanup()
+
+    def test_main_example_baseline_unchanged(self):
+        """帕累托：主示例必须仍是 11 findings / 72 evidence（新增时间级示例不得影响它）。"""
+        temp, out = self._run(EXAMPLE, POLICY)
+        try:
+            with (_find_out(out, "findings.csv")).open(encoding="utf-8") as handle:
+                findings = list(csv.DictReader(handle))
+            evidence = sum(1 for _ in (_find_out(out, "evidence.jsonl")).open(encoding="utf-8"))
+            self.assertEqual(len(findings), 11, "主示例 findings 数变了")
+            self.assertEqual(evidence, 72, "主示例 evidence 数变了")
+        finally:
+            temp.cleanup()
+
+
+if __name__ == "__main__":
+    unittest.main()

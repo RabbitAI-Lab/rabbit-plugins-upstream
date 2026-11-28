@@ -1,0 +1,209 @@
+{
+  "version": 1,
+  "skill": "bs-lilac-pitch-deck",
+  "pictures": [
+    {
+      "id": "stacked-glass-slabs-violet",
+      "kind": "decorative",
+      "description": "3D render of three stacked translucent glass slabs glowing violet and blue on a near-black background, placed right with open dark space on the left.",
+      "goodFor": [
+        "cover",
+        "section",
+        "background"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 128244,
+      "sha256": "1665a274b05fa152adffb9b81f8f4c65991e66cbd9ec4f93af7034f753ee9162",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lilac-pitch-deck/stacked-glass-slabs-violet-1665a274b05f.webp"
+    },
+    {
+      "id": "team-reviewing-cards-table",
+      "kind": "scene",
+      "description": "Photo of four colleagues around a bright office table reviewing paper cards and notebooks, one woman pointing while the others think, with soft lilac accents and plants by the window.",
+      "goodFor": [
+        "overview",
+        "team",
+        "problem",
+        "process"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 323006,
+      "sha256": "ac22b4d3b17af87c0d840ab550894b04a5ae25bb4aef8e0098f96b1fe988950e",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lilac-pitch-deck/team-reviewing-cards-table-ac22b4d3b17a.webp"
+    },
+    {
+      "id": "hands-arranging-lilac-notes",
+      "kind": "scene",
+      "description": "Close photo of hands arranging lilac and cream sticky notes on a wooden table beside a notebook, coffee mug and an open laptop showing a timeline, in warm window light.",
+      "goodFor": [
+        "process",
+        "solution",
+        "background",
+        "overview"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 307724,
+      "sha256": "1a684456551987df2894085e2e37509be4475c1aec6b6d8c27e02c1a78ea9c69",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lilac-pitch-deck/hands-arranging-lilac-notes-1a6844565519.webp"
+    },
+    {
+      "id": "pair-discussing-paper-note",
+      "kind": "scene",
+      "description": "Photo of a thoughtful man in a lilac sweater and a woman holding a small card while explaining a point at a desk with a laptop and mug in a light office.",
+      "goodFor": [
+        "problem",
+        "quote",
+        "team",
+        "chart-side"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 372350,
+      "sha256": "167b6812d89b8d03636687a65c379d9e5b77f9ab00518be667763e433707f033",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lilac-pitch-deck/pair-discussing-paper-note-167b6812d89b.webp"
+    },
+    {
+      "id": "woman-pinning-planning-board",
+      "kind": "scene",
+      "description": "Photo of a woman in a lilac blouse pinning lilac and cream notes onto a large whiteboard grid in a bright, plant-filled studio office.",
+      "goodFor": [
+        "solution",
+        "process",
+        "section"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 224144,
+      "sha256": "8a4d49f35a8ce9fd615b98532576f1f7033373ba7fefc8e2bceed12a9a594a63",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lilac-pitch-deck/woman-pinning-planning-board-8a4d49f35a8c.webp"
+    },
+    {
+      "id": "pair-reviewing-tablet-chart",
+      "kind": "scene",
+      "description": "Tall over-the-shoulder photo of two colleagues at a desk looking at a tablet showing a lilac bar chart, a man pointing at the rising bars beside a mug and notebook.",
+      "goodFor": [
+        "chart-side",
+        "problem",
+        "solution",
+        "overview"
+      ],
+      "reuse": "any-topic",
+      "width": 1024,
+      "height": 1536,
+      "orientation": "portrait",
+      "transparent": false,
+      "bytes": 85240,
+      "sha256": "c03432ec688834b4983990069916eee30f10aa790f5065b15c8f365dff8cd3d9",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lilac-pitch-deck/pair-reviewing-tablet-chart-c03432ec6888.webp"
+    },
+    {
+      "id": "glowing-glass-steps-ascending",
+      "kind": "decorative",
+      "description": "3D render of four translucent glass slabs rising diagonally like steps, edge-lit in violet and cyan on a deep indigo background.",
+      "goodFor": [
+        "process",
+        "section",
+        "background",
+        "cover"
+      ],
+      "reuse": "any-topic",
+      "width": 1536,
+      "height": 1024,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 57006,
+      "sha256": "4b676e86a99b1fe4d8d663babfdcf0336186577813a8ef1c06304251aaa0f844",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lilac-pitch-deck/glowing-glass-steps-ascending-4b676e86a99b.webp"
+    },
+    {
+      "id": "portrait-man-navy-shirt",
+      "kind": "portrait",
+      "description": "Studio portrait of a smiling bearded man in a navy overshirt and white tee with hands in pockets against a plain lilac-grey backdrop, framed to the thighs.",
+      "goodFor": [
+        "team",
+        "quote",
+        "contact"
+      ],
+      "reuse": "any-topic",
+      "width": 1024,
+      "height": 1536,
+      "orientation": "portrait",
+      "transparent": false,
+      "bytes": 102946,
+      "sha256": "bc90dde7e22a34617f3e970170d044599a8b989eb4136de20c3624de9bf6c89f",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lilac-pitch-deck/portrait-man-navy-shirt-bc90dde7e22a.webp"
+    },
+    {
+      "id": "portrait-woman-lilac-sweater",
+      "kind": "portrait",
+      "description": "Studio portrait of a smiling woman with short curly hair in a lilac knit sweater and black trousers against a plain lilac-grey backdrop, framed to the hips.",
+      "goodFor": [
+        "team",
+        "quote",
+        "contact"
+      ],
+      "reuse": "any-topic",
+      "width": 1024,
+      "height": 1536,
+      "orientation": "portrait",
+      "transparent": false,
+      "bytes": 196886,
+      "sha256": "866cdb193f191b230f4d4381957771eaea095b561304903e0c7e2d4beebe1fca",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lilac-pitch-deck/portrait-woman-lilac-sweater-866cdb193f19.webp"
+    },
+    {
+      "id": "portrait-woman-plum-blazer",
+      "kind": "portrait",
+      "description": "Studio portrait of a smiling woman with long braids in a plum blazer and cream blouse against a plain lilac-grey backdrop, framed to the hips.",
+      "goodFor": [
+        "team",
+        "quote",
+        "contact"
+      ],
+      "reuse": "any-topic",
+      "width": 1024,
+      "height": 1536,
+      "orientation": "portrait",
+      "transparent": false,
+      "bytes": 80200,
+      "sha256": "99d6636a6d019a90ed60228d021eaca3f6aa5393b6f8ae358505ba2ad22e5507",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lilac-pitch-deck/portrait-woman-plum-blazer-99d6636a6d01.webp"
+    },
+    {
+      "id": "handshake-across-office-desk",
+      "kind": "scene",
+      "description": "Photo of a smiling woman in a lilac blouse shaking hands with a man in a blazer across a light wooden desk with a laptop, mugs and lavender flowers in a bright office.",
+      "goodFor": [
+        "closing",
+        "contact",
+        "solution"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 353236,
+      "sha256": "a7d868ae652193e5589453fbe1e499974a7e3b3e28736e775c49bbc75787fd87",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lilac-pitch-deck/handshake-across-office-desk-a7d868ae6521.webp"
+    }
+  ]
+}

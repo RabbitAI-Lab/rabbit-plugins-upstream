@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "skill": "bs-cobalt-serif-marketing-deck",
+  "pictures": [
+    {
+      "id": "craft-studio-group-chat",
+      "kind": "scene",
+      "description": "A host in a denim apron talks with three smiling guests around a rustic wooden table with paper house models, sketches and fabric swatches, in a dark-walled studio with shelves of ceramics.",
+      "goodFor": [
+        "overview",
+        "team",
+        "problem",
+        "section"
+      ],
+      "reuse": "topic-specific",
+      "topic": "craft workshop / maker studio class",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 439794,
+      "sha256": "e95773b4f9de12e8230a06bcb0fe82262966198dc8ad408d78da810b2cf540a8",
+      "url": "https://media.skillry.dev/skill-image-library/bs-cobalt-serif-marketing-deck/craft-studio-group-chat-e95773b4f9de.webp"
+    },
+    {
+      "id": "portrait-woman-short-hair-apron",
+      "kind": "portrait",
+      "description": "Head-and-shoulders portrait of a smiling woman with short dark hair and hoop earrings wearing a grey apron over a black top, against a deep cobalt wall.",
+      "goodFor": [
+        "team",
+        "quote"
+      ],
+      "reuse": "any-topic",
+      "width": 560,
+      "height": 560,
+      "orientation": "square",
+      "transparent": false,
+      "bytes": 28900,
+      "sha256": "ec4cfbfa8231f3efc970105377f71d99df39a2d89cbeb3a957679cc217e37df9",
+      "url": "https://media.skillry.dev/skill-image-library/bs-cobalt-serif-marketing-deck/portrait-woman-short-hair-apron-ec4cfbfa8231.webp"
+    },
+    {
+      "id": "portrait-bearded-man-navy-sweater",
+      "kind": "portrait",
+      "description": "Head-and-shoulders portrait of a smiling bearded man in a navy knit sweater against a deep cobalt wall, soft even light.",
+      "goodFor": [
+        "team",
+        "quote"
+      ],
+      "reuse": "any-topic",
+      "width": 560,
+      "height": 560,
+      "orientation": "square",
+      "transparent": false,
+      "bytes": 39296,
+      "sha256": "b14edc7bfb3671225a8866b54210b10418d4207bf6137d783653ef77a6b92db6",
+      "url": "https://media.skillry.dev/skill-image-library/bs-cobalt-serif-marketing-deck/portrait-bearded-man-navy-sweater-b14edc7bfb36.webp"
+    },
+    {
+      "id": "portrait-woman-curls-rust-shirt",
+      "kind": "portrait",
+      "description": "Head-and-shoulders portrait of a laughing young woman with curly hair in a rust corduroy shirt against a deep cobalt wall.",
+      "goodFor": [
+        "team",
+        "quote"
+      ],
+      "reuse": "any-topic",
+      "width": 560,
+      "height": 560,
+      "orientation": "square",
+      "transparent": false,
+      "bytes": 36944,
+      "sha256": "fc7966430db186e809b332b56b3244a0607edb60ba63cc07ddd7d55e80be5cc2",
+      "url": "https://media.skillry.dev/skill-image-library/bs-cobalt-serif-marketing-deck/portrait-woman-curls-rust-shirt-fc7966430db1.webp"
+    },
+    {
+      "id": "portrait-man-glasses-green-cardigan",
+      "kind": "portrait",
+      "description": "Head-and-shoulders portrait of a smiling grey-haired man with round glasses in a dark green cardigan against a deep cobalt wall.",
+      "goodFor": [
+        "team",
+        "quote"
+      ],
+      "reuse": "any-topic",
+      "width": 560,
+      "height": 560,
+      "orientation": "square",
+      "transparent": false,
+      "bytes": 40998,
+      "sha256": "07af1772d4cbb292104409a032a62cf527b05c106177845163c11290f9eb4436",
+      "url": "https://media.skillry.dev/skill-image-library/bs-cobalt-serif-marketing-deck/portrait-man-glasses-green-cardigan-07af1772d4cb.webp"
+    },
+    {
+      "id": "paper-folding-workshop-table",
+      "kind": "scene",
+      "description": "A woman demonstrates a folded paper shape to four attentive participants around a dark table scattered with paper sheets and geometric models, cobalt wall and plants behind.",
+      "goodFor": [
+        "process",
+        "solution",
+        "team",
+        "overview"
+      ],
+      "reuse": "topic-specific",
+      "topic": "paper craft workshop / hands-on class",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 301036,
+      "sha256": "80f7e66e9d2d4d2996d120b1958a97edf642bbf5afd28ac8e3e22034ec4c40a3",
+      "url": "https://media.skillry.dev/skill-image-library/bs-cobalt-serif-marketing-deck/paper-folding-workshop-table-80f7e66e9d2d.webp"
+    },
+    {
+      "id": "maker-doorway-dusk-mug",
+      "kind": "portrait",
+      "description": "Vertical shot of a smiling woman in a dark linen apron holding a ceramic mug, leaning in the doorway of a warmly lit craft studio at dusk, cobalt walls and wooden worktables inside.",
+      "goodFor": [
+        "contact",
+        "closing",
+        "quote"
+      ],
+      "reuse": "topic-specific",
+      "topic": "craft studio / small maker business",
+      "width": 1024,
+      "height": 1536,
+      "orientation": "portrait",
+      "transparent": false,
+      "bytes": 187964,
+      "sha256": "d39961456b811ad987b3ce31c9b0a710c6583cac8a3b919dcf3a0c50273cdf1f",
+      "url": "https://media.skillry.dev/skill-image-library/bs-cobalt-serif-marketing-deck/maker-doorway-dusk-mug-d39961456b81.webp"
+    }
+  ]
+}

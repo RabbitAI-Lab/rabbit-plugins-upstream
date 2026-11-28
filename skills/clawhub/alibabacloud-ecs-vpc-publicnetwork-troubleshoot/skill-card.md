@@ -1,48 +1,68 @@
-## Description: <br>
-Diagnoses Alibaba Cloud ECS and VPC public network connectivity failures by running bundled read-only troubleshooting scripts for ECS, security groups, NAT gateways, SNAT, routes, EIPs, DDoS status, and Cloud Firewall checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Diagnoses Alibaba Cloud ECS public connectivity and VPC cloud service egress issues involving public IP reachability, security groups, NAT, SNAT, routes, and EIPs.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Cloud operations engineers and support teams use this skill to diagnose public connectivity failures for a named Alibaba Cloud ECS instance or VPC cloud service VSwitch. The skill produces a diagnostic table and remediation guidance that should be reviewed before making network or security changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Alibaba Cloud credentials are read from standard sources and persisted to scripts/.sts_cache.json. <br>
-Mitigation: Use temporary STS credentials or a narrowly scoped read-only RAM role, keep the credential cache protected, and delete the cache after diagnostics. <br>
-Risk: Suggested firewall, route, NAT, SNAT, security-group, or gateway changes can alter network exposure. <br>
-Mitigation: Treat remediation output as manual guidance; require human review, change approval, and a rollback plan before applying changes. <br>
-Risk: The skill makes Alibaba Cloud API calls against user-specified cloud resources. <br>
-Mitigation: Confirm the target resource, region, and read-only diagnostic scope before execution, and do not expand beyond the confirmed resource. <br>
+## Use Case:
 
+Developers and cloud operators use it to diagnose public reachability and outbound connectivity for a specified Alibaba Cloud ECS instance or VPC service, then review the findings and remediation guidance.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sdk-team/skills/alibabacloud-ecs-vpc-publicnetwork-troubleshoot) <br>
-- [Module 1: Preparation](artifact/references/module1_preparation.md) <br>
-- [Module 2: ECS Public Network](artifact/references/module2_ecs_public.md) <br>
-- [Module 3: VPC Service Public Network](artifact/references/module3_vpc_service.md) <br>
-- [Module 4: Output and Judgment](artifact/references/module4_output.md) <br>
-- [Module 5: Solutions](artifact/references/module5_solution.md) <br>
-- [RAM Policies](artifact/references/ram-policies.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown diagnostic report with JSON-derived findings, status tables, shell command invocations, and remediation guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit user scope confirmation before read-only Alibaba Cloud API calls; aborts on missing parameters, credential failures, or script errors.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.1 (source: server release evidence) <br>
+Risk: Credential handling can expose secrets.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated read-only identity, ensure credential caches are created safely, redact error output, and verify CLI and SDK calls use the same account.
+
+Risk: Repair guidance could weaken network protections.
+
+Mitigation: Have a network administrator review firewall and access-rule changes, keep exceptions narrow, and restore temporary changes after testing.
+
+Risk: Execution output may include account-balance information.
+
+Mitigation: Limit access to diagnostic results and remove account-balance details before sharing them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sdk-team/skills/alibabacloud-ecs-vpc-publicnetwork-troubleshoot)
+- [RAM Permission Declaration](references/ram-policies.md)
+- [Preparation](references/module1_preparation.md)
+- [ECS Public Network Diagnosis](references/module2_ecs_public.md)
+- [VPC Cloud Service Public Network Diagnosis](references/module3_vpc_service.md)
+- [Output Results and Determination Specification](references/module4_output.md)
+- [Solution Guidance](references/module5_solution.md)
+- [Alibaba Cloud Security Group Overview](https://help.aliyun.com/zh/ecs/user-guide/security-group-overview)
+- [Alibaba Cloud Network ACL Overview](https://help.aliyun.com/zh/vpc/network-acl-overview)
+- [Alibaba Cloud VPC Route Tables](https://help.aliyun.com/zh/vpc/vpc-route-table/#e2a77086dae4t)
+- [Alibaba Cloud IPv4 Gateway Overview](https://help.aliyun.com/zh/vpc/ipv4-gateway-overview#37b32469c9n6j)
+- [Alibaba Cloud Internet NAT Gateway Public Access](https://help.aliyun.com/zh/nat-gateway/user-guide/use-internet-nat-gateway-for-public-network-access)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [JSON diagnostic results and Markdown status tables with remediation guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Resource-scoped, read-only diagnostic results; execution output may include account-balance information.]
+
+## Skill Version(s):
+
+0.0.3 (source: server-resolved release metadata, artifact manifest)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -20,7 +20,7 @@ Parameters:
 |---|---|---|---|
 | `range` | `string` | yes | A1 range for the rule. |
 | `rule` | `object` | yes | Sheets ConditionalFormatRule object; ranges can be omitted. |
-| `sheet_name` | `string` | no | Optional tab name. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 
 Sample parameters:
@@ -49,7 +49,7 @@ Generated JSON parameter schema:
     "type": "object"
   },
   "sheet_name": {
-    "description": "Optional tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -75,7 +75,7 @@ Parameters:
 |---|---|---|---|
 | `name` | `string` | yes | Named range name. |
 | `range` | `string` | yes | A1 range. |
-| `sheet_name` | `string` | no | Optional tab name. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 
 Sample parameters:
@@ -104,7 +104,7 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "sheet_name": {
-    "description": "Optional tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -171,7 +171,7 @@ Parameters:
 |---|---|---|---|
 | `column_name` | `string` | yes | New column header. |
 | `column_values` | `array` | yes | Values to write below the header at the data table edge. |
-| `sheet_name` | `string` | no | Optional tab name. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 
 Sample parameters:
@@ -205,7 +205,7 @@ Generated JSON parameter schema:
     "type": "array"
   },
   "sheet_name": {
-    "description": "Optional tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -223,7 +223,7 @@ Action slug: `append-rows`
 
 Price: `5` credits
 
-Append rows at the true table end. Object rows are mapped by sheet headers.
+Append rows after Google's detected table. Object rows map to sheet headers. Returns appended_row_numbers from Google's actual updated range.
 
 Parameters:
 
@@ -231,7 +231,7 @@ Parameters:
 |---|---|---|---|
 | `header_row` | `integer` | no | One-based header row, default 1. |
 | `rows` | `array` | yes | Rows as arrays or objects keyed by headers. |
-| `sheet_name` | `string` | no | Optional tab name. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 | `value_input_option` | `string` | no | USER_ENTERED or RAW. |
 
@@ -268,7 +268,7 @@ Generated JSON parameter schema:
     "type": "array"
   },
   "sheet_name": {
-    "description": "Optional tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -285,13 +285,83 @@ Generated JSON parameter schema:
 }
 ```
 
+## `clear_range`
+
+Action slug: `clear-range`
+
+Price: `5` credits
+
+Empty the values in an A1 range without deleting rows or columns. Notes and merges are kept; formatting is kept unless clear_formatting is true.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `clear_formatting` | `boolean` | no | Also reset cell formatting in the range. |
+| `range` | `string` | yes | A1 range to clear, e.g. A10:F40 or 'Quote'!A10:F40. Parts past the tab's grid are ignored. |
+| `sheet_id` | `integer` | no | Numeric Google sheetId (gid). |
+| `sheet_index` | `integer` | no | Zero-based tab index. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
+| `spreadsheet_id` | `string` | yes | Spreadsheet ID or full Google Sheets URL. |
+
+Sample parameters:
+
+```json
+{
+  "clear_formatting": false,
+  "range": "example range",
+  "sheet_id": 1,
+  "sheet_index": 1,
+  "sheet_name": "example sheet name",
+  "spreadsheet_id": "example spreadsheet id"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "clear_formatting": {
+    "default": false,
+    "description": "Also reset cell formatting in the range.",
+    "required": false,
+    "type": "boolean"
+  },
+  "range": {
+    "description": "A1 range to clear, e.g. A10:F40 or 'Quote'!A10:F40. Parts past the tab's grid are ignored.",
+    "required": true,
+    "type": "string"
+  },
+  "sheet_id": {
+    "description": "Numeric Google sheetId (gid).",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_index": {
+    "description": "Zero-based tab index.",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_name": {
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
+    "required": false,
+    "type": "string"
+  },
+  "spreadsheet_id": {
+    "description": "Spreadsheet ID or full Google Sheets URL.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
 ## `copy_paste`
 
 Action slug: `copy-paste`
 
 Price: `5` credits
 
-Copy a source range to a destination range.
+Copy cells to an A1 destination range; overwrites destination cells and does not insert rows.
 
 Parameters:
 
@@ -300,7 +370,7 @@ Parameters:
 | `destination_range` | `string` | yes | A1 destination range. |
 | `paste_orientation` | `string` | no | NORMAL or TRANSPOSE. |
 | `paste_type` | `string` | no | Sheets pasteType such as PASTE_NORMAL or PASTE_VALUES. |
-| `sheet_name` | `string` | no | Optional tab name. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `source_range` | `string` | yes | A1 source range. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 
@@ -337,7 +407,7 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "sheet_name": {
-    "description": "Optional tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -425,7 +495,7 @@ Action slug: `cut-paste`
 
 Price: `5` credits
 
-Move a source range to a destination start cell.
+Move cells to an A1 destination start cell; does not insert rows. Returns destination_row_number.
 
 Parameters:
 
@@ -433,7 +503,7 @@ Parameters:
 |---|---|---|---|
 | `destination_range` | `string` | yes | A1 destination start cell. |
 | `paste_type` | `string` | no | Sheets pasteType such as PASTE_NORMAL or PASTE_VALUES. |
-| `sheet_name` | `string` | no | Optional tab name. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `source_range` | `string` | yes | A1 source range. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 
@@ -464,7 +534,7 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "sheet_name": {
-    "description": "Optional tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -522,6 +592,139 @@ Generated JSON parameter schema:
 }
 ```
 
+## `delete_note`
+
+Action slug: `delete-note`
+
+Price: `5` credits
+
+Remove notes from every cell in a bounded A1 cell or range without changing values or formatting.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `range` | `string` | yes | A1 range using visible one-based worksheet row numbers; quote a tab name only inside a qualified range. |
+| `sheet_id` | `integer` | no | Numeric Google sheetId (gid). |
+| `sheet_index` | `integer` | no | Zero-based tab index. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
+| `spreadsheet_id` | `string` | yes | Spreadsheet ID or full Google Sheets URL. |
+
+Sample parameters:
+
+```json
+{
+  "range": "example range",
+  "sheet_id": 1,
+  "sheet_index": 1,
+  "sheet_name": "example sheet name",
+  "spreadsheet_id": "example spreadsheet id"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "range": {
+    "description": "A1 range using visible one-based worksheet row numbers; quote a tab name only inside a qualified range.",
+    "required": true,
+    "type": "string"
+  },
+  "sheet_id": {
+    "description": "Numeric Google sheetId (gid).",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_index": {
+    "description": "Zero-based tab index.",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_name": {
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
+    "required": false,
+    "type": "string"
+  },
+  "spreadsheet_id": {
+    "description": "Spreadsheet ID or full Google Sheets URL.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
+## `delete_rows`
+
+Action slug: `delete-rows`
+
+Price: `5` credits
+
+Permanently delete complete worksheet rows by original one-based row number, from bottom to top. Requires a tab selector; row 1 is protected.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `row_numbers` | `array` | yes | Distinct original one-based sheet row numbers, each at least 2; 1-500 entries. One of sheet_name, sheet_id, or sheet_index is required. |
+| `sheet_id` | `integer` | no | Numeric Google sheetId (gid). |
+| `sheet_index` | `integer` | no | Zero-based tab index. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
+| `spreadsheet_id` | `string` | yes | Spreadsheet ID or full Google Sheets URL. |
+
+Sample parameters:
+
+```json
+{
+  "row_numbers": [
+    2
+  ],
+  "sheet_id": 1,
+  "sheet_index": 1,
+  "sheet_name": "example sheet name",
+  "spreadsheet_id": "example spreadsheet id"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "row_numbers": {
+    "description": "Distinct original one-based sheet row numbers, each at least 2; 1-500 entries. One of sheet_name, sheet_id, or sheet_index is required.",
+    "items": {
+      "minimum": 2,
+      "type": "integer"
+    },
+    "maxItems": 500,
+    "minItems": 1,
+    "required": true,
+    "type": "array",
+    "uniqueItems": true
+  },
+  "sheet_id": {
+    "description": "Numeric Google sheetId (gid).",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_index": {
+    "description": "Zero-based tab index.",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_name": {
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
+    "required": false,
+    "type": "string"
+  },
+  "spreadsheet_id": {
+    "description": "Spreadsheet ID or full Google Sheets URL.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
 ## `delete_sheet`
 
 Action slug: `delete-sheet`
@@ -536,7 +739,7 @@ Parameters:
 |---|---|---|---|
 | `sheet_id` | `integer` | no | Numeric sheet id. |
 | `sheet_index` | `integer` | no | Zero-based tab index. |
-| `sheet_name` | `string` | no | Tab name. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 
 Sample parameters:
@@ -565,7 +768,7 @@ Generated JSON parameter schema:
     "type": "integer"
   },
   "sheet_name": {
-    "description": "Tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -583,7 +786,7 @@ Action slug: `export-sheet`
 
 Price: `5` credits
 
-Export a specific sheet or whole spreadsheet to File Manager as CSV, TSV, PDF, XLSX, ODS, HTML, or ZIP.
+Export a specific sheet or whole spreadsheet to File Manager as CSV, TSV, PDF, XLSX, ODS, HTML, or ZIP. For PDF, pdf_options sets the print layout (orientation, fit to one page, gridlines, margins).
 
 Parameters:
 
@@ -591,10 +794,11 @@ Parameters:
 |---|---|---|---|
 | `expiration_days` | `integer` | no | File Manager expiration, 1-7 days. |
 | `filename` | `string` | no | Optional stored filename. |
-| `format` | `string` | yes | csv, tsv, pdf, xlsx, ods, html, or zip. |
-| `range` | `string` | no | Optional range for CSV/TSV exports. |
+| `format` | `string` | yes | csv, tsv, pdf, xlsx, ods, html, or zip. Use pdf with pdf_options for print layout. |
+| `pdf_options` | `object` | no | Print layout for format=pdf only; applies to the exported file, not the spreadsheet's own print settings. Omitted fields use Google's defaults. One-page portrait without gridlines: {"orientation": "portrait", "fit": "page", "show_gridlines": false}. |
+| `range` | `string` | no | Optional A1 range. Limits CSV/TSV exports, and PDF exports that use pdf_options, to these cells. |
 | `sheet_id` | `integer` | no | Optional numeric sheet id. |
-| `sheet_name` | `string` | no | Optional tab name for specific-sheet export. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 
 Sample parameters:
@@ -604,6 +808,16 @@ Sample parameters:
   "expiration_days": 1,
   "filename": "example filename",
   "format": "example format",
+  "pdf_options": {
+    "bottom_margin": 0,
+    "fit": "actual_size",
+    "horizontal_alignment": "LEFT",
+    "left_margin": 0,
+    "margins": "normal",
+    "orientation": "portrait",
+    "paper_size": "letter",
+    "repeat_frozen_columns": true
+  },
   "range": "example range",
   "sheet_id": 1,
   "sheet_name": "example sheet name",
@@ -628,12 +842,150 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "format": {
-    "description": "csv, tsv, pdf, xlsx, ods, html, or zip.",
+    "description": "csv, tsv, pdf, xlsx, ods, html, or zip. Use pdf with pdf_options for print layout.",
     "required": true,
     "type": "string"
   },
+  "pdf_options": {
+    "description": "Print layout for format=pdf only; applies to the exported file, not the spreadsheet's own print settings. Omitted fields use Google's defaults. One-page portrait without gridlines: {\"orientation\": \"portrait\", \"fit\": \"page\", \"show_gridlines\": false}.",
+    "properties": {
+      "bottom_margin": {
+        "description": "Bottom margin in inches.",
+        "maximum": 10,
+        "minimum": 0,
+        "required": false,
+        "type": "number"
+      },
+      "fit": {
+        "description": "actual_size, width (fit to page width), height (fit to page height), or page (everything on one page).",
+        "enum": [
+          "actual_size",
+          "width",
+          "height",
+          "page"
+        ],
+        "required": false,
+        "type": "string"
+      },
+      "horizontal_alignment": {
+        "description": "Horizontal placement on the page.",
+        "enum": [
+          "LEFT",
+          "CENTER",
+          "RIGHT"
+        ],
+        "required": false,
+        "type": "string"
+      },
+      "left_margin": {
+        "description": "Left margin in inches.",
+        "maximum": 10,
+        "minimum": 0,
+        "required": false,
+        "type": "number"
+      },
+      "margins": {
+        "description": "Margin preset: normal, narrow, or wide.",
+        "enum": [
+          "normal",
+          "narrow",
+          "wide"
+        ],
+        "required": false,
+        "type": "string"
+      },
+      "orientation": {
+        "description": "Page orientation.",
+        "enum": [
+          "portrait",
+          "landscape"
+        ],
+        "required": false,
+        "type": "string"
+      },
+      "paper_size": {
+        "description": "Paper size.",
+        "enum": [
+          "letter",
+          "legal",
+          "tabloid",
+          "statement",
+          "executive",
+          "folio",
+          "a3",
+          "a4",
+          "a5",
+          "b4",
+          "b5"
+        ],
+        "required": false,
+        "type": "string"
+      },
+      "repeat_frozen_columns": {
+        "description": "Repeat frozen columns on every page.",
+        "required": false,
+        "type": "boolean"
+      },
+      "repeat_frozen_rows": {
+        "description": "Repeat frozen header rows on every page (freeze them first).",
+        "required": false,
+        "type": "boolean"
+      },
+      "right_margin": {
+        "description": "Right margin in inches.",
+        "maximum": 10,
+        "minimum": 0,
+        "required": false,
+        "type": "number"
+      },
+      "show_gridlines": {
+        "description": "Print cell gridlines.",
+        "required": false,
+        "type": "boolean"
+      },
+      "show_notes": {
+        "description": "Print cell notes.",
+        "required": false,
+        "type": "boolean"
+      },
+      "show_page_numbers": {
+        "description": "Print page numbers.",
+        "required": false,
+        "type": "boolean"
+      },
+      "show_sheet_names": {
+        "description": "Print the tab name in the header.",
+        "required": false,
+        "type": "boolean"
+      },
+      "show_title": {
+        "description": "Print the spreadsheet title in the header.",
+        "required": false,
+        "type": "boolean"
+      },
+      "top_margin": {
+        "description": "Top margin in inches; overrides the preset for this side.",
+        "maximum": 10,
+        "minimum": 0,
+        "required": false,
+        "type": "number"
+      },
+      "vertical_alignment": {
+        "description": "Vertical placement on the page.",
+        "enum": [
+          "TOP",
+          "MIDDLE",
+          "BOTTOM"
+        ],
+        "required": false,
+        "type": "string"
+      }
+    },
+    "required": false,
+    "type": "object"
+  },
   "range": {
-    "description": "Optional range for CSV/TSV exports.",
+    "description": "Optional A1 range. Limits CSV/TSV exports, and PDF exports that use pdf_options, to these cells.",
     "required": false,
     "type": "string"
   },
@@ -643,7 +995,7 @@ Generated JSON parameter schema:
     "type": "integer"
   },
   "sheet_name": {
-    "description": "Optional tab name for specific-sheet export.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -672,7 +1024,7 @@ Parameters:
 | `match_entire_cell` | `boolean` | no | Match entire cell contents only. |
 | `replacement` | `string` | yes | Replacement text. |
 | `search_by_regex` | `boolean` | no | Treat find as regex. |
-| `sheet_name` | `string` | no | Optional tab limit. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 
 Sample parameters:
@@ -719,7 +1071,7 @@ Generated JSON parameter schema:
     "type": "boolean"
   },
   "sheet_name": {
-    "description": "Optional tab limit.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -746,7 +1098,7 @@ Parameters:
 | `cell_format` | `object` | no | Text/background/alignment/wrap formatting. |
 | `number_format` | `object` | no | Sheets numberFormat object. |
 | `range` | `string` | yes | A1 range to format. |
-| `sheet_name` | `string` | no | Optional tab name. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 
 Sample parameters:
@@ -781,12 +1133,83 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "sheet_name": {
-    "description": "Optional tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
   "spreadsheet_id": {
     "description": "Google spreadsheet id or URL.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
+## `freeze`
+
+Action slug: `freeze`
+
+Price: `5` credits
+
+Freeze the top rows and/or left columns of a tab so they stay visible while scrolling. 0 unfreezes. Frozen rows can repeat on every PDF page.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `frozen_columns` | `integer` | no | Number of left columns to freeze; 0 unfreezes columns. |
+| `frozen_rows` | `integer` | no | Number of top rows to freeze; 0 unfreezes rows. |
+| `sheet_id` | `integer` | no | Numeric Google sheetId (gid). |
+| `sheet_index` | `integer` | no | Zero-based tab index. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
+| `spreadsheet_id` | `string` | yes | Spreadsheet ID or full Google Sheets URL. |
+
+Sample parameters:
+
+```json
+{
+  "frozen_columns": 0,
+  "frozen_rows": 0,
+  "sheet_id": 1,
+  "sheet_index": 1,
+  "sheet_name": "example sheet name",
+  "spreadsheet_id": "example spreadsheet id"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "frozen_columns": {
+    "description": "Number of left columns to freeze; 0 unfreezes columns.",
+    "minimum": 0,
+    "required": false,
+    "type": "integer"
+  },
+  "frozen_rows": {
+    "description": "Number of top rows to freeze; 0 unfreezes rows.",
+    "minimum": 0,
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_id": {
+    "description": "Numeric Google sheetId (gid).",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_index": {
+    "description": "Zero-based tab index.",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_name": {
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
+    "required": false,
+    "type": "string"
+  },
+  "spreadsheet_id": {
+    "description": "Spreadsheet ID or full Google Sheets URL.",
     "required": true,
     "type": "string"
   }
@@ -799,14 +1222,14 @@ Action slug: `get-data-range`
 
 Price: `5` credits
 
-Find the last non-empty row/column and recommended append start for a tab.
+Find the absolute one-based last non-empty row/column; a partial range never returns an append recommendation.
 
 Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `range` | `string` | no | Optional A1 range to inspect. |
-| `sheet_name` | `string` | no | Optional tab name. |
+| `range` | `string` | no | Optional partial A1 range; recommended_append_start is null when set. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 
 Sample parameters:
@@ -824,12 +1247,12 @@ Generated JSON parameter schema:
 ```json
 {
   "range": {
-    "description": "Optional A1 range to inspect.",
+    "description": "Optional partial A1 range; recommended_append_start is null when set.",
     "required": false,
     "type": "string"
   },
   "sheet_name": {
-    "description": "Optional tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -854,7 +1277,7 @@ Parameters:
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `header_row` | `integer` | no | One-based header row, default 1. |
-| `sheet_name` | `string` | no | Optional tab name. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 
 Sample parameters:
@@ -878,12 +1301,74 @@ Generated JSON parameter schema:
     "type": "integer"
   },
   "sheet_name": {
-    "description": "Optional tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
   "spreadsheet_id": {
     "description": "Google spreadsheet id or URL.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
+## `list_notes`
+
+Action slug: `list-notes`
+
+Price: `5` credits
+
+List cell notes with exact sheet and A1 locations plus the current cell values. Without a filter, scans every tab.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `range` | `string` | no | A1 range using visible one-based worksheet row numbers; quote a tab name only inside a qualified range. |
+| `sheet_id` | `integer` | no | Numeric Google sheetId (gid). |
+| `sheet_index` | `integer` | no | Zero-based tab index. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
+| `spreadsheet_id` | `string` | yes | Spreadsheet ID or full Google Sheets URL. |
+
+Sample parameters:
+
+```json
+{
+  "range": "example range",
+  "sheet_id": 1,
+  "sheet_index": 1,
+  "sheet_name": "example sheet name",
+  "spreadsheet_id": "example spreadsheet id"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "range": {
+    "description": "A1 range using visible one-based worksheet row numbers; quote a tab name only inside a qualified range.",
+    "required": false,
+    "type": "string"
+  },
+  "sheet_id": {
+    "description": "Numeric Google sheetId (gid).",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_index": {
+    "description": "Zero-based tab index.",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_name": {
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
+    "required": false,
+    "type": "string"
+  },
+  "spreadsheet_id": {
+    "description": "Spreadsheet ID or full Google Sheets URL.",
     "required": true,
     "type": "string"
   }
@@ -924,6 +1409,89 @@ Generated JSON parameter schema:
 }
 ```
 
+## `merge_cells`
+
+Action slug: `merge-cells`
+
+Price: `5` credits
+
+Merge a bounded range of at least two cells. Only the top-left value of each merged area is kept, so the call fails and lists the cells that would lose values unless allow_value_loss is true.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `allow_value_loss` | `boolean` | no | Proceed even though values outside each merged area's top-left cell will be discarded. |
+| `merge_type` | `string` | no | MERGE_ALL merges the whole range into one cell; MERGE_ROWS merges each row separately; MERGE_COLUMNS merges each column separately. |
+| `range` | `string` | yes | Bounded A1 range inside the tab's grid, e.g. A1:F1. |
+| `sheet_id` | `integer` | no | Numeric Google sheetId (gid). |
+| `sheet_index` | `integer` | no | Zero-based tab index. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
+| `spreadsheet_id` | `string` | yes | Spreadsheet ID or full Google Sheets URL. |
+
+Sample parameters:
+
+```json
+{
+  "allow_value_loss": false,
+  "merge_type": "MERGE_ALL",
+  "range": "example range",
+  "sheet_id": 1,
+  "sheet_index": 1,
+  "sheet_name": "example sheet name",
+  "spreadsheet_id": "example spreadsheet id"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "allow_value_loss": {
+    "default": false,
+    "description": "Proceed even though values outside each merged area's top-left cell will be discarded.",
+    "required": false,
+    "type": "boolean"
+  },
+  "merge_type": {
+    "default": "MERGE_ALL",
+    "description": "MERGE_ALL merges the whole range into one cell; MERGE_ROWS merges each row separately; MERGE_COLUMNS merges each column separately.",
+    "enum": [
+      "MERGE_ALL",
+      "MERGE_ROWS",
+      "MERGE_COLUMNS"
+    ],
+    "required": false,
+    "type": "string"
+  },
+  "range": {
+    "description": "Bounded A1 range inside the tab's grid, e.g. A1:F1.",
+    "required": true,
+    "type": "string"
+  },
+  "sheet_id": {
+    "description": "Numeric Google sheetId (gid).",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_index": {
+    "description": "Zero-based tab index.",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_name": {
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
+    "required": false,
+    "type": "string"
+  },
+  "spreadsheet_id": {
+    "description": "Spreadsheet ID or full Google Sheets URL.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
 ## `protect_range`
 
 Action slug: `protect-range`
@@ -939,7 +1507,7 @@ Parameters:
 | `description` | `string` | no | Protection description. |
 | `editor_emails` | `array` | no | Users allowed to edit protected range. |
 | `range` | `string` | yes | A1 range to protect. |
-| `sheet_name` | `string` | no | Optional tab name. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 | `warning_only` | `boolean` | no | If true, warn instead of blocking edits. |
 
@@ -981,7 +1549,7 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "sheet_name": {
-    "description": "Optional tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -1004,15 +1572,15 @@ Action slug: `read`
 
 Price: `5` credits
 
-Read values from a tab or A1 range. If sheet_name is omitted, resolves the real first tab.
+Read values from a tab or A1 range. Returns one-based row_numbers aligned with values; no row offset is needed.
 
 Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `range` | `string` | no | Optional A1 range. Bare ranges are qualified with sheet_name. |
+| `range` | `string` | no | Optional A1 range with visible one-based row labels. Qualified range and sheet_name must identify the same tab. |
 | `sheet_id` | `integer` | no | Optional numeric sheet id. |
-| `sheet_name` | `string` | no | Optional tab name. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 | `value_render_option` | `string` | no | FORMATTED_VALUE, UNFORMATTED_VALUE, or FORMULA. |
 
@@ -1033,7 +1601,7 @@ Generated JSON parameter schema:
 ```json
 {
   "range": {
-    "description": "Optional A1 range. Bare ranges are qualified with sheet_name.",
+    "description": "Optional A1 range with visible one-based row labels. Qualified range and sheet_name must identify the same tab.",
     "required": false,
     "type": "string"
   },
@@ -1043,7 +1611,7 @@ Generated JSON parameter schema:
     "type": "integer"
   },
   "sheet_name": {
-    "description": "Optional tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -1075,7 +1643,7 @@ Parameters:
 | `new_sheet_name` | `string` | yes | New tab name. |
 | `sheet_id` | `integer` | no | Numeric sheet id. |
 | `sheet_index` | `integer` | no | Zero-based tab index. |
-| `sheet_name` | `string` | no | Current tab name. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 
 Sample parameters:
@@ -1110,12 +1678,53 @@ Generated JSON parameter schema:
     "type": "integer"
   },
   "sheet_name": {
-    "description": "Current tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
   "spreadsheet_id": {
     "description": "Google spreadsheet id or URL.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
+## `rename_spreadsheet`
+
+Action slug: `rename-spreadsheet`
+
+Price: `5` credits
+
+Rename the spreadsheet file; does not rename any sheet tab.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `new_title` | `string` | yes | Nonblank new spreadsheet file title. |
+| `spreadsheet_id` | `string` | yes | Spreadsheet ID or full URL. |
+
+Sample parameters:
+
+```json
+{
+  "new_title": "example new title",
+  "spreadsheet_id": "example spreadsheet id"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "new_title": {
+    "description": "Nonblank new spreadsheet file title.",
+    "required": true,
+    "type": "string"
+  },
+  "spreadsheet_id": {
+    "description": "Spreadsheet ID or full URL.",
     "required": true,
     "type": "string"
   }
@@ -1165,6 +1774,214 @@ Generated JSON parameter schema:
 }
 ```
 
+## `set_borders`
+
+Action slug: `set-borders`
+
+Price: `5` credits
+
+Draw or remove table borders on an A1 range using a preset, per-side borders, or both (per-side borders override the preset). Sides not given are left unchanged.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `border_color` | `object` | no | Border RGB color with 0-1 channels, e.g. {"red": 0.12, "green": 0.3, "blue": 0.47}. Defaults to black. |
+| `border_preset` | `string` | no | all (grid on every cell), outer (box around the range), inner (lines between cells only), or none (remove all borders in the range). |
+| `border_style` | `string` | no | Line style for border_preset and for borders sides given without a style. |
+| `borders` | `object` | no | Per-side borders. Keys: top, bottom, left, right, inner_horizontal, inner_vertical. Values: a style (SOLID, SOLID_MEDIUM, SOLID_THICK, DOUBLE, DASHED, DOTTED, NONE) or {"style": "SOLID_THICK", "color": {"red": 0, "green": 0, "blue": 0}}. |
+| `range` | `string` | yes | A1 range to border, e.g. A5:F20. |
+| `sheet_id` | `integer` | no | Numeric Google sheetId (gid). |
+| `sheet_index` | `integer` | no | Zero-based tab index. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
+| `spreadsheet_id` | `string` | yes | Spreadsheet ID or full Google Sheets URL. |
+
+Sample parameters:
+
+```json
+{
+  "border_color": {
+    "blue": 0,
+    "green": 0,
+    "red": 0
+  },
+  "border_preset": "all",
+  "border_style": "SOLID",
+  "borders": {},
+  "range": "example range",
+  "sheet_id": 1,
+  "sheet_index": 1,
+  "sheet_name": "example sheet name"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "border_color": {
+    "description": "Border RGB color with 0-1 channels, e.g. {\"red\": 0.12, \"green\": 0.3, \"blue\": 0.47}. Defaults to black.",
+    "properties": {
+      "blue": {
+        "description": "Blue channel, 0-1.",
+        "maximum": 1,
+        "minimum": 0,
+        "required": false,
+        "type": "number"
+      },
+      "green": {
+        "description": "Green channel, 0-1.",
+        "maximum": 1,
+        "minimum": 0,
+        "required": false,
+        "type": "number"
+      },
+      "red": {
+        "description": "Red channel, 0-1.",
+        "maximum": 1,
+        "minimum": 0,
+        "required": false,
+        "type": "number"
+      }
+    },
+    "required": false,
+    "type": "object"
+  },
+  "border_preset": {
+    "description": "all (grid on every cell), outer (box around the range), inner (lines between cells only), or none (remove all borders in the range).",
+    "enum": [
+      "all",
+      "outer",
+      "inner",
+      "none"
+    ],
+    "required": false,
+    "type": "string"
+  },
+  "border_style": {
+    "default": "SOLID",
+    "description": "Line style for border_preset and for borders sides given without a style.",
+    "enum": [
+      "SOLID",
+      "SOLID_MEDIUM",
+      "SOLID_THICK",
+      "DOUBLE",
+      "DASHED",
+      "DOTTED"
+    ],
+    "required": false,
+    "type": "string"
+  },
+  "borders": {
+    "description": "Per-side borders. Keys: top, bottom, left, right, inner_horizontal, inner_vertical. Values: a style (SOLID, SOLID_MEDIUM, SOLID_THICK, DOUBLE, DASHED, DOTTED, NONE) or {\"style\": \"SOLID_THICK\", \"color\": {\"red\": 0, \"green\": 0, \"blue\": 0}}.",
+    "required": false,
+    "type": "object"
+  },
+  "range": {
+    "description": "A1 range to border, e.g. A5:F20.",
+    "required": true,
+    "type": "string"
+  },
+  "sheet_id": {
+    "description": "Numeric Google sheetId (gid).",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_index": {
+    "description": "Zero-based tab index.",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_name": {
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
+    "required": false,
+    "type": "string"
+  },
+  "spreadsheet_id": {
+    "description": "Spreadsheet ID or full Google Sheets URL.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
+## `set_column_widths`
+
+Action slug: `set-column-widths`
+
+Price: `5` credits
+
+Set column widths in pixels and/or auto-fit columns to their contents. Provide column_widths, auto_fit, or both; explicit widths are applied after the auto-fit.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `auto_fit` | `boolean` | no | Resize columns to fit their contents. |
+| `column_widths` | `object` | no | Column letter or letter range mapped to width in pixels, e.g. {"A": 40, "B": 220, "C:F": 110}. Default Sheets width is 100. |
+| `range` | `string` | no | Columns to auto-fit, e.g. A:F. Omit to auto-fit every column on the tab. |
+| `sheet_id` | `integer` | no | Numeric Google sheetId (gid). |
+| `sheet_index` | `integer` | no | Zero-based tab index. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
+| `spreadsheet_id` | `string` | yes | Spreadsheet ID or full Google Sheets URL. |
+
+Sample parameters:
+
+```json
+{
+  "auto_fit": false,
+  "column_widths": {},
+  "range": "example range",
+  "sheet_id": 1,
+  "sheet_index": 1,
+  "sheet_name": "example sheet name",
+  "spreadsheet_id": "example spreadsheet id"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "auto_fit": {
+    "default": false,
+    "description": "Resize columns to fit their contents.",
+    "required": false,
+    "type": "boolean"
+  },
+  "column_widths": {
+    "description": "Column letter or letter range mapped to width in pixels, e.g. {\"A\": 40, \"B\": 220, \"C:F\": 110}. Default Sheets width is 100.",
+    "required": false,
+    "type": "object"
+  },
+  "range": {
+    "description": "Columns to auto-fit, e.g. A:F. Omit to auto-fit every column on the tab.",
+    "required": false,
+    "type": "string"
+  },
+  "sheet_id": {
+    "description": "Numeric Google sheetId (gid).",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_index": {
+    "description": "Zero-based tab index.",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_name": {
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
+    "required": false,
+    "type": "string"
+  },
+  "spreadsheet_id": {
+    "description": "Spreadsheet ID or full Google Sheets URL.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
 ## `set_data_validation`
 
 Action slug: `set-data-validation`
@@ -1178,7 +1995,7 @@ Parameters:
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `range` | `string` | yes | A1 range. |
-| `sheet_name` | `string` | no | Optional tab name. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 | `validation_rule` | `object` | yes | Sheets DataValidationRule object. |
 
@@ -1203,7 +2020,7 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "sheet_name": {
-    "description": "Optional tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -1216,6 +2033,215 @@ Generated JSON parameter schema:
     "description": "Sheets DataValidationRule object.",
     "required": true,
     "type": "object"
+  }
+}
+```
+
+## `set_gridlines`
+
+Action slug: `set-gridlines`
+
+Price: `5` credits
+
+Show or hide the gray cell gridlines on a tab.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `sheet_id` | `integer` | no | Numeric Google sheetId (gid). |
+| `sheet_index` | `integer` | no | Zero-based tab index. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
+| `show_gridlines` | `boolean` | yes | false hides gridlines; true shows them. |
+| `spreadsheet_id` | `string` | yes | Spreadsheet ID or full Google Sheets URL. |
+
+Sample parameters:
+
+```json
+{
+  "sheet_id": 1,
+  "sheet_index": 1,
+  "sheet_name": "example sheet name",
+  "show_gridlines": true,
+  "spreadsheet_id": "example spreadsheet id"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "sheet_id": {
+    "description": "Numeric Google sheetId (gid).",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_index": {
+    "description": "Zero-based tab index.",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_name": {
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
+    "required": false,
+    "type": "string"
+  },
+  "show_gridlines": {
+    "description": "false hides gridlines; true shows them.",
+    "required": true,
+    "type": "boolean"
+  },
+  "spreadsheet_id": {
+    "description": "Spreadsheet ID or full Google Sheets URL.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
+## `set_note`
+
+Action slug: `set-note`
+
+Price: `5` credits
+
+Set the same note on every cell in a bounded A1 cell or range.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `note` | `string` | yes | Note text to set; use delete_note to remove it. |
+| `range` | `string` | yes | A1 range using visible one-based worksheet row numbers; quote a tab name only inside a qualified range. |
+| `sheet_id` | `integer` | no | Numeric Google sheetId (gid). |
+| `sheet_index` | `integer` | no | Zero-based tab index. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
+| `spreadsheet_id` | `string` | yes | Spreadsheet ID or full Google Sheets URL. |
+
+Sample parameters:
+
+```json
+{
+  "note": "example note",
+  "range": "example range",
+  "sheet_id": 1,
+  "sheet_index": 1,
+  "sheet_name": "example sheet name",
+  "spreadsheet_id": "example spreadsheet id"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "note": {
+    "description": "Note text to set; use delete_note to remove it.",
+    "minLength": 1,
+    "required": true,
+    "type": "string"
+  },
+  "range": {
+    "description": "A1 range using visible one-based worksheet row numbers; quote a tab name only inside a qualified range.",
+    "required": true,
+    "type": "string"
+  },
+  "sheet_id": {
+    "description": "Numeric Google sheetId (gid).",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_index": {
+    "description": "Zero-based tab index.",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_name": {
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
+    "required": false,
+    "type": "string"
+  },
+  "spreadsheet_id": {
+    "description": "Spreadsheet ID or full Google Sheets URL.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
+## `set_row_heights`
+
+Action slug: `set-row-heights`
+
+Price: `5` credits
+
+Set row heights in pixels and/or auto-fit rows to their contents. Provide row_heights, auto_fit, or both; explicit heights are applied after the auto-fit.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `auto_fit` | `boolean` | no | Resize rows to fit their contents. |
+| `range` | `string` | no | Rows to auto-fit, e.g. 1:20. Omit to auto-fit every row on the tab. |
+| `row_heights` | `object` | no | One-based row number or row range mapped to height in pixels, e.g. {"1": 48, "2:30": 24}. Default Sheets height is 21. |
+| `sheet_id` | `integer` | no | Numeric Google sheetId (gid). |
+| `sheet_index` | `integer` | no | Zero-based tab index. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
+| `spreadsheet_id` | `string` | yes | Spreadsheet ID or full Google Sheets URL. |
+
+Sample parameters:
+
+```json
+{
+  "auto_fit": false,
+  "range": "example range",
+  "row_heights": {},
+  "sheet_id": 1,
+  "sheet_index": 1,
+  "sheet_name": "example sheet name",
+  "spreadsheet_id": "example spreadsheet id"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "auto_fit": {
+    "default": false,
+    "description": "Resize rows to fit their contents.",
+    "required": false,
+    "type": "boolean"
+  },
+  "range": {
+    "description": "Rows to auto-fit, e.g. 1:20. Omit to auto-fit every row on the tab.",
+    "required": false,
+    "type": "string"
+  },
+  "row_heights": {
+    "description": "One-based row number or row range mapped to height in pixels, e.g. {\"1\": 48, \"2:30\": 24}. Default Sheets height is 21.",
+    "required": false,
+    "type": "object"
+  },
+  "sheet_id": {
+    "description": "Numeric Google sheetId (gid).",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_index": {
+    "description": "Zero-based tab index.",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_name": {
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
+    "required": false,
+    "type": "string"
+  },
+  "spreadsheet_id": {
+    "description": "Spreadsheet ID or full Google Sheets URL.",
+    "required": true,
+    "type": "string"
   }
 }
 ```
@@ -1295,7 +2321,7 @@ Parameters:
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `range` | `string` | yes | A1 range to sort. |
-| `sheet_name` | `string` | no | Optional tab name when range is bare A1 notation. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `sort_specs` | `array` | yes | Sort specs with header/column_name or dimensionIndex and order/sortOrder. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 
@@ -1322,7 +2348,7 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "sheet_name": {
-    "description": "Optional tab name when range is bare A1 notation.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -1336,6 +2362,68 @@ Generated JSON parameter schema:
   },
   "spreadsheet_id": {
     "description": "Google spreadsheet id or URL.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
+## `unmerge_cells`
+
+Action slug: `unmerge-cells`
+
+Price: `5` credits
+
+Unmerge every merged area that lies within an A1 range.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `range` | `string` | yes | A1 range covering the merged cells, e.g. A1:F1. |
+| `sheet_id` | `integer` | no | Numeric Google sheetId (gid). |
+| `sheet_index` | `integer` | no | Zero-based tab index. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
+| `spreadsheet_id` | `string` | yes | Spreadsheet ID or full Google Sheets URL. |
+
+Sample parameters:
+
+```json
+{
+  "range": "example range",
+  "sheet_id": 1,
+  "sheet_index": 1,
+  "sheet_name": "example sheet name",
+  "spreadsheet_id": "example spreadsheet id"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "range": {
+    "description": "A1 range covering the merged cells, e.g. A1:F1.",
+    "required": true,
+    "type": "string"
+  },
+  "sheet_id": {
+    "description": "Numeric Google sheetId (gid).",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_index": {
+    "description": "Zero-based tab index.",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_name": {
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
+    "required": false,
+    "type": "string"
+  },
+  "spreadsheet_id": {
+    "description": "Spreadsheet ID or full Google Sheets URL.",
     "required": true,
     "type": "string"
   }
@@ -1389,7 +2477,7 @@ Action slug: `update-row`
 
 Price: `5` credits
 
-Update selected columns in a matched row using header names. Touches only requested cells.
+Update selected fields by header in a physical one-based row_number, or by a stable key; long-text exact matching is fragile.
 
 Parameters:
 
@@ -1398,8 +2486,8 @@ Parameters:
 | `key_column` | `string` | no | Header used to find the row when row_number is omitted. |
 | `key_value` | `string` | no | Value to match in key_column. |
 | `multi` | `boolean` | no | Allow all matching rows to update. |
-| `row_number` | `integer` | no | Optional one-based row number. |
-| `sheet_name` | `string` | no | Optional tab name. |
+| `row_number` | `integer` | no | Physical one-based row number from read.row_numbers; do not add 1 or 2. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
 | `spreadsheet_id` | `string` | yes | Google spreadsheet id or URL. |
 | `updates` | `object` | yes | Column patch keyed by header names. |
 
@@ -1437,13 +2525,13 @@ Generated JSON parameter schema:
     "type": "boolean"
   },
   "row_number": {
-    "description": "Optional one-based row number.",
+    "description": "Physical one-based row number from read.row_numbers; do not add 1 or 2.",
     "minimum": 1,
     "required": false,
     "type": "integer"
   },
   "sheet_name": {
-    "description": "Optional tab name.",
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
     "required": false,
     "type": "string"
   },
@@ -1456,6 +2544,94 @@ Generated JSON parameter schema:
     "description": "Column patch keyed by header names.",
     "required": true,
     "type": "object"
+  }
+}
+```
+
+## `write_range`
+
+Action slug: `write-range`
+
+Price: `5` credits
+
+Write values into exact cells, such as a title block or report layout. Refuses to replace cells that already hold data unless overwrite is true; grows the tab if values run past its grid.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `overwrite` | `boolean` | no | Allow replacing cells that already contain data. Without it the call fails and lists the occupied cells. |
+| `range` | `string` | yes | Top-left cell (e.g. B3) to size the write from values, or a bounded A1 range at least as large as values. A qualified range like 'Quote'!B3 selects the tab. |
+| `sheet_id` | `integer` | no | Numeric Google sheetId (gid). |
+| `sheet_index` | `integer` | no | Zero-based tab index. |
+| `sheet_name` | `string` | no | Exact tab title from list_sheets, without surrounding A1 quote marks. |
+| `spreadsheet_id` | `string` | yes | Spreadsheet ID or full Google Sheets URL. |
+| `values` | `array` | yes | Row arrays, e.g. [["Name", "Total"], ["Ada", 42]]. null leaves a cell unchanged; "" clears it. Entered as if typed, so formulas starting with = are evaluated. |
+
+Sample parameters:
+
+```json
+{
+  "overwrite": false,
+  "range": "example range",
+  "sheet_id": 1,
+  "sheet_index": 1,
+  "sheet_name": "example sheet name",
+  "spreadsheet_id": "example spreadsheet id",
+  "values": [
+    [
+      "example value"
+    ]
+  ]
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "overwrite": {
+    "default": false,
+    "description": "Allow replacing cells that already contain data. Without it the call fails and lists the occupied cells.",
+    "required": false,
+    "type": "boolean"
+  },
+  "range": {
+    "description": "Top-left cell (e.g. B3) to size the write from values, or a bounded A1 range at least as large as values. A qualified range like 'Quote'!B3 selects the tab.",
+    "required": true,
+    "type": "string"
+  },
+  "sheet_id": {
+    "description": "Numeric Google sheetId (gid).",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_index": {
+    "description": "Zero-based tab index.",
+    "required": false,
+    "type": "integer"
+  },
+  "sheet_name": {
+    "description": "Exact tab title from list_sheets, without surrounding A1 quote marks.",
+    "required": false,
+    "type": "string"
+  },
+  "spreadsheet_id": {
+    "description": "Spreadsheet ID or full Google Sheets URL.",
+    "required": true,
+    "type": "string"
+  },
+  "values": {
+    "description": "Row arrays, e.g. [[\"Name\", \"Total\"], [\"Ada\", 42]]. null leaves a cell unchanged; \"\" clears it. Entered as if typed, so formulas starting with = are evaluated.",
+    "items": {
+      "description": "One row of cell values.",
+      "items": {
+        "description": "Cell value: string, number, boolean, or null."
+      },
+      "type": "array"
+    },
+    "required": true,
+    "type": "array"
   }
 }
 ```

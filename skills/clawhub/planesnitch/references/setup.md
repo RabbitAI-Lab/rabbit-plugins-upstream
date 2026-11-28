@@ -11,7 +11,7 @@
 ```bash
 # grab the example config
 curl -sL \
-  https://raw.githubusercontent.com/psyb0t/docker-planesnitch/main/config.yaml.example \
+  https://raw.githubusercontent.com/psyb0t/docker-planesnitch/v1.9.2/config.yaml.example \
   -o config.yaml
 
 # edit config.yaml: locations, sources, watchlists, alerts, notifications
@@ -19,7 +19,7 @@ curl -sL \
 # run — without CSV watchlists
 docker run \
   -v ./config.yaml:/app/config.yaml:ro \
-  psyb0t/planesnitch
+  psyb0t/planesnitch:v1.9.2@sha256:aa34c3237d281f58e81b79773a7babf7a16695d79eb4a79b42255048fc6aa3f6
 
 # run — with CSV watchlists (military/gov/police tracking)
 mkdir -p csv
@@ -31,14 +31,14 @@ curl -sLo csv/plane-alert-pol.csv $BASE/plane-alert-pol.csv
 docker run \
   -v ./config.yaml:/app/config.yaml:ro \
   -v ./csv:/csv:ro \
-  psyb0t/planesnitch
+  psyb0t/planesnitch:v1.9.2@sha256:aa34c3237d281f58e81b79773a7babf7a16695d79eb4a79b42255048fc6aa3f6
 
 # full setup — CSV watchlists + persistent aircraft-type image cache
 docker run \
   -v ./config.yaml:/app/config.yaml:ro \
   -v ./csv:/csv:ro \
   -v ./images:/images \
-  psyb0t/planesnitch
+  psyb0t/planesnitch:v1.9.2@sha256:aa34c3237d281f58e81b79773a7babf7a16695d79eb4a79b42255048fc6aa3f6
 ```
 
 **Verify:** logs show `planesnitch starting`, `health endpoint listening on :8080`, and one `watchlist <name>: N aircraft loaded` line per `icao_csv` watchlist. Then `fetched N aircraft` lines start showing up every poll cycle.
@@ -48,7 +48,7 @@ docker run \
 ```yaml
 services:
   planesnitch:
-    image: psyb0t/planesnitch
+    image: psyb0t/planesnitch:v1.9.2@sha256:aa34c3237d281f58e81b79773a7babf7a16695d79eb4a79b42255048fc6aa3f6
     restart: unless-stopped
     volumes:
       - ./config.yaml:/app/config.yaml:ro
@@ -293,7 +293,7 @@ Webhook delivery is a JSON array POST per poll cycle, even for a single alert:
 ## Telegram Bot Setup
 
 1. Message [@BotFather](https://t.me/BotFather), send `/newbot`, get a token — that's `bot_token`.
-2. **Personal alerts:** send your bot a message first, then check `https://api.telegram.org/bot<TOKEN>/getUpdates` — your `chat_id` is in there.
+2. **Personal alerts:** send your bot a message first, then check `https://api.telegram.org/bot<TOKEN>/getUpdates`. Your `chat_id` is in there. That request sends the bot token to `api.telegram.org`, so make it only with your own bot's token.
 3. **Channel alerts:** add the bot as admin on the channel, post something, then check `getUpdates` for the channel ID (starts with `-100`).
 
 Multiple Telegram notification targets can use the same `bot_token` with different `chat_id`s to route different alerts to different chats/channels.

@@ -1,0 +1,153 @@
+{
+  "version": 1,
+  "skill": "bs-lavender-editorial-team-deck",
+  "pictures": [
+    {
+      "id": "bw-team-four-standing",
+      "kind": "scene",
+      "description": "Black-and-white studio photo of four smiling colleagues in dark knitwear and shirts standing close together against a plain grey backdrop, framed from the thighs up.",
+      "goodFor": [
+        "cover",
+        "team",
+        "closing"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 300296,
+      "sha256": "1fabc5788f5cd20cb9a83c7d0be0c786ec47737288a2b526825edbaaee1514ff",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lavender-editorial-team-deck/bw-team-four-standing-1fabc5788f5c.webp"
+    },
+    {
+      "id": "bw-meeting-table-discussion",
+      "kind": "scene",
+      "description": "Black-and-white photo of four colleagues talking around a light meeting table with notebooks, laptops, mugs and plants in a calm room with a window on the left.",
+      "goodFor": [
+        "overview",
+        "process",
+        "team",
+        "problem"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 248638,
+      "sha256": "d9a150e7c47102ad1217b17b7448f755b8792dd08381d9d5ea54103ece58b17c",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lavender-editorial-team-deck/bw-meeting-table-discussion-d9a150e7c471.webp"
+    },
+    {
+      "id": "bw-portrait-woman-gazing-left",
+      "kind": "portrait",
+      "description": "Black-and-white close portrait of a smiling woman with short tousled hair in a dark sweater gazing off to the left, placed right with open grey space on the left.",
+      "goodFor": [
+        "quote",
+        "team",
+        "section",
+        "cover"
+      ],
+      "reuse": "any-topic",
+      "width": 1536,
+      "height": 1024,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 113950,
+      "sha256": "1f27d462e206dacffee85b297624969d7e98d7f2c6ce6e976f04a102e83cf7d2",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lavender-editorial-team-deck/bw-portrait-woman-gazing-left-1f27d462e206.webp"
+    },
+    {
+      "id": "bw-portrait-woman-dark-blazer",
+      "kind": "portrait",
+      "description": "Black-and-white studio portrait of a woman with short natural curls in a dark blazer and white top looking off to the side against a plain grey backdrop, framed to the waist.",
+      "goodFor": [
+        "team",
+        "quote",
+        "contact"
+      ],
+      "reuse": "any-topic",
+      "width": 1086,
+      "height": 1448,
+      "orientation": "portrait",
+      "transparent": false,
+      "bytes": 208364,
+      "sha256": "7f19665f7f59cc6a9f51364b1332c7ec7be43aeb3ccd644f5a3ef6daf1d70631",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lavender-editorial-team-deck/bw-portrait-woman-dark-blazer-7f19665f7f59.webp"
+    },
+    {
+      "id": "bw-portrait-man-chore-jacket",
+      "kind": "portrait",
+      "description": "Black-and-white studio portrait of a smiling man with wavy hair in a dark chore jacket over a white shirt looking off to the side against a plain grey backdrop, framed to the waist.",
+      "goodFor": [
+        "team",
+        "quote",
+        "contact"
+      ],
+      "reuse": "any-topic",
+      "width": 1086,
+      "height": 1448,
+      "orientation": "portrait",
+      "transparent": false,
+      "bytes": 199786,
+      "sha256": "be103f50ff48a19eb220c232ca29f63e7aceca4d03fe552bd75aadb7075cd545",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lavender-editorial-team-deck/bw-portrait-man-chore-jacket-be103f50ff48.webp"
+    },
+    {
+      "id": "bw-portrait-woman-cardigan",
+      "kind": "portrait",
+      "description": "Black-and-white studio portrait of a smiling woman with shoulder-length hair in a dark cardigan and white blouse facing the camera against a plain grey backdrop, framed to the waist.",
+      "goodFor": [
+        "team",
+        "quote",
+        "contact"
+      ],
+      "reuse": "any-topic",
+      "width": 1086,
+      "height": 1448,
+      "orientation": "portrait",
+      "transparent": false,
+      "bytes": 275632,
+      "sha256": "b57a73695b676e5991a9bb07d54ce73d72b24a567c231e5bc8f76d58f50128ad",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lavender-editorial-team-deck/bw-portrait-woman-cardigan-b57a73695b67.webp"
+    },
+    {
+      "id": "bw-portrait-man-crew-sweater",
+      "kind": "portrait",
+      "description": "Black-and-white studio portrait of a smiling man with curly hair and stubble in a dark crew-neck sweater against a plain grey backdrop, framed to the waist.",
+      "goodFor": [
+        "team",
+        "quote",
+        "contact"
+      ],
+      "reuse": "any-topic",
+      "width": 1086,
+      "height": 1448,
+      "orientation": "portrait",
+      "transparent": false,
+      "bytes": 238164,
+      "sha256": "e930e7cdd4e43f23405b99a98b113f56951df3e70bb09e7fe611d8c58ca78dbe",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lavender-editorial-team-deck/bw-portrait-man-crew-sweater-e930e7cdd4e4.webp"
+    },
+    {
+      "id": "bw-portrait-woman-seated-listening",
+      "kind": "portrait",
+      "description": "Black-and-white candid portrait of a seated woman with long curly hair in a dark blouse smiling and listening with clasped hands, a blurred figure at the right edge.",
+      "goodFor": [
+        "quote",
+        "closing",
+        "team",
+        "contact"
+      ],
+      "reuse": "any-topic",
+      "width": 1086,
+      "height": 1448,
+      "orientation": "portrait",
+      "transparent": false,
+      "bytes": 208010,
+      "sha256": "923717b05a955efc5bc4181af14b3828284999f950c579290e6acc4beeabf150",
+      "url": "https://media.skillry.dev/skill-image-library/bs-lavender-editorial-team-deck/bw-portrait-woman-seated-listening-923717b05a95.webp"
+    }
+  ]
+}

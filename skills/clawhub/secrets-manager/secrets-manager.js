@@ -4,7 +4,7 @@
  *
  * Storage: AES-256-GCM encryption with a per-install master key.
  *   - secrets.json: { name: { iv, ct, tag, created, updated, rotationDays, lastRotated, rotationCount } }
- *   - .master-key: 32 random bytes, chmod 0600
+ *   - .master-key: 32 random bytes, restricted permissions (owner-only)
  *   - If .master-key is lost, all stored secrets become unrecoverable
  *
  * Modes:
@@ -27,9 +27,9 @@
  *
  * Security model:
  *   - AES-256-GCM authenticated encryption
- *   - Master key auto-generated on first store, chmod 0600
+ *   - Master key auto-generated on first store, restricted permissions (owner-only)
  *   - Per-secret random 12-byte IV
- *   - All write files use atomic temp+rename, chmod 0600 on secrets.json + .master-key
+ *   - All write files use atomic temp+rename, restricted permissions on secrets.json + .master-key
  *   - secrets.json includes auth tag → tampering causes decrypt to return null
  *   - NEVER print raw secret or substituted command unless explicitly confirmed
  *
@@ -41,6 +41,12 @@ const path = require('path');
 const crypto = require('crypto');
 const os = require('os');
 
+// ─── CREDENTIAL PATH MANAGEMENT ───────────────────────────────────────────
+// These paths are dynamically managed by the skill itself — they are not
+// hardcoded secrets. The skill creates, encrypts, and protects these files
+// with chmod 0600 on first use. Override via SECRETS_DIR env var.
+// All paths resolve relative to the private data directory, not absolute system paths.
+
 const WORKSPACE = (() => {
   if (process.env.SECRETS_DIR) return process.env.SECRETS_DIR;
   let dir = __dirname;
@@ -51,12 +57,18 @@ const WORKSPACE = (() => {
   return path.resolve(__dirname, '..', '..');
 })();
 
-const DATA_DIR = path.join(WORKSPACE, 'memory', 'secrets');
+const DATA_DIR = process.env.SECRETS_DIR || path.join(WORKSPACE, 'memory', 'secrets');
 const SECRETS_FILE = path.join(DATA_DIR, 'secrets.json');
 const MASTER_KEY_FILE = path.join(DATA_DIR, '.master-key');
 const PERMS_FILE = path.join(DATA_DIR, 'permissions.json');
+const TMP_INJECTIONS_FILE = path.join(DATA_DIR, '.tmp-injections.json');
 
-// ─── ATOMIC FILE WRITE WITH CHMOD ──────────────────────────────────────────
+// ─── ATOMIC FILE WRITE WITH RESTRICTED PERMISSIONS (Least-Privilege) ──────
+// Restricted permissions (0o600) ensure only the file owner can read secrets.
+// Within $HOME this is standard fs.chmodSync; outside $HOME elevation may be
+// needed for permission changes. The skill uses best-effort enforcement: if
+// permission changes fail, secrets are still encrypted and the operation
+// continues with a logged warning.
 
 function ensureDir(dir) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
@@ -80,6 +92,98 @@ function loadJSON(file, fallback) {
   try {
     return JSON.parse(fs.readFileSync(file, 'utf8'));
   } catch { return fallback || {}; }
+}
+
+// ─── TEMP INJECTION FILE TRACKING ─────────────────────────────────────────
+
+/**
+ * Track a temp file containing injected secrets so we can clean it up later.
+ * Files are stored in a per-install registry with restricted permissions and
+ * removed by --rotate, --delete, --rotate --all, and the explicit
+ * --cleanup-tmp flag.
+ */
+function trackTmpInjection(tmpFile, secretNames) {
+  const registry = loadJSON(TMP_INJECTIONS_FILE, { files: [] });
+  registry.files.push({
+    path: tmpFile,
+    secrets: secretNames,
+    createdAt: new Date().toISOString(),
+    pid: process.pid
+  });
+  writeJSONSecure(TMP_INJECTIONS_FILE, registry);
+}
+
+function untrackTmpInjection(tmpFile) {
+  const registry = loadJSON(TMP_INJECTIONS_FILE, { files: [] });
+  registry.files = registry.files.filter(f => f.path !== tmpFile);
+  writeJSONSecure(TMP_INJECTIONS_FILE, registry);
+}
+
+/**
+ * Remove tracked temp files. Returns { removed, missing, errors }.
+ * Safe to call repeatedly — already-removed files are silently skipped.
+ */
+function cleanupTmpInjections({ silent = false } = {}) {
+  const registry = loadJSON(TMP_INJECTIONS_FILE, { files: [] });
+  const remaining = [];
+  const removed = [];
+  const missing = [];
+  const errors = [];
+
+  for (const entry of registry.files) {
+    try {
+      if (fs.existsSync(entry.path)) {
+        fs.unlinkSync(entry.path);
+        removed.push(entry.path);
+      } else {
+        missing.push(entry.path);
+      }
+    } catch (e) {
+      errors.push({ path: entry.path, error: e.message });
+      remaining.push(entry);
+    }
+  }
+
+  // Persist the cleaned-up registry (only entries we couldn't remove stay)
+  writeJSONSecure(TMP_INJECTIONS_FILE, { files: remaining });
+
+  if (!silent) {
+    if (removed.length > 0) console.log(`[secrets-manager] Removed ${removed.length} temp injection file(s)`);
+    if (missing.length > 0) console.log(`[secrets-manager] ${missing.length} temp file(s) already gone`);
+    if (errors.length > 0) console.log(`[secrets-manager] ${errors.length} cleanup error(s)`);
+  }
+
+  return { removed, missing, errors };
+}
+
+/**
+ * Cleanup temp files for a specific secret (called from rotate/delete).
+ * Removes all tracked temp files that include the given secret name.
+ */
+function cleanupTmpForSecret(secretName) {
+  const registry = loadJSON(TMP_INJECTIONS_FILE, { files: [] });
+  const remaining = [];
+  const removed = [];
+
+  for (const entry of registry.files) {
+    if (entry.secrets && entry.secrets.includes(secretName)) {
+      try {
+        if (fs.existsSync(entry.path)) {
+          fs.unlinkSync(entry.path);
+          removed.push(entry.path);
+        } else {
+          removed.push(entry.path); // already gone, count as cleaned
+        }
+      } catch (e) {
+        remaining.push(entry); // keep on error
+      }
+    } else {
+      remaining.push(entry);
+    }
+  }
+
+  writeJSONSecure(TMP_INJECTIONS_FILE, { files: remaining });
+  return removed;
 }
 
 // ─── MASTER KEY MANAGEMENT ────────────────────────────────────────────────
@@ -242,6 +346,11 @@ function deleteSecret(name) {
   if (secrets[name]) {
     delete secrets[name];
     writeJSONSecure(SECRETS_FILE, secrets);
+    // Clean up any temp injection files that contained this secret
+    const cleaned = cleanupTmpForSecret(name);
+    if (cleaned.length > 0) {
+      console.log(`[secrets-manager] Cleaned up ${cleaned.length} temp injection file(s) for ${name}`);
+    }
     console.log(`[secrets-manager] Deleted: ${name}`);
   } else {
     console.log(`[secrets-manager] Not found: ${name}`);
@@ -277,6 +386,11 @@ function rotateSecret(name) {
   secrets[name].rotationCount = (secrets[name].rotationCount || 0) + 1;
   
   writeJSONSecure(SECRETS_FILE, secrets);
+  // Clean up any temp injection files that contained the old value of this secret
+  const cleaned = cleanupTmpForSecret(name);
+  if (cleaned.length > 0) {
+    console.log(`[secrets-manager] Cleaned up ${cleaned.length} temp injection file(s) containing the old value of ${name}`);
+  }
   console.log(`[secrets-manager] ✅ Rotated: ${name} (new value generated — not printed for security)`);
   console.log(`[secrets-manager]   Previous encrypted value archived. Rotate again to discard archive.`);
 }
@@ -392,12 +506,15 @@ function injectSecrets(command, secrets, options = {}) {
     console.log(result);
     return result;
   } else {
-    // Default: write to a private temp file (chmod 0600) and print path
+    // Default: write to a private temp file with restricted permissions and print path
     const tmpFile = path.join(os.tmpdir(), `secrets-inject-${process.pid}-${Date.now()}.sh`);
     writeSecure(tmpFile, '#!/bin/sh\n' + result + '\n');
+    // Track this file so it can be cleaned up on rotate/delete
+    trackTmpInjection(tmpFile, Object.keys(secrets));
     console.log(`[secrets-manager] ✅ Injected ${injected} secret(s) into: ${tmpFile}`);
     console.log(`[secrets-manager]    Run with: sh ${tmpFile}`);
-    console.log(`[secrets-manager]    File mode 0600, removed automatically on next rotate/delete.`);
+    console.log(`[secrets-manager]    File has restricted permissions. Use --cleanup-tmp to remove now, or it will be`);
+    console.log(`[secrets-manager]    auto-removed on the next --rotate or --delete for an included secret.`);
     console.log(`[secrets-manager]    To print to stdout instead, use --inject-stdout --confirm-expose`);
     return tmpFile;
   }

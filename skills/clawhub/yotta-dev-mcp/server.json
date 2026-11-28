@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.YottaMeta/yotta-dev-mcp",
+  "title": "YuanKai (yotta-dev-mcp)",
+  "description": "Local dev tools over stdio MCP: repo map, impact analysis, verification and release checks.",
+  "repository": {
+    "url": "https://github.com/YottaMeta/yotta-dev-mcp",
+    "source": "github"
+  },
+  "version": "0.2.10",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@yottameta/yotta-dev-mcp",
+      "version": "0.2.10",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

@@ -10,15 +10,24 @@ import os
 import sys
 import re
 import glob
+import json
 import shutil
+import stat
 import subprocess
+import tempfile
 import argparse
 import html as _html_lib
 from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
 
-from manifest import validate_for_merge
+from manifest import (chunk_file_name, chunk_id_from_file_name, list_chunk_files, load_manifest,
+                      nth_chunk_id, read_output_text, validate_for_merge)
+from convert import _fenced_code_line_indices, check_cover_file, load_stored_request
+
+if os.name == "nt":
+    sys.exit("translate-book runs on macOS and Linux only. "
+             "On Windows, run it in WSL (Windows Subsystem for Linux).")
 
 
 # =============================================================================
@@ -94,9 +103,7 @@ def _validate_chunk_images(temp_dir):
     """
     temp_path = Path(temp_dir)
     errors = []
-    for src_chunk in sorted(temp_path.glob('chunk*.md')):
-        if src_chunk.name.startswith('output_'):
-            continue
+    for src_chunk in (temp_path / name for name in list_chunk_files(temp_dir)):
         out_chunk = temp_path / f'output_{src_chunk.name}'
         if not out_chunk.exists():
             continue  # missing-output is the manifest validator's job
@@ -134,6 +141,120 @@ def _validate_chunk_images(temp_dir):
 
     if errors:
         print("\n=== Image validation failed ===")
+        for e in errors:
+            print(e)
+            print()
+        return False
+    return True
+
+
+# Pandoc footnote labels cannot contain whitespace, ^, [ or ]; this also keeps
+# `[^1^]` pseudo-footnotes from older conversions out of the comparison.
+_FOOTNOTE_LABEL_RE = re.compile(r'\[\^([^\]\s^\[]+)\]')
+
+
+def _scan_footnote_labels(text):
+    """Return (Counter of reference labels, Counter of definition labels)."""
+    refs, defs = Counter(), Counter()
+    for m in _FOOTNOTE_LABEL_RE.finditer(text):
+        line_start = text.rfind('\n', 0, m.start()) + 1
+        indent = text[line_start:m.start()]
+        is_definition = len(indent) <= 3 and not indent.strip() and text.startswith(':', m.end())
+        (defs if is_definition else refs)[m.group(1)] += 1
+    return refs, defs
+
+
+def _validate_chunk_footnotes(temp_dir):
+    """Verify each output_chunk*.md keeps the footnote labels of its chunk*.md.
+
+    A dropped or renumbered `[^N]` / `[^N]:` leaves a dangling reference or an
+    orphaned note in the merged book. Returns False on any divergence and
+    prints every error at once.
+    """
+    temp_path = Path(temp_dir)
+    errors = []
+    for src_chunk in (temp_path / name for name in list_chunk_files(temp_dir)):
+        out_chunk = temp_path / f'output_{src_chunk.name}'
+        if not out_chunk.exists():
+            continue
+        src_text = read_output_text(src_chunk)
+        out_text = read_output_text(out_chunk)
+        if src_text is None or out_text is None:
+            continue  # unreadable files are the manifest validator's job
+        src_refs, src_defs = _scan_footnote_labels(src_text)
+        out_refs, out_defs = _scan_footnote_labels(out_text)
+        if src_refs != out_refs or src_defs != out_defs:
+            errors.append(
+                f"ERROR: {out_chunk.name} footnote markers diverge from {src_chunk.name}\n"
+                f"  missing references [^N] (count): {sorted((src_refs - out_refs).items()) or 'none'}\n"
+                f"  extra   references [^N] (count): {sorted((out_refs - src_refs).items()) or 'none'}\n"
+                f"  missing definitions [^N]: (count): {sorted((src_defs - out_defs).items()) or 'none'}\n"
+                f"  extra   definitions [^N]: (count): {sorted((out_defs - src_defs).items()) or 'none'}\n"
+                f"  fix: in {out_chunk.name}, restore every footnote marker exactly as in {src_chunk.name}; "
+                f"translate only the note text"
+            )
+
+    if errors:
+        print("\n=== Footnote validation failed ===")
+        for e in errors:
+            print(e)
+            print()
+        return False
+    return True
+
+
+# Figure text from figure_text.py is a pandoc fenced div. A dropped closing `:::`
+# pulls the rest of the book into the div; an altered opening line prints as text.
+_FIGURE_TEXT_OPEN_RE = re.compile(r'^:{3,}\s*\{\.figure-text\b')
+_FENCE_CLOSE_RE = re.compile(r'^:{3,}$')
+
+
+def _scan_figure_text(text):
+    """Return (Counter of figure-text opening lines, number of them left unclosed)."""
+    openers = Counter()
+    unclosed = 0
+    inside = False
+    for line in text.split('\n'):
+        stripped = line.strip()
+        if _FIGURE_TEXT_OPEN_RE.match(stripped):
+            openers[stripped] += 1
+            unclosed += inside
+            inside = True
+        elif inside and _FENCE_CLOSE_RE.match(stripped):
+            inside = False
+    return openers, unclosed + inside
+
+
+def _validate_chunk_figure_text(temp_dir):
+    """Verify each output_chunk*.md keeps the figure-text blocks of its chunk*.md.
+
+    Returns False on any divergence and prints every error at once.
+    """
+    temp_path = Path(temp_dir)
+    errors = []
+    for src_chunk in (temp_path / name for name in list_chunk_files(temp_dir)):
+        out_chunk = temp_path / f'output_{src_chunk.name}'
+        if not out_chunk.exists():
+            continue
+        src_text = read_output_text(src_chunk)
+        out_text = read_output_text(out_chunk)
+        if src_text is None or out_text is None:
+            continue  # unreadable files are the manifest validator's job
+        src_open, _ = _scan_figure_text(src_text)
+        out_open, out_unclosed = _scan_figure_text(out_text)
+        if src_open != out_open or out_unclosed:
+            errors.append(
+                f"ERROR: {out_chunk.name} figure-text blocks diverge from {src_chunk.name}\n"
+                f"  missing opening lines (count): {sorted((src_open - out_open).items()) or 'none'}\n"
+                f"  extra   opening lines (count): {sorted((out_open - src_open).items()) or 'none'}\n"
+                f"  blocks without a closing ::: line: {out_unclosed}\n"
+                f"  fix: in {out_chunk.name}, copy each `::: {{.figure-text ...}}` line and the `:::` line "
+                f"closing it unchanged from {src_chunk.name}; translate only the list items between them. "
+                f"If the chunk was translated before figure text was injected, translate it again"
+            )
+
+    if errors:
+        print("\n=== Figure text validation failed ===")
         for e in errors:
             print(e)
             print()
@@ -249,10 +370,44 @@ _DEFAULT_LANG_CONFIG = {
     'pdf_font': 'Georgia',
 }
 
+# A BCP 47 language tag such as it, pt-BR or zh-Hant-TW.
+_LANG_TAG_RE = re.compile(r'[A-Za-z]{2,3}(?:-[A-Za-z0-9]{1,8})*')
+
+
+def _is_traditional_chinese(tag):
+    """Whether a zh tag asks for Traditional Chinese.
+
+    A script subtag decides: Hant is Traditional, Hans is Simplified. Without
+    one, Taiwan, Hong Kong and Macau mean Traditional.
+    """
+    subtags = [s.lower() for s in tag.split('-')[1:]]
+    scripts = [s for s in subtags if len(s) == 4 and s.isalpha()]
+    if scripts:
+        return scripts[0] == 'hant'
+    return any(s in ('tw', 'hk', 'mo') for s in subtags)
+
 
 def get_lang_config(lang_code):
-    """Get language config, falling back to defaults for unknown languages."""
-    return LANG_CONFIG.get(lang_code, _DEFAULT_LANG_CONFIG)
+    """Get language config for a language tag, such as it, pt-BR or zh-TW.
+
+    The tag becomes lang_attr as given, with an underscore read as a hyphen.
+    Fonts and the TOC label come from the table entry for its primary subtag
+    (zh for zh-TW), or from the defaults when there is none; Traditional
+    Chinese gets its own TOC label. A bare code that is in the table keeps
+    its entry's lang_attr, so zh is written as zh-CN.
+    """
+    tag = (lang_code or '').strip().replace('_', '-')
+    if not _LANG_TAG_RE.fullmatch(tag):
+        print(f"Warning: '{lang_code}' is not a language code such as it, pt-BR or zh-TW; "
+              f"marking the book as {_DEFAULT_LANG_CONFIG['lang_attr']}")
+        return _DEFAULT_LANG_CONFIG
+    primary = tag.split('-')[0].lower()
+    if tag.lower() == primary and primary in LANG_CONFIG:
+        return LANG_CONFIG[primary]
+    cfg = {**LANG_CONFIG.get(primary, _DEFAULT_LANG_CONFIG), 'lang_attr': tag}
+    if primary == 'zh' and _is_traditional_chinese(tag):
+        cfg['toc_label'] = '目錄'
+    return cfg
 
 
 def load_config(temp_dir):
@@ -265,15 +420,80 @@ def load_config(temp_dir):
     config = {}
     with open(config_file, 'r', encoding='utf-8') as f:
         for line in f:
-            if '=' in line and not line.strip().startswith('#'):
-                key, value = line.strip().split('=', 1)
-                config[key] = value
+            line = line.rstrip('\r\n')
+            if '=' in line and not line.lstrip().startswith('#'):
+                key, value = line.split('=', 1)
+                config[key.strip()] = value
     return config
+
+
+# SKILL.md's build command takes no book text: the agent writes the translated
+# title, the export name and an author override to these files instead.
+TITLE_FILE = 'title.txt'
+EXPORT_NAME_FILE = 'export_name.txt'
+AUTHOR_FILE = 'author.txt'
+
+
+def read_name_file(temp_dir, name):
+    """The text of <temp_dir>/<name> with surrounding whitespace removed, or None
+    when the file is missing or blank. Raises ValueError for text that is not UTF-8.
+    newline='' keeps a carriage return inside the text, as --delete-outputs reads it."""
+    try:
+        with open(os.path.join(temp_dir, name), 'r', encoding='utf-8', newline='') as f:
+            text = f.read().strip()
+    except FileNotFoundError:
+        return None
+    except UnicodeDecodeError:
+        raise ValueError(f"{name} in {temp_dir} is not UTF-8 text") from None
+    return text or None
+
+
+def stored_request_cover(temp_dir):
+    """The cover image named in the request convert.py stored in temp_dir, or None.
+    Raises ValueError when request.json is not one convert.py stored, or the
+    image it names is gone."""
+    try:
+        request = load_stored_request(temp_dir)
+    except ValueError as e:
+        raise ValueError(f"{e}. Rename or move it; the conversion step stores the request "
+                         f"again") from None
+    if request is None or request["cover"] is None:
+        return None
+    try:
+        return check_cover_file(request["cover"])
+    except ValueError as e:
+        raise ValueError(f"{e}, the cover that request.json names. Run the conversion step "
+                         f"again with the cover's current path, or with cover null") from None
 
 
 def natural_sort_key(text):
     """Natural sorting key for filenames with numbers"""
     return [int(t) if t.isdigit() else t.lower() for t in re.split(r'(\d+)', text)]
+
+
+# An ATX heading as pandoc reads it: no indent, and a space or the line end after
+# the #s, so `#hashtag` is text.
+_ATX_HEADING_RE = re.compile(r'^#+(?:[ \t]|$)')
+
+
+def heading_outline(temp_dir):
+    """List the headings of the output chunks in book order, as `file:line: heading`.
+
+    Lines in fenced code are skipped: a `# comment` there is code, not a heading.
+    """
+    rows = []
+    paths = [os.path.join(temp_dir, name) for name in list_chunk_files(temp_dir, 'output')]
+    for path in paths:
+        text = read_output_text(path)
+        if text is None:
+            continue
+        lines = text.split('\n')
+        code = _fenced_code_line_indices(lines)
+        name = os.path.basename(path)
+        rows.extend(f"{name}:{i + 1}: {line.rstrip()}"
+                    for i, line in enumerate(lines)
+                    if i not in code and _ATX_HEADING_RE.match(line))
+    return rows
 
 
 # =============================================================================
@@ -289,10 +509,13 @@ def merge_markdown_files(temp_dir):
     # Always validate manifest, even if output.md exists (catch stale/corrupt outputs)
     ok, ordered_files, warnings = validate_for_merge(temp_dir)
 
-    # Image structure validation runs unconditionally — bad chunks invalidate any cached output.md
-    if not _validate_chunk_images(temp_dir):
+    # Image, footnote and figure-text validation run unconditionally — bad chunks invalidate any cached output.md
+    images_ok = _validate_chunk_images(temp_dir)
+    footnotes_ok = _validate_chunk_footnotes(temp_dir)
+    figure_text_ok = _validate_chunk_figure_text(temp_dir)
+    if not (images_ok and footnotes_ok and figure_text_ok):
         if os.path.exists(output_md):
-            print("Removing stale output.md (built from chunks that failed image validation)")
+            print("Removing stale output.md (built from chunks that failed validation)")
             os.remove(output_md)
         return False
 
@@ -325,34 +548,30 @@ def merge_markdown_files(temp_dir):
         print(f"Merging {len(ordered_files)} translated files (manifest-ordered)")
         merged_content = ""
         for file_path in ordered_files:
-            try:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    content = f.read().strip()
-                if content:
-                    merged_content += content + "\n\n"
-            except Exception as e:
-                print(f"Error reading {os.path.basename(file_path)}: {e}")
+            content = read_output_text(file_path)
+            if content is None:
+                print(f"ERROR: Cannot read {os.path.basename(file_path)} — aborting merge")
+                return False
+            content = content.strip()
+            if not content:
+                # validate_for_merge already rejects blank outputs; this is a
+                # last line of defense so a chunk can never vanish silently.
+                print(f"ERROR: Blank output {os.path.basename(file_path)} — aborting merge")
+                return False
+            merged_content += content + "\n\n"
     else:
         # Legacy fallback: glob-based merge (no manifest)
         print("WARNING: No manifest.json found — using legacy glob-based merge.")
         print("  For hash validation, re-run convert.py to generate manifest.json")
 
-        # Match chunk output files
-        output_files = glob.glob(os.path.join(temp_dir, 'output_chunk*.md'))
-
-        # Count original source files
-        original_files = glob.glob(os.path.join(temp_dir, 'chunk*.md'))
-        original_files = [f for f in original_files if not os.path.basename(f).startswith('output_')]
+        output_files = [os.path.join(temp_dir, name) for name in list_chunk_files(temp_dir, 'output')]
+        source_basenames = list_chunk_files(temp_dir)
 
         if not output_files:
             print("Error: No translated markdown files found.")
             return False
 
-        # Build expected output filename for each source file and verify 1:1 match
-        source_basenames = sorted(
-            [os.path.basename(f) for f in original_files],
-            key=natural_sort_key
-        )
+        # Verify a 1:1 match between source chunks and outputs
         expected_outputs = set(f"output_{name}" for name in source_basenames)
         actual_outputs = set(os.path.basename(f) for f in output_files)
 
@@ -366,10 +585,17 @@ def merge_markdown_files(temp_dir):
                 print(f"ERROR: Orphaned outputs (no matching source): {', '.join(sorted(orphaned, key=natural_sort_key))}")
             return False
 
-        # Verify no empty output files
+        # Verify no empty, unreadable, or whitespace-only output files
         for fp in output_files:
             if os.path.getsize(fp) == 0:
                 print(f"ERROR: Empty output file: {os.path.basename(fp)}")
+                return False
+            text = read_output_text(fp)
+            if text is None:
+                print(f"ERROR: Unreadable output file: {os.path.basename(fp)}")
+                return False
+            if not text.strip():
+                print(f"ERROR: Blank output file: {os.path.basename(fp)}")
                 return False
 
         # Use source order to determine merge order (via expected output names)
@@ -381,13 +607,15 @@ def merge_markdown_files(temp_dir):
 
         merged_content = ""
         for file_path in output_files:
-            try:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    content = f.read().strip()
-                if content:
-                    merged_content += content + "\n\n"
-            except Exception as e:
-                print(f"Error reading {os.path.basename(file_path)}: {e}")
+            content = read_output_text(file_path)
+            if content is None:
+                print(f"ERROR: Cannot read {os.path.basename(file_path)} — aborting merge")
+                return False
+            content = content.strip()
+            if not content:
+                print(f"ERROR: Blank output {os.path.basename(file_path)} — aborting merge")
+                return False
+            merged_content += content + "\n\n"
 
     try:
         with open(output_md, 'w', encoding='utf-8') as f:
@@ -403,6 +631,9 @@ def merge_markdown_files(temp_dir):
 # =============================================================================
 # Step 5: Convert markdown to HTML
 # =============================================================================
+
+_TEX_MATH_WARNING_RE = re.compile(r'Could not convert TeX math (.*?), rendering as TeX', re.DOTALL)
+
 
 def check_pandoc_available():
     """Check if pandoc is available"""
@@ -420,13 +651,26 @@ def convert_with_pandoc(md_file, html_file, title, lang_attr):
         '--standalone',
         '--metadata', f'title={title}',
         '--metadata', f'lang={lang_attr}',
-        '--from', 'markdown+smart+east_asian_line_breaks',
-        '--to', 'html5'
+        # ascii_identifiers: heading ids such as `section-1` instead of
+        # `第一章-掉进兔子洞`. Calibre drops non-ASCII anchors from its TOC
+        # entries when it splits the book, so every entry pointed at the
+        # first file.
+        '--from', 'markdown+smart+east_asian_line_breaks+ascii_identifiers',
+        '--to', 'html5',
+        # Without this, pandoc emits any TeX it cannot approximate in plain
+        # HTML (fractions, roots, display math) as raw `$...$` text.
+        '--mathml'
     ]
 
     try:
-        subprocess.run(cmd, capture_output=True, text=True, check=True)
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         print("Converted with pandoc")
+        unconverted = _TEX_MATH_WARNING_RE.findall(result.stderr)
+        if unconverted:
+            print(f"Warning: pandoc left {len(unconverted)} formula(s) as raw TeX instead of MathML:")
+            for tex in unconverted[:5]:
+                tex = ' '.join(tex.split())
+                print(f"  {tex[:70]}{'...' if len(tex) > 70 else ''}")
         return True
     except subprocess.CalledProcessError as e:
         print(f"Pandoc conversion failed: {e.stderr}")
@@ -442,7 +686,7 @@ def convert_with_python_markdown(md_file, html_file, title):
         with open(md_file, 'r', encoding='utf-8') as f:
             md_content = f.read()
 
-        extensions = ['toc', 'tables', 'fenced_code', 'codehilite', 'nl2br']
+        extensions = ['toc', 'tables', 'fenced_code', 'codehilite', 'nl2br', 'footnotes']
         md = markdown.Markdown(extensions=extensions)
         html_content = md.convert(md_content)
 
@@ -564,28 +808,38 @@ def apply_template_to_html(html_content, template_file, output_file, title, lang
             template_content = f.read()
 
         if '$body$' in template_content:
-            full_html = template_content.replace('$body$', html_content)
+            parts, body = template_content.split('$body$'), html_content
         elif '{{content}}' in template_content:
-            full_html = template_content.replace('{{content}}', html_content)
+            parts, body = template_content.split('{{content}}'), html_content
         else:
             if '</body>' in template_content:
-                full_html = template_content.replace('</body>', f'{html_content}\n</body>')
+                parts, body = template_content.split('</body>'), f'{html_content}\n</body>'
             else:
-                full_html = template_content + html_content
+                parts, body = [template_content, ''], html_content
 
-        # Replace all template placeholders
-        full_html = full_html.replace('$title$', title)
-        full_html = full_html.replace('$lang$', lang_cfg['lang_attr'])
-        full_html = full_html.replace('$body_font$', lang_cfg['font_family'])
-        full_html = full_html.replace('$toc_label$', lang_cfg['toc_label'])
+        # Fill in the template around the body, all placeholders in one pass:
+        # the body and the title come from the book, and a $title$ or $lang$
+        # written in them must come through as written.
+        fields = {
+            'title': _html_lib.escape(title),
+            'lang': lang_cfg['lang_attr'],
+            'body_font': lang_cfg['font_family'],
+            'toc_label': lang_cfg['toc_label'],
+        }
+        full_html = body.join(
+            re.sub(r'\$(title|lang|body_font|toc_label)\$', lambda m: fields[m.group(1)], part)
+            for part in parts
+        )
 
         # Inject author meta tag into <head> so calibre_html_publish.py can extract it
         if author:
-            author_meta = f'<meta name="author" content="{author}">'
+            author_meta = f'<meta name="author" content="{_html_lib.escape(author)}">'
             if '<head>' in full_html or '<head ' in full_html:
+                # A function, not a replacement string: re.sub would read a
+                # backslash in the name as an escape or a group reference.
                 full_html = re.sub(
                     r'(<head[^>]*>)',
-                    r'\1\n    ' + author_meta,
+                    lambda m: m.group(1) + '\n    ' + author_meta,
                     full_html,
                     count=1,
                     flags=re.IGNORECASE
@@ -863,9 +1117,13 @@ def add_toc(temp_dir):
 # Step 7: Generate DOCX/EPUB/PDF with error transparency
 # =============================================================================
 
-def generate_format(html_file, temp_dir, output_ext, lang_attr):
+def generate_format(html_file, temp_dir, output_ext, lang_attr, cover=None):
     """Generate a specific format using calibre_html_publish.py"""
     output_file = os.path.join(temp_dir, f"book{output_ext}")
+    cover = cover if output_ext == '.epub' else None
+    if cover and not os.path.isfile(cover):
+        print(f"Cover image not found: {cover}")
+        return None
 
     if os.path.exists(output_file):
         output_mtime = os.path.getmtime(output_file)
@@ -883,7 +1141,9 @@ def generate_format(html_file, temp_dir, output_ext, lang_attr):
                     images_newer = True
                     break
 
-        if not html_newer and not images_newer:
+        cover_newer = bool(cover and os.path.getmtime(cover) > output_mtime)
+
+        if not html_newer and not images_newer and not cover_newer:
             file_size = os.path.getsize(output_file)
             print(f"Skipping {output_ext} - already exists and up to date ({file_size:,} bytes)")
             return output_file
@@ -893,6 +1153,8 @@ def generate_format(html_file, temp_dir, output_ext, lang_attr):
                 reasons.append("source HTML changed")
             if images_newer:
                 reasons.append("image assets changed")
+            if cover_newer:
+                reasons.append("cover image changed")
             print(f"Rebuilding {output_ext} - {', '.join(reasons)}")
 
     publish_script = os.path.join(SCRIPT_DIR, "calibre_html_publish.py")
@@ -902,6 +1164,8 @@ def generate_format(html_file, temp_dir, output_ext, lang_attr):
 
     try:
         cmd = ["python3", publish_script, html_file, "-o", output_file, "--lang", lang_attr]
+        if cover:
+            cmd.extend(["--cover", cover])
         result = subprocess.run(cmd, check=True, capture_output=True, text=True)
 
         if os.path.exists(output_file):
@@ -924,13 +1188,25 @@ def generate_format(html_file, temp_dir, output_ext, lang_attr):
         return None
 
 
-def generate_formats(temp_dir, lang_attr):
+def _metadata_title(title):
+    """Drop the 《》 a Chinese title is often wrapped in.
+
+    Readers show the metadata title in page headers and library views, where
+    书名号 look wrong; they belong around a title quoted inside prose.
+    """
+    title = title.strip()
+    if title.startswith('《') and title.endswith('》') and title.count('《') == 1:
+        title = title[1:-1].strip()
+    return title
+
+
+def generate_formats(temp_dir, lang_attr, cover=None):
     """Generate DOCX, EPUB, and PDF with result summary"""
     print("=== Generating output formats ===")
 
     html_file = os.path.join(temp_dir, "book_doc.html")
     if not os.path.exists(html_file):
-        html_files = glob.glob(os.path.join(temp_dir, "*.html"))
+        html_files = glob.glob(os.path.join(glob.escape(temp_dir), "*.html"))
         if html_files:
             html_file = max(html_files, key=os.path.getmtime)
         else:
@@ -939,7 +1215,12 @@ def generate_formats(temp_dir, lang_attr):
 
     results = {}
     for ext in ['.docx', '.epub', '.pdf']:
-        result = generate_format(html_file, temp_dir, ext, lang_attr)
+        result = generate_format(html_file, temp_dir, ext, lang_attr, cover=cover)
+        if not result and ext == '.pdf':
+            # Calibre's PDF renderer (Qt WebEngine) fails intermittently on
+            # macOS with GPU backend errors; a second run usually succeeds.
+            print("Retrying .pdf once")
+            result = generate_format(html_file, temp_dir, ext, lang_attr, cover=cover)
         if result:
             file_size = os.path.getsize(result)
             results[ext] = ('OK', f"{file_size:,} bytes")
@@ -959,6 +1240,322 @@ def generate_formats(temp_dir, lang_attr):
     return not has_failures
 
 
+# Files the pipeline keeps in temp_dir under the name the HTML alias of these
+# stems would take.
+_RESERVED_EXPORT_STEMS = {
+    "book_doc": "book_doc.html",
+    "input": "input.html",
+    "output": "output.html",
+}
+
+# What --delete-outputs removes besides the export copies; the next build
+# regenerates all of them.
+BUILD_OUTPUTS = ("book.html", "book_doc.html", "output.html", "book.docx", "book.epub", "book.pdf")
+
+EXPORT_COPIES_FILE = "export_copies.json"
+
+# The usual file name limit (NAME_MAX), in bytes.
+_MAX_FILE_NAME_BYTES = 255
+
+
+def _validate_export_name(name, label='--export-name'):
+    """Validate an export filename stem. Keep aliases inside temp_dir."""
+    if not name or not name.strip():
+        raise ValueError(f"{label} must not be empty")
+    if '\x00' in name or '/' in name or '\\' in name:
+        raise ValueError(f"{label} must be a filename stem, not a path")
+    stem = name.strip()
+    try:
+        size = len(os.fsencode(stem))
+    except UnicodeError:
+        raise ValueError(f"{label} contains characters a file name cannot hold") from None
+    # Each copy name must fit in a file name. Fail here, before the build records the
+    # copies: a copy that fails halfway leaves a name --delete-outputs cannot delete.
+    longest_suffix = max(_export_copy_names("").values(), key=len)
+    room = _MAX_FILE_NAME_BYTES - len(longest_suffix)
+    if size > room:
+        raise ValueError(f"{label} is too long: it takes {size} bytes in UTF-8, so its "
+                         f"{longest_suffix} copy would need a {size + len(longest_suffix)}-byte file "
+                         f"name, and a file name can take {_MAX_FILE_NAME_BYTES}; shorten it to {room} "
+                         f"bytes or fewer, such as {room // 3} CJK characters")
+    # Check case-insensitively so the same names are safe on macOS/Windows.
+    reserved = _RESERVED_EXPORT_STEMS.get(stem.casefold())
+    if reserved:
+        raise ValueError(f"{label} would overwrite {reserved}, which the pipeline keeps "
+                         f"in the temp dir; choose another name")
+    return stem
+
+
+def _export_copy_names(stem):
+    """Map each canonical output to the name of its copy for this stem."""
+    return {
+        "book.html": f"{stem}.html",
+        "book_doc.html": f"{stem}_doc.html",
+        "book.docx": f"{stem}.docx",
+        "book.epub": f"{stem}.epub",
+        "book.pdf": f"{stem}.pdf",
+    }
+
+
+def _export_copy_path(temp_dir, name):
+    """Return temp_dir/name if some valid export name gives a copy called name, else None."""
+    def made_with(suffix):
+        stem = name[:-len(suffix)]
+        try:
+            return name.endswith(suffix) and _validate_export_name(stem) == stem
+        except ValueError:
+            return False
+
+    if not any(made_with(suffix) for suffix in _export_copy_names("").values()):
+        return None
+    path = os.path.join(temp_dir, name)
+    # A Windows drive prefix such as "D:" would still lead out of temp_dir.
+    if os.path.dirname(os.path.abspath(path)) != os.path.abspath(temp_dir):
+        return None
+    return path
+
+
+def _read_export_copies(temp_dir):
+    """Return the names listed in export_copies.json, or None if temp_dir has no such file.
+
+    Raises ValueError if the file is there but unusable: unreadable, not the
+    JSON the build writes, or listing a name that no export copy in temp_dir has.
+    """
+    path = os.path.join(temp_dir, EXPORT_COPIES_FILE)
+    try:
+        with open(path, encoding='utf-8', errors='surrogateescape') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        if os.path.lexists(path):
+            raise ValueError("it is a symlink to a missing file") from None
+        return None
+    except (OSError, ValueError) as e:
+        raise ValueError(str(e)) from None
+    names = data.get("copies") if isinstance(data, dict) else None
+    if not isinstance(names, list) or not all(isinstance(name, str) for name in names):
+        raise ValueError('"copies" is not a list of file names')
+    bad = [name for name in names if not _export_copy_path(temp_dir, name)]
+    if bad:
+        raise ValueError("it lists names no export copy has: " + ", ".join(map(repr, bad)))
+    return names
+
+
+def _unusable_record(reason):
+    """Explain an export_copies.json that _read_export_copies() rejected."""
+    return (f"{EXPORT_COPIES_FILE} cannot be used ({reason}). It lists the export copies of "
+            f"earlier builds; repair it, or delete it so that --delete-outputs deletes the "
+            f"copies named after export_name.txt instead.")
+
+
+def _write_export_copies(temp_dir, names):
+    path = os.path.join(temp_dir, EXPORT_COPIES_FILE)
+    fd, tmp_path = tempfile.mkstemp(prefix='.export_copies.', suffix='.json', dir=temp_dir)
+    try:
+        with os.fdopen(fd, 'w', encoding='utf-8', errors='surrogateescape') as f:
+            json.dump({"copies": names}, f, ensure_ascii=False, indent=2)
+            f.write('\n')
+        os.replace(tmp_path, path)
+    except Exception:
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
+        raise
+
+
+def export_named_aliases(temp_dir, export_name):
+    """Copy canonical outputs to optional user-facing filenames.
+
+    Canonical artifacts remain untouched. The alias names use export_name as a
+    filename stem, with book_doc.html receiving a _doc suffix to avoid colliding
+    with the web HTML alias. Their names are added to export_copies.json before
+    the files are written, so --delete-outputs still finds the copies of an
+    earlier export name after it changes. If that file is there but unusable,
+    raises ValueError and writes nothing.
+    """
+    stem = _validate_export_name(export_name)
+    pending = []
+    for src_name, dst_name in _export_copy_names(stem).items():
+        src = os.path.join(temp_dir, src_name)
+        if not os.path.exists(src):
+            continue
+        dst = os.path.join(temp_dir, dst_name)
+        if os.path.exists(dst) and os.path.samefile(src, dst):
+            continue
+        pending.append((src, dst, dst_name))
+    if pending:
+        recorded = [name for name in _read_export_copies(temp_dir) or []
+                    if os.path.lexists(os.path.join(temp_dir, name))]
+        _write_export_copies(temp_dir, list(dict.fromkeys(recorded + [name for _, _, name in pending])))
+    copied = []
+    for src, dst, dst_name in pending:
+        shutil.copy2(src, dst)
+        copied.append(dst_name)
+    return copied
+
+
+def _copies_named_in_export_name_file(temp_dir):
+    """Copy names for a temp dir built before export_copies.json existed.
+
+    Those builds took the stem from `--export-name "$(cat export_name.txt)"`,
+    which _validate_export_name() strips, so the file is read the same way:
+    newline='' keeps a carriage return inside the name. Returns [] if there is
+    no export_name.txt and None if it is blank, as no build makes copies then;
+    raises ValueError if it is there but names no copies.
+    """
+    path = os.path.join(temp_dir, 'export_name.txt')
+    try:
+        with open(path, encoding='utf-8', errors='surrogateescape', newline='') as f:
+            text = f.read()
+    except FileNotFoundError:
+        if os.path.lexists(path):
+            raise ValueError("export_name.txt is a symlink to a missing file") from None
+        return []
+    except OSError as e:
+        raise ValueError(f"export_name.txt cannot be read ({e})") from None
+    if not text.strip():
+        return None
+    try:
+        stem = _validate_export_name(text)
+    except ValueError as e:
+        raise ValueError(f"export_name.txt holds no usable export name ({e})") from None
+    names = list(_export_copy_names(stem).values())
+    # Only a drive prefix such as "D:" on Windows leads a valid stem out of temp_dir.
+    if not all(_export_copy_path(temp_dir, name) for name in names):
+        raise ValueError("export_name.txt names copies outside the temp dir")
+    print(f"No {EXPORT_COPIES_FILE}; deleting the copies named after export_name.txt")
+    return names
+
+
+def _delete_file(path):
+    """Delete path if it is a regular file or a symlink, never a symlink's target.
+
+    Returns False when nothing is there. Raises OSError for anything else.
+    """
+    try:
+        mode = os.lstat(path).st_mode
+    except FileNotFoundError:
+        return False
+    if not (stat.S_ISREG(mode) or stat.S_ISLNK(mode)):
+        raise OSError("not a regular file")
+    os.unlink(path)
+    return True
+
+
+def _conversion_problem(temp_dir):
+    """Why temp_dir does not look like a temp dir convert.py split a book into, or None.
+
+    Checks the shape of the manifest.json that create_manifest() writes and
+    nothing more: its three fields, at least one chunk and as many as
+    chunk_count says, a source_hash of 64 lowercase hex digits, orders 1 to
+    N, the entry of order n naming convert.py's n-th chunk file, and exactly
+    those chunk files in temp_dir, as regular files. No hash is compared with
+    a file, as chunks may change after the conversion, so a made-up manifest
+    of that shape passes.
+    """
+    try:
+        manifest = load_manifest(temp_dir)
+    except (OSError, ValueError) as e:
+        return str(e)
+    if manifest is None:
+        return "there is none"
+    if set(manifest) != {"chunk_count", "source_hash", "chunks"}:
+        return f"it has the fields {', '.join(sorted(manifest))}, not chunk_count, chunks and source_hash"
+    chunks = manifest["chunks"]
+    if not chunks or type(manifest["chunk_count"]) is not int or manifest["chunk_count"] != len(chunks):
+        return "it lists no chunks, or not as many as its chunk_count says"
+    if not isinstance(manifest["source_hash"], str) or not re.fullmatch(r"[0-9a-f]{64}", manifest["source_hash"]):
+        return "its source_hash is not 64 lowercase hex digits"
+    if sorted(chunk["order"] for chunk in chunks) != list(range(1, len(chunks) + 1)):
+        return "its orders do not run from 1 without a gap"
+    listed = []
+    for n, chunk in enumerate(sorted(chunks, key=lambda chunk: chunk["order"]), 1):
+        name = chunk_file_name(nth_chunk_id(n))
+        if chunk["source_file"] != name:
+            return f"its entry of order {n} is {chunk['source_file']}, not {name}"
+        listed.append(name)
+    try:
+        on_disk = list_chunk_files(temp_dir)
+    except (OSError, ValueError) as e:
+        return str(e)
+    on_disk_names, listed_names = set(on_disk), set(listed)
+    missing = [name for name in listed if name not in on_disk_names]
+    if missing:
+        return f"{missing[0]}, which it lists, is not there as a file"
+    unlisted = [name for name in on_disk if name not in listed_names]
+    if unlisted:
+        return f"it does not list {unlisted[0]}, which is there"
+    return None
+
+
+def delete_outputs(temp_dir):
+    """Delete the outputs and export copies of earlier builds, so a rebuild regenerates them.
+
+    Deletes BUILD_OUTPUTS and the copies listed in export_copies.json, or for
+    an older temp dir without that record, the copies named after
+    export_name.txt. Only regular files and symlinks directly inside temp_dir
+    go; chunks, translations and the other intermediates stay. Every name is
+    checked before the first file goes, and if the record or export_name.txt
+    is there but unusable, nothing is deleted. Returns False then, or if a
+    file could not be deleted.
+    """
+    print("=== Deleting build outputs ===")
+    try:
+        recorded = _read_export_copies(temp_dir)
+    except ValueError as e:
+        print(f"Error: {_unusable_record(e)} Nothing was deleted.")
+        return False
+    if recorded is None:
+        try:
+            copies = _copies_named_in_export_name_file(temp_dir)
+        except ValueError as e:
+            print(f"Error: {e}. Without {EXPORT_COPIES_FILE}, that file is how the export copies "
+                  f"of earlier builds are found: write the export name they were made with to "
+                  f"export_name.txt, or leave export_name.txt empty if there are none. "
+                  f"Nothing was deleted.")
+            return False
+        if copies is None:
+            # An empty export_name.txt means no copies only in what looks like a translate-book temp dir.
+            problem = _conversion_problem(temp_dir)
+            if problem:
+                print(f"Error: export_name.txt is empty and {temp_dir} holds no usable manifest.json "
+                      f"({problem}), so it is not known to be a translate-book temp directory. "
+                      f"Nothing was deleted.")
+                return False
+            copies = []
+    else:
+        copies = recorded
+
+    deleted, left = [], []
+    for name in list(BUILD_OUTPUTS) + [n for n in dict.fromkeys(copies) if n not in BUILD_OUTPUTS]:
+        try:
+            if _delete_file(os.path.join(temp_dir, name)):
+                deleted.append(name)
+        except OSError as e:
+            print(f"Error: could not delete {name!r}: {e}")
+            left.append(name)
+
+    if deleted:
+        print(f"Deleted {len(deleted)} file(s):")
+        for name in deleted:
+            print(f"  {name!r}")
+    else:
+        print("No build outputs to delete.")
+
+    ok = not left
+    if recorded is not None:
+        try:
+            _write_export_copies(temp_dir, [name for name in left if name not in BUILD_OUTPUTS])
+        except OSError as e:
+            print(f"Error: could not update {EXPORT_COPIES_FILE}: {e}")
+            ok = False
+    if ok:
+        print("Nothing was built; run the build command to rebuild.")
+    else:
+        print("Nothing was built. Fix the errors above and run --delete-outputs again first.")
+    return ok
+
+
 # =============================================================================
 # Main
 # =============================================================================
@@ -969,7 +1566,15 @@ def main():
     parser.add_argument('--title', default=None, help='Translated book title (override config)')
     parser.add_argument('--author', default=None, help='Author name (override config)')
     parser.add_argument('--lang', default=None, help='Output language code (override config)')
+    parser.add_argument('--cover', default=None, help='Cover image path for EPUB output')
+    parser.add_argument('--export-name', default=None, help='Optional filename stem for exported alias copies')
     parser.add_argument('--cleanup', action='store_true', help='Remove intermediate artifacts after successful build')
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--headings', action='store_true',
+                      help='List the headings of output_chunk*.md, skipping fenced code, and exit without building')
+    mode.add_argument('--delete-outputs', action='store_true',
+                      help='Delete book.html, book_doc.html, output.html, book.docx, book.epub, book.pdf and '
+                           'the export copies, keeping chunks and translations, and exit without building')
 
     args = parser.parse_args()
     temp_dir = args.temp_dir
@@ -978,14 +1583,61 @@ def main():
         print(f"Error: Temp directory not found: {temp_dir}")
         sys.exit(1)
 
+    if not args.delete_outputs:
+        try:
+            load_manifest(temp_dir)
+            list_chunk_files(temp_dir)
+            list_chunk_files(temp_dir, 'output')
+        except (OSError, ValueError) as e:
+            print(f"Error: {e}")
+            sys.exit(1)
+
+    if args.headings:
+        rows = heading_outline(temp_dir)
+        print('\n'.join(rows) if rows else "No headings in output_chunk*.md")
+        return
+
+    if args.delete_outputs:
+        if not delete_outputs(temp_dir):
+            sys.exit(1)
+        return
+
+    try:
+        title_override = args.title or read_name_file(temp_dir, TITLE_FILE)
+        author_override = args.author or read_name_file(temp_dir, AUTHOR_FILE)
+        export_name_given = args.export_name or read_name_file(temp_dir, EXPORT_NAME_FILE)
+        cover = args.cover or stored_request_cover(temp_dir)
+    except (OSError, ValueError) as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+    if cover:
+        if not os.path.isfile(cover):
+            print(f"Error: Cover image not found: {cover}")
+            sys.exit(1)
+        cover = os.path.abspath(cover)
+
+    export_name = None
+    if export_name_given:
+        try:
+            export_name = _validate_export_name(
+                export_name_given, '--export-name' if args.export_name else EXPORT_NAME_FILE)
+        except ValueError as e:
+            print(f"Error: {e}")
+            sys.exit(1)
+        try:
+            _read_export_copies(temp_dir)
+        except ValueError as e:
+            print(f"Error: {_unusable_record(e)} Nothing was built.")
+            sys.exit(1)
+
     # Load config as base, CLI args override
     config = load_config(temp_dir)
 
     lang_code = args.lang or config.get('output_lang', 'zh')
     lang_cfg = get_lang_config(lang_code)
 
-    title = args.title or config.get('original_title', 'Translated Book')
-    author = args.author or config.get('creator', 'Unknown Author')
+    title = _metadata_title(title_override or config.get('original_title', 'Translated Book'))
+    author = author_override or config.get('creator', 'Unknown Author')
 
     print(f"=== Merge and Build ===")
     print(f"Temp directory: {temp_dir}")
@@ -1005,7 +1657,17 @@ def main():
     add_toc(temp_dir)
 
     # Step 7: Generate formats
-    all_formats_ok = generate_formats(temp_dir, lang_cfg['lang_attr'])
+    all_formats_ok = generate_formats(temp_dir, lang_cfg['lang_attr'], cover=cover)
+
+    if export_name:
+        if all_formats_ok:
+            aliases = export_named_aliases(temp_dir, export_name)
+            if aliases:
+                print("\nExport aliases:")
+                for name in aliases:
+                    print(f"  {name}")
+        else:
+            print("\nSkipping export aliases — some formats failed.")
 
     print("\n=== Build Complete ===")
     print(f"All outputs saved to: {temp_dir}")
@@ -1033,7 +1695,7 @@ def cleanup_intermediate_files(temp_dir):
 
     # Remove chunk*.md and output_chunk*.md
     for pattern in ['chunk*.md', 'output_chunk*.md']:
-        for filepath in glob.glob(os.path.join(temp_dir, pattern)):
+        for filepath in glob.glob(os.path.join(glob.escape(temp_dir), pattern)):
             os.remove(filepath)
             removed.append(os.path.basename(filepath))
 

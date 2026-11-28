@@ -1,0 +1,14 @@
+{
+  "schemaVersion" : "1.0.0",
+  "skillContractVersion" : "2.8.0",
+  "mcpServerVersion" : "1.6.0",
+  "clientVersion" : "1.1.0",
+  "dshArtifactVersion" : "1.1.0",
+  "dshRuntimeRange" : "0.2.2-rc.5",
+  "artifactType" : "skill",
+  "exportMode" : "marketplace",
+  "platform" : "generic",
+  "functionCount" : 49,
+  "mcpToolCount" : 36,
+  "functionCatalogHash" : "5d2a5b4e5449e27e9279bad758323b7080de200786fe9b6bd5de4b539ff24c81"
+}

@@ -1,44 +1,50 @@
-## Description: <br>
-Designs memory palace structures with spatial layouts and domain organization. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Designs memory palace structures with spatial layouts and domain organization.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-External users and developers use this skill as reference guidance for designing memory palaces, organizing complex knowledge domains, and creating spatial recall structures by hand. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger wording may invoke the skill during ordinary discussions about memory or organization. <br>
-Mitigation: Use the skill intentionally for memory palace or mnemonic knowledge-structure tasks, and review suggested guidance before applying it. <br>
-Risk: Example Python commands reference plugin files that are not included in this skill artifact. <br>
-Mitigation: Treat the commands as examples unless the external plugin files and Python environment are present and verified. <br>
-Risk: The artifact states the skill is unwired reference material. <br>
-Mitigation: Do not rely on automatic command or agent routing; consult the guidance manually when designing a palace by hand. <br>
+## Use Case:
 
+Developers, learners, and knowledge workers use this skill to organize complex topics into memorable spatial structures, then create navigation and recall guidance for them.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-memory-palace-memory-palace-architect) <br>
-- [Memory palace homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace) <br>
-- [Franklin Protocol article](https://spf13.com/p/how-benjamin-franklin-invented-machine-learning-in-1720/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with examples, checklists, YAML snippets, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces reference guidance for memory palace schemas, sensory encoding profiles, navigation maps, and recall validation recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Some referenced local paths were missing, leaving the security review incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Resolve the referenced paths and review them before installation.
+
+## Reference(s):
+
+- [Memory Palace project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace)
+- [The Franklin Protocol reference](https://spf13.com/p/how-benjamin-franklin-invented-machine-learning-in-1720/)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with structured palace data such as JSON or YAML]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include spatial layouts, sensory associations, navigation guidance, and recall testing recommendations.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

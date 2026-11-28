@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "skill": "bs-tidal-service-playbook-deck",
+  "pictures": [
+    {
+      "id": "guest-arriving-hotel-entrance",
+      "kind": "scene",
+      "description": "A woman pulling a navy suitcase walks through open glass doors into a sunlit hotel lobby where a smiling receptionist waits behind a navy panelled front desk.",
+      "goodFor": [
+        "cover",
+        "overview",
+        "section"
+      ],
+      "reuse": "topic-specific",
+      "topic": "hotel arrival / front desk hospitality",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 502918,
+      "sha256": "6dc57e5df83da405628208d8b41c6b6dc3252d63752f38f1ad272b5be9f367e9",
+      "url": "https://media.skillry.dev/skill-image-library/bs-tidal-service-playbook-deck/guest-arriving-hotel-entrance-6dc57e5df83d.webp"
+    },
+    {
+      "id": "receptionist-welcoming-guest",
+      "kind": "scene",
+      "description": "A smiling receptionist in navy gestures welcomingly to a guest with a shoulder bag across a white marble front desk, navy wall and seascape painting behind.",
+      "goodFor": [
+        "overview",
+        "solution",
+        "process"
+      ],
+      "reuse": "topic-specific",
+      "topic": "hotel front desk / guest service",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 199840,
+      "sha256": "e04277018dccbc60f3b5345245cae29c0dc6ad11680efc8a24771292c7915773",
+      "url": "https://media.skillry.dev/skill-image-library/bs-tidal-service-playbook-deck/receptionist-welcoming-guest-e04277018dcc.webp"
+    },
+    {
+      "id": "empty-front-desk-ready",
+      "kind": "scene",
+      "description": "Close view of an empty marble reception counter set with an open notebook, brass lamp, service bell and flowers, warm-lit lobby lounge blurred behind, navy and gold tones.",
+      "goodFor": [
+        "section",
+        "background",
+        "solution",
+        "problem"
+      ],
+      "reuse": "topic-specific",
+      "topic": "hotel front desk / reception",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 336142,
+      "sha256": "34952a444b97e37efa87edc1cfa2274b66d59189dccb7fa107669ad8e267435c",
+      "url": "https://media.skillry.dev/skill-image-library/bs-tidal-service-playbook-deck/empty-front-desk-ready-34952a444b97.webp"
+    },
+    {
+      "id": "desk-staff-reviewing-notes",
+      "kind": "scene",
+      "description": "Two front-desk staff in navy uniforms review an open notebook together at a marble counter, one pointing with a pen, in a calm lobby with blue art and lamps.",
+      "goodFor": [
+        "process",
+        "team",
+        "solution"
+      ],
+      "reuse": "topic-specific",
+      "topic": "hotel front desk team / service training",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 279036,
+      "sha256": "5b07470aba31218f6a0ed54dab30801b361370f0d46231e1f45d3455e20230ad",
+      "url": "https://media.skillry.dev/skill-image-library/bs-tidal-service-playbook-deck/desk-staff-reviewing-notes-5b07470aba31.webp"
+    },
+    {
+      "id": "sunlit-lobby-check-in",
+      "kind": "scene",
+      "description": "Wide sunlit boutique hotel lobby with armchairs on a jute rug, a guest with a suitcase checking in at a blue panelled desk with a smiling receptionist, arched doorway behind.",
+      "goodFor": [
+        "closing",
+        "cover",
+        "overview",
+        "background"
+      ],
+      "reuse": "topic-specific",
+      "topic": "hotel lobby / guest check-in",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 491138,
+      "sha256": "a37621d7827867ff3404ae46c95327be11b733c78dee13f8edbe38e70d955229",
+      "url": "https://media.skillry.dev/skill-image-library/bs-tidal-service-playbook-deck/sunlit-lobby-check-in-a37621d78278.webp"
+    }
+  ]
+}

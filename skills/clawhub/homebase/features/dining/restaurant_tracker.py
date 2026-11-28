@@ -11,21 +11,12 @@ import os
 import re
 import sys
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 
 from core.config_loader import SKILL_DIR
-from core.keychain_secrets import load_google_secrets
 from utils import write_json_atomic, locked_file
-load_google_secrets()
 
 DATA_FILE      = os.path.join(SKILL_DIR, "household", "restaurants.json")
-def _get_whatsapp_group():
-    try:
-        from core.config_loader import config
-        return config.whatsapp_group
-    except Exception:
-        return ""
-WHATSAPP_GROUP = _get_whatsapp_group()
 
 def _load_family_members():
     try:
@@ -97,14 +88,61 @@ def detect_meal_type(text: str = "", time_str: str = None) -> str:
 def log_visit(restaurant: str, date: str = None, meal_type: str = None,
               items: List[str] = None, total: float = None,
               source: str = "manual") -> Dict:
-    """Log a restaurant visit."""
+    """Log a restaurant visit, or enrich the existing one for the same meal.
+
+    Three callers reach this for what is often the same dinner: the calendar
+    auto-detector fires the evening before with nothing but a name, the agent
+    logs a receipt photo later that night with items and a total, and someone
+    may also say "we ate at X" in chat. Appending each one left two or three
+    visits and two or three rating prompts for one meal, so a call matching an
+    existing (date, restaurant) merges into it instead of appending.
+
+    Merging only ever fills in: values the caller supplies replace what is
+    there, values it omits leave the record alone. A calendar entry arriving
+    after a receipt therefore cannot blank out the items and total.
+
+    Same-day repeat visits to one restaurant collapse into a single record.
+    That is deliberate — keying on meal_type as well would re-open the
+    duplicate hole every time the calendar's guess and the receipt's clock
+    disagreed, which is the common case, not the rare one.
+    """
     with locked_file(DATA_FILE):
         data = load_data()
 
+        name = _titlecase_venue(restaurant)
+        day  = date or datetime.now().strftime("%Y-%m-%d")
+
+        existing = next(
+            (v for v in data["visits"]
+             if v["date"] == day and v["restaurant"].lower() == name.lower()),
+            None
+        )
+
+        if existing:
+            if items:
+                existing["items"] = items
+            if total is not None:
+                existing["total"] = total
+            save_data(data)
+            # `_merged` tells the formatter to say "updated" rather than
+            # "logged". Returned on a copy so it never reaches the state file.
+            return dict(existing, _merged=True)
+
+        # max(existing) + 1, not len() + 1: pending_ratings is keyed on this
+        # id, so a length-derived id collides with a live key the moment any
+        # visit is ever removed.
+        # Clear of every id in use, including keys in pending_ratings that no
+        # longer have a visit. The two sets already diverge in the live file,
+        # and pending_ratings is keyed on this id, so reusing one silently
+        # overwrites another restaurant's pending rating.
+        used_ids = {v.get("id") or 0 for v in data["visits"]}
+        used_ids |= {int(k) for k in (data.get("pending_ratings") or {})
+                     if str(k).isdigit()}
+        next_id = max(used_ids, default=0) + 1
         visit = {
-            "id":               len(data["visits"]) + 1,
-            "restaurant":       restaurant.title(),
-            "date":             date or datetime.now().strftime("%Y-%m-%d"),
+            "id":               next_id,
+            "restaurant":       name,
+            "date":             day,
             "meal_type":        meal_type or detect_meal_type(),
             "items":            items or [],
             "total":            total,
@@ -121,7 +159,7 @@ def log_visit(restaurant: str, date: str = None, meal_type: str = None,
         data["pending_ratings"][str(visit["id"])] = {
             "restaurant": visit["restaurant"],
             "date":       visit["date"],
-            "pending_for": list(FAMILY_MEMBERS.values()),  # ["Harsh", "Sushmita"]
+            "pending_for": list(FAMILY_MEMBERS.values()),  # ["Alex", "Sam"]
             "reminded":   []
         }
 
@@ -160,7 +198,7 @@ def add_rating(visit_id: int = None, restaurant: str = None,
                     break
 
         if not visit:
-            return False, f"No unrated visit found"
+            return False, "No unrated visit found"
 
         # Store individual rating
         if "individual_ratings" not in visit:
@@ -283,36 +321,28 @@ def get_pending_reminders() -> List[Dict]:
     return reminders
 
 
-def mark_reminder_sent(visit_id: int, person: str):
-    """Mark that a reminder was sent to a specific person."""
-    with locked_file(DATA_FILE):
-        data = load_data()
-        if str(visit_id) in data["pending_ratings"]:
-            reminded = data["pending_ratings"][str(visit_id)].get("reminded", [])
-            if person not in reminded:
-                reminded.append(person)
-            data["pending_ratings"][str(visit_id)]["reminded"] = reminded
-        save_data(data)
-
-
 # ─── Format for WhatsApp ──────────────────────────────────────────────────────
 
 def format_visit_confirmation(visit: Dict) -> str:
     """Format visit log confirmation + rating request."""
-    stars = "⭐" * (visit.get("rating") or 0)
     items_str = ", ".join(visit["items"][:5]) if visit["items"] else "items not recorded"
 
+    verb = "Updated" if visit.get("_merged") else "Logged"
     lines = [
-        f"🍽️ *Logged: {visit['restaurant']}*",
+        f"🍽️ *{verb}: {visit['restaurant']}*",
         f"  📅 {visit['date']} — {visit['meal_type'].title()}",
     ]
     if items_str != "items not recorded":
         lines.append(f"  🍴 {items_str}")
     if visit.get("total"):
         lines.append(f"  💰 ${visit['total']:.2f}")
-    lines.append("")
-    lines.append("How was it? Reply with a rating 1-5 ⭐")
-    lines.append("_e.g. 'rate [Restaurant] 4' or just '4'_")
+
+    # Don't re-ask for a rating the family has already given. A receipt often
+    # arrives after someone rated the meal from the calendar entry.
+    if not visit.get("individual_ratings"):
+        lines.append("")
+        lines.append("How was it? Reply with a rating 1-5 ⭐")
+        lines.append("_e.g. 'rate [Restaurant] 4' or just '4'_")
 
     return "\n".join(lines)
 
@@ -387,35 +417,98 @@ def format_top_list() -> str:
 
 # ─── Calendar Integration ─────────────────────────────────────────────────────
 
-def check_calendar_for_restaurants(calendar_events: List[Dict]) -> List[str]:
+# Titles that name a *venue*. "dinner with X" is deliberately absent: it names
+# company, not a place, and the old list had it. Combined with a splitter that
+# accepted "dinner " as a delimiter, "Dinner with Rohan and Meera" was logged
+# as a restaurant called "With Rohan And Meera" — 10 of the 18 names in
+# restaurants.json arrived that way, and they fed get_top_restaurants back to
+# the family as places to eat.
+_VENUE_KEYWORDS = (
+    "dinner at", "lunch at", "breakfast at", "brunch at",
+    "eat at", "eating at", "restaurant", "cafe",
+)
+
+# Only a locative preposition introduces a venue name. Splitting on the meal
+# word itself is what turned company into a restaurant.
+_VENUE_SPLITTER = " at "
+
+# What follows " at " is not always a place. "Dinner at 6pm" is an ordinary
+# calendar title, and the first version of this filter logged a restaurant
+# called "6Pm"; "Lunch at work" logged "Work". Closing the "dinner with X"
+# class while leaving these open just swapped one source of junk names for
+# another, and they all feed get_top_restaurants back to the family.
+_NOT_A_VENUE = re.compile(
+    r"^(?:\d{1,2}(?::\d{2})?\s*(?:am|pm)?"       # 6pm, 6:30, 18:00
+    r"|noon|midnight"
+    r"|home|work|school|the\s+office|office)$",
+    re.IGNORECASE,
+)
+
+
+def _titlecase_venue(name: str) -> str:
+    """Title-case a venue without mangling an interior apostrophe.
+
+    ``str.title()`` turns "denny's" into "Denny'S", and that mangled form is
+    what reached restaurants.json and came back to the family as a place to
+    eat — while _looks_like_a_home names Denny's specifically as a chain it is
+    trying to protect.
+    """
+    return re.sub(
+        r"[A-Za-z'\u2019]+",
+        lambda m: m.group(0)[:1].upper() + m.group(0)[1:].lower(),
+        name,
+    )
+
+
+def _looks_like_a_home(name: str) -> bool:
+    """True for "Kabir and Nisha's" — a friend's house, not a restaurant.
+
+    A trailing possessive alone is not enough to reject on: Denny's, Applebee's
+    and Cheesecake Factory-adjacent chains all end that way. What marks a home
+    is a possessive over a *pair of first names*, so the conjunction is the
+    signal that matters.
+    """
+    low = name.lower().rstrip(". ")
+    if not (low.endswith("'s") or low.endswith("’s") or low.endswith("s'")):
+        return False
+    return " and " in low or " & " in low
+
+
+def check_calendar_for_restaurants(calendar_events: List[Dict]) -> List[Dict]:
     """
     Detect restaurant visits from calendar events.
-    Looks for keywords like 'dinner at X', 'lunch at X', 'breakfast at X'.
-    """
-    restaurant_keywords = [
-        "dinner at", "lunch at", "breakfast at", "brunch at",
-        "eat at", "eating at", "restaurant", "cafe", "bbq with",
-        "dinner with", "lunch with"
-    ]
+    Looks for a venue named after a locative "at": 'dinner at X', 'lunch at X'.
 
+    Returns a list of {restaurant, date, meal_type, source} dicts. (The
+    annotation said List[str] and never matched the return value.)
+    """
     found = []
     for event in calendar_events:
         title = event.get("title", "").lower()
-        if any(kw in title for kw in restaurant_keywords):
-            # Try to extract restaurant name
-            for kw in ["at ", "dinner ", "lunch ", "breakfast ", "brunch "]:
-                if kw in title:
-                    parts = title.split(kw, 1)
-                    if len(parts) > 1:
-                        restaurant_name = parts[1].strip().title()
-                        if len(restaurant_name) > 2:
-                            found.append({
-                                "restaurant": restaurant_name,
-                                "date": event.get("date"),
-                                "meal_type": detect_meal_type(title, event.get("time")),
-                                "source": "calendar"
-                            })
-                            break
+        if not any(kw in title for kw in _VENUE_KEYWORDS):
+            continue
+        if _VENUE_SPLITTER not in title:
+            continue
+
+        restaurant_name = _titlecase_venue(
+            title.split(_VENUE_SPLITTER, 1)[1].strip())
+        if len(restaurant_name) <= 2:
+            continue
+        # "Dinner at 6pm" / "Lunch at work" — a time or a generic place.
+        if _NOT_A_VENUE.match(restaurant_name):
+            continue
+        # "Dinner at Elena's with the Nolans" — the tail is company, not venue.
+        if restaurant_name.lower().startswith("with "):
+            continue
+        if _looks_like_a_home(restaurant_name):
+            continue
+
+        found.append({
+            "restaurant": restaurant_name,
+            "date": event.get("date"),
+            "meal_type": detect_meal_type(title, event.get("time")),
+            "source": "calendar"
+        })
     return found
 
 

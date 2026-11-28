@@ -1,28 +1,26 @@
 #!/usr/bin/env python3
 """
 Shopping List Manager
-Simple store-aware shopping list. Stores are config-driven via
-`config.stores` (any number of named buckets).
+Simple store-aware shopping list. Items carry a store bucket chosen by the
+caller; STORE_LABELS below is how each bucket is displayed.
 """
 
 import fcntl
 import json
 import os
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 from utils import write_json_atomic, locked_file
 
 
-# ─── Store Detection ─────────────────────────────────────────────────────────
-
-STORE_KEYWORDS = {
-    "costco":  ["costco", "cost co"],
-    "indian":  ["indian", "spencer", "ninas", "nina's", "desi", "patel", "apna bazar",
-                "india", "indian store", "indian grocery", "subzi", "bazaar"],
-    "target":  ["target", "walmart", "wal-mart", "walgreens", "cvs", "safeway",
-                "kroger", "vons", "ralphs"],
-}
+# ─── Store buckets ───────────────────────────────────────────────────────────
+#
+# Display labels only. The keyword-matching store *detector* that used to live
+# here (detect_store / extract_item_and_store) parsed free text like "milk from
+# costco" — a job the agent does now, since tools.add_to_grocery_list takes an
+# explicit `store`. It had no production caller and hardcoded the family's
+# store list against a docstring claiming the stores were config-driven.
 
 STORE_LABELS = {
     "costco": "Costco",
@@ -30,49 +28,6 @@ STORE_LABELS = {
     "target": "Target / Walmart",
     "general": "General"
 }
-
-COSTCO_ENTRANCE  = ["apple", "banana", "fruit", "veggie", "vegetable", "berry",
-                    "bread", "bak", "produce", "orange", "grape", "lettuce",
-                    "spinach", "carrot", "tomato", "onion", "avocado"]
-COSTCO_BACK      = ["milk", "egg", "cheese", "meat", "chicken", "beef", "pork",
-                    "butter", "yogurt", "cream", "ghee", "paneer", "curd"]
-
-
-def detect_store(message: str) -> str:
-    """Detect which store from natural language."""
-    msg = message.lower()
-    for store, keywords in STORE_KEYWORDS.items():
-        if any(kw in msg for kw in keywords):
-            return store
-    return "general"
-
-
-def extract_item_and_store(message: str) -> tuple:
-    import re
-    msg = message.lower()
-
-    # Detect store first
-    store = detect_store(msg)
-
-    # Remove "from X store", "at X store", "from X"
-    msg = re.sub(r'\b(?:from|at)\s+\w+\s+(?:store|grocery|market)\b', '', msg)
-    msg = re.sub(r'\b(?:from|at)\s+(?:' + '|'.join(
-        kw for keywords in STORE_KEYWORDS.values() for kw in keywords
-    ) + r')\b', '', msg)
-
-    # Remove standalone store words
-    for keywords in STORE_KEYWORDS.values():
-        for kw in keywords:
-            msg = re.sub(r'\b' + re.escape(kw) + r'\b', '', msg)
-
-    # Remove "store", "grocery" standalone
-    msg = re.sub(r'\b(?:store|grocery|market)\b', '', msg)
-
-    # Remove action words
-    msg = re.sub(r'^(?:add|get|need|pick up|grab)\s+', '', msg.strip())
-    msg = re.sub(r'\s+', ' ', msg).strip()
-
-    return msg.strip(), store
 
 
 # ─── Shopping List Manager ───────────────────────────────────────────────────
@@ -153,14 +108,6 @@ class ShoppingList:
             self.items = {}
             self._save()
 
-    def clear_store(self, store: str):
-        """Clear all items for a specific store (after shopping trip)."""
-        with locked_file(self.list_file):
-            self.items = self._load()
-            self.items = {k: v for k, v in self.items.items()
-                         if v.get("store") != store}
-            self._save()
-
     # ─── Query ───────────────────────────────────────────────────────────────
 
     def get_all(self) -> List[Dict]:
@@ -200,11 +147,17 @@ class ShoppingList:
         total = len(self.items)
         lines = [f"🛒 *Shopping List* ({total} item{'s' if total != 1 else ''})\n"]
 
-        store_order = ["costco", "indian", "target", "general"]
+        # Derived from STORE_LABELS, plus anything grouped that it does not
+        # know about. Hardcoding the four keys here meant a bucket present in
+        # STORE_LABELS but missing from this list had its items counted in the
+        # `total` header above and then never printed — a silent drop in the
+        # one output the family actually reads.
+        store_order = list(STORE_LABELS) + [
+            k for k in grouped if k not in STORE_LABELS]
         for store in store_order:
             if store not in grouped:
                 continue
-            lines.append(f"*{STORE_LABELS[store]}*")
+            lines.append(f"*{STORE_LABELS.get(store, store.title())}*")
             for item in grouped[store]:
                 qty = item["quantity"]
                 qty_str = f"×{int(qty) if qty == int(qty) else qty}"
@@ -213,70 +166,20 @@ class ShoppingList:
 
         return "\n".join(lines).strip()
 
-    def format_costco(self) -> str:
-        """Format Costco items by Technology Drive store layout."""
-        costco_items = self.get_by_store("costco")
-        general_items = self.get_by_store("general")
-        all_items = costco_items + general_items
-
-        if not all_items:
-            return "✅ Nothing on the Costco list!"
-
-        entrance, middle, back = [], [], []
-
-        for item in sorted(all_items, key=lambda x: x["name"]):
-            name_lower = item["name"].lower()
-            qty = item["quantity"]
-            qty_str = f"×{int(qty) if qty == int(qty) else qty}"
-            label = f"{item['name']} {qty_str}"
-
-            if any(kw in name_lower for kw in COSTCO_BACK):
-                back.append(label)
-            elif any(kw in name_lower for kw in COSTCO_ENTRANCE):
-                entrance.append(label)
-            else:
-                middle.append(label)
-
-        lines = ["🛒 *Costco — Technology Drive*\n"]
-        if entrance:
-            lines.append("📍 *Entrance / Right (Produce & Bakery)*")
-            for i in entrance:
-                lines.append(f"  • {i}")
-            lines.append("")
-        if middle:
-            lines.append("📍 *Middle Aisles (Pantry & Snacks)*")
-            for i in middle:
-                lines.append(f"  • {i}")
-            lines.append("")
-        if back:
-            lines.append("📍 *Back Wall (Dairy & Meats)*")
-            for i in back:
-                lines.append(f"  • {i}")
-
-        return "\n".join(lines)
-
 
 if __name__ == "__main__":
     import sys
-    sl = ShoppingList(os.path.join(os.path.dirname(os.path.abspath(__file__)), ""))
+    from core.config_loader import SKILL_DIR
 
-    if len(sys.argv) > 1:
-        cmd = sys.argv[1]
-        if cmd == "list":
-            print(sl.format_for_whatsapp())
-        elif cmd == "costco":
-            print(sl.format_costco())
-        elif cmd == "add" and len(sys.argv) > 2:
-            item, store = extract_item_and_store(" ".join(sys.argv[2:]))
-            sl.add(item, 1, store)
-            print(f"Added {item} → {STORE_LABELS.get(store, store)}")
-        elif cmd == "remove" and len(sys.argv) > 2:
-            sl.remove(sys.argv[2])
-            print(f"Removed {sys.argv[2]}")
-        elif cmd == "clear":
-            sl.clear()
-            print("Cleared")
-        elif cmd == "store" and len(sys.argv) > 2:
-            print(sl.format_for_whatsapp(sys.argv[2]))
+    # SKILL_DIR, not this module's directory. Passing the latter made the CLI
+    # read and write features/shopping/household/shopping_list.json — a phantom
+    # list, separate from the real one every tool uses.
+    sl = ShoppingList(SKILL_DIR)
+
+    if len(sys.argv) > 1 and sys.argv[1] == "list":
+        print(sl.format_for_whatsapp())
+    elif len(sys.argv) > 2 and sys.argv[1] == "store":
+        print(sl.format_for_whatsapp(sys.argv[2]))
     else:
-        print("Usage: shopping_list.py [list|costco|add <item> [from store]|remove <item>|clear|store <name>]")
+        print("Usage: shopping_list.py [list|store <name>]")
+        print("Writes go through tools.py — see references/agent.md.")

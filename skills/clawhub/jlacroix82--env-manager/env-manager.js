@@ -12,7 +12,9 @@
  *
  * Modes:
  *   --setup <type> [name]   Write starter files; return toolchain commands.
- *                            Types: python, node, docker, go, rust.
+ *                            Types: python, node, docker, go, rust — validated
+ *                            against that list before any path is built.
+ *                            Invalid type or name writes nothing and exits 1.
  *   --ports                 List stored port records (JSON only).
  *   --ports --free          Find unused port numbers in stored data.
  *   --services              List stored service records (JSON only).
@@ -36,28 +38,62 @@ const path = require('path');
 // returned commands. The skill never runs any of them. The agent inspects
 // the command and runs it (or not) using its own shell tool.
 
+// The complete set of environment types this skill will act on. Anything not
+// on this list is refused before a path is built or a byte is written. The
+// type is not just a switch selector: when no name is supplied it becomes part
+// of the generated directory name, so an unvalidated type is a path-traversal
+// vector.
+const ACCEPTED_ENV_TYPES = ['python', 'node', 'docker', 'go', 'rust'];
+
 const DEFAULT_ACCEPTED_BINARIES = [
-  'python3', 'node', 'npm', 'docker', 'go',
-  'rustc', 'pip3', 'lsof', 'which', 'mkdir',
-  'mvn', 'gradle', 'cargo', 'ruby', 'pip',
-  'make', 'gcc', 'g++', 'clang', 'cmake',
-  'java', 'javac', 'dotnet', 'go1',
-  'perl', 'php', 'lua', 'tclsh',
+  // Declared scope: Python / Node / Docker / Go / Rust scaffolding only.
+  'python3', 'pip3',          // Python
+  'node', 'npm',              // Node
+  'docker',                   // Docker
+  'go',                       // Go
+  'rustc', 'cargo',           // Rust
+  // Read-only inspection helpers (no execution of project code).
+  'lsof', 'which', 'mkdir',
 ];
 
 // ─── Workspace helpers ─────────────────────────────────────────────────────
 //
-// The workspace root is fixed: the parent directory of this skill. There is
-// no runtime path redirection via environment variable or CLI flag. This
-// keeps the file-write surface predictable and auditable.
+// The workspace root is the project root that contains this skill — the
+// grandparent of this file (skills/env-manager/ -> repo root). It is fixed and
+// resolved deterministically; there is NO upward walk searching for markers.
+//
+// An explicit ENV_MANAGER_WORKSPACE override IS permitted (for CI/relocation),
+// but it is confined: it MUST be an absolute path that is a descendant of the
+// fixed repo root. Anything outside the repo (e.g. /tmp, /home, /etc) is
+// rejected so a caller cannot redirect writes outside the intended workspace.
+// This keeps the file-write surface predictable and auditable.
+const REPO_ROOT = (() => {
+  // This file lives at <repo>/skills/env-manager/env-manager.js
+  return path.resolve(__dirname, '..', '..');
+})();
+
+function isInsideRepo(p) {
+  const root = REPO_ROOT;
+  const rel = path.relative(root, p);
+  return rel === '' || (!rel.startsWith('..') && !path.isAbsolute(rel));
+}
 
 function getWorkspace() {
-  let dir = __dirname;
-  for (let i = 0; i < 10; i++) {
-    if (fs.existsSync(path.join(dir, 'MEMORY.md'))) return dir;
-    dir = path.resolve(dir, '..');
+  if (process.env.ENV_MANAGER_WORKSPACE) {
+    const o = path.resolve(process.env.ENV_MANAGER_WORKSPACE);
+    if (!path.isAbsolute(o)) {
+      throw new Error('ENV_MANAGER_WORKSPACE must be an absolute path');
+    }
+    if (!isInsideRepo(o)) {
+      throw new Error(
+        'ENV_MANAGER_WORKSPACE must be inside the repo root (' + REPO_ROOT +
+        '). Refusing to write outside the project workspace.'
+      );
+    }
+    return o;
   }
-  return path.resolve(__dirname, '..', '..');
+  // Fixed: two levels up from this file — no upward walk.
+  return REPO_ROOT;
 }
 
 function getDataDir() {
@@ -68,8 +104,32 @@ function getEnvsFile()     { return path.join(getDataDir(), 'environments.json')
 function getPortsFile()    { return path.join(getDataDir(), 'ports.json'); }
 function getServicesFile() { return path.join(getDataDir(), 'services.json'); }
 
+/**
+ * Final gate before any mkdir/write. Every path this skill touches must
+ * resolve to a descendant of the active workspace, no matter how it was
+ * assembled upstream. This is deliberately redundant with input validation:
+ * validation can be bypassed by a new caller or a future edit, containment
+ * cannot.
+ *
+ * @param {string} p - Candidate path
+ * @returns {string} The resolved, contained path
+ * @throws {Error} PATH_ESCAPE if the path resolves outside the workspace
+ */
+function assertInsideWorkspace(p) {
+  const ws = path.resolve(getWorkspace());
+  const target = path.resolve(p);
+  const rel = path.relative(ws, target);
+  if (rel !== '' && (rel.startsWith('..') || path.isAbsolute(rel))) {
+    throw new Error(
+      `PATH_ESCAPE: refusing to touch ${target} — outside the workspace (${ws})`
+    );
+  }
+  return target;
+}
+
 function ensureDir(dir) {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  const safe = assertInsideWorkspace(dir);
+  if (!fs.existsSync(safe)) fs.mkdirSync(safe, { recursive: true });
 }
 
 function loadJSON(file, fallback) {
@@ -82,8 +142,17 @@ function loadJSON(file, fallback) {
 }
 
 function saveJSON(file, data) {
-  ensureDir(path.dirname(file));
-  fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
+  const safe = assertInsideWorkspace(file);
+  ensureDir(path.dirname(safe));
+  fs.writeFileSync(safe, JSON.stringify(data, null, 2), 'utf8');
+}
+
+/**
+ * Write a scaffold file, contained. All scaffold writes go through here so
+ * containment is enforced in one place rather than at nine call sites.
+ */
+function writeFile(file, contents) {
+  fs.writeFileSync(assertInsideWorkspace(file), contents);
 }
 
 function getToday() {
@@ -198,24 +267,51 @@ function sanitizeEnvName(name) {
 }
 
 /**
+ * Validate an environment type against the documented allowlist.
+ *
+ * This must run before any path is constructed. When `name` is omitted the
+ * type is interpolated into the environment directory name, so an
+ * unvalidated type reaches `path.join` directly.
+ *
+ * Returns the type on success, or throws an Error on rejection.
+ */
+function sanitizeEnvType(type) {
+  if (typeof type !== 'string' || type.length === 0) {
+    throw new Error('INVALID_TYPE: environment type must be a non-empty string');
+  }
+  if (!ACCEPTED_ENV_TYPES.includes(type)) {
+    throw new Error(
+      `INVALID_TYPE: unknown environment type "${type}". ` +
+      `Supported types: ${ACCEPTED_ENV_TYPES.join(', ')}`
+    );
+  }
+  return type;
+}
+
+/**
  * Build all commands needed to set up a development environment.
  * Returns { commands: [...], environment: { name, type, path, ... } }
  */
 function buildSetupCommands(type, name) {
   const timestamp = Date.now();
+  // Validate the type BEFORE it can reach a path: with no name supplied it
+  // becomes part of the directory name.
+  const envType = sanitizeEnvType(type);
   // If a name was provided, sanitize it. If not, generate a safe default.
   let envName;
   if (name) {
     envName = sanitizeEnvName(name);
   } else {
-    envName = `${type}-env-${timestamp}`;
+    envName = `${envType}-env-${timestamp}`;
   }
-  const envDir = path.join(getWorkspace(), 'environments', envName);
+  const envDir = assertInsideWorkspace(
+    path.join(getWorkspace(), 'environments', envName)
+  );
 
   const commands = [];
   const environment = {
     name: envName,
-    type: type,
+    type: envType,
     path: envDir,
     created: getToday(),
     status: 'active'
@@ -226,7 +322,7 @@ function buildSetupCommands(type, name) {
     description: `Create environment directory: ${envDir}`
   }));
 
-  switch (type) {
+  switch (envType) {
 
     case 'python': {
       // Verify python3
@@ -298,13 +394,10 @@ function buildSetupCommands(type, name) {
     }
 
     default:
-      commands.unshift({
-        binary: type,
-        args: [],
-        error: `Unknown environment type: ${type}`,
-        status: 'error',
-        description: `Setup for unknown type: ${type}`
-      });
+      // Unreachable: sanitizeEnvType() rejects anything not handled above.
+      // Kept as an invariant so adding a type to ACCEPTED_ENV_TYPES without a
+      // case here fails loudly instead of silently scaffolding nothing.
+      throw new Error(`INTERNAL: accepted type "${envType}" has no setup branch`);
   }
 
   // Always: verify binary availability
@@ -329,15 +422,21 @@ function buildSetupCommands(type, name) {
 /**
  * Write all scaffold files for an environment type.
  * This uses ONLY fs.writeFileSync — no shell access.
+ *
+ * Exported, so it revalidates its own arguments: a caller reaching it
+ * directly gets the same type/name/containment guarantees as the CLI path.
  */
 function generateScaffoldFiles(type, envName, envDir) {
-  ensureDir(envDir);
+  const envType = sanitizeEnvType(type);
+  const safeName = sanitizeEnvName(envName);
+  const safeDir = assertInsideWorkspace(envDir);
+  ensureDir(safeDir);
 
-  switch (type) {
+  switch (envType) {
 
     case 'node': {
       const pkg = {
-        name: envName,
+        name: safeName,
         version: '1.0.0',
         description: '',
         main: 'index.js',
@@ -350,40 +449,40 @@ function generateScaffoldFiles(type, envName, envDir) {
         author: '',
         license: 'ISC'
       };
-      fs.writeFileSync(path.join(envDir, 'package.json'), JSON.stringify(pkg, null, 2));
-      fs.writeFileSync(path.join(envDir, 'index.js'),
-        `// ${envName}\nconsole.log('${envName} running');\n`);
-      fs.writeFileSync(path.join(envDir, '.gitignore'), 'node_modules\n.env\n*.log\n');
+      writeFile(path.join(safeDir, 'package.json'), JSON.stringify(pkg, null, 2));
+      writeFile(path.join(safeDir, 'index.js'),
+        `// ${safeName}\nconsole.log('${safeName} running');\n`);
+      writeFile(path.join(safeDir, '.gitignore'), 'node_modules\n.env\n*.log\n');
       break;
     }
 
     case 'docker': {
       const dockerfile = `FROM node:20-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nEXPOSE 3000\nCMD ["node", "index.js"]\n`;
-      fs.writeFileSync(path.join(envDir, 'Dockerfile'), dockerfile);
+      writeFile(path.join(safeDir, 'Dockerfile'), dockerfile);
 
       const compose = `version: '3.8'\nservices:\n  app:\n    build: .\n    ports:\n      - "3000:3000"\n    volumes:\n      - .:/app\n    environment:\n      - NODE_ENV=development\n`;
-      fs.writeFileSync(path.join(envDir, 'docker-compose.yml'), compose);
+      writeFile(path.join(safeDir, 'docker-compose.yml'), compose);
       break;
     }
 
     case 'go': {
-      fs.writeFileSync(path.join(envDir, 'main.go'),
-        `package main\n\nimport "fmt"\n\nfunc main() {\n\tfmt.Println("${envName} running")\n}\n`);
+      writeFile(path.join(safeDir, 'main.go'),
+        `package main\n\nimport "fmt"\n\nfunc main() {\n\tfmt.Println("${safeName} running")\n}\n`);
       break;
     }
 
     case 'rust': {
-      const cargo = `[package]\nname = "${envName}"\nversion = "0.1.0"\nedition = "2021"\n\n[dependencies]\n`;
-      fs.writeFileSync(path.join(envDir, 'Cargo.toml'), cargo);
-      ensureDir(path.join(envDir, 'src'));
-      fs.writeFileSync(path.join(envDir, 'src', 'main.rs'),
-        `fn main() {\n    println!("${envName} running");\n}\n`);
+      const cargo = `[package]\nname = "${safeName}"\nversion = "0.1.0"\nedition = "2021"\n\n[dependencies]\n`;
+      writeFile(path.join(safeDir, 'Cargo.toml'), cargo);
+      ensureDir(path.join(safeDir, 'src'));
+      writeFile(path.join(safeDir, 'src', 'main.rs'),
+        `fn main() {\n    println!("${safeName} running");\n}\n`);
       break;
     }
 
     case 'python': {
-      fs.writeFileSync(path.join(envDir, '.env.example'),
-        '# Environment variables example\nAPP_NAME=' + envName + '\n');
+      writeFile(path.join(safeDir, '.env.example'),
+        '# Environment variables example\nAPP_NAME=' + safeName + '\n');
       break;
     }
   }
@@ -400,33 +499,35 @@ function generateScaffoldFiles(type, envName, envDir) {
  */
 function setupEnvironment(type, name) {
   const timestamp = Date.now();
-  // Sanitize name to prevent path traversal; fall back to safe default if invalid
-  let envName;
-  if (name) {
-    try {
-      envName = sanitizeEnvName(name);
-    } catch (err) {
-      // Return error result rather than throwing — callers may not handle throws
-      return {
-        environment: null,
-        commands: [],
-        commandsText: '',
-        warnings: [err.message],
-        filesGenerated: false,
-        message: `Error: ${err.message}`
-      };
-    }
-  } else {
-    envName = `${type}-env-${timestamp}`;
+
+  // Step 0: Validate ALL input before a path is built or a byte is written.
+  // Both the type and the name reach path.join(): the name directly, the type
+  // via the generated default name. Rejected input writes nothing at all.
+  let envType, envName, envDir;
+  try {
+    envType = sanitizeEnvType(type);
+    envName = name ? sanitizeEnvName(name) : `${envType}-env-${timestamp}`;
+    envDir = assertInsideWorkspace(
+      path.join(getWorkspace(), 'environments', envName)
+    );
+  } catch (err) {
+    // Return an error result rather than throwing — callers may not handle throws
+    return {
+      environment: null,
+      commands: [],
+      commandsText: '',
+      warnings: [err.message],
+      filesGenerated: false,
+      message: `Error: ${err.message}`
+    };
   }
-  const envDir = path.join(getWorkspace(), 'environments', envName);
 
   // Step 1: Create directory and scaffold files (fs-only, always executed)
   ensureDir(envDir);
-  generateScaffoldFiles(type, envName, envDir);
+  generateScaffoldFiles(envType, envName, envDir);
 
   // Step 2: Build shell commands (agent must execute these)
-  const { commands, environment } = buildSetupCommands(type, envName);
+  const { commands, environment } = buildSetupCommands(envType, envName);
   const environmentData = {
     ...environment,
     created: getToday(),
@@ -457,9 +558,9 @@ function setupEnvironment(type, name) {
     commandsText,
     warnings,
     filesGenerated: true,
-    message: type === 'python'
+    message: envType === 'python'
       ? `Created Python environment: ${envName}\n  Path: ${envDir}\n  Activate: source ${envDir}/bin/activate`
-      : `Created ${type} environment: ${envName}\n  Path: ${envDir}`
+      : `Created ${envType} environment: ${envName}\n  Path: ${envDir}`
   };
 }
 
@@ -485,6 +586,19 @@ function formatCommands(commands) {
 function formatSingleCommand(cmd) {
   if (cmd.error) return `[ERROR] ${cmd.error}`;
   return `${cmd.description}\n  → ${cmd.binary} ${cmd.args.join(' ')}`;
+}
+
+// ─── Environment listing (data-only, no shell) ────────────────────────────
+
+function listEnvironments() {
+  const envs = loadJSON(getEnvsFile(), {});
+  const entries = Object.entries(envs);
+
+  if (entries.length === 0) {
+    return { environments: {}, count: 0, message: 'No managed environments.' };
+  }
+
+  return { environments: envs, count: entries.length };
 }
 
 // ─── Port tracking (data-only, no shell) ──────────────────────────────────
@@ -695,21 +809,28 @@ function run(argv) {
     case 'setup': {
       const type = extraArgs[0];
       const name = extraArgs[1];
+      const usage =
+        'env-manager.js --setup <type> [name]\n' +
+        `Types: ${ACCEPTED_ENV_TYPES.join(', ')}`;
       if (!type) {
-        result.output = {
-          error: 'Missing environment type',
-          usage: 'env-manager.js --setup <type> [name]\nTypes: python, node, docker, go, rust'
-        };
+        result.output = { error: 'Missing environment type', usage };
       } else {
         const setup = setupEnvironment(type, name);
-        result.output = {
-          message: setup.message,
-          environment: setup.environment,
-          filesGenerated: setup.filesGenerated
-        };
-        result.commands = setup.commands;
-        result.commandsText = setup.commandsText;
-        result.warnings = setup.warnings;
+        if (!setup.environment) {
+          // Rejected input: nothing was written. Surface it as an error so the
+          // CLI exits non-zero instead of printing a half-success object.
+          result.output = { error: setup.warnings.join('; '), usage };
+          result.warnings = setup.warnings;
+        } else {
+          result.output = {
+            message: setup.message,
+            environment: setup.environment,
+            filesGenerated: setup.filesGenerated
+          };
+          result.commands = setup.commands;
+          result.commandsText = setup.commandsText;
+          result.warnings = setup.warnings;
+        }
       }
       break;
     }
@@ -753,12 +874,21 @@ function run(argv) {
       {
         const envs = loadJSON(getEnvsFile(), {});
         const allCommands = [];
+        const skipped = [];
         for (const [name, env] of Object.entries(envs)) {
-          const { commands } = buildSetupCommands(env.type, name);
-          allCommands.push(...commands);
+          // environments.json is on-disk state and may predate current
+          // validation (or have been edited by hand). Re-validate each record
+          // and skip the bad ones rather than aborting the whole listing.
+          try {
+            const { commands } = buildSetupCommands(env.type, name);
+            allCommands.push(...commands);
+          } catch (err) {
+            skipped.push(`${name}: ${err.message}`);
+          }
         }
-        result.output = { totalCommands: allCommands.length, commands };
+        result.output = { totalCommands: allCommands.length, commands: allCommands };
         result.commands = allCommands;
+        result.warnings = skipped.map(s => `Skipped stored environment ${s}`);
       }
       break;
 
@@ -781,6 +911,7 @@ if (require.main === module) {
     } else if (typeof result.output === 'object' && result.output.error) {
       console.error(`[env-manager] ${result.output.error}`);
       if (result.output.usage) console.log(result.output.usage);
+      process.exitCode = 1;
     } else if (typeof result.output === 'object' && result.output.freePorts) {
       console.log(`[env-manager] Free ports: ${result.output.freePorts.join(', ')}`);
     } else if (typeof result.output === 'object' && result.output.inactive) {
@@ -801,7 +932,7 @@ if (require.main === module) {
       console.log('[env-manager] Status:\n');
       console.log(`  Environments: ${s.environments.count} (${JSON.stringify(s.environments.types)})`);
       console.log(`  Services: ${s.services.count} (${s.services.running} running)`);
-      console.log(`  Ports managed: ${s.portss?.managed || s.ports?.managed || 0}`);
+      console.log(`  Ports managed: ${s.ports?.managed || 0}`);
     } else {
       console.log(JSON.stringify(result.output, null, 2));
     }
@@ -853,7 +984,13 @@ module.exports = {
   findBinary,
   isOnAcceptlist,
 
+  // Input validation / path confinement
+  sanitizeEnvType,
+  sanitizeEnvName,
+  assertInsideWorkspace,
+
   // Data operations (no shell)
+  listEnvironments,
   listPorts,
   findFreePorts,
   listServices,
@@ -874,5 +1011,6 @@ module.exports = {
   run,
 
   // Constants
-  DEFAULT_ACCEPTED_BINARIES
+  DEFAULT_ACCEPTED_BINARIES,
+  ACCEPTED_ENV_TYPES
 };

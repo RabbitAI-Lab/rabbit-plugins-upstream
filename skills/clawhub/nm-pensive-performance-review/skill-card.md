@@ -1,41 +1,55 @@
-## Description: <br>
-Detects likely time and space complexity hotspots in project code using static analysis with optional enrichment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects time and space complexity hotspots via AST scan
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill before merges or during performance triage to scan target code paths for likely time and space complexity hotspots and receive ranked findings with suggested validation steps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Static-analysis findings may be false positives or may not reflect real runtime impact. <br>
-Mitigation: Confirm important findings with profiling, benchmark reruns, or manual review before applying or claiming a performance fix. <br>
-Risk: Optional gauntlet and kuva integrations may read additional project data or require separate tool installation. <br>
-Mitigation: Review optional integrations and tool installs separately in environments with network, package, or source-code access restrictions. <br>
+## Use Case:
 
+Developers use this skill before performance-sensitive merges or when investigating code that feels slow. It scans source for likely time and space complexity hotspots and returns findings with severity and suggestions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-performance-review) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown report with inline code and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Findings are informational and should be validated with profiling or benchmarks before fixes are treated as proven.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: ClawScan marks the skill suspicious because its reported behaviors do not fully match its stated static complexity analysis purpose, and it instructs users to run project benchmarks and install a third-party tool.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Consider the security verdict carefully and inspect benchmark and installation commands before running them.
+
+Risk: The security scan was partial: referenced paths were missing, so its evidence is incomplete.
+
+Mitigation: Review the complete release contents and any referenced files before relying on the scan or using the skill.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-pensive-performance-review)
+- [Project homepage listed in skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+- [kuva visualization project](https://github.com/Psy-Fer/kuva)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown performance review with severity-ranked findings and suggested fixes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Python AST analysis is always available; multi-language and call-graph analysis require optional integrations.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

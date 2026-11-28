@@ -1,8 +1,8 @@
 ---
 name: qsr-audit-readiness-countdown
-version: 1.0.0
+version: 1.0.4
 description: 30-day countdown protocol for third-party compliance audits — EcoSure, health department, corporate brand audits. Milestone-driven preparation that makes perfect audit scores the natural outcome of the process, not a last-minute scramble. Built by a franchise GM with 16 years in QSR operations and multiple consecutive years of 100% EcoSure compliance.
-license: CC-BY-NC-4.0
+license: MIT-0
 tags:
   - restaurant
   - franchise
@@ -14,8 +14,16 @@ tags:
   - qsr
 ---
 
+## Observa Edge Basic Beta
+
+Observa Edge Basic Beta is a separate, optional OpenClaw plugin from McPherson AI for local guardrails on covered tool routes. Installing this restaurant skill leaves Guard inactive. Accountless Shadow previews covered requests locally. Guard enrollment is restricted and requires approval and a separate local owner activation.
+
+[**Explore Observa Edge Basic Beta →**](https://mcphersonai.com/observa/edge-basic?utm_source=clawhub&utm_medium=skill&utm_campaign=observa-edge-basic-beta&utm_content=qsr-audit-readiness-countdown)
+
+*Publisher notice. The QSR skill’s behavior and data handling are unchanged.*
+
 # QSR Audit Readiness Countdown
-**v1.0.0 · McPherson AI · San Diego, CA**
+**v1.0.4 · McPherson AI · San Diego, CA**
 
 You are an audit preparation coach for a restaurant or franchise location. When the operator knows an audit window is approaching — EcoSure, health department, corporate brand audit, or any third-party compliance review — you run a structured 30-day countdown that escalates in intensity as the audit date approaches.
 
@@ -256,11 +264,7 @@ After 2+ audit cycles:
 
 ## LICENSE
 
-**Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**
-
-Free to use, share, and adapt for personal and business operations. For the purposes of this license, operating this skill within your own business is not considered commercial redistribution. Commercial redistribution means repackaging, reselling, or including this skill as part of a paid product or service offered to others. That requires written permission from McPherson AI.
-
-Full license: https://creativecommons.org/licenses/by-nc/4.0/
+McPherson AI distributes this ClawHub edition under MIT-0. The GitHub source edition is available under Apache License 2.0. See [LICENSE](LICENSE). Third-party materials remain subject to their applicable terms.
 
 ---
 
@@ -272,7 +276,11 @@ This skill pairs with **qsr-daily-ops-monitor** (skill #1) — the daily skill k
 
 Built by a corporate GM who has achieved 100% compliance on all three EcoSure audits for multiple consecutive years using this exact 30-day protocol. The system works because it makes audit readiness the default state of operations, not a special event.
 
-**Changelog:** v1.0.0 — Initial release. 30-day countdown with five milestones, mock audit protocol, post-audit learning, pattern tracking.
+**Changelog:**
+- v1.0.3 - Publisher-notice refresh: Observa CTA updated to the current Getting Started flow. No functional changes.
+- v1.0.2 - Publisher-note release. Updated the note: the Observa private beta is now open for selected n8n and OpenClaw operators. No operational behavior or license changes.
+- v1.0.1 — Publisher-note release. Added the McPherson Governance V6 shadow-beta notice. No operational behavior or license changes.
+- v1.0.0 — Initial release. 30-day countdown with five milestones, mock audit protocol, post-audit learning, pattern tracking.
 
 **This skill is part of the McPherson AI QSR Operations Suite — a complete operational intelligence stack for franchise and restaurant operators.**
 

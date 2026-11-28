@@ -1,7 +1,7 @@
 ---
 name: google-drive
-description: "Google Drive file management: search, upload, download, organize folders, move/copy files, share with permissions, and export Google Docs formats. Use when an agent needs google drive, search drive files by name or content, download files to agentpmt storage for processing, upload files to drive from agentpmt storage, create folder structures and organize files, copy file, file id, new name through AgentPMT-hosted remote tool calls. Discovery terms: google drive."
-version: 1.0.0
+description: "Google Drive file management: search, upload, download, organize folders, move/copy files, share with permissions, and export Google Docs formats. Supports file renaming. Use when an agent needs google drive, search drive files by name or content, download files to agentpmt storage for processing, upload files to drive from agentpmt storage, create folder structures and organize files, copy file, file id, new name through AgentPMT-hosted remote tool calls."
+version: 1.0.1
 homepage: https://www.agentpmt.com/marketplace/google-drive
 compatibility: "Agent instructions for AgentPMT-hosted remote tool calls. Follow this skill body for supported account, wallet, and setup routes. No local command runtime is declared."
 metadata: {"author":"agentpmt","openclaw":{"homepage":"https://www.agentpmt.com/marketplace/google-drive"}}
@@ -9,7 +9,7 @@ metadata: {"author":"agentpmt","openclaw":{"homepage":"https://www.agentpmt.com/
 # Google Drive
 
 ## Freshness
-Last updated: `2026-06-24`.
+Last updated: `2026-10-23`.
 
 If the current date is more than 7 days after the last updated date, reinstall this skill from skills.sh or ClawHub before relying on endpoints, schemas, setup steps, or examples.
 
@@ -340,11 +340,18 @@ List all permissions on a file or folder.
 - **Downloaded files are stored temporarily** and expire after `expiration_days` (default 7, max 7)
 - **Pagination:** When results exceed `page_size`, the response includes `next_page_token`. Pass it as `page_token` in the next request to get the next page
 
+
+##### `rename_file`
+Renames a Drive file or folder, including a Google Doc, spreadsheet, or presentation file. Required: `file_id`, nonblank `new_name`. Optional: `include_shared_drives` (default `true`). IDs and URLs stay the same; tabs inside Docs or Sheets are unchanged.
+```json
+{"action":"rename_file","file_id":"FILE_ID","new_name":"Q4 Report"}
+```
+
 ## When To Use
 - Use this skill for `Google Drive` on AgentPMT.
 - Use it when an agent needs this specific tool's behavior, schema, inputs, outputs, and invocation shape.
 - Search and activation keywords: google drive, search drive files by name or content, download files to agentpmt storage for processing, upload files to drive from agentpmt storage, create folder structures and organize files, copy file, file id, new name.
-- Supported action names: `copy_file`, `create_folder`, `delete_file`, `download_file_to_storage`, `ensure_folder_path`, `get_file_metadata`, `list_permissions`, `move_file`, `search_files`, `share_file`, `trash_file`, `upload_file_from_storage`.
+- Supported action names: `copy_file`, `create_folder`, `delete_file`, `download_file_to_storage`, `ensure_folder_path`, `get_file_metadata`, `list_permissions`, `move_file`, `rename_file`, `search_files`, `share_file`, `trash_file`, `upload_file_from_storage`.
 
 ## Use Cases
 - Search Drive files by name or content
@@ -359,14 +366,14 @@ List all permissions on a file or folder.
 - Manage shared drive content
 
 ## Related Product Skills
-- File Management: ../file-management (ClawHub: `file-management`, page: https://clawhub.ai/agentpmt/file-management; skills.sh: `npx skills add AgentPMT/agent-skills --skill file-management`) - Use this companion skill to inspect, download, upload, and manage files referenced by this product.
+- File Management: ../file-management (ClawHub: `file-management`, page: https://clawhub.ai/agentpmt/file-management; skills.sh: `npx skills add AgentPMT/agent-skills --skill file-management`)
 
 ## Categories And Industries
 No categories or industry tags are published for this tool.
 
 ## Actions And Schema
 Complete generated action schema: `./schema.md`.
-Supported action count: `12`.
+Supported action count: `13`.
 x402 availability: not enabled for this product.
 
 - `copy_file` (action slug: `copy-file`): Create a copy of a file in Google Drive. Price: `5` credits. Parameters: `create_parent_folders`, `file_id`, `folder_id`, `include_shared_drives`, `new_name`, `parent_folder_id`, `parent_folder_path`.
@@ -377,6 +384,7 @@ x402 availability: not enabled for this product.
 - `get_file_metadata` (action slug: `get-file-metadata`): Retrieve metadata for a specific file or folder. Price: `5` credits. Parameters: `file_id`, `include_shared_drives`.
 - `list_permissions` (action slug: `list-permissions`): List all permissions on a file or folder. Price: `5` credits. Parameters: `file_id`, `include_shared_drives`.
 - `move_file` (action slug: `move-file`): Move a file or folder to a different location in Google Drive. Price: `5` credits. Parameters: `create_parent_folders`, `destination_folder_id`, `destination_folder_path`, `file_id`, `folder_id`, `include_shared_drives`, `remove_existing_parents`.
+- `rename_file` (action slug: `rename-file`): Rename a Drive file or folder, including Google Docs, Sheets, and Slides files. Price: `5` credits. Parameters: `file_id`, `include_shared_drives`, `new_name`.
 - `search_files` (action slug: `search-files`): Search for files and folders in Google Drive by text, MIME type, or folder location. Price: `5` credits. Parameters: `folder_id`, `folder_path`, `include_shared_drives`, `mime_type`, `order_by`, `page_size`, `page_token`, `query`, plus 2 more.
 - `share_file` (action slug: `share-file`): Share a file or folder by creating a permission. Price: `5` credits. Parameters: `email_message`, `file_id`, `include_shared_drives`, `permission`, `send_notification`.
 - `trash_file` (action slug: `trash-file`): Move a file or folder to the trash (recoverable). Price: `5` credits. Parameters: `file_id`, `include_shared_drives`.

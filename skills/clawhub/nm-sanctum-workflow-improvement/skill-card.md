@@ -1,43 +1,54 @@
-## Description: <br>
-Evaluates and improves skills, agents, commands, and hooks after a workflow slice. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Evaluates and improves skills, agents, commands, and hooks after a workflow slice.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and maintainers use this skill after a short workflow or command run to identify slow, confusing, repetitive, or fragile steps, then plan and validate improvements to related skills, agents, commands, and hooks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can review workflow history and project context that may include sensitive operational details. <br>
-Mitigation: Review the context and generated summaries before sharing them, and avoid including secrets, private project names, stack traces, architecture details, or internal operational notes. <br>
-Risk: Automatic GitHub issue creation can publish deferred work, recommendations, or tooling lessons to an external repository. <br>
-Mitigation: Disable automatic issue creation unless intended, check for duplicates, and review every proposed issue or discussion post before allowing publication. <br>
-Risk: The skill may suggest changes to workflow assets that affect future agent behavior. <br>
-Mitigation: Keep changes bounded, review diffs, run targeted validation, and compare before-and-after workflow metrics before relying on the updated assets. <br>
+## Use Case:
 
+Developers use this skill after a workflow slice to identify friction and plan improvements to the skills, agents, commands, and hooks involved.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/athola/skills/nm-sanctum-workflow-improvement) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with checklists, plans, metrics tables, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose file edits, validation commands, GitHub issue content, and retrospective metrics for human review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Workflow observations or project details may be directed to an external GitHub repository without a clear publication approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the observations and project details for sensitive information, and obtain approval before posting externally.
+
+Risk: The security analysis was incomplete for the referenced issue-creation module.
+
+Mitigation: Review the issue-creation module and its behavior before using that workflow.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/athola/skills/nm-sanctum-workflow-improvement)
+- [Project homepage (artifact metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown, Shell commands, Code]
+
+**Output Format:** [Markdown with workflow analysis, scored improvement options, plans, validation metrics, and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include proposed workflow asset changes and optional GitHub issue drafts or reports.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent World Discovery"
+  short_description: "Read-only discovery and health checks for Agent World"
+  default_prompt: "Check the public Agent World status and show me its current official discovery links."

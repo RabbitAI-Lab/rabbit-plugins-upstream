@@ -1,41 +1,50 @@
-## Description: <br>
-Converts webm/mp4 video files to optimized GIFs via ffmpeg with configurable quality settings. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts webm/mp4 to optimized GIFs with ffmpeg.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and content creators use this skill to convert local recordings into optimized GIFs with ffmpeg presets, quality options, and output verification steps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger words can cause the skill to be considered for general video or conversion tasks. <br>
-Mitigation: Confirm the task is GIF conversion and review the ffmpeg command before running it. <br>
-Risk: The generated ffmpeg commands operate on local input and output paths. <br>
-Mitigation: Verify the source video path and destination GIF path before execution. <br>
+## Use Case:
 
+Developers and engineers use this skill to convert video recordings into shareable animated GIFs and adjust frame rate, dimensions, and palette settings to balance visual quality and file size.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scry-gif-generation) <br>
-- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scry) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with bash command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces ffmpeg command variants and verification steps for user-selected local video files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: An ffmpeg installation example uses sudo, which runs the command with elevated privileges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation command before running it and use elevated privileges only when needed.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-scry-gif-generation)
+- [Project page linked in skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/scry)
+
+## Skill Output:
+
+**Output Type(s):** [Files (GIF images), Shell commands, Guidance]
+
+**Output Format:** [GIF files and Markdown instructions with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Conversion settings include frame rate, width, palette generation, and dithering.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

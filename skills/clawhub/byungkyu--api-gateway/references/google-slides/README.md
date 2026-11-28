@@ -1,58 +1,91 @@
-# Google Slides Routing Reference
+# Google Slides
 
-> **Safety:** All write operations (POST, PUT, PATCH, DELETE) require explicit user confirmation before execution. Verify the target resource and intended effect with the user first. See the main [SKILL.md](../SKILL.md#security--permissions) for full security policy.
+## API Reference
+
+> **Safety:** All write operations (POST, PUT, PATCH, DELETE) require explicit user confirmation before execution. Verify the target resource and intended effect with the user first. See the main [SKILL.md](../../SKILL.md#security--permissions) for full security policy.
 
 **App name:** `google-slides`
-**Base URL proxied:** `slides.googleapis.com`
+**Upstream base URL:** `slides.googleapis.com`
 
-## API Path Pattern
+Replace the upstream base URL with the app name. Everything after the base URL including query strings is kept as-is. Any account-specific part of the base URL and the API credentials are stored in the Maton connection, and the gateway injects both so requests never carry them. For example:
 
-```
-/google-slides/v1/presentations/{presentationId}
-```
+- Upstream: `slides.googleapis.com/v1/presentations`
+- Gateway: `api.maton.ai/google-slides/v1/presentations`
 
-## Common Endpoints
+### Presentations API
 
-### Create Presentation
+#### List Presentations
+
+Lists the user's presentations through Google Drive's `files.list`, on this connection. Takes `files.list`'s parameters (`q`, `orderBy`, `pageSize`, `pageToken`, `fields`, `corpora`, `driveId`, `includeItemsFromAllDrives`, `supportsAllDrives`) and returns Drive's response; the gateway always limits results to this app's file type and leaves out trashed files.
+
+Needs the `https://www.googleapis.com/auth/drive.readonly` scope (a `403` names it otherwise): add it when creating the connection, or with `maton connection reauthorize {connection_id} --scopes` listing the connection's current scopes plus `drive.readonly`. Other Drive endpoints are refused here; use a `google-drive` connection for them.
+
 ```bash
-POST /google-slides/v1/presentations
-Content-Type: application/json
+maton api "/google-slides/drive/v3/files?q=name%20contains%20'Review'&orderBy=modifiedTime%20desc&pageSize=20&fields=nextPageToken,files(id,name,modifiedTime)"
+```
 
+#### Create Presentation
+
+```bash
+maton api -X POST '/google-slides/v1/presentations' -H 'Content-Type: application/json' --input - <<'JSON'
 {
   "title": "My Presentation"
 }
+JSON
 ```
 
-### Get Presentation
+#### Get Presentation
+
 ```bash
-GET /google-slides/v1/presentations/{presentationId}
+maton api '/google-slides/v1/presentations/{presentationId}'
 ```
 
-### Get Page (Slide)
+**Note:** `{presentationId}` stands for a real value; fill it in before sending the request.
+
+### Pages API
+
+#### Get Page
+
 ```bash
-GET /google-slides/v1/presentations/{presentationId}/pages/{pageId}
+maton api '/google-slides/v1/presentations/{presentationId}/pages/{pageId}'
 ```
 
-### Get Page Thumbnail
+**Note:** `{presentationId}` and `{pageId}` stand for real values; fill each of them in before sending the request.
+
+#### Get Page Thumbnail
+
 ```bash
-GET /google-slides/v1/presentations/{presentationId}/pages/{pageId}/thumbnail
+maton api '/google-slides/v1/presentations/{presentationId}/pages/{pageId}/thumbnail'
 ```
 
-### Batch Update (All Modifications)
-```bash
-POST /google-slides/v1/presentations/{presentationId}:batchUpdate
-Content-Type: application/json
+**Note:** `{presentationId}` and `{pageId}` stand for real values; fill each of them in before sending the request.
 
+With custom size:
+
+```bash
+maton api '/google-slides/v1/presentations/{presentationId}/pages/{pageId}/thumbnail?thumbnailProperties.mimeType=PNG&thumbnailProperties.thumbnailSize=LARGE'
+```
+
+**Note:** `{presentationId}` and `{pageId}` stand for real values; fill each of them in before sending the request.
+
+### Batch Updates API
+
+The batchUpdate endpoint is used for most modifications. It accepts an array of requests that are applied atomically.
+
+```bash
+maton api -X POST '/google-slides/v1/presentations/{presentationId}:batchUpdate' -H 'Content-Type: application/json' --input - <<'JSON'
 {
   "requests": [...]
 }
+JSON
 ```
 
-### Create Slide
-```bash
-POST /google-slides/v1/presentations/{presentationId}:batchUpdate
-Content-Type: application/json
+**Note:** `{presentationId}` stands for a real value; fill it in before sending the request.
 
+#### Create Slide
+
+```bash
+maton api -X POST '/google-slides/v1/presentations/{presentationId}:batchUpdate' -H 'Content-Type: application/json' --input - <<'JSON'
 {
   "requests": [
     {
@@ -65,15 +98,26 @@ Content-Type: application/json
     }
   ]
 }
+JSON
 ```
 
-Predefined layouts: `BLANK`, `TITLE`, `TITLE_AND_BODY`, `TITLE_AND_TWO_COLUMNS`, `TITLE_ONLY`, `SECTION_HEADER`, `ONE_COLUMN_TEXT`, `MAIN_POINT`, `BIG_NUMBER`
+**Note:** `{presentationId}` stands for a real value; fill it in before sending the request.
 
-### Insert Text
+Available predefined layouts:
+- `BLANK`
+- `TITLE`
+- `TITLE_AND_BODY`
+- `TITLE_AND_TWO_COLUMNS`
+- `TITLE_ONLY`
+- `SECTION_HEADER`
+- `ONE_COLUMN_TEXT`
+- `MAIN_POINT`
+- `BIG_NUMBER`
+
+#### Insert Text
+
 ```bash
-POST /google-slides/v1/presentations/{presentationId}:batchUpdate
-Content-Type: application/json
-
+maton api -X POST '/google-slides/v1/presentations/{presentationId}:batchUpdate' -H 'Content-Type: application/json' --input - <<'JSON'
 {
   "requests": [
     {
@@ -85,13 +129,36 @@ Content-Type: application/json
     }
   ]
 }
+JSON
 ```
 
-### Create Shape (Text Box)
-```bash
-POST /google-slides/v1/presentations/{presentationId}:batchUpdate
-Content-Type: application/json
+**Note:** `{presentationId}` and `{shapeId}` stand for real values; fill each of them in before sending the request.
 
+#### Delete Text
+
+```bash
+maton api -X POST '/google-slides/v1/presentations/{presentationId}:batchUpdate' -H 'Content-Type: application/json' --input - <<'JSON'
+{
+  "requests": [
+    {
+      "deleteText": {
+        "objectId": "{shapeId}",
+        "textRange": {
+          "type": "ALL"
+        }
+      }
+    }
+  ]
+}
+JSON
+```
+
+**Note:** `{presentationId}` and `{shapeId}` stand for real values; fill each of them in before sending the request.
+
+#### Create Shape
+
+```bash
+maton api -X POST '/google-slides/v1/presentations/{presentationId}:batchUpdate' -H 'Content-Type: application/json' --input - <<'JSON'
 {
   "requests": [
     {
@@ -116,13 +183,15 @@ Content-Type: application/json
     }
   ]
 }
+JSON
 ```
 
-### Create Image
-```bash
-POST /google-slides/v1/presentations/{presentationId}:batchUpdate
-Content-Type: application/json
+**Note:** `{presentationId}` and `{slideId}` stand for real values; fill each of them in before sending the request.
 
+#### Create Image
+
+```bash
+maton api -X POST '/google-slides/v1/presentations/{presentationId}:batchUpdate' -H 'Content-Type: application/json' --input - <<'JSON'
 {
   "requests": [
     {
@@ -134,19 +203,28 @@ Content-Type: application/json
           "size": {
             "width": {"magnitude": 200, "unit": "PT"},
             "height": {"magnitude": 200, "unit": "PT"}
+          },
+          "transform": {
+            "scaleX": 1,
+            "scaleY": 1,
+            "translateX": 200,
+            "translateY": 200,
+            "unit": "PT"
           }
         }
       }
     }
   ]
 }
+JSON
 ```
 
-### Delete Object
-```bash
-POST /google-slides/v1/presentations/{presentationId}:batchUpdate
-Content-Type: application/json
+**Note:** `{presentationId}` and `{slideId}` stand for real values; fill each of them in before sending the request.
 
+#### Delete Object
+
+```bash
+maton api -X POST '/google-slides/v1/presentations/{presentationId}:batchUpdate' -H 'Content-Type: application/json' --input - <<'JSON'
 {
   "requests": [
     {
@@ -156,13 +234,46 @@ Content-Type: application/json
     }
   ]
 }
+JSON
 ```
 
-### Replace All Text (Template Substitution)
-```bash
-POST /google-slides/v1/presentations/{presentationId}:batchUpdate
-Content-Type: application/json
+**Note:** `{presentationId}` and `{objectId}` stand for real values; fill each of them in before sending the request.
 
+#### Update Text Style
+
+```bash
+maton api -X POST '/google-slides/v1/presentations/{presentationId}:batchUpdate' -H 'Content-Type: application/json' --input - <<'JSON'
+{
+  "requests": [
+    {
+      "updateTextStyle": {
+        "objectId": "{shapeId}",
+        "textRange": {
+          "type": "ALL"
+        },
+        "style": {
+          "bold": true,
+          "fontSize": {"magnitude": 24, "unit": "PT"},
+          "foregroundColor": {
+            "opaqueColor": {
+              "rgbColor": {"red": 0.2, "green": 0.4, "blue": 0.8}
+            }
+          }
+        },
+        "fields": "bold,fontSize,foregroundColor"
+      }
+    }
+  ]
+}
+JSON
+```
+
+**Note:** `{presentationId}` and `{shapeId}` stand for real values; fill each of them in before sending the request.
+
+#### Replace All Text
+
+```bash
+maton api -X POST '/google-slides/v1/presentations/{presentationId}:batchUpdate' -H 'Content-Type: application/json' --input - <<'JSON'
 {
   "requests": [
     {
@@ -176,31 +287,12 @@ Content-Type: application/json
     }
   ]
 }
+JSON
 ```
 
-### Update Text Style
-```bash
-POST /google-slides/v1/presentations/{presentationId}:batchUpdate
-Content-Type: application/json
+**Note:** `{presentationId}` stands for a real value; fill it in before sending the request.
 
-{
-  "requests": [
-    {
-      "updateTextStyle": {
-        "objectId": "{shapeId}",
-        "textRange": {"type": "ALL"},
-        "style": {
-          "bold": true,
-          "fontSize": {"magnitude": 24, "unit": "PT"}
-        },
-        "fields": "bold,fontSize"
-      }
-    }
-  ]
-}
-```
-
-## Notes
+### Notes
 
 - Object IDs must be unique within a presentation
 - Use batchUpdate for all modifications (adding slides, text, shapes, etc.)
@@ -208,10 +300,11 @@ Content-Type: application/json
 - Sizes and positions use PT (points) as the unit (72 points = 1 inch)
 - Use `replaceAllText` for template-based presentation generation
 
-## Resources
+### Resources
 
-- [Slides API Overview](https://developers.google.com/slides/api/reference/rest)
+- [Google Slides API Overview](https://developers.google.com/slides/api/reference/rest)
 - [Presentations](https://developers.google.com/slides/api/reference/rest/v1/presentations)
 - [Pages](https://developers.google.com/slides/api/reference/rest/v1/presentations.pages)
 - [BatchUpdate Requests](https://developers.google.com/slides/api/reference/rest/v1/presentations/batchUpdate)
 - [Page Layouts](https://developers.google.com/slides/api/reference/rest/v1/presentations/create#predefinedlayout)
+- [Maton CLI Manual](https://cli.maton.ai/manual)

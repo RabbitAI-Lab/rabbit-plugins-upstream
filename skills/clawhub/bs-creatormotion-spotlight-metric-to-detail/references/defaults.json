@@ -1,0 +1,31 @@
+{
+  "interface": "content-library.png",
+  "metric": 100,
+  "metricLabel": "Collection reviewed",
+  "cameraTarget": [
+    0.06,
+    0.47,
+    0.88,
+    0.38
+  ],
+  "detailRegions": [
+    [
+      0.2,
+      0.746,
+      0.083,
+      0.065
+    ],
+    [
+      0.46,
+      0.746,
+      0.083,
+      0.065
+    ],
+    [
+      0.72,
+      0.746,
+      0.083,
+      0.065
+    ]
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "assets": {
+    "content-store": {
+      "file": "content-store.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1774x887 pixels. Layout reference: Use case: ui-mockup. Asset type: original rich digital-workshop storefront screenshot for B-roll camera zoom and detail highlighting. Landscape 2:1 flat screenshot, no physical device, no perspective. Header 'THE PRACTICE LIBRARY', short heading 'Resources for better work'. Three complete product listings centered horizontally: yellow physical workbook photographed on pale surface, a beautiful cream course cover with creative studio photography, and a set of printed worksheets photographed with a red pencil. They have coherent short names 'Weekly Practice', 'Creative Sessions', 'Field Notes Kit' and clear prices '$24', '$48', '$16' at roughly y65 percent. Products occupy middle half, modest top navigation and a small bottom recommendation row provide rich actual web detail. Elegant warm-white editorial commerce design with dark charcoal type and restrained orange accent. No real brands, logos, watermark or placeholder document icons.\n\nTHEME AND CLEANLINESS OVERRIDE (takes precedence over the subject and text above): keep the same layout geometry, aspect, element positions and number of main blocks, but change the subject to a travel creator (trips, destinations, itineraries, travel vlogs) and replace every headline or label with a short travel equivalent of similar length. Halve the amount of small text, make photos larger and cleaner, remove clutter, show at most one person per photo and never a group or crowd. Photos inside use clean colourful travel photography (blue sea, green hills, warm sunlight). Interfaces stay white with crisp sans-serif type and at most one small yellow highlight.\n\nClean, premium travel photography: one clear subject, uncluttered composition with generous breathing room, rich natural colour (deep blue sea and sky, fresh greens, warm golden sunlight, terracotta, white walls) but tasteful and not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. No text, no logos, no watermark, no real brands.\n\nSave as ./content-store.png at 1774x887. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "8d000eb34fe16c85b9c8db7f8392ba4edcadee2b4faae2ea6d6214b2830c11e5",
+      "generatedAt": "2026-10-29T16:32:43.469867+00:00",
+      "generationId": "codex-image-gen-content-store",
+      "sourceSha256": "bc6795ab4e8bed747b2551f11c91775378b280263e0debc4e04f2b620c6a9be4",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean travel lifestyle"
+    }
+  },
+  "effects": {
+    "bs-creatormotion-spotlight-metric-to-detail": {
+      "content-library": "content-store"
+    }
+  }
+}

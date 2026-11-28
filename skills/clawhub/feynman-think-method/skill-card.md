@@ -1,43 +1,49 @@
-## Description: <br>
-Helps agents guide Chinese-first Feynman-style learning conversations that simplify complex concepts, expose blind spots, and rebuild understanding through first-principles questions and analogies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides learners through the Feynman technique and physics-inspired reasoning to explain complex concepts, find gaps in understanding, and build first-principles mental models.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Learners, researchers, and knowledge workers use this skill to test whether they truly understand a concept, simplify explanations, identify knowledge gaps, and reason from first principles. It is primarily intended for Chinese-language learning support while preserving English technical terms where useful. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate for broad learning prompts when a narrower method is intended. <br>
-Mitigation: Invoke it explicitly for Feynman-style explanation, blind-spot discovery, or first-principles questioning tasks. <br>
-Risk: The skill may default to Chinese when another response language is expected. <br>
-Mitigation: Specify the desired language in the user prompt or agent configuration. <br>
-Risk: Educational reasoning about time-sensitive AI, finance, or industry topics can become stale or incomplete. <br>
-Mitigation: Treat those sections as learning prompts and verify factual or investment-relevant claims against current authoritative sources. <br>
+## Use Case:
 
+Learners, researchers, and knowledge workers use this skill to test their understanding of a concept, surface gaps through plain-language explanations and questions, and draft study notes. It supports learning and problem framing; consequential medical, legal, or investment decisions require qualified review.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/gechengling/skills/feynman-think-method) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or conversational text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-first responses with English technical terms preserved when useful; no code execution or file output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.1 (source: server release metadata and artifact metadata) <br>
+Risk: The skill may prefer Chinese output without first checking the user's language preference.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Ask for or state the preferred output language when the default may not suit the user.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/feynman-think-method)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-first Markdown explanations, checklists, and question prompts, retaining key English terms where useful]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft learning aids; verify time-sensitive factual claims against current primary sources.]
+
+## Skill Version(s):
+
+2.1.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

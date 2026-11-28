@@ -1,0 +1,1246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- REPLACE: site title (brand name + one-line promise) -->
+<title>Wishwell — Gifting made joyful</title>
+<link rel="stylesheet" href="./reui/reui.css">
+<script defer src="./reui/reui.js"></script>
+<style>/* ============ TOKENS ============ */
+:root{
+  --ink:#1e3a5f;          /* navy headings and CTAs */
+  --ink-deep:#132a47;
+  --body:#2f3f55;
+  --muted:#5b6b82;
+  --sky:#b8ced7;          /* hero pastel blue */
+  --sky-light:#b8ced7;    /* second hero band */
+  --cream:#f7f4ee;        /* page ground */
+  --paper:#ffffff;
+  --mint:#cfe6cd;
+  --pink:#f3a9c2;
+  --butter:#f6d97b;
+  --tangerine:#f4a24f;
+  --powder:#c4d8ee;
+  --dark:#2b2b2e;
+  --dark-2:#3a3a3e;
+  --lilac:#c9bbea;
+  --lilac-deep:#5a3f8f;
+  --lime:#9dc23f;
+  --coral:#f08a7a;
+  --line:rgba(30,58,95,.12);
+  --r-band:36px;
+  --r-card:28px;
+  --r-ui:999px;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:"Avenir Next",Avenir,"Segoe UI",system-ui,-apple-system,sans-serif;
+  --shadow-sticker:0 6px 14px rgba(20,40,70,.14),0 1px 0 rgba(255,255,255,.7) inset;
+  --shadow-card:0 20px 50px rgba(20,40,70,.16);
+  --shadow-phone:0 40px 80px rgba(20,40,70,.35),0 8px 20px rgba(20,40,70,.2);
+  --wrap:1180px;
+}*{box-sizing:border-box}html{scroll-behavior:auto}body{margin:0;font-family:var(--sans);color:var(--body);background:var(--cream);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}img{max-width:100%;display:block}a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}h1, h2, h3, h4{font-family:var(--serif);color:var(--ink);font-weight:600;letter-spacing:-.02em;line-height:1.05;margin:0}p{margin:0}.wrap{width:min(var(--wrap),calc(100% - 48px));margin:0 auto}.ic{width:1em;height:1em;flex:none;vertical-align:-.12em}[data-page]{display:none}[data-page].is-active{display:block}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}/* ============ REVEAL ============ */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}.reveal.in{opacity:1;transform:none}.reveal.pop{transform:scale(.92) rotate(-2deg)}.reveal.pop.in{transform:none}.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}.d5{transition-delay:.4s}.d6{transition-delay:.48s}@media (prefers-reduced-motion:reduce){
+  .reveal,.reveal.pop{transition:none;opacity:1;transform:none}
+  .stk,.tile,.hero-phone,.ring{animation:none!important}
+}/* ============ BUTTONS / PILLS ============ */
+.btn{display:inline-flex;align-items:center;gap:.5em;padding:.78em 1.5em;border-radius:var(--r-ui);background:var(--ink);color:#fff;font-weight:600;font-size:.95rem;letter-spacing:.01em;transition:transform .2s,background .2s,box-shadow .2s;box-shadow:0 6px 16px rgba(30,58,95,.18)}.btn:hover{background:var(--ink-deep);transform:translateY(-2px);box-shadow:0 10px 24px rgba(30,58,95,.24)}.btn.sm{padding:.55em 1.15em;font-size:.85rem}.btn.light{background:#fff;color:var(--ink);box-shadow:0 6px 16px rgba(20,40,70,.12)}.btn.light:hover{background:#fff}.btn.ghost{background:transparent;color:var(--ink);box-shadow:none;border:1.5px solid var(--ink)}.btn.ghost:hover{background:var(--ink);color:#fff}.btn.lilac{background:var(--lilac-deep)}.btn.lilac:hover{background:#48307a}.pill{display:inline-flex;align-items:center;gap:.45em;padding:.38em .95em;border-radius:var(--r-ui);background:#fff;color:var(--ink);font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;box-shadow:var(--shadow-sticker)}.pill.soft{background:rgba(255,255,255,.55);box-shadow:none}.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}.link{font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:.35em;border-bottom:1.5px solid transparent;transition:border-color .2s}.link:hover{border-color:var(--ink)}.link .ic{transition:transform .2s}.link:hover .ic{transform:translateX(3px)}/* ============ NAV ============ */
+.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(255,255,255,.55);border-bottom:1px solid rgba(255,255,255,.4)}.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:18px}.brand{display:inline-flex;align-items:center;gap:.5em;font-family:var(--serif);font-weight:700;font-size:1.25rem;color:var(--ink);letter-spacing:-.01em}.brand .mark{width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center}.brand .mark .ic{width:16px;height:16px}.menu{display:flex;align-items:center;gap:6px}.menu a{padding:.5em .9em;border-radius:var(--r-ui);font-weight:600;font-size:.92rem;color:var(--ink);transition:background .2s}.menu a:hover{background:rgba(30,58,95,.08)}.menu a.is-active{background:var(--ink);color:#fff}.nav-cta{display:flex;align-items:center;gap:10px}.nav-toggle{display:none;width:44px;height:44px;border-radius:50%;background:#fff;color:var(--ink);place-items:center;box-shadow:var(--shadow-sticker)}.nav-toggle .ic{width:22px;height:22px}.nav-toggle .ic.x{display:none}.nav-toggle[aria-expanded="true"] .ic.x{display:block}.nav-toggle[aria-expanded="true"] .ic.m{display:none}@media (max-width:900px){
+  .menu{display:none;position:absolute;left:12px;right:12px;top:76px;flex-direction:column;align-items:stretch;background:#fff;border-radius:24px;padding:12px;box-shadow:var(--shadow-card)}
+  .menu.open{display:flex}
+  .menu a{padding:.8em 1em;font-size:1rem}
+  .nav-toggle{display:grid}
+  .nav-cta .btn{display:none}
+}/* ============ PAGE HEAD (inner pages) ============ */
+.page-head{padding:72px 0 56px;text-align:center;position:relative;overflow:hidden}.page-head h1{font-size:clamp(2.4rem,5.2vw,4rem);margin:14px auto 16px;max-width:14ch}.page-head p{max-width:560px;margin:0 auto;font-size:1.08rem;color:var(--body)}.page-head.sky{background:var(--sky)}.page-head.lilac{background:var(--lilac)}.page-head.lilac h1{color:var(--lilac-deep)}.page-head.mint{background:var(--mint)}.page-head.butter{background:var(--butter)}.page-head.powder{background:var(--powder)}.page-head.pink{background:var(--pink)}.page-head.dark{background:var(--dark)}.page-head.dark h1{color:#fff}.page-head.dark p, .page-head.dark .eyebrow{color:rgba(255,255,255,.75)}.page-head .stk{position:absolute}.crumbs{display:flex;justify-content:center;gap:.5em;font-size:.82rem;font-weight:600;color:var(--muted);margin-bottom:6px}.crumbs a:hover{color:var(--ink)}.section{padding:88px 0}.section.tight{padding:56px 0}.sec-head{text-align:center;max-width:640px;margin:0 auto 48px}.sec-head h2{font-size:clamp(2rem,4.2vw,3.2rem);margin:12px 0 14px}.sec-head p{font-size:1.05rem}.sec-head.left{text-align:left;margin-left:0}/* ============ STICKERS ============ */
+.stk{position:absolute;display:inline-flex;align-items:center;justify-content:center;background:#fff;border-radius:22px;padding:10px;box-shadow:var(--shadow-sticker);color:var(--ink);transform:rotate(var(--rot,0deg));animation:floaty 6s ease-in-out infinite;animation-delay:var(--dl,0s)}.stk svg{width:var(--sz,48px);height:var(--sz,48px);display:block}.stk.round{border-radius:50%}.stk.text{font-family:var(--serif);font-weight:700;font-size:1.1rem;padding:8px 18px;border-radius:999px;white-space:nowrap}.stk.text.big{font-size:1.5rem;letter-spacing:-.02em}.stk.tilt{border-radius:14px}@keyframes floaty{0%,100%{translate:0 0}50%{translate:0 -10px}}/* ============ PHONE ============ */
+.phone{width:300px;aspect-ratio:300/620;border-radius:48px;background:#0f1622;padding:10px;box-shadow:var(--shadow-phone);position:relative;flex:none}.phone::before{content:"";position:absolute;left:50%;top:18px;transform:translateX(-50%);width:96px;height:26px;border-radius:999px;background:#0f1622;z-index:3}.screen{width:100%;height:100%;border-radius:40px;background:#fff;overflow:hidden;display:flex;flex-direction:column;position:relative}.sbar{display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0;font-size:.72rem;font-weight:700;color:var(--ink)}.sbar .dots{display:flex;gap:3px}.sbar .dots i{width:5px;height:5px;border-radius:50%;background:var(--ink);display:block}.app-top{display:flex;justify-content:space-between;align-items:center;padding:16px 18px 6px;font-size:.8rem;font-weight:700;color:var(--ink)}.app-top .cir{width:30px;height:30px;border-radius:50%;background:var(--cream);display:grid;place-items:center}.app-top .cir .ic{width:15px;height:15px}.app-card{margin:8px 18px;border-radius:18px;overflow:hidden;background:var(--sky-light);box-shadow:0 10px 24px rgba(20,40,70,.16);position:relative}.app-card img{width:100%;aspect-ratio:2/3;object-fit:cover}.app-card .cap{position:absolute;left:0;right:0;bottom:0;padding:14px;background:linear-gradient(transparent,rgba(255,255,255,.95) 55%);font-family:var(--serif);font-size:1.05rem;color:var(--ink);text-align:center;font-weight:600}.app-msg{margin:6px 18px 0;font-size:.74rem;color:var(--muted);text-align:center;line-height:1.4}.app-row{display:flex;gap:6px;margin:10px 18px 0}.app-row span{flex:1;text-align:center;font-size:.66rem;font-weight:700;padding:.5em 0;border-radius:999px;background:var(--cream);color:var(--ink)}.app-row span.on{background:var(--ink);color:#fff}.app-tabs{margin-top:auto;display:flex;justify-content:space-around;padding:12px 10px 18px;border-top:1px solid var(--line);color:var(--muted)}.app-tabs span{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.55rem;font-weight:700}.app-tabs span.on{color:var(--ink)}.app-tabs .ic{width:18px;height:18px}/* ============ HERO ============ */
+.hero{background:var(--sky);position:relative;overflow:hidden;padding:76px 0 0;text-align:center;min-height:640px}.hero .wrap{position:relative;z-index:2}.hero h1{font-size:clamp(3rem,7vw,5.4rem);margin:18px auto 22px;max-width:9ch}.hero-phone-peek{height:160px;overflow:hidden;margin-top:40px;position:relative;z-index:2}.hero-phone-peek .phone{margin:0 auto}.stk-field{position:absolute;inset:0;z-index:1;pointer-events:none}.hero-b{background:var(--sky-light);position:relative;overflow:hidden;padding:80px 0 64px}.hero-b .grid{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:40px}.hero-b h2{font-size:clamp(2rem,3.6vw,3rem);max-width:10ch}.hero-b .aside{font-size:.95rem;max-width:26ch;margin-left:auto}.occ-nav{display:flex;justify-content:center;margin-top:40px}.occ{display:inline-flex;align-items:center;gap:8px;background:#fff;padding:6px;border-radius:999px;box-shadow:var(--shadow-sticker)}.occ button{width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;transition:transform .2s}.occ button:hover{transform:scale(1.08)}.occ button .ic{width:16px;height:16px}.occ span{font-weight:700;color:var(--ink);font-size:.9rem;min-width:9ch;text-align:center}@media (max-width:900px){
+  .hero-b .grid{grid-template-columns:1fr;text-align:center}
+  .hero-b h2,.hero-b .aside{margin:0 auto;max-width:100%}
+  .hero-b .phone{margin:0 auto}
+}@media (max-width:600px){
+  .hero{min-height:0;padding-top:56px}
+  .stk.hide-m{display:none}
+  .phone{width:250px}
+  .hero-phone-peek{height:120px}
+}/* ============ BENTO ============ */
+.bento{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:minmax(180px,auto);gap:18px}.bento>div{border-radius:var(--r-card);padding:26px;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;transition:transform .3s,box-shadow .3s}.bento>div:hover{transform:translateY(-4px);box-shadow:var(--shadow-card)}.bento h3{font-size:1.5rem}.bento p{font-size:.9rem;max-width:28ch}.b-custom{grid-column:1;grid-row:1/3;background:var(--mint)}.b-sched{grid-column:2/4;background:var(--pink)}.b-wallet{grid-column:2;background:var(--dark);color:#fff}.b-wallet h3{color:#fff}.b-wallet p{color:rgba(255,255,255,.7)}.b-inbox{grid-column:3;background:var(--butter)}.b-send{grid-column:1/3;background:var(--tangerine)}.b-remind{grid-column:3;background:var(--powder)}.mini{background:#fff;border-radius:18px;box-shadow:0 10px 24px rgba(20,40,70,.12);padding:12px;font-size:.72rem;color:var(--ink)}.mini-card{width:150px;margin:18px auto 0;transform:rotate(-4deg)}.mini-card img{border-radius:10px;aspect-ratio:2/3;object-fit:cover}.tool-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}.tool-chips span{display:inline-flex;align-items:center;gap:.35em;background:#fff;padding:.35em .7em;border-radius:999px;font-size:.7rem;font-weight:700;color:var(--ink);box-shadow:var(--shadow-sticker)}.mini-cal{position:absolute;right:26px;top:22px;width:190px;transform:rotate(4deg)}.mini-cal .hd{display:flex;justify-content:space-between;font-weight:700;margin-bottom:6px}.mini-cal .g{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}.mini-cal .g span{padding:3px 0;border-radius:6px}.mini-cal .g span.on{background:var(--ink);color:#fff}.mini-cal .g span.dot{background:var(--pink)}.mini-wallet{margin-top:auto;font-size:1.4rem;font-weight:700;letter-spacing:-.02em}.mini-wallet small{display:block;font-size:.7rem;font-weight:600;opacity:.7;letter-spacing:.06em}.mini-inbox{margin-top:auto}.mini-inbox .row{display:flex;gap:8px;align-items:center;padding:6px 0;border-top:1px solid var(--line)}.mini-inbox .row:first-child{border:0}.av{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.6rem;font-weight:800;color:#fff;flex:none}.a1{background:#e0708f}.a2{background:#4f8fd6}.a3{background:#5aa46b}.a4{background:#c88a2b}.a5{background:#7a5ab8}.a6{background:#2e8c9a}.fan{position:absolute;right:30px;bottom:-10px;width:260px;height:150px}.fan i{position:absolute;bottom:0;width:120px;height:78px;border-radius:12px;box-shadow:0 10px 20px rgba(0,0,0,.18);background-size:cover;background-position:center}.fan i:nth-child(1){left:0;transform:rotate(-14deg)}.fan i:nth-child(2){left:60px;bottom:14px;transform:rotate(-2deg)}.fan i:nth-child(3){left:120px;transform:rotate(10deg)}.mini-note{margin-top:auto;display:flex;gap:10px;align-items:flex-start}.mini-note .ic{width:18px;height:18px;flex:none;margin-top:2px}.mini-note b{display:block;font-size:.76rem}@media (max-width:900px){
+  .bento{grid-template-columns:1fr 1fr}
+  .b-custom{grid-column:1;grid-row:1/3}.b-sched{grid-column:2;grid-row:1}.b-wallet{grid-column:2;grid-row:2}
+  .b-inbox{grid-column:1;grid-row:3}.b-send{grid-column:2;grid-row:3}.b-remind{grid-column:1/3;grid-row:4}
+  .mini-cal{position:static;transform:none;width:100%;margin-top:8px}
+  .fan{display:none}
+}@media (max-width:600px){
+  .bento{grid-template-columns:1fr}
+  .bento>div{grid-column:auto!important;grid-row:auto!important}
+}/* ============ LILAC TILES ============ */
+.simple{background:var(--lilac);position:relative;overflow:hidden;padding:150px 0;text-align:center;min-height:720px}.simple .wrap{position:relative;z-index:2;max-width:520px}.simple h2{color:var(--lilac-deep);font-size:clamp(2.4rem,5vw,4rem);margin-bottom:16px}.simple p{color:#3d2a66}.tiles{position:absolute;inset:0;z-index:1;pointer-events:none}.tile{position:absolute;width:var(--w,150px);aspect-ratio:1;border-radius:22px;overflow:hidden;box-shadow:0 20px 40px rgba(60,30,110,.28);transform:rotate(var(--rot,0deg));animation:floaty 7s ease-in-out infinite;animation-delay:var(--dl,0s)}.tile img{width:100%;height:100%;object-fit:cover}.tile.flip img{transform:scaleX(-1)}.tile.css{display:grid;place-items:center;color:#fff}.tile.css .ic{width:44%;height:44%}@media (max-width:900px){.simple{padding:110px 0;min-height:600px}.tile{--w:110px}}@media (max-width:600px){.simple{padding:110px 0;min-height:560px}.tile{--w:78px}.tile.hide-m{display:none}.simple .wrap{background:rgba(201,187,234,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:28px;padding:28px 20px;width:calc(100% - 56px)}.tile:nth-child(2){top:8%!important;left:auto!important;right:38%!important}.tile:nth-child(6){top:auto!important;bottom:4%!important}}/* ============ CASH ============ */
+.cash{background:var(--dark);color:#fff;padding:96px 0;text-align:center;overflow:hidden}.cash h2{color:#fff;font-size:clamp(2.4rem,5vw,4rem)}.cash-stage{position:relative;width:min(560px,100%);height:560px;margin:48px auto 36px}.cash-stage .phone{position:absolute;left:50%;top:0;transform:translateX(-50%);z-index:2}.gc{position:absolute;width:190px;height:120px;border-radius:14px;background-size:cover;background-position:center;box-shadow:0 20px 40px rgba(0,0,0,.4);z-index:1}.gc.g1{left:2%;top:120px;transform:rotate(-16deg)}.gc.g2{right:2%;top:110px;transform:rotate(14deg)}.gc.g3{left:10%;top:290px;transform:rotate(-8deg)}.gc.g4{right:8%;top:300px;transform:rotate(9deg)}.cash p{max-width:440px;margin:0 auto;color:rgba(255,255,255,.78)}.amt{margin:10px 18px 0;text-align:center}.amt .lbl{font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:.06em}.amt .ctl{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:8px}.amt .ctl button{width:34px;height:34px;border-radius:50%;background:var(--cream);color:var(--ink);display:grid;place-items:center}.amt .ctl button .ic{width:16px;height:16px}.amt .val{font-family:var(--serif);font-size:2.4rem;font-weight:700;color:var(--ink);letter-spacing:-.03em;min-width:3ch}.amt .val sup{font-size:1rem;vertical-align:top;margin-right:2px}.amt .go{display:block;margin:16px auto 0;width:80%}@media (max-width:600px){.cash-stage{height:520px}.gc{width:140px;height:88px}.gc.g3,.gc.g4{top:330px}}/* ============ GREEN CTA ============ */
+.cta-band{padding:24px 0 96px}.cta-card{border-radius:var(--r-band);overflow:hidden;position:relative;min-height:520px;background:var(--lime) url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201536%201024'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1536'%20height%3D'1024'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1536'%20height%3D'1024'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'85'%20fill%3D'%2523777'%3EHand%20holding%20a%20printed%20Starbucks%20gift%20card%20on%20lime%20green%2C%20generated%20photo%20mockup%3C%2Ftext%3E%3C%2Fsvg%3E") center/cover no-repeat;padding:56px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--shadow-card)}.cta-card h2{font-size:clamp(2.4rem,4.6vw,3.6rem);max-width:10ch;color:var(--ink-deep)}.cta-card .foot{display:flex;justify-content:flex-end}.qr{display:flex;flex-direction:column;align-items:center;gap:8px;background:#fff;padding:12px;border-radius:16px;box-shadow:var(--shadow-sticker);font-size:.7rem;font-weight:700;color:var(--ink);text-align:center;width:120px}.qr svg{width:80px;height:80px}@media (max-width:600px){.cta-card{padding:28px;min-height:440px;background-position:70% center}}/* ============ FOOTER ============ */
+.footer{padding:0 0 0;position:relative;overflow:hidden}.foot-grid{display:grid;grid-template-columns:1.4fr 1.3fr .7fr;gap:18px;position:relative;z-index:2}.foot-grid>div{background:#fff;border-radius:var(--r-card);padding:34px;min-height:300px;display:flex;flex-direction:column;gap:14px}.foot-grid h2{font-size:clamp(2.2rem,4vw,3.4rem);max-width:8ch}.foot-grid h3{font-size:1.4rem}.foot-grid .social{background:var(--lilac)}.foot-grid .social h3{color:var(--lilac-deep)}.foot-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto}.foot-links a{padding:.55em 1em;border-radius:999px;border:1.5px solid var(--line);font-size:.85rem;font-weight:600;color:var(--ink);transition:background .2s}.foot-links a:hover{background:var(--cream)}.soc{display:flex;flex-direction:column;gap:12px;margin-top:6px}.soc a{width:48px;height:48px;border-radius:50%;background:#fff;color:var(--lilac-deep);display:grid;place-items:center;transition:transform .2s}.soc a:hover{transform:scale(1.08)}.soc .ic{width:22px;height:22px}.foot-grid p{font-size:.9rem}.copy{margin-top:auto;font-size:.8rem;color:var(--muted)}.rings{height:200px;position:relative;margin-top:-40px}.ring{position:absolute;left:35%;top:40px;width:520px;height:520px;border:60px solid var(--ink);border-radius:50%;opacity:.95}.ring.r2{width:300px;height:300px;left:calc(35% + 110px);top:150px;border-width:40px}@media (max-width:900px){.foot-grid{grid-template-columns:1fr}.foot-grid>div{min-height:0}.soc{flex-direction:row}.ring{left:10%}}/* ============ GENERIC CARDS / GRIDS ============ */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.cards.two{grid-template-columns:repeat(2,1fr)}.cards.four{grid-template-columns:repeat(4,1fr)}.card{background:#fff;border-radius:var(--r-card);padding:30px;box-shadow:0 2px 0 rgba(30,58,95,.04);border:1px solid var(--line);transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;gap:12px}.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-card)}.card h3{font-size:1.35rem}.card p{font-size:.93rem}.card .num{font-family:var(--serif);font-size:2.6rem;color:var(--ink);line-height:1;font-weight:700;letter-spacing:-.03em}.iconbox{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;color:var(--ink)}.iconbox .ic{width:22px;height:22px}.iconbox.mint{background:var(--mint)}.iconbox.pink{background:var(--pink)}.iconbox.butter{background:var(--butter)}.iconbox.powder{background:var(--powder)}.iconbox.tang{background:var(--tangerine)}.iconbox.lilac{background:var(--lilac)}.card.tint-mint{background:var(--mint);border:0}.card.tint-pink{background:var(--pink);border:0}.card.tint-butter{background:var(--butter);border:0}.card.tint-powder{background:var(--powder);border:0}.card.tint-lilac{background:var(--lilac);border:0}.card.tint-tang{background:var(--tangerine);border:0}@media (max-width:900px){.cards,.cards.four{grid-template-columns:1fr 1fr}}@media (max-width:600px){.cards,.cards.two,.cards.four{grid-template-columns:1fr}}/* feature rows (features page) */
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;padding:40px 0}.frow:nth-child(even) .fpanel{order:2}.fpanel{border-radius:var(--r-card);min-height:380px;padding:36px;position:relative;overflow:hidden;display:grid;place-items:center}.frow h3{font-size:clamp(1.8rem,3vw,2.5rem);margin:12px 0 14px}.frow ul{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:10px}.frow li{display:flex;gap:10px;align-items:flex-start;font-size:.95rem}.frow li .ic{width:20px;height:20px;flex:none;color:var(--ink);margin-top:2px}.fpanel .mini{width:min(280px,100%)}@media (max-width:900px){.frow{grid-template-columns:1fr;gap:24px}.frow:nth-child(even) .fpanel{order:0}.fpanel{min-height:300px}}/* steps (how it works) */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:step}.step{background:#fff;border-radius:var(--r-card);padding:28px;border:1px solid var(--line);position:relative;transform:rotate(var(--rot,0deg));transition:transform .25s}.step:hover{transform:rotate(0) translateY(-4px)}.step .n{width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;font-family:var(--serif);font-weight:700;font-size:1.2rem;display:grid;place-items:center;margin-bottom:16px}.step h3{font-size:1.3rem;margin-bottom:8px}.step p{font-size:.92rem}@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}@media (max-width:600px){.steps{grid-template-columns:1fr}}/* tabs */
+.tabs{display:inline-flex;background:#fff;padding:6px;border-radius:999px;box-shadow:var(--shadow-sticker);gap:4px;margin:0 auto 32px}.tabs button{padding:.6em 1.3em;border-radius:999px;font-weight:700;font-size:.9rem;color:var(--ink);transition:background .2s}.tabs button[aria-selected="true"]{background:var(--ink);color:#fff}.tabpanel{display:none}.tabpanel.on{display:block}.center{text-align:center}/* filter chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:36px}.chips button{padding:.55em 1.1em;border-radius:999px;background:#fff;border:1.5px solid var(--line);font-weight:700;font-size:.85rem;color:var(--ink);transition:all .2s}.chips button:hover{border-color:var(--ink)}.chips button.on{background:var(--ink);color:#fff;border-color:var(--ink)}/* gift card tiles */
+.gcard{background:#fff;border-radius:var(--r-card);overflow:hidden;border:1px solid var(--line);transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column}.gcard:hover{transform:translateY(-6px);box-shadow:var(--shadow-card)}.gcard .art{aspect-ratio:1.55;background-size:cover;background-position:center;position:relative;border-radius:22px;margin:12px 12px 0}.gcard .art .pill{position:absolute;left:12px;top:12px}.gcard .body{padding:18px 22px 22px;display:flex;flex-direction:column;gap:6px}.gcard h3{font-size:1.3rem}.gcard .meta{font-size:.82rem;color:var(--muted)}.gcard .denoms{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.gcard .denoms span{font-size:.75rem;font-weight:700;padding:.3em .7em;border-radius:999px;background:var(--cream);color:var(--ink)}.gcard.hidden{display:none}/* gift card detail */
+.gdetail{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:start}.gdetail .hero-art{border-radius:var(--r-band);aspect-ratio:1.4;background-size:cover;background-position:center;box-shadow:var(--shadow-card);transform:rotate(-2deg)}.gdetail h1{font-size:clamp(2.2rem,4vw,3.4rem);margin:10px 0 14px}.picker{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.picker button{padding:.6em 1.1em;border-radius:999px;border:1.5px solid var(--line);background:#fff;font-weight:700;color:var(--ink)}.picker button.on{background:var(--ink);color:#fff;border-color:var(--ink)}.total{font-family:var(--serif);font-size:1.6rem;color:var(--ink);font-weight:700;margin:8px 0 18px}.total small{font-family:var(--sans);font-size:.85rem;font-weight:600;color:var(--muted);margin-left:8px}.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}.facts div{background:#fff;border-radius:18px;padding:16px;border:1px solid var(--line);font-size:.85rem}.facts b{display:block;color:var(--ink);font-size:.95rem;margin-bottom:2px}@media (max-width:900px){.gdetail{grid-template-columns:1fr}}/* pricing */
+.toggle{display:inline-flex;align-items:center;gap:12px;font-weight:700;font-size:.9rem;color:var(--ink);margin-bottom:40px}.sw{width:52px;height:30px;border-radius:999px;background:var(--ink);position:relative;transition:background .2s}.sw::after{content:"";position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .25s}.sw[aria-checked="true"]::after{transform:translateX(22px)}.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}.plan{background:#fff;border-radius:var(--r-card);padding:32px;border:1px solid var(--line);display:flex;flex-direction:column;gap:14px;position:relative}.plan.featured{background:var(--ink);color:#fff;border:0;transform:scale(1.03);box-shadow:var(--shadow-card)}.plan.featured h3, .plan.featured .price{color:#fff}.plan.featured li .ic{color:var(--butter)}.plan .price{font-family:var(--serif);font-size:3rem;color:var(--ink);font-weight:700;letter-spacing:-.03em;line-height:1}.plan .price small{font-family:var(--sans);font-size:.9rem;font-weight:600;letter-spacing:0;opacity:.7}.plan ul{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:8px;font-size:.9rem}.plan li{display:flex;gap:8px;align-items:flex-start}.plan li .ic{width:18px;height:18px;flex:none;color:var(--ink);margin-top:3px}.plan .btn{margin-top:auto;justify-content:center}.plan .tag{position:absolute;right:20px;top:-14px}.compare{width:100%;border-collapse:collapse;margin-top:56px;background:#fff;border-radius:var(--r-card);overflow:hidden;font-size:.9rem}.compare th, .compare td{padding:14px 18px;text-align:left;border-bottom:1px solid var(--line)}.compare th{font-family:var(--serif);font-size:1.05rem;color:var(--ink)}.compare td .ic{width:18px;height:18px;color:var(--ink)}.compare-wrap{overflow-x:auto}@media (max-width:900px){.plans{grid-template-columns:1fr}.plan.featured{transform:none}}/* accordion */
+.acc{max-width:760px;margin:0 auto;display:grid;gap:10px}.acc details{background:#fff;border-radius:20px;border:1px solid var(--line);padding:0 24px;transition:box-shadow .2s}.acc details[open]{box-shadow:var(--shadow-card)}.acc summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;font-weight:700;color:var(--ink);font-size:1rem}.acc summary::-webkit-details-marker{display:none}.acc summary .ic{width:20px;height:20px;transition:transform .25s;flex:none}.acc details[open] summary .ic{transform:rotate(45deg)}.acc .ans{padding:0 0 20px;font-size:.93rem;max-width:62ch}.acc details.hidden{display:none}.acc-group{margin-bottom:40px}.acc-group h3{text-align:center;font-size:1.5rem;margin-bottom:16px}.searchbar{display:flex;align-items:center;gap:10px;max-width:520px;margin:0 auto 40px;background:#fff;border-radius:999px;padding:8px 8px 8px 20px;box-shadow:var(--shadow-sticker)}.searchbar input{flex:1;border:0;outline:0;font:inherit;background:transparent;color:var(--ink);min-width:0}.searchbar .ic{width:20px;height:20px;color:var(--muted)}.empty{text-align:center;color:var(--muted);padding:20px;display:none}.empty.on{display:block}/* forms */
+.form{display:grid;gap:14px;max-width:560px;margin:0 auto;background:#fff;padding:32px;border-radius:var(--r-card);border:1px solid var(--line)}.form label{display:grid;gap:6px;font-size:.85rem;font-weight:700;color:var(--ink)}.form input, .form textarea, .form select{font:inherit;padding:.8em 1em;border-radius:14px;border:1.5px solid var(--line);background:var(--cream);color:var(--body);outline:0;transition:border-color .2s}.form input:focus, .form textarea:focus, .form select:focus{border-color:var(--ink)}.form textarea{min-height:120px;resize:vertical}.form .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form-ok{background:var(--mint);color:var(--ink);padding:14px 18px;border-radius:14px;font-weight:600;display:flex;gap:10px;align-items:center}.form-ok .ic{width:20px;height:20px}@media (max-width:600px){.form .row{grid-template-columns:1fr}}/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;text-align:center}.stat{background:#fff;border-radius:var(--r-card);padding:28px 16px;border:1px solid var(--line)}.stat b{display:block;font-family:var(--serif);font-size:2.6rem;color:var(--ink);font-weight:700;letter-spacing:-.03em;line-height:1}.stat span{font-size:.85rem;color:var(--muted);font-weight:600}@media (max-width:600px){.stats{grid-template-columns:1fr 1fr}}/* about split */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}.split h2{font-size:clamp(2rem,3.6vw,3rem);margin-bottom:16px}.split p+p{margin-top:12px}.team{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.person{background:#fff;border-radius:var(--r-card);padding:24px;border:1px solid var(--line);text-align:center}.person .av{width:64px;height:64px;font-size:1.2rem;margin:0 auto 12px}.person b{display:block;color:var(--ink)}.person span{font-size:.82rem;color:var(--muted)}.quote{background:#fff;border-radius:var(--r-card);padding:30px;border:1px solid var(--line);font-family:var(--serif);font-size:1.15rem;color:var(--ink);line-height:1.4}.quote footer{font-family:var(--sans);font-size:.82rem;color:var(--muted);margin-top:14px;font-weight:600}@media (max-width:900px){.split{grid-template-columns:1fr}.team{grid-template-columns:1fr 1fr}}/* download */
+.dl-grid{display:grid;grid-template-columns:1fr auto;gap:56px;align-items:center}.dl-grid h2{font-size:clamp(2rem,3.6vw,3rem);margin-bottom:14px}.store-row{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}.store-row .btn .ic{width:18px;height:18px}@media (max-width:900px){.dl-grid{grid-template-columns:1fr}.dl-grid .phone{margin:0 auto}}/* legal */
+.prose{max-width:720px;margin:0 auto;font-size:.98rem}.prose h2{font-size:1.8rem;margin:36px 0 12px}.prose h3{font-size:1.2rem;margin:22px 0 8px}.prose p+p{margin-top:12px}.prose ul{padding-left:20px}/* not found */
+.nf{padding:120px 0;text-align:center}.nf h1{font-size:clamp(3rem,8vw,6rem)}.supplementary-photo{width:calc(100% - 48px);max-width:1000px;margin:25px auto 75px}.supplementary-photo img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;border-radius:var(--card-radius,14px)}.supplementary-photo figcaption{font:12px/1.5 inherit;opacity:.65;margin-top:12px}/* Refinement v2: warm pastel gifting, shorter copy and comfortable controls. */
+.hero{padding-top:58px;min-height:570px}.hero h1{font-size:clamp(52px,6.2vw,80px);max-width:9ch;line-height:1.02;margin:20px auto 28px}.hero-phone-peek{margin-top:42px}.hero-b{padding:64px 0 72px}.hero-b .grid{gap:54px}.hero-b .phone{width:270px}.section{padding:68px 0}.section.tight{padding:44px 0}.page-head{padding:54px 0 42px}.page-head h1{font-size:clamp(36px,4.5vw,58px);max-width:18ch}.page-head p{max-width:44ch;font-size:17px}.frow{gap:36px}.frow p, .split p{max-width:48ch;line-height:1.6}.cards .body p{max-width:32ch}.form{width:100%;max-width:560px;gap:18px;padding:28px;border-radius:22px}.form input:not([type=radio]):not([type=checkbox]), .form select{height:48px;min-width:0;width:100%;font-size:16px}.form label{min-width:0}.form textarea{min-height:128px;width:100%;font-size:16px}.form input[type=checkbox], .form input[type=radio]{width:16px;height:16px;padding:0}.form button{min-height:48px}.form-ok[hidden]{display:none}.brand-icon{width:21px;height:21px;display:block;flex:none}.store-row .brand-icon{fill:currentColor}.store-row .btn{gap:10px;padding:12px 18px;font-size:14px}.foot-grid>div{min-height:230px;padding:28px;gap:12px;border-radius:22px}.foot-grid h2{font-size:42px}.foot-grid p{font-size:13px}.foot-links a{font-size:12px}.gdetail .copy p{max-width:45ch}.gdetail .art{background-size:contain;background-repeat:no-repeat}.plan{padding:30px}.plan li{font-size:14px;line-height:1.55}.simple{min-height:520px}.cash-stage{max-width:900px;margin-inline:auto}@media(max-width:900px){.hero-b .grid{gap:30px}.foot-grid>div{min-height:0}.dl-grid{gap:32px}.frow{gap:24px}}@media(max-width:600px){.hero{padding-top:42px;min-height:500px}.hero h1{font-size:56px;max-width:8ch}.hero .pill{font-size:10px}.hero-phone-peek{height:150px;margin-top:36px}.hero-b{padding:42px 0}.hero-b .phone{width:250px}.section{padding:48px 0}.page-head{padding:40px 0 32px}.page-head p{font-size:16px}.form{padding:22px}.form .row{grid-template-columns:1fr}.store-row{gap:10px}.store-row .btn{flex:1 1 135px;justify-content:center}.foot-grid h2{font-size:34px}.cta-card{min-height:380px}.simple{min-height:470px}}.gcard .art, .gdetail .hero-art{aspect-ratio:1;background-size:contain;background-repeat:no-repeat}.gcard .art .pill{font-size:10px;padding:6px 9px}@media(max-width:600px){.hero .pill{visibility:hidden}.hero h1{margin-top:4px}}/* Full product hero — one complete phone, no cropped repeat section. */
+.hero-complete{padding:42px 0 38px;min-height:0;overflow:hidden;text-align:left}.hero-complete .hero-layout{display:grid;grid-template-columns:1fr 1.12fr;gap:20px;align-items:center;max-width:1180px;min-height:570px}.hero-copy{padding:20px 0 35px;position:relative;z-index:4}.hero-kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700}.hero-complete h1{font-size:clamp(68px,6.7vw,96px);line-height:.98;letter-spacing:-.045em;max-width:9ch;margin:24px 0}.hero-copy>p{font-size:18px;line-height:1.55;max-width:25ch;margin:0 0 28px}.hero-actions{display:flex;gap:22px;align-items:center;flex-wrap:wrap}.hero-secondary{font-size:13px;font-weight:650;text-decoration:underline;text-underline-offset:5px}.hero-note{display:flex;gap:12px;align-items:center;margin-top:50px;font-family:var(--serif);font-style:italic;font-size:17px;line-height:1.3;transform:rotate(-3deg)}.hero-note svg{width:42px;height:42px;transform:rotate(-12deg)}.hero-scene{position:relative;min-width:0;height:590px;display:flex;align-items:center;flex-direction:column;justify-content:flex-start;padding-top:10px}.hero-orbit{position:absolute;width:510px;height:470px;border-radius:50%;background:#ffffff29;top:26px;left:50%;transform:translateX(-50%) rotate(-15deg)}.hero-scene .phone{z-index:3;width:250px;height:516px;aspect-ratio:auto;border-radius:40px;padding:8px;box-shadow:0 22px 36px -16px #1e3a5f70,0 2px 4px #1e3a5f25;transform:rotate(3deg)}.hero-scene .phone::before{width:80px;height:22px;top:16px}.hero-scene .screen{border-radius:33px}.hero-scene .sbar{padding:13px 17px 0;font-size:10px}.hero-scene .app-top{padding:17px 14px 5px;font-size:11px;flex:none}.hero-scene .app-top .cir{width:25px;height:25px}.hero-scene .app-card{flex:1;min-height:0;margin:8px 13px;border-radius:14px}.hero-scene .app-card img{height:100%;width:100%;aspect-ratio:auto;object-fit:contain}.hero-scene .app-card .cap{font-size:15px;padding:14px 8px 10px}.hero-scene .app-msg{font-size:10px;margin:3px 14px 0;min-height:28px}.hero-scene .app-row{margin:6px 14px 8px;flex:none}.hero-scene .app-tabs{padding:9px 6px 12px;flex:none}.hero-scene .app-tabs .ic{width:15px;height:15px}.hero-scene .app-tabs span{font-size:7px}.hero-scene .occ-nav{margin-top:25px;position:relative;z-index:4}.hero-scene .occ{box-shadow:none;padding:4px;background:#ffffff8f;gap:10px}.hero-scene .occ button{height:34px;width:34px}.hero-scene .occ span{font-size:12px;min-width:105px}.hero-gift{position:absolute;display:block;z-index:2;width:156px;padding:9px 9px 12px;background:var(--cream);border-radius:12px;box-shadow:0 12px 25px #1e3a5f20;transition:transform .2s}.hero-gift img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:6px}.hero-gift span{display:block;text-align:center;font:600 13px var(--serif);margin-top:8px}.hero-gift-coffee{left:-8px;top:80px;transform:rotate(-13deg)}.hero-gift-flower{right:-3px;top:262px;transform:rotate(12deg)}.hero-gift:hover{transform:rotate(0deg) translateY(-6px)}.hero-scene .stk{z-index:4;animation:none}.hero-flower{left:6%;top:365px;--sz:40px;--rot:-13deg;padding:10px}.hero-smile{right:4%;top:32px;--sz:39px;--rot:13deg;padding:10px}.hero-sent{position:absolute;z-index:4;left:1%;top:318px;display:flex;align-items:center;gap:8px;padding:12px 16px;background:white;border-radius:999px;box-shadow:var(--shadow-sticker);font-size:11px;font-weight:650;transform:rotate(-5deg)}.hero-sent .ic{width:16px;height:16px;color:#3c704b}@media(max-width:1100px) and (min-width:761px){.hero-complete .hero-layout{grid-template-columns:1fr 1fr;gap:0}.hero-gift{width:122px}.hero-gift-coffee{left:-3px}.hero-gift-flower{right:-3px}.hero-scene .phone{width:230px;height:480px}.hero-scene{height:555px}.hero-complete h1{font-size:76px}.hero-sent{left:0;padding:10px 12px;font-size:10px}}@media(max-width:760px){.hero-complete{padding:35px 0 28px}.hero-complete .hero-layout{display:flex;flex-direction:column;gap:30px;min-height:0}.hero-copy{padding:0;text-align:center;width:100%}.hero-complete h1{font-size:62px;line-height:.97;margin:18px auto;max-width:9ch}.hero-copy>p{font-size:15px;max-width:29ch;margin:0 auto 22px}.hero-actions{justify-content:center;gap:16px}.hero-actions .btn{padding:13px 20px}.hero-kicker{font-size:9px;letter-spacing:.12em}.hero-note{display:none}.hero-scene{width:100%;height:555px;padding-top:10px}.hero-scene .phone{width:232px;height:480px}.hero-orbit{width:360px;height:390px;top:28px}.hero-gift{width:116px;padding:6px 6px 9px}.hero-gift span{font-size:10px}.hero-gift-coffee{left:-12px;top:58px}.hero-gift-flower{right:-14px;top:247px}.hero-flower{left:0;top:348px;--sz:28px;padding:7px}.hero-smile{right:0;top:9px;--sz:29px;padding:7px}.hero-sent{left:-6px;top:305px;font-size:9px;padding:9px 12px}.hero-scene .occ-nav{margin-top:22px}}@media(prefers-reduced-motion:reduce){.hero-gift{transition:none}}@media(max-width:600px){.hero-complete{padding:24px 0 20px}.hero-complete .hero-layout{gap:20px}.hero-complete h1{font-size:52px;margin:15px auto}.hero-copy>p{font-size:14px;max-width:29ch;margin-bottom:18px}.hero-actions .btn{padding:12px 18px}.hero-actions{gap:15px}.hero-secondary{font-size:12px}.hero-scene{height:459px;padding-top:6px}.hero-scene .phone{width:196px;height:405px;border-radius:34px;padding:7px}.hero-scene .screen{border-radius:28px}.hero-scene .phone::before{width:68px;height:18px;top:14px}.hero-scene .sbar{font-size:9px;padding:11px 14px 0}.hero-scene .app-top{font-size:9px;padding:14px 10px 3px}.hero-scene .app-top .cir{width:22px;height:22px}.hero-scene .app-card{margin:6px 10px}.hero-scene .app-card .cap{font-size:12px;padding-bottom:8px}.hero-scene .app-msg{font-size:8px;min-height:22px;margin:1px 10px 0}.hero-scene .app-row{margin:5px 10px 6px}.hero-scene .app-row span{font-size:8px}.hero-scene .app-tabs{padding:6px 5px 9px}.hero-scene .app-tabs span{font-size:6px}.hero-scene .app-tabs .ic{width:12px;height:12px}.hero-gift{width:102px}.hero-gift-coffee{left:0;top:45px}.hero-gift-flower{right:0;top:213px}.hero-sent{left:0;top:264px;font-size:8px;padding:8px 10px}.hero-flower{top:310px}.hero-orbit{width:320px;height:345px;top:20px}.hero-scene .occ-nav{margin-top:18px}}@media(max-width:600px){.cta-card{min-height:440px}.cta-card .qr{width:100px;padding:10px}.cta-card .qr svg{width:64px;height:64px}}/* Interior v3: semantic page systems, inheriting each template's visual identity. */
+.iv3{--v3-color:var(--accent,var(--blue,#2758bf));--v3-ink:var(--ink,#1a2523);--v3-paper:var(--paper,#fff);--v3-tint:var(--tint,#f3f5f3);--v3-line:var(--line,#deded8)}.iv3 .v3-intro{padding:72px 0 40px;max-width:900px}.iv3 .v3-intro h1{font-size:clamp(38px,5.4vw,74px);line-height:1.04;letter-spacing:-.045em;margin:12px 0 20px}.iv3 .v3-intro p, .iv3 .v3-lead{max-width:58ch;font-size:18px;line-height:1.6}.iv3 .v3-kicker{font-size:11px!important;letter-spacing:.12em;text-transform:uppercase;font-weight:650;margin:0 0 14px}.iv3 .v3-section{padding:56px 0}.iv3 .v3-section h2, .iv3 .v3-band h2{font-size:clamp(28px,3vw,44px);line-height:1.12;letter-spacing:-.035em;margin:0 0 24px}.iv3 .v3-section h3{font-size:20px;line-height:1.25;letter-spacing:-.025em;margin:0 0 12px}.iv3 .v3-section p{line-height:1.65;max-width:64ch}.iv3 .v3-split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,72px);align-items:center}.iv3 .v3-art{margin:0;overflow:hidden;border-radius:var(--card-radius,16px);aspect-ratio:var(--v3-ratio,3/2)}.iv3 .v3-art img{width:100%;height:100%;display:block;object-fit:cover}.iv3 .v3-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}.iv3 .v3-columns>div{padding:24px 0;border-top:1px solid var(--v3-line)}.iv3 .v3-list{padding:0;list-style:none;margin:18px 0}.iv3 .v3-list li{padding:10px 0 10px 18px;position:relative;font-size:14px;line-height:1.5}.iv3 .v3-list li:before{content:'';width:5px;height:5px;background:currentColor;position:absolute;left:0;top:19px;border-radius:50%}.iv3 .v3-link{display:inline-block;text-decoration:underline;text-underline-offset:5px;font-size:14px;font-weight:600;padding:10px 0}.iv3 .v3-button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 24px;border:1px solid currentColor;border-radius:999px;font-weight:600;font-size:14px;line-height:1.4;text-align:center;color:var(--v3-paper);background:var(--v3-ink)}.iv3 .v3-button:hover{filter:brightness(1.15)}.iv3 .v3-band{display:flex;align-items:center;justify-content:space-between;gap:40px;padding:40px;margin:40px 0 64px;background:var(--v3-tint);border-radius:var(--card-radius,16px)}.iv3 .v3-band p{max-width:55ch;line-height:1.6;margin:0}.iv3 .v3-band h2{margin-bottom:12px}.iv3 .v3-band .v3-button{flex-shrink:0}.iv3 .v3-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;list-style:none;padding:0;margin:32px 0 0}.iv3 .v3-steps li{border-top:1px solid var(--v3-line);padding-top:20px}.iv3 .v3-steps li>span{display:block;font-size:12px;opacity:.6;margin-bottom:26px}.iv3 .v3-steps p{font-size:15px}.iv3 .v3-faq{display:grid;grid-template-columns:.8fr 1.2fr;gap:60px}.iv3 .v3-faq details{border-bottom:1px solid var(--v3-line);padding:0;background:transparent;border-radius:0}.iv3 .v3-faq summary{cursor:pointer;min-height:58px;padding:18px 26px 18px 0;font-weight:600;font-size:15px}.iv3 .v3-faq details p{font-size:14px;margin:0 0 22px}.iv3 .v3-table-wrap{overflow:auto;border:1px solid var(--v3-line);border-radius:16px}.iv3 .v3-table{width:100%;border-collapse:collapse;min-width:560px;font-size:14px}.iv3 .v3-table th, .iv3 .v3-table td{text-align:left;padding:18px 20px;border-bottom:1px solid var(--v3-line)}.iv3 .v3-table thead{background:var(--v3-tint)}.iv3 .v3-table tr:last-child td{border-bottom:0}.iv3 .v3-note{font-size:12px;line-height:1.5;opacity:.75}.iv3 .v3-billing{display:inline-flex;border:1px solid var(--v3-line);border-radius:99px;padding:5px;gap:4px;margin:14px 0 32px}.iv3 .v3-billing button{border:0;background:transparent;color:inherit;padding:11px 20px;border-radius:99px;font-size:13px;min-height:44px}.iv3 .v3-billing button[aria-pressed=true]{background:var(--v3-ink);color:var(--v3-paper)}.iv3 .v3-plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.iv3 .v3-plan{border:1px solid var(--v3-line);border-radius:20px;padding:30px;display:flex;flex-direction:column;background:var(--v3-paper);color:var(--v3-ink)}.iv3 .v3-plan.featured{border-color:var(--v3-color);box-shadow:inset 0 4px var(--v3-color);background:var(--v3-tint)}.iv3 .v3-plan h2{font-size:24px;letter-spacing:-.03em;margin:6px 0}.iv3 .v3-plan p{font-size:14px;line-height:1.6;min-height:44px}.iv3 .v3-plan .v3-price{font-size:48px;letter-spacing:-.05em;font-weight:650;margin:16px 0 0;line-height:1.2}.iv3 .v3-price small{font-size:13px;font-weight:400;letter-spacing:0}.iv3 .v3-plan .v3-button{margin-top:auto}.iv3 .v3-plan .v3-note{font-size:11px;min-height:32px}.iv3 .v3-plan-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;min-height:20px;color:var(--v3-color);font-weight:700}.iv3 .v3-article{max-width:840px;margin:0 auto;padding:40px 0 64px}.iv3 .v3-article h2{font-size:30px;margin:36px 0 16px}.iv3 .v3-article p{font-size:17px;line-height:1.85}.iv3 .v3-article blockquote{font-size:24px;line-height:1.45;margin:34px 0;padding:24px 30px;border-left:3px solid var(--v3-color);background:var(--v3-tint)}.iv3 .v3-related{display:flex;flex-wrap:wrap;gap:12px 28px;padding:24px 0;border-top:1px solid var(--v3-line)}.iv3 .v3-form-note{padding:24px;border-radius:16px;background:var(--v3-tint);margin:24px 0;font-size:14px;line-height:1.6}.iv3 .v3-form-note strong{display:block;margin-bottom:8px}.iv3 .v3-sample{padding:28px;border:1px solid var(--v3-line);border-radius:20px;background:var(--v3-paper)}.iv3 .v3-sample dl{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:20px 0}.iv3 .v3-sample dt{font-size:12px;opacity:.7}.iv3 .v3-sample dd{margin:4px 0;font-weight:600;font-size:15px}.iv3 .v3-tag{font-size:11px;border:1px solid var(--v3-line);border-radius:40px;padding:5px 10px;display:inline-block}.iv3 .v3-addition{padding-bottom:24px}.iv3 .v3-category-guide{display:grid;grid-template-columns:1fr 2fr;gap:40px;border-top:1px solid var(--v3-line);padding:36px 0}.iv3 .v3-category-guide p{font-size:15px;max-width:68ch}.iv3 .v3-media-strip{display:grid;grid-template-columns:1.3fr 1fr;gap:24px}.iv3 .v3-media-strip figure{aspect-ratio:4/3}.iv3 .v3-compact{padding:32px 0}@media(max-width:850px){.iv3 .v3-plans{gap:12px}.iv3 .v3-plan{padding:22px}.iv3 .v3-columns{gap:18px}.iv3 .v3-band{padding:28px}.iv3 .v3-faq{gap:30px}.iv3 .v3-intro{padding-top:48px}}@media(max-width:620px){.iv3 .v3-plans,.iv3 .v3-columns,.iv3 .v3-split,.iv3 .v3-steps,.iv3 .v3-faq,.iv3 .v3-category-guide{grid-template-columns:1fr}.iv3 .v3-plans{gap:18px}.iv3 .v3-plan{padding:26px}.iv3 .v3-section{padding:34px 0}.iv3 .v3-steps{gap:20px}.iv3 .v3-steps li{display:grid;grid-template-columns:30px 1fr;gap:20px}.iv3 .v3-steps li>span{margin:4px 0}.iv3 .v3-band{align-items:flex-start;flex-direction:column;margin-bottom:40px;gap:24px}.iv3 .v3-faq{gap:8px}.iv3 .v3-intro{padding:36px 0 24px}.iv3 .v3-intro h1{font-size:42px}.iv3 .v3-media-strip{gap:12px}.iv3 .v3-article p{font-size:16px}.iv3 .v3-article blockquote{font-size:21px;padding:18px}.iv3 .v3-category-guide{gap:8px}.iv3 .v3-table-wrap{max-width:100%}}.iv3 .v3-case-chapters{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}.iv3 .v3-case-chapters>div:first-child{position:sticky;top:110px}.iv3 .v3-case-chapters>div:last-child>section{padding:0 0 32px;margin:0 0 28px;border-bottom:1px solid var(--v3-line)}.iv3 .v3-case-chapters p{font-size:17px;line-height:1.7}.iv3 .v3-case-delivery{display:grid;grid-template-columns:1fr 1.2fr;gap:50px;padding:36px 0 54px;align-items:start}.iv3 .v3-case-delivery h2{font-size:32px;line-height:1.1;letter-spacing:-.03em;margin:0}.iv3 .v3-case-delivery ul{list-style:none;padding:0;margin:0}.iv3 .v3-case-delivery li{padding:16px 0;border-bottom:1px solid var(--v3-line);display:flex;gap:20px;font-size:16px}.iv3 .v3-case-delivery li span{opacity:.5;font-size:11px;padding-top:4px}@media(max-width:620px){.iv3 .v3-case-chapters,.iv3 .v3-case-delivery{grid-template-columns:1fr;gap:24px}.iv3 .v3-case-chapters>div:first-child{position:static}}
+/* Wishwell — home: loved by gifters, good questions */
+.wish-love-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.wish-love{margin:0;display:flex;flex-direction:column;gap:16px;padding:30px;min-width:0}
+.wish-stars{display:flex;gap:3px;color:var(--ink)}
+.wish-stars svg{width:15px;height:15px}
+.wish-love blockquote{margin:0;font-family:var(--serif);font-size:1.25rem;line-height:1.4;color:var(--ink-deep)}
+.wish-love figcaption{margin-top:auto;display:flex;flex-direction:column;gap:2px;font-size:.88rem;color:var(--body)}
+.wish-love figcaption strong{color:var(--ink);font-weight:700}
+.wish-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;margin-top:40px;padding-top:32px;border-top:1px solid var(--line)}
+.wish-stats b{display:block;font-family:var(--serif);font-size:2.6rem;color:var(--ink);letter-spacing:-.03em;line-height:1}
+.wish-stats span{display:block;margin-top:8px;font-size:.88rem;color:var(--muted);max-width:22ch}
+.wish-faq{display:grid;grid-template-columns:.85fr 1.15fr;gap:24px;align-items:start}
+.wish-faq-aside{padding:36px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.wish-faq-aside h2{font-size:clamp(1.8rem,3vw,2.6rem);color:var(--lilac-deep)}
+.wish-faq-aside p{color:#3d2a66;font-size:.95rem}
+.wish-faq-aside .eyebrow{color:var(--lilac-deep)}
+.wish-faq-aside .btn{margin-top:8px}
+@media(max-width:1000px){.wish-love-grid{grid-template-columns:1fr}.wish-stats{grid-template-columns:1fr 1fr}.wish-faq{grid-template-columns:1fr}}
+@media(max-width:560px){.wish-stats{grid-template-columns:1fr}}
+
+/* design-pass-2 */
+/* Wishwell — sticky: a white sticker pill */
+.nav{transition:background .3s,border-color .3s,padding .3s}
+.nav.is-stuck{background:transparent;border-bottom-color:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;padding:10px 16px}
+.nav.is-stuck .wrap{height:58px;padding:0 10px 0 20px;width:min(1020px,calc(100% - 32px));background:#fff;border-radius:999px;box-shadow:var(--shadow-sticker);animation:nav-cap .32s cubic-bezier(.34,1.3,.64,1)}
+@keyframes nav-cap{from{transform:translateY(-14px);opacity:0}to{transform:none;opacity:1}}
+</style>
+</head>
+<body>
+<!-- icon sprite: Lucide grammar, defined once, referenced with <use href="#i-…"> -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <g id="i-arrow-right" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></g>
+  <g id="i-arrow-left" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></g>
+  <g id="i-chevron-left" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></g>
+  <g id="i-chevron-right" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></g>
+  <g id="i-menu" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></g>
+  <g id="i-x" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></g>
+  <g id="i-check" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></g>
+  <g id="i-plus" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></g>
+  <g id="i-minus" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></g>
+  <g id="i-gift" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></g>
+  <g id="i-calendar" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></g>
+  <g id="i-wallet" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></g>
+  <g id="i-inbox" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></g>
+  <g id="i-bell" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></g>
+  <g id="i-palette" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".6" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".6" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".6" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".6" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></g>
+  <g id="i-sparkles" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/></g>
+  <g id="i-heart" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></g>
+  <g id="i-camera" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></g>
+  <g id="i-search" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></g>
+  <g id="i-home" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></g>
+  <g id="i-user" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></g>
+  <g id="i-users" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></g>
+  <g id="i-message" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></g>
+  <g id="i-share" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" x2="12" y1="2" y2="15"/></g>
+  <g id="i-star" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></g>
+  <g id="i-shield" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></g>
+  <g id="i-clock" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></g>
+  <g id="i-smartphone" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></g>
+  <g id="i-qr" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></g>
+  <g id="i-globe" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></g>
+  <g id="i-at-sign" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/></g>
+  <g id="i-mail" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></g>
+  <g id="i-send" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></g>
+  <g id="i-image" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></g>
+  <g id="i-type" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" x2="15" y1="20" y2="20"/><line x1="12" x2="12" y1="4" y2="20"/></g>
+  <g id="i-music" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></g>
+  <g id="i-video" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></g>
+  <g id="i-smile" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></g>
+  <g id="i-more" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></g>
+  <g id="i-zap" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></g>
+  <g id="i-lock" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></g>
+  <g id="i-repeat" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></g>
+  <g id="i-party" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11c-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></g>
+  <g id="i-cake" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/><path d="M7 4h.01"/><path d="M12 4h.01"/><path d="M17 4h.01"/></g>
+  <g id="i-flower" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 16.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 1 1 12 7.5a4.5 4.5 0 1 1 4.5 4.5 4.5 4.5 0 1 1-4.5 4.5"/><path d="M12 7.5V9"/><path d="M7.5 12H9"/><path d="M16.5 12H15"/><path d="M12 16.5V15"/><path d="m8 8 1.88 1.88"/><path d="M14.12 9.88 16 8"/><path d="m8 16 1.88-1.88"/><path d="M14.12 14.12 16 16"/></g>
+  <g id="i-coffee" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></g>
+  <g id="i-gamepad" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></g>
+  <g id="i-book" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></g>
+  <g id="i-card" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></g>
+  <g id="i-download" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></g>
+  <g id="i-pin" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></g>
+  <g id="i-pen" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></g>
+  <g id="i-rss" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></g>
+  <!-- decorative sticker art (not UI icons) -->
+  <g id="s-flower" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><circle cx="12" cy="12" r="2.6" fill="#f6d97b" stroke="#c88a2b"/><g fill="#f3a9c2" stroke="#e0708f"><ellipse cx="12" cy="5.5" rx="2.4" ry="3.2"/><ellipse cx="12" cy="18.5" rx="2.4" ry="3.2"/><ellipse cx="5.5" cy="12" rx="3.2" ry="2.4"/><ellipse cx="18.5" cy="12" rx="3.2" ry="2.4"/><ellipse cx="7.4" cy="7.4" rx="2.6" ry="2.6"/><ellipse cx="16.6" cy="7.4" rx="2.6" ry="2.6"/><ellipse cx="7.4" cy="16.6" rx="2.6" ry="2.6"/><ellipse cx="16.6" cy="16.6" rx="2.6" ry="2.6"/></g></g>
+  <g id="s-heart" fill="#f08a7a" stroke="#d9634f" stroke-width="1.3" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></g>
+  <g id="s-hat" fill="none" stroke="#1e3a5f" stroke-width="1.4" stroke-linejoin="round"><path d="M12 3 5 20h14z" fill="#c4d8ee"/><path d="m7.4 14.2 9.2 0M9.1 10.1h5.8" stroke="#f3a9c2" stroke-width="2.2"/><circle cx="12" cy="3.2" r="1.8" fill="#f6d97b"/><path d="M5 20c2 1.6 12 1.6 14 0" fill="#f3a9c2"/></g>
+  <g id="s-cake" fill="none" stroke="#1e3a5f" stroke-width="1.4" stroke-linejoin="round"><path d="M4 12h16v9H4z" fill="#f6d97b"/><path d="M4 14c2 1.4 4 1.4 6 0s4-1.4 6 0 3 1.4 4 0" stroke="#f3a9c2" stroke-width="2"/><path d="M8 12V8M12 12V7M16 12V8" stroke="#c88a2b"/><circle cx="8" cy="6.5" r="1.1" fill="#f08a7a"/><circle cx="12" cy="5.5" r="1.1" fill="#f08a7a"/><circle cx="16" cy="6.5" r="1.1" fill="#f08a7a"/></g>
+  <g id="s-smile" fill="#f6d97b" stroke="#1e3a5f" stroke-width="1.4" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M8 14.5s1.5 2.5 4 2.5 4-2.5 4-2.5" fill="none"/><circle cx="9" cy="9.5" r="1" fill="#1e3a5f"/><circle cx="15" cy="9.5" r="1" fill="#1e3a5f"/></g>
+  <g id="s-balloon" fill="none" stroke="#1e3a5f" stroke-width="1.4" stroke-linejoin="round"><ellipse cx="12" cy="9" rx="6" ry="7.5" fill="#cfe6cd"/><path d="M12 16.5v1.3M11 17.8h2M12 18.3c-2 2 2 3 0 5"/></g>
+</defs></svg>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="wrap">
+    <!-- REPLACE: brand name and mark -->
+    <a href="#/" class="brand"><span class="mark"><svg class="ic" viewBox="0 0 24 24"><use href="#i-gift"/></svg></span>Wishwell</a>
+    <nav class="menu" id="menu" aria-label="Primary">
+      <a href="#/features">Features</a>
+      <a href="#/how-it-works">How it works</a>
+      <a href="#/gift-cards">Gift cards</a>
+      <a href="#/pricing">Plans</a>
+      <a href="#/help">Help</a>
+      <a href="#/about">About</a>
+    </nav>
+    <div class="nav-cta">
+      <span data-reui="button" data-reui-variant="secondary" data-reui-href="#/download" data-reui-class="btn sm">Get Wishwell</span>
+      <span class="nav-sheet" data-reui="sheet" data-reui-side="right" data-reui-trigger-class="nav-toggle" data-reui-aria-label="Open menu" data-reui-title="Menu">
+      <span data-reui-trigger><svg class="ic m" viewBox="0 0 24 24"><use href="#i-menu"/></svg></span>
+      <span data-reui-content><a href="#/features">Features</a>
+      <a href="#/how-it-works">How it works</a>
+      <a href="#/gift-cards">Gift cards</a>
+      <a href="#/pricing">Plans</a>
+      <a href="#/help">Help</a>
+      <a href="#/about">About</a></span>
+    </span>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ============ HOME ============ -->
+<section data-page="home" data-title="Home">
+  <div class="hero hero-complete"><div class="wrap hero-layout"><div class="hero-copy"><span class="hero-kicker">Little gestures. Big feelings.</span><h1>Send more<br>smiles.</h1><p>A card, a little gift, a whole lot of love.</p><div class="hero-actions"><span data-reui="button" data-reui-variant="secondary" data-reui-href="#/download" data-reui-class="btn">Start gifting <svg class="ic" viewBox="0 0 24 24"><use href="#i-arrow-right"/></svg></span><a href="#/gift-cards" class="hero-secondary">Explore gift cards</a></div><div class="hero-note"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#s-heart"/></svg><span>For their big days.<br>And the little ones, too.</span></div></div><div class="hero-scene"><span class="hero-orbit" aria-hidden="true"></span><span class="stk round hero-flower" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#s-flower"/></svg></span><span class="stk round hero-smile" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#s-smile"/></svg></span><a href="#/gift-cards/ember-and-bean" class="hero-gift hero-gift-coffee" aria-label="Explore the coffee gift card"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3ECoffee%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E" alt="Illustrated coffee and croissant gift card"><span>A little pick-me-up.</span></a><a href="#/gift-cards/petal-house" class="hero-gift hero-gift-flower" aria-label="Explore the flower gift card"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EFlorist%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E" alt="Illustrated flower bouquet gift card"><span>Just because.</span></a><div class="phone hero-phone">
+          <div class="screen">
+            <div class="sbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+            <div class="app-top"><span class="cir"><svg class="ic" viewBox="0 0 24 24"><use href="#i-chevron-left"></use></svg></span><span data-occ-name="">Happy Birthday</span><a href="#/download" aria-label="Send this greeting card">Send</a></div>
+            <div class="app-card" data-occ-card=""><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201024%201536'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1024'%20height%3D'1536'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1024'%20height%3D'1536'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'85'%20fill%3D'%2523777'%3EGreeting%20card%20art%20(portrait)%3C%2Ftext%3E%3C%2Fsvg%3E" alt="Illustrated greeting card with balloons and a cake"><div class="cap" data-occ-cap="">Happy Birthday</div></div>
+            <p class="app-msg" data-occ-msg="">Another year of you. Cake first.</p>
+            <div class="app-row"><span class="on">Card</span><span>Gift</span><span>Cash</span></div>
+            <div class="app-tabs"><span class="on"><svg class="ic" viewBox="0 0 24 24"><use href="#i-home"></use></svg>Home</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-inbox"></use></svg>Inbox</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-gift"></use></svg>Gifts</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-wallet"></use></svg>Wallet</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-user"></use></svg>Me</span></div>
+          </div>
+        </div><span class="hero-sent" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg> A little joy, delivered.</span><div class="occ-nav">
+        <div class="occ" role="group" aria-label="Browse occasions">
+          <button type="button" data-occ-prev="" aria-label="Previous occasion"><svg class="ic" viewBox="0 0 24 24"><use href="#i-chevron-left"></use></svg></button>
+          <span data-occ-label="">Happy Birthday</span>
+          <button type="button" data-occ-next="" aria-label="Next occasion"><svg class="ic" viewBox="0 0 24 24"><use href="#i-chevron-right"></use></svg></button>
+        </div>
+      </div></div></div></div>
+
+  <!-- explore bento -->
+  <div class="section">
+    <div class="wrap">
+      <div class="sec-head">
+        <!-- REPLACE: bento section headline -->
+        <h2 class="reveal">Explore endless possibilities.</h2>
+      </div>
+      <div class="bento">
+        <div class="b-custom reveal">
+          <h3>Customize</h3>
+          <p>Choose a card. Add photos, stickers or a voice note.</p>
+          <div class="mini mini-card"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201024%201536'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1024'%20height%3D'1536'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1024'%20height%3D'1536'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'85'%20fill%3D'%2523777'%3EGreeting%20card%20art%20(portrait)%3C%2Ftext%3E%3C%2Fsvg%3E" alt=""></div>
+          <div class="tool-chips" aria-hidden="true"><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-image"/></svg>Photo</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-type"/></svg>Text</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-sparkles"/></svg>Sticker</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-music"/></svg>Song</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-video"/></svg>Video</span></div>
+          <a href="#/features" class="link" style="margin-top:auto">All customization tools <svg class="ic" viewBox="0 0 24 24"><use href="#i-arrow-right"/></svg></a>
+        </div>
+        <div class="b-sched reveal d1">
+          <h3>Schedule</h3>
+          <p>Write it now. Deliver it on their special day.</p>
+          <div class="mini mini-cal" aria-hidden="true"><div class="hd"><span>September</span><span>2026</span></div><div class="g"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span><span></span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span class="dot">9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span class="on">18</span><span>19</span><span>20</span></div></div>
+        </div>
+        <div class="b-wallet reveal d2">
+          <h3>Wallet</h3>
+          <p>Every received gift, in one place.</p>
+          <div class="mini-wallet"><small>WISHWELL CASH</small>$132.00</div>
+        </div>
+        <div class="b-inbox reveal d3">
+          <h3>Inbox</h3>
+          <p>Cards, group gifts and thank-yous, together.</p>
+          <div class="mini mini-inbox" aria-hidden="true"><div class="row"><span class="av a1">MR</span><div><b>Mara R.</b> opened your card</div></div><div class="row"><span class="av a2">JT</span><div><b>Jonah T.</b> chipped in $15</div></div><div class="row"><span class="av a3">PL</span><div><b>Priya L.</b> sent a thank-you</div></div></div>
+        </div>
+        <div class="b-send reveal d4">
+          <h3>Send gifts</h3>
+          <p>Add a gift card or invite friends to chip in.</p>
+          <a href="#/gift-cards" class="link" style="margin-top:auto">Browse the gift shop <svg class="ic" viewBox="0 0 24 24"><use href="#i-arrow-right"/></svg></a>
+          <div class="fan" aria-hidden="true"><i style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3ECoffee%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></i><i style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EArcade%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></i><i style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EFlorist%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></i></div>
+        </div>
+        <div class="b-remind reveal d5">
+          <h3>Reminders</h3>
+          <p>Keep the important dates close.</p>
+          <div class="mini mini-note" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><use href="#i-bell"/></svg><div><b>Birthday reminder</b>Leo turns 30 on Friday. Tap to send a card now.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- lilac floating tiles -->
+  <div class="simple">
+    <div class="tiles" aria-hidden="true">
+      <span class="tile" style="left:4%;top:8%;--w:170px;--rot:-10deg"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EGift%20box%20tile%3C%2Ftext%3E%3C%2Fsvg%3E" alt=""></span>
+      <span class="tile" style="left:22%;top:52%;--w:120px;--rot:8deg;--dl:1s"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EFlowers%20tile%3C%2Ftext%3E%3C%2Fsvg%3E" alt=""></span>
+      <span class="tile hide-m" style="left:8%;top:70%;--w:140px;--rot:-4deg;--dl:2s"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EGift%20card%20tile%3C%2Ftext%3E%3C%2Fsvg%3E" alt=""></span>
+      <span class="tile" style="right:5%;top:10%;--w:150px;--rot:12deg;--dl:.5s"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EFlowers%20tile%3C%2Ftext%3E%3C%2Fsvg%3E" alt=""></span>
+      <span class="tile flip hide-m" style="right:18%;top:48%;--w:110px;--rot:-7deg;--dl:1.5s"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EGift%20box%20tile%3C%2Ftext%3E%3C%2Fsvg%3E" alt=""></span>
+      <span class="tile flip" style="right:6%;top:66%;--w:160px;--rot:6deg;--dl:2.5s"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EGift%20card%20tile%3C%2Ftext%3E%3C%2Fsvg%3E" alt=""></span>
+      <span class="tile css hide-m" style="left:32%;top:6%;--w:96px;--rot:14deg;--dl:.3s;background:var(--coral)"><svg class="ic" viewBox="0 0 24 24"><use href="#i-camera"/></svg></span>
+      <span class="tile css" style="right:30%;top:78%;--w:90px;--rot:-12deg;--dl:1.8s;background:var(--ink)"><svg class="ic" viewBox="0 0 24 24"><use href="#i-heart"/></svg></span>
+    </div>
+    <div class="wrap">
+      <!-- REPLACE: gift shop promise -->
+      <h2 class="reveal">Gifting made simple</h2>
+      <p class="reveal d1">Find a thoughtful gift for their next good day.</p>
+      <p class="reveal d2" style="margin-top:22px">Explore gift cards</p>
+    </div>
+  </div>
+
+  <!-- dark cash -->
+  <div class="cash">
+    <div class="wrap">
+      <!-- REPLACE: cash feature name -->
+      <h2 class="reveal">Wishwell Cash</h2>
+      <div class="cash-stage reveal pop d1">
+        <span class="gc g1" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3ECoffee%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')" aria-hidden="true"></span>
+        <span class="gc g2" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EBookshop%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')" aria-hidden="true"></span>
+        <span class="gc g3" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EFlorist%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')" aria-hidden="true"></span>
+        <span class="gc g4" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EArcade%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')" aria-hidden="true"></span>
+        <div class="phone">
+          <div class="screen">
+            <div class="sbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+            <div class="app-top"><span class="cir"><svg class="ic" viewBox="0 0 24 24"><use href="#i-chevron-left"/></svg></span><span>Wishwell Cash</span><span></span></div>
+            <div class="mini" style="margin:14px 18px 0;text-align:center;padding:18px;border:1px solid var(--line);box-shadow:none;background:var(--cream)"><div class="av a5" style="margin:0 auto 8px;width:34px;height:34px">W</div><b style="font-size:.8rem">Spend anywhere in the shop</b></div>
+            <div class="amt" data-amt>
+              <div class="lbl">SELECT AMOUNT</div>
+              <div class="ctl"><button type="button" data-amt-dec aria-label="Decrease amount"><svg class="ic" viewBox="0 0 24 24"><use href="#i-minus"/></svg></button><span class="val"><sup>$</sup><span data-amt-val>10</span></span><button type="button" data-amt-inc aria-label="Increase amount"><svg class="ic" viewBox="0 0 24 24"><use href="#i-plus"/></svg></button></div>
+              <span class="btn sm go" style="justify-content:center">Add gift</span>
+            </div>
+            <div class="app-tabs"><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-home"/></svg>Home</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-inbox"/></svg>Inbox</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-gift"/></svg>Gifts</span><span class="on"><svg class="ic" viewBox="0 0 24 24"><use href="#i-wallet"/></svg>Wallet</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-user"/></svg>Me</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- REPLACE: cash feature copy -->
+      <p class="reveal d2">Let them choose the gift they really want.</p>
+      <p class="reveal d3" style="margin-top:22px">Explore Wishwell Cash</p>
+    </div>
+  </div>
+
+   <!-- loved by gifters --> <div class="section"> <div class="wrap"> <div class="sec-head"> <span class="eyebrow">Loved by gifters</span> <h2 class="reveal">Little notes, big feelings.</h2> <p class="reveal d1">A few of the thank-yous that come back to us, with permission.</p> </div> <div class="wish-love-grid"> <figure class="card tint-butter wish-love reveal"><span class="wish-stars" aria-label="Five stars"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><blockquote>“I scheduled Dad’s birthday card on a Sunday and forgot about it. Friday morning he rang me in tears, happy ones. Best $4 I have spent.”</blockquote><figcaption><strong>Maya Okonjo</strong><span>Sent 42 cards this year</span></figcaption></figure><figure class="card tint-mint wish-love reveal d1"><span class="wish-stars" aria-label="Five stars"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><blockquote>“Eleven of us chipped in for Priya’s leaving gift from three time zones. One link, one card, everyone signed. No spreadsheet.”</blockquote><figcaption><strong>Tom Alvarez</strong><span>Group gifts, mostly</span></figcaption></figure><figure class="card tint-powder wish-love reveal d2"><span class="wish-stars" aria-label="Five stars"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><blockquote>“Wishwell Cash means my nephew gets coffee, not another mug. He sent a thank-you voice note. From a teenager. Unprompted.”</blockquote><figcaption><strong>Ingrid Solheim</strong><span>Aunt of the year, apparently</span></figcaption></figure> </div> <div class="wish-stats reveal d3"><div><b>2.4M</b><span>cards delivered on the right day</span></div><div><b>180k</b><span>people sending smiles every month</span></div><div><b>4.9 / 5</b><span>average rating across both app stores</span></div><div><b>48</b><span>countries with local gift cards</span></div></div> </div> </div>  <!-- good questions --> <div class="section tight"> <div class="wrap"> <div class="wish-faq"> <div class="card tint-lilac wish-faq-aside reveal"> <span class="eyebrow">Good questions</span> <h2>Before you send your first card.</h2> <p>The five things people ask before they download. The help center has the rest, and a real person if you get stuck.</p> <span data-reui="button" data-reui-variant="secondary" data-reui-href="#/help" data-reui-class="btn lilac">Visit the help center <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span> </div> <div class="reveal d1"><div data-reui="accordion" data-reui-type="single" class="reui-faq">
+    <div data-reui-item data-reui-value="h1">
+      <span data-reui-trigger>Is Wishwell free?</span>
+      <div data-reui-content><p>Yes. Sending cards, scheduling and group gifts are free forever. Wishwell Plus adds video cards, unlimited photo pages and reminders for $3 a month.</p></div>
+    </div>
+    <div data-reui-item data-reui-value="h2">
+      <span data-reui-trigger>Does the person I send to need the app?</span>
+      <div data-reui-content><p>No. Cards open in any browser from a link or a text. If they do have the app, the card lands in their inbox with a little confetti.</p></div>
+    </div>
+    <div data-reui-item data-reui-value="h3">
+      <span data-reui-trigger>Where can Wishwell Cash be spent?</span>
+      <div data-reui-content><p>At every shop in the gift catalogue, in 48 countries, or withdrawn to a bank account. It never expires and there are no fees on either side.</p></div>
+    </div>
+    <div data-reui-item data-reui-value="h4">
+      <span data-reui-trigger>What if I get the date wrong?</span>
+      <div data-reui-content><p>Edit or cancel a scheduled card any time before it goes out, from your inbox. Sent cards can be followed with a second one; we do not judge.</p></div>
+    </div>
+    <div data-reui-item data-reui-value="h5">
+      <span data-reui-trigger>Can I get a refund on a gift card?</span>
+      <div data-reui-content><p>Unclaimed gift cards can be refunded in full for 30 days. Once claimed, the value belongs to the recipient, who can swap it for a different shop.</p></div>
+    </div>
+  </div></div> </div> </div> </div> <!-- green CTA -->
+  <div class="cta-band" style="padding-top:96px">
+    <div class="wrap">
+      <div class="cta-card reveal">
+        <div>
+          <!-- REPLACE: closing CTA headline -->
+          <h2>Ready to start giving?</h2>
+          <p style="margin-top:18px">Get Wishwell</p>
+        </div>
+        <div class="foot">
+          <a href="#/download" class="qr" aria-label="Download the app"><svg viewBox="0 0 80 80" aria-hidden="true"><rect width="80" height="80" fill="#fff"/><g fill="#1e3a5f"><rect x="4" y="4" width="22" height="22" rx="3"/><rect x="54" y="4" width="22" height="22" rx="3"/><rect x="4" y="54" width="22" height="22" rx="3"/><rect x="10" y="10" width="10" height="10" fill="#fff"/><rect x="60" y="10" width="10" height="10" fill="#fff"/><rect x="10" y="60" width="10" height="10" fill="#fff"/><rect x="32" y="4" width="4" height="4"/><rect x="40" y="4" width="4" height="4"/><rect x="36" y="10" width="4" height="8"/><rect x="44" y="12" width="4" height="4"/><rect x="32" y="20" width="8" height="4"/><rect x="4" y="32" width="4" height="4"/><rect x="12" y="32" width="8" height="4"/><rect x="24" y="30" width="4" height="10"/><rect x="32" y="32" width="4" height="4"/><rect x="40" y="28" width="4" height="8"/><rect x="48" y="32" width="8" height="4"/><rect x="60" y="32" width="4" height="4"/><rect x="68" y="30" width="8" height="4"/><rect x="8" y="42" width="4" height="4"/><rect x="16" y="42" width="4" height="4"/><rect x="28" y="44" width="8" height="4"/><rect x="40" y="40" width="4" height="8"/><rect x="52" y="42" width="4" height="4"/><rect x="60" y="40" width="4" height="8"/><rect x="72" y="42" width="4" height="4"/><rect x="32" y="54" width="8" height="4"/><rect x="44" y="52" width="4" height="8"/><rect x="54" y="54" width="8" height="4"/><rect x="66" y="54" width="4" height="4"/><rect x="72" y="56" width="4" height="8"/><rect x="32" y="62" width="4" height="4"/><rect x="40" y="64" width="8" height="4"/><rect x="54" y="62" width="4" height="8"/><rect x="62" y="66" width="8" height="4"/><rect x="32" y="72" width="8" height="4"/><rect x="46" y="72" width="4" height="4"/><rect x="56" y="72" width="8" height="4"/><rect x="70" y="72" width="6" height="4"/></g></svg><span>Get the app</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ FEATURES ============ -->
+<section data-page="features" data-title="Features">
+  <div class="page-head mint">
+    <span class="stk hide-m" style="left:8%;top:22%;--rot:-10deg;--sz:52px" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#s-flower"/></svg></span>
+    <span class="stk text hide-m" style="right:8%;top:30%;--rot:9deg;color:var(--coral)" aria-hidden="true">so many tools</span>
+    <div class="wrap">
+      <span class="eyebrow">Features</span>
+      <!-- REPLACE: features page headline -->
+      <h1>Everything a good gifter needs.</h1>
+      <p>Everything you need to make a small moment feel special.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="frow">
+        <div class="fpanel reveal" style="background:var(--mint)">
+          <div class="mini" style="width:min(300px,100%)"><div style="display:flex;justify-content:space-between;font-weight:700;margin-bottom:8px"><span>Card editor</span><span>Preview</span></div><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201024%201536'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1024'%20height%3D'1536'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1024'%20height%3D'1536'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'85'%20fill%3D'%2523777'%3EGreeting%20card%20art%20(portrait)%3C%2Ftext%3E%3C%2Fsvg%3E" alt="" style="border-radius:12px;aspect-ratio:3/2;object-fit:cover"><div class="tool-chips" style="justify-content:flex-start"><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-image"/></svg>Photo</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-type"/></svg>Text</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-sparkles"/></svg>Sticker</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-music"/></svg>Song</span></div></div>
+        </div>
+        <div class="reveal d1">
+          <span class="eyebrow">Customize</span>
+          <!-- REPLACE: feature 1 copy -->
+          <h3>A card that could only come from you.</h3>
+          <p>Start with a design or a blank card. Add a photo, stickers and a short voice note.</p>
+          <ul>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Photo, text, sticker, voice, song and video layers</li>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Group cards: up to 40 people sign one card</li>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Handwriting mode that keeps your actual pen strokes</li>
+          </ul>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fpanel reveal" style="background:var(--pink)">
+          <div class="mini" style="width:min(300px,100%)"><div class="hd" style="display:flex;justify-content:space-between;font-weight:700;margin-bottom:8px"><span>Scheduled</span><span>3 upcoming</span></div><div class="mini-inbox"><div class="row"><span class="av a4">LB</span><div><b>Leo B.</b> Fri 7:00 AM, birthday</div></div><div class="row"><span class="av a2">JT</span><div><b>Jonah T.</b> Sep 21, congrats</div></div><div class="row"><span class="av a6">HN</span><div><b>Hana N.</b> Oct 2, anniversary</div></div></div></div>
+        </div>
+        <div class="reveal d1">
+          <span class="eyebrow">Schedule</span>
+          <!-- REPLACE: feature 2 copy -->
+          <h3>Write it when you think of it. Send it when it matters.</h3>
+          <p>Choose the day and time. A reminder gives you one last chance to add a personal line.</p>
+          <ul>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Send by text, email or a private link</li>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Edit anything up to the minute it goes out</li>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Yearly repeats for the people you never want to miss</li>
+          </ul>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fpanel reveal" style="background:var(--dark);color:#fff">
+          <div class="mini" style="width:min(280px,100%);background:var(--dark-2);color:#fff;box-shadow:none"><small style="letter-spacing:.08em;opacity:.7">WISHWELL CASH</small><div style="font-size:2rem;font-weight:700;letter-spacing:-.02em;margin:4px 0 10px">$132.00</div><div style="display:flex;gap:6px"><span class="pill soft" style="color:#fff;background:rgba(255,255,255,.14)">Spend</span><span class="pill soft" style="color:#fff;background:rgba(255,255,255,.14)">Swap</span><span class="pill soft" style="color:#fff;background:rgba(255,255,255,.14)">Save</span></div></div>
+        </div>
+        <div class="reveal d1">
+          <span class="eyebrow">Wallet</span>
+          <!-- REPLACE: feature 3 copy -->
+          <h3>Cash that never becomes the wrong sweater.</h3>
+          <p>A flexible balance for gift cards, group contributions and a choice of shops.</p>
+          <ul>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>No expiry, no fees on the receiving side</li>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Swap any received gift card for Cash instantly</li>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Group pools with a live progress bar</li>
+          </ul>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fpanel reveal" style="background:var(--butter)">
+          <div class="mini" style="width:min(300px,100%)"><div style="font-weight:700;margin-bottom:8px">Inbox</div><div class="mini-inbox"><div class="row"><span class="av a1">MR</span><div><b>Mara R.</b> opened your card</div></div><div class="row"><span class="av a3">PL</span><div><b>Priya L.</b> sent a thank-you note</div></div><div class="row"><span class="av a5">SK</span><div><b>Sam K.</b> joined the group gift</div></div></div></div>
+        </div>
+        <div class="reveal d1">
+          <span class="eyebrow">Inbox</span>
+          <!-- REPLACE: feature 4 copy -->
+          <h3>Every card, gift and thank-you in one thread.</h3>
+          <p>See opened cards, group contributions and replies. Keep the cards you receive in one place.</p>
+          <ul>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Open receipts you can switch off</li>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>One-tap thank-you replies with your own card</li>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Keepsake export as a printable PDF</li>
+          </ul>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fpanel reveal" style="background:var(--tangerine)">
+          <div class="cards two" style="width:min(320px,100%);gap:10px"><div class="gcard"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3ECoffee%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E');aspect-ratio:1.4"></div><div class="body" style="padding:10px 12px 12px"><b style="font-size:.8rem;color:var(--ink)">Ember &amp; Bean</b></div></div><div class="gcard"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EArcade%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E');aspect-ratio:1.4"></div><div class="body" style="padding:10px 12px 12px"><b style="font-size:.8rem;color:var(--ink)">Pixel Parlor</b></div></div></div>
+        </div>
+        <div class="reveal d1">
+          <span class="eyebrow">Send gifts</span>
+          <!-- REPLACE: feature 5 copy -->
+          <h3>The right gift, attached to the right words.</h3>
+          <p>Send a gift card yourself or invite friends to sign and contribute.</p>
+          <ul>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Hundreds of shops, from coffee to concert tickets</li>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Group gifts with a chip-in link that works without the app</li>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Delivered instantly, redeemed in store or online</li>
+          </ul>
+          <p style="margin-top:18px">Browse gift cards</p>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fpanel reveal" style="background:var(--powder)">
+          <div class="mini mini-note" style="width:min(300px,100%)"><svg class="ic" viewBox="0 0 24 24"><use href="#i-bell"/></svg><div><b>Birthday reminder</b>Leo turns 30 on Friday. You sent him a card last year; want to start from that one?</div></div>
+        </div>
+        <div class="reveal d1">
+          <span class="eyebrow">Reminders</span>
+          <!-- REPLACE: feature 6 copy -->
+          <h3>Never miss a birthday or special occasion again.</h3>
+          <p>Save important dates and get a nudge before the occasion.</p>
+          <ul>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Birthdays, anniversaries, work milestones, custom dates</li>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Quiet mode that batches reminders into one weekly note</li>
+            <li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Shared family calendar on the Family plan</li>
+          </ul>
+        </div>
+      </div>
+      <div class="center reveal" style="margin-top:40px"><span data-reui="button" data-reui-variant="secondary" data-reui-href="#/how-it-works" data-reui-class="btn">See how it works</span> <span data-reui="button" data-reui-variant="ghost" data-reui-href="#/pricing" data-reui-class="btn ghost" data-reui-style="margin-left:8px">Compare plans</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section data-page="how-it-works" data-title="How it works">
+  <div class="page-head powder">
+    <span class="stk hide-m" style="left:10%;top:24%;--rot:8deg;--sz:52px" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#s-balloon"/></svg></span>
+    <span class="stk hide-m" style="right:10%;top:28%;--rot:-8deg;--sz:52px" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#s-cake"/></svg></span>
+    <div class="wrap">
+      <span class="eyebrow">How it works</span>
+      <!-- REPLACE: how-it-works headline -->
+      <h1>Four taps from thought to delivered.</h1>
+      <p>A personal card in four simple steps.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="steps">
+        <div class="step reveal" style="--rot:-2deg"><span class="n">1</span><h3>Pick a moment</h3><p>A birthday, a new home, a thank-you or no reason at all.</p></div>
+        <div class="step reveal d1" style="--rot:1.5deg"><span class="n">2</span><h3>Make the card</h3><p>Choose a design, add a photo and make it yours.</p></div>
+        <div class="step reveal d2" style="--rot:-1.5deg"><span class="n">3</span><h3>Attach a gift</h3><p>Include a gift card or a group contribution. A card on its own is lovely, too.</p></div>
+        <div class="step reveal d3" style="--rot:2deg"><span class="n">4</span><h3>Send or schedule</h3><p>Send now or choose the day and time.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="section tight" style="background:#fff">
+    <div class="wrap center">
+      <div class="sec-head">
+        <span class="eyebrow">Two sides of every gift</span>
+        <h2 class="reveal">What it looks like for each of you</h2>
+      </div>
+      <div data-reui="tabs" data-reui-default="send">
+  <div data-reui-item data-reui-value="send" data-reui-label="Sending" type="button" data-tab="send">
+    <div data-reui-content data-tabpanel="send">
+        <div class="cards" style="text-align:left">
+          <div class="card"><span class="iconbox mint"><svg class="ic" viewBox="0 0 24 24"><use href="#i-pen"/></svg></span><h3>Draft anywhere</h3><p>Start on your phone and finish on the web. Drafts stay yours until you send.</p></div>
+          <div class="card"><span class="iconbox pink"><svg class="ic" viewBox="0 0 24 24"><use href="#i-users"/></svg></span><h3>Rally the group</h3><p>Invite friends with one link to sign the card and chip in.</p></div>
+          <div class="card"><span class="iconbox butter"><svg class="ic" viewBox="0 0 24 24"><use href="#i-clock"/></svg></span><h3>Land on time</h3><p>Choose a delivery time in the recipient’s time zone.</p></div>
+        </div>
+      </div>
+  </div>
+  <div data-reui-item data-reui-value="receive" data-reui-label="Receiving" type="button" data-tab="receive">
+    <div data-reui-content data-tabpanel="receive">
+        <div class="cards" style="text-align:left">
+          <div class="card"><span class="iconbox powder"><svg class="ic" viewBox="0 0 24 24"><use href="#i-smartphone"/></svg></span><h3>Open without an app</h3><p>Open the card in a browser, with every note and signature together.</p></div>
+          <div class="card"><span class="iconbox lilac"><svg class="ic" viewBox="0 0 24 24"><use href="#i-repeat"/></svg></span><h3>Keep it or swap it</h3><p>Use the gift card or keep the value for another choice.</p></div>
+          <div class="card"><span class="iconbox tang"><svg class="ic" viewBox="0 0 24 24"><use href="#i-heart"/></svg></span><h3>Say thanks in one tap</h3><p>Send a thank-you from the same conversation.</p></div>
+        </div>
+      </div>
+  </div>
+</div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="sec-head"><h2 class="reveal">Common questions about the flow</h2></div>
+      <div class="acc">
+        <div data-reui="accordion" data-reui-type="single" class="reui-faq">
+    <div data-reui-item data-reui-value="q1">
+      <span data-reui-trigger>Does the recipient need Wishwell installed?</span>
+      <div data-reui-content><div class="ans">No. Every card opens in a browser from the link we send. Recipients only need the app if they want to keep a wallet, swap gifts or send cards back.</div></div>
+    </div>
+    <div data-reui-item data-reui-value="q2">
+      <span data-reui-trigger>Can I send to someone in another country?</span>
+      <div data-reui-content><div class="ans">Cards, yes, anywhere. Gift cards depend on the shop; each card page lists where it can be redeemed. Wishwell Cash works in every country where the shop is available.</div></div>
+    </div>
+    <div data-reui-item data-reui-value="q3">
+      <span data-reui-trigger>What happens if I schedule a card and change my mind?</span>
+      <div data-reui-content><div class="ans">Open it from your inbox and edit, reschedule or cancel it, right up until the minute it sends. Attached gifts are only charged when the card actually goes out.</div></div>
+    </div>
+  </div>
+      </div>
+      <div class="center reveal" style="margin-top:36px"><a href="#/help" class="link">More answers in the help center <svg class="ic" viewBox="0 0 24 24"><use href="#i-arrow-right"/></svg></a></div>
+    </div>
+  </div>
+<figure data-detail-image="detail-gifting" class="supplementary-photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201536%201024'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1536'%20height%3D'1024'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1536'%20height%3D'1024'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'85'%20fill%3D'%2523777'%3Edetail%20gifting%3C%2Ftext%3E%3C%2Fsvg%3E" alt="A closer look: How It Works" loading="lazy"><figcaption>A closer look: How It Works</figcaption></figure></section>
+
+<!-- ============ GIFT CARDS ============ -->
+<section data-page="gift-cards" data-title="Gift cards" class="iv3">
+  <div class="page-head lilac">
+    <span class="stk hide-m" style="left:9%;top:26%;--rot:-9deg;--sz:54px" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#s-heart"/></svg></span>
+    <span class="stk text hide-m" style="right:8%;top:24%;--rot:10deg;color:var(--lilac-deep)" aria-hidden="true">treat yourself</span>
+    <div class="wrap">
+      <span class="eyebrow" style="color:#3d2a66">Gift shop</span>
+      <!-- REPLACE: gift shop headline -->
+      <h1>Gift cards people actually want.</h1>
+      <p style="color:#3d2a66">Small pleasures, good experiences and a choice that feels like them.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="chips" role="group" aria-label="Filter by category">
+        <span data-reui="toggle-group" data-reui-type="single" aria-label="Filter by category">
+          <button data-reui-option value="all" type="button"  data-filter="all" data-reui-item-class="on" aria-pressed="true">All</button>
+          <button data-reui-option value="food" type="button" data-filter="food" aria-pressed="false">Food &amp; drink</button>
+          <button data-reui-option value="flowers" type="button" data-filter="flowers" aria-pressed="false">Flowers</button>
+          <button data-reui-option value="fun" type="button" data-filter="fun" aria-pressed="false">Fun</button>
+          <button data-reui-option value="books" type="button" data-filter="books" aria-pressed="false">Books</button>
+        </span></div>
+      <div class="cards four" data-gc-grid>
+        <!-- REPLACE: gift card tiles (one per detail page) -->
+        <a href="#/gift-cards/ember-and-bean" class="gcard reveal" data-cat="food"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3ECoffee%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"><span class="pill">Popular</span></div><div class="body"><h3>Ember &amp; Bean</h3><span class="meta">Coffee roasters, 34 cafes</span><div class="denoms"><span>$10</span><span>$25</span><span>$50</span></div></div></a>
+        <a href="#/gift-cards/petal-house" class="gcard reveal d1" data-cat="flowers"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EFlorist%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"><span class="pill">Same day</span></div><div class="body"><h3>Petal House</h3><span class="meta">Florist, delivers nationwide</span><div class="denoms"><span>$30</span><span>$60</span><span>$100</span></div></div></a>
+        <a href="#/gift-cards/pixel-parlor" class="gcard reveal d2" data-cat="fun"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EArcade%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"><span class="pill">Group pick</span></div><div class="body"><h3>Pixel Parlor</h3><span class="meta">Arcade bar, 12 locations</span><div class="denoms"><span>$20</span><span>$40</span><span>$75</span></div></div></a>
+        <a href="#/gift-cards/chapter-lane" class="gcard reveal d3" data-cat="books"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EBookshop%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"><span class="pill">Indie</span></div><div class="body"><h3>Chapter Lane</h3><span class="meta">Bookshop, online and in store</span><div class="denoms"><span>$15</span><span>$25</span><span>$50</span></div></div></a>
+      </div>
+      <p class="empty" data-gc-empty>No cards here yet. Try another category.</p>
+    </div>
+  </div>
+  <div class="section tight" style="background:#fff">
+    <div class="wrap">
+      <div class="cards">
+        <div class="card tint-mint reveal"><span class="iconbox" style="background:#fff"><svg class="ic" viewBox="0 0 24 24"><use href="#i-repeat"/></svg></span><h3>Swappable</h3><p>Recipients can swap a gift for Wishwell Cash.</p></div>
+        <div class="card tint-butter reveal d1"><span class="iconbox" style="background:#fff"><svg class="ic" viewBox="0 0 24 24"><use href="#i-zap"/></svg></span><h3>Instant</h3><p>The gift arrives with the card, on the day you choose.</p></div>
+        <div class="card tint-powder reveal d2"><span class="iconbox" style="background:#fff"><svg class="ic" viewBox="0 0 24 24"><use href="#i-shield"/></svg></span><h3>Protected</h3><p>Keep gift cards together in the app wallet.</p></div>
+      </div>
+    </div>
+  </div>
+<div class="wrap v3-addition"><section class="v3-section v3-split"><div><p class="v3-kicker">Before the next step</p><h2>Personal gifting.</h2><p>Choose a card, make the message yours and preview what the recipient will see.</p><a class="v3-link" href="#/home">Ask about the details</a></div><div><h3>Worth checking</h3><ul class="v3-list"><li>Occasion and recipient</li><li>Card and message</li><li>Delivery details</li></ul></div></section></div></section>
+
+<!-- ============ GIFT CARD DETAIL: Ember & Bean ============ -->
+<section data-page="gift-cards/ember-and-bean" data-title="Ember &amp; Bean gift card" class="iv3">
+  <div class="section">
+    <div class="wrap">
+      <div class="crumbs" style="justify-content:flex-start"><a href="#/">Home</a><span>/</span><a href="#/gift-cards">Gift cards</a><span>/</span><span>Ember &amp; Bean</span></div>
+      <div class="gdetail" style="margin-top:24px">
+        <div class="hero-art reveal pop" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3ECoffee%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')" role="img" aria-label="Ember and Bean gift card artwork: a steaming cup, croissant and coffee beans"></div>
+        <div class="reveal d1">
+          <span class="pill">Food &amp; drink</span>
+          <!-- REPLACE: gift card detail copy -->
+          <h1>Ember &amp; Bean</h1>
+          <p>Coffee, pastries and freshly roasted beans for their daily ritual.</p>
+          <div class="picker" data-picker role="group" aria-label="Choose an amount"><button type="button" data-amount="10">$10</button><button type="button" class="on" data-amount="25">$25</button><button type="button" data-amount="50">$50</button><button type="button" data-amount="75">$75</button></div>
+          <div class="total">$<span data-picker-total>25</span><small>no fees for the recipient</small></div>
+          <span data-reui="button" data-reui-variant="secondary" data-reui-href="#/download" data-reui-class="btn">Send this card</span>
+          <div class="facts">
+            <div><b>Redeem</b>In any Ember &amp; Bean cafe or on the roaster's online shop.</div>
+            <div><b>Expiry</b>Never. Balance stays until it is used.</div>
+            <div><b>Swappable</b>Yes, for Wishwell Cash at full value.</div>
+            <div><b>Delivery</b>Instant, with your card.</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:72px">
+        <h2 class="reveal" style="font-size:1.8rem;margin-bottom:20px">Goes well with</h2>
+        <div class="cards" style="grid-template-columns:repeat(3,1fr)">
+          <a href="#/gift-cards/chapter-lane" class="gcard reveal"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EBookshop%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></div><div class="body"><h3>Chapter Lane</h3><span class="meta">Books for the coffee</span></div></a>
+          <a href="#/gift-cards/petal-house" class="gcard reveal d1"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EFlorist%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></div><div class="body"><h3>Petal House</h3><span class="meta">Flowers for the table</span></div></a>
+          <a href="#/gift-cards/pixel-parlor" class="gcard reveal d2"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EArcade%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></div><div class="body"><h3>Pixel Parlor</h3><span class="meta">For after the coffee</span></div></a>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="wrap v3-addition"><section class="v3-section v3-split"><div><p class="v3-kicker">Before the next step</p><h2>Personal gifting.</h2><p>Choose a card, make the message yours and preview what the recipient will see.</p><a class="v3-link" href="#/home">Ask about the details</a></div><div><h3>Worth checking</h3><ul class="v3-list"><li>Occasion and recipient</li><li>Card and message</li><li>Delivery details</li></ul></div></section></div><div class="wrap"><section class="v3-section v3-split"><figure class="v3-art" style="--v3-ratio:3/2"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3ECoffee%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E" alt="Coffee gift card art" loading="lazy"></figure><div><h2>Make it feel like you.</h2><p>Choose the occasion, add your own message and review the recipient details before sending in a connected app.</p><a class="v3-link" href="#/how-it-works">See the gifting steps</a></div></section></div></section>
+
+<!-- ============ GIFT CARD DETAIL: Petal House ============ -->
+<section data-page="gift-cards/petal-house" data-title="Petal House gift card" class="iv3">
+  <div class="section">
+    <div class="wrap">
+      <div class="crumbs" style="justify-content:flex-start"><a href="#/">Home</a><span>/</span><a href="#/gift-cards">Gift cards</a><span>/</span><span>Petal House</span></div>
+      <div class="gdetail" style="margin-top:24px">
+        <div class="hero-art reveal pop" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EFlorist%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E');transform:rotate(2deg)" role="img" aria-label="Petal House gift card artwork: tulips and eucalyptus in a vase"></div>
+        <div class="reveal d1">
+          <span class="pill">Flowers</span>
+          <!-- REPLACE: gift card detail copy -->
+          <h1>Petal House</h1>
+          <p>Seasonal flowers, thoughtful bouquets and a little color for the everyday.</p>
+          <div class="picker" data-picker role="group" aria-label="Choose an amount"><button type="button" data-amount="30">$30</button><button type="button" class="on" data-amount="60">$60</button><button type="button" data-amount="100">$100</button><button type="button" data-amount="150">$150</button></div>
+          <div class="total">$<span data-picker-total>60</span><small>no fees for the recipient</small></div>
+          <span data-reui="button" data-reui-variant="secondary" data-reui-href="#/download" data-reui-class="btn">Send this card</span>
+          <div class="facts">
+            <div><b>Redeem</b>Online for delivery, or at the two Petal House studios.</div>
+            <div><b>Expiry</b>Never.</div>
+            <div><b>Swappable</b>Yes, for Wishwell Cash at full value.</div>
+            <div><b>Delivery</b>Instant; bouquets ship on the recipient's chosen day.</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:72px">
+        <h2 class="reveal" style="font-size:1.8rem;margin-bottom:20px">Goes well with</h2>
+        <div class="cards" style="grid-template-columns:repeat(3,1fr)">
+          <a href="#/gift-cards/ember-and-bean" class="gcard reveal"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3ECoffee%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></div><div class="body"><h3>Ember &amp; Bean</h3><span class="meta">Coffee for the morning</span></div></a>
+          <a href="#/gift-cards/chapter-lane" class="gcard reveal d1"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EBookshop%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></div><div class="body"><h3>Chapter Lane</h3><span class="meta">A book beside the vase</span></div></a>
+          <a href="#/gift-cards/pixel-parlor" class="gcard reveal d2"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EArcade%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></div><div class="body"><h3>Pixel Parlor</h3><span class="meta">For the celebration</span></div></a>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="wrap v3-addition"><section class="v3-section v3-split"><div><p class="v3-kicker">Before the next step</p><h2>Personal gifting.</h2><p>Choose a card, make the message yours and preview what the recipient will see.</p><a class="v3-link" href="#/home">Ask about the details</a></div><div><h3>Worth checking</h3><ul class="v3-list"><li>Occasion and recipient</li><li>Card and message</li><li>Delivery details</li></ul></div></section></div><div class="wrap"><section class="v3-section v3-split"><figure class="v3-art" style="--v3-ratio:3/2"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EFlorist%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E" alt="Florist gift card art" loading="lazy"></figure><div><h2>Make it feel like you.</h2><p>Choose the occasion, add your own message and review the recipient details before sending in a connected app.</p><a class="v3-link" href="#/how-it-works">See the gifting steps</a></div></section></div></section>
+
+<!-- ============ GIFT CARD DETAIL: Pixel Parlor ============ -->
+<section data-page="gift-cards/pixel-parlor" data-title="Pixel Parlor gift card" class="iv3">
+  <div class="section">
+    <div class="wrap">
+      <div class="crumbs" style="justify-content:flex-start"><a href="#/">Home</a><span>/</span><a href="#/gift-cards">Gift cards</a><span>/</span><span>Pixel Parlor</span></div>
+      <div class="gdetail" style="margin-top:24px">
+        <div class="hero-art reveal pop" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EArcade%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')" role="img" aria-label="Pixel Parlor gift card artwork: a joystick and arcade buttons"></div>
+        <div class="reveal d1">
+          <span class="pill">Fun</span>
+          <!-- REPLACE: gift card detail copy -->
+          <h1>Pixel Parlor</h1>
+          <p>Arcade games, pinball and a good night out with friends.</p>
+          <div class="picker" data-picker role="group" aria-label="Choose an amount"><button type="button" data-amount="20">$20</button><button type="button" class="on" data-amount="40">$40</button><button type="button" data-amount="75">$75</button><button type="button" data-amount="120">$120</button></div>
+          <div class="total">$<span data-picker-total>40</span><small>no fees for the recipient</small></div>
+          <span data-reui="button" data-reui-variant="secondary" data-reui-href="#/download" data-reui-class="btn">Send this card</span>
+          <div class="facts">
+            <div><b>Redeem</b>At any of the 12 Pixel Parlor locations, at the bar or the kiosks.</div>
+            <div><b>Expiry</b>Never.</div>
+            <div><b>Swappable</b>Yes, for Wishwell Cash at full value.</div>
+            <div><b>Group friendly</b>The most pooled card in the shop last year.</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:72px">
+        <h2 class="reveal" style="font-size:1.8rem;margin-bottom:20px">Goes well with</h2>
+        <div class="cards" style="grid-template-columns:repeat(3,1fr)">
+          <a href="#/gift-cards/ember-and-bean" class="gcard reveal"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3ECoffee%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></div><div class="body"><h3>Ember &amp; Bean</h3><span class="meta">The morning after</span></div></a>
+          <a href="#/gift-cards/petal-house" class="gcard reveal d1"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EFlorist%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></div><div class="body"><h3>Petal House</h3><span class="meta">A softer option</span></div></a>
+          <a href="#/gift-cards/chapter-lane" class="gcard reveal d2"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EBookshop%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></div><div class="body"><h3>Chapter Lane</h3><span class="meta">Quiet nights in</span></div></a>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="wrap v3-addition"><section class="v3-section v3-split"><div><p class="v3-kicker">Before the next step</p><h2>Personal gifting.</h2><p>Choose a card, make the message yours and preview what the recipient will see.</p><a class="v3-link" href="#/home">Ask about the details</a></div><div><h3>Worth checking</h3><ul class="v3-list"><li>Occasion and recipient</li><li>Card and message</li><li>Delivery details</li></ul></div></section></div><div class="wrap"><section class="v3-section v3-split"><figure class="v3-art" style="--v3-ratio:3/2"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EArcade%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E" alt="Arcade gift card art" loading="lazy"></figure><div><h2>Make it feel like you.</h2><p>Choose the occasion, add your own message and review the recipient details before sending in a connected app.</p><a class="v3-link" href="#/how-it-works">See the gifting steps</a></div></section></div></section>
+
+<!-- ============ GIFT CARD DETAIL: Chapter Lane ============ -->
+<section data-page="gift-cards/chapter-lane" data-title="Chapter Lane gift card" class="iv3">
+  <div class="section">
+    <div class="wrap">
+      <div class="crumbs" style="justify-content:flex-start"><a href="#/">Home</a><span>/</span><a href="#/gift-cards">Gift cards</a><span>/</span><span>Chapter Lane</span></div>
+      <div class="gdetail" style="margin-top:24px">
+        <div class="hero-art reveal pop" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EBookshop%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E');transform:rotate(2deg)" role="img" aria-label="Chapter Lane gift card artwork: a stack of books with a reading lamp"></div>
+        <div class="reveal d1">
+          <span class="pill">Books</span>
+          <!-- REPLACE: gift card detail copy -->
+          <h1>Chapter Lane</h1>
+          <p>Independent books, thoughtful recommendations and their next favourite read.</p>
+          <div class="picker" data-picker role="group" aria-label="Choose an amount"><button type="button" data-amount="15">$15</button><button type="button" class="on" data-amount="25">$25</button><button type="button" data-amount="50">$50</button><button type="button" data-amount="100">$100</button></div>
+          <div class="total">$<span data-picker-total>25</span><small>no fees for the recipient</small></div>
+          <span data-reui="button" data-reui-variant="secondary" data-reui-href="#/download" data-reui-class="btn">Send this card</span>
+          <div class="facts">
+            <div><b>Redeem</b>In store, online, or in the Chapter Lane audiobook app.</div>
+            <div><b>Expiry</b>Never.</div>
+            <div><b>Swappable</b>Yes, for Wishwell Cash at full value.</div>
+            <div><b>Extra</b>Every card includes a handwritten staff recommendation.</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:72px">
+        <h2 class="reveal" style="font-size:1.8rem;margin-bottom:20px">Goes well with</h2>
+        <div class="cards" style="grid-template-columns:repeat(3,1fr)">
+          <a href="#/gift-cards/ember-and-bean" class="gcard reveal"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3ECoffee%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></div><div class="body"><h3>Ember &amp; Bean</h3><span class="meta">Coffee for the reading</span></div></a>
+          <a href="#/gift-cards/petal-house" class="gcard reveal d1"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EFlorist%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></div><div class="body"><h3>Petal House</h3><span class="meta">For the reading nook</span></div></a>
+          <a href="#/gift-cards/pixel-parlor" class="gcard reveal d2"><div class="art" style="background-image:url('data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EArcade%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E')"></div><div class="body"><h3>Pixel Parlor</h3><span class="meta">When the book is finished</span></div></a>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="wrap v3-addition"><section class="v3-section v3-split"><div><p class="v3-kicker">Before the next step</p><h2>Personal gifting.</h2><p>Choose a card, make the message yours and preview what the recipient will see.</p><a class="v3-link" href="#/home">Ask about the details</a></div><div><h3>Worth checking</h3><ul class="v3-list"><li>Occasion and recipient</li><li>Card and message</li><li>Delivery details</li></ul></div></section></div><div class="wrap"><section class="v3-section v3-split"><figure class="v3-art" style="--v3-ratio:3/2"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EBookshop%20gift%20card%20art%3C%2Ftext%3E%3C%2Fsvg%3E" alt="Bookshop gift card art" loading="lazy"></figure><div><h2>Make it feel like you.</h2><p>Choose the occasion, add your own message and review the recipient details before sending in a connected app.</p><a class="v3-link" href="#/how-it-works">See the gifting steps</a></div></section></div></section>
+<!-- ============ PRICING ============ -->
+<section data-page="pricing" data-title="Plans" class="iv3">
+  <div class="page-head butter">
+    <span class="stk hide-m" style="left:9%;top:24%;--rot:-8deg;--sz:52px" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#s-smile"/></svg></span>
+    <span class="stk text hide-m" style="right:8%;top:30%;--rot:8deg;color:var(--ink)" aria-hidden="true">free forever</span>
+    <div class="wrap">
+      <span class="eyebrow">Plans</span>
+      <!-- REPLACE: pricing headline -->
+      <h1>Free to send. Plus for the enthusiasts.</h1>
+      <p>Start free. Add more creative and group features when you need them.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap center">
+      <div class="toggle"><span>Monthly</span><button type="button" class="sw" role="switch" aria-checked="false" data-billing aria-label="Bill yearly"></button><span>Yearly <span class="pill soft" style="font-size:.68rem">2 months free</span></span></div>
+      <div class="plans" style="text-align:left">
+        <!-- REPLACE: plan cards -->
+        <div class="plan reveal"><h3>Free</h3><div class="price">$0<small>/forever</small></div><p style="font-size:.9rem">A thoughtful card, without a subscription.</p><ul><li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Unlimited cards by link, text or email</li><li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Photos, stickers and 12-second voice notes</li><li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Gift cards and Wishwell Cash</li><li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Reminders for 20 dates</li></ul><span data-reui="button" data-reui-variant="ghost" data-reui-href="#/download" data-reui-class="btn ghost">Get started</span></div>
+        <div class="plan featured reveal d1"><span class="pill tag">Most popular</span><h3>Plus</h3><div class="price">$<span data-price data-m="4.99" data-y="3.99">4.99</span><small>/month</small></div><p style="font-size:.9rem;color:rgba(255,255,255,.75)">More room for regular gifting.</p><ul><li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Everything in Free</li><li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Video cards up to 3 minutes</li><li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Group cards with up to 40 signers</li><li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Unlimited reminders and yearly repeats</li><li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Keepsake PDF export</li></ul><span data-reui="button" data-reui-variant="secondary" data-reui-href="#/download" data-reui-class="btn light">Start Plus</span></div>
+        <div class="plan reveal d2"><h3>Family</h3><div class="price">$<span data-price data-m="9.99" data-y="7.99">9.99</span><small>/month</small></div><p style="font-size:.9rem">One shared calendar for up to six people.</p><ul><li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Everything in Plus, for six accounts</li><li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Shared birthday and anniversary calendar</li><li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Family Cash pool with spending limits for kids</li><li><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg>Priority support</li></ul><span data-reui="button" data-reui-variant="ghost" data-reui-href="#/download" data-reui-class="btn ghost">Start Family</span></div>
+      </div>
+      <div class="compare-wrap reveal">
+      <table class="compare">
+        <thead><tr><th>What you get</th><th>Free</th><th>Plus</th><th>Family</th></tr></thead>
+        <tbody>
+          <tr><td>Cards per month</td><td>Unlimited</td><td>Unlimited</td><td>Unlimited</td></tr>
+          <tr><td>Video length</td><td>None</td><td>3 min</td><td>3 min</td></tr>
+          <tr><td>Group signers</td><td>5</td><td>40</td><td>40</td></tr>
+          <tr><td>Reminders</td><td>20 dates</td><td>Unlimited</td><td>Unlimited, shared</td></tr>
+          <tr><td>Keepsake export</td><td></td><td><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg></td><td><svg class="ic" viewBox="0 0 24 24"><use href="#i-check"/></svg></td></tr>
+          <tr><td>Accounts</td><td>1</td><td>1</td><td>6</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="acc" style="margin-top:56px;text-align:left">
+        <div data-reui="accordion" data-reui-type="single" class="reui-faq">
+    <div data-reui-item data-reui-value="q1">
+      <span data-reui-trigger>Are there fees on gift cards?</span>
+      <div data-reui-content><div class="ans">No. You pay the face value of the card. The shops pay us a small commission, which is how sending stays free.</div></div>
+    </div>
+    <div data-reui-item data-reui-value="q2">
+      <span data-reui-trigger>Can I cancel Plus any time?</span>
+      <div data-reui-content><div class="ans">Yes. Cancel from your account page and you keep Plus until the end of the period you paid for. Your cards, wallet and reminders stay.</div></div>
+    </div>
+    <div data-reui-item data-reui-value="q3">
+      <span data-reui-trigger>Is there a student or nonprofit rate?</span>
+      <div data-reui-content><div class="ans">Plus is half price for students with a school email, and free for registered nonprofits sending thank-you cards to donors. Write to us from the help page.</div></div>
+    </div>
+  </div>
+      </div>
+    </div>
+  </div>
+<div class="wrap v3-addition"><section class="v3-section v3-faq"><h2>Choosing the right scope.</h2><div><div data-reui="accordion" data-reui-type="single" class="reui-faq">
+    <div data-reui-item data-reui-value="q1">
+      <span data-reui-trigger>What should I compare first?</span>
+      <div data-reui-content><p>Start with the work or access you actually need, then compare the included scope and the way it is delivered. A lower starting price may cover a different requirement.</p></div>
+    </div>
+    <div data-reui-item data-reui-value="q2">
+      <span data-reui-trigger>What happens after I choose?</span>
+      <div data-reui-content><p>Use the plan’s action to review the next step. Confirm the final scope, timing and applicable terms before making a commitment.</p></div>
+    </div>
+    <div data-reui-item data-reui-value="q3">
+      <span data-reui-trigger>Can I ask about a different requirement?</span>
+      <div data-reui-content><p>Yes. Share the difference through the contact page so it can be discussed explicitly rather than assumed to be included.</p></div>
+    </div>
+  </div></div></section><a class="v3-link" href="#/home">Ask a plan question</a></div></section>
+
+<!-- ============ HELP ============ -->
+<section data-page="help" data-title="Help center">
+  <div class="page-head sky">
+    <span class="stk hide-m" style="left:9%;top:24%;--rot:-8deg;--sz:52px" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#s-balloon"/></svg></span>
+    <span class="stk text hide-m" style="right:8%;top:30%;--rot:7deg;color:var(--ink)" aria-hidden="true">we reply fast</span>
+    <div class="wrap">
+      <span class="eyebrow">Help center</span>
+      <!-- REPLACE: help headline -->
+      <h1>How can we help?</h1>
+      <p>Find a quick answer or leave us a note.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="searchbar"><svg class="ic" viewBox="0 0 24 24"><use href="#i-search"/></svg><input type="search" placeholder="Search for scheduling, refunds, wallet..." data-help-search aria-label="Search help articles"></div>
+      <div data-help-groups>
+        <div class="acc-group">
+          <h3>Sending cards</h3>
+          <div class="acc">
+            <div data-reui="accordion" data-reui-type="single" class="reui-faq">
+    <div data-reui-item data-reui-value="q1">
+      <span data-reui-trigger>How do I schedule a card for a future date?</span>
+      <div data-reui-content><div class="ans">On the final screen, tap the calendar next to Send and choose a date and hour. The card is delivered at that hour in the recipient's time zone. You can edit or cancel it from your inbox until it goes out.</div></div>
+    </div>
+    <div data-reui-item data-reui-value="q2">
+      <span data-reui-trigger>Can several people sign one card?</span>
+      <div data-reui-content><div class="ans">Yes. Turn on Group card while editing and share the link. Friends sign and chip in from a browser without an account. Free accounts allow five signers; Plus and Family allow forty.</div></div>
+    </div>
+    <div data-reui-item data-reui-value="q3">
+      <span data-reui-trigger>What formats can I add to a card?</span>
+      <div data-reui-content><div class="ans">Photos, text, drawings, stickers, a voice note up to twelve seconds, a song from the built-in library, and video on paid plans.</div></div>
+    </div>
+  </div>
+          </div>
+        </div>
+        <div class="acc-group">
+          <h3>Gifts and wallet</h3>
+          <div class="acc">
+            <div data-reui="accordion" data-reui-type="single" class="reui-faq">
+    <div data-reui-item data-reui-value="q1">
+      <span data-reui-trigger>How does Wishwell Cash work?</span>
+      <div data-reui-content><div class="ans">Cash is a balance in the recipient's wallet. They can spend it on any gift card in the shop, combine it with other gifts, or keep it. It never expires and there are no fees on the receiving side.</div></div>
+    </div>
+    <div data-reui-item data-reui-value="q2">
+      <span data-reui-trigger>Can a recipient swap a gift card?</span>
+      <div data-reui-content><div class="ans">Yes. Any unredeemed gift card can be swapped for Wishwell Cash at full value from the wallet, then spent on something else.</div></div>
+    </div>
+    <div data-reui-item data-reui-value="q3">
+      <span data-reui-trigger>Do you refund a gift I sent by mistake?</span>
+      <div data-reui-content><div class="ans">If the card has not been opened, cancel it from your inbox and the gift is refunded to your payment method within three business days. Opened gifts belong to the recipient.</div></div>
+    </div>
+  </div>
+          </div>
+        </div>
+        <div class="acc-group">
+          <h3>Account and privacy</h3>
+          <div class="acc">
+            <div data-reui="accordion" data-reui-type="single" class="reui-faq">
+    <div data-reui-item data-reui-value="q1">
+      <span data-reui-trigger>Do recipients see my phone number?</span>
+      <div data-reui-content><div class="ans">No. Cards are delivered from Wishwell with your display name. Your number and email are never shown unless you type them into the card.</div></div>
+    </div>
+    <div data-reui-item data-reui-value="q2">
+      <span data-reui-trigger>How do I delete my account?</span>
+      <div data-reui-content><div class="ans">Open Settings, tap Account, then Delete account. Any wallet balance must be spent or refunded first. Cards you sent stay with the people who received them.</div></div>
+    </div>
+    <div data-reui-item data-reui-value="q3">
+      <span data-reui-trigger>Where can I read the terms and privacy policy?</span>
+      <div data-reui-content><div class="ans">Both are on the <a href="#/legal" class="link">legal page</a>, written in plain language with a short summary at the top of each section.</div></div>
+    </div>
+  </div>
+          </div>
+        </div>
+      </div>
+      <p class="empty" data-help-empty>No matching answers. Try another word.</p>
+    </div>
+  </div>
+  <div class="section tight" style="background:#fff">
+    <div class="wrap">
+      <div class="sec-head"><h2 class="reveal">Still stuck? Write to us.</h2><p>Support hours: 8:00–20:00, every day.</p></div>
+      <div class="form reveal" data-reui="form" data-reui-success="Preview complete. No message was sent." data-reui-success-class="form-ok">
+        <div class="row"><div data-reui-field data-reui-type="text" data-reui-name="your-name" data-reui-label="Your name" data-reui-placeholder="Mara Reyes" data-reui-required class=""></div><div data-reui-field data-reui-type="email" data-reui-name="email" data-reui-label="Email" data-reui-placeholder="mara@example.example" data-reui-required class=""></div></div>
+        <div data-reui-field data-reui-type="select" data-reui-name="topic" data-reui-label="Topic" data-reui-placeholder="Sending a card" data-reui-aria-label="Topic" class=""><div data-reui-option value="Sending a card">Sending a card</div><div data-reui-option value="Gift cards and wallet">Gift cards and wallet</div><div data-reui-option value="Billing">Billing</div><div data-reui-option value="Account and privacy">Account and privacy</div><div data-reui-option value="Something else">Something else</div></div>
+        <div data-reui-field data-reui-type="textarea" data-reui-name="how-can-we-help" data-reui-label="How can we help?" data-reui-placeholder="Tell us what happened and we will sort it out." data-reui-required class=""></div>
+        <span data-reui-submit class="btn">Send message</span>
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section data-page="about" data-title="About">
+  <div class="page-head pink">
+    <span class="stk hide-m" style="left:9%;top:24%;--rot:-8deg;--sz:52px" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#s-hat"/></svg></span>
+    <span class="stk text hide-m" style="right:8%;top:30%;--rot:8deg;color:var(--ink)" aria-hidden="true">since 2021</span>
+    <div class="wrap">
+      <span class="eyebrow">About</span>
+      <!-- REPLACE: about headline -->
+      <h1>Every moment matters.</h1>
+      <p>We make it easier to show up for the people you love.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="split">
+        <div class="reveal">
+          <!-- REPLACE: origin story -->
+          <h2>It started with a missed birthday.</h2>
+          <p>Wishwell began with a missed birthday and a rushed gift-card link. We wanted to make that moment feel more personal.</p>
+          <p>A card, a useful gift and a little planning, together in one place.</p>
+        </div>
+        <div class="reveal d1" style="position:relative;min-height:380px">
+          <span class="tile" style="left:8%;top:6%;--w:200px;--rot:-8deg;position:absolute"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EGift%20box%20tile%3C%2Ftext%3E%3C%2Fsvg%3E" alt="A hand holding a yellow gift box"></span>
+          <span class="tile" style="right:8%;top:30%;--w:180px;--rot:9deg;--dl:1s;position:absolute"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EFlowers%20tile%3C%2Ftext%3E%3C%2Fsvg%3E" alt="A bouquet of pastel ranunculus on pink"></span>
+          <span class="tile" style="left:28%;bottom:0;--w:150px;--rot:-3deg;--dl:2s;position:absolute"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201254%201254'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1254'%20height%3D'1254'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'105'%20fill%3D'%2523777'%3EGift%20card%20tile%3C%2Ftext%3E%3C%2Fsvg%3E" alt="A hand holding a teal gift card"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section tight" style="background:#fff">
+    <div class="wrap">
+      <div class="stats">
+        <div class="stat reveal"><b data-count="1200000" data-suffix="">0</b><span>gifters</span></div>
+        <div class="stat reveal d1"><b data-count="38" data-suffix="M">0</b><span>cards opened</span></div>
+        <div class="stat reveal d2"><b data-count="412" data-suffix="">0</b><span>shops in the gift shop</span></div>
+        <div class="stat reveal d3"><b data-count="97" data-suffix="%">0</b><span>delivered on the exact minute</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="sec-head"><h2 class="reveal">What we believe</h2></div>
+      <div class="cards">
+        <div class="card tint-mint reveal"><span class="iconbox" style="background:#fff"><svg class="ic" viewBox="0 0 24 24"><use href="#i-heart"/></svg></span><h3>The card is the gift</h3><p>Put the personal message first. Keep the rest simple.</p></div>
+        <div class="card tint-butter reveal d1"><span class="iconbox" style="background:#fff"><svg class="ic" viewBox="0 0 24 24"><use href="#i-lock"/></svg></span><h3>Private by default</h3><p>Private cards, clear controls and no advertising.</p></div>
+        <div class="card tint-powder reveal d2"><span class="iconbox" style="background:#fff"><svg class="ic" viewBox="0 0 24 24"><use href="#i-globe"/></svg></span><h3>Small shops first</h3><p>Make room for independent shops and meaningful gifts.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="section tight">
+    <div class="wrap">
+      <div class="sec-head"><h2 class="reveal">The people behind it</h2><p>A small team, working across three time zones.</p></div>
+      <div class="team">
+        <!-- REPLACE: team members (fictional) -->
+        <div class="person reveal"><span class="av a1">NV</span><b>Nadia Varga</b><span>Founder and chief executive</span></div>
+        <div class="person reveal d1"><span class="av a2">TO</span><b>Theo Okafor</b><span>Head of product</span></div>
+        <div class="person reveal d2"><span class="av a3">IS</span><b>Ines Salgado</b><span>Design lead</span></div>
+        <div class="person reveal d3"><span class="av a6">RK</span><b>Ravi Kulkarni</b><span>Shop partnerships</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="section tight" style="background:#fff">
+    <div class="wrap">
+      <div class="cards">
+        <blockquote class="quote reveal">"I sent my dad a card with a voice note from my daughter. He has opened it forty-one times. I know because the app told me."<footer>Priya L., Plus member</footer></blockquote>
+        <blockquote class="quote reveal d1">"Our office pooled a Pixel Parlor card for a colleague in eleven minutes. Nobody had to install anything."<footer>Jonah T., Free member</footer></blockquote>
+        <blockquote class="quote reveal d2">"The reminder came a week early with last year's card ready to remix. I looked like the most organized aunt alive."<footer>Mara R., Family plan</footer></blockquote>
+      </div>
+      <div class="center" style="margin-top:40px">
+        <p class="eyebrow" style="margin-bottom:12px">Find us</p>
+        <div class="foot-links" style="justify-content:center"><a href="#/download">@wishwell on social</a><a href="#/help">hello@wishwell.example</a><a href="#/legal">Press kit and legal</a></div>
+      </div>
+    </div>
+  </div>
+<figure data-detail-image="detail-team" class="supplementary-photo"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201536%201024'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1536'%20height%3D'1024'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1536'%20height%3D'1024'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'85'%20fill%3D'%2523777'%3Edetail%20team%3C%2Ftext%3E%3C%2Fsvg%3E" alt="A closer look: About" loading="lazy"><figcaption>A closer look: About</figcaption></figure></section>
+
+<!-- ============ DOWNLOAD ============ -->
+<section data-page="download" data-title="Download" class="iv3">
+  <div class="page-head sky">
+    <span class="stk hide-m" style="left:8%;top:22%;--rot:-12deg;--sz:56px" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#s-flower"/></svg></span>
+    <span class="stk hide-m" style="right:8%;top:24%;--rot:10deg;--sz:56px" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#s-heart"/></svg></span>
+    <span class="stk text hide-m" style="left:20%;top:70%;--rot:-5deg;color:var(--coral)" aria-hidden="true">free to start</span>
+    <div class="wrap">
+      <span class="eyebrow">Get the app</span>
+      <!-- REPLACE: download headline -->
+      <h1>Get Wishwell on your phone.</h1>
+      <p>Make your first card on iPhone, Android or the web.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="dl-grid">
+        <div class="reveal">
+          <h2>Two ways to get started</h2>
+          <p>Explore the app experience below, then get it on your phone: Wishwell is free on iOS and Android, and your cards sync between them.</p>
+          <div class="store-row">
+            <span data-reui="button" data-reui-variant="secondary" data-reui-href="#/how-it-works" data-reui-class="btn"><svg class="brand-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><path d="M97.905 67.885c.174 18.8 16.494 25.057 16.674 25.137-.138.44-2.607 8.916-8.597 17.669-5.178 7.568-10.553 15.108-19.018 15.266-8.318.152-10.993-4.934-20.504-4.934-9.508 0-12.479 4.776-20.354 5.086-8.172.31-14.395-8.185-19.616-15.724C15.822 94.961 7.669 66.8 18.616 47.791c5.438-9.44 15.158-15.417 25.707-15.571 8.024-.153 15.598 5.398 20.503 5.398 4.902 0 14.106-6.676 23.782-5.696 4.051.169 15.421 1.636 22.722 12.324-.587.365-13.566 7.921-13.425 23.639M82.272 21.719c4.338-5.251 7.258-12.563 6.462-19.836-6.254.251-13.816 4.167-18.301 9.416-4.02 4.647-7.54 12.087-6.591 19.216 6.971.54 14.091-3.542 18.43-8.796"/></svg>iPhone app</span>
+            <span data-reui="button" data-reui-variant="secondary" data-reui-href="#/how-it-works" data-reui-class="btn"><svg class="brand-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><path fill="#fff" d="M21.012 91.125c-5.538.003-10.038-4.503-10.039-10.04l-.002-30.739c-.002-5.532 4.497-10.037 10.028-10.038 2.689-.002 5.207 1.041 7.105 2.937s2.942 4.418 2.944 7.099l-.003 30.74a9.924 9.924 0 01-2.931 7.094 9.962 9.962 0 01-7.102 2.947m-.008-48.12c-4.053-.002-7.338 3.291-7.339 7.341l.005 30.736a7.347 7.347 0 007.341 7.348 7.338 7.338 0 007.339-7.347V50.342a7.345 7.345 0 00-7.346-7.337"/><path fill="#fff" d="M99.742 44.527l-2.698-.001-66.119.009-2.699.001-.002-2.699c-.006-11.08 6.03-21.385 15.917-27.473l-3.844-7.017c-.47-.822-.588-1.863-.314-2.815a3.732 3.732 0 011.814-2.239 3.605 3.605 0 011.759-.447c1.362 0 2.609.739 3.267 1.933l4.023 7.329a37.842 37.842 0 0113.099-2.305c4.606-.002 9.023.777 13.204 2.311l4.017-7.341a3.711 3.711 0 013.263-1.932 3.712 3.712 0 011.761.438A3.706 3.706 0 0188 4.524a3.69 3.69 0 01-.318 2.832l-3.842 7.013c9.871 6.101 15.9 16.398 15.899 27.459l.003 2.699zM80.196 15.403l5.123-9.355a1.019 1.019 0 10-1.783-.981l-5.176 9.45c-4.354-1.934-9.229-3.021-14.382-3.016-5.142-.005-10.008 1.078-14.349 3.005l-5.181-9.429a1.009 1.009 0 00-1.379-.405c-.497.266-.68.891-.403 1.379l5.125 9.348c-10.07 5.194-16.874 15.084-16.868 26.439l66.118-.008c.003-11.351-6.789-21.221-16.845-26.427M48.94 29.86a2.772 2.772 0 01.003-5.545 2.78 2.78 0 012.775 2.774 2.775 2.775 0 01-2.778 2.771m30.107-.006a2.767 2.767 0 01-2.772-2.771 2.788 2.788 0 012.773-2.778 2.79 2.79 0 012.767 2.779 2.769 2.769 0 01-2.768 2.77m-27.336 96.305c-5.533-.001-10.036-4.501-10.037-10.038l-.002-13.567-2.638.003a10.453 10.453 0 01-7.448-3.082 10.437 10.437 0 01-3.083-7.452l-.01-47.627v-2.701h2.699l65.623-.01 2.7-.002v2.699l.007 47.633c.001 5.809-4.725 10.536-10.532 10.535l-2.654.002.003 13.562c0 5.534-4.502 10.039-10.033 10.039a9.933 9.933 0 01-7.098-2.937 9.952 9.952 0 01-2.947-7.096v-13.568H61.75v13.565c-.002 5.535-4.503 10.043-10.039 10.042"/><path fill="#fff" d="M31.205 92.022a7.82 7.82 0 007.831 7.837h5.333l.006 16.264c-.001 4.05 3.289 7.341 7.335 7.342a7.342 7.342 0 007.338-7.348l.001-16.259 9.909-.003-.001 16.263c.004 4.051 3.298 7.346 7.343 7.338 4.056.003 7.344-3.292 7.343-7.344l-.005-16.259 5.353-.001c4.319.001 7.832-3.508 7.832-7.837l-.009-47.635-65.621.012.012 47.63zm75.791-.91c-5.536.001-10.039-4.498-10.038-10.036l-.008-30.738c.002-5.537 4.498-10.041 10.031-10.041 5.54-.001 10.046 4.502 10.045 10.038l.003 30.736c.001 5.534-4.498 10.042-10.033 10.041m-.01-48.116c-4.053-.004-7.337 3.287-7.337 7.342l.003 30.737a7.336 7.336 0 007.342 7.34 7.338 7.338 0 007.338-7.343l-.008-30.736a7.335 7.335 0 00-7.338-7.34"/><path fill="#A4C439" d="M21.004 43.005c-4.053-.002-7.338 3.291-7.339 7.341l.005 30.736a7.338 7.338 0 007.342 7.343 7.33 7.33 0 007.338-7.342V50.342a7.345 7.345 0 00-7.346-7.337m59.192-27.602l5.123-9.355a1.023 1.023 0 00-.401-1.388 1.022 1.022 0 00-1.382.407l-5.175 9.453c-4.354-1.938-9.227-3.024-14.383-3.019-5.142-.005-10.013 1.078-14.349 3.005l-5.181-9.429a1.01 1.01 0 00-1.378-.406 1.007 1.007 0 00-.404 1.38l5.125 9.349c-10.07 5.193-16.874 15.083-16.868 26.438l66.118-.008c.003-11.351-6.789-21.221-16.845-26.427M48.94 29.86a2.772 2.772 0 01.003-5.545 2.78 2.78 0 012.775 2.774 2.775 2.775 0 01-2.778 2.771m30.107-.006a2.77 2.77 0 01-2.772-2.771 2.793 2.793 0 012.773-2.778 2.79 2.79 0 012.767 2.779 2.767 2.767 0 01-2.768 2.77M31.193 44.392l.011 47.635a7.822 7.822 0 007.832 7.831l5.333.002.006 16.264c-.001 4.05 3.291 7.342 7.335 7.342 4.056 0 7.342-3.295 7.343-7.347l-.004-16.26 9.909-.003.004 16.263c0 4.047 3.293 7.346 7.338 7.338 4.056.003 7.344-3.292 7.343-7.344l-.005-16.259 5.352-.004a7.835 7.835 0 007.836-7.834l-.009-47.635-65.624.011zm83.134 5.943a7.338 7.338 0 00-7.341-7.339c-4.053-.004-7.337 3.287-7.337 7.342l.006 30.738a7.334 7.334 0 007.339 7.339 7.337 7.337 0 007.338-7.343l-.005-30.737z"/></svg>Android app</span>
+            <span data-reui="button" data-reui-variant="ghost" data-reui-href="#/features" data-reui-class="btn ghost"><svg class="ic" viewBox="0 0 24 24"><use href="#i-globe"/></svg>Use it on the web</span>
+          </div>
+          <div class="form reveal d1" data-reui="form" data-reui-success="Preview complete. No text message was sent." data-reui-success-class="form-ok">
+            <div data-reui-field data-reui-type="tel" data-reui-name="text-me-the-download-link" data-reui-label="Text me the download link" data-reui-placeholder="+1 (555) 010-0000" data-reui-required class=""></div>
+            <span data-reui-submit class="btn">Send link</span>
+            
+          </div>
+          <div class="facts" style="max-width:460px">
+            <div><b>Size</b>48 MB on iPhone, 41 MB on Android.</div>
+            <div><b>Requires</b>iOS 16 or Android 11 and newer.</div>
+            <div><b>Languages</b>English, Spanish, French, German, Portuguese, Japanese.</div>
+            <div><b>Price</b>Free. Plus and Family are optional.</div>
+          </div>
+        </div>
+        <div class="phone reveal pop d1">
+          <div class="screen">
+            <div class="sbar"><span>9:41</span><span class="dots"><i></i><i></i><i></i></span></div>
+            <div class="app-top"><span class="cir"><svg class="ic" viewBox="0 0 24 24"><use href="#i-chevron-left"/></svg></span><span>Welcome</span><span>Skip</span></div>
+            <div class="app-card"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%201024%201536'%3E%3Cdefs%3E%3Cpattern%20id%3D'p'%20width%3D'40'%20height%3D'40'%20patternUnits%3D'userSpaceOnUse'%3E%3Cpath%20d%3D'M0%2020h40M20%200v40'%20stroke%3D'%2523c9c9c9'%20stroke-width%3D'1'%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D'1024'%20height%3D'1536'%20fill%3D'%2523ececec'%2F%3E%3Crect%20width%3D'1024'%20height%3D'1536'%20fill%3D'url(%2523p)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%20font-family%3D'system-ui%2Csans-serif'%20font-size%3D'85'%20fill%3D'%2523777'%3EGreeting%20card%20art%20(portrait)%3C%2Ftext%3E%3C%2Fsvg%3E" alt="Illustrated birthday card"><div class="cap">Your first card is on us</div></div>
+            <p class="app-msg">Pick someone who deserves a good week.</p>
+            <div class="app-row"><span class="on">Birthday</span><span>Thanks</span><span>Just because</span></div>
+            <div class="app-tabs"><span class="on"><svg class="ic" viewBox="0 0 24 24"><use href="#i-home"/></svg>Home</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-inbox"/></svg>Inbox</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-gift"/></svg>Gifts</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-wallet"/></svg>Wallet</span><span><svg class="ic" viewBox="0 0 24 24"><use href="#i-user"/></svg>Me</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="wrap v3-addition"><section class="v3-section v3-split"><div><p class="v3-kicker">Before the next step</p><h2>Personal gifting.</h2><p>Choose a card, make the message yours and preview what the recipient will see.</p><a class="v3-link" href="#/home">Ask about the details</a></div><div><h3>Worth checking</h3><ul class="v3-list"><li>Occasion and recipient</li><li>Card and message</li><li>Delivery details</li></ul></div></section></div></section>
+
+<!-- ============ LEGAL ============ -->
+<section data-page="legal" data-title="Terms and privacy">
+  <div class="page-head" style="background:#fff">
+    <div class="wrap">
+      <span class="eyebrow">Legal</span>
+      <h1>Terms of use and privacy policy</h1>
+      <p>Written in plain language. Each section starts with a short summary of what it means for you.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="prose">
+        <!-- REPLACE: legal copy -->
+        <h2>Terms of use</h2>
+        <p><b>Summary:</b> use Wishwell to send cards and gifts to people who want them; do not use it to spam, harass or resell gift cards.</p>
+        <h3>1. Your account</h3>
+        <p>You need to be 16 or older to create an account and 18 or older to hold a wallet balance. Keep your sign-in private; you are responsible for what is sent from your account.</p>
+        <h3>2. Cards and gifts</h3>
+        <p>You pay the face value of gift cards and any optional plan fee. Wishwell Cash is a stored balance operated by our licensed payments partner. Unopened cards can be cancelled and refunded; opened gifts belong to the recipient.</p>
+        <h3>3. Content</h3>
+        <p>You own what you put in your cards. You give us permission to store and deliver it. Do not upload anything you do not have the right to share, and do not send content that is unlawful or abusive. We remove such cards and may close the account.</p>
+        <h3>4. Plans</h3>
+        <p>Plus and Family renew monthly or yearly until cancelled. Cancel any time from your account page; access continues until the end of the paid period.</p>
+        <h2>Privacy policy</h2>
+        <p><b>Summary:</b> we collect what is needed to deliver cards and nothing more. We do not sell data and we do not show ads.</p>
+        <h3>What we collect</h3>
+        <ul><li>Your name, email and phone number, to run your account and deliver cards.</li><li>Card content, stored so recipients can reopen cards later.</li><li>Dates you add for reminders. Contact import is optional and stays on your device unless you choose to sync it.</li><li>Payment details, handled by our payments partner; we never see full card numbers.</li></ul>
+        <h3>What we do not do</h3>
+        <ul><li>Sell or rent personal data.</li><li>Show advertising inside the app.</li><li>Share your contact list with recipients or shops.</li></ul>
+        <h3>Your choices</h3>
+        <p>Turn off open receipts in Settings. Export every card you sent or received as a PDF. Delete your account and its content from Settings; wallet balances must be spent or refunded first.</p>
+        <h3>Contact</h3>
+        <p>Questions about these terms go to legal@wishwell.example or through the <a href="#/help" class="link">help center</a>. Last updated 1 September 2026.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NOT FOUND ============ -->
+<section data-page="not-found" data-title="Page not found">
+  <div class="nf">
+    <div class="wrap">
+      <span class="pill">Oops</span>
+      <h1 style="margin:16px 0">This card got lost in the mail.</h1>
+      <p style="margin-bottom:24px">This page is missing. Try the home page or gift shop.</p>
+      <span data-reui="button" data-reui-variant="secondary" data-reui-href="#/" data-reui-class="btn">Go home</span> <span data-reui="button" data-reui-variant="ghost" data-reui-href="#/gift-cards" data-reui-class="btn ghost" data-reui-style="margin-left:8px">Browse gift cards</span>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="reveal">
+        <!-- REPLACE: footer tagline, brand, copyright -->
+        <h2>Every moment matters.</h2>
+        <a href="#/" class="brand" style="margin-top:auto"><span class="mark"><svg class="ic" viewBox="0 0 24 24"><use href="#i-gift"/></svg></span>Wishwell</a>
+        <p class="copy">2026 Wishwell Labs. All rights reserved.</p>
+      </div>
+      <div class="reveal d1">
+        <h3>Support</h3>
+        <p>Have questions? Get in touch or check out our help center. You can also text our support team at +1 (555) 010-4477 or write to help@wishwell.example.</p>
+        <div class="foot-links"><a href="#/help">Help center</a><a href="#/how-it-works">How it works</a><a href="#/pricing">Plans</a><a href="#/legal">Terms of use</a><a href="#/legal">Privacy policy</a></div>
+      </div>
+      <div class="social reveal d2">
+        <h3>Social</h3>
+        <div class="soc">
+          <a href="#/about" aria-label="Wishwell community"><svg class="ic" viewBox="0 0 24 24"><use href="#i-at-sign"/></svg></a>
+          <a href="#/about" aria-label="Wishwell updates"><svg class="ic" viewBox="0 0 24 24"><use href="#i-rss"/></svg></a>
+          <a href="#/help" aria-label="Message Wishwell"><svg class="ic" viewBox="0 0 24 24"><use href="#i-message"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="rings" aria-hidden="true"><span class="ring"></span><span class="ring r2"></span></div>
+</footer>
+<script>
+(() => {
+  /* ---------- router ---------- */
+  const pages = [...document.querySelectorAll('[data-page]')];
+  const byRoute = new Map(pages.map((p) => [p.dataset.page, p]));
+  const menu = document.getElementById('menu');
+  const baseTitle = document.title;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const io = 'IntersectionObserver' in window
+    ? new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); if (e.target.hasAttribute('data-count')) countUp(e.target); } }), { threshold: 0.12 })
+    : null;
+  const observe = (root) => root.querySelectorAll('.reveal,[data-count]').forEach((el) => { el.classList.remove('in'); io ? io.observe(el) : (el.classList.add('in'), el.hasAttribute('data-count') && countUp(el)); });
+
+  function resolve(hash) {
+    const path = decodeURIComponent(hash.replace(/^#\/?/, '').replace(/\/$/, ''));
+    if (path === '') return 'home';
+    if (byRoute.has(path)) return path;
+    const top = path.split('/')[0];
+    return byRoute.has(top) ? top : 'not-found';
+  }
+  function render() {
+    const route = resolve(location.hash);
+    const target = byRoute.get(route);
+    pages.forEach((p) => p.classList.toggle('is-active', p === target));
+    document.querySelectorAll('.menu a[href^="#/"]').forEach((a) => {
+      const r = resolve(a.getAttribute('href'));
+      a.classList.toggle('is-active', r === route || (r !== 'home' && route.startsWith(r + '/')));
+    });
+    document.title = target.dataset.title && route !== 'home' ? `${target.dataset.title.replace('&amp;', '&')} · ${baseTitle}` : baseTitle;
+    menu.classList.remove('open'); 
+    window.scrollTo(0, 0);
+    observe(target);
+    observe(document.querySelector('.footer'));
+  }
+  window.addEventListener('hashchange', render);
+  if (!location.hash) history.replaceState(null, '', '#/');
+
+  /* ---------- forms: never submit ---------- */
+
+  /* ---------- count-up stats ---------- */
+  function countUp(el) {
+    if (el.dataset.done) return; el.dataset.done = '1';
+    const end = Number(el.dataset.count), suffix = el.dataset.suffix || '';
+    const fmt = (n) => (n >= 1000000 ? (n / 1000000).toFixed(1) + 'M' : n.toLocaleString('en-US')) + suffix;
+    if (reduced) { el.textContent = fmt(end); return; }
+    const t0 = performance.now(), dur = 1400;
+    const tick = (t) => { const k = Math.min(1, (t - t0) / dur); const e = 1 - Math.pow(1 - k, 3); el.textContent = fmt(Math.round(end * e)); if (k < 1) requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  }
+
+  /* ---------- occasion carousel (hero) ---------- */
+  const occasions = [
+    { name: 'Happy Birthday', msg: 'Another year of you. Cake first, questions later.', tint: '#cfe0ef' },
+    { name: 'Thank You', msg: 'For the soup, the ride and the pep talk. All three.', tint: '#cfe6cd' },
+    { name: 'Congrats', msg: 'New job, same you. They are lucky to have you.', tint: '#f6d97b' },
+    { name: 'Get Well', msg: 'Rest up. The group chat is holding your spot.', tint: '#f3a9c2' },
+    { name: 'Just Because', msg: 'No reason. You crossed my mind and I smiled.', tint: '#c9bbea' },
+  ];
+  let occ = 0;
+  const setOcc = (i) => {
+    occ = (i + occasions.length) % occasions.length;
+    const o = occasions[occ];
+    document.querySelectorAll('[data-occ-name],[data-occ-label],[data-occ-cap]').forEach((el) => { el.textContent = o.name; });
+    document.querySelectorAll('[data-occ-msg]').forEach((el) => { el.textContent = o.msg; });
+    document.querySelectorAll('[data-occ-card]').forEach((el) => { el.style.background = o.tint; });
+  };
+  document.querySelectorAll('[data-occ-prev]').forEach((b) => b.addEventListener('click', () => setOcc(occ - 1)));
+  document.querySelectorAll('[data-occ-next]').forEach((b) => b.addEventListener('click', () => setOcc(occ + 1)));
+
+  /* ---------- cash amount stepper ---------- */
+  document.querySelectorAll('[data-amt]').forEach((box) => {
+    const val = box.querySelector('[data-amt-val]');
+    const steps = [5, 10, 15, 20, 25, 50, 75, 100];
+    let i = 1;
+    box.querySelector('[data-amt-dec]').addEventListener('click', () => { i = Math.max(0, i - 1); val.textContent = steps[i]; });
+    box.querySelector('[data-amt-inc]').addEventListener('click', () => { i = Math.min(steps.length - 1, i + 1); val.textContent = steps[i]; });
+  });
+
+  /* ---------- tabs ---------- */
+  document.querySelectorAll('[role="tablist"]').forEach((list) => {
+    const scope = list.parentElement;
+    list.querySelectorAll('[data-tab]').forEach((btn) => btn.addEventListener('click', () => {
+      list.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b === btn)));
+      scope.querySelectorAll('[data-tabpanel]').forEach((p) => { p.classList.toggle('on', p.dataset.tabpanel === btn.dataset.tab); if (p.dataset.tabpanel === btn.dataset.tab) observe(p); });
+    }));
+  });
+
+  /* ---------- gift card category filter ---------- */
+  const grid = document.querySelector('[data-gc-grid]');
+  if (grid) {
+    const empty = document.querySelector('[data-gc-empty]');
+    document.querySelectorAll('[data-filter]').forEach((btn) => btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-filter]').forEach((b) => b.classList.toggle('on', b === btn));
+      let shown = 0;
+      grid.querySelectorAll('[data-cat]').forEach((c) => { const on = btn.dataset.filter === 'all' || c.dataset.cat === btn.dataset.filter; c.classList.toggle('hidden', !on); if (on) { shown += 1; c.classList.add('in'); } });
+      empty.classList.toggle('on', shown === 0);
+    }));
+  }
+
+  /* ---------- gift card amount picker ---------- */
+  document.querySelectorAll('[data-picker]').forEach((p) => {
+    const total = p.parentElement.querySelector('[data-picker-total]');
+    p.querySelectorAll('[data-amount]').forEach((b) => b.addEventListener('click', () => {
+      p.querySelectorAll('[data-amount]').forEach((x) => x.classList.toggle('on', x === b));
+      total.textContent = b.dataset.amount;
+    }));
+  });
+
+  /* ---------- pricing billing toggle ---------- */
+  const sw = document.querySelector('[data-billing]');
+  if (sw) sw.addEventListener('click', () => {
+    const yearly = sw.getAttribute('aria-checked') !== 'true';
+    sw.setAttribute('aria-checked', String(yearly));
+    document.querySelectorAll('[data-price]').forEach((el) => { el.textContent = yearly ? el.dataset.y : el.dataset.m; });
+  });
+
+  /* ---------- help search ---------- */
+  const search = document.querySelector('[data-help-search]');
+  if (search) {
+    const groups = [...document.querySelectorAll('[data-help-groups] .acc-group')];
+    const empty = document.querySelector('[data-help-empty]');
+    search.addEventListener('input', () => {
+      const q = search.value.trim().toLowerCase();
+      let shown = 0;
+      groups.forEach((g) => {
+        let inGroup = 0;
+        g.querySelectorAll('details').forEach((d) => { const hit = !q || d.textContent.toLowerCase().includes(q); d.classList.toggle('hidden', !hit); if (hit) inGroup += 1; });
+        g.style.display = inGroup ? '' : 'none';
+        shown += inGroup;
+      });
+      empty.classList.toggle('on', shown === 0);
+    });
+  }
+
+  render();
+})();
+</script>
+<script>(()=>{const h=document.querySelector('header.nav');if(!h)return;let on=false;const t=120;const f=()=>{const s=scrollY>t;if(s!==on){on=s;h.classList.toggle('is-stuck',s)}};addEventListener('scroll',f,{passive:true});f()})()</script></body>
+</html>

@@ -1,259 +1,67 @@
 ---
 name: "article-html-to-ppt"
-description: "Use when turning articles, docs, PRDs, or specs into polished editable PPT decks."
+license: "Apache-2.0"
+description: "Create editable PPTX from documents or pasted outlines and per-slide content with optional style directions; reconstruct slide designs, reuse native PPTX templates, and revise decks with real previews and hash-bound review. 支持文档/大纲转可编辑PPTX、设计图复刻、原生PPTX模板改页与逐页视觉审核。"
 metadata:
-  display_name: MeowClaw PPT Smith
-  english_alias: MeowClaw PPT Smith
-  registry_slug: article-html-to-ppt
-  version: 2.0.7
-  brand_aliases: [meowclaw-pptsmith, meowclaw-decksmith]
+  display_name: "PPT Smith"
+  english_alias: "PPT Smith"
+  public_slug: "meowclaw-pptsmith"
+  version: "5.4.0"
+  compatibility_aliases: ["article-html-to-ppt", "meowclaw-decksmith"]
 ---
 
-# MeowClaw PPT Smith
+# PPT Smith
 
-Build presentation-ready, evidence-bounded, hybrid-editable slide decks. A valid PPTX is not automatically a professionally designed deck.
+## 1. Select the user's intent
 
-## Release Boundary
+| User wants | Route | Read when selected |
+| --- | --- | --- |
+| Make a presentation from a document, optionally with brand/style references | `create` (default) | [Declarative workflow](references/declarative-design.md) |
+| Make a presentation from a pasted outline / per-slide content (no uploaded file) | `create` | [Outline-to-deck authoring](references/outline-to-deck.md), then [Declarative workflow](references/declarative-design.md) |
+| Reconstruct supplied complete slide designs as editable objects | `recreate` | [Declarative workflow](references/declarative-design.md) |
+| Edit or duplicate original PPTX template pages | `template` | [Native template workflow](references/native-template-workflow.md) |
+| Continue an Atlas/component-plan template task | `template` | [Component workflow](references/routes/v4-template-route.md) |
 
-Version `2.0.7` adds connector routing and diagram-topology gates. It preserves the `2.0.6` MeowClaw PPT Smith name and discovery copy.
+- Infer intent, audience, language, and page budget from the request. Ask only about material conflicts (e.g., exact image reconstruction vs. native template preservation).
+- A style image does not imply exact reconstruction. A PPTX supplied only as a style reference uses `create` (read [template visual design](references/template-visual-design.md)); preserve masters/native layouts only when requested.
+- Source document page count does not prescribe slide count, whereas an explicitly supplied slide sequence/count is a binding user constraint unless restructuring is permitted. For long multi-chapter reports (e.g., 10+ distinct topics/trends), budget enough pages so chapters stay balanced rather than cramming 4–5 distinct topics onto one slide or collapsing parallel chapters into one divider.
 
-Standard readiness is component-scoped:
+**Done when:** route, native-preservation requirement, and existing task format are clear.
 
-- `python_pptx` is qualified for native text, cards, tables, charts, and simple process diagrams.
-- A simple process arrow is one connector object with its arrowhead on the line and both endpoints bound to shape connection points.
-- Complex architectures, layered systems, matrices, flywheels, ecosystems, stakeholder maps, and commercial staircases require a qualified component implementation.
-- If no qualified implementation exists, stop at contracts or a labeled visual reference. Never flatten relationship semantics into generic text boxes and call the result final.
-- PptxGenJS can produce editable visual output but does not prove native endpoint binding. Do not claim structurally movable diagrams unless binding is verified in the PPTX package.
-- PptxGenJS 4.0.1 is qualified only for straight process connectors in this release. Orthogonal/elbow and curved native routing must use the verified Python Builder or another qualified Builder; do not emulate them with disconnected line segments.
-- LibreOffice or other renderer evidence is environment-specific and does not promise Microsoft PowerPoint pixel parity.
+## 2. Establish content and design
 
-## Core Standard
+- **Source & anchors:** Read the full source once and preserve page/section anchors. Save extracted text with anchors in the task directory for PDF/DOCX/web inputs. Pasted text is a valid source (`provenance.kind: user`); never demand or fabricate an uploaded file.
+- **Per-slide manuscripts:** Separate business content from design instructions; analyze hierarchy, groups, relationships, and direction before choosing layouts. Default to complete on-slide coverage (including tables, data, and qualifications); summarize, omit, or move content to speaker notes only with user permission. Follow [outline-to-deck authoring](references/outline-to-deck.md).
+- **Model ownership:** The model owns narrative, assertion titles, visual encoding, and page-specific design; fixed tools execute decisions rather than replacing them with generic extractive layouts. Insufficient authoring capability returns `MODEL_AUTHORING_REQUIRED`.
+- **Industry & brand-grounded visual system:** Match typography, palette, density, and layout language to the deck's industry and audience instead of a one-size-fits-all look. When the source or content carries a clear brand (e.g., consulting firm report, company earnings, product launch), extract its visual traits—sampling the source document's cover, charts, and styling first, or applying established brand cues when text-only—unless the user requests a different or neutral style. Never fabricate unprovided logos or carry over a prior unrelated task's brand, palette, card layout, or footer.
+- **Decorative business reports & diversity:** For decorative business reports, original template design, or fixing repetitive/sparse decks, read [decorative business design](references/decorative-business-design.md) and use the [page planning sheet](templates/decorative-page-plan.md). Use `--review-profile decorative_business` to bind page composition plans and require an independent whole-deck review. Separate stable deck conventions from variable body compositions, and plan a genuine closing within the page budget. (Consult case studies referenced inside that guide only when diagnosing repetition or revision regressions.)
+- **Data honesty & separation:** Keep checked text/data in content records, geometry in scene records, and supplementary reasoning/sources in speaker notes (manuscript qualifications stay on-slide). Unknown chart data stays unknown; reconstructable charts/tables use native data; isolated pictures are replaceable assets, never whole-page screenshots masquerading as editable reconstruction. Disclose simplifications and accepted raster exceptions.
 
-Optimize in this order:
+**Done when:** checked content, source anchors, visual intent, and unresolved decisions are recorded separately from execution geometry.
 
-1. Source truth and evidence boundaries.
-2. Audience decision and storyline.
-3. Judgment titles.
-4. Correct expression mode.
-5. One primary visual anchor per slide.
-6. Page architecture and information design.
-7. Component craft and style consistency.
-8. Editability of message-bearing content.
-9. Real render/readback verification.
-10. Honest delivery status.
+## 3. Author and revise native objects
 
-Do not confuse any of these with visual quality proof:
+- **Probe capabilities first:** Run `python3 -m engine design capabilities` (`create`/`recreate`) or `python3 -m engine template capabilities` (`template`). Local CLI checks installed tools, browser surface, and fontconfig matches—never host model vision or image-generation abilities.
+- **Recover when the host blocks Chromium:** If the HTML probe reports `nested_browser_sandbox_blocked`, use the host's approved execution path to retry the probe and HTML import with Chromium's own sandbox enabled. Use compact author JSON if the host cannot run the browser.
+- **`create` (default HTML design surface):** When `html_design_surface.available` is true, author pages in restricted HTML/CSS and compile via `python3 -m engine design html-import` ([HTML design surface](references/html-design-authoring.md)). The fixed tool measures layout in headless Chromium, rejects scripts/external resources, places registered `data-asset` images, traces content to source text, and blocks writes on `design_lint` errors (`imported_with_lint_errors`). HTML previews are iteration drafts, never external targets.
+- **Lightweight metadata & fallback:** After importing pages, use `set-meta` (`design.brief`), `set-page` (`notes`, `composition`, `background`), and `add-page` / `remove-page` / `reorder-pages` instead of exporting the entire deck. Use [compact author JSON](references/declarative-authoring.md) for `patch` or when no browser is available. No image tool is needed for ordinary native design; never treat your own preview as an external reference.
+- **`recreate`:** Visually read the supplied complete target, verify content against the source, and preserve approved geometry without inventing numbers from pixel heights. Keep targets, approved changes, and actual PPTX previews distinct.
+- **`template`:** Follow [native template workflow](references/native-template-workflow.md): inspect actual source-page/object IDs, clone original pages, edit in revision-checked transactions, and inherit real source styles. Existing Atlas tasks keep their [component workflow](references/routes/v4-template-route.md).
+- **Preflight & incremental hygiene:** Run real-office font preflight before expanding a large deck (fontconfig alone does not prove actual CJK rendering). Use page-scoped context and guarded patches instead of rewriting the deck; never run task-authored scripts to bypass unsupported features. Reuse independent page reviews only via `review-template --inherit-from`; any change to content, notes, geometry, assets, fonts, or renderer invalidates affected evidence.
 
-- file opens successfully;
-- native text ratio is high;
-- no object is out of bounds;
-- slides are nonblank;
-- all source text is present.
+**Done when:** the candidate and affected pages are identified by revision and hash, with failed edits leaving prior valid state intact.
 
-Those are necessary structural checks only.
+## 4. Verify and deliver
 
-## Production Profiles
+- **Required gates:** Actual PPTX rendering, checked content/data, resolved fonts, structural editability, target-software edit/save/reopen checks, and independent visual review at readable resolution (a contact sheet alone cannot verify small text).
+- **Whole-deck check:** Inspect body-layout variety, visual coherence, and narrative completeness separately—title/navigation stability, numeric baselines, graphic weight, chapter transitions, summary/decision/closing order, and nonrectangular text safety margins. Verify that table-of-contents sections, section dividers, and body eyebrows share **one consistent numbering system** with every top-level section covered (if dividers are used), all section dividers share one visual style without uneven card walls, left-to-right column order matches numbered headings, and single-axis charts never mix incompatible units (e.g., GW and %). Resolve suspected collisions on full-size pages/crops. Automated diagnostics locate evidence; they never approve craft or originality. Always recheck the merged candidate after parallel authoring.
+- **Review integrity:** Original designs without an external target use `reconstruction: not_applicable`; reconstruction with a target requires fidelity approval. Inherited page reviews retain original observations and hashes, while whole-deck review is always fresh. A generator's own review is never independent, and fabricated second identities are forbidden.
+- **Delivery & isolation:** `candidate_unreviewed`, `draft`, and `render_incomplete` are not final. Deliver only when the exact file passes all route gates, with editable PPTX, actual previews, and material editing limitations. Quality acceptance is separate from OS isolation: `--isolation auto` selects macOS isolation or host execution (reporting OS isolation unverified on host), while `--require-os-isolation` is binding and must not be downgraded. Never claim untested PowerPoint/WPS or cross-platform parity, and never inherit advisory-review website policies.
 
-- `fast`: internal draft, content validation, simple article, or explicit speed request.
-- `standard`: formal internal, product, business, technical, or ordinary client deck.
-- `premium`: public release, high-value client, reusable template, strong brand requirement, or complex diagrams.
+**Done when:** all required checks apply to the exact delivered file.
 
-Resolve the profile before artifact planning. User override wins, but it cannot waive truthful capability reporting.
+## Compatibility only
 
-For Standard and Premium, preserve internal work under `.ppt-work/` and keep one unique user-facing final.
-
-## Required Production Chain
-
-```text
-source
--> content lock and evidence inventory
--> storyline and judgment titles
--> expression-mode gate
--> PPT IR
--> style contract or matched reference
--> page archetypes and component plans
--> capability probe
--> component delivery resolution
--> high-fidelity reference for polish-sensitive pages
--> editable/hybrid implementation
--> package inspection
--> real render/readback
--> visual review and revision
--> trusted delivery package
-```
-
-Use `scripts/run_pipeline.py` for the guarded pipeline. Do not bypass failed gates by manually labeling a deck final.
-
-## Expression Mode Gate
-
-Every slide chooses exactly one primary expression:
-
-- `textual_argument`
-- `structured_cards`
-- `table_matrix`
-- `data_visual`
-- `relationship_visual`
-- `conceptual_scene`
-- `hybrid_panel`
-
-Relationship, flow, system boundary, feedback loop, ecosystem, causal chain, architecture, hierarchy, or spatial metaphor content must not remain pure prose or generic cards.
-
-Before implementing `relationship_visual`:
-
-1. Define Diagram IR: nodes, groups, boundaries, edges, annotations, main path.
-2. Choose a real diagram type: process, swimlane, layered architecture, hierarchy, matrix, flywheel, ecosystem, staircase, or another explicit structure.
-3. Select a qualified component implementation.
-4. Simplify, group, split, or move details before raster fallback.
-5. Preserve one visually dominant main path.
-
-Read `references/expression-mode-gate.md`, `references/diagram-ir-and-layout.md`, and `references/diagram-auto-repair.md`.
-For connector routing, bus patterns, return paths, and topology QA, read `references/connector-routing-and-topology-gate.md`.
-
-## Connector Invariants
-
-These are hard requirements:
-
-- Arrowheads belong to the connector line itself. Never simulate an arrow with a separate triangle or chevron shape.
-- Native editable process connectors bind both endpoints to the connected shapes. Moving a node must preserve the relationship.
-- A line merely positioned near a box is not a bound connector.
-- A group containing a line and triangle is not a single connector.
-- Connector direction and semantic relation must remain readable after rendering.
-- If a Builder cannot bind endpoints, disclose the limitation and use a qualified route. Do not claim the diagram is structurally editable.
-
-### Routing grammar
-
-- Use a straight connector only for short, same-axis adjacency with no intervening object.
-- Use one native orthogonal/elbow connector for cross-row process flow, bus attachment, hierarchy, and routes that must avoid nodes or labels.
-- Use one native curved connector for feedback, recovery, influence, or an outer return path.
-- Use a bus plus short branches for many-to-one or one-to-many routing. Do not draw a radial web through a hub.
-- Reserve an explicit connector channel between layers. A connector must never occupy a text line or layer subtitle gap.
-- Do not build a continuous arrow from multiple independent line objects. The complete route and arrowhead belong to one connector object.
-- If arbitrary multi-bend geometry cannot preserve native endpoint binding, simplify the topology, use a qualified Builder, or stop. Do not fabricate editability.
-
-Before drawing, freeze the topology: main path, branch zones, return path, buses, connector channels, and node ports. Relationship completeness does not justify an unreadable line web.
-
-PPTX readback for a bound arrow connector should show:
-
-- one connector shape;
-- `a:stCxn`;
-- `a:endCxn`;
-- an arrow end element such as `a:tailEnd type="triangle"`;
-- no separate triangle or chevron arrowhead shape.
-
-## Solid-Block Invariants
-
-Filled shapes without message content must be intentional and named with one of:
-
-- `Decoration:`
-- `Background:`
-- `Material:`
-- `Connector:`
-
-An unnamed, empty, solid-color block is a QA error because it may be a detached arrowhead, stale shape, accidental overlay, or rendering artifact.
-
-Do not silence this detector by naming arbitrary objects. A declared layer must have a real design role and must not occlude content.
-
-## Style Contract
-
-For serious decks, resolve a complete `style-contract.json` before building. It is the source of truth for colors, typography, grid, spacing, cards, tables, charts, diagrams, image treatment, footer, and density limits.
-
-Confirm the style with the user or match a supplied reference. Do not invent visual tokens during implementation.
-
-Read `references/design-token-contract.md`, `references/five-style-master-systems.md`, and the matching template pack.
-
-## Information-Design Gates
-
-A Standard or Premium slide fails when any applies:
-
-- a requested process, architecture, hierarchy, matrix, flywheel, or staircase is replaced with one text box;
-- titles and body content are not visually separated;
-- the primary content occupies only the upper portion while the lower canvas is accidental empty space;
-- low-content tables use tiny text;
-- a formal slide looks like a wireframe or raw spec coverage output;
-- connectors do not reach or bind to nodes;
-- decorative shapes compete with the message;
-- the Builder silently downgrades a native-required component;
-- the visual review identifies a blocking issue.
-
-Use `references/premium-page-archetypes.md`, `references/component-craft-checklist.md`, `references/spec-to-deck-visual-priority-gate.md`, and `references/anti-regression-examples.md`.
-
-## Builder Selection
-
-Before selecting a Builder:
-
-1. Run Capability Probe.
-2. Match the Component Registry against actual capabilities.
-3. Select the Builder with the highest qualified editable-core coverage.
-4. Treat support as component-specific, not Builder-wide.
-5. Reject unknown or visual-only support for native-required objects.
-6. Stop when no valid route exists.
-
-`python_pptx` Standard qualification includes simple bound process diagrams only. It does not automatically qualify every `relationship_visual`.
-
-Read `references/component-registry.md` and `references/builder-adapters.md`.
-
-## Two-Lane Production
-
-For polish-sensitive work:
-
-### Lane A: Visual Reference
-
-Use HTML/CSS, rendered previews, or bounded visual components to calibrate typography, composition, material, density, and diagram grammar.
-
-### Lane B: Editable Reconstruction
-
-Rebuild message-bearing content as native PPT objects: titles and body text, cards and callouts, tables and simple charts, simple processes and diagrams, labels and source notes.
-
-Raster/SVG/generated layers are allowed for complex backgrounds, photos, illustrations, and bounded complex diagrams when disclosed. Do not rasterize ordinary editable content.
-
-## Verification Gate
-
-Before handoff:
-
-1. Inspect package structure.
-2. Verify expected native text, tables, charts, and connectors.
-3. Check bound connector XML for native movable diagrams.
-4. Reject connectors crossing unrelated nodes or text and ambiguous connector crossings.
-5. Detect orphan solid blocks.
-6. Check clipping, overlap, out-of-bounds objects, missing media, and color/font drift.
-7. Render every complex diagram page immediately after construction.
-8. Enlarge and inspect process, architecture, state, routing, matrix, staircase, risk, and closing pages before building the full contact sheet.
-9. Render with a real available renderer and inspect the full contact sheet.
-10. Revise and rerender when any visual issue remains.
-11. Package only after trusted status is calculated.
-
-If the authoritative capability report says no renderer is available, do not secretly use an undeclared renderer. Preserve `RENDER_ENGINE_UNAVAILABLE` and mark the task blocked/provisional as appropriate.
-
-A Standard or Premium deck must not be released merely because structural inspection passed.
-
-## Delivery Status
-
-Keep statuses distinct: `planned`, `created`, `rendered`, `read_back`, `verified`, `final`, `blocked`, `failed`.
-
-Environment capability missing is `blocked`, not a fabricated success and not necessarily a product failure. Builders and agents must not handwrite `final`.
-
-## Required References
-
-Load only what the task needs:
-
-- `references/master-presentation-design-language.md`
-- `references/expression-mode-gate.md`
-- `references/premium-page-archetypes.md`
-- `references/five-style-master-systems.md`
-- `references/spec-to-deck-visual-priority-gate.md`
-- `references/component-craft-checklist.md`
-- `references/component-registry.md`
-- `references/builder-adapters.md`
-- `references/diagram-ir-and-layout.md`
-- `references/diagram-auto-repair.md`
-- `references/connector-routing-and-topology-gate.md`
-- `references/master-ppt-design-rubric.md`
-- `references/component-raster-fallback.md`
-- `references/production-profiles.md`
-- `references/production-readiness-gates.md`
-- `references/anti-regression-examples.md`
-- `references/benchmark-methodology.md`
-
-## Final Rule
-
-A professional deck must preserve both semantics and craft. When the source calls for a real diagram, draw the real diagram or stop. Never ship a rough wireframe simply because it is editable and technically valid.
+- Legacy `new_design` and `style_transfer` map to `create`; register style references explicitly. Saved legacy tasks keep their original contract. `draft` is diagnostic only.
+- Bespoke remains an advanced compatibility route ([guide](references/routes/v4-bespoke-route.md); [V4 authoring contract](references/routes/v4-authoring-contract.md) loads only for legacy Bespoke/Atlas routes).
+- `template` preserves native assets and never silently falls back to blank-slide reconstruction. Standard/Engineering is for internal diagnostics and explicit engineering drafts only.

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+  :root { --accent:#bf360c; --accent-dark:#8c2609; --line:#ece3e3; --bg:#faf6f5; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:#333;
+         font-family:-apple-system,"PingFang SC","Microsoft YaHei",Arial,sans-serif; font-size:15px; }
+  .wrap { max-width:760px; margin:0 auto; }
+  .hd { background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:#fff;
+        padding:16px 18px; border-radius:12px 12px 0 0; }
+  .hd h1 { margin:0; font-size:19px; }
+  .hd .sub { margin-top:6px; font-size:12px; opacity:.9; }
+  .body-wrap { background:#fff; border:1px solid var(--line); border-top:none;
+        border-radius:0 0 12px 12px; padding:6px 12px 14px; }
+  .card { border:1px solid var(--line); border-radius:10px; margin:12px 0; padding:4px 12px 10px; background:#fff; }
+  .card-title { color:var(--accent-dark); font-weight:700; font-size:16px; margin:8px 0 4px;
+        border-left:4px solid var(--accent); padding-left:8px; }
+  table { width:100%; border-collapse:collapse; margin:4px 0; }
+  table.kv th { text-align:left; width:32%; color:var(--accent-dark); font-weight:600;
+        vertical-align:top; padding:7px; border-bottom:1px solid #f2eeee; }
+  table.kv td { padding:7px; border-bottom:1px solid #f2eeee; vertical-align:top; word-break:break-word; }
+  table.grid th, table.grid td { border:1px solid var(--line); padding:6px 8px; font-size:14px; vertical-align:top; }
+  table.grid thead th { background:#f7ecec; color:var(--accent-dark); }
+  td table { margin:0; }
+  .empty { color:#bbb; }
+  .prose { line-height:1.8; white-space:pre-wrap; color:#444; margin:6px 0; }
+  .note { margin:12px 4px 0; font-size:12px; color:#a08a8a; line-height:1.6; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hd">
+      <h1>{{TITLE}}</h1>
+      <div class="sub">本地兜底渲染 · {{GENERATED}} · 功能族 jinkoujue</div>
+    </div>
+    <div class="body-wrap">
+      {{BODY}}
+      <div class="note">本页由 skill 包内 <code>local_render.py --func jinkoujue</code> 读取接口 <code>data</code>
+        原始字段本地生成，分节/标签为对照云端模板的近似复刻；未覆盖字段自动并入「补充信息」。
+        <strong>权威可读版本以云端 <code>render.html</code> 为准。</strong></div>
+    </div>
+  </div>
+  <script type="application/json" id="zhouyi-render-spec">{"family": "jinkoujue", "suppress": ["birthYear", "phn", "dfTag", "yueJiangPf", "zhouYe", "guiShenArrange", "nextJieQi", "yyTag"], "sections": [{"title": "定盘", "rows": [{"l": "姓名", "k": "name"}, {"l": "性别", "k": "sex"}, {"l": "占事", "k": "zhanShi"}, {"l": "公历", "k": "birthDate", "append": "birthTime"}, {"l": "年干支", "k": "yearGanZhi"}, {"l": "月干支", "k": "monthGanZhi"}, {"l": "日干支", "k": "dayGanZhi"}, {"l": "时干支", "k": "hourGanZhi"}, {"l": "月将", "k": "yueJiang"}, {"l": "旬空", "k": "dayXunKong"}, {"l": "年命", "k": "nianMing"}, {"l": "行年", "k": "hangNian"}, {"l": "空亡", "k": "kongMang"}]}, {"title": "课式", "rows": [{"l": "人元", "k": "renYuan"}, {"l": "人元五行", "k": "renYuanWuXing"}, {"l": "人元旺衰", "k": "renYuanWangShuai"}, {"l": "贵神名", "k": "guiShenName"}, {"l": "贵神五行", "k": "guiShenWuXing"}, {"l": "贵神旺衰", "k": "guiShenWangShuai"}, {"l": "将神名", "k": "jiangShenName"}, {"l": "将神五行", "k": "jiangShenWuXing"}, {"l": "将神旺衰", "k": "jiangShenWangShuai"}, {"l": "地分", "k": "diFen"}, {"l": "地分五行", "k": "diFenWuXing"}, {"l": "地分旺衰", "k": "diFenWangShuai"}]}, {"title": "解析", "rows": [{"l": "", "k": "analysis", "prose": true}]}]}</script>
+</body>
+</html>

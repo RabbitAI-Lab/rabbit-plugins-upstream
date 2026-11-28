@@ -1,6 +1,6 @@
 [project]
 name = "homebase"
-version = "0.2.5"
+version = "0.7.3"
 description = "Family household coordinator skill for OpenClaw — calendar, meals, school, shopping, health, briefing"
 readme = "README.md"
 license = { text = "MIT" }
@@ -10,10 +10,6 @@ authors = [
 ]
 keywords = ["openclaw", "family", "household", "calendar", "whatsapp", "meal-planner"]
 
-[project.urls]
-Homepage = "https://github.com/hchawla/homebase"
-Repository = "https://github.com/hchawla/homebase"
-Issues = "https://github.com/hchawla/homebase/issues"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
@@ -26,19 +22,23 @@ classifiers = [
     "Topic :: Home Automation",
 ]
 dependencies = [
-    # Google APIs
-    "google-api-python-client>=2.100.0,<3.0.0",
-    "google-auth>=2.23.0,<3.0.0",
-    "google-auth-httplib2>=0.1.0,<1.0.0",
-    "google-auth-oauthlib>=1.0.0,<2.0.0",
-    # Credential management
-    "python-dotenv>=1.0.0,<2.0.0",
-    "keyring>=24.0.0,<26.0.0",
-    # Networking
-    "requests>=2.28.0,<3.0.0",
-    # PDF text extraction (school flyer attachments)
-    "pypdf>=4.0.0,<6.0.0",
+    # Google access is the `gog` CLI (gogcli.sh), not a Python client, so no
+    # google-* or credential-store packages appear here. gog is a BINARY dependency and
+    # pip cannot install it; see README setup and `gog auth status`.
+    "requests>=2.32.4,<3.0.0",  # 2.32.4: CVE-2024-47081 (.netrc leak)
+    # PDF text extraction (bill statements, school flyer attachments). Also the
+    # canary tools.py imports to decide whether to re-exec under the venv.
+    "pypdf>=6.21.4,<7.0.0",  # floor = version tested 2026-11-27; parses untrusted attachments, keep current
 ]
+
+# NOTE: classifiers and dependencies must stay ABOVE [project.urls]. They sat
+# below it until 2026-09-20, which TOML reads as project.urls.classifiers and
+# project.urls.dependencies — the build failed on the former and, had it not,
+# would have silently installed no dependencies at all.
+[project.urls]
+Homepage = "https://github.com/hchawla/homebase"
+Repository = "https://github.com/hchawla/homebase"
+Issues = "https://github.com/hchawla/homebase/issues"
 
 [project.optional-dependencies]
 test = [
@@ -47,11 +47,11 @@ test = [
 ]
 
 [build-system]
-requires = ["setuptools>=68.0"]
+requires = ["setuptools>=78.1.1"]  # 78.1.1: CVE-2025-47273
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-py-modules = ["tools", "utils", "setup_check", "migrate_to_keychain"]
+py-modules = ["tools", "utils", "setup_check"]
 
 [tool.setuptools.packages.find]
 include = ["core*", "features*"]

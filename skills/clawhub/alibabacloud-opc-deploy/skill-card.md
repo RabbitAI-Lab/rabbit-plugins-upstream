@@ -1,54 +1,71 @@
-## Description: <br>
-Provisions Alibaba Cloud resource bundles for one-person company deployments after a supported SKU is selected, with Chinese step-by-step status and explicit confirmations before paid actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides Chinese-speaking users through choosing an Alibaba Cloud OPC package and provisioning its cloud resources with the Aliyun CLI after explicit confirmation.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Developers and operators use this skill to provision predefined Alibaba Cloud SKUs for small-company web, app, and growth deployments. It guides account checks, CLI setup, resource creation, verification, manual fallbacks, and teardown-aware state handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Alibaba Cloud regions, with the provided SKU parameters defaulting to cn-beijing. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create billable Alibaba Cloud resources and perform account-wide cloud actions. <br>
-Mitigation: Require an itemized resource and price confirmation before any paid action, use quota limits, and review ESA PurchaseRatePlan and other broad actions before execution. <br>
-Risk: Broad or mishandled cloud credentials could expose the user's Alibaba Cloud account. <br>
-Mitigation: Use the dedicated RamRoleArn setup, avoid broad administrator credentials, never paste or echo AK/SK values, and review files written under state/, ~/.aliyun, ~/.local/bin, ~/.opc, and ~/.ssh. <br>
-Risk: Provisioned resources may expose public web ports or leave SSH reachable if networking steps are skipped. <br>
-Mitigation: Confirm public 80/443 exposure with the payment prompt and restrict SSH to the user's current IP as part of the security group flow. <br>
-Risk: Some Alibaba Cloud products require partial or manual console steps that may be missed during automation. <br>
-Mitigation: Use the CLI capability matrix before deployment, stop for console-only or partial products, and wait for user confirmation before continuing. <br>
+## Use Case:
 
+External developers, operators, and small business builders use this skill to settle an OPC SKU, prepare Alibaba Cloud credentials, review costs, and create or verify the package resources step by step.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sdk-team/skills/alibabacloud-opc-deploy) <br>
-- [Iron rules and credential safety](references/iron-rules.md) <br>
-- [Execution phases](references/execution-phases.md) <br>
-- [RAM least-privilege policy](references/ram-policies.md) <br>
-- [CLI capability matrix](references/cli_capability_matrix.md) <br>
-- [SKU parameter format](references/sku-params-format.md) <br>
-- [Alibaba Cloud CLI documentation](https://help.aliyun.com/zh/cli/) <br>
-- [Alibaba Cloud CLI install and update documentation](https://help.aliyun.com/zh/cli/install-update-alibaba-cloud-cli) <br>
-- [Alibaba Cloud ECS RunInstances API](https://help.aliyun.com/zh/ecs/developer-reference/api-ecs-2014-05-26-runinstances) <br>
-- [Alibaba Cloud SWAS API overview](https://help.aliyun.com/zh/simple-application-server/developer-reference/api-swas-open-2020-06-01-overview) <br>
-- [Alibaba Cloud ESA PurchaseRatePlan API](https://help.aliyun.com/zh/edge-security-acceleration/esa/api-esa-2024-09-10-purchaserateplan) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Chinese Markdown with step-by-step confirmations, status summaries, CLI command execution guidance, and resource tables.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit SKU selection and explicit confirmation before cost-incurring actions; writes deployment state and references Alibaba Cloud CLI configuration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.1 (source: evidence.json release.version) <br>
+Risk: The skill can create paid Alibaba Cloud resources after confirmation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the resource list, itemized pricing, and payment confirmation before allowing any paid operation.
+
+Risk: The skill can install or update local Alibaba Cloud CLI tooling and enable CLI plugin auto-install.
+
+Mitigation: Review the CLI setup steps before installation and confirm that changes to the local AI tool and Aliyun CLI environment are acceptable.
+
+Risk: Credential setup and live cloud resources can affect the user's Alibaba Cloud account.
+
+Mitigation: Use the documented dedicated RAM role and least-privilege policy, and do not share AccessKey or SecretKey values in chat.
+
+Risk: Provisioned web resources may expose public HTTP and HTTPS ports.
+
+Mitigation: Confirm public exposure during payment authorization and keep SSH restricted to the user's current IP address.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/sdk-team/skills/alibabacloud-opc-deploy)
+- [Execution Phases](references/execution-phases.md)
+- [Aliyun CLI Capability Matrix](references/cli_capability_matrix.md)
+- [Credential Setup](references/credential-setup.md)
+- [RAM Policy](references/ram-policies.md)
+- [SKU Resolution](references/sku-resolution.md)
+- [SKU Parameter Format](references/sku-params-format.md)
+- [Alibaba Cloud CLI Documentation](https://help.aliyun.com/zh/cli/)
+- [SWAS API Overview](https://help.aliyun.com/zh/simple-application-server/developer-reference/api-swas-open-2020-06-01-overview)
+- [ECS RunInstances API](https://help.aliyun.com/zh/ecs/developer-reference/api-ecs-2014-05-26-runinstances)
+- [ESA PurchaseRatePlan API](https://help.aliyun.com/zh/edge-security-acceleration/esa/api-esa-2024-09-10-purchaserateplan)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files]
+
+**Output Format:** [Chinese Markdown guidance with inline shell commands, configuration snippets, and local deployment records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [User-facing output is zh-CN; paid Alibaba Cloud operations require explicit confirmation before execution.]
+
+## Skill Version(s):
+
+0.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

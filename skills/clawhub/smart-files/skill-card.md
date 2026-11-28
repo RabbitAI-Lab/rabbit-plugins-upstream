@@ -1,40 +1,59 @@
-## Description: <br>
-Secure file search, duplicate detection, organization analysis, and rename support for workspace files, with quiet mode for content suppression and force-gated boundary overrides. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Secure file search, dedup, organize, and rename for workspace files.
 
-## Publisher: <br>
-[jlacroix82](https://clawhub.ai/user/jlacroix82) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jlacroix82](https://clawhub.ai/user/jlacroix82)
 
-## Use Case: <br>
-Developers and agents use Smart Files to inspect local workspaces, search file contents, find duplicates, summarize file metadata, preview cleanup candidates, and plan or perform guarded file renames and watch-mode organization. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search and analysis can read workspace file contents and print matching snippets into terminal output or agent context. <br>
-Mitigation: Use --quiet for sensitive searches, avoid scanning directories that may contain secrets, and review output handling before sharing logs or transcripts. <br>
-Risk: --force can override the workspace boundary for scanning or watch mode, increasing exposure of external paths. <br>
-Mitigation: Keep default workspace scoping for normal use and enable --force only after confirming the target path and intended monitoring behavior. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect workspace files, search file contents, find duplicates, categorize files, preview renames, and monitor file changes.
 
-## Reference(s): <br>
-- [Smart Files ClawHub page](https://clawhub.ai/jlacroix82/skills/smart-files) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and terminal-style text output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search output may include file paths and content snippets unless --quiet is used; binary files are skipped, files over 10MB are skipped, and search results are capped.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-99.0.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The skill has broad local file-read and monitoring access, and the security evidence says workspace boundaries and security claims should be reviewed before trusted use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in workspaces where local file reading and monitoring are acceptable, avoid sensitive directories, and review path validation, symlink handling, and scoping before trusted automation.
+
+Risk: Using snippet output can expose raw file contents, including secrets, to terminal logs or agent context.
+
+Mitigation: Keep snippets disabled by default and avoid `--snippets` on directories that may contain credentials, private data, or confidential files.
+
+Risk: `--force` can permit external-path access and watch-mode operations that persist file metadata to a journal.
+
+Mitigation: Avoid `--force` unless external access is intentional, run dry-run previews first, and clear or protect `memory/smart-files-journal.json` when path and hash metadata is sensitive.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jlacroix82/skills/smart-files)
+- [README](README.md)
+- [Vetting report](VET-REPORT.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, guidance]
+
+**Output Format:** [Plain text CLI output with optional JavaScript object results when used as a module]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search snippets are hidden by default; results and watch journals may include file paths, hashes, sizes, timestamps, and other local file metadata.]
+
+## Skill Version(s):
+
+2.2.3 (source: server release metadata, SKILL.md frontmatter, clawhub.yaml)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,14 @@
+{
+  "name": "agent-arena-mcp",
+  "version": "1.0.0",
+  "description": "Play free games with and against AI agents at Agent Arena. Thin stdio MCP bridge plus a SKILL.md.",
+  "type": "module",
+  "bin": { "agent-arena-mcp": "index.js" },
+  "main": "index.js",
+  "files": ["index.js", "check-live.mjs", "SKILL.md", "README.md", "mcp.json", "smithery.yaml", "LICENSE"],
+  "engines": { "node": ">=18" },
+  "scripts": { "start": "node index.js", "check": "node check-live.mjs" },
+  "keywords": ["mcp", "agent", "skill", "games", "co-op", "agent-arena"],
+  "homepage": "https://fmf-flex-arena.fmf-x402.workers.dev",
+  "license": "MIT"
+}

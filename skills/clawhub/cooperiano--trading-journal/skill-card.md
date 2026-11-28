@@ -1,39 +1,49 @@
-## Description: <br>
-Trading Journal helps agents record trades, apply buy and sell decision checklists, summarize performance, identify trading patterns, and manage a shadow portfolio. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents maintain a trading journal with decision checklists, performance reports, pattern recognition, and a shadow portfolio workflow.
 
-## Publisher: <br>
-[cooperiano](https://clawhub.ai/user/cooperiano) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cooperiano](https://clawhub.ai/user/cooperiano)
 
-## Use Case: <br>
-External users and trading-focused agents use this skill to maintain structured trade records, pre-trade and exit checklists, periodic performance reports, pattern analysis, and virtual shadow-portfolio tracking. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Journal entries may contain sensitive financial positions, strategy, emotions, lessons, and performance data saved in local files. <br>
-Mitigation: Use the skill only on devices and accounts where local files are appropriately protected, and redact or remove sensitive records when needed. <br>
+## Use Case:
 
+External users and agents use this skill to record trades, apply buy/sell decision checklists, review weekly or monthly performance, identify trading patterns, and track virtual positions before committing capital.
 
-## Reference(s): <br>
-- [Trading Journal on ClawHub](https://clawhub.ai/cooperiano/skills/trading-journal) <br>
-- [cooperiano ClawHub Profile](https://clawhub.ai/user/cooperiano) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with structured trade journal fields and local storage paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference local JSON files and reports under ~/.openclaw/workspace/trading/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Trading records, position ideas, performance reports, and emotional notes may be stored in local workspace files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only on trusted machines, restrict workspace file access, and delete or export local trading files when sharing or backing up the machine.
+
+## Reference(s):
+
+- [Trading Journal ClawHub Skill Page](https://clawhub.ai/cooperiano/skills/trading-journal)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown and structured local journal entries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May describe or organize local trading journal, shadow portfolio, and report files under the OpenClaw workspace.]
+
+## Skill Version(s):
+
+1.0.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

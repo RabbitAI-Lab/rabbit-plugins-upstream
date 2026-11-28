@@ -1,0 +1,82 @@
+{
+  "source_repository": "https://github.com/zzxCoding/Flydb",
+  "source_commit": "c8cc5ff89a1fcbb31effbabce7da6a81e2d39f17",
+  "source_version": "0.3.9",
+  "source_inputs_dirty": false,
+  "source_input_status": [],
+  "release_status": "not_verified",
+  "documents": [
+    {
+      "source": "docs/reference/commands.md",
+      "destination": "skills/flydb-cli-release/references/commands.md",
+      "sha256": "6d02bbe67b3850a610ebb7c9ca2515f0c8c8131886dd21c0eb5344078cc1eeea",
+      "adaptations": []
+    },
+    {
+      "source": "docs/reference/configuration.md",
+      "destination": "skills/flydb-cli-release/references/configuration.md",
+      "sha256": "5acd16cbe9b33e1818545f8f3142105d5ad1392083cd22380386202233187571",
+      "adaptations": []
+    },
+    {
+      "source": "docs/reference/errors.md",
+      "destination": "skills/flydb-cli-release/references/errors.md",
+      "sha256": "9ddc9dd0272e61d4b9560f10e2d8f1a5306e30e7f12aee6049be7668e555ede9",
+      "adaptations": []
+    },
+    {
+      "source": "docs/reference/json-output.md",
+      "destination": "skills/flydb-cli-release/references/json-output.md",
+      "sha256": "48653ad7c9b986bf70cec6f54cd825566cceac547cb58faa5caf3ae8d285212f",
+      "adaptations": [
+        "按 commands.md 补充 web 不支持 --json 的例外"
+      ]
+    },
+    {
+      "source": "docs/reference/mcp-tools.md",
+      "destination": "skills/flydb-cli-release/references/mcp-tools.md",
+      "sha256": "19e2a619da95c27a87205c6f3a12996f6c68613faecd8a077bb4e4bbd62d0211",
+      "adaptations": []
+    },
+    {
+      "source": "docs/reference/web-api.md",
+      "destination": "skills/flydb-cli-release/references/web-api.md",
+      "sha256": "852b35e0a3c0845a7124b01f8524cbe3c59be420e0e372fd107e036af44acc8f",
+      "adaptations": []
+    },
+    {
+      "source": "docs/getting-started/web.md",
+      "destination": "skills/flydb-cli-release/references/web.md",
+      "sha256": "38d09ee54747c67b183ed7e638508b3eda4c57af13ec21ba4f753667994f2d8d",
+      "adaptations": []
+    },
+    {
+      "source": "docs/getting-started/jdbc-integration.md",
+      "destination": "skills/flydb-cli-release/references/jdbc-integration.md",
+      "sha256": "220dd4f5dcf0d087eba3fccda6fcaa7f0f439206c464d536001deb7d91fea31d",
+      "adaptations": [
+        "历史 ZIP 示例改用已核验的 FLYDB_VERSION"
+      ]
+    },
+    {
+      "source": "docs/design/11-plan-artifact.md",
+      "destination": "skills/flydb-cli-release/references/plan-artifact.md",
+      "sha256": "160b4fe2d1aa5e3dff7b4eb29d61a3dc32e02a71079b350879c0d5b04d83d069",
+      "adaptations": []
+    }
+  ],
+  "manual_review_sources": [
+    {
+      "source": "pom.xml",
+      "sha256": "94de70c9b5e1f4188836482ee8eb058c2101beaec3799507269ea5c3f53fb80d"
+    },
+    {
+      "source": "flydb-skills/skills/flydb-cli/SKILL.md",
+      "sha256": "0a825bb6d32f00e235120932e164fc721f07e41f8cab26bae0a4dcde37207860"
+    },
+    {
+      "source": "docs/getting-started/multi-environment.md",
+      "sha256": "3131ca766515c5a62ea142764d14f42620540429401681002dfd6c11b338df40"
+    }
+  ]
+}

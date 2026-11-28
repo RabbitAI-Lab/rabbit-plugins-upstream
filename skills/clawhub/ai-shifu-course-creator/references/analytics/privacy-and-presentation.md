@@ -2,10 +2,6 @@
 
 Two concerns: the privacy rules baked into the endpoint (refusals, audits, masking) and the Translation Gate that every result must pass before reaching the user.
 
-## Required References
-
-None.
-
 ## `user_users` — Restricted Access
 
 `user_users` is a **global** user table with two legitimate uses:
@@ -90,11 +86,11 @@ The remaining `type` values — `303` input, `309` phone, `310` checkcode and si
 
 ## Course title is not history — hard rule
 
-When the user names a course by title and asks for data, resolve the **current** `shifu_bid → title` mapping before issuing any downstream query (Course Metadata Recipes 0a / 0b). Historical / renamed titles are never reported as the current name, and `shifu-cli.py list` (drafts only) is not a substitute. Full rule, failure modes, and required phrasing: `tables.md` → "Course title is 'current published', not 'history'".
+When the user names a course by title and asks for data, follow the Course Metadata path in `query-recipes.md` to resolve the **current** `shifu_bid → title` mapping before issuing any downstream query. Present the result under the published-versus-draft semantics and phrasing in `tables.md` → "Course title is 'current published', not 'history'".
 
 ## `var_variable_values.value` — Aggregate-Only
 
-Learners may enter free-text personal information into course variables. Aggregate only (`group_by value count`); never paste the raw value list to the user. Recipe 15 shows the canonical safe pattern.
+Persisted learner answers in this table may contain free-text personal information. Aggregate only (`group_by value count`); never paste the raw value list to the user. Recipe 15 in `query-recipes.md` shows the safe query pattern. This existing analytics permission is independent of course-authoring syntax.
 
 ## Refusals
 
@@ -111,7 +107,7 @@ Pass every result through these checks before showing it to the user:
 1. **Integer / string enums** (status, type, scene, mode) → translate via the code tables in `tables.md`. Never show raw codes like `601`, `502`, `1101`, `"read"`.
 2. **ID fields** → apply the ID Field Translation Rules in `tables.md`: never display a raw `*_bid`; `user_bid` → ordinal labels ("Learner A / B / C"); `outline_item_bid` → "Lesson X.Y: \<title\>"
 3. **Monetary values** → add currency unit (¥/CNY/USD), 2 decimal places
-4. **Timestamps** (`created_at`, `updated_at` etc.) → convert to local-timezone readable format (`2026-05-12 14:23`); never show raw ISO timestamps
+4. **Timestamps** (`created_at`, `updated_at` etc.) → backend timestamps are UTC (treat values without an explicit offset as UTC); convert to the user's local-timezone readable format (`2026-05-12 14:23`); never show raw ISO timestamps. Convert using the machine's timezone rules; do not substitute a session-fixed numeric UTC offset (DST-observing zones shift), and never assume a timezone from the conversation language
 5. **Ratios / percentages** → use percent form ("62%" not "0.623")
 6. **Credits** → round to 2 decimal places (e.g. `154.05 积分`); take credit values only from `credit-detail` output (`credits` / `total_credits`) — never invent or re-derive them (`bill_daily_usage_metrics.consumed_credits` applies only once the daily aggregation cron is enabled)
 

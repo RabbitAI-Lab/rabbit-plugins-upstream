@@ -1,0 +1,38 @@
+{
+  "documents": [
+    {
+      "title": "Itinerary",
+      "lines": [
+        "Day 1: Coast walk",
+        "Day 2: Mountain trail",
+        "Day 3: City market"
+      ]
+    },
+    {
+      "title": "City walks",
+      "lines": [
+        "Old town",
+        "Morning light",
+        "Slow streets"
+      ]
+    },
+    {
+      "title": "Photo picks",
+      "lines": [
+        "Best light",
+        "One subject",
+        "No crowds"
+      ]
+    },
+    {
+      "title": "Train route",
+      "lines": [
+        "Coast line",
+        "Mountain pass",
+        "City loop"
+      ]
+    }
+  ],
+  "summary": "One trip, many useful notes",
+  "presenter": true
+}

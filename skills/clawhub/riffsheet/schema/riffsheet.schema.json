@@ -1,0 +1,1229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "riffsheet.schema.json",
+  "title": "riffsheet analysis",
+  "description": "riffsheet.json as written by `riffsheet build`. Keys starting with _ carry provenance and measurements beside the analysis itself.",
+  "type": "object",
+  "required": [
+    "format_version",
+    "prose",
+    "audio",
+    "scene_entities",
+    "slots",
+    "metadata",
+    "_prose_segments",
+    "_local"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "format_version": {
+      "const": 1
+    },
+    "prose": {
+      "type": "string",
+      "description": "the prose segments joined by blank lines"
+    },
+    "audio": {
+      "type": "object",
+      "required": [
+        "voice_segments"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "voice_segments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/voice_segment"
+          }
+        },
+        "heard": {
+          "type": "array",
+          "description": "what the sound is, as heard by the agent after it passed the hearing check (_local.hearing); absent in files written before riffsheet 0.2.0",
+          "items": {
+            "$ref": "#/$defs/heard"
+          }
+        }
+      }
+    },
+    "scene_entities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entity"
+      }
+    },
+    "slots": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/slot"
+      }
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "_prose_segments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/prose_segment"
+      }
+    },
+    "_local": {
+      "$ref": "#/$defs/local"
+    }
+  },
+  "$defs": {
+    "voice_segment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "time_range",
+        "text",
+        "mode",
+        "speaker",
+        "_src",
+        "_pace"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^vs[0-9]+$"
+        },
+        "time_range": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "text": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string",
+          "description": "on_camera_dialogue, voiceover or no_dialogue"
+        },
+        "speaker": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "_src": {
+          "type": "object",
+          "description": "where a field's value came from; untagged fields were seen by the agent",
+          "additionalProperties": {
+            "enum": [
+              "measured",
+              "seen",
+              "heard",
+              "inferred",
+              "cannot_judge_locally",
+              "default"
+            ]
+          }
+        },
+        "_pace": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unit",
+            "count",
+            "per_s",
+            "band",
+            "longest_gap_s",
+            "pauses_over_0_4s",
+            "trend"
+          ],
+          "properties": {
+            "unit": {
+              "enum": [
+                "words",
+                "characters"
+              ]
+            },
+            "count": {
+              "type": "integer"
+            },
+            "per_s": {
+              "type": "number"
+            },
+            "band": {
+              "enum": [
+                "unhurried",
+                "measured",
+                "brisk",
+                "rapid-fire"
+              ]
+            },
+            "longest_gap_s": {
+              "type": "number"
+            },
+            "pauses_over_0_4s": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              }
+            },
+            "trend": {
+              "enum": [
+                "speeds up",
+                "slows down",
+                "even",
+                null
+              ]
+            }
+          }
+        },
+        "_notes": {
+          "type": "array",
+          "description": "free notes: corrections, uncertainties, why a value is missing"
+        }
+      }
+    },
+    "heard": {
+      "type": "object",
+      "required": [
+        "id",
+        "time_range",
+        "about",
+        "text",
+        "clip",
+        "_src"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^h[0-9]+$"
+        },
+        "time_range": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "about": {
+          "enum": [
+            "music",
+            "voice",
+            "effect",
+            "ambience",
+            "other"
+          ]
+        },
+        "text": {
+          "type": "string"
+        },
+        "clip": {
+          "type": "string",
+          "description": "the sound file `listen` cut, that the agent heard it in"
+        },
+        "_src": {
+          "type": "object",
+          "description": "where a field's value came from; untagged fields were seen by the agent",
+          "additionalProperties": {
+            "enum": [
+              "measured",
+              "seen",
+              "heard",
+              "inferred",
+              "cannot_judge_locally",
+              "default"
+            ]
+          }
+        }
+      }
+    },
+    "entity": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "semantic",
+        "time_range",
+        "attributes",
+        "params"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "person",
+            "subtitle",
+            "graphic",
+            "source_image"
+          ]
+        },
+        "semantic": {
+          "type": "string"
+        },
+        "time_range": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "attributes": {
+          "type": "object"
+        },
+        "params": {
+          "type": "object"
+        },
+        "_src": {
+          "type": "object",
+          "description": "where a field's value came from; untagged fields were seen by the agent",
+          "additionalProperties": {
+            "enum": [
+              "measured",
+              "seen",
+              "heard",
+              "inferred",
+              "cannot_judge_locally",
+              "default"
+            ]
+          }
+        },
+        "_notes": {
+          "type": "array",
+          "description": "free notes: corrections, uncertainties, why a value is missing"
+        },
+        "_measured_style": {
+          "$ref": "#/$defs/measured_style"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "person"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "params": {
+                "type": "object",
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "subtitle"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "_measured_style",
+              "_src"
+            ],
+            "properties": {
+              "params": {
+                "$ref": "#/$defs/subtitle_params"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "graphic"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "params": {
+                "$ref": "#/$defs/graphic_params"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "source_image"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "params": {
+                "type": "object",
+                "required": [
+                  "description"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "subtitle_params": {
+      "type": "object",
+      "required": [
+        "text"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "position_y_ratio": {
+          "type": "number"
+        },
+        "position_x_ratio": {
+          "type": "number"
+        },
+        "approximate_size": {
+          "type": "string",
+          "description": "measured: very_small, small, medium, large or very_large"
+        },
+        "color": {
+          "type": "string"
+        },
+        "outline_color": {
+          "type": "string"
+        },
+        "box_color": {
+          "type": "string"
+        },
+        "cue_max_words": {
+          "type": "integer"
+        },
+        "voice_anchor": {
+          "type": "string"
+        },
+        "visual_anchor": {
+          "type": "string"
+        },
+        "highlight_words": {},
+        "highlight_color": {
+          "type": "string"
+        }
+      }
+    },
+    "graphic_params": {
+      "type": "object",
+      "required": [
+        "description",
+        "split"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "inline_text": {},
+        "x_ratio": {
+          "type": "number"
+        },
+        "y_ratio": {
+          "type": "number"
+        },
+        "width_ratio": {
+          "type": "number"
+        },
+        "height_ratio": {
+          "type": "number"
+        },
+        "split": {
+          "type": "boolean"
+        }
+      }
+    },
+    "measured_style": {
+      "type": "object",
+      "required": [
+        "states_measured",
+        "states"
+      ],
+      "additionalProperties": false,
+      "description": "the caption's layer measurement, voted over its text states (weighted by frames)",
+      "properties": {
+        "states_measured": {
+          "type": "integer"
+        },
+        "states": {
+          "type": "integer"
+        },
+        "why": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fill": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "fill_agree": {
+          "type": "number"
+        },
+        "outline_color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "outline_color_agree": {
+          "type": "number"
+        },
+        "shadow_color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "shadow_color_agree": {
+          "type": "number"
+        },
+        "box_color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "box_color_agree": {
+          "type": "number"
+        },
+        "frames_measured_share": {
+          "type": "number"
+        },
+        "size_why": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "center": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "box": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "row_px_1080w": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "rows": {
+          "type": "integer"
+        }
+      }
+    },
+    "slot": {
+      "type": "object",
+      "required": [
+        "id",
+        "time_range",
+        "formula",
+        "_src"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^s[0-9]+$"
+        },
+        "time_range": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "formula": {
+          "type": "object",
+          "description": "the agent's formula: funnel_stage, function, mechanism, viewer_state_before, viewer_state_after, meaning_contract, constraint, sensory_channel, retention_anchor, linguistic_craft"
+        },
+        "_src": {
+          "type": "object",
+          "description": "where a field's value came from; untagged fields were seen by the agent",
+          "additionalProperties": {
+            "enum": [
+              "measured",
+              "seen",
+              "heard",
+              "inferred",
+              "cannot_judge_locally",
+              "default"
+            ]
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "duration_seconds",
+        "video_format",
+        "language",
+        "speaking_mode",
+        "_src"
+      ],
+      "properties": {
+        "duration_seconds": {
+          "type": "number"
+        },
+        "video_format": {
+          "type": "string",
+          "description": "one of single_shot, split_screen_left_right, split_screen_top_bottom, picture_in_picture, multi_grid_2x2, multi_grid_other"
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "speaking_mode": {
+          "enum": [
+            "none",
+            "on_camera",
+            "voiceover",
+            "mixed"
+          ],
+          "description": "from the spoken lines; none with _src.speaking_mode cannot_judge_locally means the speech was not transcribed (_local.stages says why): the analysis has no spoken lines, and whether anyone speaks is not known"
+        },
+        "_src": {
+          "type": "object",
+          "description": "where a field's value came from; untagged fields were seen by the agent",
+          "additionalProperties": {
+            "enum": [
+              "measured",
+              "seen",
+              "heard",
+              "inferred",
+              "cannot_judge_locally",
+              "default"
+            ]
+          }
+        }
+      }
+    },
+    "prose_segment": {
+      "type": "object",
+      "required": [
+        "window",
+        "text"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "window": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "text": {
+          "type": "string"
+        },
+        "claims": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "inferred": {},
+            "uncertain": {
+              "type": "array"
+            },
+            "cannot_judge_locally": {},
+            "measured": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "local": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "scan",
+        "tags",
+        "cuts",
+        "non_cut_changes",
+        "camera_still_share",
+        "dropped_as_music",
+        "cannot_judge_locally",
+        "tool_gaps",
+        "followups",
+        "images_viewed",
+        "checks",
+        "confirmations"
+      ],
+      "properties": {
+        "method": {
+          "type": "string"
+        },
+        "scan": {
+          "type": "string",
+          "description": "the scan folder, relative to the output folder"
+        },
+        "stages": {
+          "type": "object",
+          "description": "tool-written: each optional stage (speech_recognition) and whether it ran (by: what made it; tested: whether that was the tool's tested path, `transcribe` with the small model, null when nothing says), failed (it was there and stopped while running; why) or did not run (why); absent in files written before riffsheet 0.2.0",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": [
+                  "state",
+                  "by"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "state": {
+                    "const": "ran"
+                  },
+                  "by": {
+                    "type": "string"
+                  },
+                  "tested": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "required": [
+                  "state",
+                  "why"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "state": {
+                    "enum": [
+                      "failed",
+                      "not_run"
+                    ]
+                  },
+                  "why": {
+                    "type": "string"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "hearing": {
+          "type": "object",
+          "description": "tool-written: the hearing check for this analysis. passed: the agent heard the test and its `heard` statements went out; failed, cannot_hear (the agent said it cannot open sound) or not_taken: what the sound is was not judged; no_audio_track: nothing to hear. Absent in files written before riffsheet 0.2.0",
+          "required": [
+            "state"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "state": {
+              "enum": [
+                "passed",
+                "failed",
+                "cannot_hear",
+                "not_taken",
+                "no_audio_track"
+              ]
+            },
+            "checks_answered": {
+              "type": "integer"
+            },
+            "checks_passed": {
+              "type": "integer"
+            }
+          }
+        },
+        "tags": {
+          "type": "string"
+        },
+        "cuts": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "non_cut_changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "t",
+              "kind",
+              "box"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "t": {
+                "type": "number"
+              },
+              "kind": {
+                "enum": [
+                  "panel",
+                  "band",
+                  "local"
+                ]
+              },
+              "box": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 4,
+                    "maxItems": 4
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "camera_still_share": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "sound_at_picture": {
+          "description": "tool-measured: which cuts and caption appearances a loudness peak, rise or drop falls on, within tolerance_s (one frame interval plus 10 ms), and how many would by chance; times only, not what the sound is; null without an audio track (absent in files written before it)",
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "tolerance_s",
+                "peaks_and_rises",
+                "cuts",
+                "captions"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "tolerance_s": {
+                  "type": "number"
+                },
+                "peaks_and_rises": {
+                  "type": "integer"
+                },
+                "cuts": {
+                  "type": "object",
+                  "required": [
+                    "summary",
+                    "by_chance",
+                    "changes"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "summary": {
+                      "type": "string"
+                    },
+                    "by_chance": {
+                      "type": "number",
+                      "description": "how many of these would land on a peak or rise at random"
+                    },
+                    "changes": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "kind",
+                          "span",
+                          "on",
+                          "nearest"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "kind": {
+                            "enum": [
+                              "cut",
+                              "caption"
+                            ]
+                          },
+                          "span": {
+                            "type": "array",
+                            "items": {
+                              "type": "number"
+                            },
+                            "minItems": 2,
+                            "maxItems": 2
+                          },
+                          "on": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "required": [
+                                "type",
+                                "t",
+                                "dt",
+                                "db"
+                              ],
+                              "additionalProperties": false,
+                              "properties": {
+                                "type": {
+                                  "enum": [
+                                    "peak",
+                                    "cliff_rise",
+                                    "cliff_drop"
+                                  ]
+                                },
+                                "t": {
+                                  "type": "number",
+                                  "description": "the event's onset, refined to 10 ms"
+                                },
+                                "dt": {
+                                  "type": "number",
+                                  "description": "onset minus the change's first frame, in seconds"
+                                },
+                                "db": {
+                                  "type": "number"
+                                }
+                              }
+                            }
+                          },
+                          "nearest": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "required": [
+                                  "type",
+                                  "t",
+                                  "dt",
+                                  "db"
+                                ],
+                                "additionalProperties": false,
+                                "properties": {
+                                  "type": {
+                                    "enum": [
+                                      "peak",
+                                      "cliff_rise",
+                                      "cliff_drop"
+                                    ]
+                                  },
+                                  "t": {
+                                    "type": "number",
+                                    "description": "the event's onset, refined to 10 ms"
+                                  },
+                                  "dt": {
+                                    "type": "number",
+                                    "description": "onset minus the change's first frame, in seconds"
+                                  },
+                                  "db": {
+                                    "type": "number"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "captions": {
+                  "type": "object",
+                  "required": [
+                    "summary",
+                    "by_chance",
+                    "changes"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "summary": {
+                      "type": "string"
+                    },
+                    "by_chance": {
+                      "type": "number",
+                      "description": "how many of these would land on a peak or rise at random"
+                    },
+                    "changes": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "kind",
+                          "span",
+                          "on",
+                          "nearest"
+                        ],
+                        "additionalProperties": false,
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "kind": {
+                            "enum": [
+                              "cut",
+                              "caption"
+                            ]
+                          },
+                          "span": {
+                            "type": "array",
+                            "items": {
+                              "type": "number"
+                            },
+                            "minItems": 2,
+                            "maxItems": 2
+                          },
+                          "on": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "required": [
+                                "type",
+                                "t",
+                                "dt",
+                                "db"
+                              ],
+                              "additionalProperties": false,
+                              "properties": {
+                                "type": {
+                                  "enum": [
+                                    "peak",
+                                    "cliff_rise",
+                                    "cliff_drop"
+                                  ]
+                                },
+                                "t": {
+                                  "type": "number",
+                                  "description": "the event's onset, refined to 10 ms"
+                                },
+                                "dt": {
+                                  "type": "number",
+                                  "description": "onset minus the change's first frame, in seconds"
+                                },
+                                "db": {
+                                  "type": "number"
+                                }
+                              }
+                            }
+                          },
+                          "nearest": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "required": [
+                                  "type",
+                                  "t",
+                                  "dt",
+                                  "db"
+                                ],
+                                "additionalProperties": false,
+                                "properties": {
+                                  "type": {
+                                    "enum": [
+                                      "peak",
+                                      "cliff_rise",
+                                      "cliff_drop"
+                                    ]
+                                  },
+                                  "t": {
+                                    "type": "number",
+                                    "description": "the event's onset, refined to 10 ms"
+                                  },
+                                  "dt": {
+                                    "type": "number",
+                                    "description": "onset minus the change's first frame, in seconds"
+                                  },
+                                  "db": {
+                                    "type": "number"
+                                  }
+                                }
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "dropped_as_music": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "words",
+              "text",
+              "why"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "words": {},
+              "text": {
+                "type": "string"
+              },
+              "why": {}
+            }
+          }
+        },
+        "cannot_judge_locally": {},
+        "tool_gaps": {
+          "description": "the agent's record of what the tool lacked for this analysis"
+        },
+        "own_means": {
+          "type": "array",
+          "description": "facts the agent established by means the tool does not provide, each with what it used (absent in files written before riffsheet 0.2.0)",
+          "items": {
+            "type": "object",
+            "required": [
+              "fact",
+              "used"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "fact": {
+                "type": "string"
+              },
+              "used": {
+                "type": "string"
+              },
+              "time_range": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          }
+        },
+        "followups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "cmd": {},
+              "json": {},
+              "window": {},
+              "box": {},
+              "frames": {}
+            }
+          }
+        },
+        "images_viewed": {},
+        "checks": {
+          "anyOf": [
+            {
+              "const": "all passed"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "confirmations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "where",
+              "words",
+              "view",
+              "t",
+              "box"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "where": {
+                "type": "string"
+              },
+              "words": {
+                "type": "string"
+              },
+              "view": {
+                "type": "string"
+              },
+              "t": {
+                "type": "number"
+              },
+              "box": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 4,
+                    "maxItems": 4
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

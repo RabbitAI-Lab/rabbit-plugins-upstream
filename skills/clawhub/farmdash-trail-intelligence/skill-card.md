@@ -1,47 +1,60 @@
-## Description: <br>
-Read-only DeFi farming research skill for OpenClaw agents that ranks Trail Heat, simulates farming outcomes with yield decay, audits sybil risk, and streams protocol events. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read-only DeFi intelligence for opportunity research, portfolio diagnostics, allocation analysis, route previews, Trail Heat, and Sybil review. Never executes.
 
-## Publisher: <br>
-[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic)
 
-## Use Case: <br>
-External users and developers use this skill to research DeFi farming opportunities, compare protocols, estimate point outcomes, review wallet and protocol risk indicators, and receive read-only guidance before making their own execution decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Public wallet addresses, route parameters, and an optional FarmDash API key may be sent to FarmDash. <br>
-Mitigation: Use the skill only when that data sharing is acceptable, keep private keys and seed phrases out of the workflow, and provide FARMDASH_API_KEY only for higher-rate features. <br>
-Risk: DeFi rankings, simulations, and protocol suggestions may be mistaken for financial advice. <br>
-Mitigation: Treat outputs as research, verify protocols and fees independently, and require the user to make any execution decision outside this read-only skill. <br>
-Risk: FarmDash go links may involve referral or routing compensation. <br>
-Mitigation: Disclose the compensation relationship when presenting a route and include the fee reference so users can compare independently. <br>
+## Use Case:
 
+DeFi researchers and wallet owners use the skill to compare protocols and airdrop programs, review public-wallet balances and Sybil signals, estimate points or allocation scenarios, and preview capital routes. It provides research guidance and does not execute transactions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-trail-intelligence) <br>
-- [Publisher profile](https://clawhub.ai/user/parmasanandgarlic) <br>
-- [FarmDash Agent Hub](https://www.farmdash.one/agents) <br>
-- [FarmDash OpenAPI schema](https://www.farmdash.one/agents/openapi.yaml) <br>
-- [FarmDash MCP configuration](https://www.farmdash.one/.well-known/mcp.json) <br>
-- [FarmDash fee structure](https://www.farmdash.one/fees) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Configuration] <br>
-**Output Format:** [Markdown text with tables, risk warnings, route disclosures, and optional setup snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only DeFi research output; Scout tier can be keyless, while optional FARMDASH_API_KEY enables higher-rate Pioneer features.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.16 (source: ClawHub release evidence) <br>
+Risk: The security evidence flags an onboarding request that conflicts with the read-only description and transmits an agent wallet address externally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the request and destination before sharing data; use only a public wallet address when needed and never provide private keys or seed phrases.
+
+Risk: The security review was incomplete: one of two components was fully inspected and tool-misuse analysis was degraded.
+
+Mitigation: Treat the clean verdict as medium-confidence and review the skill before deployment.
+
+## Reference(s):
+
+- [FarmDash Trail Intelligence skill page](https://www.farmdash.one/agents/skills/farmdash-trail-intelligence)
+- [FarmDash agent hub](https://www.farmdash.one/agents)
+- [Trail Heat methodology](https://www.farmdash.one/guides/trail-heat-methodology)
+- [Trail Heat data confidence guide](https://www.farmdash.one/guides/agent-data-confidence-trail-heat)
+- [FarmDash documentation](https://www.farmdash.one/docs)
+- [MCP discovery configuration](https://www.farmdash.one/.well-known/mcp.json)
+- [FarmDash OpenAPI specification](https://www.farmdash.one/agents/openapi.yaml)
+- [FarmDash fee structure](https://www.farmdash.one/fees)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown, JSON]
+
+**Output Format:** [Research summaries, rankings, diagnostics, and scenario results in text, Markdown, or structured JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only research guidance; estimates and risk indicators do not authorize transactions.]
+
+## Skill Version(s):
+
+1.0.24 (source: server-resolved release metadata; supplied artifact frontmatter reports 3.1.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,10 +1,19 @@
 ---
 name: qsr-shift-reflection
-version: 2.0.1
+version: 2.0.5
 description: Cross-shift continuity and unresolved issue tracking system for restaurant and franchise operators. Captures wins, bottlenecks, and handoffs at end of shift, then actively tracks unresolved urgent items across shifts until they are confirmed closed.
+license: MIT-0
 ---
+## Observa Edge Basic Beta
+
+Observa Edge Basic Beta is a separate, optional OpenClaw plugin from McPherson AI for local guardrails on covered tool routes. Installing this restaurant skill leaves Guard inactive. Accountless Shadow previews covered requests locally. Guard enrollment is restricted and requires approval and a separate local owner activation.
+
+[**Explore Observa Edge Basic Beta →**](https://mcphersonai.com/observa/edge-basic?utm_source=clawhub&utm_medium=skill&utm_campaign=observa-edge-basic-beta&utm_content=qsr-shift-reflection)
+
+*Publisher notice. The QSR skill’s behavior and data handling are unchanged.*
+
 # QSR Shift Reflection
-**v2.0.1 · McPherson AI · San Diego, CA**
+**v2.0.5 · McPherson AI · San Diego, CA**
 
 You are a cross-shift continuity system for a restaurant or franchise location. You do four jobs:
 
@@ -400,11 +409,7 @@ v2 is most valuable here. Open issues carry forward across personnel changes. Ne
 
 ## LICENSE
 
-**Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**
-
-Free to use, share, and adapt for personal and business operations. Operating this skill within your own business is not commercial redistribution. Repackaging, reselling, or including this skill in a paid product or service offered to others requires written permission from McPherson AI.
-
-Full license: https://creativecommons.org/licenses/by-nc/4.0/
+McPherson AI distributes this ClawHub edition under MIT-0. The GitHub source edition is available under Apache License 2.0. See [LICENSE](LICENSE). Third-party materials remain subject to their applicable terms.
 
 ---
 
@@ -418,6 +423,9 @@ Built by a franchise GM who has watched critical operational issues vanish at sh
 
 ## Changelog
 
+- **v2.0.4** - Publisher-notice refresh: Observa CTA updated to the current Getting Started flow. No functional changes.
+- **v2.0.3** - Publisher-note release. Updated the note: the Observa private beta is now open for selected n8n and OpenClaw operators. No operational behavior or license changes.
+- **v2.0.2** — Publisher-note release. Added the McPherson Governance V6 shadow-beta notice. No operational behavior or license changes.
 - **v2.0.1** — Documentation and governance patch. No functional changes to the four core functions or data schemas. Added top-of-file `STORAGE, SCOPE & DATA HANDLING` section declaring qsr-store-memory-engine as the sole persistence path, store-scoped namespace boundaries, sibling-skill read-only access policy, PII handling policy, in-chat-only urgent delivery, retention via the memory engine, and host-platform responsibility for encryption/auth/audit. Added two on-demand commands to Function 4: `Export reflections [date range]` and `Export issues [date range]`. Clarified that Function 3 and Function 4 are operator-triggered, not scheduled. Reinforced read-only sibling access in `CONNECTING TO OTHER SKILLS`. Added PII reminder to `TONE AND BEHAVIOR`.
 - **v2.0.0** — Major release. Skill now functions as a cross-shift continuity layer rather than a reflection recorder. New open issue list with explicit status states (PENDING, ACKNOWLEDGED, IN_PROGRESS, PARTIALLY_RESOLVED, RESOLVED, STALE, DROPPED). Issues carry forward across shifts until explicitly closed. Four functions are now formally separated: Reflection Capture, Urgent Handoff Creation, Next-Shift Follow-Up, Unresolved Issue Tracking. New on-demand commands for open issue board, reassignment, rescheduling, and manual close. Weekly digest expanded with open/closed counts, average time-to-close, and stale issue list. Added repeat-open and ownership-gap pattern tracking. Integrates with QSR Store Memory Engine.
 - **v1.1.0** — Added automatic urgent handoff surfacing at next relevant shift check-in. New `URGENT_ACK` field.

@@ -1,0 +1,15 @@
+# ============================================================
+# 周易大师开放平台 Skill 配置（公开市场·内置共享 Key 版本）
+# 面向公开市场分发：包内置默认共享 Key，下载即用；如需独立额度可自备 key 覆盖。
+# 配置优先级：显式参数 > 对应 ZHOUYI_* 环境变量 > 本文件 > 默认值。
+# 脚本按自身位置读取包内配置，不依赖当前工作目录；可用 --config 指定文件。
+# ============================================================
+account:
+  username: ""                    # 可选：填你自己的账户名
+api_key: "sk-zhouyi-cQnryvaJAaNS8JA9TNtWgUK67F6pykaV"              # 默认共享 Key（下载即用）；可被环境变量 ZHOUYI_API_KEY 或显式参数覆盖
+endpoint:
+  base_url: https://api.iching.jiuchongju.com         # 服务根地址；兼容 /api/ 或 /api/open 尾缀
+  mcp_url: https://api.iching.jiuchongju.com/mcp      # MCP 服务端点（独立 MCP Server 使用）
+brand:
+  name: 周易大师
+  home: https://iching.jiuchongju.com

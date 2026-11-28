@@ -1,0 +1,29 @@
+{
+  "options": [
+    "Solo workspace",
+    "Team workspace"
+  ],
+  "rows": [
+    {
+      "dimension": "Focus",
+      "values": [
+        "Personal projects",
+        "Shared delivery"
+      ]
+    },
+    {
+      "dimension": "Setup",
+      "values": [
+        "Start immediately",
+        "Configure roles"
+      ]
+    },
+    {
+      "dimension": "Review",
+      "values": [
+        "Self review",
+        "Shared checkpoints"
+      ]
+    }
+  ]
+}

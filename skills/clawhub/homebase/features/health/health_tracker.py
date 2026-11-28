@@ -5,26 +5,34 @@ health_tracker.py — Sick-Kid Medication & Symptom Tracker
 Tracks as-needed medication doses, fever readings, and symptoms for each child.
 All data stored in household/:
   health_config.json — kid profiles (name, weight) — updatable via WhatsApp
-  health_log.json    — append-only chronological event log per child
+  health_log.json    — chronological event log per child. Append-only, with
+                       one exception: log_medication(correct_assumed=True)
+                       replaces the newest assumed-amount dose in place.
+
+Privacy: this is children's health data, kept only in local files at mode 600.
+Nothing here sends it anywhere; whatever a tool returns enters the calling
+agent's model context.
 
 No external dependencies beyond the Python standard library.
 
 Medications supported:
   - Tylenol / acetaminophen: 10–15 mg/kg, every 4h min, max 5 doses/24h
-      Children's: 160 mg / 5 mL  (32 mg/mL)
-      Infants':    80 mg / 0.8 mL (100 mg/mL) ← more concentrated, separate variant
+      Children's and Infants': 160 mg / 5 mL (32 mg/mL). The 80 mg / 0.8 mL
+      (100 mg/mL) infant drops were withdrawn in the US in 2011.
   - Ibuprofen / Motrin / Advil: 5–10 mg/kg, every 6h min, max 4 doses/24h
-      Children's: 100 mg / 5 mL  (20 mg/mL)
+      Children's: 100 mg / 5 mL   (20 mg/mL)
+      Infants':    50 mg / 1.25 mL (40 mg/mL)
 
 Units: parents give doses in mL; internals store mg. Both always shown in output.
 """
 from __future__ import annotations
 
 import json
+import math
 import os
 import re
 
-from utils import write_json_atomic
+from utils import write_json_atomic, locked_file
 from collections import defaultdict
 from datetime import datetime, timedelta
 from typing import Optional
@@ -59,6 +67,9 @@ def _now() -> datetime:
 # "default" points to the variant to use when the parent's phrasing is ambiguous.
 # mg_per_ml is the authoritative conversion factor for that variant.
 
+# A dose with no stated amount repeats the last one only within this window.
+ASSUME_DOSE_WITHIN_DAYS = 7
+
 MEDICATIONS: dict = {
     "acetaminophen": {
         "canonical":       "Tylenol",
@@ -73,9 +84,12 @@ MEDICATIONS: dict = {
                 "label":     "Children's Tylenol (160mg/5mL)",
                 "short":     "Children's",
             },
+            # The same strength as Children's since 2011, when the US
+            # withdrew the 80 mg/0.8 mL drops. It stays a separate entry so the
+            # reply names the bottle the parent said they used.
             "infants": {
-                "mg_per_ml": 100.0,          # 80 mg / 0.8 mL
-                "label":     "Infants' Tylenol (80mg/0.8mL)",
+                "mg_per_ml": 32.0,           # 160 mg / 5 mL
+                "label":     "Infants' Tylenol (160mg/5mL)",
                 "short":     "Infants'",
             },
             "default": "children",
@@ -98,6 +112,13 @@ MEDICATIONS: dict = {
                 "mg_per_ml": 20.0,           # 100 mg / 5 mL
                 "label":     "Children's Ibuprofen (100mg/5mL)",
                 "short":     "Children's",
+            },
+            # Twice Children's strength. "infant motrin" used to fall through to
+            # the 20 mg/mL default and log every dose at half its real size.
+            "infants": {
+                "mg_per_ml": 40.0,           # 50 mg / 1.25 mL
+                "label":     "Infants' Ibuprofen (50mg/1.25mL)",
+                "short":     "Infants'",
             },
             "default": "children",
         },
@@ -127,13 +148,13 @@ def _normalize_med(name: str) -> Optional[str]:
 def _get_concentration(med_key: str, medication_name: str) -> dict:
     """
     Return the concentration dict for a medication given the parent's phrasing.
-    Detects 'infant' / 'infants' in the name to select the more-concentrated
-    Infants' Tylenol variant; everything else uses the default (Children's).
+    'infant' / 'infants' in the name selects the Infants' variant; everything
+    else uses the default (Children's).
     """
     med   = MEDICATIONS[med_key]
     concs = med.get("concentrations", {})
     nl    = medication_name.lower()
-    if med_key == "acetaminophen" and re.search(r"\binfant", nl):
+    if "infants" in concs and re.search(r"\binfant", nl):
         return concs["infants"]
     return concs.get(concs["default"], {})
 
@@ -173,38 +194,70 @@ def _fmt_ml(ml: float) -> str:
 
 # ─── Config I/O ────────────────────────────────────────────────────────────────
 
-def _load_cfg() -> dict:
-    """Load children from the unified config.json or health_config.json fallback."""
-    # Preferred: Load children from config.json
+def _read_health_cfg() -> dict:
+    """Raw health_config.json — the weights only. Returns {} if absent/corrupt."""
+    if not os.path.exists(HEALTH_CFG_PATH):
+        return {}
     try:
-        from core.config_loader import config
-        children = {}
-        for kid in getattr(config, "family", {}).get("kids", []):
-            key = kid["name"].lower()
-            # Try to get weight from health_config.json if it exists, otherwise default
-            weight = 0.0
-            if os.path.exists(HEALTH_CFG_PATH):
-                with open(HEALTH_CFG_PATH) as f:
-                    old_cfg = json.load(f)
-                    weight = old_cfg.get("children", {}).get(key, {}).get("weight_kg", 0.0)
-            
-            children[key] = {"name": kid["name"], "weight_kg": weight}
-        if children:
-            return {"children": children}
-    except Exception:
-        pass
-
-    # Fallback: Load from health_config.json
-    if os.path.exists(HEALTH_CFG_PATH):
         with open(HEALTH_CFG_PATH) as f:
             return json.load(f)
-    
-    return {"children": {}}
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
+def _load_cfg() -> dict:
+    """Children from config.json, with weights from health_config.json.
+
+    config.json owns *who the children are* (principle 5); health_config.json
+    owns only their weights, because those change and are updated from chat via
+    update_child_weight.
+
+    This used to read `getattr(config, "family", {}).get("kids", [])`. `Config`
+    has no `family` attribute — it exposes `kids` — so the getattr returned {},
+    the loop never ran, and every call silently fell through to the
+    health_config.json fallback inside a bare `except: pass`. Invisible while
+    that file happened to list both kids; a third kid added to config.json
+    would have come back "❓ Unknown child" from every dosing tool.
+    """
+    health_cfg = _read_health_cfg()
+    weights    = health_cfg.get("children", {})
+
+    children = {}
+    try:
+        from core.config_loader import config
+        kids = config.kids
+    except Exception:
+        kids = []
+
+    for kid in kids:
+        key = kid.name.lower()
+        children[key] = {
+            "name":      kid.name,
+            "weight_kg": weights.get(key, {}).get("weight_kg", 0.0),
+        }
+
+    if children:
+        return {"children": children}
+
+    # No configured kids (a bare test fixture, or a half-set-up install):
+    # health_config.json is all there is.
+    return health_cfg if health_cfg else {"children": {}}
 
 
 def _save_cfg(cfg: dict) -> None:
-    """Save weights specifically to health_config.json (config.json is for static rules)."""
-    write_json_atomic(HEALTH_CFG_PATH, cfg)
+    """Merge weights into health_config.json without clobbering the rest.
+
+    _load_cfg returns a SYNTHESIZED view — children from config.json, weights
+    from this file — so writing that view back wholesale would delete every
+    other per-child field, every other top-level key, and any child not listed
+    in config.json. Harmless while the file happens to hold nothing else;
+    silent data loss the moment it does.
+    """
+    raw = _read_health_cfg()
+    children = raw.setdefault("children", {})
+    for key, entry in (cfg.get("children") or {}).items():
+        children.setdefault(key, {}).update(entry)
+    write_json_atomic(HEALTH_CFG_PATH, raw)
 
 
 def _tracked_names() -> str:
@@ -250,12 +303,22 @@ def _save_log(log: dict) -> None:
     write_json_atomic(HEALTH_LOG_PATH, log)
 
 
-def _append_event(child_key: str, event: dict) -> None:
-    log = _load_log()
-    if child_key not in log:
-        log[child_key] = []
-    log[child_key].append(event)
-    _save_log(log)
+def _append_event(child_key: str, event: dict,
+                  replacing: Optional[dict] = None) -> None:
+    # Locked across reload → mutate → save. write_json_atomic prevents a
+    # *corrupt* file; it does nothing about a *lost update*, and two doses
+    # logged from two chats seconds apart is exactly that race. A dropped dose
+    # is a missing entry in the interval check that gates the next one.
+    with locked_file(HEALTH_LOG_PATH):
+        log = _load_log()
+        if child_key not in log:
+            log[child_key] = []
+        if replacing is not None:
+            events = log[child_key]
+            events[events.index(replacing)] = event
+        else:
+            log[child_key].append(event)
+        _save_log(log)
 
 
 def _child_events(child_key: str) -> list:
@@ -264,11 +327,19 @@ def _child_events(child_key: str) -> list:
 
 # ─── Timestamp Helpers ─────────────────────────────────────────────────────────
 
-def _parse_ts(ts_str: Optional[str]) -> datetime:
+def _parse_ts(ts_str: Optional[str], past: bool = False) -> datetime:
     """
     Parse a loose timestamp string to a timezone-aware datetime.
     Accepts: None (→ now), ISO strings, "10:00 AM", "10am", "10:00", etc.
-    Time-only strings are anchored to today's date.
+    Time-only strings are anchored to today's date — or, with past=True, to
+    the most recent such time. A dose, reading or symptom has already
+    happened: "11:45 PM" reported at 12:23 AM is last night, not 23 hours from
+    now, and a dose logged in the future gates nothing.
+
+    Raises ValueError on anything else. It used to return now instead, so
+    "2026-10-22T08:00:00-07:00" — plain datetime.isoformat() output — logged an
+    8 AM dose at whatever time the message arrived, and every interval check
+    after it was measured from the wrong dose.
     """
     if not ts_str:
         return _now()
@@ -277,16 +348,14 @@ def _parse_ts(ts_str: Optional[str]) -> datetime:
     now = _now()
     s   = ts_str.strip()
 
-    for fmt in (
-        "%Y-%m-%dT%H:%M:%S",
-        "%Y-%m-%dT%H:%M",
-        "%Y-%m-%d %H:%M:%S",
-        "%Y-%m-%d %H:%M",
-    ):
+    # A bare date is not a dose time; midnight would be a guess.
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", s):
         try:
-            return datetime.strptime(s, fmt).replace(tzinfo=tz)
+            dt = datetime.fromisoformat(s)
         except ValueError:
             pass
+        else:
+            return dt.astimezone(tz) if dt.tzinfo else dt.replace(tzinfo=tz)
 
     # "10:30 AM" / "10:30am" / "10:30"
     m = re.match(r"^(\d{1,2}):(\d{2})\s*(am|pm)?$", s, re.IGNORECASE)
@@ -297,7 +366,8 @@ def _parse_ts(ts_str: Optional[str]) -> datetime:
             h += 12
         elif ap == "am" and h == 12:
             h = 0
-        return now.replace(hour=h, minute=mn, second=0, microsecond=0)
+        dt = now.replace(hour=h, minute=mn, second=0, microsecond=0)
+        return dt - timedelta(days=1) if past and dt > now else dt
 
     # "10am" / "10pm" / bare "10"
     m = re.match(r"^(\d{1,2})\s*(am|pm)?$", s, re.IGNORECASE)
@@ -308,9 +378,10 @@ def _parse_ts(ts_str: Optional[str]) -> datetime:
             h += 12
         elif ap == "am" and h == 12:
             h = 0
-        return now.replace(hour=h, minute=0, second=0, microsecond=0)
+        dt = now.replace(hour=h, minute=0, second=0, microsecond=0)
+        return dt - timedelta(days=1) if past and dt > now else dt
 
-    return now  # fallback
+    raise ValueError(f"unrecognised time: {ts_str!r}")
 
 
 def _fmt_time(dt: datetime) -> str:
@@ -325,10 +396,12 @@ def _fmt_dt_short(dt: datetime) -> str:
 
 # ─── Medication Lookup Helpers ─────────────────────────────────────────────────
 
-def _last_dose_dt(child_key: str, med_key: str) -> Optional[datetime]:
+def _last_dose_dt(child_key: str, med_key: str,
+                  before: Optional[datetime] = None) -> Optional[datetime]:
     """Return the most recent dose datetime for a medication (by timestamp,
     not log order — a backdated entry logged after a live one must not be
-    mistaken for the newer dose), or None."""
+    mistaken for the newer dose), or None. With `before`, only doses strictly
+    earlier than it count."""
     tz = _tz()
     latest = None
     for ev in _child_events(child_key):
@@ -336,17 +409,23 @@ def _last_dose_dt(child_key: str, med_key: str) -> Optional[datetime]:
             dt = datetime.fromisoformat(ev["timestamp"])
             if dt.tzinfo is None:
                 dt = dt.replace(tzinfo=tz)
+            if before is not None and dt >= before:
+                continue
             if latest is None or dt > latest:
                 latest = dt
     return latest
 
 
-def _doses_in_24h(child_key: str, med_key: str) -> int:
-    """Count doses of a medication logged in the past 24 hours."""
+def _doses_in_24h(child_key: str, med_key: str,
+                  excluding: Optional[dict] = None) -> int:
+    """Count doses of a medication logged in the past 24 hours. `excluding` is
+    an entry about to be replaced, so a correction isn't counted as a new dose."""
     tz     = _tz()
     cutoff = _now() - timedelta(hours=24)
     count  = 0
     for ev in _child_events(child_key):
+        if ev == excluding:
+            continue
         if ev.get("type") == "medication" and ev.get("medication") == med_key:
             dt = datetime.fromisoformat(ev["timestamp"])
             if dt.tzinfo is None:
@@ -354,6 +433,38 @@ def _doses_in_24h(child_key: str, med_key: str) -> int:
             if dt >= cutoff:
                 count += 1
     return count
+
+
+def _dose_to_assume(child_key: str, med_key: str, conc: Optional[dict],
+                    ts: datetime) -> Optional[tuple]:
+    """
+    The (event, datetime) a dose with no stated amount may repeat: the newest
+    earlier dose of this medicine, if it is recent and from the same strength.
+    A last dose from months ago says nothing about a child who has grown since,
+    and the same mL of Infants' ibuprofen is twice the medicine of Children's.
+    """
+    tz     = _tz()
+    newest = None
+    for ev in _child_events(child_key):
+        if ev.get("type") == "medication" and ev.get("medication") == med_key:
+            dt = datetime.fromisoformat(ev["timestamp"])
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=tz)
+            if dt < ts and (newest is None or dt > newest[1]):
+                newest = (ev, dt)
+    if newest is None or ts - newest[1] > timedelta(days=ASSUME_DOSE_WITHIN_DAYS):
+        return None
+    if newest[0].get("conc_label") != (conc.get("label") if conc else None):
+        return None
+    return newest
+
+
+def _newest_assumed_dose(child_key: str, med_key: str) -> Optional[dict]:
+    """The latest dose of this medicine whose amount nobody stated, if any."""
+    assumed = [ev for ev in _child_events(child_key)
+               if ev.get("medication") == med_key and ev.get("dose_assumed")]
+    return max(assumed, key=lambda ev: datetime.fromisoformat(ev["timestamp"]),
+               default=None)
 
 
 def _high_fever_readings_24h(child_key: str) -> list:
@@ -381,14 +492,21 @@ def log_medication(
     dose_mg: Optional[float] = None,
     dose_ml: Optional[float] = None,
     timestamp: Optional[str] = None,
+    correct_assumed: bool = False,
 ) -> str:
     """
     Log a medication dose for a child.
 
     Accepts dose in mg OR mL — converts automatically using standard concentrations:
-      - Children's Tylenol:   160 mg / 5 mL (32 mg/mL)
-      - Infants' Tylenol:      80 mg / 0.8 mL (100 mg/mL)
-      - Children's Ibuprofen: 100 mg / 5 mL (20 mg/mL)
+      - Children's / Infants' Tylenol: 160 mg / 5 mL (32 mg/mL)
+      - Children's Ibuprofen:          100 mg / 5 mL (20 mg/mL)
+      - Infants' Ibuprofen:            50 mg / 1.25 mL (40 mg/mL)
+    Given both, mg and mL must agree or nothing is logged.
+
+    With no amount, repeats a recent dose's and marks the entry `dose_assumed`,
+    or asks if there is none to repeat. `correct_assumed` replaces the newest
+    assumed entry with the amount given, keeping its time: logging the right
+    amount as a new entry would count as a second dose.
 
     All safety checks are done in mg. All output shows BOTH units.
     Dose is ALWAYS logged — warnings are advisory only.
@@ -417,21 +535,37 @@ def log_medication(
     weight_kg  = child_data.get("weight_kg") or 0.0
     med        = MEDICATIONS[med_key]
     conc       = _get_concentration(med_key, medication)
-    ts         = _parse_ts(timestamp)
+    try:
+        ts     = _parse_ts(timestamp, past=True)
+    except ValueError:
+        return f"❓ Couldn't read the time *{timestamp}* — try \"8:30am\" or leave it out for now."
     now        = _now()
     warnings   = []
 
-    # ── No dose at all: ask for amount ────────────────────────────────────────
+    # ── Correcting an assumed amount: same dose, same time, new amount ─────────
+    corrected: Optional[dict] = None
+    if correct_assumed:
+        if dose_mg is None and dose_ml is None:
+            return f"❓ What was the right amount of {med['canonical']} for {child_name}? Nothing changed."
+        corrected = _newest_assumed_dose(child_key, med_key)
+        if corrected is None:
+            return f"❓ {child_name} has no assumed {med['canonical']} dose to correct. Nothing changed."
+        ts = datetime.fromisoformat(corrected["timestamp"])
+
+    # ── No dose at all: repeat a recent one out loud, or ask ──────────────────
+    assumed_from: Optional[datetime] = None
     if dose_mg is None and dose_ml is None:
-        conc_label = conc.get("label", med["canonical"])
-        example_ml = 5.0
-        example_mg = _ml_to_mg(example_ml, conc) if conc else None
-        ex_str = (f"{_fmt_ml(example_ml)}" +
-                  (f" or {example_mg:.0f}mg" if example_mg else ""))
-        return (
-            f"How much {med['canonical']} did you give {child_name}? "
-            f"(e.g. {ex_str} — using {conc_label})"
-        )
+        repeat = _dose_to_assume(child_key, med_key, conc, ts)
+        if repeat is None:
+            # No example amount: "(e.g. 5mL)" gave the model a number to answer
+            # its own question with, and it logged that as the dose (2026-11-02).
+            return (
+                f"⏸️ Not logged. How much {med['canonical']} did {child_name} get? "
+                f"Ask the parent, in mL or mg. Do not fill this in yourself."
+            )
+        prior, assumed_from = repeat
+        dose_ml = prior.get("dose_ml")
+        dose_mg = None if dose_ml is not None else prior.get("dose_mg")
 
     # ── Unit conversion ────────────────────────────────────────────────────────
     # Track which unit the parent originally used so we can format output correctly.
@@ -439,7 +573,21 @@ def log_medication(
     # ml_primary=False → parent said mg → display "160mg (5mL)"
     ml_primary = dose_ml is not None
 
-    if dose_ml is not None and dose_mg is None:
+    for amount in (dose_mg, dose_ml):
+        if amount is not None and not (math.isfinite(amount) and amount > 0):
+            return f"❓ *{amount}* isn't a dose amount. How much did you give?"
+
+    if dose_ml is not None and dose_mg is not None:
+        # Both given: they must agree, or the log records one number and the
+        # range check judges the other. "50mL (160mg)" went in unchallenged.
+        implied_mg = _ml_to_mg(dose_ml, conc) if conc else None
+        if implied_mg is None or abs(implied_mg - dose_mg) > 0.1 * dose_mg:
+            got = f" ({_fmt_ml(dose_ml)} of {conc['label']} is {implied_mg:.0f}mg)" if conc else ""
+            return (
+                f"❓ {_fmt_ml(dose_ml)} and {dose_mg:.0f}mg don't match{got}. "
+                f"Which did you give {child_name}?"
+            )
+    elif dose_ml is not None:
         # Parent gave mL → convert to mg for all safety maths
         if not conc:
             return (
@@ -453,7 +601,9 @@ def log_medication(
             dose_ml = _mg_to_ml(dose_mg, conc)
 
     # ── Early-dose check (advisory) ────────────────────────────────────────────
-    last = _last_dose_dt(child_key, med_key)
+    # Against the dose before THIS one. A backdated entry compared against a
+    # later dose already on the log reported a negative "only -3h ago".
+    last = _last_dose_dt(child_key, med_key, before=ts)
     if last:
         safe_at = last + timedelta(hours=med["interval_hours"])
         if ts < safe_at:
@@ -464,6 +614,18 @@ def log_medication(
             warnings.append(
                 f"⚠️ Last {med['canonical']} was only {elapsed_str} ago — "
                 f"safe window opens at *{_fmt_time(safe_at)}*"
+            )
+
+    # ── Max-doses-per-24h check (advisory) ───────────────────────────────────────
+    max_doses_24h = med.get("max_doses_24h")
+    at_daily_max  = False
+    if max_doses_24h:
+        doses_24h = _doses_in_24h(child_key, med_key, excluding=corrected)
+        at_daily_max = doses_24h + 1 >= max_doses_24h
+        if doses_24h >= max_doses_24h:
+            warnings.append(
+                f"⚠️ This will be dose #{doses_24h + 1} of {med['canonical']} in "
+                f"the past 24h — max recommended is {max_doses_24h}/24h."
             )
 
     # ── Dosage range note (in both units) ──────────────────────────────────────
@@ -527,17 +689,25 @@ def log_medication(
         "dose_mg":    dose_mg,
         "dose_ml":    dose_ml,
         "conc_label": conc.get("label") if conc else None,
-    })
+        **({"dose_assumed": True} if assumed_from else {}),
+    }, replacing=corrected)
 
     # ── Next window for this medication ────────────────────────────────────────
-    next_this     = ts + timedelta(hours=med["interval_hours"])
+    # From the newest dose on the log, not the one just entered: a missed 8 AM
+    # dose added after an 11 AM one announced "next at 12 PM".
+    next_this     = _last_dose_dt(child_key, med_key) + timedelta(hours=med["interval_hours"])
     next_this_str = _fmt_time(next_this)
 
     # ── Alternate medication availability ──────────────────────────────────────
     alt_key  = med["alternate"]
     alt_med  = MEDICATIONS[alt_key]
     alt_last = _last_dose_dt(child_key, alt_key)
-    if alt_last:
+    alt_max  = alt_med.get("max_doses_24h")
+    if alt_max and _doses_in_24h(child_key, alt_key) >= alt_max:
+        alt_line = (
+            f"{alt_med['canonical']} has already had {alt_max} doses in the past 24h."
+        )
+    elif alt_last:
         alt_next = alt_last + timedelta(hours=alt_med["interval_hours"])
         if now >= alt_next:
             alt_line = f"{alt_med['canonical']} available *now* if needed."
@@ -575,9 +745,18 @@ def log_medication(
         lines.append("")
 
     lines.append(
-        f"✅ Logged {child_name}: {med['canonical']} {dose_display} at {_fmt_time(ts)}"
+        f"✅ {'Corrected' if corrected else 'Logged'} {child_name}: "
+        f"{med['canonical']} {dose_display} at {_fmt_time(ts)}"
     )
-    lines.append(f"⏰ Next {med['canonical']} earliest at *{next_this_str}*.")
+    if assumed_from:
+        lines.append(
+            f"📝 Amount assumed, same as {assumed_from.strftime('%b %-d, %-I:%M %p')}. "
+            f"Reply with the right amount if it was different."
+        )
+    # No "next at" once this dose fills the 24h allowance: the interval alone
+    # would announce a window the daily limit has closed.
+    if not at_daily_max:
+        lines.append(f"⏰ Next {med['canonical']} earliest at *{next_this_str}*.")
     lines.append(alt_line)
 
     if dose_note:
@@ -586,7 +765,7 @@ def log_medication(
     if conc_note:
         lines.append(conc_note)
 
-    if not warnings:
+    if not warnings and not at_daily_max and not corrected:
         lines.append(f"\nWant a reminder at {next_this_str}? Reply *yes* to set it.")
 
     return "\n".join(lines)
@@ -616,7 +795,10 @@ def log_fever(
 
     cfg        = _load_cfg()
     child_name = cfg["children"][child_key]["name"]
-    ts         = _parse_ts(timestamp)
+    try:
+        ts     = _parse_ts(timestamp, past=True)
+    except ValueError:
+        return f"❓ Couldn't read the time *{timestamp}* — try \"8:30am\" or leave it out for now."
 
     # Log first so high-fever count includes this reading
     _append_event(child_key, {
@@ -673,7 +855,10 @@ def log_symptom(
 
     cfg        = _load_cfg()
     child_name = cfg["children"][child_key]["name"]
-    ts         = _parse_ts(timestamp)
+    try:
+        ts     = _parse_ts(timestamp, past=True)
+    except ValueError:
+        return f"❓ Couldn't read the time *{timestamp}* — try \"8:30am\" or leave it out for now."
 
     _append_event(child_key, {
         "timestamp": ts.isoformat(),
@@ -786,7 +971,8 @@ def get_health_summary(child: str, days: int = 3) -> str:
                     ds = f" {d_mg:.0f}mg"
                 else:
                     ds = ""
-                lines.append(f"  {t} — {name}{ds} given")
+                assumed = " (amount assumed)" if ev.get("dose_assumed") else ""
+                lines.append(f"  {t} — {name}{ds} given{assumed}")
                 med_counts[name] = med_counts.get(name, 0) + 1
 
             elif et == "symptom":
@@ -806,7 +992,36 @@ def get_health_summary(child: str, days: int = 3) -> str:
             f"({fdt.strftime('%b %-d, %-I:%M %p')})"
         )
 
+    timing = _dose_timing_lines(child_key)
+    if timing:
+        lines.extend(["", "*Dose timing now:*", *timing])
+
     return "\n".join(lines)
+
+
+def _dose_timing_lines(child_key: str) -> list:
+    """
+    Where each medicine given in the past 24h stands right now, so a parent who
+    asks without logging a dose gets the tracker's numbers, not the model's
+    arithmetic ("earliest 5:45 PM" for a window that opened at 5:45 AM).
+
+    A medicine not given in 24h is left out: listing it reads as a prompt to
+    give it.
+    """
+    now   = _now()
+    lines = []
+    for med_key, med in MEDICATIONS.items():
+        doses = _doses_in_24h(child_key, med_key)
+        if not doses:
+            continue
+        line = f"  {med['canonical']}: {doses} of {med['max_doses_24h']} in the past 24h."
+        if doses >= med["max_doses_24h"]:
+            line += " At the maximum."
+        else:
+            next_at = _last_dose_dt(child_key, med_key) + timedelta(hours=med["interval_hours"])
+            line += f" Earliest next: {'now' if now >= next_at else _fmt_time(next_at)}."
+        lines.append(line)
+    return lines
 
 
 # ─── Tool: schedule_medication_reminder ───────────────────────────────────────
@@ -820,10 +1035,9 @@ def schedule_medication_reminder(
     Return a structured reminder payload as JSON for the OpenClaw agent to schedule.
 
     Python does NOT call `at`, does NOT run shell commands, and does NOT send
-    WhatsApp messages. The agent reads this output and creates an OpenClaw cron
-    job (via `openclaw cron add ...`) which, when it fires, has the agent post
-    the message to the family group via `openclaw message send` itself. Same
-    architecture as every other delivery in this skill (see CLAUDE.md rule #7).
+    WhatsApp messages. The agent turns `suggested_message` into an OpenClaw
+    cron job whose announce delivery posts it (workspace AGENTS.md, "Scheduled
+    work"). Python returns data; something else delivers (CLAUDE.md rule #2).
     """
     child_key = _resolve_child(child)
     if not child_key:
@@ -836,7 +1050,10 @@ def schedule_medication_reminder(
     cfg        = _load_cfg()
     child_name = cfg["children"][child_key]["name"]
     med_name   = MEDICATIONS[med_key]["canonical"]
-    ts         = _parse_ts(remind_at)
+    try:
+        ts     = _parse_ts(remind_at)
+    except ValueError:
+        return f"❓ Couldn't read the time *{remind_at}* — try \"8:30am\" or leave it out for now."
     at_time    = _fmt_time(ts)
 
     return json.dumps({
@@ -846,7 +1063,10 @@ def schedule_medication_reminder(
         "remind_at_human":  at_time,
         "remind_at_iso":    ts.isoformat(),
         "suggested_message": (
-            f"⏰ {child_name}'s {med_name} window is open — "
-            f"safe to give next dose now."
+            # Written when the reminder is SET, read when it fires. A dose
+            # given in between makes any "safe now" false, so it asks for
+            # the check instead of vouching for it.
+            f"⏰ {child_name}'s {med_name} reminder — check when the last "
+            f"dose was before giving another."
         ),
     })

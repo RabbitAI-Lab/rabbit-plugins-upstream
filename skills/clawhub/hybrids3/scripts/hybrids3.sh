@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Thin curl wrapper for the hybrids3 plain HTTP API — put / get / list / delete
+# Thin curl wrapper for the hybrids3 plain HTTP API: put / get / list / delete
 # objects and list buckets against a running instance. S3-SDK and MCP callers
 # don't need this; it exists so shell users don't hand-write Bearer headers.
 #
 # Usage:
 #   hybrids3.sh put     <bucket> <key> <local-file> [content-type]
 #   hybrids3.sh get     <bucket> <key> [out-file]        # object bytes → stdout if out-file omitted
-#   hybrids3.sh info    <bucket> <key>                   # HEAD — metadata headers only
+#   hybrids3.sh info    <bucket> <key>                   # HEAD: metadata headers only
 #   hybrids3.sh list    <bucket> [prefix] [max-keys]
 #   hybrids3.sh delete  <bucket> <key>
 #   hybrids3.sh buckets                                  # list buckets (master key → all)
@@ -16,7 +16,7 @@
 # Environment:
 #   HYBRIDS3_URL   Base URL of the instance (default: http://localhost:8080).
 #                  Include any reverse-proxy path prefix, e.g. http://host/storage.
-#   HYBRIDS3_KEY   Bearer token — a bucket's private key, or the master key.
+#   HYBRIDS3_KEY   Bearer token: a bucket's private key, or the master key.
 #                  Required for writes, private-bucket reads, presign, and the
 #                  buckets command. Public-bucket reads work without it.
 #   LOG_FILE       Where diagnostic (stderr) log lines are tee'd (default: /tmp/hybrids3.log).
@@ -127,8 +127,20 @@ cmd_get() {
 cmd_info() {
 	[[ $# -ge 2 ]] || die "info needs: <bucket> <key>"
 	log INFO "info bucket=$1 key=$2"
-	# HEAD → headers are the payload the user wants; emit to stdout.
-	curl -sI "${auth_args[@]}" "$HYBRIDS3_URL/$1/$2"
+	# HEAD → headers are the payload the user wants; emit to stdout on 2xx.
+	local headers code
+	headers="$(mktemp)"
+	# shellcheck disable=SC2064  # expand $headers now so the trap removes THIS temp file
+	trap "rm -f '$headers'" RETURN
+	code="$(curl -sI -o "$headers" -w '%{http_code}' "${auth_args[@]}" \
+		"$HYBRIDS3_URL/$1/$2")" || code=000
+	if [[ "$code" =~ ^2[0-9][0-9]$ ]]; then
+		cat "$headers"
+		return 0
+	fi
+	log ERROR "request failed http=$code"
+	cat "$headers" >&2 || true # intentional: the headers are diagnostics, the exit code carries the failure
+	return "$EXIT_HTTP_FAIL"
 }
 
 cmd_list() {
