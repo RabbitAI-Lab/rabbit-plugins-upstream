@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/vercel-labs/agent-desktop/agent-desktop-linux",
+  "repo": "vercel-labs/agent-desktop",
+  "skillId": "agent-desktop-linux",
+  "branch": "main",
+  "pushedAt": "2026-11-28T00:52:09Z",
+  "contentHash": "6a39e56309a5b9b02d01bed3ececdc5514aac4e7838e7d4c996a5326694550b1",
+  "fetchedAt": "2026-11-28T16:16:34.228Z"
+}

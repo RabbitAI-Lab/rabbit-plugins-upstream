@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/vercel-labs/agent-desktop/agent-desktop-windows",
+  "repo": "vercel-labs/agent-desktop",
+  "skillId": "agent-desktop-windows",
+  "branch": "main",
+  "pushedAt": "2026-11-28T00:52:09Z",
+  "contentHash": "392ea13896677d68436662000411d82d529573d9adc7e13ed63069a3ce97b2d6",
+  "fetchedAt": "2026-11-28T16:16:34.205Z"
+}

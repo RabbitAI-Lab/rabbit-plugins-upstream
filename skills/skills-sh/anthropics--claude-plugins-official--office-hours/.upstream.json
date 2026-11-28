@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/office-hours",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "office-hours",
+  "branch": "main",
+  "pushedAt": "2026-11-28T07:28:52Z",
+  "contentHash": "09ec3b9848a5653e56c278406ad79bd7b25f52c2cf410de643bd740b574eb35c",
+  "fetchedAt": "2026-11-28T16:16:08.381Z"
+}

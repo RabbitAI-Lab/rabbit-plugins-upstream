@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-workload-identity",
+  "repo": "google/skills",
+  "skillId": "gke-workload-identity",
+  "branch": "main",
+  "pushedAt": "2026-11-27T22:22:41Z",
+  "contentHash": "627320b35afae0d590c614cbcc5c460c7e1199b595762a27cfe526ef99bd8a4a",
+  "fetchedAt": "2026-11-28T16:16:07.418Z"
+}

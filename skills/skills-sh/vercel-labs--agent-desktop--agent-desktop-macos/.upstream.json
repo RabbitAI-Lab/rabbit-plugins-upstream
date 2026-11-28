@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/vercel-labs/agent-desktop/agent-desktop-macos",
+  "repo": "vercel-labs/agent-desktop",
+  "skillId": "agent-desktop-macos",
+  "branch": "main",
+  "pushedAt": "2026-11-28T00:52:09Z",
+  "contentHash": "2453cd478104c6ebc8172313fb4f6fafeff89443864365f67a35ff08d56d5eed",
+  "fetchedAt": "2026-11-28T16:16:34.216Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/compute-vm-creation",
+  "repo": "google/skills",
+  "skillId": "compute-vm-creation",
+  "branch": "main",
+  "pushedAt": "2026-11-27T22:22:41Z",
+  "contentHash": "1df82c48d27856915fcaf664b4577df6ef9c174744376626c76d2475513149d9",
+  "fetchedAt": "2026-11-28T16:16:07.921Z"
+}

@@ -1,0 +1,465 @@
+# Troubleshooting - Huawei Cloud OBS Object Storage Management
+
+## Table of Contents
+
+- [hcloud CLI Issues](#hcloud-cli-issues)
+- [obsutil Upload Issues](#obsutil-upload-issues)
+- [CES Monitoring Data Issues](#ces-monitoring-data-issues)
+- [Scheduled Upload Issues](#scheduled-upload-issues)
+- [Bucket Capacity Query Issues](#bucket-capacity-query-issues)
+
+---
+
+## hcloud CLI Issues
+
+### 1. hcloud OBS module has no ListAllMyBucketsType command
+
+**Problem:**
+Running `hcloud OBS ListAllMyBucketsType` returns `Error: No such command: "ListAllMyBucketsType"`.
+
+**Root cause:**
+hcloud CLI (v7.2.2 tested) OBS module **does not include** the `ListAllMyBucketsType` command. The hcloud OBS module only provides a limited set of bucket management operations; listing buckets requires the obsutil mode.
+
+**Solution:**
+```bash
+# List all buckets
+hcloud obs ls
+
+# Filter buckets in a specific region
+hcloud obs ls 2>&1 | grep "cn-south-1"
+
+# Extract bucket name list
+hcloud obs ls 2>&1 | awk '/obs:\/\// && /cn-south-1/ {print $1}' | sed 's|obs://||'
+```
+
+### 2. hcloud OBS module has no GetBucketStorageInfo command
+
+**Problem:**
+Running `hcloud OBS GetBucketStorageInfo` returns command not found.
+
+**Root cause:**
+The hcloud CLI OBS module may not include all OBS API operations; `GetBucketStorageInfo` is a bucket extension API not supported by some hcloud versions.
+
+**Solution:**
+
+**Method 1: Use CES capacity metric (recommended for batch queries)**
+```bash
+hcloud CES ShowMetricData \
+  --region=cn-south-1 \
+  --namespace=SYS.OBS \
+  --metric_name=capacity_total \
+  --dim.0=bucket_name,<BucketName> \
+  --period=86400 \
+  --filter=average \
+  --from=<TodayMidnightTimestampMs> \
+  --to=<CurrentTimestampMs>
+```
+The returned `datapoints[-1].average` is the bucket capacity (Bytes).
+
+**Method 2: Use obsutil as alternative**
+```bash
+# Use obsutil to list objects and get statistics
+obsutil ls obs://<BucketName> -limit=0 -s
+```
+
+**Method 3: Use OBS REST API directly**
+```bash
+# Call OBS REST API via curl to get bucket storage info
+# GET /?storageInfo
+curl -X GET "https://<BucketName>.obs.<RegionId>.myhuaweicloud.com/?storageInfo" \
+  -H "Date: $(date -u '+%a, %d %b %Y %H:%M:%S GMT')" \
+  -H "Authorization: OBS <Signature>"
+```
+
+**Method 4: Use OBS SDK**
+```python
+from obs import ObsClient
+
+obs_client = ObsClient(...)
+resp = obs_client.getBucketStorageInfo(bucketName)
+print(f"Size: {resp.body.size}, Objects: {resp.body.objectNumber}")
+```
+
+### 2. hcloud CES ShowMetricData parameter format issue
+
+**Problem:**
+CES ShowMetricData dimensions parameter format is incorrect.
+
+**Correct format:**
+```bash
+--dim.0=bucket_name,my-bucket
+```
+
+**Common errors:**
+```bash
+# ❌ Incorrect: dimensions index starts from 1
+--dim.1=bucket_name,my-bucket
+
+# ❌ Incorrect: dimension name is incorrect
+--dim.0=bucket,my-bucket
+
+# ❌ Incorrect: missing index
+--dim=bucket_name,my-bucket
+```
+
+> **hcloud CES parameter index starts from 0**, not from 1. Format is `--dim.N=key,value`.
+
+### 3. hcloud credential configuration issues
+
+| Error message | Cause | Solution |
+|--------------|-------|----------|
+| `No valid credential` | AK/SK not configured | Run `hcloud configure` |
+| `Access denied` | AK/SK invalid or expired | Reconfigure credentials |
+| `Invalid region` | Region ID incorrect | Use the correct region ID |
+| `Please set ak, sk and endpoint` | obsutil credentials not configured | Run `hcloud obs config -i=<AK> -k=<SK> -e=obs.<region>.myhuaweicloud.com` |
+| `InvalidAccessKeyId` | obsutil configured AK/SK is invalid | Re-run `hcloud obs config` with correct credentials |
+
+> **⚠️ obsutil credential check process**
+>
+> Before any OBS operation, verify that obsutil credentials are available:
+> ```bash
+> hcloud obs ls -limit=1
+> ```
+> If the response is `Please set ak, sk and endpoint in the configuration file!` or `InvalidAccessKeyId`,
+> inform the user of the following example command and have them configure it in their terminal:
+>
+> ```
+> obsutil credentials are not configured. Please run the following command in your terminal to configure (AK/SK can be obtained from the Huawei Cloud console "My Credentials" page):
+>
+>   hcloud obs config -i=<YourAK> -k=<YourSK> -e=obs.<Region>.myhuaweicloud.com
+>
+> Example (Guangzhou region):
+>   hcloud obs config -i=<YourAK> -k=<YourSK> -e=obs.cn-south-1.myhuaweicloud.com
+>
+> Common Endpoints:
+>   cn-north-4  → obs.cn-north-4.myhuaweicloud.com
+>   cn-east-3   → obs.cn-east-3.myhuaweicloud.com
+>   cn-south-1  → obs.cn-south-1.myhuaweicloud.com
+>   cn-southwest-2 → obs.cn-southwest-2.myhuaweicloud.com
+>
+> Retry after configuration is complete.
+> ```
+
+---
+
+## obsutil Upload Issues
+
+### 1. Upload timeout or slow speed
+
+**Problem:**
+Upload of large files or many files times out or is very slow.
+
+**Solution:**
+
+```bash
+# Directory uploads: increase batch concurrency (one task per file)
+obsutil cp <LocalDirPath> obs://<BucketName>/<Prefix> -r -p=10
+
+# Decrease concurrency (for unstable networks)
+obsutil cp <LocalPath> obs://<BucketName>/<Prefix> -r -p=3
+
+# Large single file: force multipart and keep a checkpoint
+obsutil cp <LocalFilePath> obs://<BucketName>/<ObjectKey> -flat \
+  -threshold=9MB -ps=9MB -p=5 -cpd="$HOME/.obsutil_checkpoint" -f
+```
+
+> **`-threshold` must be smaller than the file size.** If it is larger, obsutil uses direct
+> upload, creates no checkpoint, and cannot resume. See
+> [large-file-upload.md](large-file-upload.md) for the full parameter matrix.
+
+### 2. Resume after upload interruption
+
+**Problem:**
+Network interruption or abnormal program exit during upload.
+
+**Solution:**
+
+Multipart resume is enabled by default **only when multipart is actually used** (the file is
+larger than `-threshold`). There is no `-resume` switch, and `-fr` only generates a result
+manifest — it does **not** enable resume. If the failed run printed a `Task id:`, retry it with
+`obsutil cp -recover=<TaskId>`.
+
+```bash
+# Start a multipart upload (threshold must be below the file size)
+obsutil cp <LocalFilePath> obs://<BucketName>/<ObjectKey> -flat \
+  -threshold=9MB -ps=9MB -p=5 -cpd="$HOME/.obsutil_checkpoint" -f
+
+# After a failure/interruption, check the checkpoint (read-only)
+ls -lh "$HOME/.obsutil_checkpoint/upload/"
+
+# Rerun the exact same command; completed parts are reused
+obsutil cp <LocalFilePath> obs://<BucketName>/<ObjectKey> -flat \
+  -threshold=9MB -ps=9MB -p=5 -cpd="$HOME/.obsutil_checkpoint" -f
+```
+
+> Keep the source path, target URL, `-threshold`/`-ps`, and `-cpd` unchanged. A successful task
+> deletes its checkpoint automatically.
+
+### 3. Upload reports "access denied"
+
+**Problem:**
+Upload returns 403 Access Denied.
+
+**Root cause investigation:**
+
+1. **obsutil credentials not configured or invalid**
+   ```bash
+   # Check if obsutil credentials are configured: run ls command; if error, not configured
+   hcloud obs ls -limit=1
+   ```
+   
+   If not configured, inform the user to run in their terminal:
+   ```
+   hcloud obs config -i=<YourAK> -k=<YourSK> -e=obs.<Region>.myhuaweicloud.com
+   ```
+   Example (Guangzhou region):
+   ```bash
+   hcloud obs config -i=<YourAK> -k=<YourSK> -e=obs.cn-south-1.myhuaweicloud.com
+   ```
+   > AK/SK can be obtained from the Huawei Cloud console "My Credentials" page. Do not ask the user to provide AK/SK directly in the conversation.
+
+2. **Insufficient IAM permissions**
+   - Check if IAM policy includes `obs:object:PutObject` permission
+
+3. **Bucket policy restriction**
+   - Check if bucket policy restricts upload operations
+   - View via OBS console → Bucket → Access Control → Bucket Policy
+
+4. **Bucket ACL restriction**
+   - Check if bucket ACL allows the current account to upload
+
+### 4. Upload reports "bucket not exist"
+
+**Problem:**
+Upload returns 404 Bucket Not Found.
+
+**Root cause:**
+- Bucket name typo (OBS bucket names are globally unique; must match exactly)
+- Bucket region does not match the Endpoint configured in obsutil
+
+**Solution:**
+```bash
+# List buckets first to confirm bucket name and region
+obsutil ls -limit=100
+
+# Confirm Endpoint configuration is correct
+obsutil config -help
+```
+
+### 5. Large file (200MB+) upload keeps timing out
+
+**Problem:**
+A 200MB-or-larger file repeatedly reports `timeout`, `i/o timeout`, `connection reset`, or
+`dial tcp ... i/o timeout`; retrying the same whole-file command does not help.
+
+**Diagnostic order:**
+
+1. **Check whether multipart is actually enabled.**
+   `-threshold` is the switch between direct upload and multipart upload. If the file is smaller
+   than or equal to `-threshold`, obsutil uses direct upload, which **creates no checkpoint and
+   cannot resume**. For a 200MB file, set `-threshold=9MB`, not `-threshold=500MB`.
+2. **Check whether a checkpoint is produced.** After an interruption:
+   ```bash
+   ls -lh "$HOME/.obsutil_checkpoint/upload/"
+   ```
+   No checkpoint file means the task ran in direct-upload mode. Rerun with a smaller
+   `-threshold`.
+3. **Confirm the timeout is tuned in the config file, not with `-t`.**
+   `-t` is the security token for temporary AK/SK, not a timeout. Set `socketTimeout` (default
+   310s) in `~/.obsutilconfig`:
+   ```ini
+   connectTimeout=60
+   socketTimeout=600
+   maxRetryCount=5
+   ```
+4. **Reduce part concurrency and size on an unstable link.**
+   ```bash
+   obsutil cp <LocalFilePath> obs://<BucketName>/<ObjectKey> -flat \
+     -threshold=9MB -ps=9MB -p=2 -cpd="$HOME/.obsutil_checkpoint" -f
+   ```
+   Increase `-p` again (for example, to `5` to `8`) only after the link is stable.
+5. **Check bandwidth.** A 200MB file on a 1Mbps link needs about 27 minutes before overhead. If the
+   host's egress is that slow, upload from a host with better bandwidth or schedule the upload off
+   peak hours.
+6. **Check Region/Endpoint matching.** Run `obsutil ls` and confirm the bucket's `Location` matches
+   the endpoint in `~/.obsutilconfig`. `NoSuchBucket` is often an endpoint/region mismatch, not a
+   missing bucket.
+7. **Check AK/SK permission.** `AccessDenied` means the IAM user or bucket policy lacks
+   `obs:object:PutObject` (multipart `UploadPart`/`CompleteMultipartUpload` are covered by the same
+   action).
+8. **Run the same command again.** Multipart resume is automatic; the rerun uploads only the
+   remaining parts.
+
+### 6. Multipart failure / OBS error code quick reference
+
+| Error code / output | Likely cause | Fix |
+|---------------------|--------------|-----|
+| `NoSuchBucket` / `Bucket ... does not exist` | Wrong bucket name or Region/Endpoint mismatch | Correct the bucket name; align the endpoint with the bucket region |
+| `AccessDenied` / `403 Forbidden` | Missing `obs:object:PutObject`, bucket policy, or ACL restriction | Grant the object write permission and check the bucket policy/ACL |
+| `InvalidAccessKeyId` / `SignatureDoesNotMatch` | Invalid AK/SK, missing security token for temporary credentials, or endpoint mismatch | Reconfigure credentials; pass the security token with `-t` (not a timeout) |
+| `RequestTimeTooSkewed` | Local clock skew | Sync the system clock (NTP) and retry |
+| `SlowDown` / HTTP 503 | Server-side throttling | Lower `-p`, wait, then retry |
+| `RequestTimeout` / `i/o timeout` | Network timeout or small `socketTimeout` | Raise `socketTimeout`, lower `-p`, check firewall/proxy |
+| `Connection reset by peer` | Network/middlebox interruption | Retry (resume is automatic), lower `-p`, check proxy/MTU |
+| `InvalidPart` / `InvalidPartOrder` / `NoSuchUpload` | Multipart state inconsistent, stale checkpoint, or source file changed | Rerun the same command; if `NoSuchUpload` persists, remove that task's checkpoint and upload again |
+| `EntityTooLarge` | A part exceeds 5GB | Lower `-ps` (keep it above `100KB`) |
+| `InvalidArgument` on `-threshold`/`-ps` | Invalid value or unit | Use values such as `9MB`; `-ps` must be within `100KB` to `5GB` |
+
+> Full parameter matrix and 200MB/1GB/10GB samples: [large-file-upload.md](large-file-upload.md).
+
+---
+
+## CES Monitoring Data Issues
+
+### 1. CES query returns empty data
+
+**Problem:**
+CES ShowMetricData returns an empty datapoints array.
+
+**Possible causes and solutions:**
+
+1. **Incorrect bucket name**
+   - Confirm `--dim.0=bucket_name,<BucketName>` uses the correct bucket name
+
+2. **No data in time range**
+   - Bucket has no corresponding operations in the time period (e.g., no capacity sampling)
+   - Try expanding the time range to verify
+
+3. **CES data collection delay**
+   - CES metric data typically has a 1-5 minute delay
+   - If querying data from the last few minutes, it may not have been collected yet
+
+4. **Incorrect namespace or metric name**
+   - Confirm namespace is `SYS.OBS` (not `OBS` or `SYS.OBJECT_STORAGE`)
+   - Confirm metric_name is correct (e.g., `capacity_total` for bucket capacity)
+
+5. **period parameter mismatch**
+   - Data granularity must match period
+   - OBS monitoring metrics default collection period is 5 minutes
+   - For long-term queries, set period to 86400 (1 day)
+
+### 2. CES ShowMetricData parameter format errors
+
+**Key parameter reference:**
+
+| Parameter | Correct Value | Common Error |
+|-----------|--------------|-------------|
+| `--namespace` | `SYS.OBS` | `OBS`, `SYS.OBJECT_STORAGE` |
+| `--metric_name` | `capacity_total` | `capacityTotal`, `capacity` |
+| `--dim.0` | `bucket_name,<BucketName>` | `bucket`, `bucketName` |
+| `--period` | `86400` | `86400000` (milliseconds instead of seconds) |
+| `--filter` | `average` (capacity) | `SUM`, `total` |
+| `--from`/`--to` | Millisecond timestamp (13 digits) | Second timestamp (10 digits) |
+
+### 3. CES ShowMetricData does not support --User-Agent parameter
+
+**Problem:**
+Running `hcloud CES ShowMetricData --User-Agent=xxx` returns error `[USE_ERROR]Invalid parameter:User-Agent`.
+
+**Root cause:**
+The CES module's ShowMetricData command **does not support** the `--User-Agent` parameter. This parameter is only available in some OBS module commands.
+
+**Solution:**
+CES query commands **must not append** the `--User-Agent` parameter.
+
+---
+
+## Scheduled Upload Issues
+
+### 1. Crontab scheduled task not executing
+
+**Problem:**
+Crontab is set but the upload script does not execute on schedule.
+
+**Troubleshooting steps:**
+
+1. **Check if crontab is set successfully**
+   ```bash
+   crontab -l
+   ```
+
+2. **Check if cron service is running**
+   ```bash
+   # Linux
+   systemctl status cron
+   # macOS
+   launchctl list | grep cron
+   ```
+
+3. **Check script execution permissions**
+   ```bash
+   ls -la $HOME/obs-scheduled-upload-<BucketName>.sh
+   chmod +x $HOME/obs-scheduled-upload-<BucketName>.sh
+   ```
+
+4. **Check PATH environment variable**
+   ```bash
+   # Crontab has minimal PATH; add to script
+   # Add at the top of the script:
+   export PATH=/usr/local/bin:/usr/bin:/bin:$PATH
+   ```
+
+5. **View upload log**
+   ```bash
+   tail -f $HOME/obs-scheduled-upload-<BucketName>.log
+   ```
+
+### 2. Crontab executes but upload fails
+
+**Problem:**
+Crontab log shows execution but obsutil upload errors.
+
+**Common causes:**
+- obsutil credential file inaccessible in crontab environment
+- Network issues
+- Insufficient disk space
+
+**Solution:**
+```bash
+# Use full path to obsutil in the upload script
+/usr/local/bin/obsutil cp <LocalDirPath> obs://<BucketName>/<Prefix> -r
+
+# Specify obsutil config file path
+obsutil cp <LocalDirPath> obs://<BucketName>/<Prefix> -r -config=/home/user/.obsutilconfig
+```
+
+### 3. Delete scheduled task (run only after the user confirms removal)
+
+```bash
+# Delete a specific OBS upload scheduled task (only after user confirmation)
+crontab -l | grep -v "obs-scheduled-upload-<BucketName>" | crontab -
+```
+
+> **⚠️ `crontab -r` clears ALL scheduled tasks and is never used by this skill.**
+
+---
+
+## Bucket Capacity Query Issues
+
+### 1. Archived bucket capacity display is incomplete
+
+**Problem:**
+GetBucketStorageInfo returns capacity and object count less than actual values.
+
+**Root cause:**
+Archived storage class objects need to be restored before they can be accessed; unrestored objects are not counted.
+
+**Solution:**
+- Archived objects must be restored (RestoreObject) before they can be counted
+- For accurate archived object statistics, use CES monitoring metrics `cold_storage_bytes` / `cold_object_count`
+
+### 2. GetBucketStorageInfo performance issues
+
+**Problem:**
+Querying capacity for buckets with large numbers of objects (millions+) takes a long time.
+
+**Solution:**
+- Use CES monitoring metrics `standard_storage_bytes` / `standard_object_count` as an alternative (slightly less real-time but better performance)
+- Set query timeout and retry
+
+---
+
+## Official Documentation
+
+- [obsutil Troubleshooting](https://support.huaweicloud.com/utiltg-obs/obs_11_0006.html)
+- [OBS Error Codes Reference](https://support.huaweicloud.com/api-obs/obs_04_0115.html)
