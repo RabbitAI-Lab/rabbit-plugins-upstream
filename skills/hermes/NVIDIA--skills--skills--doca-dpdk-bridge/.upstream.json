@@ -5,7 +5,7 @@
   "repo": "NVIDIA/skills",
   "path": "skills/doca-dpdk-bridge",
   "branch": "main",
-  "pushedAt": "2026-07-24T21:26:54Z",
-  "contentHash": "6d50a62c8705d88dd50b436c4c8527233d410acdef7d45e0b631bbaad99e506a",
-  "fetchedAt": "2026-07-26T17:03:52.275Z"
+  "pushedAt": "2026-11-27T20:09:18Z",
+  "contentHash": "e52ffd209b914a0e4e09ae63190555b2bf4c4505208247e941efa960df5937e2",
+  "fetchedAt": "2026-11-28T16:15:06.643Z"
 }

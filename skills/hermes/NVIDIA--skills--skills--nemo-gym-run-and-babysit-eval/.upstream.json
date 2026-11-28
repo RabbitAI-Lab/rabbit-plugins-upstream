@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-gym-run-and-babysit-eval",
+  "identifier": "NVIDIA/skills/skills/nemo-gym-run-and-babysit-eval",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-gym-run-and-babysit-eval",
+  "branch": "main",
+  "pushedAt": "2026-11-27T20:09:18Z",
+  "contentHash": "2eff5a704df3e9c324dadf0ce2775eb8340f64c7c2ff220d4cf446a1db2efe14",
+  "fetchedAt": "2026-11-28T16:15:06.902Z"
+}

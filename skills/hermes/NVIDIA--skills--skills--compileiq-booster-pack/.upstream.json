@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/compileiq-booster-pack",
+  "identifier": "NVIDIA/skills/skills/compileiq-booster-pack",
+  "repo": "NVIDIA/skills",
+  "path": "skills/compileiq-booster-pack",
+  "branch": "main",
+  "pushedAt": "2026-11-27T20:09:18Z",
+  "contentHash": "a13e9f3636aa9604f43bfbde0c66fa7df53ab08ab6b9654b1e3ac2925d007a46",
+  "fetchedAt": "2026-11-28T16:15:06.491Z"
+}

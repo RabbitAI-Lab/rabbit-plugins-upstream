@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvat-corim-attestation",
+  "identifier": "NVIDIA/skills/skills/nvat-corim-attestation",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvat-corim-attestation",
+  "branch": "main",
+  "pushedAt": "2026-11-27T20:09:18Z",
+  "contentHash": "0f2f85fdc36f207f5dd1ac889132fd7fb5e3a9155149aa665dbf5f167912cfa7",
+  "fetchedAt": "2026-11-28T16:15:07.007Z"
+}

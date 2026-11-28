@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nim-tune",
+  "identifier": "NVIDIA/skills/skills/nim-tune",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nim-tune",
+  "branch": "main",
+  "pushedAt": "2026-11-27T20:09:18Z",
+  "contentHash": "b9921fc59110ee74bccea19358dc60023ae0275c5849a835ea10c5055e2dcb7d",
+  "fetchedAt": "2026-11-28T16:15:06.965Z"
+}

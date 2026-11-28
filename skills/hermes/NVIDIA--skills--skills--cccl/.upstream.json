@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cccl",
+  "identifier": "NVIDIA/skills/skills/cccl",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cccl",
+  "branch": "main",
+  "pushedAt": "2026-11-27T20:09:18Z",
+  "contentHash": "16c0eacd93c6b1ba2bf5742106c43f24d0d9943b2dcf753005b27fa717514b9d",
+  "fetchedAt": "2026-11-28T16:15:06.471Z"
+}

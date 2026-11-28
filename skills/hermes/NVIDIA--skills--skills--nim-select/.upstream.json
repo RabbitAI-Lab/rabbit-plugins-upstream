@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nim-select",
+  "identifier": "NVIDIA/skills/skills/nim-select",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nim-select",
+  "branch": "main",
+  "pushedAt": "2026-11-27T20:09:18Z",
+  "contentHash": "5d11a8cd7b528b15243f78d2fd673fc0db832daafdec3b9b7031286f44c760e0",
+  "fetchedAt": "2026-11-28T16:15:06.958Z"
+}

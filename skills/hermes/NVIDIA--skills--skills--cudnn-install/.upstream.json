@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cudnn-install",
+  "identifier": "NVIDIA/skills/skills/cudnn-install",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cudnn-install",
+  "branch": "main",
+  "pushedAt": "2026-11-27T20:09:18Z",
+  "contentHash": "fbc81c345efa36bc3c9e836979a1a7337a445415dc5641b284cb6a5ef1309c9d",
+  "fetchedAt": "2026-11-28T16:15:06.508Z"
+}
