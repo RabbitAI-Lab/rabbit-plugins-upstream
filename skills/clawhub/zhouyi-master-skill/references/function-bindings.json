@@ -1,0 +1,2514 @@
+{
+  "schemaVersion" : "1.0.0",
+  "aliasDirection" : "requestFieldToInvocationField",
+  "parameterConvention" : "未列出的 MCP 字段保持后端字段名；CLI 同名小写字段用 --字段名；排盘完整请求体用 --json，F2 由对话收集",
+  "functions" : [ {
+    "functionCode" : "F1",
+    "endpoint" : "POST /api/open/geocode",
+    "cli" : {
+      "command" : "geocode",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_geocode",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "获取出生地经纬度",
+    "endpoints" : [ "POST /geocode" ],
+    "params" : [ {
+      "name" : "keyword",
+      "type" : "string",
+      "required" : false,
+      "description" : "自由文本关键词（城市/省份模糊检索，优先于 province）",
+      "example" : "北京"
+    }, {
+      "name" : "province",
+      "type" : "string",
+      "required" : false,
+      "description" : "省份名称，缺省返回省份列表",
+      "example" : "北京"
+    } ],
+    "parameterAliases" : {
+      "cli" : { },
+      "mcp" : { }
+    }
+  }, {
+    "functionCode" : "F2",
+    "endpoint" : null,
+    "cli" : {
+      "command" : null,
+      "selector" : { },
+      "mode" : "conversation"
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_profile_complete",
+      "selector" : { }
+    },
+    "local" : true,
+    "counted" : false,
+    "name" : "个人信息补全",
+    "endpoints" : [ ],
+    "params" : [ {
+      "name" : "name",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓名",
+      "example" : "张三"
+    }, {
+      "name" : "gender",
+      "type" : "enum",
+      "required" : true,
+      "description" : "性别：男/女",
+      "example" : "男"
+    }, {
+      "name" : "birthDate",
+      "type" : "string",
+      "required" : true,
+      "description" : "公历生日 yyyy-MM-dd",
+      "example" : "1990-05-15"
+    }, {
+      "name" : "birthTime",
+      "type" : "string",
+      "required" : true,
+      "description" : "出生时刻 HH:mm",
+      "example" : "08:30"
+    }, {
+      "name" : "longitude",
+      "type" : "number",
+      "required" : false,
+      "description" : "出生地经度（真太阳时校正用）",
+      "example" : "116.40"
+    }, {
+      "name" : "useTrueSolarTime",
+      "type" : "boolean",
+      "required" : false,
+      "description" : "真太阳时开关，默认 false",
+      "example" : "false"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "birthDate" : "--birth-date",
+        "birthTime" : "--birth-time",
+        "useTrueSolarTime" : "--true-solar-time",
+        "bloodType" : "--blood-type"
+      },
+      "mcp" : {
+        "birthDate" : "birth_date",
+        "birthTime" : "birth_time",
+        "useTrueSolarTime" : "use_true_solar_time",
+        "bloodType" : "blood_type"
+      }
+    }
+  }, {
+    "functionCode" : "F3",
+    "endpoint" : "POST /api/open/fortune/bazi",
+    "cli" : {
+      "command" : "bazi",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_bazi_fortune",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "八字测算",
+    "endpoints" : [ "POST /fortune/bazi" ],
+    "params" : [ {
+      "name" : "name",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓名",
+      "example" : "张三"
+    }, {
+      "name" : "gender",
+      "type" : "enum",
+      "required" : true,
+      "description" : "性别：男/女",
+      "example" : "男"
+    }, {
+      "name" : "birthDate",
+      "type" : "string",
+      "required" : true,
+      "description" : "公历生日 yyyy-MM-dd",
+      "example" : "1990-05-15"
+    }, {
+      "name" : "birthTime",
+      "type" : "string",
+      "required" : true,
+      "description" : "出生时刻 HH:mm",
+      "example" : "08:30"
+    }, {
+      "name" : "longitude",
+      "type" : "number",
+      "required" : false,
+      "description" : "出生地经度",
+      "example" : "116.40"
+    }, {
+      "name" : "useTrueSolarTime",
+      "type" : "boolean",
+      "required" : false,
+      "description" : "真太阳时开关，默认 false",
+      "example" : "false"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "birthDate" : "--birth-date",
+        "birthTime" : "--birth-time",
+        "useTrueSolarTime" : "--true-solar-time",
+        "bloodType" : "--blood-type"
+      },
+      "mcp" : {
+        "birthDate" : "birth_date",
+        "birthTime" : "birth_time",
+        "useTrueSolarTime" : "use_true_solar_time",
+        "bloodType" : "blood_type"
+      }
+    }
+  }, {
+    "functionCode" : "F4",
+    "endpoint" : "POST /api/open/select/birth-date",
+    "cli" : {
+      "command" : "select-birth-date",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_birth_date_selection",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "优生择吉",
+    "endpoints" : [ "POST /select/birth-date" ],
+    "params" : [ {
+      "name" : "startDate",
+      "type" : "string",
+      "required" : false,
+      "description" : "候选日期起 yyyy-MM-dd",
+      "example" : "2026-01-01"
+    }, {
+      "name" : "endDate",
+      "type" : "string",
+      "required" : false,
+      "description" : "候选日期止 yyyy-MM-dd",
+      "example" : "2026-12-31"
+    }, {
+      "name" : "page",
+      "type" : "int",
+      "required" : false,
+      "description" : "页码，默认 1",
+      "example" : "1"
+    }, {
+      "name" : "pageSize",
+      "type" : "int",
+      "required" : false,
+      "description" : "每页条数，默认 20",
+      "example" : "20"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "startDate" : "--start-date",
+        "endDate" : "--end-date",
+        "pageSize" : "--page-size"
+      },
+      "mcp" : {
+        "startDate" : "start_date",
+        "endDate" : "end_date",
+        "pageSize" : "page_size"
+      }
+    }
+  }, {
+    "functionCode" : "F5",
+    "endpoint" : "POST /api/open/name/test",
+    "cli" : {
+      "command" : "name-test",
+      "selector" : {
+        "--charset" : "simplified"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_name_test",
+      "selector" : {
+        "charset" : "simplified"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "姓名测试（简体笔画）",
+    "endpoints" : [ "POST /name/test (charset=simplified)" ],
+    "params" : [ {
+      "name" : "surname",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓",
+      "example" : "张"
+    }, {
+      "name" : "givenName",
+      "type" : "string",
+      "required" : true,
+      "description" : "名",
+      "example" : "三"
+    }, {
+      "name" : "charset",
+      "type" : "enum",
+      "required" : false,
+      "description" : "字库：simplified(默认)/kangxi",
+      "example" : "simplified"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "givenName" : "--given-name"
+      },
+      "mcp" : {
+        "givenName" : "given_name"
+      }
+    }
+  }, {
+    "functionCode" : "F6",
+    "endpoint" : "POST /api/open/name/test",
+    "cli" : {
+      "command" : "name-test",
+      "selector" : {
+        "--charset" : "kangxi"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_name_test",
+      "selector" : {
+        "charset" : "kangxi"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "姓名测试（康熙字典笔画）",
+    "endpoints" : [ "POST /name/test (charset=kangxi)" ],
+    "params" : [ {
+      "name" : "surname",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓",
+      "example" : "張"
+    }, {
+      "name" : "givenName",
+      "type" : "string",
+      "required" : true,
+      "description" : "名",
+      "example" : "三"
+    }, {
+      "name" : "charset",
+      "type" : "enum",
+      "required" : false,
+      "description" : "字库：simplified/kangxi",
+      "example" : "kangxi"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "givenName" : "--given-name"
+      },
+      "mcp" : {
+        "givenName" : "given_name"
+      }
+    }
+  }, {
+    "functionCode" : "F7",
+    "endpoint" : "POST /api/open/fortune/daystem",
+    "cli" : {
+      "command" : "daystem",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_daystem_fortune",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "日干论命",
+    "endpoints" : [ "POST /fortune/daystem" ],
+    "params" : [ {
+      "name" : "birthDate",
+      "type" : "string",
+      "required" : false,
+      "description" : "公历出生日期 yyyy-MM-dd",
+      "example" : "1990-05-15"
+    }, {
+      "name" : "ganZhi",
+      "type" : "string",
+      "required" : false,
+      "description" : "日干支（与 birthDate 二选一）",
+      "example" : "甲子"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "birthDate" : "--birth-date",
+        "ganZhi" : "--gan-zhi"
+      },
+      "mcp" : {
+        "birthDate" : "birth_date",
+        "ganZhi" : "gan_zhi"
+      }
+    }
+  }, {
+    "functionCode" : "F8",
+    "endpoint" : "POST /api/open/fortune/bone-weight",
+    "cli" : {
+      "command" : "bone-weight",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_bone_weight",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "称骨论命",
+    "endpoints" : [ "POST /fortune/bone-weight" ],
+    "params" : [ {
+      "name" : "year",
+      "type" : "int",
+      "required" : true,
+      "description" : "出生年（1900–2100）",
+      "example" : "1990"
+    }, {
+      "name" : "month",
+      "type" : "int",
+      "required" : true,
+      "description" : "出生月（1–12）",
+      "example" : "5"
+    }, {
+      "name" : "day",
+      "type" : "int",
+      "required" : true,
+      "description" : "出生日（1–31）",
+      "example" : "15"
+    }, {
+      "name" : "hour",
+      "type" : "int",
+      "required" : true,
+      "description" : "出生时（0–23）",
+      "example" : "8"
+    }, {
+      "name" : "isLunar",
+      "type" : "boolean",
+      "required" : false,
+      "description" : "是否农历，默认公历",
+      "example" : "false"
+    }, {
+      "name" : "gender",
+      "type" : "enum",
+      "required" : false,
+      "description" : "性别：男/女（可选）",
+      "example" : "男"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "isLunar" : "--lunar"
+      },
+      "mcp" : {
+        "isLunar" : "is_lunar"
+      }
+    }
+  }, {
+    "functionCode" : "F9",
+    "endpoint" : "POST /api/open/name/company",
+    "cli" : {
+      "command" : "company-name",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_company_name",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "企业起名",
+    "endpoints" : [ "POST /name/company" ],
+    "params" : [ {
+      "name" : "comPre",
+      "type" : "string",
+      "required" : false,
+      "description" : "地域前缀",
+      "example" : "北京"
+    }, {
+      "name" : "comName",
+      "type" : "string",
+      "required" : true,
+      "description" : "字号",
+      "example" : "九鼎"
+    }, {
+      "name" : "comSuf",
+      "type" : "string",
+      "required" : false,
+      "description" : "行业后缀",
+      "example" : "科技有限公司"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "comName" : "--com-name",
+        "comPre" : "--com-pre",
+        "comSuf" : "--com-suf"
+      },
+      "mcp" : {
+        "comName" : "com_name",
+        "comPre" : "com_pre",
+        "comSuf" : "com_suf"
+      }
+    }
+  }, {
+    "functionCode" : "F10",
+    "endpoint" : "POST /api/open/fortune/peach-blossom",
+    "cli" : {
+      "command" : "peach-blossom",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_peach_blossom",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "桃花运势",
+    "endpoints" : [ "POST /fortune/peach-blossom" ],
+    "params" : [ {
+      "name" : "name",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓名",
+      "example" : "张三"
+    }, {
+      "name" : "gender",
+      "type" : "enum",
+      "required" : true,
+      "description" : "性别：男/女",
+      "example" : "男"
+    }, {
+      "name" : "birthday",
+      "type" : "string",
+      "required" : true,
+      "description" : "公历生日 yyyy-MM-dd",
+      "example" : "1990-05-15"
+    }, {
+      "name" : "hour",
+      "type" : "int",
+      "required" : true,
+      "description" : "出生小时（0–23）",
+      "example" : "8"
+    } ],
+    "parameterAliases" : {
+      "cli" : { },
+      "mcp" : { }
+    }
+  }, {
+    "functionCode" : "F11",
+    "endpoint" : "POST /api/open/fortune/dayun",
+    "cli" : {
+      "command" : "dayun",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_dayun",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "计算大运",
+    "endpoints" : [ "POST /fortune/dayun" ],
+    "params" : [ {
+      "name" : "name",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓名",
+      "example" : "张三"
+    }, {
+      "name" : "gender",
+      "type" : "enum",
+      "required" : true,
+      "description" : "性别：男/女",
+      "example" : "男"
+    }, {
+      "name" : "birthDate",
+      "type" : "string",
+      "required" : true,
+      "description" : "公历生日 yyyy-MM-dd",
+      "example" : "1990-05-15"
+    }, {
+      "name" : "birthTime",
+      "type" : "string",
+      "required" : true,
+      "description" : "出生时刻 HH:mm",
+      "example" : "08:30"
+    }, {
+      "name" : "longitude",
+      "type" : "number",
+      "required" : false,
+      "description" : "出生地经度",
+      "example" : "116.40"
+    }, {
+      "name" : "useTrueSolarTime",
+      "type" : "boolean",
+      "required" : false,
+      "description" : "真太阳时开关，默认 false",
+      "example" : "false"
+    }, {
+      "name" : "withBazi",
+      "type" : "boolean",
+      "required" : false,
+      "description" : "是否附带八字基础信息，默认 false",
+      "example" : "true"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "birthDate" : "--birth-date",
+        "birthTime" : "--birth-time",
+        "useTrueSolarTime" : "--true-solar-time",
+        "withBazi" : "--with-bazi"
+      },
+      "mcp" : {
+        "birthDate" : "birth_date",
+        "birthTime" : "birth_time",
+        "useTrueSolarTime" : "use_true_solar_time",
+        "withBazi" : "with_bazi"
+      }
+    }
+  }, {
+    "functionCode" : "F12",
+    "endpoint" : "POST /api/open/fortune/liunian",
+    "cli" : {
+      "command" : "liunian",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_liunian",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "计算流年",
+    "endpoints" : [ "POST /fortune/liunian" ],
+    "params" : [ {
+      "name" : "name",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓名",
+      "example" : "张三"
+    }, {
+      "name" : "gender",
+      "type" : "enum",
+      "required" : true,
+      "description" : "性别：男/女",
+      "example" : "男"
+    }, {
+      "name" : "birthDate",
+      "type" : "string",
+      "required" : true,
+      "description" : "公历生日 yyyy-MM-dd",
+      "example" : "1990-05-15"
+    }, {
+      "name" : "birthTime",
+      "type" : "string",
+      "required" : true,
+      "description" : "出生时刻 HH:mm",
+      "example" : "08:30"
+    }, {
+      "name" : "dayunIndex",
+      "type" : "int",
+      "required" : true,
+      "description" : "大运序号（0–9）",
+      "example" : "0"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "birthDate" : "--birth-date",
+        "birthTime" : "--birth-time",
+        "useTrueSolarTime" : "--true-solar-time",
+        "dayunIndex" : "--dayun-index"
+      },
+      "mcp" : {
+        "birthDate" : "birth_date",
+        "birthTime" : "birth_time",
+        "useTrueSolarTime" : "use_true_solar_time",
+        "dayunIndex" : "dayun_index"
+      }
+    }
+  }, {
+    "functionCode" : "F13",
+    "endpoint" : "POST /api/open/fortune/liuyue",
+    "cli" : {
+      "command" : "liuyue",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_liuyue",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "计算流月",
+    "endpoints" : [ "POST /fortune/liuyue" ],
+    "params" : [ {
+      "name" : "name",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓名",
+      "example" : "张三"
+    }, {
+      "name" : "gender",
+      "type" : "enum",
+      "required" : true,
+      "description" : "性别：男/女",
+      "example" : "男"
+    }, {
+      "name" : "birthDate",
+      "type" : "string",
+      "required" : true,
+      "description" : "公历生日 yyyy-MM-dd",
+      "example" : "1990-05-15"
+    }, {
+      "name" : "birthTime",
+      "type" : "string",
+      "required" : true,
+      "description" : "出生时刻 HH:mm",
+      "example" : "08:30"
+    }, {
+      "name" : "dayunIndex",
+      "type" : "int",
+      "required" : true,
+      "description" : "大运序号（0–9）",
+      "example" : "0"
+    }, {
+      "name" : "targetYear",
+      "type" : "int",
+      "required" : true,
+      "description" : "目标年份",
+      "example" : "2026"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "birthDate" : "--birth-date",
+        "birthTime" : "--birth-time",
+        "useTrueSolarTime" : "--true-solar-time",
+        "dayunIndex" : "--dayun-index",
+        "targetYear" : "--target-year"
+      },
+      "mcp" : {
+        "birthDate" : "birth_date",
+        "birthTime" : "birth_time",
+        "useTrueSolarTime" : "use_true_solar_time",
+        "dayunIndex" : "dayun_index",
+        "targetYear" : "target_year"
+      }
+    }
+  }, {
+    "functionCode" : "F14",
+    "endpoint" : "POST /api/open/fortune/liuri",
+    "cli" : {
+      "command" : "liuri",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_liuri",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "计算流日",
+    "endpoints" : [ "POST /fortune/liuri" ],
+    "params" : [ {
+      "name" : "name",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓名",
+      "example" : "张三"
+    }, {
+      "name" : "gender",
+      "type" : "enum",
+      "required" : true,
+      "description" : "性别：男/女",
+      "example" : "男"
+    }, {
+      "name" : "birthDate",
+      "type" : "string",
+      "required" : true,
+      "description" : "公历生日 yyyy-MM-dd",
+      "example" : "1990-05-15"
+    }, {
+      "name" : "birthTime",
+      "type" : "string",
+      "required" : true,
+      "description" : "出生时刻 HH:mm",
+      "example" : "08:30"
+    }, {
+      "name" : "targetDate",
+      "type" : "string",
+      "required" : false,
+      "description" : "目标日期 yyyy-MM-dd（与 targetYearMonth 二选一）",
+      "example" : "2026-08-23"
+    }, {
+      "name" : "targetYearMonth",
+      "type" : "string",
+      "required" : false,
+      "description" : "目标年月 yyyy-MM（按月批量）",
+      "example" : "2026-08"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "birthDate" : "--birth-date",
+        "birthTime" : "--birth-time",
+        "useTrueSolarTime" : "--true-solar-time",
+        "targetDate" : "--target-date",
+        "targetYearMonth" : "--target-year-month"
+      },
+      "mcp" : {
+        "birthDate" : "birth_date",
+        "birthTime" : "birth_time",
+        "useTrueSolarTime" : "use_true_solar_time",
+        "targetDate" : "target_date",
+        "targetYearMonth" : "target_year_month"
+      }
+    }
+  }, {
+    "functionCode" : "F15",
+    "endpoint" : "POST /api/open/paipan/bazi",
+    "cli" : {
+      "command" : "paipan",
+      "selector" : {
+        "--type" : "bazi"
+      },
+      "bodyOption" : "--json"
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_paipan_bazi",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "四柱八字排盘",
+    "endpoints" : [ "POST /paipan/bazi" ],
+    "params" : [ {
+      "name" : "name",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓名",
+      "example" : "张三"
+    }, {
+      "name" : "gender",
+      "type" : "enum",
+      "required" : true,
+      "description" : "性别：男/女",
+      "example" : "男"
+    }, {
+      "name" : "birthDate",
+      "type" : "string",
+      "required" : true,
+      "description" : "公历生日 yyyy-MM-dd",
+      "example" : "1990-05-15"
+    }, {
+      "name" : "birthTime",
+      "type" : "string",
+      "required" : true,
+      "description" : "出生时刻 HH:mm",
+      "example" : "08:30"
+    }, {
+      "name" : "longitude",
+      "type" : "number",
+      "required" : false,
+      "description" : "出生地经度",
+      "example" : "116.40"
+    }, {
+      "name" : "useTrueSolarTime",
+      "type" : "boolean",
+      "required" : false,
+      "description" : "真太阳时开关，默认 false",
+      "example" : "true"
+    }, {
+      "name" : "city",
+      "type" : "string",
+      "required" : false,
+      "description" : "出生城市（展示用）",
+      "example" : "北京"
+    }, {
+      "name" : "fullChart",
+      "type" : "boolean",
+      "required" : false,
+      "description" : "完整排盘开关，默认 true",
+      "example" : "true"
+    }, {
+      "name" : "daYunCount",
+      "type" : "int",
+      "required" : false,
+      "description" : "大运步数，默认 10",
+      "example" : "10"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "birthDate" : "--birth-date",
+        "birthTime" : "--birth-time",
+        "fullChart" : "--full-chart",
+        "daYunCount" : "--da-yun-count"
+      },
+      "mcp" : {
+        "birthDate" : "birth_date",
+        "birthTime" : "birth_time",
+        "useTrueSolarTime" : "use_true_solar_time",
+        "fullChart" : "full_chart",
+        "daYunCount" : "da_yun_count"
+      }
+    }
+  }, {
+    "functionCode" : "F16",
+    "endpoint" : "POST /api/open/paipan/liuyao",
+    "cli" : {
+      "command" : "paipan",
+      "selector" : {
+        "--type" : "liuyao"
+      },
+      "bodyOption" : "--json"
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_paipan_liuyao",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "六爻排盘",
+    "endpoints" : [ "POST /paipan/liuyao" ],
+    "params" : [ {
+      "name" : "fangfa",
+      "type" : "enum",
+      "required" : false,
+      "description" : "起卦方式：1=电脑自动/2=手工指定/3=时间起卦(默认)/4=手动摇卦/5=报数起卦",
+      "example" : "3"
+    }, {
+      "name" : "y1..y6",
+      "type" : "int",
+      "required" : false,
+      "description" : "手工/手摇时的六个爻值（1=少阳 2=少阴 3=老阳 4=老阴）",
+      "example" : "1"
+    }, {
+      "name" : "reason",
+      "type" : "string",
+      "required" : false,
+      "description" : "占事",
+      "example" : "事业"
+    }, {
+      "name" : "whyArea",
+      "type" : "int",
+      "required" : false,
+      "description" : "占测范围（0–10）",
+      "example" : "1"
+    }, {
+      "name" : "username",
+      "type" : "string",
+      "required" : false,
+      "description" : "姓名（可选）",
+      "example" : "张三"
+    }, {
+      "name" : "birthYear",
+      "type" : "int",
+      "required" : false,
+      "description" : "出生年份（可选）",
+      "example" : "1990"
+    }, {
+      "name" : "sex",
+      "type" : "enum",
+      "required" : false,
+      "description" : "性别：男/女（可选）",
+      "example" : "男"
+    } ],
+    "parameterAliases" : {
+      "cli" : { },
+      "mcp" : {
+        "birthYear" : "birth_year",
+        "whyArea" : "why_area"
+      }
+    }
+  }, {
+    "functionCode" : "F17",
+    "endpoint" : "POST /api/open/paipan/liuren",
+    "cli" : {
+      "command" : "paipan",
+      "selector" : {
+        "--type" : "liuren"
+      },
+      "bodyOption" : "--json"
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_paipan_liuren",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "大六壬起课",
+    "endpoints" : [ "POST /paipan/liuren" ],
+    "params" : [ {
+      "name" : "year",
+      "type" : "int",
+      "required" : true,
+      "description" : "公历年",
+      "example" : "2026"
+    }, {
+      "name" : "month",
+      "type" : "int",
+      "required" : true,
+      "description" : "公历月",
+      "example" : "8"
+    }, {
+      "name" : "day",
+      "type" : "int",
+      "required" : true,
+      "description" : "公历日",
+      "example" : "23"
+    }, {
+      "name" : "hour",
+      "type" : "int",
+      "required" : true,
+      "description" : "公历时（24 小时制）",
+      "example" : "12"
+    }, {
+      "name" : "minute",
+      "type" : "int",
+      "required" : false,
+      "description" : "公历分，默认 0",
+      "example" : "30"
+    }, {
+      "name" : "pf",
+      "type" : "enum",
+      "required" : false,
+      "description" : "月将排法：1=交节换将(默认)/2=中气换将",
+      "example" : "1"
+    }, {
+      "name" : "zhouye",
+      "type" : "enum",
+      "required" : false,
+      "description" : "昼夜：0=夜/1=昼/2=自动(默认)",
+      "example" : "2"
+    }, {
+      "name" : "gsarrage",
+      "type" : "enum",
+      "required" : false,
+      "description" : "贵神排法：1=甲戊庚牛羊(默认)/0=甲羊戊庚牛",
+      "example" : "1"
+    }, {
+      "name" : "scpf",
+      "type" : "enum",
+      "required" : false,
+      "description" : "干支排法：1=时旬遁干/0=日旬遁干(默认)",
+      "example" : "0"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "required" : false,
+      "description" : "姓名（可选）",
+      "example" : "张三"
+    }, {
+      "name" : "sex",
+      "type" : "int",
+      "required" : false,
+      "description" : "性别：1=男/0=女（可选）",
+      "example" : "1"
+    }, {
+      "name" : "zhanshi",
+      "type" : "string",
+      "required" : false,
+      "description" : "占事（可选）",
+      "example" : "事业"
+    }, {
+      "name" : "birthyear",
+      "type" : "int",
+      "required" : false,
+      "description" : "出生年份（排行年用）",
+      "example" : "1990"
+    }, {
+      "name" : "pai",
+      "type" : "int",
+      "required" : false,
+      "description" : "是否排行年：1=是/0=否(默认)",
+      "example" : "0"
+    } ],
+    "parameterAliases" : {
+      "cli" : { },
+      "mcp" : { }
+    }
+  }, {
+    "functionCode" : "F18",
+    "endpoint" : "POST /api/open/paipan/qimen",
+    "cli" : {
+      "command" : "paipan",
+      "selector" : {
+        "--type" : "qimen"
+      },
+      "bodyOption" : "--json"
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_paipan_qimen",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "奇门遁甲",
+    "endpoints" : [ "POST /paipan/qimen" ],
+    "params" : [ {
+      "name" : "year",
+      "type" : "int",
+      "required" : true,
+      "description" : "公历年",
+      "example" : "2026"
+    }, {
+      "name" : "month",
+      "type" : "int",
+      "required" : true,
+      "description" : "公历月",
+      "example" : "8"
+    }, {
+      "name" : "day",
+      "type" : "int",
+      "required" : true,
+      "description" : "公历日",
+      "example" : "23"
+    }, {
+      "name" : "hour",
+      "type" : "int",
+      "required" : true,
+      "description" : "公历时（24 小时制）",
+      "example" : "12"
+    }, {
+      "name" : "mode",
+      "type" : "enum",
+      "required" : false,
+      "description" : "排盘法：zhuanpan 转盘(默认)/feigong 飞宫",
+      "example" : "zhuanpan"
+    } ],
+    "parameterAliases" : {
+      "cli" : { },
+      "mcp" : { }
+    }
+  }, {
+    "functionCode" : "F19",
+    "endpoint" : "POST /api/open/paipan/feixing",
+    "cli" : {
+      "command" : "paipan",
+      "selector" : {
+        "--type" : "feixing"
+      },
+      "bodyOption" : "--json"
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_paipan_feixing",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "玄空飞星",
+    "endpoints" : [ "POST /paipan/feixing" ],
+    "params" : [ {
+      "name" : "sxId",
+      "type" : "int",
+      "required" : true,
+      "description" : "二十四山编号（0–23，如 0=壬山丙向）",
+      "example" : "0"
+    }, {
+      "name" : "dy",
+      "type" : "int",
+      "required" : true,
+      "description" : "大运序号（0–8，一运至九运）",
+      "example" : "8"
+    }, {
+      "name" : "paiFa",
+      "type" : "enum",
+      "required" : false,
+      "description" : "1=挨星下卦(默认)/2=挨星替卦",
+      "example" : "1"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "sxId" : "--sx-id",
+        "paiFa" : "--pai-fa"
+      },
+      "mcp" : {
+        "sxId" : "sx_id",
+        "paiFa" : "pai_fa"
+      }
+    }
+  }, {
+    "functionCode" : "F20",
+    "endpoint" : "POST /api/open/paipan/ziwei",
+    "cli" : {
+      "command" : "paipan",
+      "selector" : {
+        "--type" : "ziwei"
+      },
+      "bodyOption" : "--json"
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_paipan_ziwei",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "紫微斗数",
+    "endpoints" : [ "POST /paipan/ziwei" ],
+    "params" : [ {
+      "name" : "name",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓名",
+      "example" : "张三"
+    }, {
+      "name" : "gender",
+      "type" : "enum",
+      "required" : true,
+      "description" : "性别：男/女",
+      "example" : "男"
+    }, {
+      "name" : "birthDate",
+      "type" : "string",
+      "required" : true,
+      "description" : "公历生日 yyyy-MM-dd",
+      "example" : "1990-05-15"
+    }, {
+      "name" : "birthTime",
+      "type" : "string",
+      "required" : true,
+      "description" : "出生时刻 HH:mm",
+      "example" : "08:30"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "birthDate" : "--birth-date",
+        "birthTime" : "--birth-time",
+        "fullChart" : "--full-chart"
+      },
+      "mcp" : {
+        "birthDate" : "birth_date",
+        "birthTime" : "birth_time",
+        "useTrueSolarTime" : "use_true_solar_time",
+        "fullChart" : "full_chart"
+      }
+    }
+  }, {
+    "functionCode" : "F21",
+    "endpoint" : "POST /api/open/paipan/jinkoujue",
+    "cli" : {
+      "command" : "paipan",
+      "selector" : {
+        "--type" : "jinkoujue"
+      },
+      "bodyOption" : "--json"
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_paipan_jinkoujue",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "金口诀排盘",
+    "endpoints" : [ "POST /paipan/jinkoujue" ],
+    "params" : [ {
+      "name" : "year",
+      "type" : "int",
+      "required" : true,
+      "description" : "公历年",
+      "example" : "2026"
+    }, {
+      "name" : "month",
+      "type" : "int",
+      "required" : true,
+      "description" : "公历月",
+      "example" : "8"
+    }, {
+      "name" : "day",
+      "type" : "int",
+      "required" : true,
+      "description" : "公历日",
+      "example" : "23"
+    }, {
+      "name" : "hour",
+      "type" : "int",
+      "required" : true,
+      "description" : "公历时（24 小时制）",
+      "example" : "12"
+    }, {
+      "name" : "minute",
+      "type" : "int",
+      "required" : false,
+      "description" : "公历分，默认 0",
+      "example" : "30"
+    }, {
+      "name" : "dfTag",
+      "type" : "enum",
+      "required" : false,
+      "description" : "地分方式：1=选地支/2=报数取模/3=随机(默认)",
+      "example" : "3"
+    }, {
+      "name" : "dfIndex",
+      "type" : "int",
+      "required" : false,
+      "description" : "dfTag=1 地支下标(0–11)/dfTag=2 报数原值",
+      "example" : "0"
+    }, {
+      "name" : "pf",
+      "type" : "enum",
+      "required" : false,
+      "description" : "月将排法：1=交节换将(默认)/2=中气换将",
+      "example" : "1"
+    }, {
+      "name" : "zhouye",
+      "type" : "enum",
+      "required" : false,
+      "description" : "昼夜：0=夜/1=昼/2=自动(默认)",
+      "example" : "2"
+    }, {
+      "name" : "guiShenArrange",
+      "type" : "enum",
+      "required" : false,
+      "description" : "贵神排列：1=甲戊庚牛羊(默认)/0=甲羊戊庚牛",
+      "example" : "1"
+    }, {
+      "name" : "birthYear",
+      "type" : "int",
+      "required" : false,
+      "description" : "出生年（排行年用，默认 0 不排）",
+      "example" : "1990"
+    }, {
+      "name" : "sex",
+      "type" : "int",
+      "required" : false,
+      "description" : "性别：1=男(默认)/0=女",
+      "example" : "1"
+    }, {
+      "name" : "name",
+      "type" : "string",
+      "required" : false,
+      "description" : "姓名（可空）",
+      "example" : "张三"
+    }, {
+      "name" : "zhanShi",
+      "type" : "string",
+      "required" : false,
+      "description" : "占事（可空）",
+      "example" : "事业"
+    }, {
+      "name" : "phn",
+      "type" : "int",
+      "required" : false,
+      "description" : "是否排行年：1=是/0=否(默认)",
+      "example" : "0"
+    } ],
+    "parameterAliases" : {
+      "cli" : { },
+      "mcp" : {
+        "dfTag" : "df_tag",
+        "dfIndex" : "df_index",
+        "guiShenArrange" : "gui_shen_arrange",
+        "birthYear" : "birth_year",
+        "zhanShi" : "zhan_shi"
+      }
+    }
+  }, {
+    "functionCode" : "F22",
+    "endpoint" : "POST /api/open/dream",
+    "cli" : {
+      "command" : "dream",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_dream",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "周公解梦",
+    "endpoints" : [ "POST /dream" ],
+    "params" : [ {
+      "name" : "keyword",
+      "type" : "string",
+      "required" : true,
+      "description" : "梦境关键词",
+      "example" : "蛇"
+    } ],
+    "parameterAliases" : {
+      "cli" : { },
+      "mcp" : { }
+    }
+  }, {
+    "functionCode" : "F23",
+    "endpoint" : "POST /api/open/lingqian",
+    "cli" : {
+      "command" : "lingqian",
+      "selector" : {
+        "--lot-type" : "guanyin"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_lingqian",
+      "selector" : {
+        "lot_type" : "guanyin"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "观音灵签",
+    "endpoints" : [ "POST /lingqian (lot_type=guanyin)" ],
+    "params" : [ {
+      "name" : "qianNum",
+      "type" : "int",
+      "required" : false,
+      "description" : "指定签号（缺省随机）",
+      "example" : "8"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "lotType" : "--lot-type",
+        "qianNum" : "--qian-num"
+      },
+      "mcp" : {
+        "lotType" : "lot_type",
+        "qianNum" : "qian_num"
+      }
+    }
+  }, {
+    "functionCode" : "F24",
+    "endpoint" : "POST /api/open/lingqian",
+    "cli" : {
+      "command" : "lingqian",
+      "selector" : {
+        "--lot-type" : "lvzu"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_lingqian",
+      "selector" : {
+        "lot_type" : "lvzu"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "吕祖灵签",
+    "endpoints" : [ "POST /lingqian (lot_type=lvzu)" ],
+    "params" : [ {
+      "name" : "qianNum",
+      "type" : "int",
+      "required" : false,
+      "description" : "指定签号（1–100，缺省随机）",
+      "example" : "8"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "lotType" : "--lot-type",
+        "qianNum" : "--qian-num"
+      },
+      "mcp" : {
+        "lotType" : "lot_type",
+        "qianNum" : "qian_num"
+      }
+    }
+  }, {
+    "functionCode" : "F25",
+    "endpoint" : "POST /api/open/lingqian",
+    "cli" : {
+      "command" : "lingqian",
+      "selector" : {
+        "--lot-type" : "huangdaxian"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_lingqian",
+      "selector" : {
+        "lot_type" : "huangdaxian"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "黄大仙签",
+    "endpoints" : [ "POST /lingqian (lot_type=huangdaxian)" ],
+    "params" : [ {
+      "name" : "qianNum",
+      "type" : "int",
+      "required" : false,
+      "description" : "指定签号（1–100，缺省随机）",
+      "example" : "8"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "lotType" : "--lot-type",
+        "qianNum" : "--qian-num"
+      },
+      "mcp" : {
+        "lotType" : "lot_type",
+        "qianNum" : "qian_num"
+      }
+    }
+  }, {
+    "functionCode" : "F26",
+    "endpoint" : "POST /api/open/lingqian",
+    "cli" : {
+      "command" : "lingqian",
+      "selector" : {
+        "--lot-type" : "guandi"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_lingqian",
+      "selector" : {
+        "lot_type" : "guandi"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "关帝灵签",
+    "endpoints" : [ "POST /lingqian (lot_type=guandi)" ],
+    "params" : [ {
+      "name" : "qianNum",
+      "type" : "int",
+      "required" : false,
+      "description" : "指定签号（缺省随机）",
+      "example" : "8"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "lotType" : "--lot-type",
+        "qianNum" : "--qian-num"
+      },
+      "mcp" : {
+        "lotType" : "lot_type",
+        "qianNum" : "qian_num"
+      }
+    }
+  }, {
+    "functionCode" : "F27",
+    "endpoint" : "POST /api/open/lingqian",
+    "cli" : {
+      "command" : "lingqian",
+      "selector" : {
+        "--lot-type" : "mazu"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_lingqian",
+      "selector" : {
+        "lot_type" : "mazu"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "妈祖灵签",
+    "endpoints" : [ "POST /lingqian (lot_type=mazu)" ],
+    "params" : [ {
+      "name" : "qianNum",
+      "type" : "int",
+      "required" : false,
+      "description" : "指定签号（缺省随机）",
+      "example" : "8"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "lotType" : "--lot-type",
+        "qianNum" : "--qian-num"
+      },
+      "mcp" : {
+        "lotType" : "lot_type",
+        "qianNum" : "qian_num"
+      }
+    }
+  }, {
+    "functionCode" : "F28",
+    "endpoint" : "POST /api/open/zhuge",
+    "cli" : {
+      "command" : "zhuge",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_zhuge_shenshu",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "诸葛神数",
+    "endpoints" : [ "POST /zhuge" ],
+    "params" : [ {
+      "name" : "text",
+      "type" : "string",
+      "required" : true,
+      "description" : "1–3 个汉字",
+      "example" : "天地人"
+    } ],
+    "parameterAliases" : {
+      "cli" : { },
+      "mcp" : { }
+    }
+  }, {
+    "functionCode" : "F29",
+    "endpoint" : "POST /api/open/match",
+    "cli" : {
+      "command" : "match",
+      "selector" : {
+        "--match-type" : "astro"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_match",
+      "selector" : {
+        "match_type" : "astro"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "星座配对",
+    "endpoints" : [ "POST /match (match_type=astro)" ],
+    "params" : [ {
+      "name" : "c1",
+      "type" : "string",
+      "required" : true,
+      "description" : "星座一（白羊至双鱼，中英文均可）",
+      "example" : "白羊座"
+    }, {
+      "name" : "c2",
+      "type" : "string",
+      "required" : true,
+      "description" : "星座二",
+      "example" : "狮子座"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "matchType" : "--match-type"
+      },
+      "mcp" : {
+        "matchType" : "match_type"
+      }
+    }
+  }, {
+    "functionCode" : "F30",
+    "endpoint" : "POST /api/open/match",
+    "cli" : {
+      "command" : "match",
+      "selector" : {
+        "--match-type" : "name"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_match",
+      "selector" : {
+        "match_type" : "name"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "姓名配对",
+    "endpoints" : [ "POST /match (match_type=name)" ],
+    "params" : [ {
+      "name" : "name1",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓名1",
+      "example" : "张三"
+    }, {
+      "name" : "name2",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓名2",
+      "example" : "李四"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "matchType" : "--match-type"
+      },
+      "mcp" : {
+        "matchType" : "match_type"
+      }
+    }
+  }, {
+    "functionCode" : "F31",
+    "endpoint" : "POST /api/open/match",
+    "cli" : {
+      "command" : "match",
+      "selector" : {
+        "--match-type" : "wuge"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_match",
+      "selector" : {
+        "match_type" : "wuge"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "五格配对",
+    "endpoints" : [ "POST /match (match_type=wuge)" ],
+    "params" : [ {
+      "name" : "name1",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓名1",
+      "example" : "张三"
+    }, {
+      "name" : "name2",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓名2",
+      "example" : "李四"
+    }, {
+      "name" : "sex1",
+      "type" : "enum",
+      "required" : false,
+      "description" : "性别一（五格数理口径）",
+      "example" : "男"
+    }, {
+      "name" : "sex2",
+      "type" : "enum",
+      "required" : false,
+      "description" : "性别二",
+      "example" : "女"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "matchType" : "--match-type"
+      },
+      "mcp" : {
+        "matchType" : "match_type"
+      }
+    }
+  }, {
+    "functionCode" : "F32",
+    "endpoint" : "POST /api/open/match",
+    "cli" : {
+      "command" : "match",
+      "selector" : {
+        "--match-type" : "zodiac"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_match",
+      "selector" : {
+        "match_type" : "zodiac"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "生肖配对",
+    "endpoints" : [ "POST /match (match_type=zodiac)" ],
+    "params" : [ {
+      "name" : "z1",
+      "type" : "string",
+      "required" : true,
+      "description" : "生肖一（鼠牛虎兔龙蛇马羊猴鸡狗猪）",
+      "example" : "鼠"
+    }, {
+      "name" : "z2",
+      "type" : "string",
+      "required" : true,
+      "description" : "生肖二",
+      "example" : "牛"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "matchType" : "--match-type"
+      },
+      "mcp" : {
+        "matchType" : "match_type"
+      }
+    }
+  }, {
+    "functionCode" : "F33",
+    "endpoint" : "POST /api/open/match",
+    "cli" : {
+      "command" : "match",
+      "selector" : {
+        "--match-type" : "blood"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_match",
+      "selector" : {
+        "match_type" : "blood"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "血型配对",
+    "endpoints" : [ "POST /match (match_type=blood)" ],
+    "params" : [ {
+      "name" : "bt1",
+      "type" : "enum",
+      "required" : true,
+      "description" : "血型一：A/B/O/AB",
+      "example" : "A"
+    }, {
+      "name" : "bt2",
+      "type" : "enum",
+      "required" : true,
+      "description" : "血型二：A/B/O/AB",
+      "example" : "B"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "matchType" : "--match-type"
+      },
+      "mcp" : {
+        "matchType" : "match_type"
+      }
+    }
+  }, {
+    "functionCode" : "F34",
+    "endpoint" : "POST /api/open/match",
+    "cli" : {
+      "command" : "match",
+      "selector" : {
+        "--match-type" : "qq"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_match",
+      "selector" : {
+        "match_type" : "qq"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "QQ号配对",
+    "endpoints" : [ "POST /match (match_type=qq)" ],
+    "params" : [ {
+      "name" : "qq1",
+      "type" : "string",
+      "required" : true,
+      "description" : "QQ 号一",
+      "example" : "12345678"
+    }, {
+      "name" : "qq2",
+      "type" : "string",
+      "required" : true,
+      "description" : "QQ 号二",
+      "example" : "87654321"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "matchType" : "--match-type"
+      },
+      "mcp" : {
+        "matchType" : "match_type"
+      }
+    }
+  }, {
+    "functionCode" : "F35",
+    "endpoint" : "GET /api/open/huangli",
+    "cli" : {
+      "command" : "huangli",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_huangli",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "黄道日历",
+    "endpoints" : [ "GET /huangli?date=" ],
+    "params" : [ {
+      "name" : "date",
+      "type" : "string",
+      "required" : false,
+      "description" : "日期 yyyy-MM-dd（缺省今天）",
+      "example" : "2026-08-23"
+    }, {
+      "name" : "startDate",
+      "type" : "string",
+      "required" : false,
+      "description" : "区间起始日期 yyyy-MM-dd（与 endDate 搭配，上限 92 天）",
+      "example" : "2026-08-23"
+    }, {
+      "name" : "endDate",
+      "type" : "string",
+      "required" : false,
+      "description" : "区间结束日期 yyyy-MM-dd（与 startDate 搭配）",
+      "example" : "2026-08-25"
+    }, {
+      "name" : "year",
+      "type" : "int",
+      "required" : false,
+      "description" : "月度视图年份（与 month 搭配）",
+      "example" : "2026"
+    }, {
+      "name" : "month",
+      "type" : "int",
+      "required" : false,
+      "description" : "月度视图月份（1–12）",
+      "example" : "8"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "startDate" : "--start-date",
+        "endDate" : "--end-date"
+      },
+      "mcp" : {
+        "startDate" : "start_date",
+        "endDate" : "end_date"
+      }
+    }
+  }, {
+    "functionCode" : "F36",
+    "endpoint" : "POST /api/open/wealth/three-life",
+    "cli" : {
+      "command" : "three-life-wealth",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_three_life_wealth",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "三世财运",
+    "endpoints" : [ "POST /wealth/three-life" ],
+    "params" : [ {
+      "name" : "year",
+      "type" : "int",
+      "required" : true,
+      "description" : "阳历出生年",
+      "example" : "1990"
+    }, {
+      "name" : "month",
+      "type" : "int",
+      "required" : true,
+      "description" : "阳历出生月",
+      "example" : "5"
+    }, {
+      "name" : "day",
+      "type" : "int",
+      "required" : true,
+      "description" : "阳历出生日",
+      "example" : "15"
+    } ],
+    "parameterAliases" : {
+      "cli" : { },
+      "mcp" : { }
+    }
+  }, {
+    "functionCode" : "F37",
+    "endpoint" : "POST /api/open/predict/baby-gender",
+    "cli" : {
+      "command" : "baby-gender",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_baby_gender",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "生男生女",
+    "endpoints" : [ "POST /predict/baby-gender" ],
+    "params" : [ {
+      "name" : "age",
+      "type" : "int",
+      "required" : true,
+      "description" : "母亲虚岁年龄",
+      "example" : "28"
+    }, {
+      "name" : "month",
+      "type" : "int",
+      "required" : false,
+      "description" : "农历怀孕月（1–12，预测时必填）",
+      "example" : "5"
+    }, {
+      "name" : "gender",
+      "type" : "enum",
+      "required" : false,
+      "description" : "期望性别：男/女（bestMonths 时必填）",
+      "example" : "男"
+    }, {
+      "name" : "bestMonths",
+      "type" : "boolean",
+      "required" : false,
+      "description" : "是否查询适宜怀孕月份，默认 false",
+      "example" : "false"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "bestMonths" : "--best-months"
+      },
+      "mcp" : {
+        "bestMonths" : "best_months"
+      }
+    }
+  }, {
+    "functionCode" : "F38",
+    "endpoint" : "POST /api/open/number-luck",
+    "cli" : {
+      "command" : "number-luck",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_number_luck",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "号码吉凶",
+    "endpoints" : [ "POST /number-luck" ],
+    "params" : [ {
+      "name" : "number",
+      "type" : "string",
+      "required" : true,
+      "description" : "数字串（仅数字）",
+      "example" : "13800138000"
+    } ],
+    "parameterAliases" : {
+      "cli" : { },
+      "mcp" : { }
+    }
+  }, {
+    "functionCode" : "F39",
+    "endpoint" : "POST /api/open/fingerprint",
+    "cli" : {
+      "command" : "fingerprint",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_fingerprint",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "指纹算命",
+    "endpoints" : [ "POST /fingerprint" ],
+    "params" : [ {
+      "name" : "gender",
+      "type" : "enum",
+      "required" : false,
+      "description" : "性别（展示用）",
+      "example" : "男"
+    }, {
+      "name" : "code",
+      "type" : "string",
+      "required" : true,
+      "description" : "5 位 O/X 序列",
+      "example" : "OXOXO"
+    } ],
+    "parameterAliases" : {
+      "cli" : { },
+      "mcp" : { }
+    }
+  }, {
+    "functionCode" : "F40",
+    "endpoint" : "POST /api/open/omen",
+    "cli" : {
+      "command" : "omen",
+      "selector" : {
+        "--omen-type" : "耳鸣"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_omen",
+      "selector" : {
+        "omen_type" : "耳鸣"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "耳鸣预测",
+    "endpoints" : [ "POST /omen (omen_type=耳鸣)" ],
+    "params" : [ {
+      "name" : "hour",
+      "type" : "int",
+      "required" : true,
+      "description" : "时辰（1–12，子时至亥时）",
+      "example" : "1"
+    }, {
+      "name" : "side",
+      "type" : "enum",
+      "required" : true,
+      "description" : "方向：左/右",
+      "example" : "左"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "omenType" : "--omen-type"
+      },
+      "mcp" : {
+        "omenType" : "omen_type"
+      }
+    }
+  }, {
+    "functionCode" : "F41",
+    "endpoint" : "POST /api/open/omen",
+    "cli" : {
+      "command" : "omen",
+      "selector" : {
+        "--omen-type" : "眼跳"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_omen",
+      "selector" : {
+        "omen_type" : "眼跳"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "眼跳预测",
+    "endpoints" : [ "POST /omen (omen_type=眼跳)" ],
+    "params" : [ {
+      "name" : "hour",
+      "type" : "int",
+      "required" : true,
+      "description" : "时辰（1–12，子时至亥时）",
+      "example" : "1"
+    }, {
+      "name" : "side",
+      "type" : "enum",
+      "required" : true,
+      "description" : "方向：左/右",
+      "example" : "左"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "omenType" : "--omen-type"
+      },
+      "mcp" : {
+        "omenType" : "omen_type"
+      }
+    }
+  }, {
+    "functionCode" : "F42",
+    "endpoint" : "POST /api/open/omen",
+    "cli" : {
+      "command" : "omen",
+      "selector" : {
+        "--omen-type" : "心惊"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_omen",
+      "selector" : {
+        "omen_type" : "心惊"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "心惊预测",
+    "endpoints" : [ "POST /omen (omen_type=心惊)" ],
+    "params" : [ {
+      "name" : "hour",
+      "type" : "int",
+      "required" : true,
+      "description" : "时辰（1–12，子时至亥时）",
+      "example" : "1"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "omenType" : "--omen-type"
+      },
+      "mcp" : {
+        "omenType" : "omen_type"
+      }
+    }
+  }, {
+    "functionCode" : "F43",
+    "endpoint" : "POST /api/open/omen",
+    "cli" : {
+      "command" : "omen",
+      "selector" : {
+        "--omen-type" : "面热"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_omen",
+      "selector" : {
+        "omen_type" : "面热"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "面热预测",
+    "endpoints" : [ "POST /omen (omen_type=面热)" ],
+    "params" : [ {
+      "name" : "hour",
+      "type" : "int",
+      "required" : true,
+      "description" : "时辰（1–12，子时至亥时）",
+      "example" : "1"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "omenType" : "--omen-type"
+      },
+      "mcp" : {
+        "omenType" : "omen_type"
+      }
+    }
+  }, {
+    "functionCode" : "F44",
+    "endpoint" : "POST /api/open/omen",
+    "cli" : {
+      "command" : "omen",
+      "selector" : {
+        "--omen-type" : "喷嚏"
+      }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_omen",
+      "selector" : {
+        "omen_type" : "喷嚏"
+      }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "喷嚏预测",
+    "endpoints" : [ "POST /omen (omen_type=喷嚏)" ],
+    "params" : [ {
+      "name" : "hour",
+      "type" : "int",
+      "required" : true,
+      "description" : "时辰（1–12，子时至亥时）",
+      "example" : "1"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "omenType" : "--omen-type"
+      },
+      "mcp" : {
+        "omenType" : "omen_type"
+      }
+    }
+  }, {
+    "functionCode" : "F45",
+    "endpoint" : "GET /api/open/zodiac-personality",
+    "cli" : {
+      "command" : "zodiac-personality",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_zodiac_personality",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "属相性格",
+    "endpoints" : [ "GET /zodiac-personality?animal=" ],
+    "params" : [ {
+      "name" : "animal",
+      "type" : "enum",
+      "required" : true,
+      "description" : "生肖：鼠牛虎兔龙蛇马羊猴鸡狗猪（中英文均可）",
+      "example" : "鼠"
+    } ],
+    "parameterAliases" : {
+      "cli" : { },
+      "mcp" : { }
+    }
+  }, {
+    "functionCode" : "F46",
+    "endpoint" : "POST /api/open/name/qiming",
+    "cli" : {
+      "command" : "qiming",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_name_qiming",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "周易起名",
+    "endpoints" : [ "POST /name/qiming" ],
+    "params" : [ {
+      "name" : "surname",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓氏（1–2 字，单姓/复姓）",
+      "example" : "张"
+    }, {
+      "name" : "nameType",
+      "type" : "enum",
+      "required" : true,
+      "description" : "名字类型：single 单名/double 双名",
+      "example" : "single"
+    }, {
+      "name" : "zuhe",
+      "type" : "string",
+      "required" : false,
+      "description" : "要查看推荐汉字的笔画组合（如 11-28-24）；缺省仅返回笔画组合列表，传入则仅返回该组合的候选汉字",
+      "example" : "11-28-24"
+    }, {
+      "name" : "spec",
+      "type" : "int",
+      "required" : false,
+      "description" : "指定名字的字：0-不指定，1-第一个字，2-第二个字",
+      "example" : "0"
+    }, {
+      "name" : "specWord",
+      "type" : "string",
+      "required" : false,
+      "description" : "指定的名字字内容（spec≠0 时搭配）",
+      "example" : "明"
+    }, {
+      "name" : "wxFirst",
+      "type" : "int",
+      "required" : false,
+      "description" : "首字五行：0-忽略，1-金，2-木，3-水，4-火，5-土",
+      "example" : "0"
+    }, {
+      "name" : "wxSec",
+      "type" : "int",
+      "required" : false,
+      "description" : "第二个字五行：0-忽略，1-金，2-木，3-水，4-火，5-土",
+      "example" : "0"
+    }, {
+      "name" : "sancaiJixiong",
+      "type" : "string",
+      "required" : false,
+      "description" : "三才配置吉凶：0-忽略，或 大吉/中吉/半吉/平/凶/大凶",
+      "example" : "0"
+    }, {
+      "name" : "rengeJixiong",
+      "type" : "string",
+      "required" : false,
+      "description" : "人格吉凶：0-忽略，或 大吉/中吉/半吉/平/凶/大凶",
+      "example" : "0"
+    }, {
+      "name" : "digeJixiong",
+      "type" : "string",
+      "required" : false,
+      "description" : "地格吉凶：0-忽略，或 大吉/中吉/半吉/平/凶/大凶",
+      "example" : "0"
+    }, {
+      "name" : "waigeJixiong",
+      "type" : "string",
+      "required" : false,
+      "description" : "外格吉凶：0-忽略，或 大吉/中吉/半吉/平/凶/大凶",
+      "example" : "0"
+    }, {
+      "name" : "zonggeJixiong",
+      "type" : "string",
+      "required" : false,
+      "description" : "总格吉凶：0-忽略，或 大吉/中吉/半吉/平/凶/大凶",
+      "example" : "0"
+    }, {
+      "name" : "score",
+      "type" : "int",
+      "required" : false,
+      "description" : "格局分数：0-忽略，或 90/80/70",
+      "example" : "0"
+    }, {
+      "name" : "jichuyunJixiong",
+      "type" : "string",
+      "required" : false,
+      "description" : "基础运吉凶：0-忽略，或 大吉/中吉/凶/大凶",
+      "example" : "0"
+    }, {
+      "name" : "chenggongyunJixiong",
+      "type" : "string",
+      "required" : false,
+      "description" : "成功运吉凶：0-忽略，或 大吉/中吉/半吉/凶/大凶",
+      "example" : "0"
+    }, {
+      "name" : "shejiaoyunJixiong",
+      "type" : "string",
+      "required" : false,
+      "description" : "社交运吉凶：0-忽略，或 大吉/中吉/半吉/凶/大凶",
+      "example" : "0"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "nameType" : "--name-type",
+        "specWord" : "--spec-word",
+        "wxFirst" : "--wx-first",
+        "wxSec" : "--wx-sec",
+        "sancaiJixiong" : "--sancai-jixiong",
+        "rengeJixiong" : "--renge-jixiong",
+        "digeJixiong" : "--dige-jixiong",
+        "waigeJixiong" : "--waige-jixiong",
+        "zonggeJixiong" : "--zongge-jixiong",
+        "jichuyunJixiong" : "--jichuyun-jixiong",
+        "chenggongyunJixiong" : "--chenggongyun-jixiong",
+        "shejiaoyunJixiong" : "--shejiaoyun-jixiong"
+      },
+      "mcp" : {
+        "nameType" : "name_type",
+        "specWord" : "spec_word",
+        "wxFirst" : "wx_first",
+        "wxSec" : "wx_sec",
+        "sancaiJixiong" : "sancai_jixiong",
+        "rengeJixiong" : "renge_jixiong",
+        "digeJixiong" : "dige_jixiong",
+        "waigeJixiong" : "waige_jixiong",
+        "zonggeJixiong" : "zongge_jixiong",
+        "jichuyunJixiong" : "jichuyun_jixiong",
+        "chenggongyunJixiong" : "chenggongyun_jixiong",
+        "shejiaoyunJixiong" : "shejiaoyun_jixiong"
+      }
+    }
+  }, {
+    "functionCode" : "F47",
+    "endpoint" : "POST /api/open/idcard/parse",
+    "cli" : {
+      "command" : "idcard",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_idcard_parse",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "身份证解析",
+    "endpoints" : [ "POST /idcard/parse" ],
+    "params" : [ {
+      "name" : "idCard",
+      "type" : "string",
+      "required" : true,
+      "description" : "18 位身份证号",
+      "example" : "11010519491231002X"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "idCard" : "--id-card"
+      },
+      "mcp" : {
+        "idCard" : "id_card"
+      }
+    }
+  }, {
+    "functionCode" : "F48",
+    "endpoint" : "POST /api/open/fortune/shishen-lunming",
+    "cli" : {
+      "command" : "shishen-lunming",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_shishen_lunming",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "十神论命",
+    "endpoints" : [ "POST /fortune/shishen-lunming" ],
+    "params" : [ {
+      "name" : "name",
+      "type" : "string",
+      "required" : true,
+      "description" : "姓名",
+      "example" : "张三"
+    }, {
+      "name" : "gender",
+      "type" : "string",
+      "required" : true,
+      "description" : "性别：male/female（兼容 男/女，自动归一）",
+      "example" : "male"
+    }, {
+      "name" : "birthDate",
+      "type" : "string",
+      "required" : true,
+      "description" : "出生日期（阳历，yyyy-MM-dd）",
+      "example" : "1990-01-15"
+    }, {
+      "name" : "birthTime",
+      "type" : "string",
+      "required" : true,
+      "description" : "出生时间（HH:mm，24 小时制）",
+      "example" : "10:30"
+    }, {
+      "name" : "longitude",
+      "type" : "number",
+      "required" : false,
+      "description" : "出生地经度（配合真太阳时使用）",
+      "example" : "116.40"
+    }, {
+      "name" : "city",
+      "type" : "string",
+      "required" : false,
+      "description" : "出生地城市（展示与真太阳时参考）",
+      "example" : "北京"
+    }, {
+      "name" : "useTrueSolarTime",
+      "type" : "boolean",
+      "required" : false,
+      "description" : "是否使用真太阳时，默认 false",
+      "example" : "false"
+    }, {
+      "name" : "lang",
+      "type" : "enum",
+      "required" : false,
+      "description" : "输出语言：zh-CN/zh-TW/en-US，缺省 zh-CN",
+      "example" : "zh-CN"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "birthDate" : "--birth-date",
+        "birthTime" : "--birth-time",
+        "useTrueSolarTime" : "--true-solar-time"
+      },
+      "mcp" : {
+        "birthDate" : "birth_date",
+        "birthTime" : "birth_time",
+        "useTrueSolarTime" : "use_true_solar_time"
+      }
+    }
+  }, {
+    "functionCode" : "F49",
+    "endpoint" : "POST /api/open/fortune/chart",
+    "cli" : {
+      "command" : "fortune-chart",
+      "selector" : { }
+    },
+    "mcp" : {
+      "rawTool" : "zhouyi_fortune_chart",
+      "selector" : { }
+    },
+    "local" : false,
+    "counted" : true,
+    "name" : "运势图",
+    "endpoints" : [ "POST /fortune/chart" ],
+    "params" : [ {
+      "name" : "mode",
+      "type" : "enum",
+      "required" : true,
+      "description" : "monthly/daily/lifetime（三选一）",
+      "example" : "monthly"
+    }, {
+      "name" : "gender",
+      "type" : "string",
+      "required" : true,
+      "description" : "性别：male/female（兼容 男/女，自动归一）",
+      "example" : "female"
+    }, {
+      "name" : "birthDate",
+      "type" : "string",
+      "required" : true,
+      "description" : "出生日期（阳历 yyyy-MM-dd）",
+      "example" : "1990-05-15"
+    }, {
+      "name" : "birthTime",
+      "type" : "string",
+      "required" : true,
+      "description" : "出生时间（HH:mm）",
+      "example" : "08:30"
+    }, {
+      "name" : "specDate",
+      "type" : "string",
+      "required" : false,
+      "description" : "指定日期（yyyy-MM-dd），缺省当天；lifetime 忽略",
+      "example" : "2026-11-20"
+    } ],
+    "parameterAliases" : {
+      "cli" : {
+        "birthDate" : "--birth-date",
+        "birthTime" : "--birth-time",
+        "specDate" : "--spec-date"
+      },
+      "mcp" : {
+        "birthDate" : "birth_date",
+        "birthTime" : "birth_time",
+        "specDate" : "spec_date"
+      }
+    }
+  } ],
+  "auxiliaryTools" : [ {
+    "rawTool" : "zhouyi_my_calls",
+    "endpoints" : [ "GET /api/open/calls/recent", "GET /api/open/quota" ],
+    "cliCommands" : [ "calls-recent", "quota" ],
+    "local" : false,
+    "counted" : false
+  } ]
+}

@@ -1,6 +1,6 @@
 # rune-hallucination-guard
 
-> Rune L3 Skill | validation | model: tier:light
+> Rune L3 Skill | validation | model: tier:mid
 
 
 # hallucination-guard
@@ -84,7 +84,7 @@ If export not found → mark as **WARN** (symbol may not be exported).
 
 ### Step 3 — Verify external packages (Dependency Check Before Import)
 
-> From taste-skill (Leonxlnx/taste-skill, 3.4k★): "Before importing ANY 3rd party lib, check package.json."
+Before importing ANY third-party library, check the dependency manifest.
 
 Use read_file on the project's dependency manifest to confirm each external package is listed:
 
@@ -227,7 +227,7 @@ Known failure modes for this skill. Check these before declaring done.
 ~500-1500 tokens input, ~200-500 tokens output. Haiku for speed — this runs frequently as a sub-check.
 
 ---
-> **Rune Skill Mesh** — 66 skills, 248 connections + 45 signals, 14 extension packs
+> **Rune Skill Mesh** — 67 skills, 248 connections + 46 signals, 14 extension packs
 > [Landing Page](https://rune-kit.github.io/rune) · [Source](https://github.com/rune-kit/rune) (MIT)
-> **Rune Pro** ($49 lifetime) — 9 domain packs + context intelligence → [rune-kit/rune-pro](https://github.com/rune-kit/rune-pro)
-> **Rune Business** ($149 lifetime) — finance, legal, HR, enterprise-search packs → [rune-kit/rune-business](https://github.com/rune-kit/rune-business)
+> **Rune Pro** ($49 lifetime) — 9 domain packs + context intelligence → [rune-kit.github.io/rune#pricing](https://rune-kit.github.io/rune#pricing)
+> **Rune Business** ($149 lifetime) — finance, legal, HR, enterprise-search packs → [rune-kit.github.io/rune#pricing](https://rune-kit.github.io/rune#pricing)

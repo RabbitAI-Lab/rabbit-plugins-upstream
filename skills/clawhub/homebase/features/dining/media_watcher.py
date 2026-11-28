@@ -5,6 +5,24 @@ Scans ~/.openclaw/media/inbound for new images dropped by the WhatsApp bridge,
 classifies them by caption/filename keywords, dedupes by content hash, and
 returns structured data.
 
+STATUS (2026-08-31): the directory scanner below has no scheduled caller.
+It lived on an OpenClaw cron job; cron was emptied on 2026-08-17 and no
+launchd runner replaced it. `scan_and_process()` still works — run it with
+`.venv/bin/python -m features.dining.media_watcher` — and the code is kept
+deliberately. Nothing is broken; there is simply no timer.
+
+The in-chat path is unaffected and is how photos actually get handled today:
+the family sends a photo to WhatsApp, the OpenClaw agent reads it with its
+native vision, and calls `log_restaurant_visit` or `save_snack_schedule`
+directly. This module is the *batch* alternative to that, for images that
+arrived without anyone talking to the agent.
+
+Note it is not receipts-only, despite living under features/dining/. Receipts
+are the largest bucket, but `classify_image()` also routes school snack
+calendar photos to the snack bucket (`_SNACK_TRIGGERS` → `save_snack_schedule`),
+and `scan_and_process()` additionally surfaces pending rating reminders. Weigh
+all three before ever cutting it.
+
 Architecture:
   Python returns *data*. It does NOT call any LLM and does NOT deliver messages.
   Image classification beyond keyword matching is the agent's job — the agent
@@ -28,14 +46,12 @@ import os
 from datetime import datetime
 from typing import Any, Dict, List
 
-from core.keychain_secrets import load_google_secrets
 from utils import write_json_atomic, locked_file
 
-# Best-effort credential warm-up. Tests stub this; production may no-op.
-try:
-    load_google_secrets()
-except Exception:
-    pass
+# The best-effort Google credential warm-up that stood here is gone
+# (2026-09-07). This module reads receipt photos and writes restaurant state;
+# it never touched Google, and the import-time `load_google_secrets()` was
+# inherited boilerplate. gog owns those credentials now regardless.
 
 # Resolve skill root: features/dining/media_watcher.py → ../../
 SKILL_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -72,9 +88,16 @@ def save_state(state: Dict[str, Any]) -> None:
 
 
 def file_hash(path: str) -> str:
-    """Deterministic MD5 of file bytes — used for image dedup."""
+    """Deterministic MD5 of file bytes — used for image dedup.
+
+    Chunked: images are capped at MAX_IMAGE_BYTES (20 MB), and reading that
+    into memory to hash it is needless when the digest streams.
+    """
+    digest = hashlib.md5()
     with open(path, "rb") as f:
-        return hashlib.md5(f.read()).hexdigest()
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 # ─── Caption sidecar parsing ─────────────────────────────────────────────────
@@ -183,8 +206,11 @@ def get_pending_rating_reminders() -> List[Dict[str, Any]]:
 
 def send_rating_reminders() -> List[Dict[str, Any]]:
     """
-    Compatibility shim. Returns the pending reminders without sending anything;
-    the agent handles delivery.
+    Returns the pending reminders without sending anything; the caller
+    delivers. The name is a leftover from before the architecture flip, when
+    Python sent WhatsApp messages itself — kept because `scan_and_process`
+    calls it, and renaming it is a change to this module's only public
+    surface. It sends nothing, and per CLAUDE.md #7 it never will.
     """
     return get_pending_rating_reminders()
 

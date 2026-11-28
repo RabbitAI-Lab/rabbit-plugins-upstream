@@ -1,0 +1,237 @@
+# 标准内容对象 schema（v1）——元呈 yotta-present 呈现核心
+
+> 用途：给 `yotta_present` CLI / `present_result` MCP 工具的标准输入格式。
+> 智能体（经 SKILL.md 判断层）把「要呈现的内容」组装成标准内容对象，再交给元呈渲染；
+> 也可直接喂 Markdown / 纯文本，由元呈自动解析并兜底美化。
+
+## 字段
+
+| 字段 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| `title` | string | 否 | 标题（# 一级标题） |
+| `headline` | string | 否 | 头条 / 一句话结论（引用块） |
+| `grade` | string | 否 | 等级徽章：`success`(🟢通过) / `warn`(🟡警告) / `danger`(🔴危险) / `info`(⚪信息)，或任意自定义文本 |
+| `verdict` | string | 否 | 裁决 / 结论正文（与 `grade` 搭配） |
+| `metrics` | array | 否 | 指标块，必须是对象列表：`[{"label": "任务", "value": 12, "unit": "项"}]`；`tone` 取 `up`(▲) / `down`(▼) / `neutral`(—) |
+| `rows` | array | 否 | 表格：对象列表 / 二维数组 / 键值对（见下） |
+| `bullets` | array | 否 | 要点（短列表项）；`[x]` / `[ ]` 前缀自动保留为复选框 |
+| `body` | array | 否 | 正文段落（长文本；纯文本输入自动解析而来） |
+| `notes` | array | 否 | 注记 / 免责（`> 注：…`） |
+| `chart_data` | object | 否 | 图表数据（见下）；存在时形态自动判为 `chart` |
+| `headers` | array | 否 | 表格显式表头（`rows` 为二维数组时可选） |
+| `form` | string | 否 | 显式形态（缺省自动判断）：`conclusion` / `table` / `checklist` / `prose` / `metrics` / `qa` / `report` / `chart` |
+| `template` | string | 否 | 命名场景模板（优先于 `form`）：`vuln_report` / `faq` / `status`（定义见 `templates.json`） |
+| `code` | string | 否 | 代码块内容（模板 `codeblock` 块使用） |
+| `bold_keys` | array | 否 | 自动加粗的字段名数组（命中字段值渲染为 `**加粗**`；plain 不加） |
+| `max_len` | integer | 否 | 长度熔断上限（字符数）：先压缩列表、再降标题层级、最后截断，保留 title/headline/verdict |
+
+
+## 形态 → 输入形式 → 必填字段（速查）
+
+| 形态 | 推荐输入 | 必填 / 关键字段 | 备注 |
+|---|---|---|---|
+| `conclusion` | JSON | `grade` / `verdict`（徽章与裁决结构） | 传 Markdown 会按 prose 兜底，无徽章 |
+| `table` | JSON | `rows`（对象列表 / 二维数组 / 键值对） | **无 `columns` 字段**；二维数组可用 `headers` |
+| `checklist` | Markdown `- [x]` / `- [ ]`，或 JSON | `bullets` | |
+| `prose` | Markdown 段落 / JSON | `body` / `text` | 兜底形态 |
+| `metrics` | JSON | `metrics`（≥1 项） | |
+| `qa` | JSON | `rows`（键须命中 问题/question/q + 回答/answer/a 两列） | 否则判 `table` |
+| `report` | JSON（多节组合）或 Markdown 多节 | `title` + 至少一段内容 | |
+| `chart` | JSON | `chart_data`（`chart`/`type` + 数据） | 无 `--svg` 时 Markdown 内嵌 data URI |
+
+> 规则：要精确控制形态，请显式传 `form` + 对应 JSON；不传 `form` 时按内容形状自动判断（可解释，`--explain` 返回原因）。显式形态仍受内容保真门禁约束：无法完整保留所有内容块时自动降级 report-safe，并在 `fallback` / `warnings` 中说明原因。
+
+## 内容保真与 report-safe（v0.6.0；v0.6.1 增加顺序校验；v0.6.4 增加嵌套结构校验；v0.6.5 双保真字段）
+
+Markdown / 纯文本输入会先解析为顺序块级中间表示：
+
+| 块类型 | 常见来源 |
+|---|---|
+| 标题 | `#`～`######` |
+| 摘要 / 引用 | `>`、JSON `headline` / `verdict` |
+| 段落 | 普通文本、JSON `body` |
+| 列表 | `-` / `*` / 数字列表 / `[x]` 复选框、JSON `bullets` |
+| 表格 | Markdown table、JSON `rows` + `headers` |
+| 代码 | fenced code block、JSON `code` |
+| 问答 | `问：` / `答：`、`Q:` / `A:`、JSON QA rows |
+| 图表 | JSON `chart_data` |
+
+渲染流程：
+
+1. 先按自动判断或显式 `form` / `template` 生成候选输出。
+2. 对候选输出执行块覆盖校验（标题、正文、表格单元格、列表项、代码、问答等均需有语义去处）与顺序保真校验（有书写顺序的输入：Markdown / 纯文本 / 显式 `blocks`；顺序不符按不兼容处理）。列表项还会校验嵌套深度与有序 / 无序类型，拍平即视为未保留。
+3. 覆盖不足或顺序不符时自动降级 `report-safe`：按源块顺序完整渲染，不强行套壳。
+4. 返回 `fallback`（来源 / 目标 / 原因）与 `fidelity`：`requested_form` / `final_form`；`requested_form_preserved` 表示请求形态是否完整承载；`content_preserved` 表示最终输出是否保留全部内容。另含源块 / 最终保留块 / 丢弃块 / 压缩块与顺序字段 `order_checked` · `order_preserved` · `order_violations`；`--explain` 同步说明“请求形态保真”和“最终内容保真”两项。
+
+例外：`max_len` 是用户显式开启的长度熔断；被截断的块会计入 `fidelity.dropped` / `fidelity.compressed`，不会假报“全部保留”。
+
+## rows 四种形式
+
+1. **对象列表（推荐）**：键并集即表头，列序按首现。
+
+```json
+{"rows": [{"方案": "A", "成本": "低"}, {"方案": "B", "成本": "高"}]}
+```
+
+2. **二维数组**：首行全为字符串且行数 >= 2 时首行视为表头；恰好 2 列按「项 / 值」键值表；否则自动补「列 N」。
+
+```json
+{"rows": [["列1", "列2"], ["v1", "v2"]], "headers": ["列1", "列2"]}
+```
+
+3. **键值对**：每行恰为 `{"header": …, "value": …}`，或二维数组 2 列。
+
+```json
+{"rows": [{"header": "安装方式", "value": "npx -y @yottameta/yotta-present"}]}
+```
+
+4. **Markdown table 输入**：直接传 Markdown 文本时，元呈会解析表头、分隔行与数据行；`--form table` 不要求用户先改成 JSON `rows`。
+
+```markdown
+| 方案 | 成本 |
+| --- | --- |
+| A | 低 |
+| B | 高 |
+```
+
+## chart_data
+
+复用元呈 12 图内核（bar / line / pie / radar / scatter / histogram / funnel /
+waterfall / word_cloud / sankey / spreadsheet / treemap）。
+
+```json
+{"chart_data": {"chart": "line", "title": "访问趋势", "labels": ["一", "二", "三"], "data": [3, 5, 4]}}
+```
+
+- `chart`（或 `type`）指定图型，缺省 `bar`。
+- 其余字段（`labels` / `data` / `width` / `height` / `palette` / `stacked` / `fill` 等）透传给渲染内核。
+- 输出：Markdown 内嵌 `data:image/svg+xml;base64,…`（自包含可复制）；指定 `--svg <路径>` 时写本地 SVG 文件并在 Markdown 用相对路径引用。
+
+## 形态清单（开源基线 8 种）
+
+| 形态 | CLI 名 | 何时用 |
+|---|---|---|
+| 结论卡 | `conclusion` | 单个结论 / 评分 / 推荐 → 徽章 + 指标 + 要点 |
+| 表格交付 | `table` | 行列分明、需对比 / 罗列的数据 |
+| 清单卡 | `checklist` | 事项 / 要点 / 清单（支持 `[x]` / `[ ]`） |
+| 正文 | `prose` | 叙述 / 说明 / 长段落 |
+| 指标板 | `metrics` | 一组关键指标 |
+| 问答卡 | `qa` | 问题 / 回答成对（rows 或 bullets 均可） |
+| 报告 | `report` | 多节长内容（卡片 + 表 + 文组合 + 目录） |
+| 图表 | `chart` | 数值分布 / 趋势 / 占比（本地 SVG） |
+
+## 确定性判断兜底（内容形状 → 形态）
+
+`--form` 显式指定优先；否则按以下顺序：
+
+1. 含 `chart_data` → `chart`
+2. `rows` 为「问题 / 回答」两列（表头或键命中 问题/question/q + 回答/answer/a）→ `qa`
+3. `title` + `rows` + 其他内容段 → `report`
+4. `rows` → `table`
+5. `metrics` + 结论（verdict/grade/headline）→ `conclusion`；仅 `metrics`（>= 2 项）→ `metrics`
+6. `bullets` 成对「问 / 答」→ `qa`；`bullets` + 结论 → `conclusion`；仅 `bullets` → `checklist`；含 `body` → `prose`
+7. 仅 `verdict` / `grade` → `conclusion`
+8. 仅标题 / 头条 / 正文 → `prose`
+9. 兜底：任何输出至少套「正文」美化，不让内容裸奔
+
+> 判断可解释：CLI `--explain` / MCP `explain=true` 返回选择原因。
+
+## 示例
+
+### 结论卡
+
+```json
+{
+  "title": "安全扫描结果",
+  "grade": "success",
+  "verdict": "未发现高危风险",
+  "metrics": [{"label": "检测点", "value": 8, "unit": "项"}],
+  "bullets": ["全部 8 个检测点通过", "数据未出本机"],
+  "notes": ["扫描仅在本机进行"]
+}
+```
+
+### 报告
+
+```json
+{
+  "title": "周报",
+  "headline": "本周三项推进顺利",
+  "verdict": "整体进度正常",
+  "metrics": [{"label": "任务", "value": 12}, {"label": "完成", "value": 9}],
+  "rows": [["项", "状态"], ["元呈 S3", "进行中"], ["在线检测", "定案"]],
+  "bullets": ["下周进入校验"]
+}
+```
+
+### 图表
+
+```json
+{"title": "趋势", "chart_data": {"chart": "pie", "labels": ["A", "B"], "data": [3, 1]}}
+```
+
+## 渲染通道与平台（channel × platform）
+
+`channel`（CLI `--channel` / MCP `channel`，默认 `auto`）定「载体族」；`platform`（CLI `--platform` / MCP `platform`，默认 `webchat`）定「族内降级」。
+
+| channel | 载体 | 说明 |
+|---|---|---|
+| `auto`（默认） | — | 按 platform 自动映射：`plain` → `r0`；`webchat` / `discord` / `whatsapp` → `r1` |
+| `r0` | 基础 Markdown / 纯文本 | 保底无色：无 emoji 徽章（文字徽章仍在，如「危险」） |
+| `r1` | Markdown | emoji 增强：🟢🟡🔴⚪ 徽章 + 引用条 + 分隔线（默认） |
+| `r3` | SVG 整卡 | 开源 demo（v0.7.0）：conclusion / metrics / table 三形态 + 4 场景模板 + 品牌 token；可编辑 SVG；显式启用 |
+| `r2` | — | 富文本 HTML（后续版本推出；显式指定提示未开放） |
+
+| platform | 族内降级 |
+|---|---|
+| `webchat` | 完整 Markdown（标题 / 表格 / 代码块全支持，默认） |
+| `discord` / `whatsapp` | 禁表格、禁大标题 → 表格自动转列表、标题转加粗；代码块保留 |
+| `plain` | 命令行 / 纯文本：保留分点与逻辑顺序，去 Markdown 符号（# / ** / > / 表格竖线）；自动 r0 去 emoji |
+
+## 命名场景模板（template）
+
+声明式 structure 骨架 + 平台策略，**一次定义多处复用**；定义存 `references/templates.json`（可热更新，缺失回退内置）。
+
+| 模板 key | 用途 | 结构 |
+|---|---|---|
+| `vuln_report` | 漏洞 / 安全报告 | 概述 → 等级与指纹（表格）→ 复现步骤（有序列表）→ 请求样本（codeblock）→ 危害分析（列表）→ 修复建议（有序列表） |
+| `faq` | 问答 | 结论先行 → 问答对 |
+| `status` | 状态一句话 | 纯文本（headline / verdict） |
+
+模板块类型：`heading` / `summary` / `table` / `list`（bulleted / ordered）/ `codeblock` / `qa` / `plain`；每块 `source` 指定内容字段，缺字段自动跳过（骨架自适应）。
+
+## R3 整卡（card，v0.7.0 开源 demo）
+
+`--channel r3` 显式启用；整卡内核 = `scripts/yotta_card.py`（复用图表内核的 XML 转义与主题 token）。
+
+**形态（`--form`）**：`conclusion`（结论卡：grade / verdict / headline / bullets + 可选指标）/ `metrics`（指标板：`metrics` 必填）/ `table`（表格卡：`rows` 必填）。
+不支持形态或缺少必需字段 → 非 0 退出 + 修复建议，**不静默降级**。
+
+**场景模板（`--card`，`references/cards.json` 可热更新、内置回退）**：
+
+| slug | 主形态 | 分节 | 用途 |
+|---|---|---|---|
+| `release` | conclusion | summary + metrics | 版本发布 / 验收结论 |
+| `weekly` | metrics | metrics | 周报 / 使用统计快报 |
+| `compare` | table | table | 方案 / 产品对比 |
+| `risk` | conclusion | summary + table | 安全 / 风险报告（danger 主色） |
+
+`--card` 可单独使用（按模板的形态出卡）；与 `--form` 同时给出时以 `--form` 为准。
+
+**品牌 token（`--brand <file>`，浅合并 `theme.json.brand`，白名单字段）**：
+
+```json
+{"name": "示例品牌", "primary": "#2F6FED", "accent": "#22B8A6", "footer": "页脚文本", "logo": "logo.png"}
+```
+
+- `primary` / `accent`：十六进制色值（`#RGB` / `#RRGGBB`）；`primary` 用于主色（如 monogram），`accent` 用于 kicker。
+- `logo`：相对品牌文件所在目录的本地 PNG / JPEG（≤ 256 KB、魔数校验）；**不支持 SVG logo**；缺省用品牌名首字 monogram 兜底。
+- 默认空品牌：不默认打任何水印；未知字段忽略并进入 `warnings`。
+
+**输出**：`--svg out.svg` 写可编辑 SVG 文件；缺省在 Markdown 内嵌 `data:image/svg+xml;base64`；`--json` / MCP 返回 `card` 元数据（`form` / `template` / `sections` / `theme` / `width` / `height` / `path` / `data_uri` / `svg` / `truncated`）。Markdown / 纯文本仍随行输出同内容可复制文本（copyable-first）。
+
+**可编辑 SVG 标准**：文本全部 `<text>/<tspan>`（不转路径）；语义分层 id（`card-header` / `card-body` / `card-footer` / `card-metrics` / `card-table` / `metric-<i>` / `table-cell-<r>-<c>` 等）；无 `<script>` / 外链引用 / `<foreignObject>`；渲染后结构自检，失败即拒绝输出。
+
+## 长度熔断（max_len）
+
+`max_len`（content）或 `--max-len N`（CLI）：渲染结果超限时依次「压缩列表 → 降标题层级 → 硬截断」，优先保留 `title` / `headline` / `verdict`。被截断的块会在 `fidelity.dropped` / `fidelity.compressed` 中明确列出，`--explain` 同步说明取舍。

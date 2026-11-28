@@ -1,43 +1,52 @@
-## Description: <br>
-Xiaohongshu Radar lets an agent run Xiaohongshu keyword searches and note-detail lookups for content planning, competitive analysis, KOL screening, and trend research. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+为内容创作者、运营和分析人员检索小红书公开笔记、详情、评论、博主作品及互动数据，并以 JSON 返回；无需登录或发布内容。
 
-## Publisher: <br>
-[um-why](https://clawhub.ai/user/um-why) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[um-why](https://clawhub.ai/user/um-why)
 
-## Use Case: <br>
-External users, marketers, and content analysts use this command-line skill to collect public Xiaohongshu search results and note details for campaign research, content ideation, and structured reporting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms, note URLs, and the GUAIKEI_API_TOKEN are sent to the GuaiKei API service. <br>
-Mitigation: Use only when that data sharing is acceptable, store the token as a protected credential, and rotate it if exposure is suspected. <br>
-Risk: Search and detail results are written to local log files that may contain sensitive queries or returned content. <br>
-Mitigation: Protect or delete the logs directory when outputs contain sensitive research, customer, or campaign information. <br>
-Risk: Some documentation claims are broader than the implemented search and detail commands, and one limitation line names Douyin instead of Xiaohongshu. <br>
-Mitigation: Evaluate the skill as a Xiaohongshu keyword-search and note-detail tool, and verify claims outside those implemented commands before relying on them. <br>
+## Use Case:
 
+内容创作者、运营人员、品牌团队与分析人员可用它检索公开笔记、查看评论和博主作品，支持选题、竞品观察、KOL筛选和舆情分析。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/um-why/xiaohongshu-radar) <br>
-- [Publisher profile](https://clawhub.ai/user/um-why) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Files, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [JSON or Markdown command-line output, with JSON log files written locally] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js and GUAIKEI_API_TOKEN; search output supports json or markdown, while detail output is JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: SKILL.md frontmatter, package.json, release metadata) <br>
+Risk: ClawScan found privacy and tool-scope concerns, and parts of the artifact were only partially inspected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the declared access and privacy practices before installing; decide whether sending keywords or links to the third-party service, and possible sharing with support, is acceptable. The scan does not establish that the skill is safe.
+
+## Reference(s):
+
+- [Guaikei service and token information](https://www.guaikei.com)
+- [Output contract](references/contract.md)
+- [Command options](references/options.md)
+- [Error guidance](references/errors.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON]
+
+**Output Format:** [Structured JSON envelope]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Contains public note, comment, creator, and interaction data; results vary by command.]
+
+## Skill Version(s):
+
+1.2.4 (source: server-resolved release, SKILL.md frontmatter, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "version": 1,
+  "id": "bs-cobalt-serif-marketing-deck-semantic-fixture",
+  "title": "Editable style fixture",
+  "palette": {
+    "theme": "#5362ff",
+    "tint": "#f4f2ec",
+    "paper": "#f4f2ec",
+    "ink": "#141719"
+  },
+  "typography": {},
+  "contentLocale": "en",
+  "contentDirection": "ltr",
+  "slides": [
+    {
+      "id": "fixture-page",
+      "notes": "This is a schema fixture, not a finished presentation example.",
+      "root": {
+        "id": "fixture-root",
+        "type": "stack",
+        "gap": 24,
+        "children": [
+          {
+            "id": "fixture-label",
+            "type": "label",
+            "text": "STYLE FIXTURE"
+          },
+          {
+            "id": "fixture-heading",
+            "type": "heading",
+            "text": "An independently editable heading"
+          },
+          {
+            "id": "fixture-body",
+            "type": "text",
+            "text": "Create a user project from the style rules and replace this fixture with approved content."
+          }
+        ]
+      }
+    }
+  ]
+}

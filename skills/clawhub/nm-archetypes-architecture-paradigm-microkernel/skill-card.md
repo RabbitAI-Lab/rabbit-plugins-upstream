@@ -1,41 +1,58 @@
-## Description: <br>
-Applies microkernel architecture with minimal core and plugin extensibility. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Microkernel architecture with a minimal core and plugins
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and software architects use this skill to plan extensible platforms where a stable core is separated from customer, marketplace, or third-party plugins. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The artifact refers readers to a separate Claude Code plugin that is outside this release artifact. <br>
-Mitigation: Review and scan the separate plugin before installing or running it. <br>
-Risk: Architecture guidance for plugin loaders, sandboxes, and validation pipelines can affect runtime trust boundaries if implemented incorrectly. <br>
-Mitigation: Review proposed plugin contracts, permission models, sandboxing, and validation steps before deploying a system based on the guidance. <br>
+## Use Case:
 
+Developers and software architects use this skill to assess when a microkernel architecture fits and plan its core services, plugin contract, sandboxing, SDK, and release governance.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-microkernel) <br>
-- [Metadata Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only architecture guidance; no shell commands, code execution, or credential access are included in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Plugins can fail or exceed their intended access if their capabilities and permissions are not constrained.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Define a plugin permission model and run extensions in an isolated sandbox with limited capabilities.
+
+Risk: Core and plugin versions can drift out of compatibility.
+
+Mitigation: Use semantic versioning, publish a compatibility matrix, and provide backward-compatible shims when needed.
+
+Risk: An uncontrolled number of plugins can make ongoing support unsustainable.
+
+Mitigation: Use a formal certification process or marketplace-style review for third-party plugins.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-microkernel)
+- [Archetypes project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Markdown architecture guidance and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations depend on the system's requirements and plugin model.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

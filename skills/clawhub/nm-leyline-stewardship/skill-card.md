@@ -1,39 +1,49 @@
-## Description: <br>
-Applies stewardship virtues (Care, Curiosity, Humility, Diligence) to plugin work. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies stewardship virtues (Care, Curiosity, Humility, Diligence) to plugin work.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and plugin maintainers use this skill to apply stewardship principles and reflection prompts while designing, reviewing, maintaining, and documenting plugins. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad triggers may cause the skill to appear in general quality or maintenance conversations where stewardship guidance is not needed. <br>
-Mitigation: Review trigger fit for the workspace before installing and invoke the skill primarily for plugin design, review, maintenance, and contributor-experience work. <br>
+## Use Case:
 
+Plugin developers and maintainers use this skill when making design decisions, reviewing code quality and contributor experience, and reflecting at workflow boundaries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-stewardship) <br>
-- [Leyline plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown guidance and reflection prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory markdown-only output; no executable code, credential handling, persistence, or hidden data access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Broad reflection triggers may cause reflection to run beyond the intended workflow scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit reflection to explicit requests or defined workflows.
+
+## Reference(s):
+
+- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands]
+
+**Output Format:** [Markdown guidance with reflection prompts and optional shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Context-dependent guidance for plugin design, code review, maintenance, and workflow reflection.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

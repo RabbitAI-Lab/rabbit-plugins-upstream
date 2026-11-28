@@ -1,41 +1,48 @@
-## Description: <br>
-Pre-implementation gate covering think-first, simplicity, surgical edits, and verifiable goals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pre-implementation gate covering think-first, simplicity, surgical edits, and verifiable goals.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[athola](https://clawhub.ai/user/athola)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and coding agents use this skill before substantial implementation, during code review, and before reporting work complete. It guides them to surface assumptions, prefer simple and focused changes, and define checkable success criteria.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Applying the principles rigidly to trivial fixes, throwaway work, documentation-only changes, or production incidents can add unnecessary delay.
+
+Mitigation: Use the skill's stated exceptions and scale the review effort to the task's ambiguity, lifetime, and urgency.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and coding agents use this skill as a pre-implementation and review gate for non-trivial coding tasks. It prompts assumption checks, scope control, surgical diffs, and verifiable success criteria before and after implementation. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Guidance, Markdown]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may slow or over-constrain trivial coding tasks because some triggers are broad. <br>
-Mitigation: Apply the tradeoff guidance and keep the gate lightweight for obvious typo fixes, throwaway spikes, documentation-only edits, time-boxed prototypes, and urgent production fixes. <br>
-Risk: Companion Night Market or Claude Code plugin components may introduce behavior outside this skill's markdown guidance. <br>
-Mitigation: Review and scan any companion plugin agents, hooks, or commands before enabling them. <br>
+**Output Format:** [Concise written guidance, checklists, and examples]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-imbue-karpathy-principles) <br>
-- [Claude Night Market imbue plugin](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
+**Other Properties Related to Output:** [A four-principle self-check with task-specific exceptions.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code] <br>
-**Output Format:** [Markdown guidance with checklists, scope rationale, and verification criteria] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include assumptions, tradeoff notes, diff-trace checks, and test or command suggestions for verification.] <br>
+1.10.4 (source: server-resolved release metadata)
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter says 1.9.8) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

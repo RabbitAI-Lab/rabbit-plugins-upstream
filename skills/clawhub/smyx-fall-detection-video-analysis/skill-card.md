@@ -1,45 +1,59 @@
-## Description: <br>
-Detects falls in target areas from video streams to support real-time home safety monitoring for elderly people living alone. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects whether anyone has fallen within a target area using video analysis for safety monitoring.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and safety-monitoring developers use this skill to analyze local videos or video URLs for fall events and to request structured reports or history for elderly home-safety monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends fall-detection videos, video URLs, identity values, and report history requests to configured LifeEmergence/Open API services. <br>
-Mitigation: Use it only when those data transfers are acceptable, and prefer explicit user confirmation before uploads or history queries. <br>
-Risk: The skill silently creates or reuses local identities and persists tokens or report-related records. <br>
-Mitigation: Review the local data directory before deployment and clear generated records or tokens according to the user's retention policy. <br>
-Risk: Fall-detection results are advisory and may be incorrect or incomplete. <br>
-Mitigation: Require human confirmation and appropriate caregiver or medical follow-up before relying on alerts for safety decisions. <br>
+## Use Case:
 
+Home safety users can submit a video for fall detection and receive a structured result, alerts, and report links. Fall alerts are for reference and should be confirmed by a person.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fall-detection-video-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Fall detection API documentation](references/api_doc.md) <br>
-- [Common analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown summaries and tables, JSON detail output, and optional saved text or JSON result files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links and history-list tables; supports basic, standard, and json detail levels.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release evidence; artifact frontmatter lists 1.0.6) <br>
+Risk: Video upload and data-retention practices are not clear.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the upload destination and retention practices before sending sensitive footage.
+
+Risk: Credential handling could expose access beyond trusted services.
+
+Mitigation: Restrict credentials to trusted destinations and avoid exposing API keys in user-facing output.
+
+Risk: The skill may create an account automatically and access historical reports without a clear, separate confirmation.
+
+Mitigation: Require explicit user intent for account creation and historical report access.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub release page](https://clawhub.ai/18072937735/skills/smyx-fall-detection-video-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Report links]
+
+**Output Format:** [Structured analysis results in JSON or text; historical report lists in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fall alerts are for safety reference and require human confirmation.]
+
+## Skill Version(s):
+
+1.0.22 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

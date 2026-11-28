@@ -180,7 +180,7 @@ You didn't have to guess that weekly review would be popular. You discovered it.
 
 When agents take unsolicited actions--doing things on their own rather than responding to explicit requests--you need to decide how much autonomy to grant.
 
-> **Note:** This framework applies to unsolicited agent actions. If the user explicitly asks the agent to do something ("send that email"), that's already approval--the agent just does it.
+> An authenticated user request can authorize the exact requested action within the user's grants and application policy. Enforce any separate approval requirement for protected actions.
 
 ### The Stakes/Reversibility Matrix
 
@@ -233,44 +233,39 @@ Requires explicit action, makes consequences clear.
 
 ### Implementation
 
-```swift
-enum ApprovalLevel {
-    case autoApply       // Just do it
-    case quickConfirm    // One-tap approval
-    case suggestApply    // Show preview, ask to apply
-    case explicitApproval // Require explicit confirmation
-}
+```typescript
+type ApprovalLevel =
+  | "autoApply"
+  | "quickConfirm"
+  | "suggestApply"
+  | "explicitApproval";
 
-func approvalLevelFor(action: AgentAction) -> ApprovalLevel {
-    let stakes = assessStakes(action)
-    let reversibility = assessReversibility(action)
+type AgentAction =
+  | "organizeFiles"
+  | "publishToFeed"
+  | "modifyCode"
+  | "sendEmail"
+  | "makePayment";
 
-    switch (stakes, reversibility) {
-    case (.low, .easy): return .autoApply
-    case (.low, .hard): return .quickConfirm
-    case (.high, .easy): return .suggestApply
-    case (.high, .hard): return .explicitApproval
-    }
-}
+type ActionRisk = {
+  stakes: "low" | "high";
+  reversibility: "easy" | "hard";
+};
 
-func assessStakes(_ action: AgentAction) -> Stakes {
-    switch action {
-    case .organizeFiles: return .low
-    case .publishToFeed: return .low
-    case .modifyCode: return .high
-    case .sendEmail: return .high
-    case .makePayment: return .high
-    }
-}
+const actionRisks: Record<AgentAction, ActionRisk> = {
+  organizeFiles: { stakes: "low", reversibility: "easy" },
+  publishToFeed: { stakes: "low", reversibility: "hard" },
+  modifyCode: { stakes: "high", reversibility: "easy" },
+  sendEmail: { stakes: "high", reversibility: "hard" },
+  makePayment: { stakes: "high", reversibility: "hard" },
+};
 
-func assessReversibility(_ action: AgentAction) -> Reversibility {
-    switch action {
-    case .organizeFiles: return .easy  // Can move back
-    case .publishToFeed: return .hard  // People might see it
-    case .modifyCode: return .easy     // Git revert
-    case .sendEmail: return .hard      // Can't unsend
-    case .makePayment: return .hard    // Money moved
-    }
+function approvalLevelFor(action: AgentAction): ApprovalLevel {
+  const { stakes, reversibility } = actionRisks[action];
+  if (stakes === "low") {
+    return reversibility === "easy" ? "autoApply" : "quickConfirm";
+  }
+  return reversibility === "easy" ? "suggestApply" : "explicitApproval";
 }
 ```
 
@@ -282,22 +277,28 @@ When agents can modify their own behavior--changing prompts, updating preference
 2. **Understanding:** User understands the effects
 3. **Rollback:** User can undo changes
 
-Approval flows are one way to achieve this. Audit logs with easy rollback could be another. **The principle is: make it legible.**
+Use the [self-modification guardrails](./self-modification.md) for system prompts, protected workflows, and other protected state. Keep the proposed change pending while the authenticated user reviews the exact draft revision. Show the applied change in the audit log and provide a rollback path after the trusted service applies it.
 
-```swift
-// When agent modifies its own prompt
-func agentSelfModify(change: PromptChange) async {
-    // Log the change
-    await auditLog.record(change)
+The example applies an unprotected response-length preference. The application supplies the audit, checkpoint, mutation, and notification adapters. The mutation adapter verifies the caller's grant and validates the preference before saving.
 
-    // Create checkpoint for rollback
-    await createCheckpoint(currentState)
+```typescript
+type ResponseLength = "concise" | "detailed";
 
-    // Notify user (could be async/batched)
-    await notifyUser("I've adjusted my approach: \(change.summary)")
+interface PreferenceRuntime {
+  recordChangeRequest(length: ResponseLength): Promise<void>;
+  checkpointCurrentState(): Promise<void>;
+  setResponseLength(length: ResponseLength): Promise<void>;
+  notifyUser(message: string): Promise<void>;
+}
 
-    // Apply change
-    await applyChange(change)
+async function changeResponseLength(
+  length: ResponseLength,
+  runtime: PreferenceRuntime,
+): Promise<void> {
+  await runtime.recordChangeRequest(length);
+  await runtime.checkpointCurrentState();
+  await runtime.setResponseLength(length);
+  await runtime.notifyUser(`Response length set to ${length}.`);
 }
 ```
 </approval_and_agency>
@@ -386,25 +387,34 @@ Agent-native apps require trust. Users are giving an AI significant capability. 
 
 ### Implementation
 
-```swift
-struct AgentTransparency {
-    // Show what's happening
-    func onToolCall(_ tool: ToolCall) {
-        showInUI("Using \(tool.name)...")
-    }
+Use an application-defined UI adapter to expose status, concise decision explanations, and inspectable output:
 
-    // Explain reasoning
-    func onDecision(_ decision: AgentDecision) {
-        if decision.needsExplanation {
-            showInUI("I chose this because: \(decision.reasoning)")
-        }
-    }
+```typescript
+type ToolCall = { name: string };
+type AgentDecision = { needsExplanation: boolean; explanation: string };
+type AgentOutput = { title: string; content: string };
 
-    // Make work inspectable
-    func onOutput(_ output: AgentOutput) {
-        // All output is in files user can see
-        // Or in visible UI state
+interface TransparencyUI {
+  showStatus(message: string): void;
+  showOutput(output: AgentOutput): void;
+}
+
+class AgentTransparency {
+  constructor(private readonly ui: TransparencyUI) {}
+
+  onToolCall(tool: ToolCall): void {
+    this.ui.showStatus(`Using ${tool.name}...`);
+  }
+
+  onDecision(decision: AgentDecision): void {
+    if (decision.needsExplanation) {
+      this.ui.showStatus(`I chose this because: ${decision.explanation}`);
     }
+  }
+
+  onOutput(output: AgentOutput): void {
+    this.ui.showOutput(output);
+  }
 }
 ```
 </designing_for_trust>

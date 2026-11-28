@@ -2,89 +2,47 @@
  * 小红书笔记搜索模块
  */
 const constants = require("../config/constants");
-const { postJson, getJson } = require("../utils/request");
-const { withRetry } = require("../utils/retry");
-const utils = require("../utils/utils");
+const { requestApi, pollTaskResult } = require("../utils/request");
+const { pickCost, pickTaskId } = require("../utils/cost");
+const { SkillError } = require("../utils/errors");
 
 /**
  * 创建小红书笔记搜索任务
- * @param {string} token - API令牌
- * @param {string} keyword - 搜索关键词
- * @param {number} type - 内容类型, 0: 全部, 1: 视频, 2: 图文
- * @param {number} sort - 排序规则, 0: 综合, 1: 最新, 2: 最多点赞, 3: 最多评论, 4: 最多收藏
- * @param {number} limit - 搜索数量, 1-60
- * @returns {Promise<Object>} 搜索任务状态
- * @throws {Error} API调用失败时抛出错误
+ * @returns {Promise<string|undefined>} Create 成功时的任务 id（uuid）
  */
-async function createSearchTask(token, keyword, type, sort, limit) {
-  return await withRetry(
-    async () => {
-      return await postJson(
-        "/api/xiaohongshu/note-search/keyword",
-        { _: Date.now(), token: token },
-        { keyword, type, sort, limit },
-      );
-    },
+async function createSearchTask(token, keyword, type, sort, time, limit) {
+  const response = await requestApi(
+    "POST",
+    "/api/xiaohongshu/note-search/keyword",
+    { _: Date.now() },
+    { keyword, type, sort, time, limit },
+    token,
     constants.CREATE_MAX_ATTEMPTS,
-    (attempt, err) => {
-      utils.printError(
-        `【创建任务重试】 ${attempt + 1}/${constants.CREATE_MAX_ATTEMPTS} 次 - ${err.message}`,
-      );
-    },
+    "创建任务",
   );
+  return pickTaskId(response);
 }
 
 /**
- * 获取小红书笔记搜索任务结果
- * @param {string} token - API令牌
- * @param {string} keyword - 搜索关键词
- * @param {number} type - 内容类型, 0: 全部, 1: 视频, 2: 图文
- * @param {number} sort - 排序规则, 0: 综合, 1: 最新, 2: 最多点赞, 3: 最多评论, 4: 最多收藏
- * @param {number} limit - 搜索数量, 1-60
- * @returns {Promise<Array>} 搜索结果数组
- * @throws {Error} API调用失败时抛出错误
+ * 获取小红书笔记搜索任务结果。返回接口 data 数组，不追加文档以外的字段。
+ * @param {string} [taskId] Create 返回的任务 id；有则查询只传 id（不带业务字段）
+ * @returns {Promise<{ results: Array, cost?: number }>}
  */
-async function getSearchTask(token, keyword, type, sort, limit) {
-  return await withRetry(
-    async () => {
-      const res = await getJson("/api/xiaohongshu/note-search/info", {
-        _: Date.now(),
-        token: token,
-        keyword,
-        type,
-        sort,
-        limit,
-      });
-      if (res.errcode === 0) {
-        for (let i = 0; i < res.data.length; i++) {
-          const item = res.data[i];
-          if (item.id && item.xsec_token) {
-            res.data[i].url =
-              "https://www.xiaohongshu.com/explore/" +
-              item.id +
-              "?xsec_token=" +
-              item.xsec_token;
-          }
-          if (item.user && item.user.user_id && item.user.xsec_token) {
-            res.data[i].user.url =
-              "https://www.xiaohongshu.com/user/profile/" +
-              item.user.user_id +
-              "?xsec_token=" +
-              item.user.xsec_token;
-          }
-        }
-        return res.data;
-      } else {
-        throw new Error(`请求错误信息: ${res.errmsg || "请求失败"}`);
-      }
-    },
-    constants.QUERY_MAX_ATTEMPTS,
-    (attempt, err) => {
-      utils.printError(
-        `【查询任务重试】 ${attempt + 1}/${constants.QUERY_MAX_ATTEMPTS} 次 - ${err.message}`,
-      );
-    },
+async function getSearchTask(token, keyword, type, sort, time, limit, taskId) {
+  const params = taskId
+    ? { id: taskId }
+    : { keyword, type, sort, time, limit };
+  const response = await pollTaskResult(
+    "/api/xiaohongshu/note-search/info",
+    params,
+    token,
+    "查询任务",
   );
+  const cost = pickCost(response);
+  if (!Array.isArray(response.data)) {
+    throw new SkillError("API_ERROR", "搜索结果格式错误: data 不是数组", true);
+  }
+  return { results: response.data, cost };
 }
 
 module.exports = {

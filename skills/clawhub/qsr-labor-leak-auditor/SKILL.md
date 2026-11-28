@@ -1,8 +1,8 @@
 ---
 name: qsr-labor-leak-auditor
-version: 3.1.1
+version: 3.1.5
 description: Real-time labor decision support for restaurant and franchise operators with summary-first mobile-optimized output. All V3 capabilities — surfaced events, state control, goal tracking, recovery planning, forward planning, event-aware comparisons — plus executive-summary-first formatting, math hidden by default, standardized output structure, and concise correction handling. Designed for fast mobile operator use on the shift floor. Built by a franchise GM with 16 years in QSR operations.
-license: CC-BY-NC-4.0
+license: MIT-0
 tags:
   - restaurant
   - franchise
@@ -17,8 +17,16 @@ tags:
   - mobile-first
 ---
 
+## Observa Edge Basic Beta
+
+Observa Edge Basic Beta is a separate, optional OpenClaw plugin from McPherson AI for local guardrails on covered tool routes. Installing this restaurant skill leaves Guard inactive. Accountless Shadow previews covered requests locally. Guard enrollment is restricted and requires approval and a separate local owner activation.
+
+[**Explore Observa Edge Basic Beta →**](https://mcphersonai.com/observa/edge-basic?utm_source=clawhub&utm_medium=skill&utm_campaign=observa-edge-basic-beta&utm_content=qsr-labor-leak-auditor)
+
+*Publisher notice. The QSR skill’s behavior and data handling are unchanged.*
+
 # QSR Labor Leak Auditor
-**v3.1.1 · McPherson AI · San Diego, CA**
+**v3.1.5 · McPherson AI · San Diego, CA**
 [mcphersonai.com](https://mcphersonai.com)
 
 You are a real-time labor decision support assistant for a restaurant or franchise location. Your job goes beyond tracking labor cost — you help the operator understand where they stand, whether they are on track for the week, what to do when they are not, and how to plan tomorrow. You maintain awareness of stored operating context and surface it at the moment it affects a labor read.
@@ -514,11 +522,7 @@ Ask the minimum necessary question. One question, not five.
 
 ## LICENSE
 
-**Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**
-
-Free to use, share, and adapt for personal and business operations. Operating this skill within your own business is not considered commercial redistribution. Commercial redistribution requires written permission from McPherson AI.
-
-Full license: https://creativecommons.org/licenses/by-nc/4.0/
+McPherson AI distributes this ClawHub edition under MIT-0. The GitHub source edition is available under Apache License 2.0. See [LICENSE](LICENSE). Third-party materials remain subject to their applicable terms.
 
 ---
 
@@ -531,6 +535,9 @@ This skill complements **qsr-daily-ops-monitor** (daily compliance) and **qsr-fo
 Built by a corporate GM who uses daily labor tracking and mid-week corrections to maintain labor cost targets at a high-volume QSR location — validated through live operational testing where mid-day labor evaluations dropped from 15–20 minutes to fast interactive exchanges.
 
 **Changelog:**
+- v3.1.4 - Publisher-notice refresh: Observa CTA updated to the current Getting Started flow. No functional changes.
+- v3.1.3 - Publisher-note release. Updated the note: the Observa private beta is now open for selected n8n and OpenClaw operators. No operational behavior or license changes.
+- v3.1.2 — Publisher-note release. Added the McPherson Governance V6 shadow-beta notice. No operational behavior or license changes.
 - v3.1.1 — Documentation and governance patch. No functional changes to the four core behaviors, executive-summary output, or any operator-facing UX. Added top-of-file `STORAGE, SCOPE & DATA HANDLING` section declaring qsr-store-memory-engine as the sole persistence path, store-scoped namespace boundaries, sibling-skill read-only access policy, sensitive financial and personnel data handling rules, in-chat-only alert delivery, retention via the memory engine, and host-platform responsibility for encryption/auth/audit. Added three on-demand export commands to State Control: `Export entries`, `Export weekly summaries`, `Export audit log`. Clarified that the daily check, mid-week alert, and weekly summary are operator-triggered, not scheduled.
 - v3.1.0 — Summary-First UX: executive summary leads every response, detailed math hidden by default, "show math" on request. Standardized Output: all responses follow Status → Today → WTD → Goal → Next Move structure. Compact Formatting: daily output, recovery blocks, target cards, and weekly summaries redesigned for mobile readability. Concise Corrections: corrections lead with "what changed" in one line. Based on live operational testing and operator feedback on output length.
 - v3.0.0 — Surfaced Events, Store Operating Context, State Control, Goal Tracking, Recovery Planning, Forward Planning, Event-Aware Comparisons, Messy Input Handling, Ambiguity Detection.

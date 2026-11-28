@@ -1,0 +1,150 @@
+---
+name: sail-verification
+description: Verify Rust with Verus, check proof repairs, and run cached Z3 queries with Sail. Use when cargo verus verify is slow, when developing Verus proofs, or when giving coding agents SMT-LIB solver access through the CLI or MCP.
+license: MIT
+metadata:
+  version: "1.0.0"
+---
+
+# Sail verification
+
+Sail reuses solver answers and proofs across edits so developers and agents
+spend less time waiting for Verus. It also runs SMT-LIB queries through bundled
+Z3 with a persistent result cache.
+
+Sail runs on Linux x86-64 and Apple-silicon macOS. Use its CLI or an already
+configured Sail MCP server.
+
+## Verify Rust
+
+In a Cargo project using Verus, run:
+
+```sh
+sail verify --output json
+```
+
+`sail verify` takes the arguments you would pass to `cargo verus verify`.
+
+Use the failure locations and diagnostics to revise the code or proof, then
+verify again. Preserve the intended contract; weakening a specification is not
+a fix for an implementation that violates it. A selected function passing is
+not evidence that the entire target passes.
+
+For a new Verus library, run `sail new --lib demo`, then `cd demo`. Write the intended Verus
+contracts and proofs along with the Rust implementation.
+
+Read [Verus workflows](references/verus.md) for standalone files, MCP,
+background preparation, explicit jobs, proof-repair checks and cache management. Inspect the installed help before
+choosing the standalone workflow; the reference explains release availability.
+
+## Verify in CI
+
+In GitHub Actions, use the Sail action after a checkout with
+`fetch-depth: 0`:
+
+```yaml
+- uses: Chelis-Lang/sail/action@v0.3.1
+  with:
+    args: --lib
+```
+
+It installs Sail, caches solver replies and proof receipts, writes a job
+summary, annotations and SARIF, and ends with `sail verify`'s exit code. It
+needs a Sail release that includes `sail report` (0.3.0 or newer); check that
+the tag exists before using it. Read the
+[action guide](https://github.com/Chelis-Lang/sail/blob/main/docs/github-action.md)
+for inputs, baselines and caching. Elsewhere, run
+`sail verify --output json > result.json` and render it with
+`sail report --format github-summary|github-annotations|sarif result.json`,
+keeping `sail verify`'s exit code for the job.
+
+## Repeat a native temporal check
+
+Replay, `recheck` and `edit-session` are available in Sail 0.3.1 and newer,
+which links D.I.V.E. 0.2.0. Use `sail runtime capabilities` to confirm that the installation includes its
+native worker. Submit the same complete model, configuration and limits with
+`sail runtime execute --file job.json`. A completed exhaustive check or
+validated refutation can replay across processes, including after undo.
+Inspect `cache_hit` and `cache_key`. The native statistics and trace belong
+to the run that established the verdict. Simulation and resource stops do
+not establish an invariant. To precompute a specific first job, use
+`sail runtime prepare-temporal --file job.json` on a supporting installation.
+
+If the installed `sail runtime --help` lists `recheck`, use
+`sail runtime recheck --previous before.json --file after.json` for a
+configuration comment edit following an invariant violation. The
+`equivalent-cfg-rechecked-refutation` route carries a counterexample validated
+against the edited job. The `current-check` route returns the ordinary current
+result, including its exact receipt key on a hit. After dropping invariants
+from a completed ordinary safety check, the same command can return
+`established-invariant-subset`. Read the current obligation and invariant
+inventory together with the previous receipt key and worker identity.
+After a complete ordinary native liveness check, retaining its first temporal
+property alone can return `established-first-temporal-claim`. Report its
+`property` and describe `basis_counts` as the earlier check’s search counts.
+
+To check a sequence of related native models, use
+`sail runtime edit-session --file edits.json`. Supply one overall
+`wall_time_ms` and a `checks` array of 1–64 closed native check requests in
+edit order. A complete response reports each current digest and whether the
+worker captured evidence, reused it or ran a fresh check. Inspect each
+decision and its current trace validation when reporting a failure.
+[Request format and worked example](https://github.com/Chelis-Lang/sail/blob/main/docs/temporal-jobs.md).
+
+`sail runtime symbolic-check` is not part of this release: it needs a
+symbolic Dive worker that ships with D.I.V.E. 0.3. Do not offer it to users.
+
+## Run SMT queries
+
+For repeated Z3 work outside Rust, check the installed solver once with
+`sail runtime capabilities`, then submit complete SMT-LIB transcripts using
+`sail runtime execute --file query.json`. Read [SMT requests](references/smt.md)
+for a complete request and the equivalent MCP tools.
+
+Sail returns stored output when the transcript and execution settings match a
+cached decided run. Changed formulas are solved again. Read the satisfiability
+answer and requested model or unsat core; solver installation readiness alone
+is not a result about the formula.
+
+## Read the evidence
+
+In Sail 0.3.0 and newer, `sail health JOB --output json` and MCP
+`proof_health` read recorded per-check effort for requested targets. They run
+no solver. Use `--baseline NAME` or MCP `baseline` to show immutable reference
+evidence separately. Check `attributed`, `complete`, `unrecorded_checks` and
+the original verdict/provenance/currentness before interpreting a finite
+`peak`. Missing effort is not zero, unlimited is not a finite margin, and one
+run does not measure stability or an absent fragility score. The command is
+absent from 0.2.0; check `sail health --help` for availability.
+
+For Verus results, check scope and currentness before reporting success. Current
+evidence matches the present inputs; Historical evidence no longer matches
+them; Unknown does not establish a current proof. An Unknown result's
+`SAIL3114` note names the checks that failed in parentheses; re-run once for a
+current result. Current describes freshness,
+not success: read the verdict too. Verify again after
+further edits. An SMT answer concerns its submitted formula; Verus checks
+whether the Rust implementation meets its contracts.
+
+Keep transcripts, logs and redirected output outside the project's watched
+inputs during verification. Writing them inside those inputs can invalidate
+freshness.
+
+If Sail is missing, use the [installation guide](https://github.com/Chelis-Lang/sail/blob/main/docs/install.md).
+Sail ships its own Verus and Z3; an existing Verus installation is left alone.
+For a missing runtime, check `sail engine status` and the installation guide.
+Use [compatibility](https://github.com/Chelis-Lang/sail/blob/main/docs/compatibility.md)
+to check the pinned release. Use `cargo verus verify` if a project must keep
+a different Verus release.
+
+For a multi-root TLA+ project, pass the previous exact request and current
+request to `sail runtime recheck` with the same cache. A
+`unchanged-loaded-program` proof lists the files the authenticated worker
+resolved in both versions. A changed loaded module requires a current check.
+
+For an edited TLA+ job with saved temporal counterexamples, run
+`sail runtime witness-recheck --donor-index INDEX --property PROPERTY` with
+the current module and CFG. The index lists prior words and the models that
+produced them. Optional field selectors identify the typed coordinates to map.
+Use the returned word only after current-source replay succeeds.
+[Command and index format](https://github.com/Chelis-Lang/sail/blob/main/docs/temporal-jobs.md#discover-donors-from-an-edited-job).

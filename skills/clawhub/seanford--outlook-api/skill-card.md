@@ -1,47 +1,62 @@
-## Description: <br>
-Microsoft Outlook API integration with managed OAuth for reading, sending, and managing email, folders, calendar events, and contacts through Microsoft Graph. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Microsoft Outlook API integration with managed OAuth for reading, sending, and managing emails, folders, calendar events, and contacts via Microsoft Graph.
 
-## Publisher: <br>
-[seanford](https://clawhub.ai/user/seanford) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[seanford](https://clawhub.ai/user/seanford)
 
-## Use Case: <br>
-Developers and agents use this skill to make authenticated Outlook and Microsoft Graph requests through Maton for mailbox, calendar, and contact workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Authorized Outlook actions can send email or modify or delete messages, folders, calendar events, and contacts. <br>
-Mitigation: Require the agent to show recipients, message content, target items, requested operation, and account connection before write or delete actions are approved. <br>
-Risk: A Maton API key allows the agent to act through the user's authorized Outlook connection. <br>
-Mitigation: Store MATON_API_KEY securely, avoid pasting it into prompts or logs, and rotate it if it may have been exposed. <br>
-Risk: When multiple Outlook connections exist, omitting the Maton-Connection header can use the default active connection. <br>
-Mitigation: Specify the intended connection ID with the Maton-Connection header for account-sensitive requests. <br>
+## Use Case:
 
+Developers and agents use this skill to interact with Outlook through Maton's managed Microsoft Graph gateway, including mailbox, calendar, contact, and connection workflows.
 
-## Reference(s): <br>
-- [Microsoft Graph API Overview](https://learn.microsoft.com/en-us/graph/api/overview) <br>
-- [Microsoft Graph Mail API](https://learn.microsoft.com/en-us/graph/api/resources/mail-api-overview) <br>
-- [Microsoft Graph Calendar API](https://learn.microsoft.com/en-us/graph/api/resources/calendar) <br>
-- [Microsoft Graph Contacts API](https://learn.microsoft.com/en-us/graph/api/resources/contact) <br>
-- [Microsoft Graph Query Parameters](https://learn.microsoft.com/en-us/graph/query-parameters) <br>
-- [ClawHub Outlook API Listing](https://clawhub.ai/seanford/skills/outlook-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP endpoint descriptions and Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY for live Outlook requests] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and target metadata) <br>
+Risk: The skill can use a Maton API key connected to Outlook resources, creating exposure if the key is logged, shared, or overly broad.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep MATON_API_KEY out of logs and chat output, store it only in the runtime environment, and use narrowly scoped Microsoft permissions where possible.
+
+Risk: Documented operations include sending, moving, deleting, and connection-management actions that can change mailbox, calendar, contact, or OAuth connection state.
+
+Mitigation: Explicitly confirm send, move, delete, and connection-management actions before execution, including the target resource and intended account.
+
+Risk: When multiple Outlook connections exist, omitted connection selection may use an unintended default account.
+
+Mitigation: Specify the intended Outlook connection with the Maton-Connection header whenever more than one active connection may exist.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/seanford/skills/outlook-api)
+- [Microsoft Graph API overview](https://learn.microsoft.com/en-us/graph/api/overview)
+- [Microsoft Graph Mail API](https://learn.microsoft.com/en-us/graph/api/resources/mail-api-overview)
+- [Microsoft Graph Calendar API](https://learn.microsoft.com/en-us/graph/api/resources/calendar)
+- [Microsoft Graph Contacts API](https://learn.microsoft.com/en-us/graph/api/resources/contact)
+- [Microsoft Graph query parameters](https://learn.microsoft.com/en-us/graph/query-parameters)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with Python, JavaScript, shell, HTTP, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; can produce actions against Outlook resources through Microsoft Graph.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

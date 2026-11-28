@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "assets": {
+    "travel-cafe": {
+      "file": "travel-cafe.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1672x941 pixels. Subject: A minimal seaside café table by a window: a cup of coffee, an open notebook with a pen and a passport, bright blue sea outside, clean white and light-wood surfaces.\n\nClean, premium travel photography: one clear subject, uncluttered composition with generous breathing room, rich natural colour (deep blue sea and sky, fresh greens, warm golden sunlight, terracotta, white walls) but tasteful and not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. No text, no logos, no watermark, no real brands.\n\nSave as ./travel-cafe.png at 1672x941. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "df9f0fe6e38024e4f8bba45e8cf66c538a6e46155fae55bfcf301f8c746c7692",
+      "sourceSha256": "e0a2c23e0a5ed45c4279bb93f1bcbfe0c8dcb7b927bdd1473403069a09ad5f13",
+      "generatedAt": "2026-10-29T16:32:43.469867+00:00",
+      "generationId": "codex-image-gen-travel-cafe",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean travel lifestyle"
+    },
+    "travel-city": {
+      "file": "travel-city.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1672x941 pixels. Subject: A quiet old-town street in southern Europe in the morning: warm ochre and terracotta facades, blue shutters, a single bicycle leaning on a wall, soft sunlight and long shadows, no people.\n\nClean, premium travel photography: one clear subject, uncluttered composition with generous breathing room, rich natural colour (deep blue sea and sky, fresh greens, warm golden sunlight, terracotta, white walls) but tasteful and not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. No text, no logos, no watermark, no real brands.\n\nSave as ./travel-city.png at 1672x941. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "ba127771410586d1bfafd02e5d080a58b67ae1801a0c55317523b827f4e6b950",
+      "sourceSha256": "8db6e9a0be0a8cddf8c8195a65711ed97356277440d312e44ccd011e9a4f6684",
+      "generatedAt": "2026-10-29T16:32:43.469867+00:00",
+      "generationId": "codex-image-gen-travel-city",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean travel lifestyle"
+    },
+    "travel-coast": {
+      "file": "travel-coast.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1672x941 pixels. Subject: A white-washed cliffside terrace above a deep blue Mediterranean bay at golden hour, a single wooden chair and a small table with a glass of water, sea and sky filling most of the frame.\n\nClean, premium travel photography: one clear subject, uncluttered composition with generous breathing room, rich natural colour (deep blue sea and sky, fresh greens, warm golden sunlight, terracotta, white walls) but tasteful and not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. No text, no logos, no watermark, no real brands.\n\nSave as ./travel-coast.png at 1672x941. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "7bb669296c654f90914aa953c8ef142735b7c06aefebb65441cabea8a4915339",
+      "sourceSha256": "ea8e8158cd2ac79e4a3218702141f5baf0e9cff684c92a8baa5255c536dcb22e",
+      "generatedAt": "2026-10-29T16:32:43.469867+00:00",
+      "generationId": "codex-image-gen-travel-coast",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean travel lifestyle"
+    },
+    "travel-train": {
+      "file": "travel-train.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1672x941 pixels. Subject: A window seat on a modern train: a hand-free view of green rolling hills and a blue sky passing outside, a takeaway coffee and a small camera on the fold-out table, calm and bright, no faces.\n\nClean, premium travel photography: one clear subject, uncluttered composition with generous breathing room, rich natural colour (deep blue sea and sky, fresh greens, warm golden sunlight, terracotta, white walls) but tasteful and not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. No text, no logos, no watermark, no real brands.\n\nSave as ./travel-train.png at 1672x941. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "68eeb919482988a42a487f50bbf5146417d4cc0fce2a44897bbd4fcebefed6b2",
+      "sourceSha256": "7c1653b30c07315780884072af0c42da22fa4ca9da441f1afddceef6abd8c81d",
+      "generatedAt": "2026-10-29T16:32:43.469867+00:00",
+      "generationId": "codex-image-gen-travel-train",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean travel lifestyle"
+    }
+  },
+  "effects": {
+    "bs-creatormotion-collage-evidence-summary": {
+      "document-1": "travel-cafe",
+      "document-2": "travel-city",
+      "document-3": "travel-coast",
+      "document-4": "travel-train"
+    }
+  }
+}

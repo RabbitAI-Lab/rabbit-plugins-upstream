@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.YottaMeta/yotta-present",
+  "title": "YuanCheng (yotta-present)",
+  "description": "Render agent output into copyable Markdown, tables, cards and SVG (Python 3.8+).",
+  "repository": {
+    "url": "https://github.com/YottaMeta/yotta-present",
+    "source": "github"
+  },
+  "version": "0.7.4",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@yottameta/yotta-present",
+      "version": "0.7.4",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

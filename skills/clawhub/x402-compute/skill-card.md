@@ -1,48 +1,53 @@
-## Description: <br>
-x402 Compute helps agents browse, provision, manage, resize, extend, and destroy Singularity Cloud Network GPU/VPS instances, AI Machines, SGL Grid inference, and node-operator workflows using x402, MPP, or preloaded credits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through provisioning and managing cloud compute, using AI and Grid services, and deploying hosted agents through the Singularity Cloud Network.
 
-## Publisher: <br>
-[ivaavimusic](https://clawhub.ai/user/ivaavimusic) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ivaavimusic](https://clawhub.ai/user/ivaavimusic)
 
-## Use Case: <br>
-Developers and operators use this skill to provision paid GPU/VPS compute, deploy private OpenAI-compatible LLM endpoints, consume SGL Grid inference, or run grid nodes from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can spend wallet funds and manage cloud servers. <br>
-Mitigation: Use a dedicated low-balance wallet, confirm spend and target instance before execution, and avoid unattended confirmation flags unless the cost and lifecycle action are known. <br>
-Risk: The skill handles sensitive wallet keys, API keys, and root-access material. <br>
-Mitigation: Keep secrets out of logs, prefer SSH keys over password fallback, delete any one-time password files immediately, and scope API keys to the intended workflow. <br>
-Risk: Runtime installers or dependency changes can introduce supply-chain exposure. <br>
-Mitigation: Pin or review dependencies and inspect the node installer before running remote install commands. <br>
+## Use Case:
 
+Developers and infrastructure operators use this skill to provision and manage GPU or VPS instances, deploy hosted agents and AI endpoints, and interact with compute and Grid APIs. It also provides guidance for related inference, training, backup, and node-operator workflows.
 
-## Reference(s): <br>
-- [x402 Compute Documentation](https://docs.x402layer.cc/agentic-access/x402-compute) <br>
-- [x402 Compute Cloud App](https://cloud.x402compute.cc) <br>
-- [ClawHub Skill Page](https://clawhub.ai/ivaavimusic/skills/x402-compute) <br>
-- [AI Machines Reference](references/ai-machines.md) <br>
-- [x402Compute API Reference](references/api-reference.md) <br>
-- [SGL Grid Node Operator Reference](references/node-operator.md) <br>
-- [OpenWallet / OWS Reference](references/openwallet-ows.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, environment-variable guidance, API request examples, and operational checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce commands or configuration that manage paid cloud resources, wallet-backed payments, API keys, SSH access, and server lifecycle actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.10.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: ClawScan reports a Solana payment authorization weakness and a mutable remote installer; its analysis was incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid installation until the Solana payment path and installer are independently reviewed, dependencies are pinned, and the relevant references receive a complete scan.
+
+## Reference(s):
+
+- [x402-compute documentation](https://docs.x402layer.cc/agentic-access/x402-compute)
+- [Cloud Network](https://cloud.x402compute.cc)
+- [Compute API](https://compute.x402layer.cc)
+- [Grid API](https://grid.x402compute.cc)
+- [ClawHub skill page](https://clawhub.ai/ivaavimusic/skills/x402-compute)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, API calls, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline code, API examples, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Python helper scripts and operational instructions.]
+
+## Skill Version(s):
+
+1.42.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

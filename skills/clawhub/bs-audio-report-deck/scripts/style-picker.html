@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PPT styles</title>
+<style>
+:root{--ink:#171717;--muted:#6b6b6b;--line:#e7e5e1;--paper:#fbfaf8;--card:#fff;--accent:#171717;--free:#0f7b4f;--free-bg:#e6f4ec;--paid:#8a5a00;--paid-bg:#fbf0d9;--last:#1d4ed8;--last-bg:#e8efff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"PingFang SC","Hiragino Sans","Noto Sans",sans-serif}
+header{position:sticky;top:0;z-index:5;background:rgba(251,250,248,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.bar{padding:18px 28px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+h1{font-size:20px;margin:0;letter-spacing:-.2px}
+.sub{color:var(--muted);font-size:13px;margin:2px 0 0}
+.tools{margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:0 12px;height:40px;min-width:240px}
+.search input{border:0;outline:0;font:inherit;flex:1;background:transparent;min-width:0}
+.chip{height:40px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:0 14px;font:inherit;cursor:pointer;color:var(--ink)}
+.chip[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.lang{position:relative;display:flex;align-items:center;height:40px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:0 10px;gap:6px}
+.lang select{appearance:none;-webkit-appearance:none;border:0;outline:0;background:transparent;font:inherit;color:var(--ink);padding-right:16px;cursor:pointer}
+.lang svg{flex:none}
+.lang .caret{position:absolute;right:10px;pointer-events:none}
+main.loading{opacity:.45;pointer-events:none;transition:opacity .15s}
+main{padding:24px 28px 40px}
+.grid{--cols:1;--gap:20px;display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:var(--gap)}
+@media(min-width:520px){.grid{--cols:2;--gap:16px}}
+@media(min-width:800px){.grid{--cols:3;--gap:18px}}
+@media(min-width:1080px){.grid{--cols:4;--gap:20px}}
+@media(min-width:1360px){.grid{--cols:5}}
+@media(min-width:1600px){.grid{--cols:6}}
+@media(min-width:1920px){.grid{--cols:8}}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s,transform .15s}
+.card:hover{box-shadow:0 10px 28px rgba(0,0,0,.08);transform:translateY(-2px)}
+.card.last{border-color:var(--last);box-shadow:0 0 0 3px var(--last-bg)}
+.thumb{position:relative;aspect-ratio:16/10;background:#efedea;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.card:hover .thumb img{transform:scale(1.03)}
+.badge{position:absolute;left:8px;top:8px;font-size:10.5px;font-weight:600;line-height:1;padding:4px 7px;border-radius:999px;background:rgba(255,255,255,.92);color:var(--ink)}
+.badge.free{color:var(--free)}
+.badge.paid{color:var(--paid)}
+.peek{position:absolute;right:8px;top:8px;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;background:rgba(255,255,255,.92);color:var(--ink);opacity:.9;transition:opacity .15s,transform .15s}
+.peek:hover{opacity:1;transform:scale(1.06)}
+.peek svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.mark{font-size:11px;font-weight:600;color:var(--muted);line-height:1}
+.card.last .mark{color:var(--last)}
+.name{font-weight:650;font-size:14px;line-height:1.35;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.choose{margin-top:auto;height:34px;border-radius:9px;border:0;background:var(--ink);color:#fff;font:inherit;font-size:13px;font-weight:600;cursor:pointer;width:100%}
+.choose:hover{background:#333}
+.choose:disabled{opacity:.6}
+.empty{color:var(--muted);padding:40px 0;text-align:center}
+.done{position:fixed;inset:0;background:rgba(251,250,248,.96);display:none;align-items:center;justify-content:center;z-index:10;padding:24px;text-align:center}
+.done.show{display:flex}
+.done .box{max-width:460px}
+.done svg{width:44px;height:44px;stroke:var(--free);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.done h2{margin:12px 0 6px;font-size:22px}
+.done p{color:var(--muted);margin:0}
+@media(max-width:800px){.bar{padding:14px 16px;gap:12px}main{padding:16px}.tools{width:100%;margin-left:0}.search{min-width:0;flex:1}h1{font-size:18px}}
+@media(max-width:519px){.chip,.lang,.search{height:38px}.tools{flex-wrap:wrap}.search{flex-basis:100%}.chip,.lang{flex:1;justify-content:center}.lang select{flex:1}}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <div><h1 data-t="title"></h1><p class="sub" data-t="subtitle"></p></div>
+  <div class="tools">
+    <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8a8a8a" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" autocomplete="off"></label>
+    <button class="chip" id="free" type="button" aria-pressed="false"></button>
+    <label class="lang"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#525252" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><select id="lang"></select><svg class="caret" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a8a8a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></label>
+  </div>
+</div></header>
+<main id="main"></main>
+<div class="done" id="done" role="status"><div class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m7.5 12.5 3 3 6-6.5"/></svg><h2 id="done-title"></h2><p data-t="doneBody"></p></div></div>
+<script>
+let DATA = "__PICKER_DATA__";
+const LANGUAGE_NAMES = { en: 'English', zh: '\u7b80\u4f53\u4e2d\u6587', 'zh-tw': '\u7e41\u9ad4\u4e2d\u6587', ja: '\u65e5\u672c\u8a9e', ko: '\ud55c\uad6d\uc5b4', es: 'Espa\u00f1ol', 'pt-br': 'Portugu\u00eas (Brasil)', de: 'Deutsch', fr: 'Fran\u00e7ais' };
+const STRINGS = {
+  en:{closed:'This picker has closed. Go back to the conversation and open it again.',language:'Language',used:'Used before',title:'Choose a PPT style',subtitle:'Your narrated report will be built in this style.',search:'Search styles',freeOnly:'Free only',lastUsed:'Last used',free:'Free',paid:'Pro',members:'Members',preview:'Preview',use:'Select',chosen:'Selected: {name}',doneBody:'You can close this tab and return to the conversation.',empty:'No style matches your search.',failed:'Could not save your choice. Please try again.'},
+  zh:{closed:'\u8fd9\u4e2a\u9009\u62e9\u9875\u5df2\u5173\u95ed\uff0c\u8bf7\u56de\u5230\u5bf9\u8bdd\u91cd\u65b0\u6253\u5f00\u3002',language:'\u8bed\u8a00',used:'\u7528\u8fc7',title:'\u9009\u62e9 PPT \u98ce\u683c',subtitle:'\u6709\u58f0\u62a5\u544a\u4f1a\u6309\u8fd9\u4e2a\u98ce\u683c\u751f\u6210\u3002',search:'\u641c\u7d22\u98ce\u683c',freeOnly:'\u53ea\u770b\u514d\u8d39',lastUsed:'\u4e0a\u6b21\u9009\u62e9',free:'\u514d\u8d39',paid:'Pro',members:'\u4f1a\u5458',preview:'\u9884\u89c8',use:'\u9009\u62e9',chosen:'\u5df2\u9009\u62e9\uff1a{name}',doneBody:'\u53ef\u4ee5\u5173\u95ed\u8fd9\u4e2a\u9875\u9762\uff0c\u56de\u5230\u5bf9\u8bdd\u7ee7\u7eed\u3002',empty:'\u6ca1\u6709\u7b26\u5408\u641c\u7d22\u7684\u98ce\u683c\u3002',failed:'\u9009\u62e9\u6ca1\u6709\u4fdd\u5b58\u6210\u529f\uff0c\u8bf7\u518d\u8bd5\u4e00\u6b21\u3002'},
+  'zh-tw':{closed:'\u9019\u500b\u9078\u64c7\u9801\u5df2\u95dc\u9589\uff0c\u8acb\u56de\u5230\u5c0d\u8a71\u91cd\u65b0\u958b\u555f\u3002',language:'\u8a9e\u8a00',used:'\u7528\u904e',title:'\u9078\u64c7 PPT \u98a8\u683c',subtitle:'\u6709\u8072\u5831\u544a\u6703\u4ee5\u9019\u500b\u98a8\u683c\u7522\u751f\u3002',search:'\u641c\u5c0b\u98a8\u683c',freeOnly:'\u53ea\u770b\u514d\u8cbb',lastUsed:'\u4e0a\u6b21\u9078\u64c7',free:'\u514d\u8cbb',paid:'Pro',members:'\u6703\u54e1',preview:'\u9810\u89bd',use:'\u9078\u64c7',chosen:'\u5df2\u9078\u64c7\uff1a{name}',doneBody:'\u53ef\u4ee5\u95dc\u9589\u9019\u500b\u9801\u9762\uff0c\u56de\u5230\u5c0d\u8a71\u7e7c\u7e8c\u3002',empty:'\u6c92\u6709\u7b26\u5408\u641c\u5c0b\u7684\u98a8\u683c\u3002',failed:'\u9078\u64c7\u672a\u80fd\u5132\u5b58\uff0c\u8acb\u518d\u8a66\u4e00\u6b21\u3002'},
+  ja:{closed:'\u3053\u306e\u9078\u629e\u30da\u30fc\u30b8\u306f\u9589\u3058\u3089\u308c\u307e\u3057\u305f\u3002\u4f1a\u8a71\u306b\u623b\u3063\u3066\u3082\u3046\u4e00\u5ea6\u958b\u3044\u3066\u304f\u3060\u3055\u3044\u3002',language:'\u8a00\u8a9e',used:'\u4f7f\u7528\u6e08\u307f',title:'PPT \u30b9\u30bf\u30a4\u30eb\u3092\u9078\u629e',subtitle:'\u30ca\u30ec\u30fc\u30b7\u30e7\u30f3\u4ed8\u304d\u30ec\u30dd\u30fc\u30c8\u306f\u3053\u306e\u30b9\u30bf\u30a4\u30eb\u3067\u4f5c\u6210\u3055\u308c\u307e\u3059\u3002',search:'\u30b9\u30bf\u30a4\u30eb\u3092\u691c\u7d22',freeOnly:'\u7121\u6599\u306e\u307f',lastUsed:'\u524d\u56de\u306e\u9078\u629e',free:'\u7121\u6599',paid:'Pro',members:'\u30e1\u30f3\u30d0\u30fc',preview:'\u30d7\u30ec\u30d3\u30e5\u30fc',use:'\u9078\u629e',chosen:'\u9078\u629e\u3057\u307e\u3057\u305f\uff1a{name}',doneBody:'\u3053\u306e\u30bf\u30d6\u3092\u9589\u3058\u3066\u4f1a\u8a71\u306b\u623b\u308c\u307e\u3059\u3002',empty:'\u4e00\u81f4\u3059\u308b\u30b9\u30bf\u30a4\u30eb\u304c\u3042\u308a\u307e\u305b\u3093\u3002',failed:'\u9078\u629e\u3092\u4fdd\u5b58\u3067\u304d\u307e\u305b\u3093\u3067\u3057\u305f\u3002\u3082\u3046\u4e00\u5ea6\u304a\u8a66\u3057\u304f\u3060\u3055\u3044\u3002'},
+  ko:{closed:'\uc774 \uc120\ud0dd \ud398\uc774\uc9c0\uac00 \ub2eb\ud614\uc2b5\ub2c8\ub2e4. \ub300\ud654\ub85c \ub3cc\uc544\uac00 \ub2e4\uc2dc \uc5ec\uc138\uc694.',language:'\uc5b8\uc5b4',used:'\uc0ac\uc6a9\ud568',title:'PPT \uc2a4\ud0c0\uc77c \uc120\ud0dd',subtitle:'\ub0b4\ub808\uc774\uc158 \ubcf4\uace0\uc11c\uac00 \uc774 \uc2a4\ud0c0\uc77c\ub85c \ub9cc\ub4e4\uc5b4\uc9d1\ub2c8\ub2e4.',search:'\uc2a4\ud0c0\uc77c \uac80\uc0c9',freeOnly:'\ubb34\ub8cc\ub9cc',lastUsed:'\uc9c0\ub09c\ubc88 \uc120\ud0dd',free:'\ubb34\ub8cc',paid:'Pro',members:'\uba64\ubc84',preview:'\ubbf8\ub9ac\ubcf4\uae30',use:'\uc120\ud0dd',chosen:'\uc120\ud0dd\ub428: {name}',doneBody:'\uc774 \ud0ed\uc744 \ub2eb\uace0 \ub300\ud654\ub85c \ub3cc\uc544\uac00\uc138\uc694.',empty:'\uac80\uc0c9\uacfc \uc77c\uce58\ud558\ub294 \uc2a4\ud0c0\uc77c\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.',failed:'\uc120\ud0dd\uc744 \uc800\uc7a5\ud558\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4. \ub2e4\uc2dc \uc2dc\ub3c4\ud574 \uc8fc\uc138\uc694.'},
+  es:{closed:'Este selector se cerr\u00f3. Vuelve a la conversaci\u00f3n y \u00e1brelo de nuevo.',language:'Idioma',used:'Usado',title:'Elige un estilo de PPT',subtitle:'Tu informe narrado se crear\u00e1 con este estilo.',search:'Buscar estilos',freeOnly:'Solo gratis',lastUsed:'\u00daltimo usado',free:'Gratis',paid:'Pro',members:'Miembros',preview:'Vista previa',use:'Elegir',chosen:'Seleccionado: {name}',doneBody:'Puedes cerrar esta pesta\u00f1a y volver a la conversaci\u00f3n.',empty:'Ning\u00fan estilo coincide con la b\u00fasqueda.',failed:'No se pudo guardar tu elecci\u00f3n. Int\u00e9ntalo de nuevo.'},
+  'pt-br':{closed:'Este seletor foi fechado. Volte \u00e0 conversa e abra-o de novo.',language:'Idioma',used:'Usado',title:'Escolha um estilo de PPT',subtitle:'Seu relat\u00f3rio narrado ser\u00e1 criado neste estilo.',search:'Buscar estilos',freeOnly:'S\u00f3 gratuitos',lastUsed:'\u00daltimo usado',free:'Gr\u00e1tis',paid:'Pro',members:'Membros',preview:'Pr\u00e9via',use:'Escolher',chosen:'Selecionado: {name}',doneBody:'Voc\u00ea pode fechar esta aba e voltar \u00e0 conversa.',empty:'Nenhum estilo corresponde \u00e0 busca.',failed:'N\u00e3o foi poss\u00edvel salvar sua escolha. Tente novamente.'},
+  de:{closed:'Diese Auswahlseite wurde geschlossen. Kehre zum Gespr\u00e4ch zur\u00fcck und \u00f6ffne sie erneut.',language:'Sprache',used:'Verwendet',title:'PPT-Stil w\u00e4hlen',subtitle:'Dein vertonter Bericht wird in diesem Stil erstellt.',search:'Stile suchen',freeOnly:'Nur kostenlos',lastUsed:'Zuletzt gew\u00e4hlt',free:'Kostenlos',paid:'Pro',members:'Mitglieder',preview:'Vorschau',use:'Ausw\u00e4hlen',chosen:'Ausgew\u00e4hlt: {name}',doneBody:'Du kannst diesen Tab schlie\u00dfen und zum Gespr\u00e4ch zur\u00fcckkehren.',empty:'Kein Stil passt zur Suche.',failed:'Die Auswahl konnte nicht gespeichert werden. Bitte erneut versuchen.'},
+  fr:{closed:'Ce s\u00e9lecteur est ferm\u00e9. Revenez \u00e0 la conversation et rouvrez-le.',language:'Langue',used:'D\u00e9j\u00e0 utilis\u00e9',title:'Choisir un style de PPT',subtitle:'Votre rapport narr\u00e9 sera cr\u00e9\u00e9 dans ce style.',search:'Rechercher un style',freeOnly:'Gratuits seulement',lastUsed:'Dernier choix',free:'Gratuit',paid:'Pro',members:'Membres',preview:'Aper\u00e7u',use:'Choisir',chosen:'S\u00e9lectionn\u00e9 : {name}',doneBody:'Vous pouvez fermer cet onglet et revenir \u00e0 la conversation.',empty:'Aucun style ne correspond \u00e0 la recherche.',failed:'Le choix n\u2019a pas pu \u00eatre enregistr\u00e9. R\u00e9essayez.'}
+};
+let L = STRINGS.en;
+const t = (key, vars = {}) => (L[key] || STRINGS.en[key]).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
+const q = document.getElementById('q');
+const freeBtn = document.getElementById('free');
+const langSelect = document.getElementById('lang');
+langSelect.innerHTML = (DATA.locales || Object.keys(LANGUAGE_NAMES)).map((code) => `<option value="${code}">${LANGUAGE_NAMES[code] || code}</option>`).join('');
+
+function applyLocale() {
+  L = STRINGS[DATA.locale] || STRINGS.en;
+  document.documentElement.lang = DATA.locale === 'zh' ? 'zh-CN' : DATA.locale === 'zh-tw' ? 'zh-TW' : DATA.locale === 'pt-br' ? 'pt-BR' : DATA.locale;
+  document.title = t('title');
+  document.querySelectorAll('[data-t]').forEach((el) => { el.textContent = t(el.dataset.t); });
+  q.placeholder = t('search');
+  q.setAttribute('aria-label', t('search'));
+  freeBtn.textContent = t('freeOnly');
+  langSelect.value = DATA.locale;
+  langSelect.setAttribute('aria-label', t('language'));
+}
+
+async function switchLocale(locale) {
+  if (!locale || locale === DATA.locale) return;
+  const main = document.getElementById('main');
+  main.classList.add('loading');
+  try {
+    const response = await fetch(`/catalog${location.search}&locale=${encodeURIComponent(locale)}`);
+    if (!response.ok) throw new Error(String(response.status));
+    DATA = await response.json();
+    applyLocale();
+    render();
+  } catch {
+    langSelect.value = DATA.locale;
+  } finally {
+    main.classList.remove('loading');
+  }
+}
+
+/** First supported browser language, e.g. zh-HK -> zh-tw, pt-PT -> pt-br. */
+function browserLocale() {
+  for (const raw of navigator.languages || [navigator.language]) {
+    const tag = String(raw || '').toLowerCase();
+    if (tag.startsWith('zh')) return /-(tw|hk|mo|hant)/.test(tag) ? 'zh-tw' : 'zh';
+    if (tag.startsWith('pt')) return 'pt-br';
+    const base = tag.split('-')[0];
+    if (LANGUAGE_NAMES[base]) return base;
+  }
+  return null;
+}
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeUrl = (u) => /^https?:\/\//i.test(u || '') ? u : '';
+const EYE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+
+function card(style) {
+  const cover = safeUrl(style.coverUrl);
+  const demo = safeUrl(style.demoUrl) || safeUrl(style.detailUrl);
+  const mark = style.lastSelected ? t('lastUsed') : style.previouslySelected ? t('used') : '';
+  return `<article class="card${style.lastSelected ? ' last' : ''}">
+    <div class="thumb">${cover ? `<img src="${esc(cover)}" alt="${esc(style.coverAlt || style.name)}" loading="lazy">` : ''}
+      <span class="badge ${style.access === 'free' ? 'free' : 'paid'}">${esc(t(style.access))}</span>
+      ${demo ? `<a class="peek" href="${esc(demo)}" target="_blank" rel="noopener" title="${esc(t('preview'))}" aria-label="${esc(t('preview'))}: ${esc(style.name)}">${EYE}</a>` : ''}
+    </div>
+    <div class="body">
+      ${mark ? `<span class="mark">${esc(mark)}</span>` : ''}
+      <h3 class="name">${esc(style.name)}</h3>
+      <button class="choose" type="button" data-slug="${esc(style.slug)}">${esc(t('use'))}</button>
+    </div>
+  </article>`;
+}
+
+function render() {
+  const term = q.value.trim().toLowerCase();
+  const freeOnly = freeBtn.getAttribute('aria-pressed') === 'true';
+  const match = (s) => (!freeOnly || s.access === 'free') && (!term || [s.name, s.description, s.slug, ...(s.styleTags || []).map((x) => x.label)].join(' ').toLowerCase().includes(term));
+  // One grid in catalog order: the last choice first, then other styles used before, then the rest.
+  const list = DATA.styles.filter(match);
+  const html = list.length ? `<div class="grid">${list.map(card).join('')}</div>` : '';
+  document.getElementById('main').innerHTML = html || `<p class="empty">${esc(t('empty'))}</p>`;
+}
+
+q.addEventListener('input', render);
+langSelect.addEventListener('change', () => switchLocale(langSelect.value));
+freeBtn.addEventListener('click', () => { freeBtn.setAttribute('aria-pressed', String(freeBtn.getAttribute('aria-pressed') !== 'true')); render(); });
+document.getElementById('main').addEventListener('click', async (event) => {
+  const button = event.target.closest('button[data-slug]');
+  if (!button) return;
+  const style = DATA.styles.find((s) => s.slug === button.dataset.slug);
+  button.disabled = true;
+  try {
+    const response = await fetch(`/choose${location.search}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ slug: style.slug, locale: DATA.locale }) });
+    if (!response.ok) throw new Error(String(response.status));
+    document.getElementById('done-title').textContent = t('chosen', { name: style.name });
+    document.getElementById('done').classList.add('show');
+  } catch (error) {
+    button.disabled = false;
+    // A network error means the local picker server is gone (timed out or restarted).
+    alert(error instanceof TypeError ? t('closed') : t('failed'));
+  }
+});
+applyLocale();
+render();
+if (DATA.followBrowser) switchLocale(browserLocale());
+</script>
+</body>
+</html>

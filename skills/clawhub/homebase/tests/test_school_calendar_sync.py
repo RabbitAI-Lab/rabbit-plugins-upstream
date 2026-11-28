@@ -19,60 +19,8 @@ from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# Stub external deps so import never touches the network
-for _mod in (
-    "google", "google.oauth2", "google.oauth2.credentials",
-    "google.auth", "google.auth.transport", "google.auth.transport.requests",
-    "googleapiclient", "googleapiclient.discovery",
-):
-    sys.modules.setdefault(_mod, types.ModuleType(_mod))
 
 import features.school.school_calendar_sync as scs
-
-
-class TestExtractPdfText:
-    def test_returns_empty_string_on_import_error(self):
-        """No pypdf installed → return '' instead of crashing the cron job."""
-        with patch.dict(sys.modules, {"pypdf": None}):
-            result = scs.extract_pdf_text_from_bytes(b"fake pdf bytes")
-        assert isinstance(result, str)
-
-    def test_returns_empty_string_on_invalid_bytes(self):
-        """Garbage bytes must not raise — extractor swallows + returns ''."""
-        result = scs.extract_pdf_text_from_bytes(b"not a pdf")
-        assert isinstance(result, str)
-        assert result == ""
-
-    def test_returns_empty_string_on_empty_bytes(self):
-        result = scs.extract_pdf_text_from_bytes(b"")
-        assert result == ""
-
-
-class TestCollectPdfParts:
-    def test_finds_top_level_pdf(self):
-        out: list = []
-        scs._collect_pdf_parts({"mimeType": "application/pdf", "filename": "f.pdf"}, out)
-        assert len(out) == 1
-
-    def test_recurses_into_multipart(self):
-        payload = {
-            "mimeType": "multipart/mixed",
-            "parts": [
-                {"mimeType": "text/plain"},
-                {"mimeType": "multipart/alternative", "parts": [
-                    {"mimeType": "application/pdf", "filename": "a.pdf"},
-                ]},
-                {"mimeType": "application/pdf", "filename": "b.pdf"},
-            ],
-        }
-        out: list = []
-        scs._collect_pdf_parts(payload, out)
-        assert len(out) == 2
-
-    def test_ignores_non_pdf(self):
-        out: list = []
-        scs._collect_pdf_parts({"mimeType": "image/jpeg"}, out)
-        assert out == []
 
 
 class TestCollectImageParts:
@@ -111,39 +59,35 @@ class TestDownloadImageAttachments:
             "filename": "newsletter.png",
             "body": {"data": base64.urlsafe_b64encode(img_bytes).decode()},
         }
-        paths = scs.download_image_attachments(None, "msg123", payload, str(tmp_path))
+        paths = scs.download_image_attachments("msg123", payload, str(tmp_path))
         assert len(paths) == 1
         assert os.path.isfile(paths[0])
         with open(paths[0], "rb") as f:
             assert f.read() == img_bytes
 
     def test_downloads_attachment_by_id(self, tmp_path):
-        """Image with attachmentId fetches from Gmail API."""
+        """Image with attachmentId is fetched through core.gmail (gog)."""
         img_bytes = b"\xff\xd8\xff" + b"\x00" * 50
-        service = MagicMock()
-        service.users.return_value.messages.return_value.attachments.return_value \
-            .get.return_value.execute.return_value = {
-                "data": base64.urlsafe_b64encode(img_bytes).decode()
-            }
         payload = {
             "mimeType": "image/jpeg",
             "filename": "photo.jpg",
             "body": {"attachmentId": "att_abc"},
         }
-        paths = scs.download_image_attachments(service, "msg456", payload, str(tmp_path))
+        with patch("core.gmail.get_attachment", return_value=img_bytes):
+            paths = scs.download_image_attachments("msg456", payload, str(tmp_path))
         assert len(paths) == 1
         assert os.path.isfile(paths[0])
 
     def test_skips_when_no_data(self, tmp_path):
         """Part with neither attachmentId nor data is skipped."""
         payload = {"mimeType": "image/jpeg", "body": {}}
-        paths = scs.download_image_attachments(None, "msg789", payload, str(tmp_path))
+        paths = scs.download_image_attachments("msg789", payload, str(tmp_path))
         assert paths == []
 
     def test_returns_empty_for_no_image_parts(self, tmp_path):
         """Non-image payload returns empty list."""
         payload = {"mimeType": "text/plain", "body": {"data": "dGVzdA=="}}
-        paths = scs.download_image_attachments(None, "msg000", payload, str(tmp_path))
+        paths = scs.download_image_attachments("msg000", payload, str(tmp_path))
         assert paths == []
 
 

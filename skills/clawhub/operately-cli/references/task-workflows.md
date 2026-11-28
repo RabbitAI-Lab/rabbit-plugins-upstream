@@ -86,17 +86,31 @@ operately tasks update_description \
 operately tasks get --id t1
 ```
 
-### Listing Tasks
+### Listing tasks
 
 ```bash
-# List tasks in a project
 operately tasks list --project-id p1
-
-# List tasks in a space
-operately spaces list_tasks --space-id s1
+operately tasks list --space-id s1
+operately tasks list --board-id b1
 ```
 
-**Note:** Use `tasks list` for projects and `spaces list_tasks` for spaces.
+A space-wide list includes direct tasks across its boards.
+
+### Task boards
+
+Projects have one board. Spaces can have several. Space task creation uses the default board unless you pass `--board-id`.
+
+```bash
+operately tasks list_boards --space-id s1
+operately tasks create_board --space-id s1 --name "Support"
+operately tasks rename_board --board-id b1 --new-name "Customer support"
+operately tasks set_default_board --space-id s1 --board-id b2
+operately tasks archive_board --space-id s1 --board-id b1
+operately tasks list_boards --space-id s1 --archive-status archived
+operately tasks restore_board --space-id s1 --board-id b1
+```
+
+Only non-default boards can be archived. For a single closed task, use `tasks update_archive --task-id t1 --archived true`. Pass `false` to restore it.
 
 ## Task Assignment
 
@@ -125,14 +139,14 @@ operately tasks update_assignee \
 ### Finding Potential Assignees
 
 ```bash
-# For project tasks
+# For project tasks (--id is the project ID, not the task ID)
 operately tasks list_potential_assignees \
-  --id t1 \
+  --id p1 \
   --type project
 
-# For space tasks
+# For space tasks (--id is the space ID)
 operately tasks list_potential_assignees \
-  --id t2 \
+  --id s1 \
   --type space
 ```
 
@@ -188,51 +202,11 @@ operately tasks update_status \
 
 ### Custom Status Workflows
 
-Task statuses are project-specific or space-specific.
-
-**Project task statuses:**
+Read the board before editing its workflow. Send the full status list to `tasks update_board_statuses`, preserving existing IDs. For each removed status still in use, supply a replacement with `--deleted-status-replacements`.
 
 ```bash
-# Get available statuses
-operately projects get --id p1
-
-# Update project task statuses
-operately projects update_task_statuses \
-  --project-id p1 \
-  --task-statuses.0.id ts1 \
-  --task-statuses.0.label "To Do" \
-  --task-statuses.1.id ts2 \
-  --task-statuses.1.label "In Progress" \
-  --task-statuses.2.id ts3 \
-  --task-statuses.2.label "In Review" \
-  --task-statuses.3.id ts4 \
-  --task-statuses.3.label "Done"
-```
-
-**Space task statuses:**
-
-```bash
-# Update space task statuses
-operately spaces update_task_statuses \
-  --space-id s1 \
-  --task-statuses.0.id ts1 \
-  --task-statuses.0.label "To Do" \
-  --task-statuses.0.color gray \
-  --task-statuses.0.index 0 \
-  --task-statuses.0.value todo \
-  --task-statuses.0.closed false \
-  --task-statuses.1.id ts2 \
-  --task-statuses.1.label "In Progress" \
-  --task-statuses.1.color blue \
-  --task-statuses.1.index 1 \
-  --task-statuses.1.value in_progress \
-  --task-statuses.1.closed false \
-  --task-statuses.2.id ts3 \
-  --task-statuses.2.label "Done" \
-  --task-statuses.2.color green \
-  --task-statuses.2.index 2 \
-  --task-statuses.2.value done \
-  --task-statuses.2.closed true
+operately tasks get_board --board-id b1
+operately tasks list_task_statuses --board-id b1
 ```
 
 ## Task Updates
@@ -307,9 +281,12 @@ operately tasks update_milestone \
 operately tasks update_milestone_and_ordering \
   --task-id t1 \
   --milestone-id m2 \
-  --milestones-ordering-state.0.milestone-id m2 \
-  --milestones-ordering-state.0.ordering-state.0 t1
+  --index 0
 ```
+
+## Template Tasks vs Live Tasks
+
+Edit tasks on **active projects or spaces** with `tasks/*`. Edit blueprint tasks inside a **project template** with `project_templates create_task`, `update_task`, `update_milestone_and_ordering`, etc. See [Project Template Workflows](project-template-workflows.md).
 
 ### General Task Movement
 
@@ -326,11 +303,8 @@ operately tasks move \
   --destination-type space \
   --destination-id s1
 
-# Move task from one space to another
-operately tasks move \
-  --task-id t2 \
-  --destination-type space \
-  --destination-id s2
+# Move to a specific space board. If no status matches, supply a status ID from the destination board.
+operately tasks move --task-id t2 --destination-type space --destination-id s2 --destination-board-id b2 --destination-status-id ready
 ```
 
 **Note:** When moving a project task to a space, the milestone association is removed since space tasks cannot have milestones.
@@ -362,7 +336,8 @@ operately tasks create \
   --id p1 \
   --name "User story: Login with SSO" \
   --milestone-id m5 \
-  --assignee-id u1
+  --assignee-id u1 \
+  --due-date null
 
 operately tasks update_description \
   --task-id t1 \
@@ -374,14 +349,16 @@ operately tasks create \
   --id p1 \
   --name "User story: Dashboard widgets" \
   --milestone-id m5 \
-  --assignee-id u2
+  --assignee-id u2 \
+  --due-date null
 
 operately tasks create \
   --type project \
   --id p1 \
   --name "Bug: Fix pagination" \
   --milestone-id m5 \
-  --assignee-id u3
+  --assignee-id u3 \
+  --due-date null
 
 # 3. Daily updates
 operately tasks update_status --task-id t1 --type project --status.id in_progress --status.label "In Progress" --status.color blue --status.index 1 --status.value in_progress --status.closed false
@@ -394,19 +371,13 @@ operately tasks update_status --task-id t3 --type project --status.id done --sta
 ### Kanban Board Pattern
 
 ```bash
-# 1. Set up custom statuses
-operately projects update_task_statuses \
-  --project-id p1 \
-  --task-statuses.0.label "Backlog" \
-  --task-statuses.1.label "Ready" \
-  --task-statuses.2.label "In Progress" \
-  --task-statuses.3.label "Review" \
-  --task-statuses.4.label "Done"
+# 1. Read the project's board and use its status IDs below
+operately tasks get_board --project-id p1
 
 # 2. Create tasks in backlog
-operately tasks create --type project --id p1 --name "Feature A" --milestone-id m1
-operately tasks create --type project --id p1 --name "Feature B" --milestone-id m1
-operately tasks create --type project --id p1 --name "Feature C" --milestone-id m1
+operately tasks create --type project --id p1 --name "Feature A" --milestone-id m1 --due-date null
+operately tasks create --type project --id p1 --name "Feature B" --milestone-id m1 --due-date null
+operately tasks create --type project --id p1 --name "Feature C" --milestone-id m1 --due-date null
 
 # 3. Move through workflow
 operately tasks update_status --task-id t1 --type project --status.id ready --status.label "Ready" --status.color blue --status.index 1 --status.value ready --status.closed false
@@ -513,7 +484,8 @@ operately tasks create \
   --type project \
   --id p1 \
   --name "Bug: Login fails on Safari" \
-  --milestone-id bugs_milestone
+  --milestone-id bugs_milestone \
+  --due-date null
 
 operately tasks update_description \
   --task-id t1 \
@@ -541,12 +513,12 @@ operately tasks update_description \
 ```bash
 operately comments create \
   --entity-id t1 \
-  --entity-type "task" \
+  --entity-type "project_task" \
   --content "Started working on this. Will have it done by EOD."
 
 operately comments create \
   --entity-id t1 \
-  --entity-type "task" \
+  --entity-type "project_task" \
   --content "Blocked on API access. Need credentials from DevOps."
 ```
 
@@ -555,7 +527,7 @@ operately comments create \
 ```bash
 operately comments list \
   --entity-id t1 \
-  --entity-type "task"
+  --entity-type "project_task"
 ```
 
 ## Task Metrics and Reporting
@@ -566,14 +538,14 @@ Get all tasks and filter by status in your script:
 
 ```bash
 # Get all tasks and process with jq or similar
-operately tasks list --project-id p1 --compact | jq '.[] | select(.status == "in_progress")'
+operately tasks list --project-id p1 --compact | jq '.tasks[] | select(.status.value == "in_progress")'
 ```
 
 ### Listing Tasks by Assignee
 
 ```bash
-# Get user's assignments
-operately people list_assignments
+# Get my open assigned tasks
+operately people list_my_tasks
 
 # Get assignment count
 operately people get_assignments_count
@@ -591,17 +563,7 @@ operately people get_assignments_count
 
 ### Task Status IDs
 
-Task statuses are project-specific or space-specific. Always get the status IDs first:
-
-```bash
-# For project tasks
-operately projects get --id p1
-
-# For space tasks, check space tools
-operately spaces list_tools --space-id s1
-```
-
-Don't assume status IDs like "completed" or "in_progress" - use the actual IDs from the project or space.
+Use `operately tasks list_task_statuses --task-id t1` to look up the task’s actual workflow before changing its status.
 
 ### Space Tasks Require Tool Enablement
 
@@ -614,12 +576,6 @@ operately spaces update_tools \
   --tools.discussions-enabled true \
   --tools.resource-hub-enabled true
 ```
-
-### Listing Tasks
-
-Different commands for projects vs spaces:
-- **Project tasks**: `operately tasks list --project-id p1`
-- **Space tasks**: `operately spaces list_tasks --space-id s1`
 
 ### Milestone Association
 
@@ -644,7 +600,8 @@ operately tasks create \
   --type project \
   --id p1 \
   --name "Complex feature" \
-  --milestone-id m1
+  --milestone-id m1 \
+  --due-date null
 
 operately tasks update_description \
   --task-id t1 \

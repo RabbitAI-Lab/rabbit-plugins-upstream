@@ -1,46 +1,58 @@
-## Description: <br>
-Generates or updates tutorials from VHS tapes and Playwright specs with dual-tone markdown and GIF recording. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates or updates tutorials from VHS tapes and Playwright specs with dual-tone markdown and GIF recording.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and documentation engineers use this skill to refresh user-facing tutorials by discovering tutorial manifests and tapes, validating commands, recording terminal or browser demos, and generating docs and book markdown. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run project-defined shell commands from tapes and manifest prerequisites. <br>
-Mitigation: Use it only in trusted repositories, review tape and manifest commands before execution, and keep validation enabled for untrusted content. <br>
-Risk: The skill can rebuild or install CLI binaries and launch background services while preparing recordings. <br>
-Mitigation: Confirm build targets and service prerequisites before recording, and run in a controlled workspace where background processes can be stopped cleanly. <br>
-Risk: The skill can edit README, docs, book, and tutorial asset paths. <br>
-Mitigation: Review generated file changes before committing and verify that demos and markdown match the intended release. <br>
+## Use Case:
 
+Developers and project maintainers use this skill to create or refresh user-facing tutorials from terminal tapes and browser specs, including recorded GIFs and brief and detailed Markdown guides.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-tutorial-updates) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
-- [Manifest Parsing Module](modules/manifest-parsing.md) <br>
-- [Markdown Generation Module](modules/markdown-generation.md) <br>
-- [Tape Validation Module](modules/tape-validation.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands, file paths, manifest snippets, and tutorial asset instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose updates to README, docs, book, tape, manifest, and GIF asset paths.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: The security assessment reports that tape-command validation can run commands from tutorial tapes on the local system.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect every VHS Type command before validation, and run reviewed commands in a disposable, isolated project environment.
+
+Risk: The security assessment calls for review of README update behavior and flags behavior outside the skill's stated tutorial-generation purpose.
+
+Mitigation: Review README changes before applying them and confirm that updates affect only the intended demo content.
+
+Risk: The security scan was partial, so it does not establish that the skill is safe.
+
+Mitigation: Treat the security assessment as incomplete and defer installation until the remaining component and flagged behavior have been reviewed.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/athola/skills/nm-sanctum-tutorial-updates)
+- [Project homepage (skill metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, GIF files]
+
+**Output Format:** [Markdown tutorial files and animated GIF recordings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create brief project documentation and detailed book documentation, update a README demo section, and integrate generated tutorial assets.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

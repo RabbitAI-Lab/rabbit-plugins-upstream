@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "assets": {
+    "avatar-editor": {
+      "file": "avatar-editor.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1254x1254 pixels (aspect 1254:1254). Subject and layout: Use case: photorealistic-natural. Asset type: original profile portrait for creator B-roll chat avatars and testimonial comments. Generate one square 1:1 editorial photograph of a fictional Black woman in her early 30s, short natural curly hair, thoughtful relaxed smile, muted terracotta top. Head and shoulders centered, face occupies about 55 percent of image height with enough margin for circular cropping. Beautiful soft daylight, neutral warm cream background, natural skin texture, refined professional candid photography. No text, logos, watermark, borders, UI, or collage.\n\nSTYLE (this overrides every colour, lighting, paper or material description above): premium 'clean modern studio' look. Bright, cool, neutral palette of white, very light grey, warm grey and graphite; soft diffused daylight; crisp medium-format detail; generous negative space; no clutter; no warm beige, cream paper, sepia, wood-heavy or cosy-cottage styling; at most one small saturated yellow accent. For photographs: architectural white or light-grey studio or interior, pale concrete, light oak only as a minor material, natural fictional adults (not models), faces natural and in focus. No logos, no watermark, no real brands. Save as ./avatar-editor.png at 1254x1254. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "eae75e56730eb4f54c10fb00554a917ab083c95f290fb4491322e775794babf6",
+      "generatedAt": "2026-10-29T14:48:47.343244+00:00",
+      "generationId": "codex-image-gen-avatar-editor",
+      "sourceSha256": "25e15c483d2bf78de232e19f23a6c29c3bcb84a866af1605207dbefa3479b111",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean modern studio"
+    },
+    "mobile-screen": {
+      "file": "mobile-screen.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 875x1798 pixels. Layout reference: Use case: ui-mockup. Asset type: original mobile notes application screenshot used as image content within a B-roll phone frame. One very tall 9:19.5 portrait flat screen filling the full canvas, NO physical device or outer phone border. Beautiful crisp light cream interface, restrained sage/amber accents. Top status time '9:41', small back arrow, title 'Workshop notes'. Hero photograph occupying upper quarter shows an open notebook and red pencil on an oak table. Below: clear section 'Next session' with readable short paragraphs and three useful checklist items 'Review the notes', 'Choose one action', 'Try it this week'. Small circular realistic human profile thumbnail next to 'Shared with Maya'. A small voice message card with waveform, duration '0:24', and microphone control. Bottom modest toolbar. Precise elegant real app typography, rich visual content. No real app names, brands, personal information, watermark, skeleton text or blank placeholder blocks.\n\nTHEME AND CLEANLINESS OVERRIDE (takes precedence over the subject and text above): keep the same layout geometry, aspect, element positions and number of main blocks, but change the subject to a travel creator (trips, destinations, itineraries, travel vlogs) and replace every headline or label with a short travel equivalent of similar length. Halve the amount of small text, make photos larger and cleaner, remove clutter, show at most one person per photo and never a group or crowd. Photos inside use clean colourful travel photography (blue sea, green hills, warm sunlight). Interfaces stay white with crisp sans-serif type and at most one small yellow highlight.\n\nClean, premium travel photography: one clear subject, uncluttered composition with generous breathing room, rich natural colour (deep blue sea and sky, fresh greens, warm golden sunlight, terracotta, white walls) but tasteful and not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. No text, no logos, no watermark, no real brands.\n\nSave as ./mobile-screen.png at 875x1798. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "d0cce1db7f20fa0d6503f61ff1132ed33820f52f49926f9c65ccad944d739def",
+      "generatedAt": "2026-10-29T16:32:43.469867+00:00",
+      "generationId": "codex-image-gen-mobile-screen",
+      "sourceSha256": "27c758450e7a742fbf11bf59d02e2483759d501449d8728cfb80fc4033e8e85e",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean travel lifestyle"
+    }
+  },
+  "effects": {
+    "bs-creatormotion-split-phone-callouts": {
+      "mobile-screen": "mobile-screen",
+      "chat-avatar": "avatar-editor"
+    }
+  }
+}

@@ -1,59 +1,64 @@
-## Description: <br>
-x402 Singularity Layer helps agents pay for APIs with USDC, deploy and manage monetized endpoints, handle credits, webhooks, marketplace listings, wallet-first agent registration, reputation, support, and staking workflows across Base, Ethereum, Polygon, BSC, Monad, and Solana. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps AI agents pay for API access with USDC, manage monetized endpoints and credits, handle payment webhooks, and register or manage agents across supported networks.
 
-## Publisher: <br>
-[ivaavimusic](https://clawhub.ai/user/ivaavimusic) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ivaavimusic](https://clawhub.ai/user/ivaavimusic)
 
-## Use Case: <br>
-External developers and agent operators use this skill to integrate x402/Singularity Layer payment flows, deploy monetized APIs, consume paid endpoints, verify webhooks, manage marketplace and control-plane resources, register or rate agents, and perform optional wallet-backed staking or support workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can spend USDC and submit blockchain transactions. <br>
-Mitigation: Use a dedicated low-balance wallet and review payment, staking, destination, and network details before executing any spend or signing flow. <br>
-Risk: The skill can mutate owner-scoped x402 resources such as endpoints, webhooks, marketplace listings, campaigns, and registrations. <br>
-Mitigation: Use scoped API keys or PATs, prefer trusted default hosts, and confirm create, update, delete, registration, and feedback actions before running them. <br>
-Risk: Credentialed flows may use wallet private keys, Solana signer keys, endpoint API keys, PATs, AWAL, or OWS. <br>
-Mitigation: Set only the credentials required for the selected runbook, avoid long-lived high-value keys, and keep read-only discovery on the no-secret path. <br>
-Risk: Some support workflows can revoke XMTP installations. <br>
-Mitigation: Review XMTP revoke actions explicitly and avoid revoking installations unless the account owner intends that change. <br>
+## Use Case:
 
+Developers and AI agents use this skill to discover paid services, pay for API access, build and manage monetized endpoints, and handle related agent registration and reputation workflows. Some tasks require signing or account credentials, while read-only discovery does not.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ivaavimusic/skills/x402-layer) <br>
-- [x402 Studio](https://studio.x402layer.cc) <br>
-- [OpenClaw skill documentation](https://docs.x402layer.cc/agentic-access/openclaw-skill) <br>
-- [Agent Registry and Reputation (ERC-8004 / Solana-8004)](references/agent-registry-reputation.md) <br>
-- [Agentic Endpoint Creation](references/agentic-endpoints.md) <br>
-- [World AgentKit Benefits](references/agentkit-benefits.md) <br>
-- [Credit-Based Access](references/credit-based.md) <br>
-- [Marketplace Discovery](references/marketplace.md) <br>
-- [Singularity MCP Control Plane](references/mcp-control-plane.md) <br>
-- [OpenWallet / OWS (Optional Wallet Backend)](references/openwallet-ows.md) <br>
-- [Pay-Per-Request (Direct Mode)](references/pay-per-request.md) <br>
-- [Payment Signing Reference](references/payment-signing.md) <br>
-- [Integrating Payments Into Your App](references/payments-integration.md) <br>
-- [$SGL Staking (agentic)](references/staking.md) <br>
-- [Webhooks and Payment Genuineness Verification](references/webhooks-verification.md) <br>
-- [XMTP Support in Studio](references/xmtp-support.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, configuration snippets, and code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose wallet, API, webhook, endpoint, marketplace, and staking actions that require user review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.14.0 (source: frontmatter and server release metadata) <br>
+Risk: Wallet signing and payment actions can move funds or change on-chain state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the destination, amount, and requested action before signing; use a dedicated low-balance or delegated wallet and never place a long-lived private key in chats, logs, or shared terminals.
+
+Risk: The skill includes an install command that downloads and runs a remote script, and the security review reports that install path as unverified.
+
+Mitigation: Independently review the installation source and command before running it, and avoid using valuable credentials until the installation has been reviewed.
+
+Risk: The security review says some components were only partially inspected, including an opaque XMTP script.
+
+Mitigation: Treat the install as high risk; inspect the partially reviewed components and address the reported transaction, payment, installation, and file-handling risks before using funded wallets or valuable credentials.
+
+## Reference(s):
+
+- [x402 Layer agent documentation](https://docs.x402layer.cc/agentic-access/openclaw-skill)
+- [x402 Layer Studio](https://studio.x402layer.cc)
+- [Pay-per-request guide](references/pay-per-request.md)
+- [Endpoint management guide](references/agentic-endpoints.md)
+- [Webhook verification guide](references/webhooks-verification.md)
+- [Agent registry and reputation guide](references/agent-registry-reputation.md)
+- [Staking guide](references/staking.md)
+- [ClawHub skill release](https://clawhub.ai/ivaavimusic/skills/x402-layer)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown runbooks with Python and JavaScript examples, shell commands, and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No fixed output shape; examples and returned service data depend on the selected workflow.]
+
+## Skill Version(s):
+
+1.17.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

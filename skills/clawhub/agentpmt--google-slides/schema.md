@@ -759,6 +759,47 @@ Generated JSON parameter schema:
 }
 ```
 
+## `rename_presentation`
+
+Action slug: `rename-presentation`
+
+Price: `5` credits
+
+Rename an existing Google Slides presentation file without changing its slides or ID.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `new_title` | `string` | yes | Nonblank new presentation file title. |
+| `presentation_id` | `string` | yes | ID of the presentation to rename. |
+
+Sample parameters:
+
+```json
+{
+  "new_title": "example new title",
+  "presentation_id": "example presentation id"
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "new_title": {
+    "description": "Nonblank new presentation file title.",
+    "required": true,
+    "type": "string"
+  },
+  "presentation_id": {
+    "description": "ID of the presentation to rename.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
 ## `reorder_slides`
 
 Action slug: `reorder-slides`

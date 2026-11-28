@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+  :root { --accent:#c2185b; --accent-dark:#8c0e40; --line:#ece3e3; --bg:#faf6f5; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:#333;
+         font-family:-apple-system,"PingFang SC","Microsoft YaHei",Arial,sans-serif; font-size:15px; }
+  .wrap { max-width:760px; margin:0 auto; }
+  .hd { background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:#fff;
+        padding:16px 18px; border-radius:12px 12px 0 0; }
+  .hd h1 { margin:0; font-size:19px; }
+  .hd .sub { margin-top:6px; font-size:12px; opacity:.9; }
+  .body-wrap { background:#fff; border:1px solid var(--line); border-top:none;
+        border-radius:0 0 12px 12px; padding:6px 12px 14px; }
+  .card { border:1px solid var(--line); border-radius:10px; margin:12px 0; padding:4px 12px 10px; background:#fff; }
+  .card-title { color:var(--accent-dark); font-weight:700; font-size:16px; margin:8px 0 4px;
+        border-left:4px solid var(--accent); padding-left:8px; }
+  table { width:100%; border-collapse:collapse; margin:4px 0; }
+  table.kv th { text-align:left; width:32%; color:var(--accent-dark); font-weight:600;
+        vertical-align:top; padding:7px; border-bottom:1px solid #f2eeee; }
+  table.kv td { padding:7px; border-bottom:1px solid #f2eeee; vertical-align:top; word-break:break-word; }
+  table.grid th, table.grid td { border:1px solid var(--line); padding:6px 8px; font-size:14px; vertical-align:top; }
+  table.grid thead th { background:#f7ecec; color:var(--accent-dark); }
+  td table { margin:0; }
+  .empty { color:#bbb; }
+  .prose { line-height:1.8; white-space:pre-wrap; color:#444; margin:6px 0; }
+  .note { margin:12px 4px 0; font-size:12px; color:#a08a8a; line-height:1.6; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hd">
+      <h1>{{TITLE}}</h1>
+      <div class="sub">本地兜底渲染 · {{GENERATED}} · 功能族 nametest</div>
+    </div>
+    <div class="body-wrap">
+      {{BODY}}
+      <div class="note">本页由 skill 包内 <code>local_render.py --func nametest</code> 读取接口 <code>data</code>
+        原始字段本地生成，分节/标签对照移动端（flutter-web <code>nametest_page.dart</code> /
+        <code>nametest_traditional_page.dart</code>）与云端模板；未覆盖字段自动并入「补充信息」。
+        <strong>权威可读版本以云端 <code>render.html</code> 为准。</strong></div>
+    </div>
+  </div>
+  <script type="application/json" id="zhouyi-render-spec">{"family": "nametest", "labels": {"type": "类型", "zi": "简体", "bihua": "简体笔画", "py": "拼音", "fanti": "繁体", "ftBihua": "繁体笔画", "wuxing": "五行", "jixiong": "吉凶"}, "covered": ["sanCai", "surnameStrokes", "givenNameStrokes", "wuXing", "tianGeAnalysis", "renGeAnalysis", "diGeAnalysis", "waiGeAnalysis", "zongGeAnalysis"], "sections": [{"title": "基础测算信息", "rows": [{"l": "", "k": "characters", "block": true}]}, {"title": "综合评分", "rows": [{"l": "综合评分", "k": "score"}]}, {"title": "运势影响", "rows": [{"l": "基础运势", "k": "baseInfluence", "append": "baseInfluenceLuck"}, {"l": "成功运势", "k": "successInfluence", "append": "successInfluenceLuck"}, {"l": "人际关系", "k": "relationshipInfluence", "append": "relationshipInfluenceLuck"}, {"l": "性格特点", "k": "personalityInfluence", "prose": true, "skip_if": ["personalityBrief", "healthHint"]}]}, {"title": "三才配置", "rows": [{"l": "三才配置", "k": "sanCaiTitle", "fallback": "sanCai"}, {"l": "三才吉凶", "k": "sanCaiLuck"}, {"l": "三才涵义", "k": "sanCaiMeaning", "prose": true}]}, {"title": "三才综合分析", "rows": [{"l": "", "k": "sanCaiExplanation", "prose": true}]}, {"title": "性格 · 健康", "rows": [{"l": "性格概述", "k": "personalityBrief", "prose": true}, {"l": "性格详细", "k": "personalityInfluence", "prose": true, "unless_covered": true}, {"l": "健康暗示", "k": "healthHint", "prose": true}]}, {"title": "六亲关系运势", "rows": [{"l": "", "k": "sixRelationships", "prose": true}]}, {"title": "五格概览", "rows": [{"l": "天格", "k": "tianGe", "append": "tianGeWuxing"}, {"l": "人格", "k": "renGe", "append": "renGeWuxing"}, {"l": "地格", "k": "diGe", "append": "diGeWuxing"}, {"l": "外格", "k": "waiGe", "append": "waiGeWuxing"}, {"l": "总格", "k": "zongGe", "append": "zongGeWuxing"}]}, {"title": "五格数理详解", "rows": [{"l": "天格吉凶", "k": "tianGeLuck"}, {"l": "天格解析", "k": "tianGeExplanation", "prose": true}, {"l": "天格数理暗示", "k": "tianGeHint", "prose": true}, {"l": "人格吉凶", "k": "renGeLuck"}, {"l": "人格解析", "k": "renGeExplanation", "prose": true}, {"l": "人格数理暗示", "k": "renGeHint", "prose": true}, {"l": "地格吉凶", "k": "diGeLuck"}, {"l": "地格解析", "k": "diGeExplanation", "prose": true}, {"l": "地格数理暗示", "k": "diGeHint", "prose": true}, {"l": "外格吉凶", "k": "waiGeLuck"}, {"l": "外格解析", "k": "waiGeExplanation", "prose": true}, {"l": "外格数理暗示", "k": "waiGeHint", "prose": true}, {"l": "总格吉凶", "k": "zongGeLuck"}, {"l": "总格解析", "k": "zongGeExplanation", "prose": true}, {"l": "总格数理暗示", "k": "zongGeHint", "prose": true}]}, {"title": "姓氏起源", "rows": [{"l": "", "k": "surnameOrigin", "prose": true}]}, {"title": "综合分析", "rows": [{"l": "", "k": "analysis", "prose": true}]}]}</script>
+</body>
+</html>

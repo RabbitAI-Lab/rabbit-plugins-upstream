@@ -1,0 +1,19 @@
+{
+  "leftLabel": "Before",
+  "rightLabel": "After",
+  "pairs": [
+    [
+      "draft-1.png",
+      "refined-1.png"
+    ],
+    [
+      "draft-2.png",
+      "refined-2.png"
+    ],
+    [
+      "draft-3.png",
+      "refined-3.png"
+    ]
+  ],
+  "stepCaption": "Refine the same idea"
+}

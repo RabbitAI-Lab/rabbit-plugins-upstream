@@ -1,41 +1,48 @@
-## Description: <br>
-Audits Rust code for unsafe blocks, ownership issues, and Cargo dependency risks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audits Rust code for unsafe blocks, ownership issues, and Cargo dependency risks.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[athola](https://clawhub.ai/user/athola)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers use this skill to review Rust changes for safety, correctness, concurrency, dependency, and idiom issues before merging or during focused audits.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: ClawScan rated the release suspicious and reported incomplete inspection, with concerns about the relevance of some guidance and file-writing or installation steps.
+
+Mitigation: Review the full skill contents, including commands that write local files and the cargo-mutants installation step, before running the workflow.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and engineers use this skill to review Rust changes for ownership, error handling, concurrency, unsafe code, dependency risk, performance, idioms, and test quality before merge or release. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Analysis, Markdown, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can suggest local Cargo analysis commands, including commands that may install tools or perform dependency and network checks. <br>
-Mitigation: Review proposed commands before running them, especially installation, audit, outdated, deny, or other dependency-check commands. <br>
-Risk: Broad Rust-related triggers may activate the skill in contexts where its opinionated audit workflow is not needed. <br>
-Mitigation: Use it for Rust code-review tasks and disregard or disable it for unrelated review work. <br>
+**Output Format:** [Structured Markdown audit report with findings, source locations, evidence anchors, and recommendations.]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-pensive-rust-review) <br>
-- [Project Homepage from ClawHub Metadata](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+**Other Properties Related to Output:** [Findings are expected to include source locations and verbatim anchors; unsupported findings should be removed or labeled UNVERIFIED.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown review report with optional inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes categorized findings, recommendations, evidence logging, and an approve / approve with actions / block recommendation.] <br>
+1.10.4 (source: server-resolved release metadata)
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

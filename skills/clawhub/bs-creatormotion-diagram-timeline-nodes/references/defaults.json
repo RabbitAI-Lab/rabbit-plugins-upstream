@@ -1,0 +1,17 @@
+{
+  "milestones": [
+    {
+      "date": "Week 1",
+      "caption": "A rough prototype"
+    },
+    {
+      "date": "Week 3",
+      "caption": "A small pilot"
+    },
+    {
+      "date": "Week 6",
+      "caption": "A public release"
+    }
+  ],
+  "presenter": false
+}

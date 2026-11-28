@@ -6,14 +6,14 @@ last-reviewed: 2026-07-09
 
 # oceanio (Ocean.io)
 
-Mid-tier company/people search and enrichment — four actions, all 1 credit. Its edge is **lookalike sourcing** (`searchCompanies` with `lookalikeDomains`: "companies like these three customers") plus technographic / web-traffic / e-commerce filters, and **cross-filtered search** (people filters and company filters combined in one call). Not in the priority stack: `salesNavigator` (0.02–0.05) stays the sourcing default; come here when the filter is lookalike- or technographic-shaped, before escalating to `peopleDataLabs` (3). See [`../references/stage-action-map.md`](../references/stage-action-map.md) (mid-tier rows).
+Mid-tier company/people search and enrichment — four actions, all 1 credit. Its edge is **lookalike sourcing** (`searchCompanies` with `lookalikeDomains`: "companies like these three customers") plus technographic / web-traffic / e-commerce filters, and **cross-filtered search** (people filters and company filters combined in one call). Not in the priority stack: `salesNavigator` (0.2/item) stays the sourcing default and `aiArk.searchCompanies` (0.01/item) is the cheap lookalike path; come here when the filter is technographic / web-traffic / e-commerce-shaped or needs cross-filtered people+company search, before escalating to `peopleDataLabs` (3/item). See [`../references/stage-action-map.md`](../references/stage-action-map.md) (mid-tier rows).
 
 ## Credits-based actions
 
 | Action | Cost | Inputs | Use for |
 |---|---|---|---|
-| `searchCompanies` | 1 **per returned record** | `companiesFilters`, `peopleFilters`, `limit` | Company search: lookalikes, technographics, web traffic, revenue, e-commerce flags. |
-| `searchPeople` | 1 | `peopleFilters`, `companiesFilters`, `limit` | People search cross-filtered by their company's attributes. |
+| `searchCompanies` | 1 **per returned record** | `companiesFilters`, `peopleFilters`, `limit` (default 25, max 100) | Company search: lookalikes, technographics, web traffic, revenue, e-commerce flags. |
+| `searchPeople` | 1 | `peopleFilters`, `companiesFilters`, `limit` (default 25, max 100) | People search cross-filtered by their company's attributes. |
 | `enrichCompany` | 1 | `company` object (`domain, name, linkedin, email, phone, countryCode, city, address, …` + socials) | Company enrichment from weak identifiers. |
 | `enrichPerson` | 1 | `person` object (`email, linkedin, firstName, lastName, jobTitle, phone, …`) + `company` object | Person enrichment; company context improves matching. |
 
@@ -21,10 +21,10 @@ Mid-tier company/people search and enrichment — four actions, all 1 credit. It
 
 - ✅ **Lookalike TAM** — `companiesFilters.lookalikeDomains` seeds a search from best-customer domains; no priority-stack action does this.
 - ✅ **Technographic + traffic filters** — `technologies`, `webTrafficVisitsFrom/To`, `ecommerce`, `mobileAppsFrom/To`, `revenues`, `companySizes` in one filter object (vs `theirStack` for job-posting-derived tech intent).
-- ✅ **"People at companies like X"** — `searchPeople` accepts both filter objects: `peopleFilters` (`jobTitles`, `seniorities`, `departments`, `emailStatuses`, `keywords`, `countries`, …) AND `companiesFilters` in the same call.
+- ✅ **"People at companies like X"** — `searchPeople` accepts both filter objects: `peopleFilters` (`jobTitles`, `excludeJobTitles`, `names`, `seniorities`, `departments`, `countries`, `includeIds` / `excludeIds`) AND `companiesFilters` in the same call.
 - ✅ **Dedupe-aware sourcing** — `includeDomains` / `excludeDomains` (companies) and `includeIds` / `excludeIds`, `excludeJobTitles` (people) keep already-owned records out of the paid pull.
-- ❌ **Plain industry/size/geo sourcing** — `salesNavigator.searchAccounts` (0.05) is 20× cheaper.
-- ❌ **First-stop enrichment** — the ENRICH chain leads with `cargo` native and `linkedin` (0.25); oceanio is a same-price peer of `waterfall.enrichCompany` (1), so pick by pilot coverage.
+- ❌ **Plain industry/size/geo sourcing** — `salesNavigator.searchAccounts` (0.2/item) is 5× cheaper, and `aiArk.searchCompanies` (0.01/item) 100×.
+- ❌ **First-stop enrichment** — the ENRICH chain leads with `aiArk.enrichCompany` (0.01) and `linkedin` (0.25); oceanio is a same-price peer of `waterfall.enrichCompany` (1), so pick by pilot coverage.
 
 ## Patterns
 
@@ -32,7 +32,7 @@ Mid-tier company/people search and enrichment — four actions, all 1 credit. It
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"oceanio","actionSlug":"searchCompanies","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"oceanio","actionSlug":"searchCompanies"}' \
   --data '{
     "companiesFilters": {
       "lookalikeDomains": ["acme.com", "globex.com", "initech.com"],
@@ -51,7 +51,7 @@ Billed per returned record — set `limit` to the approved scope ([`../reference
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"oceanio","actionSlug":"searchPeople","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"oceanio","actionSlug":"searchPeople"}' \
   --data '{
     "peopleFilters": {"jobTitles": ["VP Marketing", "CMO"], "seniorities": ["vp", "c_suite"]},
     "companiesFilters": {"technologies": ["shopify"], "countries": ["US"]},
@@ -66,7 +66,7 @@ Enum values in both examples (`companySizes`, `seniorities`, `technologies`, …
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"oceanio","actionSlug":"enrichPerson","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"oceanio","actionSlug":"enrichPerson"}' \
   --records '[
     {"person":{"firstName":"Alice","lastName":"Smith","jobTitle":"CTO"},"company":{"domain":"acme.com"}},
     {"person":{"linkedin":"https://linkedin.com/in/bobjones"}}
@@ -79,16 +79,24 @@ cargo-ai orchestration action execute-batch \
 ## Common pitfalls
 
 - **Inputs are nested objects.** Filters go inside `peopleFilters` / `companiesFilters`; enrich identifiers inside `person` / `company`. Flat top-level fields express nothing.
-- **Filter values are opaque enums.** `companySizes`, `revenues`, `seniorities`, `departments`, `emailStatuses`, `industries`, `technologies` take provider-defined string values — inspect them via the `listObjectFieldValues` autocomplete on `connection integration get oceanio` before building the filter; guessed strings silently mismatch.
+- **Filter values are opaque enums.** `companySizes`, `revenues`, `countries`, `states`, `seniorities`, `departments`, `industries`, `industryCategories`, `technologies` take provider-defined string values — inspect them via the `listObjectFieldValues` autocomplete (`cargo-ai connection connector autocomplete --connector-uuid <oceanio-connector-uuid> --slug listObjectFieldValues --params '{"fieldName":"seniorities"}'`) before building the filter; guessed strings silently mismatch.
 - **`searchCompanies` bills per item, `searchPeople` per call** — the dump prices `searchCompanies` per returned record (`limit` = budget cap) while `searchPeople` is a fixed 1/execution.
 - **Rate limit: 60 calls/minute** (spread) — the slowest in this group; batch accordingly.
 
 ## Position in the waterfall
 
-- **SOURCE — mid-tier rung** (both searches at 1): after `salesNavigator` / `icypeas` (0.02–0.05), before `peopleDataLabs` / `waterfall.searchProspects` (3). Promote it when the filter is lookalike- or technographic-first.
+- **SOURCE — mid-tier rung** (`searchCompanies` 1/item, `searchPeople` 1 flat): after `aiArk` (0.01–0.05/item) / `icypeas` (0.02 per 100 items) / `salesNavigator` (0.2/item), before `peopleDataLabs` / `waterfall.searchProspects` (3/item). Promote it when the filter is technographic-first or needs people+company cross-filtering.
 - **ENRICH — mid-tier rung** (both enriches at 1): peer of `waterfall.enrichCompany` (1) and `apolloio.enrichOrganization` (1); pilot 10 rows to pick by coverage.
 - Sourced people flow on to CONTACT (`FullEnrich.findEmail`, 1) and VERIFY (`waterfall.verifyEmail`, 0.1) as usual.
 
+## Recurring use
+
+Lookalike discovery compounds — **re-run `searchCompanies` weekly as the seed list grows** (cadence table: [`../recipes/save-as-play.md`](../recipes/save-as-play.md)).
+
+- **Dedup before paid nodes:** each re-discovery returns known winners again — refresh `lookalikeDomains` with new Closed-Won domains, keep owned accounts in `excludeDomains`, and dedup hits against the Companies model before any downstream enrichment bills.
+- **Per-record billing recurs too:** `searchCompanies` bills per returned record on every scheduled run — hold `limit` at the approved scope so recurring pulls bill mostly-new rows.
+- **In-play gate:** `enrichCompany` / `enrichPerson` (1) run only where the target enriched field is still empty — firmographics are stable; re-enriching a filled row re-buys the same data.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"oceanio","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"oceanio","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**

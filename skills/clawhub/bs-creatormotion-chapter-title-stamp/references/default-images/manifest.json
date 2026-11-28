@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "assets": {
+    "workshop-photo": {
+      "file": "workshop-photo.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1672x941 pixels. Layout reference: Use case: photorealistic-natural. Asset type: original rich content photograph for a creative workshop B-roll collage. Landscape 16:9 documentary editorial photography of a small group of four fictional diverse adult designers collaborating around a broad oak table in a bright calm studio, handwritten notes, real printed photo references, sketchbooks, pens and coffee visible. One person standing gestures toward a wall of photos and paper notes, others engaged in discussion. Warm window light, believable candid faces and hands, filmic depth, well-composed rather than stock-photo posing. No logos, no watermarks, no text overlays.\n\nTHEME AND CLEANLINESS OVERRIDE (takes precedence over the subject and text above): keep the same layout geometry, aspect, element positions and number of main blocks, but change the subject to a travel creator (trips, destinations, itineraries, travel vlogs) and replace every headline or label with a short travel equivalent of similar length. Halve the amount of small text, make photos larger and cleaner, remove clutter, show at most one person per photo and never a group or crowd. Photos inside use clean colourful travel photography (blue sea, green hills, warm sunlight). Interfaces stay white with crisp sans-serif type and at most one small yellow highlight.\n\nClean, premium travel photography: one clear subject, uncluttered composition with generous breathing room, rich natural colour (deep blue sea and sky, fresh greens, warm golden sunlight, terracotta, white walls) but tasteful and not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. No text, no logos, no watermark, no real brands.\n\nSave as ./workshop-photo.png at 1672x941. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "9ed5591913d60a6329bedafe854c0e7c45ccfb0f62bda834ffff18442eb42977",
+      "generatedAt": "2026-10-29T16:32:43.469867+00:00",
+      "generationId": "codex-image-gen-workshop-photo",
+      "sourceSha256": "3b03eaa17ad1eb5975c072e4f5a97238b6c38d3279fb01ae456c96d4998d392c",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean travel lifestyle"
+    }
+  },
+  "effects": {
+    "bs-creatormotion-chapter-title-stamp": {
+      "next-scene-image": "workshop-photo"
+    }
+  }
+}

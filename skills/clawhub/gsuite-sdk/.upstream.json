@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/gsuite-sdk",
   "slug": "gsuite-sdk",
   "ownerHandle": null,
-  "version": "0.1.3",
-  "updatedAt": 1778487899210,
-  "contentHash": "7ed5662b537b7cba0cc18f3ff9b401c2135de0f160d37f8419bb24caca5abb4a",
-  "fetchedAt": "2026-07-26T20:25:15.456Z"
+  "version": "0.15.0",
+  "updatedAt": 1795580975453,
+  "contentHash": "01aa2167ad373803f1440df0ce4ebf09ec3c15207caec57daca17c709cac60aa",
+  "fetchedAt": "2026-11-28T16:26:30.949Z"
 }

@@ -1,0 +1,12 @@
+{
+  "unitAmount": 240,
+  "quantity": 5,
+  "investment": 600,
+  "currency": "$",
+  "labels": [
+    "Value per project",
+    "Projects recovered",
+    "Monthly value"
+  ],
+  "conclusion": "Two times the initial cost"
+}

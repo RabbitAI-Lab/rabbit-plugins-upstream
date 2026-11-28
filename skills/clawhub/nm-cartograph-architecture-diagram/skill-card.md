@@ -1,43 +1,50 @@
-## Description: <br>
-Generates a Mermaid architecture diagram showing high-level component relationships. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates a Mermaid architecture diagram showing high-level component relationships
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to understand how plugins, modules, or codebase components relate to each other and to document those relationships for onboarding or review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated architecture diagrams may omit important components or misstate relationships if the explored scope is incomplete. <br>
-Mitigation: Review the Mermaid diagram against the target codebase before using it for onboarding, documentation, or review decisions. <br>
-Risk: Mermaid rendering or MCP output may fail or produce an inaccurate visualization when syntax is invalid. <br>
-Mitigation: Validate the generated Mermaid flowchart and correct syntax errors before presenting the rendered result. <br>
-Risk: Configured operational credentials or upload integrations can expose or persist incident data when directed by the user. <br>
-Mitigation: Scope any configured credentials and review shared-memory or upload actions before use. <br>
+## Use Case:
 
+Developers and engineers use the skill to understand and communicate high-level relationships among packages, plugins, and modules during onboarding, architecture documentation, and pull request reviews.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-cartograph-architecture-diagram) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/cartograph) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with Mermaid flowchart code and a brief text summary] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call a Mermaid rendering MCP when available; rendering failures should be corrected and retried before presenting results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter states 1.9.8) <br>
+Risk: The diagram workflow may send codebase architecture details to Mermaid Chart, which may expose sensitive information from a private or confidential repository.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before use, check whether the renderer's data handling is acceptable for the repository and use local diagram output when external sharing is not permitted.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/athola/skills/nm-cartograph-architecture-diagram)
+- [Cartograph project homepage (Clawdis metadata)](https://github.com/athola/claude-night-market/tree/master/plugins/cartograph)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Markdown]
+
+**Output Format:** [Markdown containing Mermaid flowchart syntax and a brief description of the architecture diagram]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A high-level component map grouped by package; the skill guidance limits diagrams to 15–20 nodes and calls for at least 3 nodes.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

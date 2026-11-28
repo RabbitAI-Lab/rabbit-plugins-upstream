@@ -1,43 +1,56 @@
-## Description: <br>
-Issue To Pr helps an agent read a GitHub issue, analyze the target repository, implement a fix, verify the change, and prepare a pull request. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through reproducing a GitHub issue, making and verifying a minimal fix, and preparing a pull request that follows repository conventions.
 
-## Publisher: <br>
-[4ydx3906](https://clawhub.ai/user/4ydx3906) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[4ydx3906](https://clawhub.ai/user/4ydx3906)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to turn a GitHub issue reference into a local fix workflow, including issue triage, repository analysis, code changes, verification, and pull request preparation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use the user's GitHub CLI identity to access repositories, fork projects, push branches, and create pull requests. <br>
-Mitigation: Use it only with GitHub access you are comfortable delegating, confirm the target repository, and require explicit approval before forking, pushing, or opening a pull request. <br>
-Risk: The workflow may run project test, lint, or build commands from the target repository. <br>
-Mitigation: Review commands before execution and prefer an isolated checkout or sandbox when working with untrusted repositories. <br>
-Risk: The agent modifies local source files while attempting to fix an issue. <br>
-Mitigation: Inspect the root cause analysis and diff before commit or PR creation, and keep unrelated local work out of the working tree. <br>
+## Use Case:
 
+Developers use this skill to investigate and fix a GitHub issue in a local repository, verify the change against a baseline, and prepare a pull request with evidence.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/4ydx3906/issue-to-pr) <br>
-- [GitHub CLI](https://cli.github.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command blocks, code edits, commit messages, and pull request text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May clone repositories, edit local files, run project checks, and create branches or pull requests after user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: frontmatter, changelog, clawhub.json, release evidence) <br>
+Risk: The documented install command does not pin the installer or skill revision, so fetched content could change.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the resolved skill contents before installation and use a pinned revision when the installer supports it.
+
+Risk: Security analysis is incomplete because some referenced paths could not be resolved.
+
+Mitigation: Review the complete skill package, including its referenced files, before installing or running it.
+
+## Reference(s):
+
+- [Project repository](https://github.com/4yDX3906/issue-to-pr)
+- [ClawHub skill page](https://clawhub.ai/4ydx3906/skills/issue-to-pr)
+- [PR evidence template](references/pr-evidence.md)
+- [Run state schema](references/state.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Shell commands, Files, Markdown, Guidance]
+
+**Output Format:** [Repository changes, verification artifacts, and a Markdown pull request report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a resumable run-state file, test evidence, and a pull request URL.]
+
+## Skill Version(s):
+
+1.4.0 (source: frontmatter, CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

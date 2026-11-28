@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/nm-scribe-slop-detector",
   "slug": "nm-scribe-slop-detector",
   "ownerHandle": null,
-  "version": null,
-  "updatedAt": 1784059130789,
-  "contentHash": "e47137df6b3201e7a2f784e1d1ee7fc57dc74f241f370c8bf8613ae2608bc25a",
-  "fetchedAt": "2026-07-26T18:14:15.439Z"
+  "version": "1.10.4",
+  "updatedAt": 1795479041270,
+  "contentHash": "4743f1af5b12fe62015bc65d4ac736a2a4ad22a9e3ac848b48e1abbb26b00454",
+  "fetchedAt": "2026-11-28T16:28:14.069Z"
 }

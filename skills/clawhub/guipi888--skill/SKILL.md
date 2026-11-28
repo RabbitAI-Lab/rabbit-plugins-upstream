@@ -1,38 +1,11 @@
 ---
 name: Skill发布文案优化
-description: 专门为 Skill 优化在各平台（虾评/ClawHub/GitHub/小红书 RED Skill/知识星球）的发布文案，包括技能名称、description、triggers、发布介绍文案，提升其他 Agent 和用户的搜索发现率。当用户说「优化skill发布文案」「帮我写发布介绍」「优化技能描述让更多人搜到」「skill名称怎么起更容易被找到」时触发。
-agent_created: true
-version: "1.0.0"
-slug: skill-publish-copywriter
-displayName: "Skill发布文案优化 🔧 提升搜索发现率"
-xiaping_trigger:
-  - AI
-  - 效率
-  - 工具
-  - 文案
-  - 搜索
-xiaping_category:
-  - 效率工具
-xiaping_tags:
-  - AI工具
-  - 自媒体
-  - 技能发布
-  - 搜索优化
-triggers:
-  - 优化skill发布文案
-  - 优化技能描述
-  - skill名称怎么起
-  - 让别人更容易搜到我的skill
-  - 写skill发布介绍
-  - 优化skill的description
-  - 优化skill的triggers
-  - skill发布文案
-  - 提升skill搜索排名
-  - 这个skill怎么介绍更好
-  - 帮我优化技能的发布信息
-  - skill元数据优化
+description: Skill 发出去没人搜到？技能描述写了一大段，Agent 和用户就是找不到？Skill发布文案优化（skill publish copywriter / skill SEO / 技能发布文案 / 发布介绍生成）专门解决技能「发布了却没曝光」的问题：按各平台检索机制重写技能名称、description、trigger 词与发布介绍文案——ClawHub 靠向量语义匹配就补中英双语同义词变体，SkillHub 只认 displayName 前缀就把核心关键词放最前，虾评名称控制在 10 字以内并配齐 category/tags，GitHub 补满 20 个 topics 让 SkillsMP 自动索引。当用户说「优化skill发布文案」「帮我写发布介绍」「优化技能描述让更多人搜到」「skill名称怎么起更容易被找到」「如何提升技能曝光」时触发。Use when you want your published skill to be discoverable by both agents and users. 内置发布前 SEO 预检（8 维检查清单）与多渠道文案模板，一次生成全平台适配的发布物料。
+version: 1.0.1
+metadata:
+  openclaw:
+    requires: {}
 ---
-
 # Skill 发布文案优化
 
 专门用于优化 Skill 在各发布渠道的**元数据文案**，提升搜索可见性和点击转化率。

@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "skill": "bs-spectrum-brand-strategy-deck",
+  "pictures": [
+    {
+      "id": "clay-objects-four-plinths",
+      "kind": "decorative",
+      "description": "Square 3D render of four matte clay-like objects, a cream canister, green twisted ribbon, orange stacked vase and yellow wavy arch, each on a green, blue, orange or yellow plinth against a black background.",
+      "goodFor": [
+        "cover",
+        "section",
+        "overview",
+        "background"
+      ],
+      "reuse": "any-topic",
+      "width": 1254,
+      "height": 1254,
+      "orientation": "square",
+      "transparent": false,
+      "bytes": 213008,
+      "sha256": "fed02152d3be2fb904b3b953b6daa1312ff4bbd196492b166b8968dd01e75b8a",
+      "url": "https://media.skillry.dev/skill-image-library/bs-spectrum-brand-strategy-deck/clay-objects-four-plinths-fed02152d3be.webp"
+    },
+    {
+      "id": "bottle-on-color-blocks",
+      "kind": "decorative",
+      "description": "Portrait 3D render of a blank cream bottle standing on an orange cylinder, flanked by a green ring, blue cube and yellow quarter-round block on a black background.",
+      "goodFor": [
+        "solution",
+        "chart-side",
+        "section",
+        "cover"
+      ],
+      "reuse": "any-topic",
+      "width": 1024,
+      "height": 1536,
+      "orientation": "portrait",
+      "transparent": false,
+      "bytes": 38792,
+      "sha256": "0d3180b5b3ac705d538c20085943c469e43bf732948c2b1db581cdc865c7c384",
+      "url": "https://media.skillry.dev/skill-image-library/bs-spectrum-brand-strategy-deck/bottle-on-color-blocks-0d3180b5b3ac.webp"
+    },
+    {
+      "id": "refill-station-3d",
+      "kind": "illustration",
+      "description": "3D render of a cream refill dispenser with three filled chambers and blue, green and orange taps, reusable jars and a bottle in front, a potted plant, yellow arch shelf and blank tent card on a black floor.",
+      "goodFor": [
+        "solution",
+        "process",
+        "overview",
+        "chart-side"
+      ],
+      "reuse": "topic-specific",
+      "topic": "refill shop / zero-waste grocery",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 239438,
+      "sha256": "0a2a291ae614ce6dc762e0123562ec8eddc40a5a62ddad00145afe8d81d89f17",
+      "url": "https://media.skillry.dev/skill-image-library/bs-spectrum-brand-strategy-deck/refill-station-3d-0a2a291ae614.webp"
+    },
+    {
+      "id": "tiny-shopfront-3d",
+      "kind": "illustration",
+      "description": "3D render of a small cream storefront with a green scalloped awning and open green door revealing a warm-lit shop, beside an orange plant pot, cream jars, yellow mat and blue bench, set right on a black background.",
+      "goodFor": [
+        "closing",
+        "cover",
+        "contact",
+        "section"
+      ],
+      "reuse": "topic-specific",
+      "topic": "small retail shop / neighborhood store",
+      "width": 1536,
+      "height": 1024,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 68320,
+      "sha256": "aeea40e429949b39fee171ffb022b1933242498c4634a2b6b4cec8b8ad580fc7",
+      "url": "https://media.skillry.dev/skill-image-library/bs-spectrum-brand-strategy-deck/tiny-shopfront-3d-aeea40e42994.webp"
+    }
+  ]
+}

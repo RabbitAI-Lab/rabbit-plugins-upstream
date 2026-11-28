@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "assets": {
+    "avatar-researcher": {
+      "file": "avatar-researcher.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1254x1254 pixels (aspect 1254:1254). Subject and layout: Use case: photorealistic-natural. Asset type: original profile portrait for a creator B-roll chat avatar and testimonial. Generate one square 1:1 editorial photograph of a fictional East Asian man in his early 30s, natural friendly half smile, short dark hair, simple off-white shirt. Head and shoulders, centered face occupies about 55 percent of image height, enough margin for a circular crop. Soft side window light, warm pale grey studio background, detailed natural skin, tasteful realistic photography. No text, logos, watermark, borders, UI, or collage.\n\nSTYLE (this overrides every colour, lighting, paper or material description above): premium 'clean modern studio' look. Bright, cool, neutral palette of white, very light grey, warm grey and graphite; soft diffused daylight; crisp medium-format detail; generous negative space; no clutter; no warm beige, cream paper, sepia, wood-heavy or cosy-cottage styling; at most one small saturated yellow accent. For photographs: architectural white or light-grey studio or interior, pale concrete, light oak only as a minor material, natural fictional adults (not models), faces natural and in focus. No logos, no watermark, no real brands. Save as ./avatar-researcher.png at 1254x1254. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "29c79433f42cf5455ee7d0438abc76c9263f9fd22873bf201345dd4bd5690ac0",
+      "generatedAt": "2026-10-29T14:48:47.343244+00:00",
+      "generationId": "codex-image-gen-avatar-researcher",
+      "sourceSha256": "30aae3338c013b6fb6e759ab051de06aa554bc8fcb5ca126a12e0bd69870d3e6",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean modern studio"
+    }
+  },
+  "effects": {
+    "bs-creatormotion-cards-chat-stack": {
+      "chatAvatar": "avatar-researcher"
+    }
+  }
+}

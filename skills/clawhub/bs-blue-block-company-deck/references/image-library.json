@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "skill": "bs-blue-block-company-deck",
+  "pictures": [
+    {
+      "id": "glass-office-campus-courtyard",
+      "kind": "scene",
+      "description": "Low-rise glass office campus around a landscaped courtyard with a reflecting pool, trees and people walking under a clear blue sky, wide daylight shot.",
+      "goodFor": [
+        "cover",
+        "overview",
+        "closing",
+        "background"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 681856,
+      "sha256": "af3907147b02e9e050622dd5b9e3f57fd6f4602d2b63562b9e649f4fec321de2",
+      "url": "https://media.skillry.dev/skill-image-library/bs-blue-block-company-deck/glass-office-campus-courtyard-af3907147b02.webp"
+    },
+    {
+      "id": "team-reviewing-floor-plans",
+      "kind": "scene",
+      "description": "Three business people at a white table in a navy-walled office, a woman standing and pointing at large printed plans while two men look on.",
+      "goodFor": [
+        "overview",
+        "solution",
+        "process",
+        "team"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 307116,
+      "sha256": "0eca6f71441b12be4fce6cbdd65cefd9eff6e252a2d4dcb5cb02f3607b4b6aae",
+      "url": "https://media.skillry.dev/skill-image-library/bs-blue-block-company-deck/team-reviewing-floor-plans-0eca6f71441b.webp"
+    },
+    {
+      "id": "colleagues-laptop-open-office",
+      "kind": "scene",
+      "description": "Three colleagues smiling around a laptop on a wooden desk in a bright open-plan office with a deep blue wall and coworkers in the background.",
+      "goodFor": [
+        "overview",
+        "team",
+        "solution",
+        "section"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 317542,
+      "sha256": "83b40e35b580036450f4ed8c30af34ab48f566af59df87e2000189019557c75e",
+      "url": "https://media.skillry.dev/skill-image-library/bs-blue-block-company-deck/colleagues-laptop-open-office-83b40e35b580.webp"
+    },
+    {
+      "id": "team-huddle-workflow-whiteboard",
+      "kind": "scene",
+      "description": "Four colleagues talking among desk monitors, one holding a tablet, with a simple icon workflow loop drawn on a whiteboard behind them; navy and white palette.",
+      "goodFor": [
+        "process",
+        "problem",
+        "solution",
+        "team"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 266572,
+      "sha256": "39b7a2230215913549028ebf31a5dfb1b9992fd4148bd694ac084278a8a5ccfd",
+      "url": "https://media.skillry.dev/skill-image-library/bs-blue-block-company-deck/team-huddle-workflow-whiteboard-39b7a2230215.webp"
+    },
+    {
+      "id": "office-lobby-glass-boardroom",
+      "kind": "scene",
+      "description": "Quiet office entrance with a navy wall, marble console and abstract blue artwork, looking through glass doors into an empty boardroom with a city skyline view.",
+      "goodFor": [
+        "section",
+        "overview",
+        "background",
+        "contact"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 310740,
+      "sha256": "96443397ff0d89e9875366d9c4be5b3af7b2ba3ca06e0ed810e566f27f509517",
+      "url": "https://media.skillry.dev/skill-image-library/bs-blue-block-company-deck/office-lobby-glass-boardroom-96443397ff0d.webp"
+    },
+    {
+      "id": "portrait-woman-grey-hair-navy-blazer",
+      "kind": "portrait",
+      "description": "Head-and-shoulders portrait of a smiling middle-aged woman with short grey hair in a navy blazer, soft blurred office background with a blue wall.",
+      "goodFor": [
+        "team",
+        "quote"
+      ],
+      "reuse": "any-topic",
+      "width": 560,
+      "height": 560,
+      "orientation": "square",
+      "transparent": false,
+      "bytes": 32240,
+      "sha256": "76aa6a009657665f57bd816bef5713975c19353aad0571289fe2e3eec36d73ce",
+      "url": "https://media.skillry.dev/skill-image-library/bs-blue-block-company-deck/portrait-woman-grey-hair-navy-blazer-76aa6a009657.webp"
+    },
+    {
+      "id": "portrait-man-light-blue-shirt",
+      "kind": "portrait",
+      "description": "Head-and-shoulders portrait of a smiling man with dark wavy hair and a light blue shirt against a soft blurred office background with blue accents.",
+      "goodFor": [
+        "team",
+        "quote"
+      ],
+      "reuse": "any-topic",
+      "width": 560,
+      "height": 560,
+      "orientation": "square",
+      "transparent": false,
+      "bytes": 30294,
+      "sha256": "0efd1fd1c8d57832741631b6de94bf422864b8dfff51680e94ad02b05b4e0b5d",
+      "url": "https://media.skillry.dev/skill-image-library/bs-blue-block-company-deck/portrait-man-light-blue-shirt-0efd1fd1c8d5.webp"
+    },
+    {
+      "id": "portrait-man-glasses-grey-sweater",
+      "kind": "portrait",
+      "description": "Head-and-shoulders portrait of a smiling older man with glasses wearing a charcoal sweater over a collared shirt, blurred bright office behind.",
+      "goodFor": [
+        "team",
+        "quote"
+      ],
+      "reuse": "any-topic",
+      "width": 560,
+      "height": 560,
+      "orientation": "square",
+      "transparent": false,
+      "bytes": 40390,
+      "sha256": "f0285a13e751fba1538cde122bbbc180d56371f8437fe4c6d3641df1852782f3",
+      "url": "https://media.skillry.dev/skill-image-library/bs-blue-block-company-deck/portrait-man-glasses-grey-sweater-f0285a13e751.webp"
+    },
+    {
+      "id": "portrait-woman-curly-hair-white-shirt",
+      "kind": "portrait",
+      "description": "Head-and-shoulders portrait of a smiling woman with curly black hair in a white shirt, blurred office background with a navy wall and greenery.",
+      "goodFor": [
+        "team",
+        "quote"
+      ],
+      "reuse": "any-topic",
+      "width": 560,
+      "height": 560,
+      "orientation": "square",
+      "transparent": false,
+      "bytes": 32496,
+      "sha256": "080c31d1100738d52a1da77327ca458a30b5651360c0134ba4d0dd81b1e0e382",
+      "url": "https://media.skillry.dev/skill-image-library/bs-blue-block-company-deck/portrait-woman-curly-hair-white-shirt-080c31d11007.webp"
+    }
+  ]
+}

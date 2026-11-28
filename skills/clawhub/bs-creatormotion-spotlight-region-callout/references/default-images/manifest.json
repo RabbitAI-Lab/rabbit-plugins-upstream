@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "assets": {
+    "workspace-brief": {
+      "file": "workspace-brief.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1672x941 pixels. Layout reference: Use case: ui-mockup. Asset type: original rich project workspace screenshot for B-roll focus/voice/reply scenes. Landscape 16:9 front-facing flat app screenshot fills canvas. Beautiful professional notes workspace on warm white. Narrow left sidebar with small icons and labels 'Overview', 'The brief', 'Materials', 'Next steps'. Main page header 'THE WORKING BRIEF'. Upper center region contains a readable highlighted section titled 'What the team needs' with concise actual lines 'One clear outcome', 'The information needed to begin', 'A visible definition of done'. Lower half has an attractive wide creative-studio photograph and two columns of dense real English project notes/checklist content. Small fictional collaborator avatars and precise top toolbar. Actual finished content-rich editor, fine lines, subtle amber selected state. No real app logos, brands, watermark, code, blank lines pretending to be paragraphs, or device.\n\nTHEME AND CLEANLINESS OVERRIDE (takes precedence over the subject and text above): keep the same layout geometry, aspect, element positions and number of main blocks, but change the subject to a travel creator (trips, destinations, itineraries, travel vlogs) and replace every headline or label with a short travel equivalent of similar length. Halve the amount of small text, make photos larger and cleaner, remove clutter, show at most one person per photo and never a group or crowd. Photos inside use clean colourful travel photography (blue sea, green hills, warm sunlight). Interfaces stay white with crisp sans-serif type and at most one small yellow highlight.\n\nClean, premium travel photography: one clear subject, uncluttered composition with generous breathing room, rich natural colour (deep blue sea and sky, fresh greens, warm golden sunlight, terracotta, white walls) but tasteful and not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. No text, no logos, no watermark, no real brands.\n\nSave as ./workspace-brief.png at 1672x941. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "3c2f0ee8b184b240efcad7a3e8a5642147a8c5158460fb7d9d92943efba1b108",
+      "generatedAt": "2026-10-29T16:32:43.469867+00:00",
+      "generationId": "codex-image-gen-workspace-brief",
+      "sourceSha256": "bec5104bd1cf1fa662b0dc43ab3a029a6d24c30fb21a9a1c7a85917b02f0b1e2",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean travel lifestyle"
+    }
+  },
+  "effects": {
+    "bs-creatormotion-spotlight-region-callout": {
+      "document": "workspace-brief"
+    }
+  }
+}

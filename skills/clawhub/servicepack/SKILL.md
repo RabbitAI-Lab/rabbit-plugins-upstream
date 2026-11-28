@@ -1,6 +1,6 @@
 ---
 name: servicepack
-description: Build a Go service on psyb0t/servicepack — clone-and-own framework (not a `go get` library) providing a Service interface (Name/Run/Stop), a singleton ServiceManager that runs services concurrently with dependency-ordered topological start, automatic retry (Retryable), non-fatal failures (AllowedFailure), readiness gating (ReadyNotifier), per-service CLI subcommands (Commander), an App singleton with OnPreRun/OnPostStop lifecycle hooks, gofindimpl-based service auto-discovery codegen, slog-configurator logging, and a graceful-shutdown Runner. Import path github.com/psyb0t/servicepack. Use when the user wants to build a Go service/daemon with concurrent long-running workers, retry/dependency/readiness semantics, or a `make service NAME=x` scaffolded multi-service binary.
+description: "Build a Go service on psyb0t/servicepack: clone-and-own framework (not a `go get` library) providing a Service interface (Name/Run/Stop), a singleton ServiceManager that runs services concurrently with dependency-ordered topological start, automatic retry (Retryable), non-fatal failures (AllowedFailure), readiness gating (ReadyNotifier), per-service CLI subcommands (Commander), an App singleton with OnPreRun/OnPostStop lifecycle hooks, gofindimpl-based service auto-discovery codegen, ctxscope/slogging structured logging, and a graceful-shutdown Runner. Import path github.com/psyb0t/servicepack. Use when the user wants related Go services debugged together locally, then deployed as one binary or split into separate microservices, with retry/dependency/readiness semantics. The one-time setup clones the repository and runs make own, which turns that fresh clone into the user's new project (rewrites the module path, removes the clone's .git and re-initializes it)."
 homepage: https://github.com/psyb0t/servicepack
 user-invocable: true
 permissions:
@@ -15,33 +15,42 @@ permissions:
       - "internal/pkg/services/**"
       - "cmd/init.go"
       - "cmd/commands.go"
+      - "the whole fresh clone, only during the one-time make own setup the user asked for (see references/setup.md)"
+  network:
+    - "git clone from https://github.com/psyb0t/servicepack (one-time setup)"
+    - "Docker image builds and Go module downloads run by the make targets below"
   shell:
-    - "go build ./..."
-    - "go test ./..."
-    - "go vet ./..."
+    - "git clone https://github.com/psyb0t/servicepack (one-time setup, only when the user asks to start a new project)"
+    - "make own MODNAME=* (one-time setup, fresh clone only)"
+    - "make run-dev"
+    - "./build/<app> run (the binary make build produces)"
+    - "make dev-image"
     - "make service NAME=*"
     - "make service-registration"
     - "make build"
     - "make test"
+    - "make test-integration"
+    - "make test-coverage"
     - "make lint"
+    - "make format"
 metadata:
   openclaw:
     emoji: "📦"
     requires:
       bins:
-        - go
+        - docker
 ---
 
-# servicepack — build a Go service on the framework
+# servicepack: build a Go service on the framework
 
-`servicepack` runs your Go services concurrently without you hand-rolling a supervisor loop. It is NOT a package you `go get` into an existing project — it's a **template repo you clone and make your own**, then you add services under `internal/pkg/services/`. This skill teaches you to build a service with it, not to run it as a standalone server (there's nothing to run until you write a service).
+`servicepack` runs your Go services concurrently without you hand-rolling a supervisor loop. It is NOT a package you `go get` into an existing project, it's a **template repo you clone and make your own**, then you add services under `internal/pkg/services/`. This skill teaches you to build a service with it, not to run it as a standalone server (there's nothing to run until you write a service).
 
 ## Security & safety
 
-servicepack is source code you compile into your own binary — it has no runtime surface of its own, no network listener, no daemon to secure. Once cloned it's just Go files in your repo; whatever surface your SERVICE exposes (HTTP, gRPC, DB connections) is on you, same as any Go code you'd write by hand. The only things worth flagging:
+servicepack is source code you compile into your own binary. It has no runtime surface of its own, no network listener, no daemon to secure. Once cloned it's just Go files in your repo; whatever surface your SERVICE exposes (HTTP, gRPC, DB connections) is on you, same as any Go code you'd write by hand. The only things worth flagging:
 
-- `make own MODNAME=...` rewrites `go.mod`, nukes `.git`, and re-inits — irreversible on the clone, run it once at the start.
-- `internal/app/`, `internal/pkg/service-manager/`, `pkg/runner/`, and `cmd/main.go` are framework-owned files that `make servicepack-update` overwrites — never hand-edit them (see "Framework boundaries" below).
+- `make own MODNAME=...` rewrites the clone into a new project and deletes its `.git` (full list in [setup](references/setup.md#what-make-own-changes)). It cannot be undone. Run it once, in a fresh clone you just made, and only when the user asked to start a new project. Never run it in an existing repository.
+- `internal/app/`, `internal/pkg/service-manager/`, `pkg/runner/`, and `cmd/main.go` are framework-owned files that `make servicepack-update` overwrites. Never hand-edit them (see "Framework boundaries" below).
 - No secrets, tokens, or credentials live in the framework itself. Your services' env vars are your own to manage (`gonfiguration`, not `os.Getenv`).
 
 ## When to use
@@ -53,11 +62,13 @@ servicepack is source code you compile into your own binary — it has no runtim
 
 ## When NOT to use
 
-- You need a single, simple `main()` with no concurrent workers — plain Go is less ceremony.
-- You're building an HTTP API only, no background workers — reach for `aichteeteapee` directly in a plain `main.go`; servicepack's value is the multi-service supervisor, not routing.
+- You need a single, simple `main()` with no concurrent workers: plain Go is less ceremony.
+- You're building an HTTP API only, no background workers: reach for `aichteeteapee` directly in a plain `main.go`; servicepack's value is the multi-service supervisor, not routing.
 - You want a library to import into an EXISTING app without restructuring around `cmd/`, `internal/app/`, `internal/pkg/services/`. servicepack expects to own your project's top-level shape.
 
 ## Quick start
+
+Clone into a new directory, and run `make own` only after the user has asked to start a new project:
 
 ```bash
 git clone https://github.com/psyb0t/servicepack
@@ -73,16 +84,16 @@ package myworker
 
 import (
 	"context"
-	"log/slog"
 
 	"github.com/psyb0t/ctxerrors"
+	"github.com/psyb0t/ctxscope"
 	"github.com/psyb0t/gonfiguration"
 )
 
 const ServiceName = "my-worker"
 
 type Config struct {
-	Value string `env:"MYWORKER_VALUE"`
+	Value string `env:"MYWORKER_VALUE" default:"default-value"`
 }
 
 type MyWorker struct {
@@ -92,12 +103,8 @@ type MyWorker struct {
 func New() (*MyWorker, error) {
 	cfg := Config{}
 
-	gonfiguration.SetDefaults(map[string]any{
-		"MYWORKER_VALUE": "default-value",
-	})
-
 	if err := gonfiguration.Parse(&cfg); err != nil {
-		return nil, ctxerrors.Wrap(err, "failed to parse myworker config")
+		return nil, ctxerrors.Wrap(err, "parse my-worker config")
 	}
 
 	return &MyWorker{config: cfg}, nil
@@ -108,15 +115,19 @@ func (s *MyWorker) Name() string {
 }
 
 func (s *MyWorker) Run(ctx context.Context) error {
-	slog.Info("starting service", "service", ServiceName)
-	// your logic — listen on ctx.Done() and return cleanly when cancelled
+	ctx = ctxscope.Set(ctx, ctxscope.Attr("service", ServiceName))
+	logger := ctxscope.GetLogger(ctx)
+	logger.Info("starting service")
+
 	<-ctx.Done()
+	logger.Info("service context cancelled")
 
 	return nil
 }
 
-func (s *MyWorker) Stop(_ context.Context) error {
-	slog.Info("stopping service", "service", ServiceName)
+func (s *MyWorker) Stop(ctx context.Context) error {
+	serviceCtx := ctxscope.Set(ctx, ctxscope.Attr("service", ServiceName))
+	ctxscope.GetLogger(serviceCtx).Info("stopping service")
 
 	return nil
 }
@@ -143,37 +154,37 @@ type Service interface {
 
 `Run()` listens for `ctx.Done()` and returns cleanly on cancellation; a non-nil return from `Run()` stops all services (unless the service is an `AllowedFailure`, see below). `Stop()` runs during shutdown for cleanup.
 
-## Optional interfaces — opt into extra behavior
+## Optional interfaces: opt into extra behavior
 
 A service can implement any combination of these on top of `Service`:
 
 ```go
-// Retryable — service gets restarted on failure, up to MaxRetries times,
-// waiting RetryDelay between attempts.
+// Retryable: service gets restarted on failure, up to MaxRetries times,
+// waiting RetryDelay between attempts. A negative MaxRetries counts as 0.
 type Retryable interface {
 	MaxRetries() int
 	RetryDelay() time.Duration
 }
 
-// AllowedFailure — service can die (even after exhausting retries)
+// AllowedFailure: service can die (even after exhausting retries)
 // without killing the rest of the process.
 type AllowedFailure interface {
 	IsAllowedFailure() bool
 }
 
-// Dependent — service manager topologically sorts start order;
+// Dependent: service manager topologically sorts start order;
 // services with no deps start first.
 type Dependent interface {
 	Dependencies() []string // names of other services in this process
 }
 
-// ReadyNotifier — service manager waits for this channel to close
+// ReadyNotifier: service manager waits for this channel to close
 // before starting anything that depends on this service.
 type ReadyNotifier interface {
 	Ready() <-chan struct{}
 }
 
-// Commander — exposes CLI subcommands under the service's own
+// Commander: exposes CLI subcommands under the service's own
 // namespace: ./app <servicename> <subcommand>. Only that service
 // gets instantiated when its command runs.
 type Commander interface {
@@ -181,9 +192,11 @@ type Commander interface {
 }
 ```
 
-Dependencies on services not present in the current process (e.g. another microservice) are skipped with a debug log, not an error — cyclic dependencies within the process ARE rejected at startup.
+Dependencies on services not present in the current process (e.g. another microservice) are skipped with a warning log, not an error. Cyclic dependencies within the process ARE rejected at startup.
 
-## Lifecycle hooks — customize without touching framework files
+**`Dependent` alone orders the LAUNCH, not the readiness.** A service that does not implement `ReadyNotifier` is treated as ready the moment its goroutine is launched, so its dependents are started right after, possibly before its `Run` body has executed a single line. If a dependent genuinely must not start until the dependency is accepting work (a DB accepting connections, a listener bound), the dependency has to implement `ReadyNotifier` and close its channel when it is actually up. Combining `Dependent` with `ReadyNotifier` is what turns "started in the right order" into "started only once the dependency works".
+
+## Lifecycle hooks: customize without touching framework files
 
 `cmd/init.go` is yours; it's never overwritten by `make servicepack-update`. Register hooks on the `App` singleton:
 
@@ -212,7 +225,7 @@ Hooks run sequentially in registration order; multiple hooks are allowed.
 
 ## Custom CLI commands
 
-`cmd/commands.go` is also yours — add standalone cobra commands separate from per-service `Commander` commands:
+`cmd/commands.go` is also yours: add standalone cobra commands separate from per-service `Commander` commands:
 
 ```go
 // cmd/commands.go
@@ -235,13 +248,13 @@ func commands() []*cobra.Command {
 
 ## Logging and config
 
-- Logging is `log/slog`, wired by `github.com/psyb0t/slog-configurator`. Add extra `slog.Handler`s (Loki, Datadog, etc.) in `cmd/init.go`; every `slog.Info/Warn/Error` call across the framework and your services goes to every registered handler.
-- Config is `github.com/psyb0t/gonfiguration` — struct tags (`env:"MYWORKER_VALUE"`), `gonfiguration.Parse(&cfg)`, `gonfiguration.SetDefaults(map[string]any{...})`. Never `os.Getenv` directly.
+- Logging is `ctxscope` over `log/slog`, with `github.com/psyb0t/slogging/slogconf` wiring the default handler. Add extra `slog.Handler`s (Loki, Datadog, etc.) in `cmd/init.go`; set durable identity fields with `ctxscope.Set(ctx, ...)`, then log through `ctxscope.GetLogger(ctx)`.
+- Config is `github.com/psyb0t/gonfiguration`: struct tags (`env:"MYWORKER_VALUE"`), `gonfiguration.Parse(&cfg)`, `gonfiguration.SetDefaults(map[string]any{...})`. Never `os.Getenv` directly.
 - Errors are wrapped with `github.com/psyb0t/ctxerrors` (`ctxerrors.Wrap(err, "doing X")`) for file/line/function context.
 
-## Framework boundaries — never hand-edit these
+## Framework boundaries: never hand-edit these
 
-`internal/app/`, `internal/pkg/service-manager/`, `pkg/runner/`, `cmd/main.go`, `Makefile.servicepack`, `scripts/make/servicepack/`, `Dockerfile.servicepack*`, `servicepack.version` are all overwritten by `make servicepack-update`. Customize behavior through the lifecycle hooks above, not by patching these files. Everything under `internal/pkg/services/`, plus `Makefile`, `Dockerfile`, `Dockerfile.dev`, `cmd/init.go`, `cmd/commands.go`, is yours and never touched by updates.
+`internal/app/`, `internal/pkg/service-manager/`, `pkg/runner/`, `cmd/main.go`, `Makefile.servicepack`, `scripts/make/servicepack/`, `Dockerfile.servicepack*`, `servicepack.version` are all overwritten by `make servicepack-update`. Customize behavior through the lifecycle hooks above, not by patching these files. Everything under `internal/pkg/services/`, `docs/`, and `tests/`, plus `Makefile`, `Dockerfile`, `Dockerfile.dev`, `cmd/init.go`, `cmd/commands.go`, is yours and never touched by updates.
 
 ## Filtering which services run
 
@@ -252,4 +265,4 @@ export SERVICES_ENABLED="my-worker,another-service"   # comma-separated; unset/e
 
 ## Further reading
 
-`references/setup.md` has the install/module details, required Go version, and a fuller worked example with `Retryable` + `Dependent` + `ReadyNotifier` combined.
+`references/setup.md` has the install/module details, Docker/toolchain requirements, and a fuller worked example with `Retryable` + `Dependent` + `ReadyNotifier` combined.

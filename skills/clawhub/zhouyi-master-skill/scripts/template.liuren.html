@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+  :root { --accent:#1565c0; --accent-dark:#0d3c78; --line:#e3e8ef; --bg:#f5f8fc; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:#333;
+         font-family:-apple-system,"PingFang SC","Microsoft YaHei",Arial,sans-serif; font-size:15px; }
+  .wrap { max-width:760px; margin:0 auto; }
+  .hd { background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:#fff;
+        padding:16px 18px; border-radius:12px 12px 0 0; }
+  .hd h1 { margin:0; font-size:19px; }
+  .hd .sub { margin-top:6px; font-size:12px; opacity:.9; }
+  .body-wrap { background:#fff; border:1px solid var(--line); border-top:none;
+        border-radius:0 0 12px 12px; padding:6px 12px 14px; }
+  .card { border:1px solid var(--line); border-radius:10px; margin:12px 0; padding:4px 12px 10px; background:#fff; }
+  .card-title { color:var(--accent-dark); font-weight:700; font-size:16px; margin:8px 0 4px;
+        border-left:4px solid var(--accent); padding-left:8px; }
+  table { width:100%; border-collapse:collapse; margin:4px 0; }
+  table.kv th { text-align:left; width:32%; color:var(--accent-dark); font-weight:600;
+        vertical-align:top; padding:7px; border-bottom:1px solid #eef2f7; }
+  table.kv td { padding:7px; border-bottom:1px solid #eef2f7; vertical-align:top; word-break:break-word; }
+  table.grid th, table.grid td { border:1px solid var(--line); padding:6px 8px; font-size:14px; vertical-align:top; }
+  table.grid thead th { background:#eaf1f8; color:var(--accent-dark); }
+  td table { margin:0; }
+  .empty { color:#bbb; }
+  .prose { line-height:1.8; white-space:pre-wrap; color:#444; margin:6px 0; }
+  .note { margin:12px 4px 0; font-size:12px; color:#8a94a0; line-height:1.6; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hd">
+      <h1>{{TITLE}}</h1>
+      <div class="sub">本地兜底渲染 · {{GENERATED}} · 功能族 liuren</div>
+    </div>
+    <div class="body-wrap">
+      {{BODY}}
+      <div class="note">本页由 skill 包内 <code>local_render.py --func liuren</code> 读取接口 <code>data</code>
+        原始字段本地生成，分节/标签为对照云端模板的近似复刻；未覆盖字段自动并入「补充信息」。
+        <strong>权威可读版本以云端 <code>render.html</code> 为准。</strong></div>
+    </div>
+  </div>
+  <script type="application/json" id="zhouyi-render-spec">{"family": "liuren", "suppress": ["pf", "zhouYe", "gsarrage", "scpf", "pai", "phn", "jk1index", "jk2index", "jk3index", "jk4index", "birthDate", "birthTime", "ke1", "ke2", "ke3", "ke4", "guiShen", "rawData"], "sections": [{"title": "起课", "rows": [{"l": "月将", "k": "yueJiang"}, {"l": "下一节气", "k": "nextJieQi"}]}, {"title": "四柱", "rows": [{"l": "年柱", "k": "yearGanZhi"}, {"l": "月柱", "k": "monthGanZhi"}, {"l": "日柱", "k": "dayGanZhi"}, {"l": "时柱", "k": "hourGanZhi"}, {"l": "旬空", "k": "xunKong"}]}, {"title": "四课", "rows": [{"l": "第一课", "k": "jk1"}, {"l": "第一课贵神", "k": "gs1"}, {"l": "第二课", "k": "jk2"}, {"l": "第二课贵神", "k": "gs2"}, {"l": "第三课", "k": "jk3"}, {"l": "第三课贵神", "k": "gs3"}, {"l": "第四课", "k": "jk4"}, {"l": "第四课贵神", "k": "gs4"}, {"l": "初爻地支", "k": "jkInitZhi"}]}, {"title": "三传", "rows": [{"l": "初传", "k": "chuan1"}, {"l": "初传天干", "k": "chuan1Tg"}, {"l": "初传贵神", "k": "chuan1Gs"}, {"l": "初传六亲", "k": "lq1"}, {"l": "中传", "k": "chuan2"}, {"l": "中传天干", "k": "chuan2Tg"}, {"l": "中传贵神", "k": "chuan2Gs"}, {"l": "中传六亲", "k": "lq2"}, {"l": "末传", "k": "chuan3"}, {"l": "末传天干", "k": "chuan3Tg"}, {"l": "末传贵神", "k": "chuan3Gs"}, {"l": "末传六亲", "k": "lq3"}]}, {"title": "天地盘", "rows": [{"l": "天盘", "k": "tianPan"}, {"l": "地盘", "k": "diPan"}, {"l": "贵神盘", "k": "guiShens"}]}, {"title": "附加信息", "rows": [{"l": "姓名", "k": "name"}, {"l": "性别", "k": "sex"}, {"l": "年命", "k": "nianMing"}, {"l": "行年", "k": "hangNian"}, {"l": "占事", "k": "zhanshi"}]}, {"title": "课体解析", "rows": [{"l": "", "k": "analysis", "prose": true}]}]}</script>
+</body>
+</html>

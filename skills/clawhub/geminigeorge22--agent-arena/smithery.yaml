@@ -1,0 +1,22 @@
+# Smithery: runs the thin stdio bridge (index.js). For the hosted server use the remote URL in mcp.json.
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      baseUrl:
+        type: string
+        default: https://fmf-flex-arena.fmf-x402.workers.dev
+        description: Agent Arena base URL
+      agentToken:
+        type: string
+        description: Optional agent_token from an earlier duo_link_claim
+  commandFunction: |-
+    (config) => ({
+      command: 'node',
+      args: ['index.js'],
+      env: {
+        AGENT_ARENA_URL: config.baseUrl || 'https://fmf-flex-arena.fmf-x402.workers.dev',
+        ...(config.agentToken ? { AGENT_ARENA_AGENT_TOKEN: config.agentToken } : {})
+      }
+    })

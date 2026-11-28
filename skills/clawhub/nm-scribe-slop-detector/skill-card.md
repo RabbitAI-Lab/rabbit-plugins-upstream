@@ -1,43 +1,55 @@
-## Description: <br>
-Detects AI-generated writing patterns in prose. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects AI-generated writing patterns in prose.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers, documentation maintainers, and release reviewers use this skill to scan prose, comments, READMEs, and public documentation for AI-writing markers, identity leaks, unsupported claims, hallucinated references, and cleanup candidates. It can also guide remediation and CI guardrails when reviewers want structured findings rather than a passive detector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review reports a suspicious posture because the skill asks for broader repository cleanup, security review, and remediation authority than its short prose-detector summary suggests. <br>
-Mitigation: Install it only when that broader repo-aware review is desired, run it on explicit target paths, and review its proposed changes before applying them. <br>
-Risk: The workflow can inspect sensitive project surfaces such as secrets, agent configs, package registries, URLs, CI, and pre-commit hooks. <br>
-Mitigation: Run it in a controlled workspace, avoid unnecessary secret exposure, and scope scans to files or directories that need review. <br>
-Risk: Remediation output may include diffs or cleanup recommendations that could remove meaningful comments, change public API documentation, or overcorrect low-confidence findings. <br>
-Mitigation: Keep auto-apply disabled unless a reviewer has approved the proposed diffs, and require human decisions for low-confidence findings. <br>
+## Use Case:
 
+Writers, editors, and developers use this skill to review prose and code comments for AI-style wording and structural patterns. It reports located findings and suggests fixes for human review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-slop-detector) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports, structured finding records, JSON Lines for CI, and inline shell commands or configuration snippets.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Findings may include severity, confidence, evidence, rationale, suggested fixes, and diffs for high-confidence cases; default unattended behavior is report-only.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release metadata; artifact frontmatter reports 1.9.8) <br>
+Risk: ClawScan rates the release suspicious with high confidence and reports broad project changes that may not match the prose-analysis purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill's scope and requested permissions before installation or execution; the security guidance advises avoiding installation until reviewed.
+
+Risk: The security evidence reports persistent configuration edits, remote pushes, and document-triggered network checks; scanner coverage is partial.
+
+Mitigation: Inspect these actions and network checks, and account for the stated coverage gaps before using the skill.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/athola/skills/nm-scribe-slop-detector)
+- [Project homepage (metadata.clawdis)](https://github.com/athola/claude-night-market/tree/master/plugins/scribe)
+- [Publisher profile (athola)](https://clawhub.ai/user/athola)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Guidance]
+
+**Output Format:** [Markdown report or JSON in CI mode, with file and line references, findings, severity, confidence, evidence, and suggested fixes.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings are surfaced for human review; low-confidence findings should not be applied automatically.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

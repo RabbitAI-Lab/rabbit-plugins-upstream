@@ -1,6 +1,6 @@
 # Prompt library — data extraction
 
-Prompts that turn messy input (scraped pages, raw name/address strings, job postings) into strict, parse-ready JSON. Every prompt carries its schema inline and instructs the model to emit ONLY the JSON object — pipe the response straight into `jq`. Run through `anthropic.instruct` with `temperature: 0` (bulk tier only — some judgment-tier models reject non-default sampling parameters with a 400; see [`../../provider-playbooks/anthropic.md`](../../provider-playbooks/anthropic.md) and omit the override when in doubt); extraction wants zero creativity.
+Prompts that turn messy input (scraped pages, raw name/address strings, job postings) into strict, parse-ready JSON. Every prompt carries its schema inline and instructs the model to emit ONLY the JSON object — pipe the response straight into `jq`. Run through `anthropic.instruct` with `temperature: 0` (bulk tier only — Cargo silently drops `temperature` on models that removed sampling parameters (`claude-sonnet-5`, the Opus 5 and Fable 5 families, `claude-opus-4-8`, `claude-opus-4-7`); see [`../../provider-playbooks/anthropic.md`](../../provider-playbooks/anthropic.md) and omit the override when in doubt); extraction wants zero creativity.
 
 ### scraped-page-to-company-json
 
@@ -90,4 +90,34 @@ Extract structured fields from this job posting. Output ONLY the JSON object.
 Schema: {"job_title": string|null, "seniority": "C-Level|VP|Director|Manager|IC"|null, "department": string|null, "location": string|null, "remote_policy": "remote|hybrid|onsite"|null, "salary_range": string|null, "technologies": string[], "posted_date": string|null (ISO 8601)}
 
 Rules: technologies = named tools, languages, and platforms from the requirements, verbatim and deduplicated — not soft skills. salary_range only if the posting states figures; keep currency symbols as written. remote_policy only from explicit statements ("fully remote", "3 days in office") — never inferred from location alone. Any field the posting does not state = null (empty array for technologies); do not infer from the company or from title conventions. Posting text: {{job_posting_text}}
+```
+
+### custom-attribute-extraction
+
+**Purpose:** Fill one *defined* custom attribute for one account from fetched page text — with a confidence band, a verbatim evidence quote, and `Unknown` as a first-class answer. The extract half of the `firecrawl.scrape` → `instruct` pattern in [`../../recipes/custom-datapoints.md`](../../recipes/custom-datapoints.md). **Variables:** {{attribute_name}}, {{attribute_definition}}, {{allowed_values}}, {{page_text}}. **Model guidance:** claude-3-5-haiku-latest; claude-sonnet-4-6 when the attribute needs synthesis across several pages. **Output:** JSON `{value, confidence, evidence, source_hint}`.
+
+```
+Determine ONE attribute for this company from the page text below. Do not use any knowledge of the company beyond this text.
+
+Attribute: {{attribute_name}} — {{attribute_definition}}
+Allowed values: {{allowed_values}}
+Page text: {{page_text}}
+
+Confidence bands: "confirmed" = the text states it explicitly and currently; "inferred" = several consistent indirect statements and nothing contradicting them; "estimated" = calculated or approximated from partial figures actually present in the text (use only for numeric or range-valued attributes); "unknown" = insufficient, contradictory, or only historical evidence. Those first three are all reportable — return the value with the band that describes how you got it. Return value null with confidence "unknown" whenever the evidence does not reach any of them: an unsupported value is worse than a missing one, because it will be scored as if it were real. "estimated" requires arithmetic on figures in the text, never a guess at a plausible number. Never widen the allowed value set; if the true answer is outside it, return null.
+
+Output ONLY the JSON object: {"value": <one of the allowed values, or null>, "confidence": "confirmed|inferred|estimated|unknown", "evidence": "<verbatim phrase from the text supporting the value, or null>", "source_hint": "<which section or page the phrase came from, or null>"}
+```
+
+### technology-adoption-state
+
+**Purpose:** Classify *how widely* a company uses a technology from mixed evidence — the guard against one job posting becoming "company-wide adoption". **Variables:** {{technology}}, {{evidence_items}}. **Model guidance:** claude-3-5-haiku-latest. **Output:** JSON `{state, strongest_evidence, evidence_count, caveat}`.
+
+```
+Classify how widely this company uses a technology, based only on the evidence listed. Technology: {{technology}}. Evidence items (each with source type and date): {{evidence_items}}
+
+States, strongest first: "company_standard" (official docs, engineering handbook, or public standardization statement) · "approved_tool" (listed as sanctioned/available, not mandated) · "team_usage" (multiple current people on one team, or a team-scoped statement) · "individual_usage" (one person's profile, post, or repo) · "pilot_or_evaluation" (explicitly trialing or evaluating) · "historical" (all evidence predates 18 months, or describes past use) · "none_found" (evidence exists about the company but none about this technology) · "unknown" (no usable evidence).
+
+Rules: a single job posting is at most "individual_usage" — never higher, no matter how strongly worded. A technology listed as a desired or nice-to-have skill is "none_found", not usage. A vendor's own customer page counts only if the customer is quoted. Downgrade one band when all evidence is older than 12 months. Never aggregate weak evidence into a strong state — three individual profiles are still "individual_usage" unless they name a team or a standard.
+
+Output ONLY the JSON object: {"state": "<one state>", "strongest_evidence": "<verbatim quote or item reference>", "evidence_count": <number of items that mention the technology>, "caveat": "<the main reason this could be wrong, or null>"}
 ```

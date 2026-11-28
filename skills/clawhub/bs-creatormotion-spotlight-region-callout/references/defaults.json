@@ -1,0 +1,17 @@
+{
+  "region": [
+    0.274,
+    0.225,
+    0.49,
+    0.21
+  ],
+  "callout": "Keep only the essential rules",
+  "step": "01 · Clarify the brief",
+  "documentTitle": "The working brief",
+  "sectionTitle": "What the team needs",
+  "rules": [
+    "One clear outcome",
+    "The information needed to begin",
+    "A visible definition of done"
+  ]
+}

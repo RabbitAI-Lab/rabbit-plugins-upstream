@@ -1,0 +1,143 @@
+{
+  "version": 1,
+  "skill": "bs-cobalt-ribbon-profile-deck",
+  "pictures": [
+    {
+      "id": "distribution-center-exterior",
+      "kind": "scene",
+      "description": "Modern white distribution center with a blue stripe and glass office block, loading bays open, a truck parked and workers in hi-vis vests moving pallets under a clear blue sky.",
+      "goodFor": [
+        "cover",
+        "overview",
+        "closing",
+        "background"
+      ],
+      "reuse": "topic-specific",
+      "topic": "logistics distribution center / warehouse",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 412254,
+      "sha256": "694f6f652fb1b9427ca6784e21386bea26b56e050f81cca0026a16da164b96aa",
+      "url": "https://media.skillry.dev/skill-image-library/bs-cobalt-ribbon-profile-deck/distribution-center-exterior-694f6f652fb1.webp"
+    },
+    {
+      "id": "open-office-overhead-desks",
+      "kind": "scene",
+      "description": "High-angle view of an open-plan office with white desk rows, blue task chairs and staff at monitors, tall windows showing a truck yard outside.",
+      "goodFor": [
+        "overview",
+        "team",
+        "process",
+        "section"
+      ],
+      "reuse": "any-topic",
+      "width": 1536,
+      "height": 1024,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 223944,
+      "sha256": "277c38f3835d9aa1c82512aaa3b80f2fd05e3ee2e7c4f3abdb3d601958f09283",
+      "url": "https://media.skillry.dev/skill-image-library/bs-cobalt-ribbon-profile-deck/open-office-overhead-desks-277c38f3835d.webp"
+    },
+    {
+      "id": "team-route-map-planning",
+      "kind": "scene",
+      "description": "Three colleagues at a desk studying large printed route maps, a woman pointing at a line, monitors with maps behind and a truck yard visible through the window.",
+      "goodFor": [
+        "process",
+        "solution",
+        "problem",
+        "overview"
+      ],
+      "reuse": "topic-specific",
+      "topic": "logistics route planning / dispatch",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 312922,
+      "sha256": "ca11aa5155c7af6cd4e199f5bf91d515469713379ef577ce0355bea499f4c529",
+      "url": "https://media.skillry.dev/skill-image-library/bs-cobalt-ribbon-profile-deck/team-route-map-planning-ca11aa5155c7.webp"
+    },
+    {
+      "id": "dispatch-office-truck-yard",
+      "kind": "scene",
+      "description": "Bright operations office with staff at dual monitors showing maps and schedules, two colleagues talking by floor-to-ceiling windows overlooking a yard of blue-and-white trucks.",
+      "goodFor": [
+        "overview",
+        "process",
+        "solution",
+        "chart-side"
+      ],
+      "reuse": "topic-specific",
+      "topic": "logistics operations / fleet dispatch office",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 414204,
+      "sha256": "d06efc5aeb44f18638a2e03489d20e23178989901a0f578019087f6e2ee45778",
+      "url": "https://media.skillry.dev/skill-image-library/bs-cobalt-ribbon-profile-deck/dispatch-office-truck-yard-d06efc5aeb44.webp"
+    },
+    {
+      "id": "parcel-handover-van",
+      "kind": "scene",
+      "description": "Two workers in navy fleece jackets at an open delivery van, one holding a cardboard box while the other checks a tablet, warehouse bay and pallet jack behind.",
+      "goodFor": [
+        "process",
+        "solution",
+        "team"
+      ],
+      "reuse": "topic-specific",
+      "topic": "parcel delivery / warehouse handover",
+      "width": 1536,
+      "height": 1024,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 153968,
+      "sha256": "800fefc7982295715255d997ed6bb8b3c22c9188f013592ee8d92550d7803d3e",
+      "url": "https://media.skillry.dev/skill-image-library/bs-cobalt-ribbon-profile-deck/parcel-handover-van-800fefc79822.webp"
+    },
+    {
+      "id": "warehouse-team-aisle-talk",
+      "kind": "scene",
+      "description": "Three warehouse staff in navy vests with a tablet, clipboard and scanner talking in an aisle of tall blue racking stacked with boxes, forklift in the distance.",
+      "goodFor": [
+        "team",
+        "process",
+        "problem"
+      ],
+      "reuse": "topic-specific",
+      "topic": "logistics warehouse operations",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 337258,
+      "sha256": "c919c516f0c0cd14f1fcc6d65b02e42a71312f464534d1928af991f926b20977",
+      "url": "https://media.skillry.dev/skill-image-library/bs-cobalt-ribbon-profile-deck/warehouse-team-aisle-talk-c919c516f0c0.webp"
+    },
+    {
+      "id": "loading-dock-van-sunrise",
+      "kind": "scene",
+      "description": "White delivery van with rear doors open beside a white-and-blue warehouse, a worker pushing boxes on a pallet jack into the bay at sunrise, wet reflective concrete.",
+      "goodFor": [
+        "closing",
+        "cover",
+        "section",
+        "background"
+      ],
+      "reuse": "topic-specific",
+      "topic": "logistics loading dock / last-mile delivery",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 367080,
+      "sha256": "6d83efcfa081504d04d36028c0c04b127edfeb8552e89204246e3390150c31a6",
+      "url": "https://media.skillry.dev/skill-image-library/bs-cobalt-ribbon-profile-deck/loading-dock-van-sunrise-6d83efcfa081.webp"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- launchd agent for whisper.cpp's server. Replace __WHISPER_DIR__ with the absolute path of
+     your whisper.cpp folder and __FFMPEG_DIR__ with the folder that contains ffmpeg. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>local.whisper-server</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>__WHISPER_DIR__/build/bin/whisper-server</string>
+    <string>-m</string><string>__WHISPER_DIR__/models/ggml-base.en.bin</string>
+    <string>--host</string><string>127.0.0.1</string>
+    <string>--port</string><string>8080</string>
+    <string>--convert</string>
+  </array>
+  <key>WorkingDirectory</key><string>__WHISPER_DIR__</string>
+  <key>EnvironmentVariables</key>
+  <dict><key>PATH</key><string>__FFMPEG_DIR__:/usr/bin:/bin</string></dict>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ProcessType</key><string>Background</string>
+  <key>StandardOutPath</key><string>__WHISPER_DIR__/whisper-server.log</string>
+  <key>StandardErrorPath</key><string>__WHISPER_DIR__/whisper-server.log</string>
+</dict>
+</plist>

@@ -29,14 +29,14 @@ LinkedIn page-level enrichment, URL resolution, and activity signals. **Cheapest
 | Action | Cost | Inputs | Use for |
 |---|---|---|---|
 | `searchPosts` | 0.25 | `searchKeywords, sortBy, datePosted, contentType, fromMemberUrns, fromCompanyIds, mentioningMemberUrns, mentioningCompanyIds, authorIndustry, authorKeyword` | Find posts by keyword / author / mention. |
-| `searchPostComments` | 0.05/item | `urn`, `sortBy` (required) | Commenters on a post → engagement-based sourcing. |
-| `searchPostReactions` | 0.05/item | `urn`, `type` (required) | Reactors on a post. |
+| `searchPostComments` | 0.05/item | `urn` (required), `sortBy` (default `Most recent`) | Commenters on a post → engagement-based sourcing. |
+| `searchPostReactions` | 0.05/item | `urn` (required), `type` (default `ALL`) | Reactors on a post. |
 | `extractProfilePostActivity` | 0.05/item | `linkedinProfileUrl` | Posts a person published — personalization fodder. |
 | `extractProfileCommentActivity` | 0.05/item | `linkedinProfileUrl` | Posts a person commented on. |
 | `extractProfileReactionActivity` | 0.05/item | `linkedinProfileUrl` | Posts a person reacted to. |
-| `searchJobs` | 0.5 | `keywords, geoCodes, datePosted, experienceLevels, companyIds, titleIds, jobTypes, onsiteRemote, functions, industryCodes, sortBy, easyApply, under10Applicants` | Job-posting search — hiring-intent alternative to `theirStack.searchJobs` (0.5). |
+| `searchJobs` | 0.5 | `keywords, geoCodes, datePosted, experienceLevels, companyIds, titleIds, jobTypes, onsiteRemote, functions, industryCodes, sortBy, easyApply, under10Applicants` | Job-posting search — hiring-intent alternative to `theirStack.searchJobs` (0.5/item). |
 | `extractEventAttendees` | 0.05/item | `linkedinEventUrl`, `identityIds` (required) | Attendees of a LinkedIn event → event-based sourcing. |
-| `extractProfileViewers` | 0.05/item | `identityIds`, `limit` (required) | Who viewed **your** connected identity's profile recently. |
+| `extractProfileViewers` | 0.05/item | `identityIds` (required), `limit` (default 100, max 1000) | Who viewed **your** connected identity's profile recently. |
 
 ### Engagement (identity-driven — acts as a real LinkedIn user)
 
@@ -49,15 +49,15 @@ LinkedIn page-level enrichment, URL resolution, and activity signals. **Cheapest
 | `commentPost` | 0.25 | `linkedinPostUrl`, `comment`, `identityIds` | Comment on a post. |
 | `commentPostComment` | 0.25 | `linkedinCommentUrl`, `comment`, `identityIds` | Reply to a comment. |
 
-`identityIds` ("Linkedin Users") are the workspace's connected LinkedIn identities — discover them via the `listIdentityIds` autocomplete on `connection integration get linkedin`.
+`identityIds` ("Linkedin Users") are the workspace's connected LinkedIn identities — discover them via the `listIdentityIds` autocomplete: `cargo-ai connection connector autocomplete --connector-uuid <linkedin-connector-uuid> --slug listIdentityIds --params '{}'`.
 
 ## What it's for
 
 - ✅ **LinkedIn URL resolution** — `findProfileUrl` (0.25) then `enrichProfile` (0.25) as the mandatory validation gate ([`../recipes/linkedin-url-lookup.md`](../recipes/linkedin-url-lookup.md)).
-- ✅ **Cheap page-level enrichment** — 0.25 vs `cargo.enrichProspectDetails` (2) when LinkedIn-anchored details are sufficient and you already have the URL ([`../references/alternatives.md`](../references/alternatives.md)).
+- ✅ **Cheap page-level enrichment** — 0.25 vs `waterfall.enrichContact` (2) when LinkedIn-anchored details are sufficient and you already have the URL ([`../references/alternatives.md`](../references/alternatives.md)). Note `aiArk.enrichPerson` (0.1) is cheaper still and returns a verified email; reach here when you specifically want the LinkedIn page fields.
 - ✅ **Engagement-based sourcing** — commenters/reactors on a competitor-topic post, event attendees: warm pools no search filter can express.
 - ✅ **Personalization signal** — a lead's recent post/comment/reaction activity feeds openers (SIGNAL stage before outreach).
-- ❌ **At-scale search** — no people/company search here; that's `salesNavigator.searchLeads` (0.02) / `searchAccounts` (0.05).
+- ❌ **At-scale search** — no people/company search here; that's `salesNavigator.searchLeads` / `searchAccounts` (0.2/item).
 
 ## Patterns
 
@@ -65,7 +65,7 @@ LinkedIn page-level enrichment, URL resolution, and activity signals. **Cheapest
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"findProfileUrl","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"findProfileUrl"}' \
   --records '[{"fullName":"Alice Smith","companyName":"Acme"},{"fullName":"Bob Jones","companyName":"Globex"}]' \
   --wait-until-finished
 ```
@@ -77,12 +77,12 @@ Then run `enrichProfile` on each returned URL and cross-check name + company —
 ```bash
 # 1. Find the post(s)
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"searchPosts","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"searchPosts"}' \
   --data '{"searchKeywords":"revenue operations benchmarks","sortBy":"Latest","datePosted":"Past week"}' \
   --wait-until-finished
 # 2. Pull who engaged (billed per item — cap the pull)
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"searchPostReactions","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"searchPostReactions"}' \
   --data '{"urn":"7181234567890123456","type":"ALL"}' \
   --wait-until-finished
 ```
@@ -93,7 +93,7 @@ cargo-ai orchestration action execute \
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"extractCompanyEmployeesInsights","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"extractCompanyEmployeesInsights"}' \
   --data '{"linkedinUrl":"https://linkedin.com/company/acme","affiliates":false}' \
   --wait-until-finished
 ```
@@ -111,15 +111,23 @@ Chain with `extractSimilarCompanies` (0.25) for a cheap lookalike seed list, or 
 
 - **`enrichProfileFromName` instead of the two-step.** Same 0.5 total as `findProfileUrl` + `enrichProfile`, but the two-step gives you the validation gate between resolution and enrichment — the recipe's mandatory pattern.
 - **Engagement actions as a bulk channel.** `connectProfile` / `commentPost` act **as a real member identity** — batch-blasting them burns the identity. Gate to qualified, personalized touches only.
-- **`extractProfileViewers` on a lead's URL.** It only works on your own connected identities (`identityIds` + `limit` required) — it is not a lead-enrichment action.
+- **`extractProfileViewers` on a lead's URL.** It only works on your own connected identities (`identityIds` required) — it is not a lead-enrichment action.
 
 ## Position in the waterfall
 
-- `findProfileUrl` + `enrichProfile` — **default for the LinkedIn-URL lookup stage**; `FullEnrich.reverseEmailLookup` (2) only when all you have is an email.
-- `enrichProfile` / `enrichCompany` — **first rung of ENRICH** when the input is a LinkedIn URL; escalate to `cargo` native, then `waterfall`, then `peopleDataLabs` for non-LinkedIn fields.
-- Posts / jobs / activity extraction — **SIGNAL stage**: engagement pools and personalization inputs; `searchJobs` sits beside `theirStack.searchJobs` (both 0.5) for hiring intent.
+- `findProfileUrl` + `enrichProfile` — **default for the LinkedIn-URL lookup stage**; `FullEnrich.reverseEmailLookup` (1) only when all you have is an email.
+- `enrichProfile` / `enrichCompany` — **first rung of ENRICH** when the input is a LinkedIn URL; escalate to `waterfall`, then `peopleDataLabs`, for non-LinkedIn fields.
+- Posts / jobs / activity extraction — **SIGNAL stage**: engagement pools and personalization inputs; `searchJobs` (0.5 flat) sits beside `theirStack.searchJobs` (0.5 per returned job) for hiring intent.
 - Engagement actions — post-VERIFY activation touches, outside the sourcing spine.
+
+## Recurring use
+
+Split by data half-life: **posts, jobs, and activity decay — profiles and company pages don't**.
+
+- **Scheduled pulls:** `searchJobs` daily (hiring intent) and `searchPosts` weekly, with `datePosted` matched to the cadence (`Past 24 hours` / `Past week`) so each run bills only the fresh window — cadence defaults in [`../recipes/save-as-play.md`](../recipes/save-as-play.md). Per-item activity pulls (`extractProfilePostActivity` et al., 0.05/item) fit a pre-outreach refresh, sized first per the per-item pitfall above.
+- **Don't re-pull stable pages:** `enrichProfile` / `enrichCompany` (0.25) on a timer re-bills unchanged rows; in a play, gate them on an empty enriched field.
+- **In-play gate:** run `findProfileUrl` only where the LinkedIn-URL column is still empty.
 
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"linkedin","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"linkedin","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**

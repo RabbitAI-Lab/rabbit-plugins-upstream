@@ -1,41 +1,38 @@
 ---
 name: tinrec-audio2text
-description: 将音频转文字，并提供 AI 总结、录音要点与发言人区分。 音频转文字：云端转写，支持多格式（mp3/wav/m4a 等）。 AI 总结：自动生成摘要与纪要。 录音要点：章节、待办、推荐等结构化要点。 发言人区分：转写结果带发言人标识，便于会议/对话场景。
+description: 支持 MP3、WAV、M4A 等本地音频的云端转写，也可解析受支持平台的公开分享链接，自动下载媒体并导入转写。支持发言人区分，并生成 AI 摘要、会议纪要、章节要点、待办事项和推荐提示词。可浏览 Tinrec 的录音列表和文件夹，按需查看录音详情或逐字稿，上传和导入时可指定文件夹。
 ---
-## 使用说明
-使用tinrec的云端API进行便捷的音频转文字，区分发言人并快速总结音频内容和生成摘要
 
-## 使用流程
-1. 先获取api-keys，获取地址[https://tinrec.com/api-keys](https://tinrec.com/api-keys)，注册账号后即可免费获取 Key
-1.1. claw需要将用户发送的key保存至api-keys文件后使用cli模式进行调用，调用时通过 `--api-keys-file` 指定该文件，每位用户注册后可免费领取1小时转写额度，开通Pro后解锁转写限制
+## 准备
 
+使用 Python 3.9 或更新版本。用户可在自己的站点创建密钥。[CN 版 API Keys](https://tinrec.cn/api-keys) · [海外版 API Keys](https://tinrec.com/api-keys)
 
-在技能目录下使用 Python CLI，一次完成上传、转写、轮询并输出结果：
+将密钥保存到技能目录外的本地文件，每行一个 Key，CLI 读取第一行非空、非注释内容。以下命令在技能目录中执行，并在命令末尾追加 `--api-keys-file /path/to/api-keys`。
 
-```bash
-cd script
-# 使用目录下的 api-keys 文件
-python audio2text_cli.py /path/to/audio.mp3 --api-keys-file ./api-keys
-```
+直接配置 Key 即可。`mt-cn-` 自动使用 `https://api.tinrec.cn/api`，`mt-global-` 自动使用 `https://api.tinrec.com/api`。历史 `mt-` Key 会先用只读请求识别地区，再执行命令。需要指定测试或自定义环境时，可用 `--base-url` 显式覆盖。
 
-- `--api-keys-file`：API Key 文件路径（默认当前目录 `api-keys`），文件内第一行非空非注释即为 Key。
-- `--api-key`：直接传入 Key，优先于文件和环境变量。
-- `--base-url`：API 地址，默认 `https://api.tinrec.com/api`。
-- `--json`：仅输出 JSON（含转写、总结、要点、发言人），便于 AI 解析。
-- `--no-wait`：只提交不轮询，返回任务 id。
-- `--poll-interval` / `--timeout`：轮询间隔与总超时。
+## 浏览录音
 
-输出包含：`summary`（AI 总结）、`chapters`/`todos`（要点）、`transcripts`（转写正文）、`speaker_data`（发言人信息）。  
-**状态说明**：接口有两个状态——**转写状态**（`transcript_status`）与**任务状态**（`task_status`）。转写完成后才有正文；任务状态完成后才会有总结、要点、发言人等信息，CLI 会轮询到两者均完成后再输出。
+当用户想了解 Tinrec 里有哪些内容时，先提供两个入口。用户已指定录音 ID 或文件夹时，可直接打开对应层级。
 
-## 使用场景
+- **录音列表** → 查看录音概览 → 按录音 ID 查看详情或逐字稿。
+- **文件夹列表** → 选择文件夹并查看其中的录音概览 → 按录音 ID 查看详情或逐字稿。
 
-在以下场景下应调用本技能（传入用户提供的**本地音频文件路径**及可选的 `--api-keys-file`）：
+| 用户意图 | 命令 | 返回内容 |
+| --- | --- | --- |
+| 查看录音列表 | `python3 script/audio2text_cli.py list-recordings` | 录音 ID、文件名、AI 标题、时长、创建时间、来源、所属文件夹和分页 |
+| 查看文件夹列表 | `python3 script/audio2text_cli.py list-folders` | 文件夹 ID、名称、录音数量、最近添加的录音和分页 |
+| 查看某个文件夹的录音 | `python3 script/audio2text_cli.py list-recordings --folder-id 123` | 与录音列表相同的概览字段，范围限于该文件夹 |
+| 查看单条录音的 AI 产出与状态 | `python3 script/audio2text_cli.py detail 456` | 录音详情、AI 总结、章节、待办、推荐提示词及处理状态 |
+| 查看逐字稿或谁说了什么 | `python3 script/audio2text_cli.py transcript 456` | 转写正文、发言人标识和发言人信息 |
 
-- **用户发来/提到一段本地录音文件**，希望转成文字、要全文或摘要时。
-- **用户明确要求「把这段音频转成文字」「听写/转写这段录音」**，且能访问到本地文件路径时。
-- **用户需要会议/访谈纪要**：要总结、要点、待办或「谁说了什么」的发言人区分时。
-- **用户提供录音并希望得到结构化结果**：如章节、待办列表、推荐后续动作等，且文件在本地可读时。
-- **用户说「用 Tinrec / 用你们的转写」** 或指定要用该服务处理本地音频时。
+列表按页返回 JSON，使用 `--page`、`--page-size` 翻页。录音列表可通过 `--filename "项目评审"` 搜索文件名、AI 标题和主题。引用录音或文件夹时优先使用结果中的 `public_id`，也可使用数字 `id`。列表请求使用 `GET /api/audio-list/simple` 和 `GET /api/folders`。只有当用户需要具体内容时，再按目标录音调用 `GET /api/audio-detail/{id}` 或 `GET /api/transcript/{id}`。
 
-不适用：仅提供在线链接/URL 而无法下载为本地文件时，需先下载再调用；无本地文件路径或用户未提供音频文件时不调用。
+## 上传和网络导入
+
+- **本地文件**。运行 `python3 script/audio2text_cli.py upload /path/to/meeting.mp3 --folder-id 123`。支持常见音频格式和有音轨的视频。旧用法 `python3 script/audio2text_cli.py /path/to/meeting.mp3` 仍可使用。
+- **分享链接**。运行 `python3 script/audio2text_cli.py import-url "分享链接或含链接的分享文案" --folder-id 123`。适用于 Tinrec 支持的公开平台链接，例如 YouTube、抖音、TikTok、小红书、Bilibili、Instagram、Facebook、X 和快手。
+
+`--folder-id` 可省略。如用户指定的是文件夹名称，先从文件夹列表确认 ID，再提交导入。两个命令默认等待转写和 AI 处理，追加 `--json` 可获得结构化结果，包含总结、章节、待办、推荐提示词、逐字稿、发言人和状态。只需提交时追加 `--no-wait`，获得 `audio_id` 后可用 `detail` 查看进度。
+
+网络导入调用 `POST /api/network-download/resolve` 取得媒体地址和网络任务 ID。CLI 将可下载的音视频文件保存到本地临时目录，上传到 Tinrec 的对象存储，再通过 `POST /api/upload-v2` 提交录音并携带网络任务 ID 和可选的文件夹 ID。处理结束后会清理临时文件。

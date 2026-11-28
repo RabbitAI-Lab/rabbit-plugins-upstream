@@ -34,12 +34,13 @@ Do not commit real env files.
 ## Publish
 
 ```bash
-node scripts/wp-publish-receipt.mjs \
+node scripts/wp-publish-receipt.js \
   --env-file .env.wordpress \
   --title "My Post" \
   --content-file draft.md \
   --author 123 \
-  --category 1
+  --category 1 \
+  --status publish
 ```
 
 Output:
@@ -58,16 +59,16 @@ Output:
 ## Verify
 
 ```bash
-node scripts/wp-verify-receipt.mjs --env-file .env.wordpress --date 2026-07-01
-node scripts/wp-verify-receipt.mjs --env-file .env.wordpress --id 456
-node scripts/wp-verify-receipt.mjs --url https://example.com/my-post/
+node scripts/wp-verify-receipt.js --env-file .env.wordpress --date 2026-07-01
+node scripts/wp-verify-receipt.js --env-file .env.wordpress --id 456
+node scripts/wp-verify-receipt.js --env-file .env.wordpress --id 456 --url https://example.com/my-post/
 ```
 
 ## Cron Pattern
 
 1. Main cron publishes the post.
 2. A second cron runs shortly after the publish window.
-3. The second cron runs `wp-verify-receipt.mjs`.
+3. The second cron runs `wp-verify-receipt.js`.
 4. If verification fails, alert the human with the exact missing receipt.
 
 That turns "the job sounded fine" into "the artifact exists".
@@ -88,7 +89,7 @@ Stripped-env smoke:
 
 ```bash
 env -i HOME="$HOME" USER="$USER" PATH="/usr/bin:/bin:/usr/sbin:/sbin" \
-  /opt/homebrew/bin/node scripts/wp-verify-receipt.mjs \
+  /opt/homebrew/bin/node scripts/wp-verify-receipt.js \
   --env-file .env.wordpress \
   --date 2026-07-01
 ```
@@ -112,3 +113,7 @@ This repository contains no private domains, paths, tokens, chat IDs, post IDs, 
 ## License
 
 MIT
+
+## Receipt boundaries
+
+Publishing requires explicit `--status publish`; `--status draft` creates and verifies a draft without claiming public publication. Verification requires the configured API and a published post identity; URL-only HTTP 200 is never proof. Optional `--url` must match that API post’s canonical link. Public receipt fetches stay on the configured site origin and do not follow redirects. If the public site differs from the API origin, explicitly configure `WORDPRESS_SITE_URL` or `--site-url`. The configured site may be local or private when deliberately selected by the user; the helpers are not a generic arbitrary-URL fetch service.

@@ -1,0 +1,6 @@
+# 运行依赖。精确的已验证版本见 README「已验证环境」。
+# 抓密钥(setup)需要 frida；解密/读取/导出需要 pycryptodome、zstandard、psutil。
+pycryptodome
+psutil
+frida
+zstandard

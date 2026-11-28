@@ -72,10 +72,17 @@ Use signal IDs from Step 1 (`GET /signals`).
 ## Workflows
 
 ### Set up monitoring
-1. `POST /signals` — create signal with name + description + tags + color + cron + timezone (auto-activates)
+1. `POST /signals` — create signal with name + description + tags + color (turns on right away; send `active: false` to create it off)
 2. Wait up to 6 hours for processing
 3. `GET /signals/{id}/matches` — check results
-4. `PUT /signals/{id}` — refine description if too many irrelevant matches
+4. `PUT /signals/{id}` — refine description if too many irrelevant matches, or fix `include_keywords` and `exclude_keywords`. A new description also updates what the signal matches
+
+### Pause or resume a signal
+1. `GET /signals?active=true` — see what is on
+2. `PUT /signals/{id}` with `{"active": false}` — turn it off. It keeps its settings and history, and its active-signal slot frees up
+3. `PUT /signals/{id}` with `{"active": true}` — turn it back on
+
+When the user only wants a signal to stop, turn it off. `DELETE` is irreversible.
 
 ### Organize bookmarks
 1. `GET /folders` — list folders
@@ -84,22 +91,28 @@ Use signal IDs from Step 1 (`GET /signals`).
 4. `GET /folders/:id/tweets` — review folder contents
 
 ### First run
-1. `GET /auth/me` — verify API key
+1. `GET /auth/me` — verify API key and see `signals.active` against `signals.limit`. If `api.updated` is newer than these docs, read `https://purefeed.ai/llms.txt` for what changed
 2. `GET /signals` — see signal configurations
 3. `GET /folders` — see bookmark folders
 
 ## Key Concepts
 
-- **Signal**: AI content detector with a name + description. Active if `signals_subscriptions` is non-empty; inactive if `[]`. When creating: always set `tags` and `color`, never set `include_keywords` unless user explicitly asks (they are very restrictive).
+- **Signal**: AI content detector with a name + description. `active` says whether it is on for you. When creating: always set `tags` and `color`, never set `include_keywords` unless user explicitly asks (they are very restrictive).
 - **Folder**: Bookmark folder for organizing curated tweets. Created via `POST /folders`, populated via `POST /folders/:id/tweets`.
 
 ## Error Handling
 
 | Error | Agent Action |
 |-------|-------------|
-| 401 Unauthorized | Tell user to create new key at purefeed.ai/profile |
+| 401 `missing_authorization` | No key reached the API. Send `Authorization: Bearer $PUREFEED_API_KEY` from code (curl, Python). Web-browsing and page-fetch tools usually cannot send headers. Do not ask for a new key |
+| 401 `unknown_key` | The key was deleted or copied incompletely. Ask the user to compare it with the keys at purefeed.ai/profile, or to create a new one |
+| 401 `disabled_key` | Ask the user to turn the key back on at purefeed.ai/profile |
+| 401 `key_in_query` | Keys are read only from the header. Tell the user to rotate the key that was put in a URL |
+| 503 `key_check_failed` | The key was not rejected. Retry with the same key after `Retry-After` (30 s) |
 | 429 Too Many Requests | Wait and retry. Check `Retry-After` header |
 | "Signal not found" | Call `GET /signals` to get valid IDs |
+| 403 `SIGNAL_LIMIT_REACHED` | The account is at its active-signal limit. Ask the user which signal to turn off, send `PUT /signals/{id}` with `{"active": false}`, then retry |
+| 503 `SIGNAL_ACTIVATION_FROZEN` | Activations are paused. Show the message to the user and retry in a few minutes |
 
 **4xx responses may include an `error.hint.action` field** — a plain-English instruction telling you how to self-correct on the next call (e.g. "List current signals via GET /api/v1/signals to refresh cached IDs"). When present, follow `hint.action` directly. `hint.docs_url` points to the canonical API docs for deeper context.
 
@@ -107,7 +120,7 @@ Use signal IDs from Step 1 (`GET /signals`).
 
 Read `API_REFERENCE.md` for full endpoint documentation, parameters, curl examples, and response shapes.
 
-All endpoints return `{ "data": ..., "error": null }` on success and `{ "data": null, "error": { "message": "...", "code": "...", "hint"?: { "action": "...", "docs_url"?: "..." } } }` on error.
+All endpoints return `{ "data": ..., "error": null }` on success and `{ "data": null, "error": { "message": "...", "code": "...", "reason"?: "...", "hint"?: { "action": "...", "docs_url"?: "..." } } }` on error. `reason` is set when a request was refused before reaching the endpoint (see Error Handling).
 
 ### Endpoint Summary
 
@@ -120,16 +133,19 @@ All endpoints return `{ "data": ..., "error": null }` on success and `{ "data": 
 | GET | /folders | List bookmark folders |
 | POST | /folders | Create a folder (`{ "name": "..." }`) |
 | PATCH | /folders/:id | Rename a folder (`{ "name": "..." }`) |
+| PATCH | /folders/:id | Rename a folder (`{ "name": "..." }`) |
 | DELETE | /folders/:id | Delete a folder and its items |
 | GET | /folders/:id/tweets | Tweets in a folder |
 | POST | /folders/:id/tweets | Add tweet to folder (`{ "tweet_id": "..." }`) |
 | DELETE | /folders/:id/tweets?tweet_id=X | Remove tweet from folder |
 | GET | /signals | List signals (supports semantic search) |
-| POST | /signals | Create + auto-activate a signal |
+| POST | /signals | Create a signal, on by default |
 | GET | /signals/:id | Signal details |
-| PUT | /signals/:id | Update signal |
+| PUT | /signals/:id | Update name, description, color or keywords, or turn it on or off with `active` |
 | DELETE | /signals/:id | Delete signal (irreversible) |
-| GET | /signals/:id/matches | Tweets matching a signal |
+| GET | /signals/:id/matches | Tweets matching a signal. Page with `cursor` from `pagination.cursor` |
+| GET | /hype | Crypto hype index: coins discussed more than usual, with status, a hot flag and reason |
+| GET | /hype/:ticker | One coin's hype card: history, past spikes, top posts |
 
 ## Rate Limits
 

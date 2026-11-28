@@ -1,0 +1,13 @@
+# systemd user service for whisper.cpp's server. Replace __WHISPER_DIR__ with the absolute path
+# of your whisper.cpp folder. ffmpeg must be on the service's PATH.
+[Unit]
+Description=whisper.cpp server (local speech-to-text, loopback only)
+
+[Service]
+WorkingDirectory=__WHISPER_DIR__
+ExecStart=__WHISPER_DIR__/build/bin/whisper-server -m __WHISPER_DIR__/models/ggml-base.en.bin --host 127.0.0.1 --port 8080 --convert
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

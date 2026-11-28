@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+  :root { --accent:#ef6c00; --accent-dark:#b25000; --line:#ece3e3; --bg:#faf6f5; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:#333;
+         font-family:-apple-system,"PingFang SC","Microsoft YaHei",Arial,sans-serif; font-size:15px; }
+  .wrap { max-width:760px; margin:0 auto; }
+  .hd { background:linear-gradient(135deg,var(--accent),var(--accent-dark)); color:#fff;
+        padding:16px 18px; border-radius:12px 12px 0 0; }
+  .hd h1 { margin:0; font-size:19px; }
+  .hd .sub { margin-top:6px; font-size:12px; opacity:.9; }
+  .body-wrap { background:#fff; border:1px solid var(--line); border-top:none;
+        border-radius:0 0 12px 12px; padding:6px 12px 14px; }
+  .card { border:1px solid var(--line); border-radius:10px; margin:12px 0; padding:4px 12px 10px; background:#fff; }
+  .card-title { color:var(--accent-dark); font-weight:700; font-size:16px; margin:8px 0 4px;
+        border-left:4px solid var(--accent); padding-left:8px; }
+  table { width:100%; border-collapse:collapse; margin:4px 0; }
+  table.kv th { text-align:left; width:32%; color:var(--accent-dark); font-weight:600;
+        vertical-align:top; padding:7px; border-bottom:1px solid #f2eeee; }
+  table.kv td { padding:7px; border-bottom:1px solid #f2eeee; vertical-align:top; word-break:break-word; }
+  table.grid th, table.grid td { border:1px solid var(--line); padding:6px 8px; font-size:14px; vertical-align:top; }
+  table.grid thead th { background:#f7ecec; color:var(--accent-dark); }
+  td table { margin:0; }
+  .empty { color:#bbb; }
+  .prose { line-height:1.8; white-space:pre-wrap; color:#444; margin:6px 0; }
+  .note { margin:12px 4px 0; font-size:12px; color:#a08a8a; line-height:1.6; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hd">
+      <h1>{{TITLE}}</h1>
+      <div class="sub">本地兜底渲染 · {{GENERATED}} · 功能族 huangli</div>
+    </div>
+    <div class="body-wrap">
+      {{BODY}}
+      <div class="note">本页由 skill 包内 <code>local_render.py --func huangli</code> 读取接口 <code>data</code>
+        原始字段本地生成，分节/标签为对照云端模板的近似复刻；未覆盖字段自动并入「补充信息」。
+        <strong>权威可读版本以云端 <code>render.html</code> 为准。</strong></div>
+    </div>
+  </div>
+  <script type="application/json" id="zhouyi-render-spec">{"family": "huangli", "labels": {"yi": "宜", "ji": "忌"}, "sections": [{"title": "日期", "rows": [{"l": "公历", "k": "basic.huangliDate", "fallback": "date"}, {"l": "农历", "k": "basic.huangliNongli", "fallback": "lunarDate"}, {"l": "星期", "k": "basic.weekDay"}, {"l": "星座", "k": "basic.westConstellation"}, {"l": "岁次", "k": "suiCi", "fallback": "suici"}]}, {"title": "今日宜忌", "rows": [{"l": "宜", "k": "yi"}, {"l": "忌", "k": "ji"}]}, {"title": "历法要素", "rows": [{"l": "干支年", "k": "ganZhiYear"}, {"l": "干支月", "k": "ganZhiMonth"}, {"l": "干支日", "k": "ganZhiDay"}, {"l": "干支", "k": "basic.ganZhi"}, {"l": "冲", "k": "chong", "fallback": "basic.hlChongsha"}, {"l": "煞", "k": "sha"}, {"l": "五行", "k": "wuhang", "fallback": "basic.hlWxr"}, {"l": "六曜", "k": "basic.hlLiuyao"}, {"l": "值神", "k": "basic.hlZhishen"}, {"l": "建除十二神", "k": "basic.hlJcses"}, {"l": "二十八宿", "k": "basic.hlEsbxx"}, {"l": "胎神占方", "k": "basic.hlTszf"}, {"l": "彭祖百忌", "k": "pzbj"}]}, {"title": "吉神方位", "rows": [{"l": "吉神宜趋", "k": "jsyq", "fallback": "basic.hlJsyq"}, {"l": "凶神宜忌", "k": "xsyq", "fallback": "basic.hlXsyj"}, {"l": "吉神方位", "k": "basic.hlJsfw"}, {"l": "福神", "k": "fuShen"}, {"l": "财神", "k": "caiShen"}, {"l": "喜神", "k": "xiShen"}]}, {"title": "十二时辰 · 其他", "rows": [{"l": "时辰", "k": "extensions"}, {"l": "附加", "k": "basic"}]}]}</script>
+</body>
+</html>

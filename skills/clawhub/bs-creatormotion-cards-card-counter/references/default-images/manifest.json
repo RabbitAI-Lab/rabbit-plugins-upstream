@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "assets": {
+    "product-workbook": {
+      "file": "product-workbook.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1254x1254 pixels. Layout reference: Use case: product-mockup. Asset type: original product photograph of a printed practice workbook for motion graphics. One square 1:1 premium editorial product photograph: a thick warm mustard-yellow softcover workbook lying at a gentle diagonal on a pale warm-grey tabletop, tasteful directional daylight and soft real shadow, a dark red pencil placed alongside. On the cover clear black condensed typography with exact title 'WEEKLY PRACTICE', a tiny subtitle 'Small steps. Real progress.' and restrained abstract black ink mark. Photographic paper grain, printed spine, actual physical product depth; main book occupies about 70 percent of frame with clear margin. No real brand, no watermark, no extra text outside the book.\n\nTHEME AND CLEANLINESS OVERRIDE (takes precedence over the subject and text above): keep the same layout geometry, aspect, element positions and number of main blocks, but change the subject to a travel creator (trips, destinations, itineraries, travel vlogs) and replace every headline or label with a short travel equivalent of similar length. Halve the amount of small text, make photos larger and cleaner, remove clutter, show at most one person per photo and never a group or crowd. Photos inside use clean colourful travel photography (blue sea, green hills, warm sunlight). Interfaces stay white with crisp sans-serif type and at most one small yellow highlight.\n\nClean, premium travel photography: one clear subject, uncluttered composition with generous breathing room, rich natural colour (deep blue sea and sky, fresh greens, warm golden sunlight, terracotta, white walls) but tasteful and not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. No text, no logos, no watermark, no real brands.\n\nSave as ./product-workbook.png at 1254x1254. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "b083b791145ab9987358e58fb0d86cc0aef802f916b39dd09e4ea3240155a31c",
+      "generatedAt": "2026-10-29T16:32:43.469867+00:00",
+      "generationId": "codex-image-gen-product-workbook",
+      "sourceSha256": "315b831c208dc101d851be6d04e6211f7034c851a71156e32bffa973e5b9e087",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean travel lifestyle"
+    },
+    "travel-alley": {
+      "file": "travel-alley.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1122x1402 pixels. Subject: A narrow white-washed alley with blue doors and pink bougainvillea, stairs leading up, bright sun, no people.\n\nClean, premium travel photography: one clear subject, uncluttered composition with breathing room, rich natural colour (blue sea and sky, fresh greens, warm sunlight, terracotta, white walls), tasteful not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. Absolutely no text, letters, signs, labels, logos or watermarks anywhere in the image.\n\nSave as ./travel-alley.png at 1122x1402. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "8082e8329ea747c0c8796fe59efa72bac846e906a154cc6a2768fcd2bae7b41c",
+      "sourceSha256": "69e4e80b12b3b57d4cca88f9cd744d5dd2ee0b616fdeb2759d8f65f050db669d",
+      "generatedAt": "2026-10-30T05:58:02.429120+00:00",
+      "generationId": "codex-image-gen-travel-alley",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean modern studio"
+    },
+    "travel-city": {
+      "file": "travel-city.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1672x941 pixels. Subject: A quiet old-town street in southern Europe in the morning: warm ochre and terracotta facades, blue shutters, a single bicycle leaning on a wall, soft sunlight and long shadows, no people.\n\nClean, premium travel photography: one clear subject, uncluttered composition with generous breathing room, rich natural colour (deep blue sea and sky, fresh greens, warm golden sunlight, terracotta, white walls) but tasteful and not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. No text, no logos, no watermark, no real brands.\n\nSave as ./travel-city.png at 1672x941. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "ba127771410586d1bfafd02e5d080a58b67ae1801a0c55317523b827f4e6b950",
+      "sourceSha256": "8db6e9a0be0a8cddf8c8195a65711ed97356277440d312e44ccd011e9a4f6684",
+      "generatedAt": "2026-10-29T16:32:43.469867+00:00",
+      "generationId": "codex-image-gen-travel-city",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean travel lifestyle"
+    },
+    "travel-coast": {
+      "file": "travel-coast.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1672x941 pixels. Subject: A white-washed cliffside terrace above a deep blue Mediterranean bay at golden hour, a single wooden chair and a small table with a glass of water, sea and sky filling most of the frame.\n\nClean, premium travel photography: one clear subject, uncluttered composition with generous breathing room, rich natural colour (deep blue sea and sky, fresh greens, warm golden sunlight, terracotta, white walls) but tasteful and not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. No text, no logos, no watermark, no real brands.\n\nSave as ./travel-coast.png at 1672x941. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "7bb669296c654f90914aa953c8ef142735b7c06aefebb65441cabea8a4915339",
+      "sourceSha256": "ea8e8158cd2ac79e4a3218702141f5baf0e9cff684c92a8baa5255c536dcb22e",
+      "generatedAt": "2026-10-29T16:32:43.469867+00:00",
+      "generationId": "codex-image-gen-travel-coast",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean travel lifestyle"
+    },
+    "travel-train": {
+      "file": "travel-train.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1672x941 pixels. Subject: A window seat on a modern train: a hand-free view of green rolling hills and a blue sky passing outside, a takeaway coffee and a small camera on the fold-out table, calm and bright, no faces.\n\nClean, premium travel photography: one clear subject, uncluttered composition with generous breathing room, rich natural colour (deep blue sea and sky, fresh greens, warm golden sunlight, terracotta, white walls) but tasteful and not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. No text, no logos, no watermark, no real brands.\n\nSave as ./travel-train.png at 1672x941. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "68eeb919482988a42a487f50bbf5146417d4cc0fce2a44897bbd4fcebefed6b2",
+      "sourceSha256": "7c1653b30c07315780884072af0c42da22fa4ca9da441f1afddceef6abd8c81d",
+      "generatedAt": "2026-10-29T16:32:43.469867+00:00",
+      "generationId": "codex-image-gen-travel-train",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean travel lifestyle"
+    },
+    "travel-waterfall": {
+      "file": "travel-waterfall.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1122x1402 pixels. Subject: A tall waterfall falling into a green pool in a lush forest, a tiny hiker in a yellow jacket at the edge for scale.\n\nClean, premium travel photography: one clear subject, uncluttered composition with breathing room, rich natural colour (blue sea and sky, fresh greens, warm sunlight, terracotta, white walls), tasteful not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. Absolutely no text, letters, signs, labels, logos or watermarks anywhere in the image.\n\nSave as ./travel-waterfall.png at 1122x1402. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "15ba38b9641a67ed16ebaeb51be2e60c80899f3473c4e9f2f2f9997f5a2a7900",
+      "sourceSha256": "7d87ec89b350d1aaf007a8d15ba002fd9bdfda4f90d5d2c3b3c0757c629d333d",
+      "generatedAt": "2026-10-30T05:58:02.429120+00:00",
+      "generationId": "codex-image-gen-travel-waterfall",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean modern studio"
+    },
+    "travel-window": {
+      "file": "travel-window.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1122x1402 pixels. Subject: A hotel window with white curtains opening onto a sunny blue sea and a small balcony table with a coffee cup.\n\nClean, premium travel photography: one clear subject, uncluttered composition with breathing room, rich natural colour (blue sea and sky, fresh greens, warm sunlight, terracotta, white walls), tasteful not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. Absolutely no text, letters, signs, labels, logos or watermarks anywhere in the image.\n\nSave as ./travel-window.png at 1122x1402. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "35780146e89477b85ca8eef522bffd9567547cb4c23eadfe41bfce2dbaad5ae0",
+      "sourceSha256": "d7cdb989af3a756b0bba8bb96b8330b39f5aa74e6d648f593fe0a703a12279b2",
+      "generatedAt": "2026-10-30T05:58:02.429120+00:00",
+      "generationId": "codex-image-gen-travel-window",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean modern studio"
+    },
+    "workshop-cover": {
+      "file": "workshop-cover.webp",
+      "kind": "generated-image",
+      "provider": "built-in-imagegen",
+      "prompt": "Use your built-in image_gen tool to generate one image of exactly 1122x1402 pixels. Layout reference: Use case: ads-marketing. Asset type: original course/workshop cover image to replace HTML placeholder content covers in B-roll motion design. Single portrait 4:5 cover, perfectly front-facing and flat, edge-to-edge, no mockup environment. Refined contemporary editorial design, warm yellow paper, charcoal bold condensed display typography. Exact text 'SMALL WORK' on two lines at top; subtitle 'A practical workshop' and small footer 'NOTES • EXERCISES • NEXT STEPS'. Lower two-thirds is a striking authentic editorial photograph of hands arranging cream paper notes, a red pencil, a black notebook and a small glass of water on an oak desk, morning light. Beautiful considered asymmetrical layout, subtle paper texture, professional magazine-cover finish. Rich photograph and real type, no fake HTML cards, no watermarks, no brand logos.\n\nTHEME AND CLEANLINESS OVERRIDE (takes precedence over the subject and text above): keep the same layout geometry, aspect, element positions and number of main blocks, but change the subject to a travel creator (trips, destinations, itineraries, travel vlogs) and replace every headline or label with a short travel equivalent of similar length. Halve the amount of small text, make photos larger and cleaner, remove clutter, show at most one person per photo and never a group or crowd. Photos inside use clean colourful travel photography (blue sea, green hills, warm sunlight). Interfaces stay white with crisp sans-serif type and at most one small yellow highlight.\n\nClean, premium travel photography: one clear subject, uncluttered composition with generous breathing room, rich natural colour (deep blue sea and sky, fresh greens, warm golden sunlight, terracotta, white walls) but tasteful and not oversaturated, crisp detail, soft natural light. At most one person, never a crowd. No text, no logos, no watermark, no real brands.\n\nSave as ./workshop-cover.png at 1122x1402. Reply with only the absolute path.",
+      "redistributable": true,
+      "sha256": "1b3c70d4eb83d740ea544638c2a55ae42ff5388836db82e21c8aa1a3ab0e3845",
+      "generatedAt": "2026-10-29T16:32:43.469867+00:00",
+      "generationId": "codex-image-gen-workshop-cover",
+      "sourceSha256": "b722e37a5e32b0b153eea8c5d4ac4630e7545cd86d860169ff8476d1a8f1b53f",
+      "transcode": "WebP quality 85 from original generated PNG",
+      "style": "CreatorMotion 2.0 clean travel lifestyle"
+    }
+  },
+  "effects": {
+    "bs-creatormotion-cards-card-counter": {
+      "itemImage1": "travel-alley",
+      "itemImage2": "travel-waterfall",
+      "itemImage3": "travel-city",
+      "itemImage4": "travel-window",
+      "itemImage5": "workshop-cover",
+      "itemImage6": "product-workbook",
+      "itemImage7": "travel-coast",
+      "itemImage8": "travel-train"
+    }
+  }
+}

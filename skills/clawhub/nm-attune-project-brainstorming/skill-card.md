@@ -1,41 +1,54 @@
-## Description: <br>
-Guides project ideation via Socratic questioning to produce a validated brief before specification when requirements are unclear. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides project ideation via Socratic questioning to produce a validated brief. Use before specification when requirements are unclear.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and product teams use this skill to turn unclear project ideas into a structured project brief with problem definition, constraints, approach comparison, decision rationale, and next steps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically pass the full brainstorming context to related skills and review agents. <br>
-Mitigation: Use it only with planning context that may be shared with follow-on agents, or run in standalone/skip-review modes when sensitive strategy, legal, security, or product details are involved. <br>
-Risk: The skill can write project brief and session-state files during planning. <br>
-Mitigation: Review generated files before relying on them, committing them, or using them as inputs to implementation work. <br>
+## Use Case:
 
+Developers and project teams use this skill to clarify unclear requirements, compare approaches, record decision rationale, and produce a project brief before specification.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-project-brainstorming) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown project brief, JSON session state, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write docs/project-brief.md and .attune/brainstorm-session.json, and may continue into related Attune skills unless bypassed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The skill automatically delegates brainstorming context to a separate multi-LLM workflow and continues into specification without confirmation; the delegated providers are not identified and external transmission is not established by the evidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the handoff and continuation behavior before use; choose the documented --standalone mode when you want to stop after brainstorming.
+
+Risk: Security analysis is partial because some referenced paths could not be resolved, so the available evidence does not establish that the artifact is safe.
+
+Mitigation: Review unresolved references and the full artifact, and complete security review before installation or use.
+
+## Reference(s):
+
+- [ClawHub release: project-brainstorming](https://clawhub.ai/athola/skills/nm-attune-project-brainstorming)
+- [Claude Night Market Attune plugin (metadata homepage)](https://github.com/athola/claude-night-market/tree/master/plugins/attune)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown project brief with structured questions, approach comparisons, and decision rationale]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The workflow may continue into a project specification phase after producing the brief.]
+
+## Skill Version(s):
+
+1.10.4 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

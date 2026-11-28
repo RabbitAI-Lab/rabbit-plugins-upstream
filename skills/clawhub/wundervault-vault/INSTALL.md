@@ -1,76 +1,89 @@
 # Installing Wundervault Vault
 
-## Prerequisites
+You need a free account at [wundervault.com](https://wundervault.com), Node.js 22.23.4, 24.22.1
+or 26.12.1 or newer (the October 21, 2026 security fix; the helper app won't start on an older Node),
+and administrator rights on this computer. Every step:
+[wundervault.com/help/computer](https://wundervault.com/help/computer).
 
-- A Wundervault account — request early access via the [contact form](https://wundervault.com/contact)
-- An agent configured in your Wundervault dashboard (Settings → Agents)
-- Node.js / npm installed
+## 1. Install the package and the helper app (administrator, once per computer)
 
-## Step 1 — Install the MCP server
-
-```bash
-npm install -g @wundervault/mcp-server
-```
-
-Or install locally in your OpenClaw workspace:
+Linux:
 
 ```bash
-cd ~/.openclaw/workspace
-npm install @wundervault/mcp-server
+sudo npm install -g @wundervault/mcp-server@2
+sudo sh "$(npm root -g)/@wundervault/mcp-server/packaging/install-daemon.sh"
 ```
 
-## Step 2 — Run the onboarding script
+`sudo` for both, because the helper app only runs a copy installed in a system folder, never one
+inside your home folder.
 
-In your Wundervault dashboard under **Settings → Agents**, create an agent and copy the setup URL (it includes the passphrase in the `#fragment`). Download the script, then run it:
+Windows and macOS: [wundervault.com/install](https://wundervault.com/install).
+The installer downloads nothing and is short enough to read first.
+
+## 2. Pair it with your account
+
+Run the pairing command the installer printed last. It names node and the helper app by their
+full paths, for example:
 
 ```bash
-curl -fsSL https://wundervault.com/onboard -o /tmp/wv-onboard.py
-python3 /tmp/wv-onboard.py "https://wundervault.com/setup/agent/TOKEN#PASSPHRASE"
+sudo /opt/wundervault/current/node /opt/wundervault/current/app/bin/wundervault-agent --pair
 ```
 
-The script must be downloaded before running — pipe mode (`curl ... | python3`) is blocked. The script verifies its own ed25519 signature on startup and exits immediately if the check fails.
+Full paths, because with `sudo` a bare name could be found in a folder your agents can write.
 
-Pinned version, SHA-256 checksum, and the ed25519 public key for independent verification are available at [wundervault.com/install](https://wundervault.com/install).
+Check that the fingerprint it shows matches the one in your vault, then confirm there.
 
-The script will:
-- Verify its own signature before doing anything else
-- Decrypt your credentials locally (passphrase never sent to the server)
-- Save them to `~/.wundervault/creds-{agent_name}.json`
-- Auto-configure OpenClaw (`~/.openclaw/openclaw.json`) if present
-- Clear any stale MCP session so the new credentials take effect immediately
+## 3. Add the agent
 
-## Multiple agents on the same machine
+In your vault, add an agent and choose this computer. You get a **message for your agent** with a
+claim code in it. Paste the message into the agent's chat and it does the rest: a claim code
+isn't a secret, works once, only through the helper app on this computer, for 15 minutes.
 
-Each agent gets its own named credentials file (`~/.wundervault/creds-Byte.json`, `~/.wundervault/creds-Claude.json`, etc.). The onboarding script handles this automatically for OpenClaw.
+Or do it yourself. Enrol, piping the code in (never as an argument):
 
-For other clients (Claude Code, Cursor, Windsurf), set this env var in their MCP config to point at the right file:
+```bash
+printf '%s\n' 'WV-XXXX-XXXX' | wundervault-agent --enrol
+```
+
+Then add Wundervault to the agent's MCP settings. `WUNDERVAULT_AGENT_NAME` must match the
+agent's name in your vault exactly (enrol prints it). OpenClaw:
+
+```bash
+openclaw mcp add wundervault --command wundervault-mcp --env 'WUNDERVAULT_AGENT_NAME=<name>'
+```
+
+Other clients take this block: Claude Code `~/.claude.json` (or `claude mcp add`), Cursor
+`~/.cursor/mcp.json`, Windsurf `~/.codeium/windsurf/mcp_config.json`.
 
 ```json
 {
   "mcpServers": {
     "wundervault": {
       "command": "wundervault-mcp",
-      "env": {
-        "WUNDERVAULT_CREDENTIALS_FILE": "/home/youruser/.wundervault/creds-Claude.json"
-      }
+      "env": { "WUNDERVAULT_AGENT_NAME": "<the agent's name in your vault>" }
     }
   }
 }
 ```
 
-Common global MCP config locations:
-- **Claude Code**: `~/.claude/mcp.json`
-- **Cursor**: `~/.cursor/mcp.json`
-- **Windsurf**: `~/.codeium/windsurf/mcp_config.json`
+The config holds no secrets. An app that starts several copies of the vault tool for one agent
+(several chats, or OpenClaw's gateway and its Codex runtime) is fine: copies of one agent share
+its connection.
 
-## Verify
+## 4. Check
 
-Ask your agent:
+Ask the agent: "List my vault secrets." It should call `vault_entries_list` and show what you
+gave it. No secrets yet is normal until you give it some: open a secret in your vault and turn the
+agent on.
 
-> "List my vault secrets"
+## Upgrading from version 1
 
-The agent should call `vault_entries_list` and show available entries.
+Version 2 moves secrets into the helper app; your account and vault carry over. Install version 2
+and the helper app (steps 1-2), then **Repair** each agent in your vault and enrol it (step 3). The
+steps, in full: [wundervault.com/install#upgrade-to-2](https://wundervault.com/install#upgrade-to-2).
 
-## Self-Hosting
+## Updating
 
-Wundervault is open-source and can be self-hosted. The onboarding script auto-detects the vault URL from the setup link, so no extra configuration is needed.
+When a new version is out, your vault's Computers page shows **Update now**: one press updates the
+helper app on that computer. What changed: [wundervault.com/changelog](https://wundervault.com/changelog);
+releases are announced on X as [@wundervault1](https://x.com/wundervault1).

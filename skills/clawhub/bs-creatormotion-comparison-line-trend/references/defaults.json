@@ -1,0 +1,44 @@
+{
+  "title": "Practice and consistency",
+  "points": [
+    [
+      0,
+      12
+    ],
+    [
+      1,
+      18
+    ],
+    [
+      2,
+      16
+    ],
+    [
+      3,
+      29
+    ],
+    [
+      4,
+      31
+    ],
+    [
+      5,
+      42
+    ]
+  ],
+  "trend": [
+    [
+      0,
+      10
+    ],
+    [
+      5,
+      40
+    ]
+  ],
+  "axisLabels": [
+    "Weeks of practice",
+    "Quality score"
+  ],
+  "conclusion": "Repeated practice creates a visible trend."
+}

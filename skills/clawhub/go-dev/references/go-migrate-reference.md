@@ -1,6 +1,14 @@
 # golang-migrate Reference
 
-Latest: **v4.19.1** (November 2025). Supports Go 1.24 and 1.25. MIT license, 18K+ stars.
+Latest: **v4.20.1** (2026-09-09). Built with Go 1.25/1.26. MIT license, 18K+ stars.
+
+**Pin v4.20.1, not v4.20.0.** A release-workflow bug meant v4.20.0 exists as a git tag but never reached Docker or the package registries - "Due to a bug in the release workflow, GoReleaser failed and `v4.20.0` was not published to Docker or other package registries." v4.20.1 is that release redistributed, and carries no other changes.
+
+v4.20.0 is worth upgrading for regardless of the pin mechanics:
+
+- **S3 sources silently truncated at 1000 migrations** - "fix(source/aws_s3): paginate ListObjects to load >1000 migrations".
+- **Quadratic startup cost removed** - "perf(source): build migrations index lazily to avoid quadratic startup".
+- **Security, partial:** migrate's own code moved from `docker/docker` to the `moby/moby/api` and `moby/moby/client` modules, but v4.20.1's `go.mod` still lists `github.com/docker/docker v28.5.2+incompatible // indirect`, pulled in by `dhui/dktest`. Scanners keep flagging it - open issue [golang-migrate/migrate#1444](https://github.com/golang-migrate/migrate/issues/1444) "Dependencies still trigger CVE-2026-41568" (milestone v4.21.0). The released artefacts carry more: [#1458](https://github.com/golang-migrate/migrate/pull/1458) says "`v4.20.1` pins several modules with known vulnerabilities, so Trivy and govulncheck flag the release binary and the `migrate/migrate` Docker image" (x/crypto, x/net, x/text, grpc, klauspost/compress, otel/sdk). [#1468](https://github.com/golang-migrate/migrate/pull/1468) dropped `dhui/dktest` and `docker/docker` from `go.mod` on 2026-11-13, and #1458 ("bump vulnerable dependencies and require go 1.26") followed on 2026-11-16 - but neither is released: the next tag (v4.21.0, or the v4.20.2 patch #1458 asks for) will need Go 1.26, and #1444 stays open. `go install ...@v4.20.1` builds with exactly the versions in v4.20.1's `go.mod`, so a self-built CLI inherits them too; scan the binary you actually deploy (`govulncheck -mode=binary`).
 
 ## Installation
 
@@ -14,17 +22,19 @@ brew install golang-migrate
 scoop install migrate
 
 # Pre-built binary
-curl -L https://github.com/golang-migrate/migrate/releases/download/v4.19.1/migrate.linux-amd64.tar.gz | tar xvz
+curl -L https://github.com/golang-migrate/migrate/releases/download/v4.20.1/migrate.linux-amd64.tar.gz | tar xvz
 
 # With Go (specify database driver via build tags)
-go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.19.1
+go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.20.1
 
 # Docker
-docker run -v $(pwd)/migrations:/migrations --network host migrate/migrate \
+docker run -v $(pwd)/migrations:/migrations --network host migrate/migrate:v4.20.1 \
     -path=/migrations/ -database "postgres://localhost:5432/db" up
 ```
 
-Multiple drivers: `-tags 'postgres mysql sqlite3'`
+Multiple drivers: `-tags 'postgres mysql sqlite'`
+
+For SQLite pick the tag deliberately: `sqlite` "Uses the `modernc.org/sqlite` sqlite db driver (pure Go)", while `sqlite3` "Uses the `github.com/mattn/go-sqlite3` sqlite db driver (cgo)" and so breaks `CGO_ENABLED=0` builds such as the template's `build-release`.
 
 ### Library
 
@@ -51,20 +61,24 @@ migrations/
 
 Control zero-padding with `-digits N` (default: 6).
 
+Two more `create` flags: `-format` takes "a Go time format string" for the version prefix, and `-tz` sets the timezone used to generate it.
+
 ### Timestamp (better for larger teams)
 
 ```bash
 migrate create -ext sql -dir migrations create_users_table
 ```
 
-Produces:
+Produces (default `-format` is `20060102150405`, a UTC timestamp):
 ```
 migrations/
-  1712345678_create_users_table.up.sql
-  1712345678_create_users_table.down.sql
+  20240405123456_create_users_table.up.sql
+  20240405123456_create_users_table.down.sql
 ```
 
-Eliminates version conflicts when multiple developers create migrations simultaneously.
+Timestamps stop two developers from claiming the same number, but not out-of-order merges. migrate stores one current version and `up` walks forward from it (`readUp` calls `sourceDrv.Next(from)`, `migrate.go:532`), so a migration created on a long-lived branch and merged after a newer one sorts below the database's version and is never applied - with no error. Upstream: "two developers can create conflicting migrations, and the developer that created their migration later gets it merged to the repository first" ([#179](https://github.com/golang-migrate/migrate/issues/179)). Gate it in CI (see CI/CD Patterns below), and keep shared databases on `main`'s migrations only.
+
+For unix-epoch versions pass `-format unix` - "If the string `"unix"` or `"unixNano"` is specified, then the seconds or nanoseconds since January 1, 1970 UTC respectively will be used." Combining `-seq` with any non-default `-format` fails with "the seq and format options are mutually exclusive".
 
 ## CLI Commands
 
@@ -108,13 +122,13 @@ migrate create -ext sql -dir migrations -seq add_email_column
 - `-lock-timeout N` - seconds to acquire lock (default 15)
 - `-verbose` - verbose logging
 
-Handles `SIGINT` gracefully, stopping at a safe point.
+Handles `SIGINT` gracefully, stopping at a safe point. Programmatically the same guarantee is exposed as a channel - "To help prevent database corruptions, it supports graceful stops via `GracefulStop chan bool`" - and the library takes your own logger via its `Logger` interface ("Bring your own logger.") rather than writing to stdout.
 
 ## Up/Down Migration Patterns
 
 **Up migration** (`000001_create_users.up.sql`):
 ```sql
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE users (
     id          SERIAL PRIMARY KEY,
     email       VARCHAR(255) UNIQUE NOT NULL,
     name        VARCHAR(100) NOT NULL,
@@ -126,8 +140,10 @@ CREATE INDEX idx_users_email ON users (email);
 
 **Down migration** (`000001_create_users.down.sql`):
 ```sql
-DROP TABLE IF EXISTS users;
+DROP TABLE users;
 ```
+
+Leave out `IF NOT EXISTS` / `IF EXISTS` here: the up-down-up test below relies on the error. Upstream: "let's say you forgot to drop the table in down migration ... `CREATE TABLE` would return an error, helping you find an issue in down migration, while `CREATE TABLE IF NOT EXISTS` would not."
 
 **Multi-statement with transaction** (`000002_add_status.up.sql`):
 ```sql
@@ -155,6 +171,9 @@ COMMIT;
 
 ```go
 import (
+    "errors"
+    "log"
+
     "github.com/golang-migrate/migrate/v4"
     _ "github.com/golang-migrate/migrate/v4/database/postgres"
     _ "github.com/golang-migrate/migrate/v4/source/file"
@@ -167,7 +186,7 @@ if err != nil {
     log.Fatal(err)
 }
 
-if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+if err := m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
     log.Fatal(err)
 }
 ```
@@ -186,15 +205,17 @@ db, _ := sql.Open("postgres", connStr)
 driver, _ := postgres.WithInstance(db, &postgres.Config{})
 m, _ := migrate.NewWithDatabaseInstance("file://migrations", "postgres", driver)
 
-m.Up()        // Apply all pending
-m.Steps(2)    // Apply 2 up
+m.Up()        // Apply ALL pending migrations - not just the next one
+m.Steps(2)    // Apply exactly 2 up
 m.Steps(-1)   // Revert 1
 m.Version()   // Get current version + dirty flag
 m.Force(3)    // Set version without running
 m.Close()     // Close connections
 ```
 
-Always check for `migrate.ErrNoChange` when calling `Up()` - it means no new migrations exist and is not a real error.
+Always check for `migrate.ErrNoChange` when calling `Up()` - it means no new migrations exist and is not a real error. Compare with `errors.Is`, not `!=`: the template's `errorlint` flags the plain comparison ("comparing with != will fail on wrapped errors"). The other sentinels worth handling: `Version()` returns `migrate.ErrNilVersion` on a database that has never been migrated, lock contention returns `migrate.ErrLocked` or `migrate.ErrLockTimeout`, and a failed migration surfaces as `migrate.ErrDirty` (a struct type, so match it with `errors.As`).
+
+**`Up()` and `Steps(1)` are not interchangeable.** `Up()` applies every pending migration in one call; `Steps(1)` applies exactly one. Automation wired to `Up()` on merge will apply an entire backlog of DDL the first time it runs, which surprises teams who assumed each deploy advanced one version. Decide deliberately which semantics a given entry point has, and name it accordingly.
 
 ## Embedding Migrations with embed.FS
 
@@ -205,7 +226,7 @@ package main
 
 import (
     "embed"
-    "log"
+    "errors"
 
     "github.com/golang-migrate/migrate/v4"
     _ "github.com/golang-migrate/migrate/v4/database/postgres"
@@ -226,7 +247,7 @@ func runMigrations(databaseURL string) error {
         return err
     }
 
-    if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+    if err := m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
         return err
     }
 
@@ -244,16 +265,29 @@ URL format: `postgres://user:password@host:port/dbname?query`
 |-----------|-------------|
 | `x-migrations-table` | Custom migrations table name (default: `schema_migrations`) |
 | `x-statement-timeout` | Abort statements exceeding N ms |
-| `x-multi-statement` | Enable multi-statement execution (default: false) |
+| `x-multi-statement` | Enable multi-statement execution (default: false). The file is split on `;` and each statement runs on its own, so the migration is no longer atomic, and a `;` inside a function body or string breaks the split |
 | `x-multi-statement-max-size` | Max statement size in bytes (default: 10MB) |
 | `search_path` | Schema search path |
+| `x-migrations-table-quoted` | Disable quoting of the migrations table name - "By default, migrate quotes the migration table for SQL injection safety reasons. This option disable quoting" |
 | `sslmode` | disable, require, verify-ca, verify-full |
 
 Uses `pg_advisory_lock` for safe concurrent migrations.
 
+### pgx v5 driver
+
+For projects already on `jackc/pgx/v5`, use the `pgx5` driver instead of `postgres` (which uses `lib/pq`). Same query parameters; different URL scheme, build tag, and import:
+
+- URL: `pgx5://user:password@host:port/dbname?query`
+- CLI: `go install -tags 'pgx5' github.com/golang-migrate/migrate/v4/cmd/migrate@v4.20.1`
+- Library: `_ "github.com/golang-migrate/migrate/v4/database/pgx/v5"`
+
 ## Transaction Handling
 
-golang-migrate does **NOT** automatically wrap migrations in transactions. You must use explicit `BEGIN`/`COMMIT`:
+Transaction handling is per driver, not per library. Most drivers do **not** wrap a migration in a transaction, so explicit `BEGIN`/`COMMIT` is the usual advice - with one hard exception.
+
+**SQLite: never write `BEGIN`/`COMMIT`.** "Unlike other migrate database drivers, the sqlite driver will automatically wrap each migration in an implicit transaction by default. Migrations must not contain explicit `BEGIN` or `COMMIT` statements." The same holds for `sqlite3`. To manage transactions yourself, set `x-no-tx-wrap=true` on the database URL, after which "Migrations may, and should, contain explicit `BEGIN` and `COMMIT` statements."
+
+**Postgres:** "In PostgreSQL running multiple SQL statements in one `Exec` executes them inside a transaction." A multi-statement Postgres migration is therefore already atomic in practice (unless `x-multi-statement` is on) - but writing `BEGIN`/`COMMIT` anyway costs nothing and keeps the intent explicit:
 
 ```sql
 BEGIN;
@@ -312,22 +346,46 @@ steps:
 
 The up-down-up pattern validates both directions work correctly.
 
+### Reject Out-of-Order Migrations
+
+A PR whose new migration sorts at or below the newest one on the base branch would be skipped on every database already past it (see Timestamp above). Fail it before merge:
+
+```yaml
+- uses: actions/checkout@v7
+  with:
+    fetch-depth: 0   # the three-dot diff needs the merge base
+- name: New migrations sort above the base branch
+  env:
+    BASE: origin/${{ github.base_ref }}
+  run: |
+    newest=$(git ls-tree --name-only "$BASE" migrations/ | sed -n 's|^migrations/\([0-9]*\)_.*\.up\.sql$|\1|p' | sort -n | tail -1)
+    git diff --name-only --diff-filter=A "$BASE...HEAD" -- 'migrations/*.up.sql' | sed -n 's|^migrations/\([0-9]*\)_.*|\1|p' | while read -r v; do
+      if [ "$v" -le "${newest:-0}" ]; then
+        echo "migration $v does not sort above $newest on $BASE"
+        exit 1
+      fi
+    done
+```
+
+It handles both sequential (`000010`) and timestamp names; a PR rebased onto a newer base needs its migration renamed with a fresh version.
+
 ## Common Pitfalls
 
 1. **Dirty state after failure** - most common issue. Must `force` correct version after manual fix
-2. **Version conflicts in teams** - use timestamp versioning for larger teams
+2. **Out-of-order merges** - a migration merged after a newer one is silently skipped; timestamps avoid number clashes, not this. Gate PRs with the check above
 3. **Missing down migrations** - always write both directions, even if down is a no-op (add a SQL comment)
 4. **Non-transactional DDL** - `CREATE INDEX CONCURRENTLY` needs its own migration without `BEGIN`/`COMMIT`
 5. **URL encoding** - special characters in passwords must be percent-encoded
 6. **Empty files** - 0-byte migration files cause issues. Add a SQL comment if intentionally empty
 7. **Schema + role name clash** in PostgreSQL - `search_path` causes migrations table duplication. Fix: set `search_path=public` in URL
 8. **Never edit applied migrations** - treat merged migrations as immutable. Create new ones for corrections
+9. **Not every migration is reversible** - upstream's `MIGRATIONS.md` has a "Reversibility of Migrations" section; a destructive `up` (dropping a column, collapsing rows) cannot be undone by a `down` that only restores schema. Say so in a comment rather than shipping a `down` that silently loses data
 
 ## Best Practices
 
 - Keep migrations small and focused - one logical change per migration
 - Always test up-down-up before merging
-- Use transactions for multi-statement migrations (when database supports it)
+- Use transactions for multi-statement migrations where the driver does not already wrap them (not on SQLite)
 - Embed migrations for production binaries (`embed.FS` + `iofs`)
 - Run migrations at app startup or as a separate step in the deploy pipeline
 - Use `migrate.ErrNoChange` check in programmatic usage

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "version": 1,
+  "id": "bs-spectrum-brand-strategy-deck-semantic-fixture",
+  "title": "Editable style fixture",
+  "palette": {
+    "theme": "#2eaaeb",
+    "tint": "#f5f3e8",
+    "paper": "#f5f3e8",
+    "ink": "#121613"
+  },
+  "typography": {},
+  "contentLocale": "en",
+  "contentDirection": "ltr",
+  "slides": [
+    {
+      "id": "fixture-page",
+      "notes": "This is a schema fixture, not a finished presentation example.",
+      "root": {
+        "id": "fixture-root",
+        "type": "stack",
+        "gap": 24,
+        "children": [
+          {
+            "id": "fixture-label",
+            "type": "label",
+            "text": "STYLE FIXTURE"
+          },
+          {
+            "id": "fixture-heading",
+            "type": "heading",
+            "text": "An independently editable heading"
+          },
+          {
+            "id": "fixture-body",
+            "type": "text",
+            "text": "Create a user project from the style rules and replace this fixture with approved content."
+          }
+        ]
+      }
+    }
+  ]
+}

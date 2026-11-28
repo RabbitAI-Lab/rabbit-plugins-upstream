@@ -1,0 +1,158 @@
+{
+  "version": 1,
+  "skill": "bs-steel-curve-profile-deck",
+  "pictures": [
+    {
+      "id": "glass-office-entrance-dusk",
+      "kind": "scene",
+      "description": "Two-storey glass office building with a cantilevered roof garden at golden hour, two colleagues walking toward the lit entrance along a waterfront plaza.",
+      "goodFor": [
+        "cover",
+        "overview",
+        "closing",
+        "background"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 546374,
+      "sha256": "a356154a21ae8e0a3f23d779c7b08537459014e429407d5dffd5229a1da94661",
+      "url": "https://media.skillry.dev/skill-image-library/bs-steel-curve-profile-deck/glass-office-entrance-dusk-a356154a21ae.webp"
+    },
+    {
+      "id": "two-colleagues-laptop-desk",
+      "kind": "scene",
+      "description": "A seated man in a denim shirt and a standing woman in a cream sweater smile at a laptop on a desk in a bright office with a slate-blue wall.",
+      "goodFor": [
+        "overview",
+        "solution",
+        "team",
+        "section"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 295828,
+      "sha256": "b780df7382f9ea857ea4895218fe2e7381ee499cf9a7cdc20e47a37c9b5c7ad0",
+      "url": "https://media.skillry.dev/skill-image-library/bs-steel-curve-profile-deck/two-colleagues-laptop-desk-b780df7382f9.webp"
+    },
+    {
+      "id": "team-planning-wooden-table",
+      "kind": "scene",
+      "description": "Four colleagues gathered around a long wooden table with notebooks and a laptop, one woman pointing at printed notes, in a plant-filled open office with slate-blue walls.",
+      "goodFor": [
+        "overview",
+        "process",
+        "team",
+        "solution"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 347672,
+      "sha256": "b3c1933c9cf7bf69b7472ef47555c989739b7624312b1f482d3d801783bbf76c",
+      "url": "https://media.skillry.dev/skill-image-library/bs-steel-curve-profile-deck/team-planning-wooden-table-b3c1933c9cf7.webp"
+    },
+    {
+      "id": "lounge-skyline-glass-atrium",
+      "kind": "scene",
+      "description": "Wide, airy office lounge with blue sofas, a round wooden table and polished concrete floor, floor-to-ceiling windows over a city skyline and mountains, a few people working at a table.",
+      "goodFor": [
+        "section",
+        "background",
+        "overview",
+        "closing"
+      ],
+      "reuse": "any-topic",
+      "width": 1536,
+      "height": 1024,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 239382,
+      "sha256": "d4659902f3ee35608dd643aaed8fff7bb91e9ef848eab3d032331fc67fac545c",
+      "url": "https://media.skillry.dev/skill-image-library/bs-steel-curve-profile-deck/lounge-skyline-glass-atrium-d4659902f3ee.webp"
+    },
+    {
+      "id": "team-walking-office-tour",
+      "kind": "scene",
+      "description": "Four colleagues walking through a bright open office past a lounge and kitchen bar, a woman in a blue blouse gesturing ahead while the others follow.",
+      "goodFor": [
+        "process",
+        "team",
+        "overview",
+        "solution"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 416672,
+      "sha256": "c0e2c49155395cb6a76d59a934047fb12569a4c880b6c8e1cf3937d2f37cacbd",
+      "url": "https://media.skillry.dev/skill-image-library/bs-steel-curve-profile-deck/team-walking-office-tour-c0e2c4915539.webp"
+    },
+    {
+      "id": "trio-walking-pointing-corridor",
+      "kind": "scene",
+      "description": "Three colleagues walking along a sunlit glass corridor with a city view, the man in the middle pointing upward while the others look, navy and grey tones.",
+      "goodFor": [
+        "process",
+        "problem",
+        "team",
+        "section"
+      ],
+      "reuse": "any-topic",
+      "width": 1536,
+      "height": 1024,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 160796,
+      "sha256": "26ddfb44a0b996202ae21219849b2a5160dbaf0b671ccb2afe6727c1c6e66d86",
+      "url": "https://media.skillry.dev/skill-image-library/bs-steel-curve-profile-deck/trio-walking-pointing-corridor-26ddfb44a0b9.webp"
+    },
+    {
+      "id": "reception-desk-visitor-greeting",
+      "kind": "scene",
+      "description": "Smiling receptionist behind a light wood desk greeting a visitor with a shoulder bag, navy panelled wall and glass pendant lamps, over-the-shoulder framing.",
+      "goodFor": [
+        "solution",
+        "process",
+        "contact"
+      ],
+      "reuse": "topic-specific",
+      "topic": "office reception / visitor services",
+      "width": 1536,
+      "height": 1024,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 131786,
+      "sha256": "73f8ad0fc90af3b0dc8357b60011ac38b10aedb62fe766e7f74511fbdb943f60",
+      "url": "https://media.skillry.dev/skill-image-library/bs-steel-curve-profile-deck/reception-desk-visitor-greeting-73f8ad0fc90a.webp"
+    },
+    {
+      "id": "meeting-room-woman-presenting",
+      "kind": "scene",
+      "description": "A woman stands and talks to three seated colleagues around a wooden meeting table with a laptop and notebooks, soft blue landscape art and an open door behind.",
+      "goodFor": [
+        "team",
+        "closing",
+        "quote",
+        "overview"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 256912,
+      "sha256": "dce269c130de8366c5c05f8163a5b336149d6edad59aa3eacc02740aef0ea289",
+      "url": "https://media.skillry.dev/skill-image-library/bs-steel-curve-profile-deck/meeting-room-woman-presenting-dce269c130de.webp"
+    }
+  ]
+}

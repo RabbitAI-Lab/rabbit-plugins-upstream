@@ -1,0 +1,33 @@
+#narration-bar{display:none;position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:46;align-items:center;gap:2px;padding:5px;border-radius:15px;color:#fff;background:rgba(38,38,38,.66);backdrop-filter:blur(22px) saturate(0%);-webkit-backdrop-filter:blur(22px) saturate(0%);border:1px solid rgba(255,255,255,.24);box-shadow:0 8px 32px rgba(0,0,0,.13),inset 0 1px 0 rgba(255,255,255,.08);font:500 12px/1.2 system-ui,-apple-system,"PingFang SC","Hiragino Sans","Noto Sans",sans-serif;transition:opacity .25s;max-width:calc(100vw - 24px)}
+.viewing #narration-bar,.presentation #narration-bar{display:flex}
+#narration-bar.nb-idle{opacity:0}
+#narration-bar .nb-btn{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;padding:0 7px;border:0;border-radius:10px;background:transparent;color:#fff;cursor:pointer;font:inherit;font-variant-numeric:tabular-nums;white-space:nowrap}
+#narration-bar .nb-btn:hover{background:rgba(255,255,255,.15)}
+#narration-bar .nb-btn:focus-visible{outline:2px solid rgba(255,255,255,.85);outline-offset:1px}
+#narration-bar .nb-play{background:#fff;color:#171717}
+#narration-bar .nb-play:hover{background:#e5e5e5}
+#narration-bar .nb-toggle{opacity:.55}
+#narration-bar .nb-toggle.on{opacity:1;background:rgba(255,255,255,.18)}
+#narration-bar .nb-auto{gap:5px;padding:0 9px}
+#narration-bar .nb-auto svg{width:14px;height:14px}
+#narration-bar .nb-auto svg path:first-child{fill:currentColor}
+#narration-bar .nb-exit{display:none;padding:0 12px;font-weight:600}
+.presentation #narration-bar .nb-exit{display:inline-flex}
+#narration-bar .nb-sep{display:none;width:1px;height:20px;margin:0 2px;background:rgba(255,255,255,.2)}
+.presentation #narration-bar .nb-sep{display:block}
+#narration-bar svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+#narration-bar .nb-play svg path:first-child{fill:currentColor}
+#narration-bar .nb-track{display:flex;align-items:center;gap:7px;padding:0 4px;min-width:0}
+#narration-bar .nb-page,#narration-bar .nb-time{white-space:nowrap;font-variant-numeric:tabular-nums;opacity:.85}
+#narration-bar .nb-seek{width:110px;accent-color:#fff;cursor:pointer}
+#narration-bar.nb-empty .nb-seek{opacity:.3}
+#narration-bar.nb-stale .nb-page:after{content:"";display:inline-block;width:6px;height:6px;margin-left:6px;border-radius:50%;background:#fbbf24;vertical-align:middle}
+#narration-script{position:fixed;left:50%;bottom:78px;transform:translateX(-50%);z-index:46;width:min(560px,calc(100vw - 24px));max-height:40vh;overflow:auto;padding:16px 18px;border-radius:14px;background:rgba(255,255,255,.94);color:#262626;border:1px solid #e5e5e5;box-shadow:0 12px 40px rgba(0,0,0,.14);font:14px/1.7 system-ui,-apple-system,"PingFang SC","Hiragino Sans","Noto Sans",sans-serif;white-space:pre-wrap}
+body:not(.viewing):not(.presentation) #narration-script{display:none}
+/* With narration the player is the single bottom control: Edit/Present move to the top
+   right, and the deck's own present navigation (the same prev/next/count) gives way. */
+body.viewing:not(.presentation) #view-bar{top:16px;right:16px;bottom:auto;left:auto;transform:none}
+body.presentation #present-nav{display:none!important}
+@media(max-width:800px){#narration-bar .nb-label{display:none}#narration-bar{left:12px;right:12px;bottom:12px;transform:none;justify-content:space-between}#narration-bar .nb-seek{width:auto;flex:1}#narration-bar .nb-track{flex:1}#narration-bar .nb-time{display:none}#narration-script{left:12px;right:12px;bottom:70px;transform:none;width:auto}}
+@media(max-width:520px){#narration-bar .nb-page,#narration-bar [data-nb=script]{display:none}}
+@media print{#narration-bar,#narration-script{display:none!important}}

@@ -1,0 +1,180 @@
+{
+  "version": 1,
+  "skill": "bs-mint-marker-deck",
+  "pictures": [
+    {
+      "id": "workshop-trio-planning-boards",
+      "kind": "illustration",
+      "description": "Hand-drawn ink illustration of three makers at a workbench measuring timber, reading a plan sheet and holding a hammer, with mint green accents on an off-white background and a tool pegboard behind.",
+      "goodFor": [
+        "cover",
+        "overview",
+        "team",
+        "process"
+      ],
+      "reuse": "topic-specific",
+      "topic": "community woodworking workshop / maker space",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 168518,
+      "sha256": "ddecc0cc93cd955997aaa8aa70634b7b8b19871c0eca93c7a1b974a1901e1fe0",
+      "url": "https://media.skillry.dev/skill-image-library/bs-mint-marker-deck/workshop-trio-planning-boards-ddecc0cc93cd.webp"
+    },
+    {
+      "id": "maker-opening-empty-workshop",
+      "kind": "illustration",
+      "description": "Tall hand-drawn illustration of a woman in a mint apron carrying a toolbox through a door into a bright, mostly empty workshop room with a long table, stools, pegboard tools and dashed outlines of future shelves.",
+      "goodFor": [
+        "problem",
+        "section",
+        "solution",
+        "background"
+      ],
+      "reuse": "topic-specific",
+      "topic": "community woodworking workshop / maker space",
+      "width": 1024,
+      "height": 1536,
+      "orientation": "portrait",
+      "transparent": false,
+      "bytes": 127918,
+      "sha256": "8c024f16ff86392c6e1385c1540e3f42fb3ced921342700e69fcd6fa82fed049",
+      "url": "https://media.skillry.dev/skill-image-library/bs-mint-marker-deck/maker-opening-empty-workshop-8c024f16ff86.webp"
+    },
+    {
+      "id": "makers-showing-lamp-shelf",
+      "kind": "illustration",
+      "description": "Hand-drawn ink sketch of two smiling makers presenting a repaired green desk lamp and a small wooden shelf with a plant, mint accents on a pale background.",
+      "goodFor": [
+        "solution",
+        "overview",
+        "team"
+      ],
+      "reuse": "topic-specific",
+      "topic": "repair cafe / DIY making workshop",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 128250,
+      "sha256": "72178649ee748b1d0420377cdb84fe1834a18080f549a8809bacf17b93326a7f",
+      "url": "https://media.skillry.dev/skill-image-library/bs-mint-marker-deck/makers-showing-lamp-shelf-72178649ee74.webp"
+    },
+    {
+      "id": "whiteboard-sticky-notes-pair",
+      "kind": "illustration",
+      "description": "Hand-drawn illustration on a solid teal background of a woman pointing at sticky notes on a rolling whiteboard while a man in a cap and work apron listens thoughtfully.",
+      "goodFor": [
+        "process",
+        "section",
+        "team",
+        "overview"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 113772,
+      "sha256": "d7407caf730406cd38453e9b7e891111fcedcaa37c14815df27a47446f8370fb",
+      "url": "https://media.skillry.dev/skill-image-library/bs-mint-marker-deck/whiteboard-sticky-notes-pair-d7407caf7304.webp"
+    },
+    {
+      "id": "maker-presenting-list-board",
+      "kind": "illustration",
+      "description": "Hand-drawn ink illustration of a woman in a mint apron gesturing at a blank flip board with three bullet lines, beside a tool shelf and plant on an off-white background, with open space for text.",
+      "goodFor": [
+        "process",
+        "overview",
+        "chart-side",
+        "section"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 89364,
+      "sha256": "a191b3da170cafe015de31b8b0e933d84592f55f5c00bef64189edb500b41824",
+      "url": "https://media.skillry.dev/skill-image-library/bs-mint-marker-deck/maker-presenting-list-board-a191b3da170c.webp"
+    },
+    {
+      "id": "hands-building-wooden-crate",
+      "kind": "scene",
+      "description": "Overhead photo of several hands assembling and sanding a reclaimed wooden box on a rustic table with a hammer, screws, twine, paper and a coffee mug in warm natural light.",
+      "goodFor": [
+        "process",
+        "solution",
+        "background",
+        "team"
+      ],
+      "reuse": "topic-specific",
+      "topic": "woodworking / hands-on craft workshop",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 560436,
+      "sha256": "72852ce67a41d772e6643dac458fe0a583923d866ad9019aabf47d54d76e632c",
+      "url": "https://media.skillry.dev/skill-image-library/bs-mint-marker-deck/hands-building-wooden-crate-72852ce67a41.webp"
+    },
+    {
+      "id": "repair-cafe-welcome-scene",
+      "kind": "illustration",
+      "description": "Hand-drawn ink illustration of a woman in a green apron welcoming a visitor with a coffee and tote bag through a green door into a workshop where an older man fixes a lamp for two seated people.",
+      "goodFor": [
+        "overview",
+        "solution",
+        "team",
+        "section"
+      ],
+      "reuse": "topic-specific",
+      "topic": "repair cafe / community workshop",
+      "width": 1536,
+      "height": 1024,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 169166,
+      "sha256": "92c6f1e08762050304ff83d153f1846ff721014fbc29b14159e3fc370aef2d1b",
+      "url": "https://media.skillry.dev/skill-image-library/bs-mint-marker-deck/repair-cafe-welcome-scene-92c6f1e08762.webp"
+    },
+    {
+      "id": "floor-circle-brainstorm-group",
+      "kind": "illustration",
+      "description": "Hand-drawn illustration of five diverse people sitting cross-legged in a circle on the floor around paper cards, tape, scissors, a hammer and wood blocks, one raising a hand, with mint accents on off-white.",
+      "goodFor": [
+        "process",
+        "team",
+        "overview",
+        "section"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 130280,
+      "sha256": "f2904f123e6760030740b14ed0bbaaf414f04ec965b3de7ad4c4fce9696540f8",
+      "url": "https://media.skillry.dev/skill-image-library/bs-mint-marker-deck/floor-circle-brainstorm-group-f2904f123e67.webp"
+    },
+    {
+      "id": "waving-trio-with-shelf",
+      "kind": "illustration",
+      "description": "Hand-drawn ink illustration of three smiling people waving, the middle one holding a finished wooden shelf with a plant and books, mint green accents on an off-white background.",
+      "goodFor": [
+        "closing",
+        "team",
+        "contact"
+      ],
+      "reuse": "any-topic",
+      "width": 1672,
+      "height": 941,
+      "orientation": "landscape",
+      "transparent": false,
+      "bytes": 106900,
+      "sha256": "78317eb761ac8d5f91d68cd4f8eb453810b7d5894eef77d4f5c0840e2236d942",
+      "url": "https://media.skillry.dev/skill-image-library/bs-mint-marker-deck/waving-trio-with-shelf-78317eb761ac.webp"
+    }
+  ]
+}
