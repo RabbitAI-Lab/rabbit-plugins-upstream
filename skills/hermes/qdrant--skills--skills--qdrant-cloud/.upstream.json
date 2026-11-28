@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/qdrant/skills/tree/main/skills/qdrant-cloud",
+  "identifier": "qdrant/skills/skills/qdrant-cloud",
+  "repo": "qdrant/skills",
+  "path": "skills/qdrant-cloud",
+  "branch": "main",
+  "pushedAt": "2026-11-26T15:28:20Z",
+  "contentHash": "91f32bd598392c97749d3373ef568918b62068e31e0a4be774775f7668285c83",
+  "fetchedAt": "2026-11-28T16:14:59.765Z"
+}

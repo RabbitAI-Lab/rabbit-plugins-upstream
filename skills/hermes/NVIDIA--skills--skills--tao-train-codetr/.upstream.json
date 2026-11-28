@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-codetr",
+  "identifier": "NVIDIA/skills/skills/tao-train-codetr",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-train-codetr",
+  "branch": "main",
+  "pushedAt": "2026-11-27T20:09:18Z",
+  "contentHash": "f20e163aa36d7d48ad5e768740884705cdc000654b277ae8d5bd1c436a96d34d",
+  "fetchedAt": "2026-11-28T16:15:07.284Z"
+}

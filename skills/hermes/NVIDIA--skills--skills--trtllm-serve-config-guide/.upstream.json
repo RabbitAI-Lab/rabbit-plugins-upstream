@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/trtllm-serve-config-guide",
+  "identifier": "NVIDIA/skills/skills/trtllm-serve-config-guide",
+  "repo": "NVIDIA/skills",
+  "path": "skills/trtllm-serve-config-guide",
+  "branch": "main",
+  "pushedAt": "2026-11-27T20:09:18Z",
+  "contentHash": "912b588d403756f37d9e3d8d73fcb15b9d67e348f83a1757660a16fcfe5c2a32",
+  "fetchedAt": "2026-11-28T16:15:07.452Z"
+}

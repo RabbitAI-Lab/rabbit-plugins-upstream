@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/modelopt-day0-release",
+  "identifier": "NVIDIA/skills/skills/modelopt-day0-release",
+  "repo": "NVIDIA/skills",
+  "path": "skills/modelopt-day0-release",
+  "branch": "main",
+  "pushedAt": "2026-11-27T20:09:18Z",
+  "contentHash": "0c01758b9391bca0ab78086456051930e58d7fa2fd916ca45947151f255dc70f",
+  "fetchedAt": "2026-11-28T16:15:06.883Z"
+}

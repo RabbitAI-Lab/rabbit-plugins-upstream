@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nim-deploy",
+  "identifier": "NVIDIA/skills/skills/nim-deploy",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nim-deploy",
+  "branch": "main",
+  "pushedAt": "2026-11-27T20:09:18Z",
+  "contentHash": "cf253f3742a723eddd7710b3648e950b4046ed263ce2b5d866a9f9b7c68ed836",
+  "fetchedAt": "2026-11-28T16:15:06.950Z"
+}

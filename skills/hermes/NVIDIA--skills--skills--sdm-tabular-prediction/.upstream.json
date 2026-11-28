@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/sdm-tabular-prediction",
+  "identifier": "NVIDIA/skills/skills/sdm-tabular-prediction",
+  "repo": "NVIDIA/skills",
+  "path": "skills/sdm-tabular-prediction",
+  "branch": "main",
+  "pushedAt": "2026-11-27T20:09:18Z",
+  "contentHash": "e067c57501ccfc85317006bf6a565473e3fb69b10444fecbfd0be796f973db81",
+  "fetchedAt": "2026-11-28T16:15:07.157Z"
+}
